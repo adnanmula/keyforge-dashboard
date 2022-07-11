@@ -1,3 +1,7 @@
 index:
     path: /test
     controller: AdnanMula\Cards\Entrypoint\Controller\Example\ExampleController
+
+keyforge_list_decks:
+    path: /keyforge/decks
+    controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\ListDecksController

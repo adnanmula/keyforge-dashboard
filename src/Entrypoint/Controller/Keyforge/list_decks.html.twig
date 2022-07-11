@@ -1,0 +1,40 @@
+{% extends "Shared/base.html.twig" %}
+
+{% block title %}Example{% endblock %}
+
+{% block body %}
+    <div class="border border-secondary w-75">
+        <table class="table table-responsive-sm table-hover w-50">
+            <thead>
+                <tr class="table-dark">
+                    <th scope="col">Deck</th>
+                    <th scope="col">Set</th>
+                    <th scope="col">Houses</th>
+                    <th scope="col">Winrate</th>
+                    <th scope="col">SAS</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+
+            {% for deck in decks %}
+                <tr>
+                    <td>{{ deck.name }}</td>
+                    <td>{{ deck.set.name }}</td>
+                    <td>{{ deck.houses.value[0].name }}/{{ deck.houses.value[1].name }}/{{ deck.houses.value[2].name }}</td>
+                    <td>{{ deck.wins }}/{{ deck.losses }}</td>
+                    <td>{{ deck.sas }}</td>
+                    <td>
+                        <a href="https://www.keyforgegame.com/deck-details/{{ deck.id }}" target="_blank">
+                            <button type="submit" class="btn btn-primary"><span class="bi-search"></span> Vault</button>
+                        </a>
+                        <a href="https://decksofkeyforge.com/decks/{{ deck.id }}" target="_blank">
+                            <button type="submit" class="btn btn-secondary"><span class="bi-search"></span> Dok</button>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

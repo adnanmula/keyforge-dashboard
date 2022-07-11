@@ -1,0 +1,3 @@
+services:
+  AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeRepository:
+    alias: AdnanMula\Cards\Infrastructure\Persistence\Repository\Keyforge\KeyforgeDbalRepository
