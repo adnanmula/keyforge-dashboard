@@ -1,0 +1,3 @@
+index:
+    path: /test
+    controller: AdnanMula\Cards\Entrypoint\Controller\Example\ExampleController

@@ -1,0 +1,59 @@
+parameters:
+  db_url: '%env(resolve:DATABASE_URL)%'
+  db_url_default: '%env(resolve:DATABASE_URL_DEFAULT)%'
+
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  AdnanMula\Cards\Application\:
+    autowire: true
+    autoconfigure: true
+    resource: '../src/Application/*/*/*Handler.php'
+    tags: [{ name: messenger.message_handler, bus: messenger.bus.command }]
+
+  AdnanMula\Cards\Domain\Service\:
+    autowire: true
+    autoconfigure: true
+    resource: '../src/Domain/Service'
+
+  AdnanMula\Cards\Entrypoint\Controller\:
+    autowire: true
+    autoconfigure: true
+    resource: '../src/Entrypoint/Controller'
+    tags: ['controller.service_arguments']
+
+  AdnanMula\Cards\Infrastructure\Service\:
+    autowire: true
+    autoconfigure: true
+    resource: '../src/Infrastructure/Service'
+
+  AdnanMula\Cards\Infrastructure\Persistence\Repository\:
+      autowire: true
+      autoconfigure: true
+      resource: '../src/Infrastructure/Persistence/Repository'
+
+  AdnanMula\Cards\Infrastructure\Fixtures\:
+      autoconfigure: true
+      autowire: true
+      resource: '../src/Infrastructure/Fixtures/*/*'
+      tags: ['cards.fixture']
+
+  AdnanMula\Cards\Infrastructure\Fixtures\FixturesRegistry:
+    class: AdnanMula\Cards\Infrastructure\Fixtures\FixturesRegistry
+
+  AdnanMula\Cards\Entrypoint\Command\:
+    autowire: true
+    autoconfigure: true
+    resource: '../src/Entrypoint/Command'
+    bind:
+      Doctrine\DBAL\Connection $defaultConnection: '@repository.dbal.connection_default'
+      Doctrine\DBAL\Connection $connection: '@repository.dbal.connection'
+    tags: [ 'console.command' ]
+
+imports:
+    - { resource: context/system/buses.yaml }
+    - { resource: context/system/repositories.yaml }
+    - { resource: context/user/repositories.yaml }

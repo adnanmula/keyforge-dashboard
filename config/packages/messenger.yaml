@@ -1,0 +1,9 @@
+framework:
+    messenger:
+        default_bus: messenger.bus.command
+        buses:
+            messenger.bus.command:
+                default_middleware: true
+                middleware:
+                    - 'middleware.dbal.transactional'
+                    - 'middleware.exception.catcher'

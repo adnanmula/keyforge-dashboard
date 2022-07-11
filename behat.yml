@@ -1,0 +1,24 @@
+default:
+  gherkin:
+    filters:
+      tags: "~@wip&&~@third-party"
+  suites:
+    api:
+      paths: [tests/Entrypoint/features]
+      contexts:
+        - AdnanMula\Cards\Tests\Entrypoint\Infrastructure\Behat\FeatureContext
+#        - Behat\MinkExtension\Context\MinkContext
+#        - behatch:context:rest
+#        - behatch:context:json
+#        - behatch:context:system
+  extensions:
+    FriendsOfBehat\SymfonyExtension:
+      bootstrap: config/bootstrap.php
+      kernel:
+        class: AdnanMula\Cards\Kernel
+        environment: test
+#    Behat\MinkExtension:
+#      sessions:
+#        symfony:
+#          symfony: ~
+#    Behatch\Extension: ~

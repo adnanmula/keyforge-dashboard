@@ -1,0 +1,5 @@
+[*.{yml,yaml}]
+indent_size = 2
+[*.dist]
+indent_style = space
+indent_size = 2

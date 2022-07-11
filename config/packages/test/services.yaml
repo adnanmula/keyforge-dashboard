@@ -1,0 +1,7 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  AdnanMula\Cards\Tests\Entrypoint\Infrastructure\Behat\:
+    resource: '../../../tests/Entrypoint/Infrastructure/Behat/*'

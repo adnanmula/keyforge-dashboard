@@ -1,0 +1,10 @@
+parameters:
+    level: 5
+    checkMissingIterableValueType: false
+    paths:
+        -   src
+        -   tests
+    excludePaths:
+        -   public/*
+        -   src/Kernel.php
+        -   config/bootstrap.php
