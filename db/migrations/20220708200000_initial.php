@@ -24,6 +24,7 @@ final class Initial extends AbstractMigration
                 sas integer NOT NULL,
                 wins integer NOT NULL,
                 losses integer NOT NULL,
+                extra_data jsonb NOT NULL,
                 PRIMARY KEY(id)
             )',
         );

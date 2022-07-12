@@ -17,7 +17,8 @@ final class KeyforgeDeck
         private KeyforgeDeckHouses $houses,
         private int $sas,
         private int $wins,
-        private int $losses
+        private int $losses,
+        private array $extraData
     ) {}
 
     public function id(): UuidValueObject
@@ -53,6 +54,11 @@ final class KeyforgeDeck
     public function losses(): int
     {
         return $this->losses;
+    }
+
+    public function extraData(): array
+    {
+        return $this->extraData;
     }
 
     public static function modelName(): string

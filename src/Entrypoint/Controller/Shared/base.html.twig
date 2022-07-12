@@ -8,6 +8,24 @@
         <title>{% block title %}{% endblock %}</title>
     </head>
     <body>
+        <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/keyforge/decks">Decks <span class="sr-only"></span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/keyforge/decks/import">Import deck <span class="sr-only"></span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/keyforge/games/add">Add games</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <div class="divider py-2"></div>
+
         {% block body %}{% endblock %}
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>

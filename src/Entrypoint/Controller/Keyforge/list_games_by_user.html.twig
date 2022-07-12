@@ -1,0 +1,9 @@
+{% extends "Shared/base.html.twig" %}
+
+{% block title %}Games{% endblock %}
+
+{% block body %}
+    <h3>Games of {{ name }}</h3>
+
+    {% include 'Keyforge/list_games.html.twig' %}
+{% endblock %}

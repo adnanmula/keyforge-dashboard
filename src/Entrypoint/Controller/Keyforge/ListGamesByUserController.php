@@ -14,7 +14,26 @@ final class ListGamesByUserController extends QueryController
         $games = $this->extractResult(
             $this->bus->dispatch(new GetUserStatsQuery($userId)),
         );
+        return $this->render(
+            'Keyforge/list_games_by_user.html.twig',
+            ['games' => $games, 'reference' => $userId, 'name' => $this->getReferenceName($games[0] ?? null, $userId)],
+        );
+    }
 
-        return $this->render('Keyforge/list_games.html.twig', ['games' => $games]);
+    private function getReferenceName(?array $game, string $userId): string
+    {
+        if (null === $game) {
+            return '';
+        }
+
+        if ($game['winner'] === $userId) {
+            return $game['winner_name'];
+        }
+
+        if ($game['loser'] === $userId) {
+            return $game['loser_name'];
+        }
+
+        return '';
     }
 }

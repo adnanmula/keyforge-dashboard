@@ -70,8 +70,8 @@ final class KeyforgeDbalRepository extends DbalRepository implements KeyforgeRep
         $stmt = $this->connection->prepare(
             \sprintf(
                 '
-                    INSERT INTO %s (id, name, set, houses, sas, wins, losses)
-                    VALUES (:id, :name, :set, :houses, :sas, :wins, :losses)
+                    INSERT INTO %s (id, name, set, houses, sas, wins, losses, extra_data)
+                    VALUES (:id, :name, :set, :houses, :sas, :wins, :losses, :extra_data)
                     ON CONFLICT (id) DO UPDATE SET
                         id = :id,
                         name = :name,
@@ -79,7 +79,8 @@ final class KeyforgeDbalRepository extends DbalRepository implements KeyforgeRep
                         houses = :houses,
                         sas = :sas,
                         wins = :wins,
-                        losses = :losses
+                        losses = :losses,
+                        extra_data = :extra_data
                     ',
                 self::TABLE,
             ),
@@ -92,6 +93,7 @@ final class KeyforgeDbalRepository extends DbalRepository implements KeyforgeRep
         $stmt->bindValue(':sas', $deck->sas());
         $stmt->bindValue(':wins', $deck->wins());
         $stmt->bindValue(':losses', $deck->losses());
+        $stmt->bindValue(':extra_data', \json_encode($deck->extraData()));
 
         $stmt->execute();
     }
@@ -111,6 +113,7 @@ final class KeyforgeDbalRepository extends DbalRepository implements KeyforgeRep
             $deck['sas'],
             $deck['wins'],
             $deck['losses'],
+            \json_decode($deck['extra_data'], true, 512, JSON_THROW_ON_ERROR),
         );
     }
 
@@ -140,7 +143,7 @@ final class KeyforgeDbalRepository extends DbalRepository implements KeyforgeRep
             ->select('a.*')
             ->from(self::TABLE_GAMES, 'a')
             ->where('a.winner_deck = :id')
-            ->orWhere('a.winner_deck = :id')
+            ->orWhere('a.loser_deck = :id')
             ->setParameter('id', $id->value())
             ->execute()
             ->fetchAllAssociative();

@@ -2,8 +2,6 @@
 
 namespace AdnanMula\Cards\Domain\Model\Keyforge\ValueObject;
 
-use JetBrains\PhpStorm\Internal\TentativeType;
-
 enum KeyforgeHouse: string implements \JsonSerializable
 {
     case BROBNAR = 'BROBNAR';
@@ -16,6 +14,19 @@ enum KeyforgeHouse: string implements \JsonSerializable
     case SAURIAN = 'SAURIAN';
     case STAR_ALLIANCE = 'STAR_ALLIANCE';
     case UNFATHOMABLE = 'UNFATHOMABLE';
+
+    public static function fromDokName(string $house): static
+    {
+        if (\in_array(\strtoupper($house), \array_map(static fn (KeyforgeHouse $case) => $case->name, self::cases()))) {
+            return self::from(\strtoupper($house));
+        }
+
+        if ($house === 'StarAlliance') {
+            return self::STAR_ALLIANCE;
+        }
+
+        throw new \InvalidArgumentException($house);
+    }
 
     public function jsonSerialize(): mixed
     {

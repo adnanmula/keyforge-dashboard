@@ -1,35 +1,33 @@
-{% extends "Shared/base.html.twig" %}
+<div class="border border-secondary w-75">
+    <table class="table table-responsive-sm table-hover">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">Winner</th>
+                <th scope="col">Winner Deck</th>
+                <th scope="col">Loser</th>
+                <th scope="col">Loser Deck</th>
+                <th scope="col">Score</th>
+                <th scope="col">First Turn</th>
+                <th scope="col">Date</th>
+            </tr>
+        </thead>
+        <tbody>
 
-{% block title %}Games{% endblock %}
-
-{% block body %}
-    <div class="border border-secondary w-75">
-        <table class="table table-responsive-sm table-hover">
-            <thead>
-                <tr class="table-dark">
-                    <th scope="col">Winner</th>
-                    <th scope="col">Winner Deck</th>
-                    <th scope="col">Loser</th>
-                    <th scope="col">Loser Deck</th>
-                    <th scope="col">Score</th>
-                    <th scope="col">First Turn</th>
-                    <th scope="col">Date</th>
-                </tr>
-            </thead>
-            <tbody>
-
-            {% for game in games %}
-                <tr>
-                    <td><a href="/keyforge/games/user/{{ game.winner }}">{{ game.winner_name }}</a></td>
-                    <td><a href="https://decksofkeyforge.com/decks/{{ game.winner_deck }}">{{ game.winner_deck_name }}</a></td>
-                    <td><a href="/keyforge/games/user/{{ game.loser }}">{{ game.loser_name }}</a></td>
-                    <td><a href="https://decksofkeyforge.com/decks/{{ game.loser_deck }}">{{ game.loser_deck_name }}</a></td>
-                    <td>{{ game.score }}</td>
-                    <td>{{ game.first_turn }}</td>
-                    <td>{{ game.date }}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
-{% endblock %}
+        {% for game in games %}
+            {% if reference == game.winner or reference == game.winner_deck %}
+            <tr class="table-success">
+            {% else %}
+            <tr class="table-danger">
+            {% endif %}
+                <td><a href="/keyforge/games/user/{{ game.winner }}">{{ game.winner_name }}</a></td>
+                <td><a href="/keyforge/games/deck/{{ game.winner_deck }}">{{ game.winner_deck_name }}</a></td>
+                <td><a href="/keyforge/games/user/{{ game.loser }}">{{ game.loser_name }}</a></td>
+                <td><a href="/keyforge/games/deck/{{ game.loser_deck }}">{{ game.loser_deck_name }}</a></td>
+                <td>{{ game.score }}</td>
+                <td>{{ game.first_turn }}</td>
+                <td>{{ game.date }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

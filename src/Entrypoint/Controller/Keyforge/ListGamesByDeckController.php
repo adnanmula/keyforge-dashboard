@@ -15,6 +15,26 @@ final class ListGamesByDeckController extends QueryController
             $this->bus->dispatch(new GetKeyforgeGamesByDeckQuery($deckId)),
         );
 
-        return $this->render('Keyforge/list_games.html.twig', ['games' => $games]);
+        return $this->render(
+            'Keyforge/list_games_by_deck.html.twig',
+            ['games' => $games, 'reference' => $deckId, 'name' => $this->getReferenceName($games[0] ?? null, $deckId)],
+        );
+    }
+
+    private function getReferenceName(?array $game, string $deckId): string
+    {
+        if (null === $game) {
+            return '';
+        }
+
+        if ($game['winner_deck'] === $deckId) {
+            return $game['winner_deck_name'];
+        }
+
+        if ($game['loser_deck'] === $deckId) {
+            return $game['loser_deck_name'];
+        }
+
+        return '';
     }
 }

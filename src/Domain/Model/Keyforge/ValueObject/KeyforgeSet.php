@@ -21,4 +21,29 @@ enum KeyforgeSet: string
             self::DT => 'Dark Tidings',
         };
     }
+
+    public static function fromDokName(string $set): self
+    {
+        if ($set === 'CALL_OF_THE_ARCHONS') {
+            return KeyforgeSet::CotA;
+        }
+
+        if ($set === 'AGE_OF_ASCENSION') {
+            return KeyforgeSet::AoA;
+        }
+
+        if ($set === 'WORLDS_COLLIDE') {
+            return KeyforgeSet::WC;
+        }
+
+        if ($set === 'MASS_MUTATION') {
+            return KeyforgeSet::MM;
+        }
+
+        if ($set === 'DARK_TIDINGS') {
+            return KeyforgeSet::DT;
+        }
+
+        throw new \InvalidArgumentException($set);
+    }
 }
