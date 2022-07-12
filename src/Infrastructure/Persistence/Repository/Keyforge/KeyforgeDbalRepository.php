@@ -155,6 +155,39 @@ final class KeyforgeDbalRepository extends DbalRepository implements KeyforgeRep
         return \array_map(fn (array $game) => $this->mapGame($game), $result);
     }
 
+    public function saveGame(KeyforgeGame $game): void
+    {
+        $stmt = $this->connection->prepare(
+            \sprintf(
+                '
+                    INSERT INTO %s (id, winner, loser, winner_deck, loser_deck, first_turn, score, date)
+                    VALUES (:id, :winner, :loser, :winner_deck, :loser_deck, :first_turn, :score, :date)
+                    ON CONFLICT (id) DO UPDATE SET
+                        id = :id,
+                        winner = :winner,
+                        loser = :loser,
+                        winner_deck = :winner_deck,
+                        loser_deck = :loser_deck,
+                        first_turn = :first_turn,
+                        score = :score,
+                        date = :date
+                    ',
+                self::TABLE_GAMES,
+            ),
+        );
+
+        $stmt->bindValue(':id', $game->id()->value());
+        $stmt->bindValue(':winner', $game->winner()->value());
+        $stmt->bindValue(':loser', $game->loser()->value());
+        $stmt->bindValue(':winner_deck', $game->winnerDeck()->value());
+        $stmt->bindValue(':loser_deck', $game->loserDeck()->value());
+        $stmt->bindValue(':first_turn', null === $game->firstTurn() ? null : $game->firstTurn()->value());
+        $stmt->bindValue(':score', \json_encode($game->score()));
+        $stmt->bindValue(':date', $game->date()->format(\DateTimeInterface::ATOM));
+
+        $stmt->execute();
+    }
+
     private function mapGame(array $game): KeyforgeGame
     {
         $score = \json_decode($game['score'], true, 512, JSON_THROW_ON_ERROR);
@@ -165,7 +198,7 @@ final class KeyforgeDbalRepository extends DbalRepository implements KeyforgeRep
             UuidValueObject::from($game['loser']),
             UuidValueObject::from($game['winner_deck']),
             UuidValueObject::from($game['loser_deck']),
-            UuidValueObject::from($game['first_turn']),
+            null === $game['first_turn'] ? null : UuidValueObject::from($game['first_turn']),
             KeyforgeGameScore::from($score['winner_score'], $score['loser_score']),
             new \DateTimeImmutable($game['date']),
         );

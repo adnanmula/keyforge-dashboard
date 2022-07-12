@@ -15,7 +15,7 @@ final class KeyforgeGame
         private UuidValueObject $loser,
         private UuidValueObject $winnerDeck,
         private UuidValueObject $loserDeck,
-        private UuidValueObject $firstTurn,
+        private ?UuidValueObject $firstTurn,
         private KeyforgeGameScore $score,
         private \DateTimeImmutable $date
     ) {}
@@ -45,7 +45,7 @@ final class KeyforgeGame
         return $this->loserDeck;
     }
 
-    public function firstTurn(): UuidValueObject
+    public function firstTurn(): ?UuidValueObject
     {
         return $this->firstTurn;
     }
@@ -55,13 +55,13 @@ final class KeyforgeGame
         return $this->score;
     }
 
-    public static function modelName(): string
-    {
-        return self::MODEL_NAME;
-    }
-
     public function date(): \DateTimeImmutable
     {
         return $this->date;
+    }
+
+    public static function modelName(): string
+    {
+        return self::MODEL_NAME;
     }
 }

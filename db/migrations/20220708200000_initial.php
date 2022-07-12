@@ -36,7 +36,7 @@ final class Initial extends AbstractMigration
                 loser uuid NOT NULL,            
                 winner_deck uuid NOT NULL,
                 loser_deck uuid NOT NULL,
-                first_turn uuid NOT NULL,
+                first_turn uuid NULL,
                 score jsonb NOT NULL,
                 date TIMESTAMP WITH TIME ZONE NULL,
                 PRIMARY KEY(id)

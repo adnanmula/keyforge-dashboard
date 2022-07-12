@@ -58,7 +58,7 @@ final class GetKeyforgeGamesByDeckQueryHandler
                 'loser_deck' => $game->loserDeck()->value(),
                 'loser_deck_name' => $indexedDecks[$game->loserDeck()->value()],
                 'score' => $game->score()->winnerScore() . '/' . $game->score()->loserScore(),
-                'first_turn' => $indexedUsers[$game->firstTurn()->value()],
+                'first_turn' => null === $game->firstTurn() ? null : $indexedUsers[$game->firstTurn()->value()],
                 'date' => $game->date()->format('Y-m-d H:i:s'),
             ];
         }

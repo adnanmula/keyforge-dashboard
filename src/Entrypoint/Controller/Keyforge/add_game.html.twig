@@ -1,0 +1,73 @@
+{% extends "Shared/base.html.twig" %}
+
+{% block title %}Import{% endblock %}
+
+{% block body %}
+    {% if result != false %}
+        <div class="alert alert-{% if success == true %}success{% else %}danger{% endif %}" role="alert">
+            {{ result }}
+        </div>
+    {% endif %}
+
+    <form action="{{ path('keyforge_register_game') }}" method="post">
+        <div class="row">
+            <div class="col-sm-4">
+                <label for="winner" class="form-label">Winner</label> <input class="form-control" list="winnerOptions" id="winner" placeholder="Type to search..." name="winner" required>
+                <label for="winnerDeck" class="form-label">Deck</label> <input class="form-control" list="winnerDeckOptions" id="winnerDeck" placeholder="Type to search..." name="winnerDeck" required>
+
+                <label for="winnerScore" class="form-label">Score</label>
+                <br>
+
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="winnerScore" id="inlineRadio3" value="3" checked>
+                    <label class="form-check-label" for="inlineRadio3">3</label>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <label for="loser" class="form-label">Loser</label> <input class="form-control" list="loserOptions" id="loser" placeholder="Type to search..." name="loser" required>
+                <label for="loserDeck" class="form-label">Deck</label> <input class="form-control" list="loserDeckOptions" id="loserDeck" placeholder="Type to search..." name="loserDeck" required>
+                <label for="loserScore" class="form-label">Score</label>
+                <br>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="loserScore" value="0" checked>
+                    <label class="form-check-label" for="inlineRadio1">0</label>
+                </div>
+
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="loserScore" value="1">
+                    <label class="form-check-label" for="inlineRadio1">1</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="loserScore" value="2">
+                    <label class="form-check-label" for="inlineRadio2">2</label>
+                </div>
+            </div>
+        </div>
+
+        <datalist id="winnerOptions">
+            {% for winner in winners %}
+                <option value="{{ winner.id }}"> {{ winner.name }} </option>
+            {% endfor %}
+        </datalist>
+
+        <datalist id="winnerDeckOptions">
+            {% for winnerDeck in winnerDecks %}
+                <option value="{{ winnerDeck.id }}"> {{ winnerDeck.name }} </option>
+            {% endfor %}
+        </datalist>
+
+        <datalist id="loserOptions">
+            {% for loser in losers %}
+                <option value="{{ loser.id }}"> {{ loser.name}} </option>
+            {% endfor %}
+        </datalist>
+
+        <datalist id="loserDeckOptions">
+            {% for loserDeck in loserDecks %}
+                <option value="{{ loserDeck.id }}"> {{ loserDeck.name }} </option>
+            {% endfor %}
+        </datalist>
+
+        <button type="submit" class="col-md-2 btn btn-primary">Guardar</button>
+    </form>
+{% endblock %}

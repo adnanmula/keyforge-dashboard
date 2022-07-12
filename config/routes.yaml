@@ -18,6 +18,7 @@ keyforge_import_deck:
   controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\ImportDeckController
   methods: [ GET,POST ]
 
-#keyforge_import_deck:
-#  path: /keyforge/deck/import/{deckId}
-#  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\ImportDeckController
+keyforge_register_game:
+  path: /keyforge/games/add
+  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\AddGameController
+  methods: [ GET,POST ]

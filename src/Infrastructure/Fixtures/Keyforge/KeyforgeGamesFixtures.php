@@ -106,7 +106,7 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
         $stmt->bindValue(':loser', $game->loser()->value());
         $stmt->bindValue(':winner_deck', $game->winnerDeck()->value());
         $stmt->bindValue(':loser_deck', $game->loserDeck()->value());
-        $stmt->bindValue(':first_turn', $game->firstTurn()->value());
+        $stmt->bindValue(':first_turn', null === $game->firstTurn() ? null : $game->firstTurn()->value());
         $stmt->bindValue(':score', \json_encode($game->score()));
         $stmt->bindValue(':date', $game->date()->format(\DateTimeInterface::ATOM));
 
