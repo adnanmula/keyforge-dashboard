@@ -9,6 +9,7 @@ use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeSet;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\UuidValueObject;
 use AdnanMula\Cards\Domain\Service\Persistence\Fixture;
 use AdnanMula\Cards\Infrastructure\Fixtures\DbalFixture;
+use AdnanMula\Cards\Infrastructure\Fixtures\User\UserFixtures;
 
 final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
 {
@@ -97,7 +98,9 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
 
     public function dependants(): array
     {
-        return [];
+        return [
+            UserFixtures::class,
+        ];
     }
 
     private function save(KeyforgeDeck $deck): void

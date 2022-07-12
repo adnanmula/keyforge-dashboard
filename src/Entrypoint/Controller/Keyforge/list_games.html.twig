@@ -1,0 +1,35 @@
+{% extends "Shared/base.html.twig" %}
+
+{% block title %}Games{% endblock %}
+
+{% block body %}
+    <div class="border border-secondary w-75">
+        <table class="table table-responsive-sm table-hover">
+            <thead>
+                <tr class="table-dark">
+                    <th scope="col">Winner</th>
+                    <th scope="col">Winner Deck</th>
+                    <th scope="col">Loser</th>
+                    <th scope="col">Loser Deck</th>
+                    <th scope="col">Score</th>
+                    <th scope="col">First Turn</th>
+                    <th scope="col">Date</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            {% for game in games %}
+                <tr>
+                    <td>{{ game.winner }}</td>
+                    <td>{{ game.winnerDeck }}</td>
+                    <td>{{ game.loser }}</td>
+                    <td>{{ game.loserDeck }}</td>
+                    <td>{{ game.score.winnerScore }}/{{ game.score.loserScore }}</td>
+                    <td>{{ game.firstTurn }}</td>
+                    <td>{{ game.date|date('Y-m-d H:i:s') }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

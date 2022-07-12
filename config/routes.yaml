@@ -5,3 +5,11 @@ index:
 keyforge_list_decks:
     path: /keyforge/decks
     controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\ListDecksController
+
+keyforge_list_games_user:
+  path: /keyforge/games/user/{userId}
+  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\ListGamesByUserController
+
+keyforge_list_games_deck:
+  path: /keyforge/games/deck/{deckId}
+  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\ListGamesByDeckController

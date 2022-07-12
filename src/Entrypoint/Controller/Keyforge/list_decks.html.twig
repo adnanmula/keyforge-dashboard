@@ -1,6 +1,6 @@
 {% extends "Shared/base.html.twig" %}
 
-{% block title %}Example{% endblock %}
+{% block title %}Decks{% endblock %}
 
 {% block body %}
     <div class="border border-secondary w-75">
@@ -19,7 +19,7 @@
 
             {% for deck in decks %}
                 <tr>
-                    <td>{{ deck.name }}</td>
+                    <td><a href="/keyforge/games/deck/{{ deck.id }}">{{ deck.name }}</a></td>
                     <td>{{ deck.set.name }}</td>
                     <td>{{ deck.houses.value[0].name }}/{{ deck.houses.value[1].name }}/{{ deck.houses.value[2].name }}</td>
                     <td>{{ deck.wins }}/{{ deck.losses }}</td>

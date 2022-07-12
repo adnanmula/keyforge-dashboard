@@ -2,10 +2,8 @@
 
 namespace AdnanMula\Cards\Infrastructure\Fixtures\User;
 
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\UuidValueObject;
 use AdnanMula\Cards\Domain\Model\User\User;
-use AdnanMula\Cards\Domain\Model\User\ValueObject\UserId;
-use AdnanMula\Cards\Domain\Model\User\ValueObject\UserReference;
-use AdnanMula\Cards\Domain\Model\User\ValueObject\UserUsername;
 use AdnanMula\Cards\Domain\Service\Persistence\Fixture;
 use AdnanMula\Cards\Infrastructure\Fixtures\DbalFixture;
 
@@ -20,21 +18,8 @@ final class UserFixtures extends DbalFixture implements Fixture
 
     public function load(): void
     {
-        $this->save(
-            User::create(
-                UserId::from(self::FIXTURE_USER_1_ID),
-                UserReference::from('123456'),
-                UserUsername::from('username'),
-            ),
-        );
-
-        $this->save(
-            User::create(
-                UserId::from(self::FIXTURE_USER_2_ID),
-                UserReference::from('100000'),
-                UserUsername::from('username2'),
-            ),
-        );
+        $this->save(User::create(UuidValueObject::from(self::FIXTURE_USER_1_ID), 'username'));
+        $this->save(User::create(UuidValueObject::from(self::FIXTURE_USER_2_ID), 'username2'));
 
         $this->loaded = true;
     }
@@ -54,17 +39,18 @@ final class UserFixtures extends DbalFixture implements Fixture
         $stmt = $this->connection->prepare(
             \sprintf(
                 '
-                INSERT INTO %s (id, reference, username) VALUES (
-                    :id, :reference, :username
-                ) ON CONFLICT (id) DO UPDATE SET
-                    id = :id, reference = :reference, username = :username',
+                INSERT INTO %s (id, name)
+                VALUES (:id, :name)
+                ON CONFLICT (id) DO UPDATE SET
+                    id = :id,
+                    name = :name
+                ',
                 self::TABLE_USER,
             ),
         );
 
         $stmt->bindValue(':id', $user->id()->value());
-        $stmt->bindValue(':reference', $user->reference()->value());
-        $stmt->bindValue(':username', $user->username()->value());
+        $stmt->bindValue(':name', $user->name());
 
         $stmt->execute();
     }

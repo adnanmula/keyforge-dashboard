@@ -2,43 +2,30 @@
 
 namespace AdnanMula\Cards\Domain\Model\User;
 
-use AdnanMula\Cards\Domain\Model\User\ValueObject\UserId;
-use AdnanMula\Cards\Domain\Model\User\ValueObject\UserReference;
-use AdnanMula\Cards\Domain\Model\User\ValueObject\UserUsername;
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\UuidValueObject;
 
 final class User
 {
     private const MODEL_NAME = 'user';
 
-    private UserId $id;
-    private UserReference $reference;
-    private UserUsername $username;
+    private function __construct(
+        private UuidValueObject $id,
+        private string $name
+    ) {}
 
-    private function __construct(UserId $id, UserReference $reference, UserUsername $username)
+    public static function create(UuidValueObject $id, string $name): self
     {
-        $this->id = $id;
-        $this->reference = $reference;
-        $this->username = $username;
+        return new self($id, $name);
     }
 
-    public static function create(UserId $id, UserReference $reference, UserUsername $username): self
-    {
-        return new self($id, $reference, $username);
-    }
-
-    public function id(): UserId
+    public function id(): UuidValueObject
     {
         return $this->id;
     }
 
-    public function reference(): UserReference
+    public function name(): string
     {
-        return $this->reference;
-    }
-
-    public function username(): UserUsername
-    {
-        return $this->username;
+        return $this->name;
     }
 
     public static function modelName(): string
