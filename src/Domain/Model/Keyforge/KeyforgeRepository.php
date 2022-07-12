@@ -9,8 +9,9 @@ interface KeyforgeRepository
     /** @return array<KeyforgeDeck> */
     public function all(int $page, int $pageSize): array;
     public function byId(UuidValueObject $id): ?KeyforgeDeck;
+    /** @return array<KeyforgeDeck> */
+    public function byIds(UuidValueObject ...$id): array;
     public function save(KeyforgeDeck $deck): void;
-
     /** @return array<KeyforgeGame> */
     public function gamesByUser(UuidValueObject $id): array;
     /** @return array<KeyforgeGame> */

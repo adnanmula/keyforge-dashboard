@@ -2,7 +2,7 @@
 
 namespace AdnanMula\Cards\Domain\Model\Shared\ValueObject;
 
-class StringValueObject
+class StringValueObject implements \JsonSerializable
 {
     private string $value;
 

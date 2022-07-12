@@ -9,5 +9,7 @@ interface UserRepository
     /** @return array<User> */
     public function all(): array;
     public function byId(UuidValueObject $id): ?User;
+    /** @return array<User> */
+    public function byIds(UuidValueObject ...$id): array;
     public function save(User $user): void;
 }

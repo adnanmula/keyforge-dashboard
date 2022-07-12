@@ -11,6 +11,7 @@ use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeSet;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\UuidValueObject;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeRepository;
 use AdnanMula\Cards\Infrastructure\Persistence\Repository\DbalRepository;
+use Doctrine\DBAL\Connection;
 
 final class KeyforgeDbalRepository extends DbalRepository implements KeyforgeRepository
 {
@@ -45,6 +46,24 @@ final class KeyforgeDbalRepository extends DbalRepository implements KeyforgeRep
 
         return $this->map($result);
     }
+
+    public function byIds(UuidValueObject ...$ids): array
+    {
+        $result = $this->connection->createQueryBuilder()
+            ->select('a.*')
+            ->from(self::TABLE, 'a')
+            ->where('a.id in (:ids)')
+            ->setParameter('ids', \array_map(static fn (UuidValueObject $id) => $id->value(), $ids), Connection::PARAM_STR_ARRAY)
+            ->execute()
+            ->fetchAllAssociative();
+
+        if (false === $result) {
+            return [];
+        }
+
+        return \array_map(fn (array $deck) => $this->map($deck), $result);
+    }
+
 
     public function save(KeyforgeDeck $deck): void
     {

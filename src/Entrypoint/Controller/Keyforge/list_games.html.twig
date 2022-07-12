@@ -20,13 +20,13 @@
 
             {% for game in games %}
                 <tr>
-                    <td>{{ game.winner }}</td>
-                    <td>{{ game.winnerDeck }}</td>
-                    <td>{{ game.loser }}</td>
-                    <td>{{ game.loserDeck }}</td>
-                    <td>{{ game.score.winnerScore }}/{{ game.score.loserScore }}</td>
-                    <td>{{ game.firstTurn }}</td>
-                    <td>{{ game.date|date('Y-m-d H:i:s') }}</td>
+                    <td><a href="/keyforge/games/user/{{ game.winner }}">{{ game.winner_name }}</a></td>
+                    <td><a href="https://decksofkeyforge.com/decks/{{ game.winner_deck }}">{{ game.winner_deck_name }}</a></td>
+                    <td><a href="/keyforge/games/user/{{ game.loser }}">{{ game.loser_name }}</a></td>
+                    <td><a href="https://decksofkeyforge.com/decks/{{ game.loser_deck }}">{{ game.loser_deck_name }}</a></td>
+                    <td>{{ game.score }}</td>
+                    <td>{{ game.first_turn }}</td>
+                    <td>{{ game.date }}</td>
                 </tr>
             {% endfor %}
             </tbody>

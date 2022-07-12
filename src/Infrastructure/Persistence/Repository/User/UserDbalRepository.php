@@ -6,6 +6,7 @@ use AdnanMula\Cards\Domain\Model\Shared\ValueObject\UuidValueObject;
 use AdnanMula\Cards\Domain\Model\User\User;
 use AdnanMula\Cards\Domain\Model\User\UserRepository;
 use AdnanMula\Cards\Infrastructure\Persistence\Repository\DbalRepository;
+use Doctrine\DBAL\Connection;
 
 final class UserDbalRepository extends DbalRepository implements UserRepository
 {
@@ -15,7 +16,7 @@ final class UserDbalRepository extends DbalRepository implements UserRepository
     {
         $result = $this->connection
             ->createQueryBuilder()
-            ->select('a.id, a.username')
+            ->select('a.id, a.name')
             ->from(self::TABLE_USER, 'a')
             ->execute()
             ->fetchAllAssociative();
@@ -27,7 +28,7 @@ final class UserDbalRepository extends DbalRepository implements UserRepository
     {
         $result = $this->connection
             ->createQueryBuilder()
-            ->select('a.id, a.username')
+            ->select('a.id, a.name')
             ->from(self::TABLE_USER, 'a')
             ->where('a.id = :id')
             ->setParameter('id', $id->value())
@@ -40,6 +41,24 @@ final class UserDbalRepository extends DbalRepository implements UserRepository
         }
 
         return $this->map($result);
+    }
+
+    public function byIds(UuidValueObject ...$ids): array
+    {
+        $result = $this->connection
+            ->createQueryBuilder()
+            ->select('a.id, a.name')
+            ->from(self::TABLE_USER, 'a')
+            ->where('a.id in (:ids)')
+            ->setParameter('ids', \array_map(static fn (UuidValueObject $id) => $id->value(), $ids),Connection::PARAM_STR_ARRAY)
+            ->execute()
+            ->fetchAllAssociative();
+
+        if (false === $result) {
+            return [];
+        }
+
+        return \array_map(fn (array $user) => $this->map($user), $result);
     }
 
     public function save(User $user): void
