@@ -8,9 +8,9 @@ use Assert\Assert;
 final class AddKeyforgeGameCommand
 {
     private UuidValueObject $winner;
-    private UuidValueObject $winnerDeck;
+    private string $winnerDeck;
     private UuidValueObject $loser;
-    private UuidValueObject $loserDeck;
+    private string $loserDeck;
     private int $loserScore;
     private ?UuidValueObject $firstTurn;
     private \DateTimeImmutable $date;
@@ -19,17 +19,17 @@ final class AddKeyforgeGameCommand
     {
         Assert::lazy()
             ->that($winner, 'winner')->uuid()
-            ->that($winnerDeck, 'winnerDeck')->uuid()
+            ->that($winnerDeck, 'winnerDeck')->string()->notBlank()->notEq($loserDeck)
             ->that($loser, 'loser')->uuid()
-            ->that($loserDeck, 'loserDeck')->uuid()
+            ->that($loserDeck, 'loserDeck')->string()->notBlank()->notEq($winnerDeck)
             ->that($loserScore, 'loserScore')->integerish()->min(0)->max(2)
             ->that($firstTurn, 'firstTurn')->nullOr()->uuid()
             ->that($date, 'date')->date('Y-m-d H:i:s');
 
         $this->winner = UuidValueObject::from($winner);
-        $this->winnerDeck = UuidValueObject::from($winnerDeck);
+        $this->winnerDeck = $winnerDeck;
         $this->loser = UuidValueObject::from($loser);
-        $this->loserDeck = UuidValueObject::from($loserDeck);
+        $this->loserDeck = $loserDeck;
         $this->loserScore = (int) $loserScore;
         $this->firstTurn = null === $firstTurn
             ? null
@@ -42,7 +42,7 @@ final class AddKeyforgeGameCommand
         return $this->winner;
     }
 
-    public function winnerDeck(): UuidValueObject
+    public function winnerDeck(): string
     {
         return $this->winnerDeck;
     }
@@ -52,7 +52,7 @@ final class AddKeyforgeGameCommand
         return $this->loser;
     }
 
-    public function loserDeck(): UuidValueObject
+    public function loserDeck(): string
     {
         return $this->loserDeck;
     }

@@ -1,3 +1,11 @@
+home:
+  path: /
+  controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::redirectAction
+  defaults:
+    route: keyforge_list_decks
+    permanent: true
+    keepQueryParams: false
+
 keyforge_list_decks:
     path: /keyforge/decks
     controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\ListDecksController

@@ -2,6 +2,7 @@
 
 namespace AdnanMula\Cards\Application\Keyforge\AddGame;
 
+use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeck;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGame;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeGameScore;
@@ -15,12 +16,36 @@ final class AddKeyforgeGameCommandHandler
 
     public function __invoke(AddKeyforgeGameCommand $command): void
     {
+        $decks = $this->repository->byNames(
+            $command->winnerDeck(),
+            $command->loserDeck(),
+        );
+
+        $winnerDeck = null;
+        $loserDeck = null;
+
+        foreach ($decks as $deck) {
+            if ($deck->name() === $command->winnerDeck()) {
+                $winnerDeck = $deck;
+
+                continue;
+            }
+
+            if ($deck->name() === $command->loserDeck()) {
+                $loserDeck = $deck;
+            }
+        }
+
+        if (null === $winnerDeck || null === $loserDeck) {
+            throw new \InvalidArgumentException('Deck not found');
+        }
+
         $game = new KeyforgeGame(
             UuidValueObject::v4(),
             $command->winner(),
             $command->loser(),
-            $command->winnerDeck(),
-            $command->loserDeck(),
+            $winnerDeck->id(),
+            $loserDeck->id(),
             $command->firstTurn(),
             KeyforgeGameScore::from(3, $command->loserScore()),
             $command->date(),
@@ -28,41 +53,23 @@ final class AddKeyforgeGameCommandHandler
 
         $this->repository->saveGame($game);
 
-        $decks = $this->repository->byIds(
-            $game->winnerDeck(),
-            $game->loserDeck()
-        );
+        $this->updateDeckWinRate($winnerDeck, $loserDeck);
+    }
 
-        $deck1 = null;
-        foreach ($decks as $deck) {
-            if ($deck->id()->equalTo($game->winnerDeck())) {
-                $deck1 = $deck;
-
-                break;
-            }
-        }
-
-        $deck2 = null;
-        foreach ($decks as $deck) {
-            if ($deck->id()->equalTo($game->loserDeck())) {
-                $deck2 = $deck;
-
-                break;
-            }
-        }
-
-        $games1 = $this->repository->gamesByDeck($deck1->id());
-        $games2 = $this->repository->gamesByDeck($deck2->id());
+    private function updateDeckWinRate(KeyforgeDeck $winnerDeck, KeyforgeDeck $loserDeck): void
+    {
+        $games1 = $this->repository->gamesByDeck($winnerDeck->id());
+        $games2 = $this->repository->gamesByDeck($loserDeck->id());
 
         $deck1Wins = 0;
         $deck1Loses = 0;
 
         foreach ($games1 as $game) {
-            if ($game->winnerDeck()->equalTo($deck1->id())) {
+            if ($game->winnerDeck()->equalTo($winnerDeck->id())) {
                 $deck1Wins++;
             }
 
-            if ($game->loserDeck()->equalTo($deck1->id())) {
+            if ($game->loserDeck()->equalTo($winnerDeck->id())) {
                 $deck1Loses++;
             }
         }
@@ -71,19 +78,19 @@ final class AddKeyforgeGameCommandHandler
         $deck2Loses = 0;
 
         foreach ($games2 as $game) {
-            if ($game->winnerDeck()->equalTo($deck2->id())) {
+            if ($game->winnerDeck()->equalTo($loserDeck->id())) {
                 $deck2Wins++;
             }
 
-            if ($game->loserDeck()->equalTo($deck2->id())) {
+            if ($game->loserDeck()->equalTo($loserDeck->id())) {
                 $deck2Loses++;
             }
         }
 
-        $deck1->updateWins($deck1Wins)->updateLoses($deck1Loses);
-        $deck2->updateWins($deck2Wins)->updateLoses($deck2Loses);
+        $winnerDeck->updateWins($deck1Wins)->updateLoses($deck1Loses);
+        $loserDeck->updateWins($deck2Wins)->updateLoses($deck2Loses);
 
-        $this->repository->save($deck1);
-        $this->repository->save($deck2);
+        $this->repository->save($winnerDeck);
+        $this->repository->save($loserDeck);
     }
 }

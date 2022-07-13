@@ -12,6 +12,7 @@
         "doctrine/dbal": "^2.10",
         "ramsey/uuid": "^4.0",
         "robmorgan/phinx": "^0.12.11",
+        "symfony/asset": "6.0.*",
         "symfony/console": "6.0.*",
         "symfony/dotenv": "6.0.*",
         "symfony/flex": "^1.3.1",

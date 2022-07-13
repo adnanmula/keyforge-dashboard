@@ -9,11 +9,15 @@
         </div>
     {% endif %}
 
+    <div class="divider py-2"></div>
+
     <form action="{{ path('keyforge_import_deck') }}" method="post">
-        <div class="col-md-6 form-inline">
-            <label for="deck" class="col-md-1">Deck id:</label>
-            <input type="text" class="col-md-7" id="deck" name="deck">
-            <button type="submit" class="col-md-2 btn btn-primary">Vamooo</button>
+        <div class="row">
+            <div class="col form-inline">
+                <label for="deck" class="col">Deck id:</label>
+                <input type="text" class="col" id="deck" name="deck">
+                <button type="submit" class="col btn btn-primary">Vamooo</button>
+            </div>
         </div>
     </form>
 {% endblock %}

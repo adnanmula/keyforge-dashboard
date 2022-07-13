@@ -43,12 +43,12 @@ final class AddGameController extends QueryController
         if ($request->getMethod() === Request::METHOD_POST) {
             try {
                 $this->bus->dispatch(new AddKeyforgeGameCommand(
-                    $request->request->get('winner'),
+                    $request->request->get('winnerId'),
                     $request->request->get('winnerDeck'),
-                    $request->request->get('loser'),
+                    $request->request->get('loserId'),
                     $request->request->get('loserDeck'),
                     $request->request->get('loserScore'),
-                    $request->request->get('firstTurn') === '' ? null : $request->request->get('firstTurn'),
+                    $request->request->get('firstTurnId') === '' ? null : $request->request->get('firstTurnId'),
                     $request->request->get('date'),
                 ));
 

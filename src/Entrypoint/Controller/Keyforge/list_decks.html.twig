@@ -3,8 +3,8 @@
 {% block title %}Decks{% endblock %}
 
 {% block body %}
-    <div class="border border-secondary w-75">
-        <table class="table table-responsive-sm table-hover w-50">
+    <div class="border border-secondary">
+        <table class="table table-responsive-sm table-hover">
             <thead>
                 <tr class="table-dark">
                     <th scope="col">Deck</th>
@@ -20,16 +20,26 @@
             {% for deck in decks %}
                 <tr>
                     <td><a href="/keyforge/games/deck/{{ deck.id }}">{{ deck.name }}</a></td>
-                    <td>{{ deck.set.name }}</td>
-                    <td>{{ deck.houses.value[0].name }}/{{ deck.houses.value[1].name }}/{{ deck.houses.value[2].name }}</td>
+
+                    {% set set = 'assets/keyforge/sets/' ~ deck.set.name ~ '.svg' %}
+                    <td><img width="33px" src="{{ asset(set) }}" alt="{{ deck.houses.value[0].name }}"/></td>
+
+                    {% set house0 = 'assets/keyforge/houses/' ~ deck.houses.value[0].name ~ '.png' %}
+                    {% set house1 = 'assets/keyforge/houses/' ~ deck.houses.value[1].name ~ '.png' %}
+                    {% set house2 = 'assets/keyforge/houses/' ~ deck.houses.value[2].name ~ '.png' %}
+                    <td>
+                        <img width="35px" src="{{ asset(house0) }}" alt="{{ deck.houses.value[0].name }}"/>
+                        <img width="35px" src="{{ asset(house1) }}" alt="{{ deck.houses.value[1].name }}"/>
+                        <img width="35px" src="{{ asset(house2) }}" alt="{{ deck.houses.value[2].name }}"/>
+                    </td>
                     <td>{{ deck.wins }}/{{ deck.losses }}</td>
                     <td>{{ deck.sas }}</td>
                     <td>
                         <a href="https://www.keyforgegame.com/deck-details/{{ deck.id }}" target="_blank">
-                            <button class="btn btn-primary"><span class="bi-search"></span> Vault</button>
+                            <img class="img-thumbnail" width="50px" src="{{ asset('assets/keyforge/logos/vault.png') }}" alt="Vault"/>
                         </a>
                         <a href="https://decksofkeyforge.com/decks/{{ deck.id }}" target="_blank">
-                            <button class="btn btn-secondary"><span class="bi-search"></span> Dok</button>
+                            <img class="img-thumbnail" width="40px" src="{{ asset('assets/keyforge/logos/dok.svg') }}" alt="DoK"/>
                         </a>
                     </td>
                 </tr>

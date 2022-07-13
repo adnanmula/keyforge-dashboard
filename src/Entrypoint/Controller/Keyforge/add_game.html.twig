@@ -11,28 +11,47 @@
 
     <form action="{{ path('keyforge_register_game') }}" method="post">
         <div class="row">
-            <div class="col-sm-4">
-                <label for="winner" class="form-label">Winner</label> <input class="form-control" list="winnerOptions" id="winner" placeholder="Type to search..." name="winner" autocomplete="off" required>
-                <label for="winnerDeck" class="form-label">Deck</label> <input class="form-control" list="winnerDeckOptions" id="winnerDeck" placeholder="Type to search..." name="winnerDeck" autocomplete="off" required>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="winner" class="form-label">Winner</label>
+                    <input class="form-control selector" list="winnerOptions" id="winner" placeholder="Type to search..." name="winner" autocomplete="off" required>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <label for="loser" class="form-label">Loser</label>
+                <input class="form-control selector" list="loserOptions" id="loser" placeholder="Type to search..." name="loser" autocomplete="off" required>
+            </div>
+        </div>
 
-                <label for="winnerScore" class="form-label">Score</label>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="winnerDeck" class="form-label">Winner Deck</label>
+                    <input class="form-control" list="winnerDeckOptions" id="winnerDeck" placeholder="Type to search..." name="winnerDeck" autocomplete="off" required>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <label for="loserDeck" class="form-label">Loser Deck</label>
+                <input class="form-control" list="loserDeckOptions" id="loserDeck" placeholder="Type to search..." name="loserDeck"  autocomplete="off" required>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <label for="winnerScore" class="form-label">Winner Score</label>
                 <br>
-
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="winnerScore" id="inlineRadio3" value="3" checked>
                     <label class="form-check-label" for="inlineRadio3">3</label>
                 </div>
             </div>
-            <div class="col-sm-4">
-                <label for="loser" class="form-label">Loser</label> <input class="form-control" list="loserOptions" id="loser" placeholder="Type to search..." name="loser" autocomplete="off" required>
-                <label for="loserDeck" class="form-label">Deck</label> <input class="form-control" list="loserDeckOptions" id="loserDeck" placeholder="Type to search..." name="loserDeck"  autocomplete="off" required>
-                <label for="loserScore" class="form-label">Score</label>
+            <div class="col-md-6">
+                <label for="loserScore" class="form-label">Loser Score</label>
                 <br>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="loserScore" value="0" checked>
                     <label class="form-check-label" for="inlineRadio1">0</label>
                 </div>
-
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="loserScore" value="1">
                     <label class="form-check-label" for="inlineRadio1">1</label>
@@ -44,36 +63,77 @@
             </div>
         </div>
 
-        <div class="col-sm-8">
-            <label for="firstTurn" class="form-label">First turn: </label>
-            <input class="form-control" list="winnerOptions" id="firstTUrn" placeholder="Type to search..." name="firstTurn" autocomplete="off">
-            <input type="date" name="date" required>
+        <div class="row mt-3">
+            <div class="col-md-6">
+                <label for="firstTurn" class="form-label" >First turn: </label>
+                <input class="form-control selector" list="firstTurnOptions" id="firstTurn" placeholder="Type to search..." name="firstTurn" autocomplete="off">
+            </div>
+            <div class="col-md-6">
+                <label for="date" class="form-label">Date: </label> <br>
+                <input type="date" name="date" required>
+            </div>
         </div>
 
-        <button type="submit" class="col-md-2 btn btn-primary">Guardar</button>
+        <div class="row mt-3">
+            <div class="col-md-12">
+                <button type="submit" class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
 
-        <datalist id="winnerOptions">
-            {% for winner in winners %}
-                <option value="{{ winner.id }}"> {{ winner.name }} </option>
-            {% endfor %}
-        </datalist>
+        <div>
+            <datalist id="winnerOptions">
+                {% for winner in winners %}
+                    <option data-value="{{ winner.id }}" value="{{ winner.name }}"> {{ winner.id }} </option>
+                {% endfor %}
+            </datalist>
 
-        <datalist id="winnerDeckOptions">
-            {% for winnerDeck in winnerDecks %}
-                <option value="{{ winnerDeck.id }}"> {{ winnerDeck.name }} </option>
-            {% endfor %}
-        </datalist>
+            <datalist id="winnerDeckOptions">
+                {% for winnerDeck in winnerDecks %}
+                    <option data-value="{{ winnerDeck.id }}" value="{{ winnerDeck.name }}"> {{ winnerDeck.id }} </option>
+                {% endfor %}
+            </datalist>
 
-        <datalist id="loserOptions">
-            {% for loser in losers %}
-                <option value="{{ loser.id }}"> {{ loser.name}} </option>
-            {% endfor %}
-        </datalist>
+            <datalist id="loserOptions">
+                {% for loser in losers %}
+                    <option data-value="{{ loser.id }}" value="{{ loser.name }}"> {{ loser.id }} </option>
+                {% endfor %}
+            </datalist>
 
-        <datalist id="loserDeckOptions">
-            {% for loserDeck in loserDecks %}
-                <option value="{{ loserDeck.id }}"> {{ loserDeck.name }} </option>
-            {% endfor %}
-        </datalist>
+            <datalist id="loserDeckOptions">
+                {% for loserDeck in loserDecks %}
+                    <option data-value="{{ loserDeck.id }}" value="{{ loserDeck.name }}"> {{ loserDeck.id }} </option>
+                {% endfor %}
+            </datalist>
+
+            <datalist id="firstTurnOptions">
+                {% for winner in winners %}
+                    <option data-value="{{ winner.id }}" value="{{ winner.name }}"> {{ winner.id }} </option>
+                {% endfor %}
+            </datalist>
+
+            <input type="hidden" id="hidden-winner" name="winnerId" value="">
+            <input type="hidden" id="hidden-loser" name="loserId" value="">
+            <input type="hidden" id="hidden-firstTurn" name="firstTurnId" value="">
+        </div>
     </form>
+
+    <script>
+        let selectors = document.querySelectorAll('.selector');
+
+        selectors.forEach(selector => {
+            selector.addEventListener("change", function (e) {
+                console.log('change');
+
+                let input = e.target;
+                let listId = input.getAttribute('list');
+
+                option = document.querySelector('#' + listId + ' option[value="' + input.value + '"]');
+
+                if (null !== option) {
+                    let hiddenInput = document.querySelector('#hidden-' + input.getAttribute('id'));
+                    hiddenInput.value = option.getAttribute('data-value');
+                }
+            });
+        });
+    </script>
 {% endblock %}

@@ -64,6 +64,23 @@ final class KeyforgeDbalRepository extends DbalRepository implements KeyforgeRep
         return \array_map(fn (array $deck) => $this->map($deck), $result);
     }
 
+    public function byNames(string ...$decks): array
+    {
+        $result = $this->connection->createQueryBuilder()
+            ->select('a.*')
+            ->from(self::TABLE, 'a')
+            ->where('a.name in (:decks)')
+            ->setParameter('decks', $decks, Connection::PARAM_STR_ARRAY)
+            ->execute()
+            ->fetchAllAssociative();
+
+        if (false === $result) {
+            return [];
+        }
+
+        return \array_map(fn (array $deck) => $this->map($deck), $result);
+    }
+
 
     public function save(KeyforgeDeck $deck): void
     {
