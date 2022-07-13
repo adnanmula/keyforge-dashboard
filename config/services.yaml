@@ -25,11 +25,6 @@ services:
     resource: '../src/Entrypoint/Controller'
     tags: ['controller.service_arguments']
 
-  AdnanMula\Cards\Infrastructure\Service\:
-    autowire: true
-    autoconfigure: true
-    resource: '../src/Infrastructure/Service'
-
   AdnanMula\Cards\Infrastructure\Persistence\Repository\:
       autowire: true
       autoconfigure: true
