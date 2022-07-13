@@ -12,8 +12,8 @@
     <form action="{{ path('keyforge_register_game') }}" method="post">
         <div class="row">
             <div class="col-sm-4">
-                <label for="winner" class="form-label">Winner</label> <input class="form-control" list="winnerOptions" id="winner" placeholder="Type to search..." name="winner" required>
-                <label for="winnerDeck" class="form-label">Deck</label> <input class="form-control" list="winnerDeckOptions" id="winnerDeck" placeholder="Type to search..." name="winnerDeck" required>
+                <label for="winner" class="form-label">Winner</label> <input class="form-control" list="winnerOptions" id="winner" placeholder="Type to search..." name="winner" autocomplete="off" required>
+                <label for="winnerDeck" class="form-label">Deck</label> <input class="form-control" list="winnerDeckOptions" id="winnerDeck" placeholder="Type to search..." name="winnerDeck" autocomplete="off" required>
 
                 <label for="winnerScore" class="form-label">Score</label>
                 <br>
@@ -24,8 +24,8 @@
                 </div>
             </div>
             <div class="col-sm-4">
-                <label for="loser" class="form-label">Loser</label> <input class="form-control" list="loserOptions" id="loser" placeholder="Type to search..." name="loser" required>
-                <label for="loserDeck" class="form-label">Deck</label> <input class="form-control" list="loserDeckOptions" id="loserDeck" placeholder="Type to search..." name="loserDeck" required>
+                <label for="loser" class="form-label">Loser</label> <input class="form-control" list="loserOptions" id="loser" placeholder="Type to search..." name="loser" autocomplete="off" required>
+                <label for="loserDeck" class="form-label">Deck</label> <input class="form-control" list="loserDeckOptions" id="loserDeck" placeholder="Type to search..." name="loserDeck"  autocomplete="off" required>
                 <label for="loserScore" class="form-label">Score</label>
                 <br>
                 <div class="form-check form-check-inline">
@@ -46,8 +46,8 @@
 
         <div class="col-sm-8">
             <label for="firstTurn" class="form-label">First turn: </label>
-            <input class="form-control" list="winnerOptions" id="firstTUrn" placeholder="Type to search..." name="firstTurn" required>
-            <input type="date" name="date">
+            <input class="form-control" list="winnerOptions" id="firstTUrn" placeholder="Type to search..." name="firstTurn" autocomplete="off">
+            <input type="date" name="date" required>
         </div>
 
         <button type="submit" class="col-md-2 btn btn-primary">Guardar</button>
