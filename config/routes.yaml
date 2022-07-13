@@ -6,6 +6,11 @@ home:
     permanent: true
     keepQueryParams: false
 
+keyforge_list_users:
+  path: /keyforge/users
+  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\ListUsersController
+  methods: [ GET ]
+
 keyforge_list_decks:
     path: /keyforge/decks
     controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\ListDecksController

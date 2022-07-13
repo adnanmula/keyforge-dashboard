@@ -13,7 +13,7 @@ interface KeyforgeRepository
     public function byIds(UuidValueObject ...$id): array;
     public function save(KeyforgeDeck $deck): void;
     /** @return array<KeyforgeGame> */
-    public function gamesByUser(UuidValueObject $id): array;
+    public function gamesByUser(UuidValueObject ...$id): array;
     /** @return array<KeyforgeGame> */
     public function gamesByDeck(UuidValueObject $id): array;
     public function saveGame(KeyforgeGame $game): void;

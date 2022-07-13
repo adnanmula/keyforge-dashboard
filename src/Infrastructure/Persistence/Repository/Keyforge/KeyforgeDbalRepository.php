@@ -23,6 +23,7 @@ final class KeyforgeDbalRepository extends DbalRepository implements KeyforgeRep
         $result = $this->connection->createQueryBuilder()
             ->select('a.*')
             ->from(self::TABLE, 'a')
+            ->orderBy('a.wins', 'DESC')
             ->execute()
             ->fetchAllAssociative();
 
@@ -135,14 +136,17 @@ final class KeyforgeDbalRepository extends DbalRepository implements KeyforgeRep
     }
 
     /** @return array<KeyforgeGame> */
-    public function gamesByUser(UuidValueObject $id): array
+    public function gamesByUser(UuidValueObject ...$ids): array
     {
+        $ids = \array_map(static fn (UuidValueObject $id) => $id->value(), $ids);
+
         $result = $this->connection->createQueryBuilder()
             ->select('a.*')
             ->from(self::TABLE_GAMES, 'a')
-            ->where('a.winner = :id')
-            ->orWhere('a.loser = :id')
-            ->setParameter('id', $id->value())
+            ->where('a.winner in (:ids)')
+            ->orWhere('a.loser in (:ids)')
+            ->setParameter('ids', $ids, Connection::PARAM_STR_ARRAY)
+            ->orderBy('a.date', 'DESC')
             ->execute()
             ->fetchAllAssociative();
 
@@ -162,6 +166,7 @@ final class KeyforgeDbalRepository extends DbalRepository implements KeyforgeRep
             ->where('a.winner_deck = :id')
             ->orWhere('a.loser_deck = :id')
             ->setParameter('id', $id->value())
+            ->orderBy('a.date', 'DESC')
             ->execute()
             ->fetchAllAssociative();
 

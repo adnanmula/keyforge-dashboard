@@ -32,7 +32,14 @@
                         <img width="35px" src="{{ asset(house1) }}" alt="{{ deck.houses.value[1].name }}"/>
                         <img width="35px" src="{{ asset(house2) }}" alt="{{ deck.houses.value[2].name }}"/>
                     </td>
-                    <td>{{ deck.wins }}/{{ deck.losses }}</td>
+
+                    {% if (deck.wins + deck.losses) == 0 %}
+                        {% set winrate = 0 %}
+                    {% else %}
+                        {% set winrate = (deck.wins / (deck.wins + deck.losses)) * 100 %}
+                    {% endif %}
+
+                    <td>{{ deck.wins }}/{{ deck.losses }} ({{ winrate|round(2) }}%)</td>
                     <td>{{ deck.sas }}</td>
                     <td>
                         <a href="https://www.keyforgegame.com/deck-details/{{ deck.id }}" target="_blank">
