@@ -38,8 +38,8 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
                     KeyforgeHouse::LOGOS,
                 ),
                 71,
-                4,
-                4,
+                1,
+                1,
                 $extraData1,
             ),
         );
@@ -58,8 +58,8 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
                     KeyforgeHouse::SANCTUM,
                 ),
                 63,
-                3,
                 0,
+                2,
                 $extraData2,
             ),
         );
@@ -78,8 +78,8 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
                     KeyforgeHouse::SANCTUM,
                 ),
                 72,
-                7,
-                5,
+                1,
+                0,
                 $extraData3,
             ),
         );
@@ -99,7 +99,7 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
                 ),
                 61,
                 1,
-                8,
+                0,
                 $extraData4,
             ),
         );

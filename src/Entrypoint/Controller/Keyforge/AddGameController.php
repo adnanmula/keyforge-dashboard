@@ -50,7 +50,7 @@ final class AddGameController extends QueryController
                     $request->request->get('loserDeck'),
                     $request->request->get('loserScore'),
                     $request->request->get('firstTurn'),
-                    '2000-11-11 10:00:00',
+                    $request->request->get('date'),
                 ));
 
                 return $this->render(

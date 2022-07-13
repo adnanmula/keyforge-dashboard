@@ -61,6 +61,20 @@ final class KeyforgeDeck
         return $this->extraData;
     }
 
+    public function updateWins(int $wins): self
+    {
+        $this->wins = $wins;
+
+        return $this;
+    }
+
+    public function updateLoses(int $loses): self
+    {
+        $this->losses = $loses;
+
+        return $this;
+    }
+
     public static function modelName(): string
     {
         return self::MODEL_NAME;

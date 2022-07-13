@@ -44,6 +44,14 @@
             </div>
         </div>
 
+        <div class="col-sm-8">
+            <label for="firstTurn" class="form-label">First turn: </label>
+            <input class="form-control" list="winnerOptions" id="firstTUrn" placeholder="Type to search..." name="firstTurn" required>
+            <input type="date" name="date">
+        </div>
+
+        <button type="submit" class="col-md-2 btn btn-primary">Guardar</button>
+
         <datalist id="winnerOptions">
             {% for winner in winners %}
                 <option value="{{ winner.id }}"> {{ winner.name }} </option>
@@ -67,7 +75,5 @@
                 <option value="{{ loserDeck.id }}"> {{ loserDeck.name }} </option>
             {% endfor %}
         </datalist>
-
-        <button type="submit" class="col-md-2 btn btn-primary">Guardar</button>
     </form>
 {% endblock %}
