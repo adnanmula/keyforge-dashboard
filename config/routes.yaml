@@ -2,9 +2,14 @@ home:
   path: /
   controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::redirectAction
   defaults:
-    route: keyforge_list_decks
+    route: keyforge_home
     permanent: true
     keepQueryParams: false
+
+keyforge_home:
+  path: /keyforge
+  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\GetGeneralInfoController
+  methods: [ GET ]
 
 keyforge_list_users:
   path: /keyforge/users

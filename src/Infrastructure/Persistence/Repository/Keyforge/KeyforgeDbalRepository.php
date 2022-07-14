@@ -157,6 +157,23 @@ final class KeyforgeDbalRepository extends DbalRepository implements KeyforgeRep
         return \array_map(fn (array $game) => $this->mapGame($game), $result);
     }
 
+    public function allGames(int $page, int $pageSize): array
+    {
+        $result = $this->connection->createQueryBuilder()
+            ->select('a.*')
+            ->from(self::TABLE_GAMES, 'a')
+            ->orderBy('a.date', 'DESC')
+            ->execute()
+            ->fetchAllAssociative();
+
+        if (false === $result) {
+            return [];
+        }
+
+        return \array_map(fn (array $game) => $this->mapGame($game), $result);
+    }
+
+
     /** @return array<KeyforgeGame> */
     public function gamesByDeck(UuidValueObject $id): array
     {

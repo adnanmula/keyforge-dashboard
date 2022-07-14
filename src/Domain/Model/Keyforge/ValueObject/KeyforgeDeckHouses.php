@@ -18,6 +18,7 @@ final class KeyforgeDeckHouses
         return new self($houses);
     }
 
+    /** @return array<KeyforgeHouse> */
     public function value(): array
     {
         return $this->value;

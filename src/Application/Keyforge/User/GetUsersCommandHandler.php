@@ -2,7 +2,6 @@
 
 namespace AdnanMula\Cards\Application\Keyforge\User;
 
-use AdnanMula\Cards\Application\Keyforge\Get\GetKeyforgeDecksQuery;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeck;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGame;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeRepository;
@@ -24,7 +23,6 @@ final class GetUsersCommandHandler
 
         $games = $this->keyforgeRepository->gamesByUser(...$userIds);
 
-
         $result = [];
 
         foreach ($users as $user) {
@@ -34,7 +32,6 @@ final class GetUsersCommandHandler
             $totalGames = $wins + $loses;
 
             $winRate = 0;
-
             if ($totalGames > 0) {
                 $winRate = $wins / ($totalGames) * 100;
             }

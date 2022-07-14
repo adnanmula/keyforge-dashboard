@@ -1,0 +1,75 @@
+{% extends "Shared/base.html.twig" %}
+
+{% block title %}Decks{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col">
+            <span>Decks registered: {{ data.deck_count }}</span> <br>
+            <span>Games played: {{ data.games_played }}</span> <br>
+            <span>Best win rate: <a href="/keyforge/games/deck/{{ data.deck_win_rate.id }}">{{ data.deck_win_rate.name }}</a> {{ data.deck_win_rate.wins }}/{{ data.deck_win_rate.loses }} {{ data.deck_win_rate.win_rate }}%</span> <br>
+            <span>Best sas:  <a href="/keyforge/games/deck/{{ data.deck_max_sas.id }}">{{ data.deck_max_sas.name }}</a> {{ data.deck_max_sas.sas }} sas</span> <br>
+            <span>Worse sas: <a href="/keyforge/games/deck/{{ data.deck_min_sas.id }}">{{ data.deck_min_sas.name }}</a> {{ data.deck_min_sas.sas }} sas</span> <br>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+    </div>
+
+
+    <div class="row">
+        <div class="col-4 col-xs-10">
+            <span>Set presence</span>
+            <canvas id="setPresence" width="400" height="400"></canvas>
+        </div>
+        <div class="col-4 col-xs-10">
+            <span>House presence</span>
+            <canvas id="housePresence" width="400" height="400"></canvas>
+        </div>
+    </div>
+
+    <script>
+        let setPresence = JSON.parse('{{ data.set_presence|json_encode|raw }}');
+
+        const setPresenceChart = new Chart(document.getElementById('setPresence').getContext('2d'), {
+            type: 'doughnut',
+            data: {
+                datasets: [{
+                    data: Object.values(setPresence),
+                    backgroundColor: [
+                        'rgb(255, 99, 132)',
+                        'rgb(54, 162, 235)',
+                        'rgb(210, 145, 188)',
+                        'rgb(179, 217, 178)',
+                        'rgb(114, 99, 143)',
+                    ],
+                }],
+                labels: Object.keys(setPresence),
+            },
+        });
+
+        let housePresence = JSON.parse('{{ data.house_presence|json_encode|raw }}');
+
+        const housePresenceChart = new Chart(document.getElementById('housePresence').getContext('2d'), {
+            type: 'doughnut',
+            data: {
+                datasets: [{
+                    data: Object.values(housePresence),
+                    backgroundColor: [
+                        'rgb(41, 128, 185)', //Sanctum
+                        'rgb(225, 78, 183)', //Dis
+                        'rgb(46, 204, 113)', //Mars
+                        'rgb(125, 60, 152)', //Star Alliance
+                        'rgb(22, 160, 133)', //Saurian
+                        'rgb(81, 90, 90)',   //Shadows
+                        'rgb(20, 90, 50)',   //Untamed
+                        'rgb(231, 76, 60)',  //Brobnar
+                        'rgb(21, 67, 96)',   //Unfathomable
+                        'rgb(52, 152, 219)', //Logos
+                    ],
+                }],
+                labels: Object.keys(housePresence),
+            },
+        });
+    </script>
+{% endblock %}
