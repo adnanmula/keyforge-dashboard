@@ -14,24 +14,36 @@
     </div>
 
     <div class="row mt-3">
-        <div class="col-5">
+        <div class="col-12 col-sm-6 col-lg-4">
+            <canvas id="setWins" width="400" height="400"></canvas>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-4">
             <canvas id="setWinRate" width="400" height="400"></canvas>
         </div>
-        <div class="col-5">
+        <div class="col-12 col-sm-6 col-lg-4">
             <canvas id="setPresence" width="400" height="400"></canvas>
         </div>
     </div>
 
     <div class="row mt-3">
-        <div class="col-5">
-            <canvas id="houseWinRate" width="400" height="400"></canvas>
+        <div class="col-12 col-sm-6 col-lg-4">
+            <canvas id="houseWins" width="400" height="450"></canvas>
         </div>
-        <div class="col-5">
+        <div class="col-12 col-sm-6 col-lg-4">
+            <canvas id="houseWinRate" width="400" height="450"></canvas>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-4">
             <canvas id="housePresence" width="400" height="400"></canvas>
         </div>
     </div>
+
     <script>
         let setPresence = JSON.parse('{{ data.set_presence|json_encode|raw }}');
+        let housePresence = JSON.parse('{{ data.house_presence|json_encode|raw }}');
+        let setWins = JSON.parse('{{ data.set_wins|json_encode|raw }}');
+        let houseWins = JSON.parse('{{ data.house_wins|json_encode|raw }}');
+        let setWinRate = JSON.parse('{{ data.set_win_rate|json_encode|raw }}');
+        let houseWinRate = JSON.parse('{{ data.house_win_rate|json_encode|raw }}');
 
         const setPresenceChart = new Chart(document.getElementById('setPresence').getContext('2d'), {
             type: 'doughnut',
@@ -62,8 +74,6 @@
                 }
             },
         });
-
-        let housePresence = JSON.parse('{{ data.house_presence|json_encode|raw }}');
 
         const housePresenceChart = new Chart(document.getElementById('housePresence').getContext('2d'), {
             type: 'doughnut',
@@ -100,7 +110,89 @@
             },
         });
 
-        let houseWinRate = JSON.parse('{{ data.house_win_rate|json_encode|raw }}');
+        const setWinsChart = new Chart(document.getElementById('setWins').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: Object.keys(setWins),
+                datasets: [
+                    {
+                        label: 'Wins',
+                        data: Object.values(setWins),
+                        borderColor: 'rgb(37, 41, 33)',
+                        backgroundColor: 'rgb(37, 41, 33)',
+                    },
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false,
+                        position: 'bottom',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Set Wins'
+                    }
+                }
+            },
+        });
+
+        const houseWinsChart = new Chart(document.getElementById('houseWins').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: Object.keys(houseWins),
+                datasets: [
+                    {
+                        label: 'Wins',
+                        data: Object.values(houseWins),
+                        borderColor: 'rgb(37, 41, 33)',
+                        backgroundColor: 'rgb(37, 41, 33)',
+                    },
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false,
+                        position: 'bottom',
+                    },
+                    title: {
+                        display: true,
+                        text: 'House Wins'
+                    }
+                }
+            },
+        });
+
+        const setWinRateChart = new Chart(document.getElementById('setWinRate').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: Object.keys(setWinRate),
+                datasets: [
+                    {
+                        label: 'Win Rate',
+                        data: Object.values(setWinRate),
+                        borderColor: 'rgb(37, 41, 33)',
+                        backgroundColor: 'rgb(37, 41, 33)',
+                    },
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false,
+                        position: 'bottom',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Set Win Rate'
+                    }
+                }
+            },
+        });
 
         const houseWinRateChart = new Chart(document.getElementById('houseWinRate').getContext('2d'), {
             type: 'bar',
@@ -129,36 +221,5 @@
                 }
             },
         });
-
-        let setWinRate = JSON.parse('{{ data.set_win_rate|json_encode|raw }}');
-
-        const setWinRateChart = new Chart(document.getElementById('setWinRate').getContext('2d'), {
-            type: 'bar',
-            data: {
-                labels: Object.keys(setWinRate),
-                datasets: [
-                    {
-                        label: 'Wins',
-                        data: Object.values(setWinRate),
-                        borderColor: 'rgb(37, 41, 33)',
-                        backgroundColor: 'rgb(37, 41, 33)',
-                    },
-                ]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        display: false,
-                        position: 'bottom',
-                    },
-                    title: {
-                        display: true,
-                        text: 'Set Win Rate'
-                    }
-                }
-            },
-        });
-
     </script>
 {% endblock %}

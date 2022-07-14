@@ -100,7 +100,7 @@ final class GetGeneralKeyforgeDataCommandHandler
 
         $games = $this->keyforgeRepository->allGames(0, 10000);
 
-        $setWinRate = [
+        $setWins = [
             KeyforgeSet::CotA->name => 0,
             KeyforgeSet::AoA->name => 0,
             KeyforgeSet::WC->name => 0,
@@ -108,7 +108,28 @@ final class GetGeneralKeyforgeDataCommandHandler
             KeyforgeSet::DT->name => 0,
         ];
 
-        $houseWinRate = [
+        $houseWins = [
+            KeyforgeHouse::SANCTUM->name => 0,
+            KeyforgeHouse::DIS->name => 0,
+            KeyforgeHouse::MARS->name => 0,
+            KeyforgeHouse::STAR_ALLIANCE->name => 0,
+            KeyforgeHouse::SAURIAN->name => 0,
+            KeyforgeHouse::SHADOWS->name => 0,
+            KeyforgeHouse::UNTAMED->name => 0,
+            KeyforgeHouse::BROBNAR->name => 0,
+            KeyforgeHouse::UNFATHOMABLE->name => 0,
+            KeyforgeHouse::LOGOS->name => 0,
+        ];
+
+        $setLoses = [
+            KeyforgeSet::CotA->name => 0,
+            KeyforgeSet::AoA->name => 0,
+            KeyforgeSet::WC->name => 0,
+            KeyforgeSet::MM->name => 0,
+            KeyforgeSet::DT->name => 0,
+        ];
+
+        $houseLoses = [
             KeyforgeHouse::SANCTUM->name => 0,
             KeyforgeHouse::DIS->name => 0,
             KeyforgeHouse::MARS->name => 0,
@@ -128,12 +149,41 @@ final class GetGeneralKeyforgeDataCommandHandler
 
             $winnerDeck = $indexedDecks[$game->winnerDeck()->value()];
 
-            $setWinRate[$winnerDeck->set()->name]++;
+            $setWins[$winnerDeck->set()->name]++;
 
             foreach ($winnerDeck->houses()->value() as $house) {
-                $houseWinRate[$house->name]++;
+                $houseWins[$house->name]++;
+            }
+
+            $loserDeck = $indexedDecks[$game->loserDeck()->value()];
+
+            $setLoses[$loserDeck->set()->name]++;
+
+            foreach ($loserDeck->houses()->value() as $house) {
+                $houseLoses[$house->name]++;
             }
         }
+
+        $setWinRate = [
+            KeyforgeSet::CotA->name => $this->winRate($setWins[KeyforgeSet::CotA->name], $setLoses[KeyforgeSet::CotA->name]),
+            KeyforgeSet::AoA->name => $this->winRate($setWins[KeyforgeSet::AoA->name], $setLoses[KeyforgeSet::AoA->name]),
+            KeyforgeSet::WC->name => $this->winRate($setWins[KeyforgeSet::WC->name], $setLoses[KeyforgeSet::WC->name]),
+            KeyforgeSet::MM->name => $this->winRate($setWins[KeyforgeSet::MM->name], $setLoses[KeyforgeSet::MM->name]),
+            KeyforgeSet::DT->name => $this->winRate($setWins[KeyforgeSet::DT->name], $setLoses[KeyforgeSet::DT->name]),
+        ];
+
+        $houseWinRate = [
+            KeyforgeHouse::SANCTUM->name => $this->winRate($houseWins[KeyforgeHouse::SANCTUM->name], $houseLoses[KeyforgeHouse::SANCTUM->name]),
+            KeyforgeHouse::DIS->name => $this->winRate($houseWins[KeyforgeHouse::DIS->name], $houseLoses[KeyforgeHouse::DIS->name]),
+            KeyforgeHouse::MARS->name => $this->winRate($houseWins[KeyforgeHouse::MARS->name], $houseLoses[KeyforgeHouse::MARS->name]),
+            KeyforgeHouse::STAR_ALLIANCE->name => $this->winRate($houseWins[KeyforgeHouse::STAR_ALLIANCE->name], $houseLoses[KeyforgeHouse::STAR_ALLIANCE->name]),
+            KeyforgeHouse::SAURIAN->name => $this->winRate($houseWins[KeyforgeHouse::SAURIAN->name], $houseLoses[KeyforgeHouse::SAURIAN->name]),
+            KeyforgeHouse::SHADOWS->name => $this->winRate($houseWins[KeyforgeHouse::SHADOWS->name], $houseLoses[KeyforgeHouse::SHADOWS->name]),
+            KeyforgeHouse::UNTAMED->name => $this->winRate($houseWins[KeyforgeHouse::UNTAMED->name], $houseLoses[KeyforgeHouse::UNTAMED->name]),
+            KeyforgeHouse::BROBNAR->name => $this->winRate($houseWins[KeyforgeHouse::BROBNAR->name], $houseLoses[KeyforgeHouse::BROBNAR->name]),
+            KeyforgeHouse::UNFATHOMABLE->name => $this->winRate($houseWins[KeyforgeHouse::UNFATHOMABLE->name], $houseLoses[KeyforgeHouse::UNFATHOMABLE->name]),
+            KeyforgeHouse::LOGOS->name => $this->winRate($houseWins[KeyforgeHouse::LOGOS->name], $houseLoses[KeyforgeHouse::LOGOS->name]),
+        ];
 
         $result = [
             'deck_count' => \count($decks),
@@ -143,6 +193,8 @@ final class GetGeneralKeyforgeDataCommandHandler
             'deck_win_rate' => $maxWinRateResult,
             'deck_max_sas' => $maxSasResult,
             'deck_min_sas' => $minSasResult,
+            'set_wins' => $setWins,
+            'house_wins' => $houseWins,
             'set_win_rate' => $setWinRate,
             'house_win_rate' => $houseWinRate,
         ];
