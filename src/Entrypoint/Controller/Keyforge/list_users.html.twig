@@ -21,7 +21,7 @@
                     <td><a href="/keyforge/games/user/{{ user.id }}">{{ user.name }}</a></td>
                     <td>{{ user.wins }}</td>
                     <td>{{ user.loses }}</td>
-                    <td>{{ user.win_rate|round(2) }}</td>
+                    <td>{{ user.win_rate|round(2) }}%</td>
                     <td>{{ user.games_played }}</td>
                 </tr>
             {% endfor %}

@@ -14,36 +14,45 @@
     </div>
 
     <div class="row mt-3">
-        <div class="col-12 col-sm-6 col-lg-4">
+        <div class="col-12 col-sm-6 col-lg-3">
             <canvas id="setWins" width="400" height="400"></canvas>
         </div>
-        <div class="col-12 col-sm-6 col-lg-4">
+        <div class="col-12 col-sm-6 col-lg-3">
             <canvas id="setWinRate" width="400" height="400"></canvas>
         </div>
-        <div class="col-12 col-sm-6 col-lg-4">
+        <div class="col-12 col-sm-6 col-lg-3">
+            <canvas id="setPickRate" width="400" height="400"></canvas>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-3">
             <canvas id="setPresence" width="400" height="400"></canvas>
         </div>
     </div>
 
     <div class="row mt-3">
-        <div class="col-12 col-sm-6 col-lg-4">
+        <div class="col-12 col-sm-6 col-lg-3">
             <canvas id="houseWins" width="400" height="450"></canvas>
         </div>
-        <div class="col-12 col-sm-6 col-lg-4">
+        <div class="col-12 col-sm-6 col-lg-3">
             <canvas id="houseWinRate" width="400" height="450"></canvas>
         </div>
-        <div class="col-12 col-sm-6 col-lg-4">
+        <div class="col-12 col-sm-6 col-lg-3">
+            <canvas id="housePickRate" width="400" height="450"></canvas>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-3">
             <canvas id="housePresence" width="400" height="400"></canvas>
         </div>
     </div>
 
     <script>
         let setPresence = JSON.parse('{{ data.set_presence|json_encode|raw }}');
+
         let housePresence = JSON.parse('{{ data.house_presence|json_encode|raw }}');
         let setWins = JSON.parse('{{ data.set_wins|json_encode|raw }}');
         let houseWins = JSON.parse('{{ data.house_wins|json_encode|raw }}');
         let setWinRate = JSON.parse('{{ data.set_win_rate|json_encode|raw }}');
         let houseWinRate = JSON.parse('{{ data.house_win_rate|json_encode|raw }}');
+        let setPickRate = JSON.parse('{{ data.set_pick_rate|json_encode|raw }}');
+        let housePickRate = JSON.parse('{{ data.house_pick_rate|json_encode|raw }}');
 
         const setPresenceChart = new Chart(document.getElementById('setPresence').getContext('2d'), {
             type: 'doughnut',
@@ -172,7 +181,7 @@
                 labels: Object.keys(setWinRate),
                 datasets: [
                     {
-                        label: 'Win Rate',
+                        label: '%',
                         data: Object.values(setWinRate),
                         borderColor: 'rgb(37, 41, 33)',
                         backgroundColor: 'rgb(37, 41, 33)',
@@ -200,7 +209,7 @@
                 labels: Object.keys(houseWinRate),
                 datasets: [
                     {
-                        label: 'Wins',
+                        label: '%',
                         data: Object.values(houseWinRate),
                         borderColor: 'rgb(37, 41, 33)',
                         backgroundColor: 'rgb(37, 41, 33)',
@@ -217,6 +226,62 @@
                     title: {
                         display: true,
                         text: 'House Win Rate'
+                    }
+                }
+            },
+        });
+
+        const setPickRateChart = new Chart(document.getElementById('setPickRate').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: Object.keys(setPickRate),
+                datasets: [
+                    {
+                        label: '%',
+                        data: Object.values(setPickRate),
+                        borderColor: 'rgb(37, 41, 33)',
+                        backgroundColor: 'rgb(37, 41, 33)',
+                    },
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false,
+                        position: 'bottom',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Set Pick Rate'
+                    }
+                }
+            },
+        });
+
+        const housePickRateChart = new Chart(document.getElementById('housePickRate').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: Object.keys(housePickRate),
+                datasets: [
+                    {
+                        label: '%',
+                        data: Object.values(housePickRate),
+                        borderColor: 'rgb(37, 41, 33)',
+                        backgroundColor: 'rgb(37, 41, 33)',
+                    },
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false,
+                        position: 'bottom',
+                    },
+                    title: {
+                        display: true,
+                        text: 'House Pick Rate'
                     }
                 }
             },

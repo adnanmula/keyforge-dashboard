@@ -1,10 +1,7 @@
 home:
   path: /
-  controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::redirectAction
-  defaults:
-    route: keyforge_home
-    permanent: true
-    keepQueryParams: false
+  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\GetGeneralInfoController
+  methods: [ GET ]
 
 keyforge_home:
   path: /keyforge

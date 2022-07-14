@@ -185,6 +185,31 @@ final class GetGeneralKeyforgeDataCommandHandler
             KeyforgeHouse::LOGOS->name => $this->winRate($houseWins[KeyforgeHouse::LOGOS->name], $houseLoses[KeyforgeHouse::LOGOS->name]),
         ];
 
+
+        $totalSetPicks = \count($games) * 2;
+        $totalHousePicks = \count($games) * 6;
+
+        $setPickRate = [
+            KeyforgeSet::CotA->name => $this->pickRate($setWins[KeyforgeSet::CotA->name] + $setLoses[KeyforgeSet::CotA->name], $totalSetPicks),
+            KeyforgeSet::AoA->name => $this->pickRate($setWins[KeyforgeSet::AoA->name] + $setLoses[KeyforgeSet::AoA->name], $totalSetPicks),
+            KeyforgeSet::WC->name => $this->pickRate($setWins[KeyforgeSet::WC->name] + $setLoses[KeyforgeSet::WC->name], $totalSetPicks),
+            KeyforgeSet::MM->name => $this->pickRate($setWins[KeyforgeSet::MM->name] + $setLoses[KeyforgeSet::MM->name], $totalSetPicks),
+            KeyforgeSet::DT->name => $this->pickRate($setWins[KeyforgeSet::DT->name] + $setLoses[KeyforgeSet::DT->name], $totalSetPicks),
+        ];
+
+        $housePickRate = [
+            KeyforgeHouse::SANCTUM->name => $this->pickRate($houseWins[KeyforgeHouse::SANCTUM->name] + $houseLoses[KeyforgeHouse::SANCTUM->name], $totalHousePicks),
+            KeyforgeHouse::DIS->name => $this->pickRate($houseWins[KeyforgeHouse::DIS->name] + $houseLoses[KeyforgeHouse::DIS->name], $totalHousePicks),
+            KeyforgeHouse::MARS->name => $this->pickRate($houseWins[KeyforgeHouse::MARS->name] + $houseLoses[KeyforgeHouse::MARS->name], $totalHousePicks),
+            KeyforgeHouse::STAR_ALLIANCE->name => $this->pickRate($houseWins[KeyforgeHouse::STAR_ALLIANCE->name] + $houseLoses[KeyforgeHouse::STAR_ALLIANCE->name], $totalHousePicks),
+            KeyforgeHouse::SAURIAN->name => $this->pickRate($houseWins[KeyforgeHouse::SAURIAN->name] + $houseLoses[KeyforgeHouse::SAURIAN->name], $totalHousePicks),
+            KeyforgeHouse::SHADOWS->name => $this->pickRate($houseWins[KeyforgeHouse::SHADOWS->name] + $houseLoses[KeyforgeHouse::SHADOWS->name], $totalHousePicks),
+            KeyforgeHouse::UNTAMED->name => $this->pickRate($houseWins[KeyforgeHouse::UNTAMED->name] + $houseLoses[KeyforgeHouse::UNTAMED->name], $totalHousePicks),
+            KeyforgeHouse::BROBNAR->name => $this->pickRate($houseWins[KeyforgeHouse::BROBNAR->name] + $houseLoses[KeyforgeHouse::BROBNAR->name], $totalHousePicks),
+            KeyforgeHouse::UNFATHOMABLE->name => $this->pickRate($houseWins[KeyforgeHouse::UNFATHOMABLE->name] + $houseLoses[KeyforgeHouse::UNFATHOMABLE->name], $totalHousePicks),
+            KeyforgeHouse::LOGOS->name => $this->pickRate($houseWins[KeyforgeHouse::LOGOS->name] + $houseLoses[KeyforgeHouse::LOGOS->name], $totalHousePicks),
+        ];
+
         $result = [
             'deck_count' => \count($decks),
             'set_presence' => $setPresence,
@@ -197,6 +222,8 @@ final class GetGeneralKeyforgeDataCommandHandler
             'house_wins' => $houseWins,
             'set_win_rate' => $setWinRate,
             'house_win_rate' => $houseWinRate,
+            'set_pick_rate' => $setPickRate,
+            'house_pick_rate' => $housePickRate,
         ];
 
         return $result;
@@ -206,6 +233,15 @@ final class GetGeneralKeyforgeDataCommandHandler
     {
         $games = $wins + $loses;
 
+        if ($games === 0) {
+            return 0;
+        }
+
+        return round($wins/$games*100, 2);
+    }
+
+    private function pickRate(int $wins, int $games): float
+    {
         if ($games === 0) {
             return 0;
         }
