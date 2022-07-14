@@ -48,6 +48,8 @@ final class GetGeneralKeyforgeDataCommandHandler
         $maxWinRate = 0;
         $maxWinRateResult = [];
 
+        $indexedDecks = [];
+
         foreach ($decks as $deck) {
             $setPresence[$deck->set()->name]++;
 
@@ -92,9 +94,46 @@ final class GetGeneralKeyforgeDataCommandHandler
                     'win_rate' => $this->winRate($deck->wins(), $deck->losses()),
                 ];
             }
+
+            $indexedDecks[$deck->id()->value()] = $deck;
         }
 
         $games = $this->keyforgeRepository->allGames(0, 10000);
+
+        $setWinRate = [
+            KeyforgeSet::CotA->name => 0,
+            KeyforgeSet::AoA->name => 0,
+            KeyforgeSet::WC->name => 0,
+            KeyforgeSet::MM->name => 0,
+            KeyforgeSet::DT->name => 0,
+        ];
+
+        $houseWinRate = [
+            KeyforgeHouse::SANCTUM->name => 0,
+            KeyforgeHouse::DIS->name => 0,
+            KeyforgeHouse::MARS->name => 0,
+            KeyforgeHouse::STAR_ALLIANCE->name => 0,
+            KeyforgeHouse::SAURIAN->name => 0,
+            KeyforgeHouse::SHADOWS->name => 0,
+            KeyforgeHouse::UNTAMED->name => 0,
+            KeyforgeHouse::BROBNAR->name => 0,
+            KeyforgeHouse::UNFATHOMABLE->name => 0,
+            KeyforgeHouse::LOGOS->name => 0,
+        ];
+
+        foreach ($games as $game) {
+            if (false === \array_key_exists($game->winnerDeck()->value(), $indexedDecks)) {
+                continue;
+            }
+
+            $winnerDeck = $indexedDecks[$game->winnerDeck()->value()];
+
+            $setWinRate[$winnerDeck->set()->name]++;
+
+            foreach ($winnerDeck->houses()->value() as $house) {
+                $houseWinRate[$house->name]++;
+            }
+        }
 
         $result = [
             'deck_count' => \count($decks),
@@ -104,6 +143,8 @@ final class GetGeneralKeyforgeDataCommandHandler
             'deck_win_rate' => $maxWinRateResult,
             'deck_max_sas' => $maxSasResult,
             'deck_min_sas' => $minSasResult,
+            'set_win_rate' => $setWinRate,
+            'house_win_rate' => $houseWinRate,
         ];
 
         return $result;

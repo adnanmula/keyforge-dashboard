@@ -3,7 +3,7 @@
 {% block title %}Decks{% endblock %}
 
 {% block body %}
-    <div class="row">
+    <div class="row bg-light m-1 border border-dark">
         <div class="col">
             <span>Decks registered: {{ data.deck_count }}</span> <br>
             <span>Games played: {{ data.games_played }}</span> <br>
@@ -13,21 +13,23 @@
         </div>
     </div>
 
-    <div class="row mb-3">
-    </div>
-
-
-    <div class="row">
-        <div class="col-4 col-xs-10">
-            <span>Set presence</span>
+    <div class="row mt-3">
+        <div class="col-5">
+            <canvas id="setWinRate" width="400" height="400"></canvas>
+        </div>
+        <div class="col-5">
             <canvas id="setPresence" width="400" height="400"></canvas>
         </div>
-        <div class="col-4 col-xs-10">
-            <span>House presence</span>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-5">
+            <canvas id="houseWinRate" width="400" height="400"></canvas>
+        </div>
+        <div class="col-5">
             <canvas id="housePresence" width="400" height="400"></canvas>
         </div>
     </div>
-
     <script>
         let setPresence = JSON.parse('{{ data.set_presence|json_encode|raw }}');
 
@@ -45,6 +47,19 @@
                     ],
                 }],
                 labels: Object.keys(setPresence),
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false,
+                        position: 'bottom',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Set Presence'
+                    }
+                }
             },
         });
 
@@ -70,6 +85,80 @@
                 }],
                 labels: Object.keys(housePresence),
             },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false,
+                        position: 'bottom',
+                    },
+                    title: {
+                        display: true,
+                        text: 'House Presence'
+                    }
+                }
+            },
         });
+
+        let houseWinRate = JSON.parse('{{ data.house_win_rate|json_encode|raw }}');
+
+        const houseWinRateChart = new Chart(document.getElementById('houseWinRate').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: Object.keys(houseWinRate),
+                datasets: [
+                    {
+                        label: 'Wins',
+                        data: Object.values(houseWinRate),
+                        borderColor: 'rgb(37, 41, 33)',
+                        backgroundColor: 'rgb(37, 41, 33)',
+                    },
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false,
+                        position: 'bottom',
+                    },
+                    title: {
+                        display: true,
+                        text: 'House Win Rate'
+                    }
+                }
+            },
+        });
+
+        let setWinRate = JSON.parse('{{ data.set_win_rate|json_encode|raw }}');
+
+        const setWinRateChart = new Chart(document.getElementById('setWinRate').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: Object.keys(setWinRate),
+                datasets: [
+                    {
+                        label: 'Wins',
+                        data: Object.values(setWinRate),
+                        borderColor: 'rgb(37, 41, 33)',
+                        backgroundColor: 'rgb(37, 41, 33)',
+                    },
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false,
+                        position: 'bottom',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Set Win Rate'
+                    }
+                }
+            },
+        });
+
     </script>
 {% endblock %}
