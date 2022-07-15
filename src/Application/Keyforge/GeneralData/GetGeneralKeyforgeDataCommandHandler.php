@@ -240,12 +240,12 @@ final class GetGeneralKeyforgeDataCommandHandler
         return round($wins/$games*100, 2);
     }
 
-    private function pickRate(int $wins, int $games): float
+    private function pickRate(int $picks, int $games): float
     {
         if ($games === 0) {
             return 0;
         }
 
-        return round($wins/$games*100, 2);
+        return round($picks / $games * 100, 2);
     }
 }

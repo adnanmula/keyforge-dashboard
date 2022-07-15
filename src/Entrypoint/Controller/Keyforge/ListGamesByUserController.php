@@ -11,12 +11,19 @@ final class ListGamesByUserController extends QueryController
 {
     public function __invoke(Request $request, string $userId): Response
     {
-        $games = $this->extractResult(
-            $this->bus->dispatch(new GetUserStatsQuery($userId)),
-        );
+        $result = $this->extractResult($this->bus->dispatch(new GetUserStatsQuery($userId)));
+
         return $this->render(
             'Keyforge/list_games_by_user.html.twig',
-            ['games' => $games, 'reference' => $userId, 'name' => $this->getReferenceName($games[0] ?? null, $userId)],
+            [
+                'games' => $result['games'],
+                'reference' => $userId,
+                'name' => $this->getReferenceName($result['games'][0] ?? null, $userId),
+                'win_rate_vs_users' => $result['win_rate_vs_users'],
+                'pick_rate_vs_users' => $result['pick_rate_vs_users'],
+                'wins_by_date' => $result['wins_by_date'],
+                'loses_by_date' => $result['loses_by_date'],
+            ],
         );
     }
 
