@@ -4,14 +4,14 @@ namespace AdnanMula\Cards\Application\Query\Keyforge\Stats;
 
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGameRepository;
-use AdnanMula\Cards\Domain\Model\User\UserRepository;
+use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUserRepository;
 
 final class UserStatsQueryHandler
 {
     public function __construct(
         private KeyforgeDeckRepository $deckRepository,
         private KeyforgeGameRepository $gameRepository,
-        private UserRepository $userRepository
+        private KeyforgeUserRepository $userRepository
     ) {}
 
     public function __invoke(UserStatsQuery $query): array

@@ -7,7 +7,7 @@ final class Initial extends AbstractMigration
     public function up(): void
     {
         $this->execute(
-        'CREATE TABLE users (
+        'CREATE TABLE keyforge_users (
                 id uuid NOT NULL,
                 name character varying(32) NOT NULL
                    CONSTRAINT name_unique UNIQUE,
@@ -46,7 +46,7 @@ final class Initial extends AbstractMigration
 
     public function down(): void
     {
-        $this->execute('DROP TABLE IF EXISTS "users"');
+        $this->execute('DROP TABLE IF EXISTS "keyforge_"');
         $this->execute('DROP TABLE IF EXISTS "keyforge_decks"');
         $this->execute('DROP TABLE IF EXISTS "keyforge_games"');
     }

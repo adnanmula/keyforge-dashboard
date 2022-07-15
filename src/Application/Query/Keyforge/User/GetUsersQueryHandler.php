@@ -4,13 +4,13 @@ namespace AdnanMula\Cards\Application\Query\Keyforge\User;
 
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGame;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGameRepository;
-use AdnanMula\Cards\Domain\Model\User\User;
-use AdnanMula\Cards\Domain\Model\User\UserRepository;
+use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUser;
+use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUserRepository;
 
 final class GetUsersQueryHandler
 {
     public function __construct(
-        private UserRepository $repository,
+        private KeyforgeUserRepository $repository,
         private KeyforgeGameRepository $gameRepository
     ) {}
 
@@ -22,7 +22,7 @@ final class GetUsersQueryHandler
             return $users;
         }
 
-        $userIds = \array_map(static fn(User $user) => $user->id(), $users);
+        $userIds = \array_map(static fn(KeyforgeUser $user) => $user->id(), $users);
 
         $games = $this->gameRepository->byUser(...$userIds);
 

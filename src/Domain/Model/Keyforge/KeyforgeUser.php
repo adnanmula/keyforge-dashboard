@@ -1,13 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace AdnanMula\Cards\Domain\Model\User;
+namespace AdnanMula\Cards\Domain\Model\Keyforge;
 
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 
-final class User
+final class KeyforgeUser
 {
-    private const MODEL_NAME = 'user';
-
     private function __construct(
         private Uuid $id,
         private string $name
@@ -26,10 +24,5 @@ final class User
     public function name(): string
     {
         return $this->name;
-    }
-
-    public static function modelName(): string
-    {
-        return self::MODEL_NAME;
     }
 }

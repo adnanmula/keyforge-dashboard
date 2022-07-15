@@ -4,14 +4,14 @@ namespace AdnanMula\Cards\Application\Query\Keyforge\Game;
 
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGameRepository;
-use AdnanMula\Cards\Domain\Model\User\UserRepository;
+use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUserRepository;
 
 final class GetGamesByDeckQueryHandler
 {
     public function __construct(
         private KeyforgeGameRepository $gameRepository,
         private KeyforgeDeckRepository $deckRepository,
-        private UserRepository $userRepository
+        private KeyforgeUserRepository $userRepository
     ) {}
 
     public function __invoke(GetGamesByDeckQuery $query): array

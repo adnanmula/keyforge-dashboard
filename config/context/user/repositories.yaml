@@ -1,4 +1,0 @@
-services:
-  AdnanMula\Cards\Domain\Model\User\UserRepository:
-    class: AdnanMula\Cards\Infrastructure\Persistence\Repository\User\UserDbalRepository
-    parent: 'repository.dbal.base'

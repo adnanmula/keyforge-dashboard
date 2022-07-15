@@ -3,3 +3,5 @@ services:
     alias: AdnanMula\Cards\Infrastructure\Persistence\Repository\Keyforge\KeyforgeDeckDbalRepository
   AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGameRepository:
     alias: AdnanMula\Cards\Infrastructure\Persistence\Repository\Keyforge\KeyforgeGameDbalRepository
+  AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUserRepository:
+    alias: AdnanMula\Cards\Infrastructure\Persistence\Repository\Keyforge\KeyforgeUserDbalRepository

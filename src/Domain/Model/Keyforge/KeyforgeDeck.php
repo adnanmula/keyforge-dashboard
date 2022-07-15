@@ -8,8 +8,6 @@ use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 
 final class KeyforgeDeck
 {
-    private const MODEL_NAME = 'keyforge_deck';
-
     public function __construct(
         private Uuid $id,
         private string $name,
@@ -73,10 +71,5 @@ final class KeyforgeDeck
         $this->losses = $losses;
 
         return $this;
-    }
-
-    public static function modelName(): string
-    {
-        return self::MODEL_NAME;
     }
 }

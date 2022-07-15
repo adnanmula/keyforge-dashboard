@@ -7,8 +7,6 @@ use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 
 final class KeyforgeGame
 {
-    private const MODEL_NAME = 'keyforge_game';
-
     public function __construct(
         private Uuid $id,
         private Uuid $winner,
@@ -58,10 +56,5 @@ final class KeyforgeGame
     public function date(): \DateTimeImmutable
     {
         return $this->date;
-    }
-
-    public static function modelName(): string
-    {
-        return self::MODEL_NAME;
     }
 }

@@ -6,7 +6,7 @@ use AdnanMula\Cards\Application\Command\Keyforge\Game\Create\CreateGameCommand;
 use AdnanMula\Cards\Application\Query\Keyforge\Deck\GetDecksQuery;
 use AdnanMula\Cards\Application\Query\Keyforge\User\GetUsersQuery;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeck;
-use AdnanMula\Cards\Domain\Model\User\User;
+use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUser;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,7 +23,7 @@ final class CreateGameController extends Controller
             $this->bus->dispatch(new GetDecksQuery(0, 1000))
         );
 
-        $users = \array_map(static fn (User $user) => ['id' => $user->id()->value(), 'name' => $user->name()], $users);
+        $users = \array_map(static fn (KeyforgeUser $user) => ['id' => $user->id()->value(), 'name' => $user->name()], $users);
         $decks = \array_map(static fn (KeyforgeDeck $deck) => ['id' => $deck->id()->value(), 'name' => $deck->name()], $decks);
 
         if ($request->getMethod() === Request::METHOD_GET) {

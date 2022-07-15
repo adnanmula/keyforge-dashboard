@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace AdnanMula\Cards\Tests\Mock\Domain\Model\User;
+namespace AdnanMula\Cards\Tests\Mock\Domain\Model\Keyforge;
 
+use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUser;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
-use AdnanMula\Cards\Domain\Model\User\User;
 
 final class UserMotherObject
 {
@@ -19,9 +19,9 @@ final class UserMotherObject
         $this->name = self::MOCK_NAME;
     }
 
-    public function build(): User
+    public function build(): KeyforgeUser
     {
-        return User::create($this->id, $this->name);
+        return KeyforgeUser::create($this->id, $this->name);
     }
 
     public function setId(Uuid $id): self
@@ -38,9 +38,9 @@ final class UserMotherObject
         return $this;
     }
 
-    public static function buildDefault(): User
+    public static function buildDefault(): KeyforgeUser
     {
-        return User::create(
+        return KeyforgeUser::create(
             Uuid::from(self::MOCK_ID),
             self::MOCK_NAME,
         );

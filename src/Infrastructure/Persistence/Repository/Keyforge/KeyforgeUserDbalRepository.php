@@ -1,35 +1,35 @@
 <?php declare(strict_types=1);
 
-namespace AdnanMula\Cards\Infrastructure\Persistence\Repository\User;
+namespace AdnanMula\Cards\Infrastructure\Persistence\Repository\Keyforge;
 
+use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUser;
+use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUserRepository;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
-use AdnanMula\Cards\Domain\Model\User\User;
-use AdnanMula\Cards\Domain\Model\User\UserRepository;
 use AdnanMula\Cards\Infrastructure\Persistence\Repository\DbalRepository;
 use Doctrine\DBAL\Connection;
 
-final class UserDbalRepository extends DbalRepository implements UserRepository
+final class KeyforgeUserDbalRepository extends DbalRepository implements KeyforgeUserRepository
 {
-    private const TABLE_USER = 'users';
+    private const TABLE = 'keyforge_users';
 
     public function all(): array
     {
         $result = $this->connection
             ->createQueryBuilder()
             ->select('a.id, a.name')
-            ->from(self::TABLE_USER, 'a')
+            ->from(self::TABLE, 'a')
             ->execute()
             ->fetchAllAssociative();
 
         return \array_map(fn (array $row) => $this->map($row), $result);
     }
 
-    public function byId(Uuid $id): ?User
+    public function byId(Uuid $id): ?KeyforgeUser
     {
         $result = $this->connection
             ->createQueryBuilder()
             ->select('a.id, a.name')
-            ->from(self::TABLE_USER, 'a')
+            ->from(self::TABLE, 'a')
             ->where('a.id = :id')
             ->setParameter('id', $id->value())
             ->setMaxResults(1)
@@ -48,7 +48,7 @@ final class UserDbalRepository extends DbalRepository implements UserRepository
         $result = $this->connection
             ->createQueryBuilder()
             ->select('a.id, a.name')
-            ->from(self::TABLE_USER, 'a')
+            ->from(self::TABLE, 'a')
             ->where('a.id in (:ids)')
             ->setParameter('ids', \array_map(static fn (Uuid $id) => $id->value(), $ids),Connection::PARAM_STR_ARRAY)
             ->execute()
@@ -61,7 +61,7 @@ final class UserDbalRepository extends DbalRepository implements UserRepository
         return \array_map(fn (array $user) => $this->map($user), $result);
     }
 
-    public function save(User $user): void
+    public function save(KeyforgeUser $user): void
     {
         $stmt = $this->connection->prepare(
             \sprintf(
@@ -70,7 +70,7 @@ final class UserDbalRepository extends DbalRepository implements UserRepository
                 ON CONFLICT (id) DO UPDATE SET
                 id = :id,
                 name = :name',
-                self::TABLE_USER,
+                self::TABLE,
             ),
         );
 
@@ -80,9 +80,9 @@ final class UserDbalRepository extends DbalRepository implements UserRepository
         $stmt->execute();
     }
 
-    private function map($user): User
+    private function map($user): KeyforgeUser
     {
-        return User::create(
+        return KeyforgeUser::create(
             Uuid::from($user['id']),
             $user['name'],
         );
