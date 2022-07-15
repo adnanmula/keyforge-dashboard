@@ -2,7 +2,7 @@
 
 namespace AdnanMula\Cards\Infrastructure\Persistence\Repository\User;
 
-use AdnanMula\Cards\Domain\Model\Shared\ValueObject\UuidValueObject;
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Domain\Model\User\User;
 use AdnanMula\Cards\Domain\Model\User\UserRepository;
 use AdnanMula\Cards\Infrastructure\Persistence\Repository\DbalRepository;
@@ -24,7 +24,7 @@ final class UserDbalRepository extends DbalRepository implements UserRepository
         return \array_map(fn (array $row) => $this->map($row), $result);
     }
 
-    public function byId(UuidValueObject $id): ?User
+    public function byId(Uuid $id): ?User
     {
         $result = $this->connection
             ->createQueryBuilder()
@@ -43,14 +43,14 @@ final class UserDbalRepository extends DbalRepository implements UserRepository
         return $this->map($result);
     }
 
-    public function byIds(UuidValueObject ...$ids): array
+    public function byIds(Uuid ...$ids): array
     {
         $result = $this->connection
             ->createQueryBuilder()
             ->select('a.id, a.name')
             ->from(self::TABLE_USER, 'a')
             ->where('a.id in (:ids)')
-            ->setParameter('ids', \array_map(static fn (UuidValueObject $id) => $id->value(), $ids),Connection::PARAM_STR_ARRAY)
+            ->setParameter('ids', \array_map(static fn (Uuid $id) => $id->value(), $ids),Connection::PARAM_STR_ARRAY)
             ->execute()
             ->fetchAllAssociative();
 
@@ -83,7 +83,7 @@ final class UserDbalRepository extends DbalRepository implements UserRepository
     private function map($user): User
     {
         return User::create(
-            UuidValueObject::from($user['id']),
+            Uuid::from($user['id']),
             $user['name'],
         );
     }

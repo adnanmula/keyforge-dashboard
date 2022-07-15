@@ -3,49 +3,49 @@
 namespace AdnanMula\Cards\Domain\Model\Keyforge;
 
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeGameScore;
-use AdnanMula\Cards\Domain\Model\Shared\ValueObject\UuidValueObject;
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 
 final class KeyforgeGame
 {
     private const MODEL_NAME = 'keyforge_game';
 
     public function __construct(
-        private UuidValueObject $id,
-        private UuidValueObject $winner,
-        private UuidValueObject $loser,
-        private UuidValueObject $winnerDeck,
-        private UuidValueObject $loserDeck,
-        private ?UuidValueObject $firstTurn,
+        private Uuid $id,
+        private Uuid $winner,
+        private Uuid $loser,
+        private Uuid $winnerDeck,
+        private Uuid $loserDeck,
+        private ?Uuid $firstTurn,
         private KeyforgeGameScore $score,
         private \DateTimeImmutable $date
     ) {}
 
-    public function id(): UuidValueObject
+    public function id(): Uuid
     {
         return $this->id;
     }
 
-    public function winner(): UuidValueObject
+    public function winner(): Uuid
     {
         return $this->winner;
     }
 
-    public function loser(): UuidValueObject
+    public function loser(): Uuid
     {
         return $this->loser;
     }
 
-    public function winnerDeck(): UuidValueObject
+    public function winnerDeck(): Uuid
     {
         return $this->winnerDeck;
     }
 
-    public function loserDeck(): UuidValueObject
+    public function loserDeck(): Uuid
     {
         return $this->loserDeck;
     }
 
-    public function firstTurn(): ?UuidValueObject
+    public function firstTurn(): ?Uuid
     {
         return $this->firstTurn;
     }

@@ -8,10 +8,16 @@ services:
     autoconfigure: true
     public: false
 
-  AdnanMula\Cards\Application\:
+  AdnanMula\Cards\Application\Command\:
     autowire: true
     autoconfigure: true
-    resource: '../src/Application/*/*/*Handler.php'
+    resource: '../src/Application/Command/*/*/*/*Handler.php'
+    tags: [{ name: messenger.message_handler, bus: messenger.bus.command }]
+
+  AdnanMula\Cards\Application\Query\:
+    autowire: true
+    autoconfigure: true
+    resource: '../src/Application/Query/*/*/*Handler.php'
     tags: [{ name: messenger.message_handler, bus: messenger.bus.command }]
 
   AdnanMula\Cards\Domain\Service\:

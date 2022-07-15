@@ -8,7 +8,7 @@ use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeDeckHouses;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeGameScore;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeHouse;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeSet;
-use AdnanMula\Cards\Domain\Model\Shared\ValueObject\UuidValueObject;
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Domain\Service\Persistence\Fixture;
 use AdnanMula\Cards\Infrastructure\Fixtures\DbalFixture;
 use AdnanMula\Cards\Infrastructure\Fixtures\User\UserFixtures;
@@ -27,12 +27,12 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
     {
         $this->save(
             new KeyforgeGame(
-                UuidValueObject::from(self::FIXTURE_KEYFORGE_GAME_1_ID),
-                UuidValueObject::from(UserFixtures::FIXTURE_USER_2_ID),
-                UuidValueObject::from(UserFixtures::FIXTURE_USER_1_ID),
-                UuidValueObject::from(KeyforgeDecksFixtures::FIXTURE_KEYFORGE_DECK_1_ID),
-                UuidValueObject::from(KeyforgeDecksFixtures::FIXTURE_KEYFORGE_DECK_2_ID),
-                UuidValueObject::from(UserFixtures::FIXTURE_USER_2_ID),
+                Uuid::from(self::FIXTURE_KEYFORGE_GAME_1_ID),
+                Uuid::from(UserFixtures::FIXTURE_USER_2_ID),
+                Uuid::from(UserFixtures::FIXTURE_USER_1_ID),
+                Uuid::from(KeyforgeDecksFixtures::FIXTURE_KEYFORGE_DECK_1_ID),
+                Uuid::from(KeyforgeDecksFixtures::FIXTURE_KEYFORGE_DECK_2_ID),
+                Uuid::from(UserFixtures::FIXTURE_USER_2_ID),
                 KeyforgeGameScore::from(3, 2),
                 new \DateTimeImmutable('2022-05-24 16:00:00'),
             ),
@@ -40,12 +40,12 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
 
         $this->save(
             new KeyforgeGame(
-                UuidValueObject::from(self::FIXTURE_KEYFORGE_GAME_2_ID),
-                UuidValueObject::from(UserFixtures::FIXTURE_USER_1_ID),
-                UuidValueObject::from(UserFixtures::FIXTURE_USER_2_ID),
-                UuidValueObject::from(KeyforgeDecksFixtures::FIXTURE_KEYFORGE_DECK_3_ID),
-                UuidValueObject::from(KeyforgeDecksFixtures::FIXTURE_KEYFORGE_DECK_2_ID),
-                UuidValueObject::from(UserFixtures::FIXTURE_USER_1_ID),
+                Uuid::from(self::FIXTURE_KEYFORGE_GAME_2_ID),
+                Uuid::from(UserFixtures::FIXTURE_USER_1_ID),
+                Uuid::from(UserFixtures::FIXTURE_USER_2_ID),
+                Uuid::from(KeyforgeDecksFixtures::FIXTURE_KEYFORGE_DECK_3_ID),
+                Uuid::from(KeyforgeDecksFixtures::FIXTURE_KEYFORGE_DECK_2_ID),
+                Uuid::from(UserFixtures::FIXTURE_USER_1_ID),
                 KeyforgeGameScore::from(3, 1),
                 new \DateTimeImmutable('2022-06-14 10:00:00'),
             ),
@@ -53,12 +53,12 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
 
         $this->save(
             new KeyforgeGame(
-                UuidValueObject::from(self::FIXTURE_KEYFORGE_GAME_3_ID),
-                UuidValueObject::from(UserFixtures::FIXTURE_USER_2_ID),
-                UuidValueObject::from(UserFixtures::FIXTURE_USER_1_ID),
-                UuidValueObject::from(KeyforgeDecksFixtures::FIXTURE_KEYFORGE_DECK_4_ID),
-                UuidValueObject::from(KeyforgeDecksFixtures::FIXTURE_KEYFORGE_DECK_1_ID),
-                UuidValueObject::from(UserFixtures::FIXTURE_USER_1_ID),
+                Uuid::from(self::FIXTURE_KEYFORGE_GAME_3_ID),
+                Uuid::from(UserFixtures::FIXTURE_USER_2_ID),
+                Uuid::from(UserFixtures::FIXTURE_USER_1_ID),
+                Uuid::from(KeyforgeDecksFixtures::FIXTURE_KEYFORGE_DECK_4_ID),
+                Uuid::from(KeyforgeDecksFixtures::FIXTURE_KEYFORGE_DECK_1_ID),
+                Uuid::from(UserFixtures::FIXTURE_USER_1_ID),
                 KeyforgeGameScore::from(3, 0),
                 new \DateTimeImmutable('2022-07-01 08:44:00'),
             ),

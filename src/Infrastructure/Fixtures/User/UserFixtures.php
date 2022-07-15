@@ -2,7 +2,7 @@
 
 namespace AdnanMula\Cards\Infrastructure\Fixtures\User;
 
-use AdnanMula\Cards\Domain\Model\Shared\ValueObject\UuidValueObject;
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Domain\Model\User\User;
 use AdnanMula\Cards\Domain\Service\Persistence\Fixture;
 use AdnanMula\Cards\Infrastructure\Fixtures\DbalFixture;
@@ -18,8 +18,8 @@ final class UserFixtures extends DbalFixture implements Fixture
 
     public function load(): void
     {
-        $this->save(User::create(UuidValueObject::from(self::FIXTURE_USER_1_ID), 'username'));
-        $this->save(User::create(UuidValueObject::from(self::FIXTURE_USER_2_ID), 'username2'));
+        $this->save(User::create(Uuid::from(self::FIXTURE_USER_1_ID), 'username'));
+        $this->save(User::create(Uuid::from(self::FIXTURE_USER_2_ID), 'username2'));
 
         $this->loaded = true;
     }

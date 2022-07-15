@@ -1,39 +1,39 @@
 home:
   path: /
-  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\GetGeneralInfoController
+  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Stats\GeneralStatsController
   methods: [ GET ]
 
 keyforge_home:
   path: /keyforge
-  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\GetGeneralInfoController
+  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Stats\GeneralStatsController
   methods: [ GET ]
 
-keyforge_list_users:
+keyforge_user_list:
   path: /keyforge/users
-  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\ListUsersController
+  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Stats\User\ListUsersController
   methods: [ GET ]
 
-keyforge_list_decks:
+keyforge_deck_list:
     path: /keyforge/decks
-    controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\ListDecksController
+    controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Stats\Deck\ListDecksController
     methods: [ GET ]
 
-keyforge_list_games_user:
+keyforge_game_list_by_user:
   path: /keyforge/games/user/{userId}
-  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\ListGamesByUserController
+  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Stats\Game\ListGamesByUserController
   methods: [ GET ]
 
-keyforge_list_games_deck:
+keyforge_game_list_by_deck:
   path: /keyforge/games/deck/{deckId}
-  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\ListGamesByDeckController
+  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Stats\Game\ListGamesByDeckController
   methods: [ GET ]
 
-keyforge_import_deck:
+keyforge_deck_import:
   path: /keyforge/decks/import
-  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\ImportDeckController
+  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Deck\ImportDeckController
   methods: [ GET,POST ]
 
-keyforge_register_game:
+keyforge_game_create:
   path: /keyforge/games/add
-  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\AddGameController
+  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Game\CreateGameController
   methods: [ GET,POST ]

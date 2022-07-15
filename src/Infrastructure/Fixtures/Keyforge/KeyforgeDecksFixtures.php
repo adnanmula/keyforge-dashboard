@@ -6,7 +6,7 @@ use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeck;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeDeckHouses;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeHouse;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeSet;
-use AdnanMula\Cards\Domain\Model\Shared\ValueObject\UuidValueObject;
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Domain\Service\Persistence\Fixture;
 use AdnanMula\Cards\Infrastructure\Fixtures\DbalFixture;
 use AdnanMula\Cards\Infrastructure\Fixtures\User\UserFixtures;
@@ -29,7 +29,7 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
 
         $this->save(
             new KeyforgeDeck(
-                UuidValueObject::from(self::FIXTURE_KEYFORGE_DECK_1_ID),
+                Uuid::from(self::FIXTURE_KEYFORGE_DECK_1_ID),
                 'Parker la Sedienta',
                 KeyforgeSet::CotA,
                 KeyforgeDeckHouses::from(
@@ -49,7 +49,7 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
 
         $this->save(
             new KeyforgeDeck(
-                UuidValueObject::from(self::FIXTURE_KEYFORGE_DECK_2_ID),
+                Uuid::from(self::FIXTURE_KEYFORGE_DECK_2_ID),
                 'Lydia la Inacabable de la Colmena',
                 KeyforgeSet::AoA,
                 KeyforgeDeckHouses::from(
@@ -69,7 +69,7 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
 
         $this->save(
             new KeyforgeDeck(
-                UuidValueObject::from(self::FIXTURE_KEYFORGE_DECK_3_ID),
+                Uuid::from(self::FIXTURE_KEYFORGE_DECK_3_ID),
                 'Harrison "Sátiro", Rebelde del Foro',
                 KeyforgeSet::MM,
                 KeyforgeDeckHouses::from(
@@ -89,7 +89,7 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
 
         $this->save(
             new KeyforgeDeck(
-                UuidValueObject::from(self::FIXTURE_KEYFORGE_DECK_4_ID),
+                Uuid::from(self::FIXTURE_KEYFORGE_DECK_4_ID),
                 'Cassiopeia la Artera',
                 KeyforgeSet::DT,
                 KeyforgeDeckHouses::from(

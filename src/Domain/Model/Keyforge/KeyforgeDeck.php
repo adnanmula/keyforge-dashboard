@@ -4,14 +4,14 @@ namespace AdnanMula\Cards\Domain\Model\Keyforge;
 
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeDeckHouses;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeSet;
-use AdnanMula\Cards\Domain\Model\Shared\ValueObject\UuidValueObject;
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 
 final class KeyforgeDeck
 {
     private const MODEL_NAME = 'keyforge_deck';
 
     public function __construct(
-        private UuidValueObject $id,
+        private Uuid $id,
         private string $name,
         private KeyforgeSet $set,
         private KeyforgeDeckHouses $houses,
@@ -21,7 +21,7 @@ final class KeyforgeDeck
         private array $extraData
     ) {}
 
-    public function id(): UuidValueObject
+    public function id(): Uuid
     {
         return $this->id;
     }
@@ -68,9 +68,9 @@ final class KeyforgeDeck
         return $this;
     }
 
-    public function updateLoses(int $loses): self
+    public function updateLosses(int $losses): self
     {
-        $this->losses = $loses;
+        $this->losses = $losses;
 
         return $this;
     }

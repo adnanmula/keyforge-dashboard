@@ -1,0 +1,23 @@
+{% extends "Shared/base.html.twig" %}
+
+{% block title %}Import{% endblock %}
+
+{% block body %}
+    {% if result != false %}
+        <div class="alert alert-{% if success == true %}success{% else %}danger{% endif %}" role="alert">
+            {{ result }}
+        </div>
+    {% endif %}
+
+    <div class="divider py-2"></div>
+
+    <form action="{{ path('keyforge_deck_import') }}" method="post">
+        <div class="row">
+            <div class="col form-inline">
+                <label for="deck" class="col">Deck id:</label>
+                <input type="text" class="col" id="deck" name="deck">
+                <button type="submit" class="col btn btn-primary">Vamooo</button>
+            </div>
+        </div>
+    </form>
+{% endblock %}
