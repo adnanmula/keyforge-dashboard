@@ -8,7 +8,7 @@ final class KeyforgeUser
 {
     private function __construct(
         private Uuid $id,
-        private string $name
+        private string $name,
     ) {}
 
     public static function create(Uuid $id, string $name): self

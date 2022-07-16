@@ -16,7 +16,7 @@ final class KeyforgeDeck
         private int $sas,
         private int $wins,
         private int $losses,
-        private array $extraData
+        private array $extraData,
     ) {}
 
     public function id(): Uuid

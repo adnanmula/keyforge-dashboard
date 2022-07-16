@@ -50,11 +50,11 @@ final class KeyforgeUserDbalRepository extends DbalRepository implements Keyforg
             ->select('a.id, a.name')
             ->from(self::TABLE, 'a')
             ->where('a.id in (:ids)')
-            ->setParameter('ids', \array_map(static fn (Uuid $id) => $id->value(), $ids),Connection::PARAM_STR_ARRAY)
+            ->setParameter('ids', \array_map(static fn (Uuid $id) => $id->value(), $ids), Connection::PARAM_STR_ARRAY)
             ->execute()
             ->fetchAllAssociative();
 
-        if (false === $result) {
+        if ([] === $result) {
             return [];
         }
 
@@ -80,7 +80,7 @@ final class KeyforgeUserDbalRepository extends DbalRepository implements Keyforg
         $stmt->execute();
     }
 
-    private function map($user): KeyforgeUser
+    private function map(array $user): KeyforgeUser
     {
         return KeyforgeUser::create(
             Uuid::from($user['id']),

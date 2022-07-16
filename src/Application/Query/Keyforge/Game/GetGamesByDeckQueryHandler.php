@@ -11,7 +11,7 @@ final class GetGamesByDeckQueryHandler
     public function __construct(
         private KeyforgeGameRepository $gameRepository,
         private KeyforgeDeckRepository $deckRepository,
-        private KeyforgeUserRepository $userRepository
+        private KeyforgeUserRepository $userRepository,
     ) {}
 
     public function __invoke(GetGamesByDeckQuery $query): array
@@ -32,11 +32,13 @@ final class GetGamesByDeckQueryHandler
         $users = $this->userRepository->byIds(...$userIds);
 
         $indexedDecks = [];
+
         foreach ($decks as $deck) {
             $indexedDecks[$deck->id()->value()] = $deck->name();
         }
 
         $indexedUsers = [];
+
         foreach ($users as $user) {
             $indexedUsers[$user->id()->value()] = $user->name();
         }

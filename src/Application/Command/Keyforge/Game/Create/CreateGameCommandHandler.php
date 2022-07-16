@@ -13,7 +13,7 @@ final class CreateGameCommandHandler
 {
     public function __construct(
         private KeyforgeGameRepository $gameRepository,
-        private KeyforgeDeckRepository $deckRepository
+        private KeyforgeDeckRepository $deckRepository,
     ) {}
 
     public function __invoke(CreateGameCommand $command): void

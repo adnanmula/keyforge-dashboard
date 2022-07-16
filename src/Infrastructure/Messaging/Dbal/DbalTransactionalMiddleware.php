@@ -9,12 +9,9 @@ use Symfony\Component\Messenger\Middleware\StackInterface;
 
 final class DbalTransactionalMiddleware implements MiddlewareInterface
 {
-    private Connection $connection;
-
-    public function __construct(Connection $connection)
-    {
-        $this->connection = $connection;
-    }
+    public function __construct(
+        private Connection $connection,
+    ) {}
 
     public function handle(Envelope $envelope, StackInterface $stack): Envelope
     {

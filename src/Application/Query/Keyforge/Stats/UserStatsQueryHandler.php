@@ -11,7 +11,7 @@ final class UserStatsQueryHandler
     public function __construct(
         private KeyforgeDeckRepository $deckRepository,
         private KeyforgeGameRepository $gameRepository,
-        private KeyforgeUserRepository $userRepository
+        private KeyforgeUserRepository $userRepository,
     ) {}
 
     public function __invoke(UserStatsQuery $query): array
@@ -32,11 +32,13 @@ final class UserStatsQueryHandler
         $users = $this->userRepository->byIds(...$userIds);
 
         $indexedDecks = [];
+
         foreach ($decks as $deck) {
             $indexedDecks[$deck->id()->value()] = $deck->name();
         }
 
         $indexedUsers = [];
+
         foreach ($users as $user) {
             $indexedUsers[$user->id()->value()] = $user->name();
         }
@@ -62,6 +64,7 @@ final class UserStatsQueryHandler
         }
 
         $winRateVsUser = [];
+
         foreach ($users as $user) {
             if ($user->id()->equalTo($query->userId())) {
                 continue;
@@ -69,7 +72,6 @@ final class UserStatsQueryHandler
 
             $winRateVsUser[$user->id()->value()] = ['wins' => 0, 'losses' => 0];
         }
-
 
         $winsByDate = [];
         $lossesByDate = [];
@@ -114,11 +116,12 @@ final class UserStatsQueryHandler
 
         $dates = \array_values(\array_unique(\array_merge(\array_keys($winsByDate), \array_keys($lossesByDate))));
 
-        usort($dates, function (string $a, string $b) {
-           return new \DateTimeImmutable($a) <=> new \DateTimeImmutable($b);
+        \usort($dates, static function (string $a, string $b) {
+            return new \DateTimeImmutable($a) <=> new \DateTimeImmutable($b);
         });
 
         $resultDates = [];
+
         foreach ($dates as $date) {
             $resultDates[$date] = 0;
         }

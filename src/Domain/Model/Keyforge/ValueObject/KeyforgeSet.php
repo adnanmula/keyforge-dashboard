@@ -12,8 +12,7 @@ enum KeyforgeSet: string
 
     public function fullName(): string
     {
-        return match($this)
-        {
+        return match ($this) {
             self::CotA => 'Call of the Archons',
             self::AoA => 'Age of Ascension',
             self::WC => 'Worlds Collide',

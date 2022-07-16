@@ -4,18 +4,14 @@ namespace AdnanMula\Cards\Domain\Model\Keyforge\ValueObject;
 
 final class KeyforgeGameScore implements \JsonSerializable
 {
-    private int $winnerScore;
-    private int $loserScore;
-
-    private function __construct(int $winnerScore, int $loserScore)
-    {
+    private function __construct(
+        private int $winnerScore,
+        private int $loserScore,
+    ) {
         $this->assert($winnerScore, $loserScore);
-
-        $this->winnerScore = $winnerScore;
-        $this->loserScore = $loserScore;
     }
 
-    public static function from(int $winnerScore, int $loserScore)
+    public static function from(int $winnerScore, int $loserScore): self
     {
         return new self($winnerScore, $loserScore);
     }
@@ -38,7 +34,7 @@ final class KeyforgeGameScore implements \JsonSerializable
         ];
     }
 
-    private function assert(int $winnerScore, int $loserScore)
+    private function assert(int $winnerScore, int $loserScore): void
     {
         if ($winnerScore !== 3 || $loserScore < 0 || $loserScore > 2) {
             throw new \InvalidArgumentException('Invalid game score');

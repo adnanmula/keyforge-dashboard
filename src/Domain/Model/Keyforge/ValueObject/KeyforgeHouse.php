@@ -17,7 +17,9 @@ enum KeyforgeHouse: string implements \JsonSerializable
 
     public static function fromDokName(string $house): static
     {
-        if (\in_array(\strtoupper($house), \array_map(static fn (KeyforgeHouse $case) => $case->name, self::cases()))) {
+        $houses = \array_map(static fn (KeyforgeHouse $case) => $case->name, self::cases());
+
+        if (\in_array(\strtoupper($house), $houses, true)) {
             return self::from(\strtoupper($house));
         }
 

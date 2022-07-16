@@ -11,14 +11,10 @@ final class CreateDatabaseCommand extends Command
 {
     public const NAME = 'environment:database';
 
-    private Connection $defaultConnection;
-    private Connection $connection;
-
-    public function __construct(Connection $defaultConnection, Connection $connection)
-    {
-        $this->defaultConnection = $defaultConnection;
-        $this->connection = $connection;
-
+    public function __construct(
+        private Connection $defaultConnection,
+        private Connection $connection,
+    ) {
         parent::__construct(null);
     }
 

@@ -11,7 +11,7 @@ final class GetUsersQueryHandler
 {
     public function __construct(
         private KeyforgeUserRepository $repository,
-        private KeyforgeGameRepository $gameRepository
+        private KeyforgeGameRepository $gameRepository,
     ) {}
 
     public function __invoke(GetUsersQuery $query): array
@@ -22,7 +22,7 @@ final class GetUsersQueryHandler
             return $users;
         }
 
-        $userIds = \array_map(static fn(KeyforgeUser $user) => $user->id(), $users);
+        $userIds = \array_map(static fn (KeyforgeUser $user) => $user->id(), $users);
 
         $games = $this->gameRepository->byUser(...$userIds);
 
@@ -35,8 +35,9 @@ final class GetUsersQueryHandler
             $totalGames = $wins + $losses;
 
             $winRate = 0;
+
             if ($totalGames > 0) {
-                $winRate = $wins / ($totalGames) * 100;
+                $winRate = $wins / $totalGames * 100;
             }
 
             $result[] = [
@@ -49,7 +50,7 @@ final class GetUsersQueryHandler
             ];
         }
 
-        \usort($result, function (array $a, array $b) {
+        \usort($result, static function (array $a, array $b) {
             return $b['wins'] <=> $a['wins'];
         });
 

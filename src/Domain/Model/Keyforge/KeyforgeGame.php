@@ -15,7 +15,7 @@ final class KeyforgeGame
         private Uuid $loserDeck,
         private ?Uuid $firstTurn,
         private KeyforgeGameScore $score,
-        private \DateTimeImmutable $date
+        private \DateTimeImmutable $date,
     ) {}
 
     public function id(): Uuid

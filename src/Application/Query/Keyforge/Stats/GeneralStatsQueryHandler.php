@@ -11,7 +11,7 @@ final class GeneralStatsQueryHandler
 {
     public function __construct(
         private KeyforgeDeckRepository $deckRepository,
-        private KeyforgeGameRepository $gameRepository
+        private KeyforgeGameRepository $gameRepository,
     ) {}
 
     public function __invoke(GeneralStatsQuery $query): array
@@ -208,7 +208,7 @@ final class GeneralStatsQueryHandler
             KeyforgeHouse::LOGOS->name => $this->pickRate($houseWins[KeyforgeHouse::LOGOS->name] + $houseLosses[KeyforgeHouse::LOGOS->name], $totalHousePicks),
         ];
 
-        $result = [
+        return [
             'deck_count' => \count($decks),
             'set_presence' => $setPresence,
             'house_presence' => $housePresence,
@@ -223,8 +223,6 @@ final class GeneralStatsQueryHandler
             'set_pick_rate' => $setPickRate,
             'house_pick_rate' => $housePickRate,
         ];
-
-        return $result;
     }
 
     private function winRate(int $wins, int $losses): float

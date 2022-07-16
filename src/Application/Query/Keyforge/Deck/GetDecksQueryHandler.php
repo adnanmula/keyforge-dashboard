@@ -8,7 +8,7 @@ use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeckRepository;
 final class GetDecksQueryHandler
 {
     public function __construct(
-        private KeyforgeDeckRepository $repository
+        private KeyforgeDeckRepository $repository,
     ) {}
 
     /** @return array<KeyforgeDeck> */

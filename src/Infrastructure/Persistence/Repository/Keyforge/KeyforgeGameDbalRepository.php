@@ -28,7 +28,7 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
             ->execute()
             ->fetchAllAssociative();
 
-        if (false === $result) {
+        if ([] === $result) {
             return [];
         }
 
@@ -48,7 +48,7 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
             ->execute()
             ->fetchAllAssociative();
 
-        if (false === $result) {
+        if ([] === $result) {
             return [];
         }
 
@@ -64,7 +64,7 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
             ->execute()
             ->fetchAllAssociative();
 
-        if (false === $result) {
+        if ([] === $result) {
             return [];
         }
 
@@ -97,7 +97,7 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
         $stmt->bindValue(':loser', $game->loser()->value());
         $stmt->bindValue(':winner_deck', $game->winnerDeck()->value());
         $stmt->bindValue(':loser_deck', $game->loserDeck()->value());
-        $stmt->bindValue(':first_turn', null === $game->firstTurn() ? null : $game->firstTurn()->value());
+        $stmt->bindValue(':first_turn', $game->firstTurn()?->value());
         $stmt->bindValue(':score', \json_encode($game->score()));
         $stmt->bindValue(':date', $game->date()->format(\DateTimeInterface::ATOM));
 
@@ -106,7 +106,7 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
 
     private function map(array $game): KeyforgeGame
     {
-        $score = \json_decode($game['score'], true, 512, JSON_THROW_ON_ERROR);
+        $score = \json_decode($game['score'], true, 512, \JSON_THROW_ON_ERROR);
 
         return new KeyforgeGame(
             Uuid::from($game['id']),

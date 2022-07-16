@@ -13,7 +13,7 @@ final class KeyforgeDeckHouses
         $this->value = $houses;
     }
 
-    public static function from(KeyforgeHouse ...$houses)
+    public static function from(KeyforgeHouse ...$houses): self
     {
         return new self($houses);
     }
@@ -24,7 +24,7 @@ final class KeyforgeDeckHouses
         return $this->value;
     }
 
-    private function assert($houses): void
+    private function assert(array $houses): void
     {
         if (\count($houses) !== 3) {
             throw new \InvalidArgumentException('Invalid house configuration');

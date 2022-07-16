@@ -38,7 +38,7 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
             ->execute()
             ->fetchAssociative();
 
-        if (false === $result) {
+        if ([] === $result) {
             return null;
         }
 
@@ -55,7 +55,7 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
             ->execute()
             ->fetchAllAssociative();
 
-        if (false === $result) {
+        if ([] === $result) {
             return [];
         }
 
@@ -72,7 +72,7 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
             ->execute()
             ->fetchAllAssociative();
 
-        if (false === $result) {
+        if ([] === $result) {
             return [];
         }
 
@@ -120,14 +120,14 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
             KeyforgeSet::from($deck['set']),
             KeyforgeDeckHouses::from(
                 ...\array_map(
-                static fn (string $house) => KeyforgeHouse::from($house),
-                \json_decode($deck['houses'], true, 512, JSON_THROW_ON_ERROR),
-            ),
+                    static fn (string $house) => KeyforgeHouse::from($house),
+                    \json_decode($deck['houses'], true, 512, \JSON_THROW_ON_ERROR),
+                ),
             ),
             $deck['sas'],
             $deck['wins'],
             $deck['losses'],
-            \json_decode($deck['extra_data'], true, 512, JSON_THROW_ON_ERROR),
+            \json_decode($deck['extra_data'], true, 512, \JSON_THROW_ON_ERROR),
         );
     }
 }

@@ -14,7 +14,7 @@ final class ImportDeckCommandHandler
 {
     public function __construct(
         private KeyforgeDeckRepository $repository,
-        private HttpClientInterface $dokClient
+        private HttpClientInterface $dokClient,
     ) {}
 
     public function __invoke(ImportDeckCommand $command): void

@@ -6,12 +6,9 @@ use Doctrine\DBAL\Connection;
 
 abstract class DbalRepository
 {
-    protected Connection $connection;
-
-    public function __construct(Connection $connection)
-    {
-        $this->connection = $connection;
-    }
+    public function __construct(
+        protected Connection $connection,
+    ) {}
 
     final public function beginTransaction(): void
     {

@@ -21,7 +21,7 @@ final class ImportDeckController extends Controller
                 $this->bus->dispatch(new ImportDeckCommand($request->request->get('deck')));
 
                 return $this->render('Keyforge/Deck/import_deck.html.twig', ['result' => 'Que bien jugado caralmendra', 'success' => true]);
-            } catch (InvalidUuidStringException $exception) {
+            } catch (InvalidUuidStringException) {
                 return $this->render('Keyforge/Deck/import_deck.html.twig', ['result' => 'Esto  no es un id, melón', 'success' => false]);
             } catch (\Throwable $exception) {
                 return $this->render('Keyforge/Deck/import_deck.html.twig', ['result' => $exception->getMessage(), 'success' => false]);

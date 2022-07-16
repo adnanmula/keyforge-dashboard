@@ -4,12 +4,11 @@ namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\Stats\Game;
 
 use AdnanMula\Cards\Application\Query\Keyforge\Stats\UserStatsQuery;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 final class ListGamesByUserController extends Controller
 {
-    public function __invoke(Request $request, string $userId): Response
+    public function __invoke(string $userId): Response
     {
         $result = $this->extractResult($this->bus->dispatch(new UserStatsQuery($userId)));
 

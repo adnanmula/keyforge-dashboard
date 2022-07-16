@@ -4,12 +4,9 @@ namespace AdnanMula\Cards\Domain\Model\Shared\ValueObject;
 
 class StringValueObject implements \JsonSerializable
 {
-    private string $value;
-
-    final protected function __construct(string $value)
-    {
-        $this->value = $value;
-    }
+    final protected function __construct(
+        private string $value,
+    ) {}
 
     public function value(): string
     {
@@ -18,17 +15,17 @@ class StringValueObject implements \JsonSerializable
 
     public function equalTo(StringValueObject $other): bool
     {
-        return static::class === \get_class($other) && $this->value === $other->value;
+        return static::class === $other::class && $this->value === $other->value;
+    }
+
+    public static function from(string $value): static
+    {
+        return new static($value);
     }
 
     final public function jsonSerialize(): string
     {
         return $this->value;
-    }
-
-    public static function from(string $value)
-    {
-        return new static($value);
     }
 
     public function __toString(): string

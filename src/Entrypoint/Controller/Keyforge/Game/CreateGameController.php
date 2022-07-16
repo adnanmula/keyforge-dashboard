@@ -16,11 +16,11 @@ final class CreateGameController extends Controller
     public function __invoke(Request $request): Response
     {
         $users = $this->extractResult(
-            $this->bus->dispatch(new GetUsersQuery(0, 1000, false))
+            $this->bus->dispatch(new GetUsersQuery(0, 1000, false)),
         );
 
         $decks = $this->extractResult(
-            $this->bus->dispatch(new GetDecksQuery(0, 1000))
+            $this->bus->dispatch(new GetDecksQuery(0, 1000)),
         );
 
         $users = \array_map(static fn (KeyforgeUser $user) => ['id' => $user->id()->value(), 'name' => $user->name()], $users);
@@ -60,7 +60,7 @@ final class CreateGameController extends Controller
                         'losers' => $users,
                         'loserDecks' => $decks,
                         'result' => 'Que bien jugado caralmendra',
-                        'success' => true
+                        'success' => true,
                     ],
                 );
             } catch (\Throwable $exception) {
@@ -72,7 +72,7 @@ final class CreateGameController extends Controller
                         'losers' => $users,
                         'loserDecks' => $decks,
                         'result' => $exception->getMessage(),
-                        'success' => false
+                        'success' => false,
                     ],
                 );
             }

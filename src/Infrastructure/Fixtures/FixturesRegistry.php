@@ -15,14 +15,14 @@ final class FixturesRegistry
 
     public function add(Fixture $fixture): void
     {
-        $this->registry[\get_class($fixture)] = $fixture;
+        $this->registry[$fixture::class] = $fixture;
     }
 
     public function execute(): void
     {
         \array_walk(
             $this->registry,
-            function (Fixture $fixture) {
+            function (Fixture $fixture): void {
                 $this->load($fixture);
             },
         );

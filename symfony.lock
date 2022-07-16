@@ -1,7 +1,4 @@
 {
-    "adnanmula/coding-standard": {
-        "version": "0.0.1"
-    },
     "amphp/amp": {
         "version": "v2.5.1"
     },
@@ -40,9 +37,6 @@
     },
     "brick/math": {
         "version": "0.8.15"
-    },
-    "dealerdirect/phpcodesniffer-composer-installer": {
-        "version": "v0.7.0"
     },
     "doctrine/cache": {
         "version": "1.10.1"
@@ -124,9 +118,6 @@
     },
     "phpspec/prophecy": {
         "version": "v1.10.3"
-    },
-    "phpstan/phpdoc-parser": {
-        "version": "0.4.4"
     },
     "phpstan/phpstan": {
         "version": "0.12.30"
@@ -232,17 +223,17 @@
     "seld/jsonlint": {
         "version": "1.8.3"
     },
-    "slevomat/coding-standard": {
-        "version": "6.3.9"
-    },
     "squizlabs/php_codesniffer": {
-        "version": "3.0",
+        "version": "3.7",
         "recipe": {
             "repo": "github.com/symfony/recipes-contrib",
-            "branch": "master",
-            "version": "3.0",
-            "ref": "0dc9cceda799fd3a08b96987e176a261028a3709"
-        }
+            "branch": "main",
+            "version": "3.6",
+            "ref": "1019e5c08d4821cb9b77f4891f8e9c31ff20ac6f"
+        },
+        "files": [
+            "phpcs.xml.dist"
+        ]
     },
     "symfony/cache": {
         "version": "v5.1.0"

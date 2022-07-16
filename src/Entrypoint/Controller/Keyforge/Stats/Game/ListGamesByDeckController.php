@@ -4,12 +4,11 @@ namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\Stats\Game;
 
 use AdnanMula\Cards\Application\Query\Keyforge\Game\GetGamesByDeckQuery;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 final class ListGamesByDeckController extends Controller
 {
-    public function __invoke(Request $request, string $deckId): Response
+    public function __invoke(string $deckId): Response
     {
         $games = $this->extractResult(
             $this->bus->dispatch(new GetGamesByDeckQuery($deckId)),
