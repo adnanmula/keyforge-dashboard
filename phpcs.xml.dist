@@ -51,11 +51,11 @@
     </properties>
   </rule>
 
-<!--  <rule ref="Generic.PHP.ForbiddenFunctions">-->
-<!--    <properties>-->
-<!--      <property name="forbiddenFunctions" type="array" value="array=>null,var_dump=>null,dump=>null,dd=>null" />-->
-<!--    </properties>-->
-<!--  </rule>-->
+  <rule ref="Generic.PHP.ForbiddenFunctions">
+    <properties>
+      <property name="forbiddenFunctions" type="array" value="array=>null,var_dump=>null,dump=>null,dd=>null" />
+    </properties>
+  </rule>
 
   <rule ref="SlevomatCodingStandard.TypeHints.DeclareStrictTypes">
     <properties>
@@ -71,13 +71,13 @@
 <!--    </properties>-->
 <!--  </rule>-->
 
-<!--  <rule ref="SlevomatCodingStandard.Commenting.ForbiddenComments" >-->
-<!--    <properties>-->
-<!--      <property name="forbiddenCommentPatterns" type="array">-->
-<!--        <element value="/Created by PhpStorm/"/>-->
-<!--      </property>-->
-<!--    </properties>-->
-<!--  </rule>-->
+  <rule ref="SlevomatCodingStandard.Commenting.ForbiddenComments" >
+    <properties>
+      <property name="forbiddenCommentPatterns" type="array">
+        <element value="/Created by PhpStorm/"/>
+      </property>
+    </properties>
+  </rule>
 
   <rule ref="SlevomatCodingStandard.Namespaces.UnusedUses">
     <properties>
