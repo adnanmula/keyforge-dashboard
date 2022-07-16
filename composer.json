@@ -19,6 +19,7 @@
         "symfony/framework-bundle": "6.0.*",
         "symfony/http-client": "6.0.*",
         "symfony/messenger": "6.0.*",
+        "symfony/security-bundle": "6.0.*",
         "symfony/twig-bundle": "6.0.*",
         "symfony/yaml": "6.0.*"
     },

@@ -3,29 +3,30 @@
 {% block title %}Decks{% endblock %}
 
 {% block body %}
-    <div class="border border-secondary">
-        <table class="table table-responsive-sm table-hover">
-            <thead>
-                <tr class="table-dark">
-                    <th scope="col">Name</th>
-                    <th scope="col">Wins</th>
-                    <th scope="col">Losses</th>
-                    <th scope="col">Win Rate</th>
-                    <th scope="col">Games played</th>
-                </tr>
-            </thead>
-            <tbody>
-
-            {% for user in users %}
-                <tr>
-                    <td><a href="/keyforge/games/user/{{ user.id }}">{{ user.name }}</a></td>
-                    <td>{{ user.wins }}</td>
-                    <td>{{ user.losses }}</td>
-                    <td>{{ user.win_rate|round(2) }}%</td>
-                    <td>{{ user.games_played }}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+    <div class="shadow-lg p-3 mb-5 bg-white rounded">
+        <div class="border borderless">
+            <table class="table table-responsive-sm table-hover">
+                <thead>
+                    <tr class="table-dark">
+                        <th scope="col">Name</th>
+                        <th scope="col">Wins</th>
+                        <th scope="col">Losses</th>
+                        <th scope="col">Win Rate</th>
+                        <th scope="col">Games played</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td><a href="/keyforge/games/user/{{ user.id }}">{{ user.name }}</a></td>
+                        <td>{{ user.wins }}</td>
+                        <td>{{ user.losses }}</td>
+                        <td>{{ user.win_rate|round(2) }}%</td>
+                        <td>{{ user.games_played }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 {% endblock %}

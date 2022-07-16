@@ -23,3 +23,6 @@ services:
     class: AdnanMula\Cards\Notifier\Infrastructure\Persistence\Repository\DbalRepository
     arguments:
       - '@repository.dbal.connection'
+
+  AdnanMula\Cards\Domain\Model\Shared\UserRepository:
+    alias: AdnanMula\Cards\Infrastructure\Persistence\Repository\Shared\UserDbalRepository

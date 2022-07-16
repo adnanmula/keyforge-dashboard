@@ -7,7 +7,7 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-final class InitEnvironmentCommand extends Command
+final class EnvironmentInitCommand extends Command
 {
     public const NAME = 'environment:init';
 

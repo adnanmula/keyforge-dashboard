@@ -3,6 +3,8 @@
 
   <file>src</file>
   <exclude-pattern>src/Kernel.php</exclude-pattern>
+  <exclude-pattern>db</exclude-pattern>
+  <exclude-pattern>/config/bundles.php</exclude-pattern>
 
 
   <rule ref="PSR2" />
@@ -22,6 +24,7 @@
     <exclude name="SlevomatCodingStandard.Files.LineLength.LineTooLong" />
     <exclude name="SlevomatCodingStandard.Files.TypeNameMatchesFileName.NoMatchBetweenTypeNameAndFileName" />
     <exclude name="SlevomatCodingStandard.Functions.DisallowArrowFunction.DisallowedArrowFunction" />
+    <exclude name="SlevomatCodingStandard.Functions.DisallowEmptyFunction.EmptyFunction" />
     <exclude name="SlevomatCodingStandard.Functions.DisallowTrailingCommaInCall.DisallowedTrailingComma" />
     <exclude name="SlevomatCodingStandard.Functions.DisallowTrailingCommaInDeclaration.DisallowedTrailingComma" />
     <exclude name="SlevomatCodingStandard.Functions.FunctionLength.FunctionLength" />

@@ -3,43 +3,45 @@
 {% block title %}Decks{% endblock %}
 
 {% block body %}
-    <div class="row bg-light m-1 border border-dark">
-        <div class="col">
-            <span>Decks registered: {{ data.deck_count }}</span> <br>
-            <span>Games played: {{ data.games_played }}</span> <br>
-            <span>Best win rate: <a href="/keyforge/games/deck/{{ data.deck_win_rate.id }}">{{ data.deck_win_rate.name }}</a> {{ data.deck_win_rate.wins }}/{{ data.deck_win_rate.losses }} {{ data.deck_win_rate.win_rate }}%</span> <br>
-            <span>Best sas:  <a href="/keyforge/games/deck/{{ data.deck_max_sas.id }}">{{ data.deck_max_sas.name }}</a> {{ data.deck_max_sas.sas }} sas</span> <br>
-            <span>Worse sas: <a href="/keyforge/games/deck/{{ data.deck_min_sas.id }}">{{ data.deck_min_sas.name }}</a> {{ data.deck_min_sas.sas }} sas</span> <br>
+    <div class="shadow-lg p-3 mb-5 bg-white rounded">
+        <div class="row bg-light m-1 border border-dark">
+            <div class="col">
+                <span>Decks registered: {{ data.deck_count }}</span> <br>
+                <span>Games played: {{ data.games_played }}</span> <br>
+                <span>Best win rate: <a href="/keyforge/games/deck/{{ data.deck_win_rate.id }}">{{ data.deck_win_rate.name }}</a> {{ data.deck_win_rate.wins }}/{{ data.deck_win_rate.losses }} {{ data.deck_win_rate.win_rate }}%</span> <br>
+                <span>Best sas:  <a href="/keyforge/games/deck/{{ data.deck_max_sas.id }}">{{ data.deck_max_sas.name }}</a> {{ data.deck_max_sas.sas }} sas</span> <br>
+                <span>Worse sas: <a href="/keyforge/games/deck/{{ data.deck_min_sas.id }}">{{ data.deck_min_sas.name }}</a> {{ data.deck_min_sas.sas }} sas</span> <br>
+            </div>
         </div>
-    </div>
 
-    <div class="row mt-3">
-        <div class="col-12 col-sm-6 col-lg-3">
-            <canvas id="setWins" width="400" height="400"></canvas>
+        <div class="row mt-3">
+            <div class="col-12 col-sm-6 col-lg-3">
+                <canvas id="setWins" width="400" height="400"></canvas>
+            </div>
+            <div class="col-12 col-sm-6 col-lg-3">
+                <canvas id="setWinRate" width="400" height="400"></canvas>
+            </div>
+            <div class="col-12 col-sm-6 col-lg-3">
+                <canvas id="setPickRate" width="400" height="400"></canvas>
+            </div>
+            <div class="col-12 col-sm-6 col-lg-3">
+                <canvas id="setPresence" width="400" height="400"></canvas>
+            </div>
         </div>
-        <div class="col-12 col-sm-6 col-lg-3">
-            <canvas id="setWinRate" width="400" height="400"></canvas>
-        </div>
-        <div class="col-12 col-sm-6 col-lg-3">
-            <canvas id="setPickRate" width="400" height="400"></canvas>
-        </div>
-        <div class="col-12 col-sm-6 col-lg-3">
-            <canvas id="setPresence" width="400" height="400"></canvas>
-        </div>
-    </div>
 
-    <div class="row mt-3">
-        <div class="col-12 col-sm-6 col-lg-3">
-            <canvas id="houseWins" width="400" height="450"></canvas>
-        </div>
-        <div class="col-12 col-sm-6 col-lg-3">
-            <canvas id="houseWinRate" width="400" height="450"></canvas>
-        </div>
-        <div class="col-12 col-sm-6 col-lg-3">
-            <canvas id="housePickRate" width="400" height="450"></canvas>
-        </div>
-        <div class="col-12 col-sm-6 col-lg-3">
-            <canvas id="housePresence" width="400" height="400"></canvas>
+        <div class="row mt-3">
+            <div class="col-12 col-sm-6 col-lg-3">
+                <canvas id="houseWins" width="400" height="450"></canvas>
+            </div>
+            <div class="col-12 col-sm-6 col-lg-3">
+                <canvas id="houseWinRate" width="400" height="450"></canvas>
+            </div>
+            <div class="col-12 col-sm-6 col-lg-3">
+                <canvas id="housePickRate" width="400" height="450"></canvas>
+            </div>
+            <div class="col-12 col-sm-6 col-lg-3">
+                <canvas id="housePresence" width="400" height="400"></canvas>
+            </div>
         </div>
     </div>
 

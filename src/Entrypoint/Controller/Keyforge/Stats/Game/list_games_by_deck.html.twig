@@ -3,6 +3,9 @@
 {% block title %}Games{% endblock %}
 
 {% block body %}
-    <h3>Games of <a href="https://decksofkeyforge.com/decks/{{ reference }}" target="_blank">{{ name }}</a></h3>
-    {% include 'Keyforge/Stats/Game/list_games.html.twig' %}
+    <div class="shadow-lg p-3 mb-5 bg-white rounded">
+        <h3>Games of <a href="https://decksofkeyforge.com/decks/{{ reference }}" target="_blank">{{ name }}</a></h3>
+        <div class="divider py-1"></div>
+        {% include 'Keyforge/Stats/Game/list_games.html.twig' %}
+    </div>
 {% endblock %}

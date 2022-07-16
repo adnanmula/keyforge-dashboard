@@ -2,7 +2,7 @@
 
 use Phinx\Migration\AbstractMigration;
 
-final class Initial extends AbstractMigration
+final class KeyforgeInitial extends AbstractMigration
 {
     public function up(): void
     {
@@ -10,7 +10,7 @@ final class Initial extends AbstractMigration
         'CREATE TABLE keyforge_users (
                 id uuid NOT NULL,
                 name character varying(32) NOT NULL
-                   CONSTRAINT name_unique UNIQUE,
+                   CONSTRAINT keyforge_name_unique UNIQUE,
                 PRIMARY KEY(id)
             )',
         );
@@ -46,7 +46,7 @@ final class Initial extends AbstractMigration
 
     public function down(): void
     {
-        $this->execute('DROP TABLE IF EXISTS "keyforge_"');
+        $this->execute('DROP TABLE IF EXISTS "keyforge_users"');
         $this->execute('DROP TABLE IF EXISTS "keyforge_decks"');
         $this->execute('DROP TABLE IF EXISTS "keyforge_games"');
     }

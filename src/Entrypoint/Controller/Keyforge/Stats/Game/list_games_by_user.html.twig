@@ -3,26 +3,26 @@
 {% block title %}Games{% endblock %}
 
 {% block body %}
+    <div class="shadow-lg p-3 mb-5 bg-white rounded">
+        <div class="divider py-2"></div>
+        <h3>Games of {{ name }}</h3>
+        <div class="divider py-2"></div>
 
-    <div class="divider py-2"></div>
-    <h3>Games of {{ name }}</h3>
-    <div class="divider py-2"></div>
+        <div class="row mt-3">
+            <div class="col-12 col-sm-6 col-lg-3">
+                <canvas id="winRateVsUsers" height="310"></canvas>
+            </div>
+            <div class="col-12 col-sm-12 col-lg-9">
+                <canvas id="winsByDate" height="100"></canvas>
+            </div>
+        </div>
 
-    <div class="row mt-3">
-        <div class="col-12 col-sm-6 col-lg-3">
-            <canvas id="winRateVsUsers" height="310"></canvas>
-        </div>
-        <div class="col-12 col-sm-12 col-lg-9">
-            <canvas id="winsByDate" height="100"></canvas>
-        </div>
+        <div class="divider py-2"></div>
+        <div class="divider py-2"></div>
+        <div class="divider py-2"></div>
+
+        {% include 'Keyforge/Stats/Game/list_games.html.twig' %}
     </div>
-
-    <div class="divider py-2"></div>
-    <div class="divider py-2"></div>
-    <div class="divider py-2"></div>
-
-    {% include 'Keyforge/Stats/Game/list_games.html.twig' %}
-
     <script>
         let winRateVsUsers = JSON.parse('{{ win_rate_vs_users|json_encode|raw }}');
         let pickRateVsUsers = JSON.parse('{{ pick_rate_vs_users|json_encode|raw }}');
