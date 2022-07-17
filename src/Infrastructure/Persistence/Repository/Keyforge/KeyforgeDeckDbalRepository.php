@@ -18,9 +18,10 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
     public function all(int $page, int $pageSize): array
     {
         $result = $this->connection->createQueryBuilder()
-            ->select('a.*')
+            ->select('a.id, a.name, a.set, a.houses, a.sas, a.wins, a.losses, a.extra_data')
             ->from(self::TABLE, 'a')
             ->orderBy('a.wins', 'DESC')
+            ->addOrderBy('a.losses', 'ASC')
             ->execute()
             ->fetchAllAssociative();
 
