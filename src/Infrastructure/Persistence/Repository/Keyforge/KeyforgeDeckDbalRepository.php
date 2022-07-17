@@ -38,7 +38,7 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
             ->execute()
             ->fetchAssociative();
 
-        if ([] === $result) {
+        if ([] === $result || false === $result) {
             return null;
         }
 
@@ -55,7 +55,7 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
             ->execute()
             ->fetchAllAssociative();
 
-        if ([] === $result) {
+        if ([] === $result || false === $result) {
             return [];
         }
 
@@ -72,7 +72,7 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
             ->execute()
             ->fetchAllAssociative();
 
-        if ([] === $result) {
+        if ([] === $result || false === $result) {
             return [];
         }
 

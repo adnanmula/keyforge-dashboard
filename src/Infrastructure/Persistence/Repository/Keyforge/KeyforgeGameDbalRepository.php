@@ -28,7 +28,7 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
             ->execute()
             ->fetchAllAssociative();
 
-        if ([] === $result) {
+        if ([] === $result || false === $result) {
             return [];
         }
 
@@ -48,7 +48,7 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
             ->execute()
             ->fetchAllAssociative();
 
-        if ([] === $result) {
+        if ([] === $result || false === $result) {
             return [];
         }
 
@@ -64,7 +64,7 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
             ->execute()
             ->fetchAllAssociative();
 
-        if ([] === $result) {
+        if ([] === $result || false === $result) {
             return [];
         }
 

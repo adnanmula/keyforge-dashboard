@@ -54,7 +54,7 @@ final class KeyforgeUserDbalRepository extends DbalRepository implements Keyforg
             ->execute()
             ->fetchAllAssociative();
 
-        if ([] === $result) {
+        if ([] === $result || false === $result) {
             return [];
         }
 

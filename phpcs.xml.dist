@@ -6,7 +6,6 @@
   <exclude-pattern>db</exclude-pattern>
   <exclude-pattern>/config/bundles.php</exclude-pattern>
 
-
   <rule ref="PSR2" />
 
   <rule ref="vendor/slevomat/coding-standard/SlevomatCodingStandard/ruleset.xml">
