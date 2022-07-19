@@ -24,14 +24,15 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
             ->setFirstResult($start)
             ->setMaxResults($length);
 
+//      TODO quitar esto de aqui
         if (null !== $order) {
             if ('win_rate' === $order->field()) {
                 if (\strtolower($order->order()) === 'desc') {
                     $query->orderBy('a.wins', 'DESC')
                         ->addOrderBy('a.losses', 'ASC');
                 } else {
-                    $query->orderBy('a.losses', 'DESC')
-                        ->addOrderBy('a.wins', 'ASC');
+                    $query->orderBy('a.wins', 'ASC')
+                        ->addOrderBy('a.losses', 'DESC');
                 }
             } else {
                 $query->orderBy('a.' . $order->field(), $order->order());
