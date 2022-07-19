@@ -20,11 +20,11 @@ final class CreateGameController extends Controller
         );
 
         $decks = $this->extractResult(
-            $this->bus->dispatch(new GetDecksQuery(0, 1000)),
+            $this->bus->dispatch(new GetDecksQuery(0, 1000, null)),
         );
 
         $users = \array_map(static fn (KeyforgeUser $user) => ['id' => $user->id()->value(), 'name' => $user->name()], $users);
-        $decks = \array_map(static fn (KeyforgeDeck $deck) => ['id' => $deck->id()->value(), 'name' => $deck->name()], $decks);
+        $decks = \array_map(static fn (KeyforgeDeck $deck) => ['id' => $deck->id()->value(), 'name' => $deck->name()], $decks['decks']);
 
         if ($request->getMethod() === Request::METHOD_GET) {
             return $this->render(

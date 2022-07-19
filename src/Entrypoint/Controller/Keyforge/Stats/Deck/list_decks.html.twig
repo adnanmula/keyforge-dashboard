@@ -3,59 +3,118 @@
 {% block title %}Decks{% endblock %}
 
 {% block body %}
-
     <div class="shadow-lg p-3 mb-5 bg-white rounded">
-
-        <div class="border borderless">
-            <table class="table table-responsive-sm table-hover">
-                <thead>
-                    <tr class="table-dark">
-                        <th scope="col">Deck</th>
-                        <th scope="col">Set</th>
-                        <th scope="col">Houses</th>
-                        <th scope="col">Winrate</th>
-                        <th scope="col">SAS</th>
-                        <th scope="col"></th>
-                    </tr>
-                </thead>
-                <tbody>
-
-                {% for deck in decks %}
-                    <tr>
-                        <td><a href="/keyforge/games/deck/{{ deck.id }}">{{ deck.name }}</a></td>
-
-                        {% set set = 'assets/keyforge/sets/' ~ deck.set.name ~ '.svg' %}
-                        <td><img width="33px" src="{{ asset(set) }}" alt="{{ deck.houses.value[0].name }}"/></td>
-
-                        {% set house0 = 'assets/keyforge/houses/' ~ deck.houses.value[0].name ~ '.png' %}
-                        {% set house1 = 'assets/keyforge/houses/' ~ deck.houses.value[1].name ~ '.png' %}
-                        {% set house2 = 'assets/keyforge/houses/' ~ deck.houses.value[2].name ~ '.png' %}
-                        <td>
-                            <img width="35px" src="{{ asset(house0) }}" alt="{{ deck.houses.value[0].name }}"/>
-                            <img width="35px" src="{{ asset(house1) }}" alt="{{ deck.houses.value[1].name }}"/>
-                            <img width="35px" src="{{ asset(house2) }}" alt="{{ deck.houses.value[2].name }}"/>
-                        </td>
-
-                        {% if (deck.wins + deck.losses) == 0 %}
-                            {% set winrate = 0 %}
-                        {% else %}
-                            {% set winrate = (deck.wins / (deck.wins + deck.losses)) * 100 %}
-                        {% endif %}
-
-                        <td>{{ deck.wins }}/{{ deck.losses }} ({{ winrate|round(2) }}%)</td>
-                        <td>{{ deck.sas }}</td>
-                        <td>
-                            <a href="https://www.keyforgegame.com/deck-details/{{ deck.id }}" target="_blank">
-                                <img class="img-thumbnail" width="50px" style="min-width: 50px" src="{{ asset('assets/keyforge/logos/vault.png') }}" alt="Vault"/>
-                            </a>
-                            <a href="https://decksofkeyforge.com/decks/{{ deck.id }}" target="_blank">
-                                <img class="img-thumbnail" width="40px" style="min-width: 40px" src="{{ asset('assets/keyforge/logos/dok.svg') }}" alt="DoK"/>
-                            </a>
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
+        <table id="newTable" class="table table-responsive-sm table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Deck</th>
+                    <th scope="col">Set</th>
+                    <th scope="col">Houses</th>
+                    <th scope="col">Win Rate</th>
+                    <th scope="col">SAS</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+        </table>
     </div>
+
+    <script>
+        $(document).ready(function () {
+            $('#newTable').DataTable({
+                searching: false,
+                paging: true,
+                info: false,
+                responsive: true,
+                processing: true,
+                serverSide: true,
+                order: [[3, 'desc']],
+                lengthMenu: [10, 25, 50, 100],
+                iDisplayLength: 25,
+                ajax: '/keyforge/decks/json',
+                columns: [
+                    { data: "name" },
+                    { data: "set" },
+                    { data: "houses" },
+                    { data: "wins" },
+                    { data: "sas" },
+                    { data: "sas" },
+                ],
+                columnDefs: [
+                    {
+                        render: function (data, type, row) {
+                            return '<a href="/keyforge/games/deck/' + row.id + '">' + data + '</a>';
+                        },
+                        targets: 0, //Deck
+                    },
+                    {
+                        render: function (data, type, row) {
+                            return '<img width="33px" src="' + '/assets/keyforge/sets/' + data + '.svg' + '" alt="' + data + '"/>';
+                        },
+                        targets: 1, //Set
+                    },
+                    {
+                        render: function (data, type, row) {
+                            let house0 = '/assets/keyforge/houses/' + data[0] + '.png';
+                            let house1 = '/assets/keyforge/houses/' + data[1] + '.png';
+                            let house2 = '/assets/keyforge/houses/' + data[2] + '.png';
+
+                            return '<img width="35px" src="' + house0 + '" alt="' + data[0] +'"/>' +
+                                '<img width="35px" src="' + house1 + '" alt="' + data[1] +'"/>' +
+                                '<img width="35px" src="' + house2 + '" alt="' + data[2] +'"/>';
+                        },
+                        targets: 2, //Houses
+                    },
+                    {
+                        render: function (data, type, row) {
+                            let wins = row.wins;
+                            let losses = row.losses;
+                            let win_rate = 0;
+
+                            if (wins + losses > 0) {
+                                win_rate = wins / (wins + losses) * 100;
+                                win_rate = Math.round((win_rate + Number.EPSILON) * 100) / 100;
+                            }
+
+                            return wins + '/' + losses + ' (' + win_rate + '%)';
+                        },
+                        targets: 3, //Win Rate
+                    },
+                    {
+                        render: function (data, type, row) {
+                            return data;
+                        },
+                        targets: 4, //Sas
+                    },
+                    {
+                        render: function (data, type, row) {
+                            vaultLink = 'https://www.keyforgegame.com/deck-details/' + row.id;
+                            dokLink = 'https://decksofkeyforge.com/decks/' + row.id;
+
+                            vaultLogo = '/assets/keyforge/logos/vault.png';
+                            dokLogo = '/assets/keyforge/logos/dok.svg';
+
+                            return '<a href="' + vaultLink + '" target="_blank">' +
+                                '<img class="img-thumbnail" width="50px" style="min-width: 50px" src="' + vaultLogo + '" alt="Vault"/></a>' +
+                                '<a href="' + dokLink + '" target="_blank">' +
+                                '<img class="img-thumbnail" width="40px" style="min-width: 40px" src="' + dokLogo + '" alt="DoK"/></a>';
+                        },
+                        targets: 5, //Buttons
+                    },
+                    {
+                        targets: [0, 1, 2, 3, 4, 5], //All
+                        searchable: false,
+                        visible: true,
+                    },
+                    {
+                        targets: [2, 5],
+                        orderable: false
+                    },
+                    {
+                        targets: [0, 1, 3, 4],
+                        orderable: true
+                    },
+                ],
+            });
+        });
+    </script>
 {% endblock %}

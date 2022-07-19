@@ -12,6 +12,7 @@
     <exclude name="SlevomatCodingStandard.Classes.ClassStructure.IncorrectGroupOrder" />
     <exclude name="SlevomatCodingStandard.Classes.DisallowConstructorPropertyPromotion.DisallowedConstructorPropertyPromotion" />
     <exclude name="SlevomatCodingStandard.Classes.RequireAbstractOrFinal.ClassNeitherAbstractNorFinal" />
+    <exclude name="SlevomatCodingStandard.Classes.RequireConstructorPropertyPromotion.RequiredConstructorPropertyPromotion" />
     <exclude name="SlevomatCodingStandard.Classes.RequireSingleLineMethodSignature.RequiredSingleLineSignature" />
     <exclude name="SlevomatCodingStandard.ControlStructures.DisallowNullSafeObjectOperator.DisallowedNullSafeObjectOperator" />
     <exclude name="SlevomatCodingStandard.ControlStructures.DisallowYodaComparison.DisallowedYodaComparison" />
@@ -24,6 +25,7 @@
     <exclude name="SlevomatCodingStandard.Files.TypeNameMatchesFileName.NoMatchBetweenTypeNameAndFileName" />
     <exclude name="SlevomatCodingStandard.Functions.DisallowArrowFunction.DisallowedArrowFunction" />
     <exclude name="SlevomatCodingStandard.Functions.DisallowEmptyFunction.EmptyFunction" />
+    <exclude name="SlevomatCodingStandard.Functions.DisallowNamedArguments.DisallowedNamedArgument" />
     <exclude name="SlevomatCodingStandard.Functions.DisallowTrailingCommaInCall.DisallowedTrailingComma" />
     <exclude name="SlevomatCodingStandard.Functions.DisallowTrailingCommaInDeclaration.DisallowedTrailingComma" />
     <exclude name="SlevomatCodingStandard.Functions.FunctionLength.FunctionLength" />

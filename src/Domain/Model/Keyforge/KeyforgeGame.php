@@ -16,6 +16,7 @@ final class KeyforgeGame
         private ?Uuid $firstTurn,
         private KeyforgeGameScore $score,
         private \DateTimeImmutable $date,
+        private \DateTimeImmutable $createdAt,
     ) {}
 
     public function id(): Uuid
@@ -56,5 +57,10 @@ final class KeyforgeGame
     public function date(): \DateTimeImmutable
     {
         return $this->date;
+    }
+
+    public function createdAt(): \DateTimeImmutable
+    {
+        return $this->createdAt;
     }
 }

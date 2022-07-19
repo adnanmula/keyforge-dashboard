@@ -2,7 +2,6 @@
 
 namespace AdnanMula\Cards\Application\Query\Keyforge\Deck;
 
-use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeck;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeckRepository;
 
 final class GetDecksQueryHandler
@@ -11,9 +10,16 @@ final class GetDecksQueryHandler
         private KeyforgeDeckRepository $repository,
     ) {}
 
-    /** @return array<KeyforgeDeck> */
     public function __invoke(GetDecksQuery $query): array
     {
-        return $this->repository->all($query->page(), $query->pageSize());
+        $decks = $this->repository->all($query->start(), $query->length(), $query->order());
+        $total = $this->repository->count();
+
+        return [
+            'decks' => $decks,
+            'total' => $total,
+            'start' => $query->start(),
+            'length' => $query->length(),
+        ];
     }
 }

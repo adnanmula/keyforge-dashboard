@@ -2,12 +2,14 @@
 
 namespace AdnanMula\Cards\Domain\Model\Keyforge;
 
+use AdnanMula\Cards\Domain\Model\Shared\QueryOrder;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 
 interface KeyforgeDeckRepository
 {
-    /** @return array<KeyforgeDeck> */
-    public function all(int $page, int $pageSize): array;
+    public function all(int $start, int $length, ?QueryOrder $order): array;
+
+    public function count(): int;
 
     public function byId(Uuid $id): ?KeyforgeDeck;
 

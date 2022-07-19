@@ -13,6 +13,9 @@ interface KeyforgeGameRepository
     public function byDeck(Uuid $id): array;
 
     /** @return array<KeyforgeGame> */
+    public function byUsersAndDecks(array $users, array $decks): array;
+
+    /** @return array<KeyforgeGame> */
     public function all(int $page, int $pageSize): array;
 
     public function save(KeyforgeGame $game): void;

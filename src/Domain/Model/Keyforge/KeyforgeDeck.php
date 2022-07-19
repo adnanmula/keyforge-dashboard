@@ -6,7 +6,7 @@ use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeDeckHouses;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeSet;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 
-final class KeyforgeDeck
+final class KeyforgeDeck implements \JsonSerializable
 {
     public function __construct(
         private Uuid $id,
@@ -71,5 +71,19 @@ final class KeyforgeDeck
         $this->losses = $losses;
 
         return $this;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'id' => $this->id()->value(),
+            'name' => $this->name(),
+            'set' => $this->set()->value,
+            'houses' => $this->houses()->value(),
+            'sas' => $this->sas(),
+            'wins' => $this->wins(),
+            'losses' => $this->losses(),
+            'extraData' => $this->extraData(),
+        ];
     }
 }

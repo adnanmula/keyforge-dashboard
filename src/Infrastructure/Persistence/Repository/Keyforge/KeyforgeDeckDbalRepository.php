@@ -7,6 +7,7 @@ use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeDeckHouses;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeHouse;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeSet;
+use AdnanMula\Cards\Domain\Model\Shared\QueryOrder;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Infrastructure\Persistence\Repository\DbalRepository;
 use Doctrine\DBAL\Connection;
@@ -15,18 +16,45 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
 {
     private const TABLE = 'keyforge_decks';
 
-    public function all(int $page, int $pageSize): array
+    public function all(int $start, int $length, ?QueryOrder $order): array
     {
-        $result = $this->connection->createQueryBuilder()
+        $query = $this->connection->createQueryBuilder()
             ->select('a.id, a.name, a.set, a.houses, a.sas, a.wins, a.losses, a.extra_data')
             ->from(self::TABLE, 'a')
-            ->orderBy('a.wins', 'DESC')
-            ->addOrderBy('a.losses', 'ASC')
-            ->execute()
-            ->fetchAllAssociative();
+            ->setFirstResult($start)
+            ->setMaxResults($length);
+
+        if (null !== $order) {
+            if ('win_rate' === $order->field()) {
+                if (\strtolower($order->order()) === 'desc') {
+                    $query->orderBy('a.wins', 'DESC')
+                        ->addOrderBy('a.losses', 'ASC');
+                } else {
+                    $query->orderBy('a.losses', 'DESC')
+                        ->addOrderBy('a.wins', 'ASC');
+                }
+            } else {
+                $query->orderBy('a.' . $order->field(), $order->order());
+            }
+        } else {
+            $query->orderBy('a.wins', 'DESC')
+                ->addOrderBy('a.losses', 'ASC');
+        }
+
+        $result = $query->execute()->fetchAllAssociative();
 
         return \array_map(fn (array $row) => $this->map($row), $result);
     }
+
+    public function count(): int
+    {
+        return $this->connection->createQueryBuilder()
+            ->select('COUNT(a.id)')
+            ->from(self::TABLE, 'a')
+            ->execute()
+            ->fetchOne();
+    }
+
 
     public function byId(Uuid $id): ?KeyforgeDeck
     {

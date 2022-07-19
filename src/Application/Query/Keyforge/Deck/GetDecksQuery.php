@@ -2,30 +2,38 @@
 
 namespace AdnanMula\Cards\Application\Query\Keyforge\Deck;
 
+use AdnanMula\Cards\Domain\Model\Shared\QueryOrder;
 use Assert\Assert;
 
 final class GetDecksQuery
 {
-    private int $page;
-    private int $pageSize;
+    private int $start;
+    private int $length;
+    private ?QueryOrder $order;
 
-    public function __construct($page, $pageSize)
+    public function __construct($start, $length, ?QueryOrder $order)
     {
         Assert::lazy()
-            ->that($page, 'page')->integerish()->greaterOrEqualThan(0)
-            ->that($pageSize, 'page_size')->integerish()->greaterThan(0);
+            ->that($start, 'start')->integerish()->greaterOrEqualThan(0)
+            ->that($length, 'length')->integerish()->greaterThan(0);
 
-        $this->page = (int) $page;
-        $this->pageSize = (int) $pageSize;
+        $this->start = (int) $start;
+        $this->length = (int) $length;
+        $this->order = $order;
     }
 
-    public function page(): int
+    public function start(): int
     {
-        return $this->page;
+        return $this->start;
     }
 
-    public function pageSize(): int
+    public function length(): int
     {
-        return $this->pageSize;
+        return $this->length;
+    }
+
+    public function order(): ?QueryOrder
+    {
+        return $this->order;
     }
 }

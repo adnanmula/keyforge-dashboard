@@ -31,6 +31,7 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                 Uuid::from(UserFixtures::FIXTURE_USER_2_ID),
                 KeyforgeGameScore::from(3, 2),
                 new \DateTimeImmutable('2022-05-24 16:00:00'),
+                new \DateTimeImmutable('2022-05-24 16:00:00'),
             ),
         );
 
@@ -44,6 +45,7 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                 Uuid::from(UserFixtures::FIXTURE_USER_1_ID),
                 KeyforgeGameScore::from(3, 1),
                 new \DateTimeImmutable('2022-06-14 10:00:00'),
+                new \DateTimeImmutable('2022-06-14 10:00:00'),
             ),
         );
 
@@ -56,6 +58,7 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                 Uuid::from(KeyforgeDecksFixtures::FIXTURE_KEYFORGE_DECK_1_ID),
                 Uuid::from(UserFixtures::FIXTURE_USER_1_ID),
                 KeyforgeGameScore::from(3, 0),
+                new \DateTimeImmutable('2022-07-01 08:44:00'),
                 new \DateTimeImmutable('2022-07-01 08:44:00'),
             ),
         );
@@ -81,8 +84,8 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
         $stmt = $this->connection->prepare(
             \sprintf(
                 '
-                    INSERT INTO %s (id, winner, loser, winner_deck, loser_deck, first_turn, score, date)
-                    VALUES (:id, :winner, :loser, :winner_deck, :loser_deck, :first_turn, :score, :date)
+                    INSERT INTO %s (id, winner, loser, winner_deck, loser_deck, first_turn, score, date, created_at)
+                    VALUES (:id, :winner, :loser, :winner_deck, :loser_deck, :first_turn, :score, :date, :created_at)
                     ON CONFLICT (id) DO UPDATE SET
                         id = :id,
                         winner = :winner,
@@ -91,7 +94,8 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                         loser_deck = :loser_deck,
                         first_turn = :first_turn,
                         score = :score,
-                        date = :date
+                        date = :date,
+                        created_at = :created_at
                     ',
                 self::TABLE,
             ),
@@ -105,6 +109,7 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
         $stmt->bindValue(':first_turn', $game->firstTurn()?->value());
         $stmt->bindValue(':score', \json_encode($game->score()));
         $stmt->bindValue(':date', $game->date()->format(\DateTimeInterface::ATOM));
+        $stmt->bindValue(':created_at', $game->createdAt()->format(\DateTimeInterface::ATOM));
 
         $stmt->execute();
     }
