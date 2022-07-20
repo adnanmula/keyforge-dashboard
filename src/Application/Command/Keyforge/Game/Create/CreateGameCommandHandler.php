@@ -48,6 +48,8 @@ final class CreateGameCommandHandler
             $command->loser(),
             $winnerDeck->id(),
             $loserDeck->id(),
+            $command->winnerChains(),
+            $command->loserChains(),
             $command->firstTurn(),
             KeyforgeGameScore::from(3, $command->loserScore()),
             $command->date(),

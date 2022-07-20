@@ -1,4 +1,4 @@
-{% extends "Keyforge/Shared/base.html.twig" %}
+{% extends "Keyforge/Shared/keyforge_base.html.twig" %}
 
 {% block title %}Import{% endblock %}
 
@@ -36,6 +36,19 @@
                 <div class="col-md-6">
                     <label for="loserDeck" class="form-label">Loser deck</label>
                     <input class="form-control" list="loserDeckOptions" id="loserDeck" placeholder="Type to search..." name="loserDeck"  autocomplete="off" required>
+                </div>
+            </div>
+
+            <div class="divider py-1"></div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="winnerChains" class="form-label">Winner chains</label>
+                    <input type="number" class="form-control" id="winnerChains" value="0" name="winnerChains" max="20" min="0" autocomplete="off" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="loserChains" class="form-label">Loser chains</label>
+                    <input type="number" class="form-control" id="loserChains" value="0" name="loserChains" max="20" min="0" autocomplete="off" required>
                 </div>
             </div>
 

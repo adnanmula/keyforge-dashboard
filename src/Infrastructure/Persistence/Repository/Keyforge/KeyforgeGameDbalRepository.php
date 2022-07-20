@@ -105,8 +105,8 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
         $stmt = $this->connection->prepare(
             \sprintf(
                 '
-                    INSERT INTO %s (id, winner, loser, winner_deck, loser_deck, first_turn, score, date, created_at)
-                    VALUES (:id, :winner, :loser, :winner_deck, :loser_deck, :first_turn, :score, :date, :created_at)
+                    INSERT INTO %s (id, winner, loser, winner_deck, loser_deck, first_turn, score, date, created_at, winner_chains, loser_chains)
+                    VALUES (:id, :winner, :loser, :winner_deck, :loser_deck, :first_turn, :score, :date, :created_at, :winner_chains, :loser_chains)
                     ON CONFLICT (id) DO UPDATE SET
                         id = :id,
                         winner = :winner,
@@ -116,7 +116,9 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
                         first_turn = :first_turn,
                         score = :score,
                         date = :date,
-                        created_at = :created_at
+                        created_at = :created_at,
+                        winner_chains = :winner_chains,
+                        loser_chains = :loser_chains
                     ',
                 self::TABLE,
             ),
@@ -127,6 +129,8 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
         $stmt->bindValue(':loser', $game->loser()->value());
         $stmt->bindValue(':winner_deck', $game->winnerDeck()->value());
         $stmt->bindValue(':loser_deck', $game->loserDeck()->value());
+        $stmt->bindValue(':winner_chains', $game->winnerChains());
+        $stmt->bindValue(':loser_chains', $game->loserChains());
         $stmt->bindValue(':first_turn', $game->firstTurn()?->value());
         $stmt->bindValue(':score', Json::encode($game->score()));
         $stmt->bindValue(':date', $game->date()->format(\DateTimeInterface::ATOM));
@@ -145,6 +149,8 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
             Uuid::from($game['loser']),
             Uuid::from($game['winner_deck']),
             Uuid::from($game['loser_deck']),
+            $game['winner_chains'],
+            $game['loser_chains'],
             null === $game['first_turn'] ? null : Uuid::from($game['first_turn']),
             KeyforgeGameScore::from($score['winner_score'], $score['loser_score']),
             new \DateTimeImmutable($game['date']),

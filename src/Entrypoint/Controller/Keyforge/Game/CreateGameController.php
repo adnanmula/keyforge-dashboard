@@ -45,8 +45,10 @@ final class CreateGameController extends Controller
                 $this->bus->dispatch(new CreateGameCommand(
                     $request->request->get('winnerId'),
                     $request->request->get('winnerDeck'),
+                    $request->request->get('winnerChains'),
                     $request->request->get('loserId'),
                     $request->request->get('loserDeck'),
+                    $request->request->get('loserChains'),
                     $request->request->get('loserScore'),
                     $request->request->get('firstTurnId') === '' ? null : $request->request->get('firstTurnId'),
                     $request->request->get('date'),

@@ -18,7 +18,7 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <ul class="navbar-nav me-auto mb-lg-0">
                         <li class="nav-item">
                             <a class="nav-link" href="/keyforge/users">Users<span class="sr-only"></span></a>
                         </li>
@@ -34,16 +34,16 @@
                     </ul>
 
                     {% if is_granted('ROLE_BASIC') %}
-                        <div class="my-2 my-lg-0">
-                            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <div class="my-lg-0">
+                            <ul class="navbar-nav me-auto mb-lg-0">
                                 <li class="nav-item">
                                     <a class="nav-link" href="/logout">Logout<span class="sr-only"></span></a>
                                 </li>
                             </ul>
                         </div>
                     {% else %}
-                        <div class="my-2 my-lg-0">
-                            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <div class="my-lg-0">
+                            <ul class="navbar-nav me-auto mb-lg-0">
                                 <li class="nav-item">
                                     <a class="nav-link" href="/register">Register<span class="sr-only"></span></a>
                                 </li>

@@ -13,6 +13,8 @@ final class KeyforgeGame
         private Uuid $loser,
         private Uuid $winnerDeck,
         private Uuid $loserDeck,
+        private int $winnerChains,
+        private int $loserChains,
         private ?Uuid $firstTurn,
         private KeyforgeGameScore $score,
         private \DateTimeImmutable $date,
@@ -42,6 +44,16 @@ final class KeyforgeGame
     public function loserDeck(): Uuid
     {
         return $this->loserDeck;
+    }
+
+    public function winnerChains(): int
+    {
+        return $this->winnerChains;
+    }
+
+    public function loserChains(): int
+    {
+        return $this->loserChains;
     }
 
     public function firstTurn(): ?Uuid

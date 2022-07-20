@@ -40,6 +40,8 @@ final class KeyforgeInitial extends AbstractMigration
                 score jsonb NOT NULL,
                 date TIMESTAMP WITH TIME ZONE NULL,
                 created_at TIMESTAMP WITH TIME ZONE NULL,
+                winner_chains integer NOT NULL,
+                loser_chains integer NOT NULL,
                 PRIMARY KEY(id)
             )',
         );

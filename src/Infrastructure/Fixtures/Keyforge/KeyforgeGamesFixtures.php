@@ -28,6 +28,8 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                 Uuid::from(UserFixtures::FIXTURE_USER_1_ID),
                 Uuid::from(KeyforgeDecksFixtures::FIXTURE_KEYFORGE_DECK_1_ID),
                 Uuid::from(KeyforgeDecksFixtures::FIXTURE_KEYFORGE_DECK_2_ID),
+                0,
+                0,
                 Uuid::from(UserFixtures::FIXTURE_USER_2_ID),
                 KeyforgeGameScore::from(3, 2),
                 new \DateTimeImmutable('2022-05-24 16:00:00'),
@@ -42,6 +44,8 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                 Uuid::from(UserFixtures::FIXTURE_USER_2_ID),
                 Uuid::from(KeyforgeDecksFixtures::FIXTURE_KEYFORGE_DECK_3_ID),
                 Uuid::from(KeyforgeDecksFixtures::FIXTURE_KEYFORGE_DECK_2_ID),
+                0,
+                0,
                 Uuid::from(UserFixtures::FIXTURE_USER_1_ID),
                 KeyforgeGameScore::from(3, 1),
                 new \DateTimeImmutable('2022-06-14 10:00:00'),
@@ -56,6 +60,8 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                 Uuid::from(UserFixtures::FIXTURE_USER_1_ID),
                 Uuid::from(KeyforgeDecksFixtures::FIXTURE_KEYFORGE_DECK_4_ID),
                 Uuid::from(KeyforgeDecksFixtures::FIXTURE_KEYFORGE_DECK_1_ID),
+                0,
+                1,
                 Uuid::from(UserFixtures::FIXTURE_USER_1_ID),
                 KeyforgeGameScore::from(3, 0),
                 new \DateTimeImmutable('2022-07-01 08:44:00'),
@@ -84,8 +90,8 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
         $stmt = $this->connection->prepare(
             \sprintf(
                 '
-                    INSERT INTO %s (id, winner, loser, winner_deck, loser_deck, first_turn, score, date, created_at)
-                    VALUES (:id, :winner, :loser, :winner_deck, :loser_deck, :first_turn, :score, :date, :created_at)
+                    INSERT INTO %s (id, winner, loser, winner_deck, loser_deck, first_turn, score, date, created_at, winner_chains, loser_chains)
+                    VALUES (:id, :winner, :loser, :winner_deck, :loser_deck, :first_turn, :score, :date, :created_at, :winner_chains, :loser_chains)
                     ON CONFLICT (id) DO UPDATE SET
                         id = :id,
                         winner = :winner,
@@ -95,7 +101,9 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                         first_turn = :first_turn,
                         score = :score,
                         date = :date,
-                        created_at = :created_at
+                        created_at = :created_at,
+                        winner_chains = :winner_chains,
+                        loser_chains = :loser_chains
                     ',
                 self::TABLE,
             ),
@@ -106,6 +114,8 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
         $stmt->bindValue(':loser', $game->loser()->value());
         $stmt->bindValue(':winner_deck', $game->winnerDeck()->value());
         $stmt->bindValue(':loser_deck', $game->loserDeck()->value());
+        $stmt->bindValue(':winner_chains', $game->winnerChains());
+        $stmt->bindValue(':loser_chains', $game->loserChains());
         $stmt->bindValue(':first_turn', $game->firstTurn()?->value());
         $stmt->bindValue(':score', \json_encode($game->score()));
         $stmt->bindValue(':date', $game->date()->format(\DateTimeInterface::ATOM));
