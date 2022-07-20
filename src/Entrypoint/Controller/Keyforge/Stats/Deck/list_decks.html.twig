@@ -4,7 +4,7 @@
 
 {% block body %}
     <div class="shadow-lg p-3 mb-5 bg-white rounded">
-        <table id="newTable" class="table table-responsive-sm table-hover">
+        <table id="deckList" class="table table-responsive-sm table-hover" style="width:100%">
             <thead>
                 <tr>
                     <th scope="col">Deck</th>
@@ -20,7 +20,11 @@
 
     <script>
         $(document).ready(function () {
-            $('#newTable').DataTable({
+            $(window).on('resize', function() {
+                $('#deckList.dataTable').resize;
+            });
+
+            $('#deckList').DataTable({
                 searching: false,
                 paging: true,
                 info: false,
@@ -105,6 +109,10 @@
                         searchable: false,
                         visible: true,
                     },
+                    // {
+                    //     targets: [1, 5], //All
+                    //     visible: false,
+                    // },
                     {
                         targets: [2, 5],
                         orderable: false
