@@ -16,7 +16,7 @@ final class GeneralStatsQueryHandler
 
     public function __invoke(GeneralStatsQuery $query): array
     {
-        $decks = $this->deckRepository->all(0, 2000, null);
+        $decks = $this->deckRepository->all(0, 2000);
 
         $housePresence = [
             KeyforgeHouse::SANCTUM->name => 0,

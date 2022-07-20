@@ -16,10 +16,17 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
 {
     private const TABLE = 'keyforge_decks';
 
-    public function all(int $start, int $length, ?QueryOrder $order): array
-    {
-        $query = $this->connection->createQueryBuilder()
-            ->select('a.id, a.name, a.set, a.houses, a.sas, a.wins, a.losses, a.extra_data')
+    public function all(
+        int $start,
+        int $length,
+        ?string $deckName = null,
+        ?string $set = null,
+        ?string $house = null,
+        ?QueryOrder $order = null
+    ): array {
+        $builder = $this->connection->createQueryBuilder();
+
+        $query = $builder->select('a.id, a.name, a.set, a.houses, a.sas, a.wins, a.losses, a.extra_data')
             ->from(self::TABLE, 'a')
             ->setFirstResult($start)
             ->setMaxResults($length);
@@ -42,18 +49,54 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
                 ->addOrderBy('a.losses', 'ASC');
         }
 
+        if (null !== $deckName) {
+            $query->andWhere('a.name ilike :deck_name')
+                ->setParameter('deck_name', '%' . $deckName . '%');
+        }
+
+        if (null !== $set) {
+            $query->andWhere('a.set = :set')
+                ->setParameter('set', $set);
+        }
+
+        if (null !== $house) {
+            $query->andWhere($builder->expr()->or(
+                'a.houses->>0 = :house',
+                'a.houses->>1 = :house',
+                'a.houses->>2 = :house',
+            ))->setParameter('house', $house);
+        }
+
         $result = $query->execute()->fetchAllAssociative();
 
         return \array_map(fn (array $row) => $this->map($row), $result);
     }
 
-    public function count(): int
+    public function count(?string $deckName = null, ?string $set = null, ?string $house = null): int
     {
-        return $this->connection->createQueryBuilder()
-            ->select('COUNT(a.id)')
-            ->from(self::TABLE, 'a')
-            ->execute()
-            ->fetchOne();
+        $builder = $this->connection->createQueryBuilder();
+        $query = $builder->select('COUNT(a.id)')
+            ->from(self::TABLE, 'a');
+
+        if (null !== $deckName) {
+            $query->andWhere('a.name ilike :deck_name')
+                ->setParameter('deck_name', '%' . $deckName . '%');
+        }
+
+        if (null !== $set) {
+            $query->andWhere('a.set = :set')
+                ->setParameter('set', $set);
+        }
+
+        if (null !== $house) {
+            $query->andWhere($builder->expr()->or(
+                'a.houses->>0 = :house',
+                'a.houses->>1 = :house',
+                'a.houses->>2 = :house',
+            ))->setParameter('house', $house);
+        }
+
+        return $query->execute()->fetchOne();
     }
 
 

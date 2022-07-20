@@ -12,17 +12,43 @@ final class GetDecksController extends Controller
 {
     public function __invoke(Request $request): JsonResponse
     {
-        $orderColumns = [
-            0 => 'name',
-            1 => 'set',
-            3 => 'win_rate',
-            4 => 'sas',
-        ];
-
         $order = null;
         $queryOrder = $request->get('order');
 
+        $searchDeck = null;
+
+        if (null !== $request->get('search') && '' !== $request->get('search')['value']) {
+            $searchDeck = $request->get('search')['value'];
+        }
+
+        $columnFilters = $request->get('columns', []);
+        $searchHouse = null;
+        $searchSet = null;
+
+        if (\array_key_exists(1, $columnFilters)) {
+            $value = $columnFilters[1]['search']['value'];
+
+            if ('' !== $value) {
+                $searchSet = $value;
+            }
+        }
+
+        if (\array_key_exists(2, $columnFilters)) {
+            $value = $columnFilters[2]['search']['value'];
+
+            if ('' !== $value) {
+                $searchHouse = $value;
+            }
+        }
+
         if (\count($queryOrder) > 0) {
+            $orderColumns = [
+                0 => 'name',
+                1 => 'set',
+                3 => 'win_rate',
+                4 => 'sas',
+            ];
+
             $orderField = $orderColumns[(int) $queryOrder[0]['column']] ?? null;
             $orderType = $queryOrder[0]['dir'] ?? null;
 
@@ -32,12 +58,19 @@ final class GetDecksController extends Controller
         }
 
         $decks = $this->extractResult(
-            $this->bus->dispatch(new GetDecksQuery($request->get('start'), $request->get('length'), $order)),
+            $this->bus->dispatch(new GetDecksQuery(
+                $request->get('start'),
+                $request->get('length'),
+                $searchDeck,
+                $searchSet,
+                $searchHouse,
+                $order,
+            )),
         );
 
         $response = [
             'recordsTotal' => $decks['total'],
-            'recordsFiltered' => $decks['total'],
+            'recordsFiltered' => $decks['totalFiltered'],
             'data' => $decks['decks'],
         ];
 

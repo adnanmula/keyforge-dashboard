@@ -7,9 +7,16 @@ use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 
 interface KeyforgeDeckRepository
 {
-    public function all(int $start, int $length, ?QueryOrder $order): array;
+    public function all(
+        int $start,
+        int $length,
+        ?string $deckName = null,
+        ?string $set = null,
+        ?string $house = null,
+        ?QueryOrder $order = null,
+    ): array;
 
-    public function count(): int;
+    public function count(?string $deckName = null, ?string $set = null, ?string $house = null): int;
 
     public function byId(Uuid $id): ?KeyforgeDeck;
 

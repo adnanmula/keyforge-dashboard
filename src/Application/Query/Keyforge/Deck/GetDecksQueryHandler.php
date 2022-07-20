@@ -12,12 +12,22 @@ final class GetDecksQueryHandler
 
     public function __invoke(GetDecksQuery $query): array
     {
-        $decks = $this->repository->all($query->start(), $query->length(), $query->order());
+        $decks = $this->repository->all(
+            $query->start(),
+            $query->length(),
+            $query->deck(),
+            $query->set(),
+            $query->house(),
+            $query->order(),
+        );
+
         $total = $this->repository->count();
+        $totalFiltered = $this->repository->count($query->deck(), $query->set(), $query->house());
 
         return [
             'decks' => $decks,
             'total' => $total,
+            'totalFiltered' => $totalFiltered,
             'start' => $query->start(),
             'length' => $query->length(),
         ];
