@@ -30,7 +30,7 @@
                         .columns([2])
                         .every(function () {
                             var column = this;
-                            var select = $('<select><option value=""></option></select>');
+                            var select = $('<select><option value="">Houses</option></select>');
 
                             select.appendTo($(column.header()).empty()).on('change', function () {
                                 var val = $.fn.dataTable.util.escapeRegex($(this).val());
@@ -53,7 +53,7 @@
                         .columns([1])
                         .every(function () {
                             var column = this;
-                            var select = $('<select><option value=""></option></select>');
+                            var select = $('<select><option value="">Set</option></select>');
 
                             select.appendTo($(column.header()).empty()).on('change', function () {
                                 var val = $.fn.dataTable.util.escapeRegex($(this).val());

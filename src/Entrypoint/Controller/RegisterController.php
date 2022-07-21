@@ -24,7 +24,11 @@ final class RegisterController extends Controller
                 $error = $exception->getMessage();
             }
 
-            return $this->render('register.html.twig', ['error' => $error]);
+            if (null !== $error) {
+                return $this->render('register.html.twig', ['error' => $error]);
+            }
+
+            return $this->render('login.html.twig', ['error' => null, 'last_username' => $request->request->get('_username')]);
         }
 
         return $this->render('register.html.twig', ['error' => null]);
