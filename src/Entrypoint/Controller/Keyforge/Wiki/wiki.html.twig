@@ -1,0 +1,23 @@
+{% extends "Keyforge/Shared/keyforge_base.html.twig" %}
+
+{% block title %}Wiki{% endblock %}
+
+{% block body %}
+    <div class="divider py-1"></div>
+
+    <div class="shadow-lg p-3 mb-5 bg-white rounded">
+        <div class="list-group">
+            <h4>Useful stuff</h4>
+
+            <div class="divider py-1"></div>
+
+            <a href="https://archonarcana.com/Main_Page" target="_blank" class="list-group-item list-group-item-action">Wiki (Archon Arcana)</a>
+            <a href="https://archonarcana.com/Errata" target="_blank" class="list-group-item list-group-item-action">Erratas</a>
+            <a href="https://archonarcana.com/Revised_Cards" target="_blank" class="list-group-item list-group-item-action">Cartas revisadas</a>
+            <a href="https://archonarcana.com/Rules" target="_blank" class="list-group-item list-group-item-action">Resumen de reglas (EN)</a>
+            <a href="{{ asset('assets/keyforge/doc/rules_es.pdf') }}" target="_blank" class="list-group-item list-group-item-action">Reglamento (v1.6) (ES)</a>
+            <a href="https://archonarcana.com/Timing_Chart" target="_blank" class="list-group-item list-group-item-action">Esquema de timings</a>
+            <a href="https://archonarcana.com/Tournament_Concepts" target="_blank" class="list-group-item list-group-item-action">Reglas de torneo</a>
+        </div>
+    </div>
+{% endblock %}
