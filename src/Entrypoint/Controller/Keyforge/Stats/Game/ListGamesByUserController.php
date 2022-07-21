@@ -22,6 +22,8 @@ final class ListGamesByUserController extends Controller
                 'pick_rate_vs_users' => $result['pick_rate_vs_users'],
                 'wins_by_date' => $result['wins_by_date'],
                 'losses_by_date' => $result['losses_by_date'],
+                'best_deck' => $result['best_deck'],
+                'worse_deck' => $result['worse_deck'],
             ],
         );
     }
