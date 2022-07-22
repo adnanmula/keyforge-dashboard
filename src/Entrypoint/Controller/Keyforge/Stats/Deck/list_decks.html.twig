@@ -4,7 +4,7 @@
 
 {% block body %}
     <div class="shadow-lg p-3 mb-5 bg-white rounded">
-        <table id="deckList" class="table table-responsive-sm table-hover" style="width:100%">
+        <table id="deckList" class="table table-responsive-sm table-hover" style="width:100%;">
             <thead>
                 <tr>
                     <th scope="col">Deck</th>
@@ -30,7 +30,7 @@
                         .columns([2])
                         .every(function () {
                             var column = this;
-                            var select = $('<select><option value="">Houses</option></select>');
+                            var select = $('<select class="form-control form-control-sm"><option value="">Houses</option></select>');
 
                             select.appendTo($(column.header()).empty()).on('change', function () {
                                 var val = $.fn.dataTable.util.escapeRegex($(this).val());
@@ -53,7 +53,7 @@
                         .columns([1])
                         .every(function () {
                             var column = this;
-                            var select = $('<select><option value="">Set</option></select>');
+                            var select = $('<select class="form-control form-control-sm"><option value="">Set</option></select>');
 
                             select.appendTo($(column.header()).empty()).on('change', function () {
                                 var val = $.fn.dataTable.util.escapeRegex($(this).val());
