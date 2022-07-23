@@ -16,7 +16,8 @@ final class GetGamesByDeckQueryHandler
 
     public function __invoke(GetGamesByDeckQuery $query): array
     {
-        $games = $this->gameRepository->byDeck($query->deckId());
+        $games = $this->gameRepository->byDeck($query->deckId(), $query->pagination(), null);
+        $total = $this->gameRepository->count($query->deckId());
 
         $userIds = [];
         $decksIds = [];
@@ -61,6 +62,12 @@ final class GetGamesByDeckQueryHandler
             ];
         }
 
-        return $result;
+        return [
+            'games' => $result,
+            'total' => $total,
+            'totalFiltered' => $total,
+            'start' => $query->pagination()->start(),
+            'length' => $query->pagination()->length(),
+        ];
     }
 }

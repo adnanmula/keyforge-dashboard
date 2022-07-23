@@ -63,8 +63,8 @@ final class CreateGameCommandHandler
 
     private function updateDeckWinRate(KeyforgeDeck $winnerDeck, KeyforgeDeck $loserDeck): void
     {
-        $games1 = $this->gameRepository->byDeck($winnerDeck->id());
-        $games2 = $this->gameRepository->byDeck($loserDeck->id());
+        $games1 = $this->gameRepository->byDeck($winnerDeck->id(), null, null);
+        $games2 = $this->gameRepository->byDeck($loserDeck->id(), null, null);
 
         $deck1Wins = 0;
         $deck1Losses = 0;

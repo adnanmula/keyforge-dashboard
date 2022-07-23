@@ -6,6 +6,8 @@ use AdnanMula\Cards\Application\Service\Json;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGame;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGameRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeGameScore;
+use AdnanMula\Cards\Domain\Model\Shared\Pagination;
+use AdnanMula\Cards\Domain\Model\Shared\QueryOrder;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Infrastructure\Persistence\Repository\DbalRepository;
 use Doctrine\DBAL\Connection;
@@ -38,18 +40,28 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
     }
 
     /** @return array<KeyforgeGame> */
-    public function byDeck(Uuid $id): array
+    public function byDeck(Uuid $id, ?Pagination $pagination, ?QueryOrder $order): array
     {
-        $result = $this->connection->createQueryBuilder()
-            ->select('a.*')
+        $builder = $this->connection->createQueryBuilder();
+
+        $query = $builder->select('a.*')
             ->from(self::TABLE, 'a')
             ->where('a.winner_deck = :id')
             ->orWhere('a.loser_deck = :id')
-            ->setParameter('id', $id->value())
-            ->orderBy('a.date', 'DESC')
-            ->addOrderBy('a.created_at', 'DESC')
-            ->execute()
-            ->fetchAllAssociative();
+            ->setParameter('id', $id->value());
+
+        if (null !== $pagination) {
+            $query->setFirstResult($pagination->start())->setMaxResults($pagination->length());
+        }
+
+        if (null === $order) {
+            $query->orderBy('a.date', 'DESC')
+                ->addOrderBy('a.created_at', 'DESC');
+        } else {
+            $query->orderBy($order->field(), $order->order());
+        }
+
+        $result = $query->execute()->fetchAllAssociative();
 
         if ([] === $result || false === $result) {
             return [];
@@ -83,21 +95,42 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
         return \array_map(fn (array $game) => $this->map($game), $result);
     }
 
-    public function all(int $page, int $pageSize): array
+    public function all(?Pagination $pagination): array
     {
-        $result = $this->connection->createQueryBuilder()
-            ->select('a.*')
+        $builder = $this->connection->createQueryBuilder();
+
+        $query = $builder->select('a.*')
             ->from(self::TABLE, 'a')
             ->orderBy('a.date', 'DESC')
-            ->addOrderBy('a.created_at', 'DESC')
-            ->execute()
-            ->fetchAllAssociative();
+            ->addOrderBy('a.created_at', 'DESC');
+
+        if (null !== $pagination) {
+            $query->setFirstResult($pagination->start())->setMaxResults($pagination->length());
+        }
+
+        $result = $query->execute()->fetchAllAssociative();
 
         if ([] === $result || false === $result) {
             return [];
         }
 
         return \array_map(fn (array $game) => $this->map($game), $result);
+    }
+
+    public function count(?Uuid $deckId = null): int
+    {
+        $builder = $this->connection->createQueryBuilder();
+
+        $query = $builder->select('count(a.*)')
+            ->from(self::TABLE, 'a');
+
+        if (null !== $deckId) {
+            $query->andWhere('a.winner_deck = :id')
+                ->orWhere('a.loser_deck = :id')
+                ->setParameter('id', $deckId->value());
+        }
+
+        return $query->execute()->fetchOne();
     }
 
     public function save(KeyforgeGame $game): void

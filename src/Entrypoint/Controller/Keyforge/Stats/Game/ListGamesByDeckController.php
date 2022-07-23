@@ -3,6 +3,7 @@
 namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\Stats\Game;
 
 use AdnanMula\Cards\Application\Query\Keyforge\Game\GetGamesByDeckQuery;
+use AdnanMula\Cards\Domain\Model\Shared\Pagination;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -11,12 +12,12 @@ final class ListGamesByDeckController extends Controller
     public function __invoke(string $deckId): Response
     {
         $games = $this->extractResult(
-            $this->bus->dispatch(new GetGamesByDeckQuery($deckId)),
+            $this->bus->dispatch(new GetGamesByDeckQuery($deckId, new Pagination(0, 37), null, null)),
         );
 
         return $this->render(
             'Keyforge/Stats/Game/list_games_by_deck.html.twig',
-            ['games' => $games, 'reference' => $deckId, 'name' => $this->getReferenceName($games[0] ?? null, $deckId)],
+            ['games' => $games, 'reference' => $deckId, 'name' => $this->getReferenceName($games['games'][0] ?? null, $deckId)],
         );
     }
 

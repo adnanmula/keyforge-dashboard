@@ -96,7 +96,7 @@ final class GeneralStatsQueryHandler
             $indexedDecks[$deck->id()->value()] = $deck;
         }
 
-        $games = $this->gameRepository->all(0, 10000);
+        $games = $this->gameRepository->all(null);
 
         $setWins = [
             KeyforgeSet::CotA->name => 0,
