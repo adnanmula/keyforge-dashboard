@@ -7,6 +7,10 @@ use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGame;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGameRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeGameScore;
+use AdnanMula\Cards\Domain\Model\Shared\Filter;
+use AdnanMula\Cards\Domain\Model\Shared\SearchTerm;
+use AdnanMula\Cards\Domain\Model\Shared\SearchTerms;
+use AdnanMula\Cards\Domain\Model\Shared\SearchTermType;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 
 final class CreateGameCommandHandler
@@ -63,8 +67,21 @@ final class CreateGameCommandHandler
 
     private function updateDeckWinRate(KeyforgeDeck $winnerDeck, KeyforgeDeck $loserDeck): void
     {
-        $games1 = $this->gameRepository->byDeck($winnerDeck->id(), null, null);
-        $games2 = $this->gameRepository->byDeck($loserDeck->id(), null, null);
+        $games1 = $this->gameRepository->search(new SearchTerms(
+            new SearchTerm(
+                SearchTermType::OR,
+                new Filter('winner_deck', $winnerDeck->id()->value()),
+                new Filter('loser_deck', $winnerDeck->id()->value()),
+            ),
+        ), null, null);
+
+        $games2 = $this->gameRepository->search(new SearchTerms(
+            new SearchTerm(
+                SearchTermType::OR,
+                new Filter('winner_deck', $loserDeck->id()->value()),
+                new Filter('loser_deck', $loserDeck->id()->value()),
+            ),
+        ), null, null);
 
         $deck1Wins = 0;
         $deck1Losses = 0;

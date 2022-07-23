@@ -2,8 +2,13 @@
 
 namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\Stats\Game;
 
-use AdnanMula\Cards\Application\Query\Keyforge\Game\GetGamesByDeckQuery;
+use AdnanMula\Cards\Application\Query\Keyforge\Game\GetGamesQuery;
+use AdnanMula\Cards\Domain\Model\Shared\Filter;
 use AdnanMula\Cards\Domain\Model\Shared\Pagination;
+use AdnanMula\Cards\Domain\Model\Shared\QueryOrder;
+use AdnanMula\Cards\Domain\Model\Shared\SearchTerm;
+use AdnanMula\Cards\Domain\Model\Shared\SearchTerms;
+use AdnanMula\Cards\Domain\Model\Shared\SearchTermType;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,16 +18,37 @@ final class GetGamesController extends Controller
     public function __invoke(Request $request): JsonResponse
     {
         $deckId = $request->get('deckId');
+        $queryOrder = $request->get('order');
+
+        $order = null;
+
+        if (\count($queryOrder) > 0) {
+            $orderColumns = [
+                6 => 'date',
+            ];
+
+            $orderField = $orderColumns[(int) $queryOrder[0]['column']] ?? null;
+            $orderType = $queryOrder[0]['dir'] ?? null;
+
+            if (null !== $orderField && null !== $orderType) {
+                $order = new QueryOrder(field: $orderField, order: $orderType);
+            }
+        }
 
         $result = $this->extractResult(
-            $this->bus->dispatch(new GetGamesByDeckQuery(
-                $deckId,
+            $this->bus->dispatch(new GetGamesQuery(
                 new Pagination(
                     (int) $request->get('start'),
                     (int) $request->get('length'),
                 ),
-                null,
-                null,
+                new SearchTerms(
+                    new SearchTerm(
+                        SearchTermType::OR,
+                        new Filter('winner_deck', $deckId),
+                        new Filter('loser_deck', $deckId),
+                    ),
+                ),
+                $order,
             )),
         );
 

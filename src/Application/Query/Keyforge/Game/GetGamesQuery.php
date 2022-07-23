@@ -5,29 +5,18 @@ namespace AdnanMula\Cards\Application\Query\Keyforge\Game;
 use AdnanMula\Cards\Domain\Model\Shared\Pagination;
 use AdnanMula\Cards\Domain\Model\Shared\QueryOrder;
 use AdnanMula\Cards\Domain\Model\Shared\SearchTerms;
-use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
-use Assert\Assert;
 
-final class GetGamesByDeckQuery
+final class GetGamesQuery
 {
-    private Uuid $deckId;
     private ?Pagination $pagination;
-    private ?SearchTerms $searchTerms;
+    private ?SearchTerms $search;
     private ?QueryOrder $order;
 
-    public function __construct($deckId, ?Pagination $pagination, ?SearchTerms $searchTerms, ?QueryOrder $order)
+    public function __construct(?Pagination $pagination, ?SearchTerms $search, ?QueryOrder $order)
     {
-        Assert::lazy()->that($deckId, 'deck_id')->uuid();
-
-        $this->deckId = Uuid::from($deckId);
         $this->pagination = $pagination;
-        $this->searchTerms = $searchTerms;
+        $this->search = $search;
         $this->order = $order;
-    }
-
-    public function deckId(): Uuid
-    {
-        return $this->deckId;
     }
 
     public function pagination(): ?Pagination
@@ -35,9 +24,9 @@ final class GetGamesByDeckQuery
         return $this->pagination;
     }
 
-    public function searchTerms(): ?SearchTerms
+    public function search(): ?SearchTerms
     {
-        return $this->searchTerms;
+        return $this->search;
     }
 
     public function order(): ?QueryOrder

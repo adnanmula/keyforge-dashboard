@@ -4,18 +4,23 @@ namespace AdnanMula\Cards\Domain\Model\Shared;
 
 final class SearchTerm
 {
-    public function __construct(
-        private string $field,
-        private string $value,
-    ) {}
+    private SearchTermType $type;
+    private array $filters;
 
-    public function field(): string
+    public function __construct(SearchTermType $type, Filter ...$filters)
     {
-        return $this->field;
+        $this->type = $type;
+        $this->filters = $filters;
     }
 
-    public function value(): string
+    public function type(): SearchTermType
     {
-        return $this->value;
+        return $this->type;
+    }
+
+    /** @return array<Filter> */
+    public function filters(): array
+    {
+        return $this->filters;
     }
 }

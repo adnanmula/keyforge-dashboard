@@ -19,8 +19,11 @@ final class ChainsCalculator
     {
         $this->assert($user1, $user2, $deck1, $deck2);
 
-        $gamesWithUsers = $this->gameRepository->byUser($user1, $user2);
-        $gamesWithDecks = $this->gameRepository->byUsersAndDecks([$user1, $user2], [$deck1, $deck2]);
+//        $gamesWithUsers = $this->gameRepository->byUser($user1, $user2);
+//        $gamesWithDecks = $this->gameRepository->byUsersAndDecks([$user1, $user2], [$deck1, $deck2]);
+
+        $gamesWithUsers = $this->gameRepository->search(null, null, null);
+        $gamesWithDecks = $this->gameRepository->search(null, null, null);
 
         $indexedGamesWithUser = [
             $user1->value() => [

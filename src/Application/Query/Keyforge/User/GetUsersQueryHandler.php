@@ -6,6 +6,10 @@ use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGame;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGameRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUser;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUserRepository;
+use AdnanMula\Cards\Domain\Model\Shared\Filter;
+use AdnanMula\Cards\Domain\Model\Shared\SearchTerm;
+use AdnanMula\Cards\Domain\Model\Shared\SearchTerms;
+use AdnanMula\Cards\Domain\Model\Shared\SearchTermType;
 
 final class GetUsersQueryHandler
 {
@@ -22,9 +26,23 @@ final class GetUsersQueryHandler
             return $users;
         }
 
-        $userIds = \array_map(static fn (KeyforgeUser $user) => $user->id(), $users);
+        $userIds = \array_map(static fn (KeyforgeUser $user) => $user->id()->value(), $users);
 
-        $games = $this->gameRepository->byUser(...$userIds);
+        $filters = [];
+
+        foreach ($userIds as $userId) {
+            $filters[] = new Filter('winner', $userId);
+            $filters[] = new Filter('loser', $userId);
+        }
+
+        $searchTerms = new SearchTerms(
+            new SearchTerm(
+                SearchTermType::OR,
+                ...$filters,
+            ),
+        );
+
+        $games = $this->gameRepository->search($searchTerms, null, null);
 
         $result = [];
 

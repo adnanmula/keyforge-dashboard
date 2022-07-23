@@ -6,7 +6,7 @@ use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGameRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUserRepository;
 
-final class GetGamesByDeckQueryHandler
+final class GetGamesQueryHandler
 {
     public function __construct(
         private KeyforgeGameRepository $gameRepository,
@@ -14,10 +14,10 @@ final class GetGamesByDeckQueryHandler
         private KeyforgeUserRepository $userRepository,
     ) {}
 
-    public function __invoke(GetGamesByDeckQuery $query): array
+    public function __invoke(GetGamesQuery $query): array
     {
-        $games = $this->gameRepository->byDeck($query->deckId(), $query->pagination(), null);
-        $total = $this->gameRepository->count($query->deckId());
+        $games = $this->gameRepository->search($query->search(), $query->pagination(), $query->order());
+        $total = $this->gameRepository->count($query->search());
 
         $userIds = [];
         $decksIds = [];
@@ -66,8 +66,6 @@ final class GetGamesByDeckQueryHandler
             'games' => $result,
             'total' => $total,
             'totalFiltered' => $total,
-            'start' => $query->pagination()->start(),
-            'length' => $query->pagination()->length(),
         ];
     }
 }

@@ -42,7 +42,7 @@
                 responsive: true,
                 processing: true,
                 serverSide: true,
-                // order: [[3, 'desc']],
+                order: [[6, 'desc']],
                 lengthMenu: [10, 25, 50, 100],
                 iDisplayLength: 25,
                 ajax: '/keyforge/games/json?deckId={{ reference }}',
@@ -105,7 +105,14 @@
                         targets: [0, 1, 2, 3, 4, 5, 6],
                         searchable: false,
                         visible: true,
+                    },
+                    {
+                        targets: [0, 1, 2, 3, 4, 5],
                         orderable: false,
+                    },
+                    {
+                        targets: [6],
+                        orderable: true,
                     },
                 ],
             });

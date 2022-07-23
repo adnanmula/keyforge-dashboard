@@ -5,6 +5,10 @@ namespace AdnanMula\Cards\Application\Query\Keyforge\Stats;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGameRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUserRepository;
+use AdnanMula\Cards\Domain\Model\Shared\Filter;
+use AdnanMula\Cards\Domain\Model\Shared\SearchTerm;
+use AdnanMula\Cards\Domain\Model\Shared\SearchTerms;
+use AdnanMula\Cards\Domain\Model\Shared\SearchTermType;
 
 final class UserStatsQueryHandler
 {
@@ -16,7 +20,13 @@ final class UserStatsQueryHandler
 
     public function __invoke(UserStatsQuery $query): array
     {
-        $games = $this->gameRepository->byUser($query->userId());
+        $games = $this->gameRepository->search(new SearchTerms(
+            new SearchTerm(
+                SearchTermType::OR,
+                new Filter('winner', $query->userId()->value()),
+                new Filter('loser', $query->userId()->value()),
+            ),
+        ), null, null);
 
         $userIds = [];
         $decksIds = [];
