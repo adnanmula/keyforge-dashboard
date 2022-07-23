@@ -46,6 +46,15 @@
                 lengthMenu: [10, 25, 50, 100],
                 iDisplayLength: 25,
                 ajax: '/keyforge/games/json?deckId={{ reference }}',
+                createdRow: function(row, data, dataIndex) {
+                    let deck = '{{ reference }}';
+
+                    if (deck === data.winner_deck) {
+                        $(row).addClass('table-success');
+                    } else {
+                        $(row).addClass('table-danger');
+                    }
+                },
                 columns: [
                     { data: "winner_name" },
                     { data: "winner_deck_name" },
