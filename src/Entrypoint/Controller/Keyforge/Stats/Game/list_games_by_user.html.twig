@@ -37,7 +37,19 @@
 
         <div class="divider py-2"></div>
 
-        {% include 'Keyforge/Stats/Game/list_games.html.twig' %}
+        <table id="gamesList" class="table table-responsive-sm table-hover" style="width:100%;">
+            <thead>
+            <tr>
+                <th scope="col">Winner</th>
+                <th scope="col">Winner deck</th>
+                <th scope="col">Loser</th>
+                <th scope="col">Loser deck</th>
+                <th scope="col">Score</th>
+                <th scope="col">First turn</th>
+                <th scope="col">Date</th>
+            </tr>
+            </thead>
+        </table>
     </div>
     <script>
         let winRateVsUsers = JSON.parse('{{ win_rate_vs_users|json_encode|raw }}');
@@ -112,5 +124,94 @@
                 }
             },
         });
+
+        $(document).ready(function () {
+            $(window).on('resize', function() {
+                $('#gamesList.dataTable').resize;
+            });
+
+            $('#gamesList').DataTable({
+                searching: false,
+                paging: true,
+                info: true,
+                responsive: true,
+                processing: true,
+                serverSide: true,
+                order: [[6, 'desc']],
+                lengthMenu: [10, 25, 50, 100],
+                iDisplayLength: 25,
+                ajax: '/keyforge/games/json?userId={{ reference }}',
+                createdRow: function(row, data, dataIndex) {
+                    let winner = '{{ reference }}';
+
+                    if (winner === data.winner) {
+                        $(row).addClass('table-success');
+                    } else {
+                        $(row).addClass('table-danger');
+                    }
+                },
+                columns: [
+                    { data: "winner_name" },
+                    { data: "winner_deck_name" },
+                    { data: "loser_name" },
+                    { data: "loser_deck_name" },
+                    { data: "score" },
+                    { data: "first_turn" },
+                    { data: "date" },
+                ],
+                columnDefs: [
+                    {
+                        render: function (data, type, row) {
+                            return '<a href="/keyforge/games/user/' + row.winner + '">' + data + '</a>';
+                        },
+                        targets: 0, //Winner
+                    },
+                    {
+                        render: function (data, type, row) {
+                            let reference = '{{ reference }}';
+
+                            if (reference === row.winner_deck) {
+                                return data;
+                            } else {
+                                return '<a href="/keyforge/games/deck/' + row.winner_deck + '">' + data + '</a>';
+                            }
+                        },
+                        targets: 1, //Winner deck
+                    },
+                    {
+                        render: function (data, type, row) {
+                            return '<a href="/keyforge/games/user/' + row.loser + '">' + data + '</a>';
+                        },
+                        targets: 2, //Loser
+                    },
+                    {
+                        render: function (data, type, row) {
+                            let reference = '{{ reference }}';
+
+                            if (reference === row.loser_deck) {
+                                return data;
+                            } else {
+                                return '<a href="/keyforge/games/deck/' + row.loser_deck + '">' + data + '</a>';
+                            }
+                        },
+                        targets: 3, //Loser deck
+                    },
+                    {
+                        targets: [0, 1, 2, 3, 4, 5, 6],
+                        searchable: false,
+                        visible: true,
+                    },
+                    {
+                        targets: [0, 1, 2, 3, 4, 5],
+                        orderable: false,
+                    },
+                    {
+                        targets: [6],
+                        orderable: true,
+                    },
+                ],
+            });
+        });
+
     </script>
 {% endblock %}

@@ -32,7 +32,7 @@
     <script>
         $(document).ready(function () {
             $(window).on('resize', function() {
-                $('#deckList.dataTable').resize;
+                $('#gamesList.dataTable').resize;
             });
 
             $('#gamesList').DataTable({
@@ -78,7 +78,7 @@
                             if (reference === row.winner_deck) {
                                 return data;
                             } else {
-                                return '<a href="/keyforge/games/user/' + row.winner + '">' + data + '</a>';
+                                return '<a href="/keyforge/games/deck/' + row.winner_deck + '">' + data + '</a>';
                             }
                         },
                         targets: 1, //Winner deck
