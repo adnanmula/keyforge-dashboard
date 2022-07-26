@@ -24,6 +24,7 @@ final class ListGamesByUserController extends Controller
                 'losses_by_date' => $result['losses_by_date'],
                 'best_deck' => $result['best_deck'],
                 'worse_deck' => $result['worse_deck'],
+                'favorite_deck' => $result['favorite_deck'],
             ],
         );
     }

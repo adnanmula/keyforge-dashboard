@@ -6,11 +6,13 @@ use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUser;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Domain\Service\Persistence\Fixture;
 use AdnanMula\Cards\Infrastructure\Fixtures\DbalFixture;
+use AdnanMula\Cards\Infrastructure\Fixtures\User\UserFixtures;
 
 final class KeyforgeUsersFixtures extends DbalFixture implements Fixture
 {
-    public const FIXTURE_USER_1_ID = '426117e9-e016-4f53-be1f-4eb8711ce625';
-    public const FIXTURE_USER_2_ID = '97a7e9fe-ff27-4d52-83c0-df4bc9309fb0';
+    public const FIXTURE_KF_USER_1_ID = UserFixtures::FIXTURE_USER_1_ID;
+    public const FIXTURE_KF_USER_2_ID = UserFixtures::FIXTURE_USER_2_ID;
+    public const FIXTURE_KF_USER_3_ID = 'b889fac0-6ddb-41fe-95c2-3df1230111c6';
 
     private const TABLE = 'keyforge_users';
 
@@ -18,8 +20,9 @@ final class KeyforgeUsersFixtures extends DbalFixture implements Fixture
 
     public function load(): void
     {
-        $this->save(KeyforgeUser::create(Uuid::from(self::FIXTURE_USER_1_ID), 'username'));
-        $this->save(KeyforgeUser::create(Uuid::from(self::FIXTURE_USER_2_ID), 'username2'));
+        $this->save(KeyforgeUser::create(Uuid::from(self::FIXTURE_KF_USER_1_ID), 'username'));
+        $this->save(KeyforgeUser::create(Uuid::from(self::FIXTURE_KF_USER_2_ID), 'username2'));
+        $this->save(KeyforgeUser::create(Uuid::from(self::FIXTURE_KF_USER_3_ID), 'user-without-login'));
 
         $this->loaded = true;
     }

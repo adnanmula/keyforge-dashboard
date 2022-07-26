@@ -172,7 +172,13 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
                 $expression = $expression->with(\sprintf('%s = :%s', $filter->field(), $filter->field() . $index));
             }
 
-            $query->andWhere($expression);
+            if ($terms->type() === SearchTermType::AND) {
+                $query->andWhere($expression);
+            }
+
+            if ($terms->type() === SearchTermType::OR) {
+                $query->orWhere($expression);
+            }
 
             foreach ($term->filters() as $index => $filter) {
                 $query->setParameter($filter->field() . $index, $filter->value());

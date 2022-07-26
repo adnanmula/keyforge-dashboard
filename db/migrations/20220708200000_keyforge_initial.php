@@ -25,6 +25,7 @@ final class KeyforgeInitial extends AbstractMigration
                 wins integer NOT NULL,
                 losses integer NOT NULL,
                 extra_data jsonb NOT NULL,
+                owner uuid,
                 PRIMARY KEY(id)
             )',
         );

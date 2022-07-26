@@ -33,6 +33,15 @@
                     <p>{{ worse_deck.wins }}/{{ worse_deck.losses }} (WR: {{ worse_deck.win_rate }}%/PR: {{ worse_deck.pick_rate }}%)</p>
                 </a>
             {% endif %}
+
+            {% if (null != favorite_deck) %}
+                <a href="/keyforge/games/deck/{{ favorite_deck.id }}" class="btn btn-dark border col-12 col-sm-6 col-lg-3">
+                    <h5>Favorite</h5>
+                    <p>{{ favorite_deck.name }}</p>
+                    <p>Played {{ favorite_deck.wins + favorite_deck.losses }} times</p>
+                </a>
+            {% endif %}
+
         </div>
 
         <div class="divider py-2"></div>

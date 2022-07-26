@@ -5,13 +5,24 @@
 {% block body %}
     <div class="shadow-lg p-3 mb-5 bg-white rounded">
         <div class="d-flex flex-row">
-            <h4>Games of {{ name }}</h4>
+            <h4>Games of {{ deck_name }}</h4>
         </div>
+
+        {% if (null != deck_owner) %}
+{#            <h6><a href="/keyforge/games/user/{{ deck_owner }}" target="_blank">Claimed</a></h6>#}
+            <h6>Claimed</h6>
+        {% endif %}
+
+        <div class="alert" id="result" style="display: none"></div>
 
         <div class="d-flex flex-row-reverse">
             <a href="https://archonarcana.com/Deck:{{ reference }}" target="_blank"><img class="img-thumbnail" width="50px" style="min-width: 40px" src="{{ asset('assets/keyforge/logos/wiki.jpg') }}" alt="Wiki"/></a>
             <a href="https://decksofkeyforge.com/decks/{{ reference }}" target="_blank"><img class="img-thumbnail" width="40px" style="min-width: 40px" src="{{ asset('assets/keyforge/logos/dok.svg') }}" alt="DoK"/></a>
             <a href="https://keyforgegame.com/deck-details/{{ reference }}" target="_blank"><img class="img-thumbnail" width="50px" style="min-width: 50px" src="{{ asset('assets/keyforge/logos/vault.png') }}" alt="Vault"/></a>
+
+            {% if (is_granted('ROLE_KEYFORGE')) and null == deck_owner %}
+                <div class="btn btn-sm btn-dark" id="claimDeckButton">Claim</div>
+            {% endif %}
         </div>
 
         <table id="gamesList" class="table table-responsive-sm table-hover" style="width:100%;">
@@ -35,6 +46,12 @@
                 $('#gamesList.dataTable').resize;
             });
 
+            {% if userId != null %}
+                let endpoint = '/keyforge/games/json?deckId={{ reference }}&userId={{ userId }}';
+            {% else %}
+                let endpoint = '/keyforge/games/json?deckId={{ reference }}';
+            {% endif %}
+
             $('#gamesList').DataTable({
                 searching: false,
                 paging: true,
@@ -45,7 +62,7 @@
                 order: [[6, 'desc']],
                 lengthMenu: [10, 25, 50, 100],
                 iDisplayLength: 25,
-                ajax: '/keyforge/games/json?deckId={{ reference }}',
+                ajax: endpoint,
                 createdRow: function(row, data, dataIndex) {
                     let deck = '{{ reference }}';
 
@@ -115,6 +132,32 @@
                         orderable: true,
                     },
                 ],
+            });
+
+            $('#claimDeckButton').click(function () {
+                $.ajax({
+                    url: '/keyforge/deck/claim',
+                    type: "post",
+                    data: {
+                        deckId: '{{ reference }}',
+                    },
+                    success: function (response) {
+                        $('#claimDeckButton').hide();
+
+                        let alert = $('#result');
+                        alert.removeClass('alert-success');
+                        alert.removeClass('alert-danger');
+                        alert.addClass('alert-success').text('Es tuya mostro, que la disfrutes').show();
+                        alert.delay(3000).fadeOut('slow');
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        let alert = $('#result');
+                        alert.removeClass('alert-success');
+                        alert.removeClass('alert-danger');
+                        alert.addClass('alert-danger').text('Algo fue mal, que lo revise nan supongo...').show();
+                        alert.delay(3000).fadeOut('slow');
+                    }
+                });
             });
         });
     </script>

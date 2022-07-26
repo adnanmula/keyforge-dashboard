@@ -44,6 +44,7 @@ final class ImportDeckCommandHandler
                 0,
                 0,
                 $deck,
+                null,
             ),
         );
     }

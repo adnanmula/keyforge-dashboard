@@ -2,6 +2,7 @@
 
 namespace AdnanMula\Cards\Application\Query\Keyforge\Stats;
 
+use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeck;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGameRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUserRepository;
@@ -21,6 +22,7 @@ final class UserStatsQueryHandler
     public function __invoke(UserStatsQuery $query): array
     {
         $games = $this->gameRepository->search(new SearchTerms(
+            SearchTermType::AND,
             new SearchTerm(
                 SearchTermType::OR,
                 new Filter('winner', $query->userId()->value()),
@@ -39,6 +41,8 @@ final class UserStatsQueryHandler
         }
 
         $decks = $this->deckRepository->byIds(...$decksIds);
+        $decks = \array_filter($decks, static fn (KeyforgeDeck $deck) => $deck->owner()?->value() === $query->userId()->value());
+
         $users = $this->userRepository->byIds(...$userIds);
 
         $indexedDecks = [];
@@ -59,6 +63,10 @@ final class UserStatsQueryHandler
 
         foreach ($games as $game) {
             if ($game->winner()->equalTo($query->userId())) {
+                if (false === \array_key_exists($game->winnerDeck()->value(), $bestAndWorseDecks)) {
+                    continue;
+                }
+
                 $bestAndWorseDecks[$game->winnerDeck()->value()] = [
                     'wins' => $bestAndWorseDecks[$game->winnerDeck()->value()]['wins'] + 1,
                     'losses' => $bestAndWorseDecks[$game->winnerDeck()->value()]['losses'],
@@ -66,6 +74,10 @@ final class UserStatsQueryHandler
             }
 
             if ($game->loser()->equalTo($query->userId())) {
+                if (false === \array_key_exists($game->loserDeck()->value(), $bestAndWorseDecks)) {
+                    continue;
+                }
+
                 $bestAndWorseDecks[$game->loserDeck()->value()] = [
                     'wins' => $bestAndWorseDecks[$game->loserDeck()->value()]['wins'],
                     'losses' => $bestAndWorseDecks[$game->loserDeck()->value()]['losses'] + 1,
@@ -88,11 +100,11 @@ final class UserStatsQueryHandler
                 'winner' => $game->winner()->value(),
                 'winner_name' => $indexedUsers[$game->winner()->value()],
                 'winner_deck' => $game->winnerDeck()->value(),
-                'winner_deck_name' => $indexedDecks[$game->winnerDeck()->value()],
+                'winner_deck_name' => $indexedDecks[$game->winnerDeck()->value()] ?? '',
                 'loser' => $game->loser()->value(),
                 'loser_name' => $indexedUsers[$game->loser()->value()],
                 'loser_deck' => $game->loserDeck()->value(),
-                'loser_deck_name' => $indexedDecks[$game->loserDeck()->value()],
+                'loser_deck_name' => $indexedDecks[$game->loserDeck()->value()] ?? '',
                 'score' => $game->score()->winnerScore() . '/' . $game->score()->loserScore(),
                 'first_turn' => null === $game->firstTurn() ? null : $indexedUsers[$game->firstTurn()->value()],
                 'date' => $game->date()->format('Y-m-d'),
@@ -188,6 +200,14 @@ final class UserStatsQueryHandler
             'pick_rate' => 0,
         ];
 
+        $favoriteDeck = [
+            'id' => null,
+            'wins' => 0,
+            'losses' => 0,
+            'win_rate' => 200,
+            'pick_rate' => 0,
+        ];
+
         foreach ($bestAndWorseDecks as $id => $bestAndWorseDeck) {
             $winRate = $this->winRate($bestAndWorseDeck['wins'], $bestAndWorseDeck['losses']);
 
@@ -214,12 +234,28 @@ final class UserStatsQueryHandler
                     'pick_rate' => $this->pickRate($bestAndWorseDeck['wins'] + $bestAndWorseDeck['losses'], \count($games)),
                 ];
             }
+
+            $currentTimesPlayed = $bestAndWorseDeck['wins'] + $bestAndWorseDeck['losses'];
+            $timesPlayed = $favoriteDeck['wins'] + $favoriteDeck['losses'];
+
+            if ($currentTimesPlayed > $timesPlayed
+                || ($timesPlayed === $currentTimesPlayed && $winRate > $favoriteDeck['win_rate'])) {
+                $favoriteDeck = [
+                    'id' => $id,
+                    'name' => $indexedDecks[$id],
+                    'wins' => $bestAndWorseDeck['wins'],
+                    'losses' => $bestAndWorseDeck['losses'],
+                    'win_rate' => $this->winRate($bestAndWorseDeck['wins'], $bestAndWorseDeck['losses']),
+                    'pick_rate' => $this->pickRate($bestAndWorseDeck['wins'] + $bestAndWorseDeck['losses'], \count($games)),
+                ];
+            }
         }
 
         $result['wins_by_date'] = $resultWinsByDate;
         $result['losses_by_date'] = $resultLossesByDate;
         $result['best_deck'] = null === $bestDeck['id'] ? null : $bestDeck;
         $result['worse_deck'] = null === $worseDeck['id'] ? null : $worseDeck;
+        $result['favorite_deck'] = null === $favoriteDeck['id'] ? null : $favoriteDeck;
 
         return $result;
     }

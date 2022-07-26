@@ -13,10 +13,16 @@ interface KeyforgeDeckRepository
         ?string $deckName = null,
         ?string $set = null,
         ?string $house = null,
+        ?Uuid $owner = null,
         ?QueryOrder $order = null,
     ): array;
 
-    public function count(?string $deckName = null, ?string $set = null, ?string $house = null): int;
+    public function count(
+        ?string $deckName = null,
+        ?string $set = null,
+        ?string $house = null,
+        ?Uuid $owner = null,
+    ): int;
 
     public function byId(Uuid $id): ?KeyforgeDeck;
 

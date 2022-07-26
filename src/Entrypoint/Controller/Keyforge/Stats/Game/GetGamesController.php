@@ -56,7 +56,7 @@ final class GetGamesController extends Controller
 
         $filters = [];
 
-        if (null !== $deckId) {
+        if (null !== $deckId && null === $userId) {
             $filters[] = new SearchTerm(
                 SearchTermType::OR,
                 new Filter('winner_deck', $deckId),
@@ -64,7 +64,7 @@ final class GetGamesController extends Controller
             );
         }
 
-        if (null !== $userId) {
+        if (null !== $userId && null === $deckId) {
             $filters[] = new SearchTerm(
                 SearchTermType::OR,
                 new Filter('winner', $userId),
@@ -72,11 +72,27 @@ final class GetGamesController extends Controller
             );
         }
 
+        if (null !== $userId && null !== $deckId) {
+            $filters[] = new SearchTerm(
+                SearchTermType::AND,
+                new Filter('winner', $userId),
+                new Filter('winner_deck', $deckId),
+            );
+
+            $filters[] = new SearchTerm(
+                SearchTermType::AND,
+                new Filter('loser', $userId),
+                new Filter('loser_deck', $deckId),
+            );
+
+            return new SearchTerms(SearchTermType::OR, ...$filters);
+        }
+
         if (\count($filters) === 0) {
             return null;
         }
 
-        return new SearchTerms(...$filters);
+        return new SearchTerms(SearchTermType::AND, ...$filters);
     }
 
     private function getOrder(Request $request): ?QueryOrder

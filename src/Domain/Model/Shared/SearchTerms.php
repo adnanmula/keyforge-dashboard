@@ -7,11 +7,18 @@ use Traversable;
 
 final class SearchTerms implements \IteratorAggregate
 {
+    private SearchTermType $type;
     private array $terms;
 
-    public function __construct(SearchTerm ...$terms)
+    public function __construct(SearchTermType $type, SearchTerm ...$terms)
     {
+        $this->type = $type;
         $this->terms = $terms;
+    }
+
+    public function type(): SearchTermType
+    {
+        return $this->type;
     }
 
     public function terms(): array

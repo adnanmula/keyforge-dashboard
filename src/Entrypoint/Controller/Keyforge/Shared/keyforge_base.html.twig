@@ -25,6 +25,13 @@
                         <li class="nav-item">
                             <a class="nav-link" href="/keyforge/decks">Decks<span class="sr-only"></span></a>
                         </li>
+
+                        {% if is_granted('ROLE_KEYFORGE') %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/keyforge/my-decks">My Decks<span class="sr-only"></span></a>
+                        </li>
+                        {% endif %}
+
                         <li class="nav-item">
                             <a class="nav-link" href="/keyforge/games/add">Register games<span class="sr-only"></span></a>
                         </li>

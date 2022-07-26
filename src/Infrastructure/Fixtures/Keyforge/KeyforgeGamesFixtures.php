@@ -22,6 +22,7 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
     public const FIXTURE_KEYFORGE_GAME_10_ID = '11fdb28b-070c-4c8b-8b2b-57d4431045f7';
     public const FIXTURE_KEYFORGE_GAME_11_ID = 'fa894952-3e79-43ad-aa83-69ebecf213fc';
     public const FIXTURE_KEYFORGE_GAME_12_ID = '5da99bd0-563a-4247-8d04-8a904c8542ab';
+    public const FIXTURE_KEYFORGE_GAME_13_ID = 'a4e32bc2-f3ed-4c56-a742-e8d75dd2acb3';
 
     private const TABLE = 'keyforge_games';
 
@@ -32,13 +33,13 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
         $this->save(
             new KeyforgeGame(
                 Uuid::from(self::FIXTURE_KEYFORGE_GAME_1_ID),
-                Uuid::from(KeyforgeUsersFixtures::FIXTURE_USER_2_ID),
-                Uuid::from(KeyforgeUsersFixtures::FIXTURE_USER_1_ID),
+                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID),
+                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_1_ID),
                 Uuid::from(KeyforgeDecksFixtures::FIXTURE_KEYFORGE_DECK_1_ID),
                 Uuid::from(KeyforgeDecksFixtures::FIXTURE_KEYFORGE_DECK_2_ID),
                 0,
                 0,
-                Uuid::from(KeyforgeUsersFixtures::FIXTURE_USER_2_ID),
+                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID),
                 KeyforgeGameScore::from(3, 2),
                 new \DateTimeImmutable('2022-05-24 16:00:00'),
                 new \DateTimeImmutable('2022-05-24 16:00:00'),
@@ -48,13 +49,13 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
         $this->save(
             new KeyforgeGame(
                 Uuid::from(self::FIXTURE_KEYFORGE_GAME_2_ID),
-                Uuid::from(KeyforgeUsersFixtures::FIXTURE_USER_1_ID),
-                Uuid::from(KeyforgeUsersFixtures::FIXTURE_USER_2_ID),
+                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_1_ID),
+                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID),
                 Uuid::from(KeyforgeDecksFixtures::FIXTURE_KEYFORGE_DECK_3_ID),
                 Uuid::from(KeyforgeDecksFixtures::FIXTURE_KEYFORGE_DECK_2_ID),
                 0,
                 0,
-                Uuid::from(KeyforgeUsersFixtures::FIXTURE_USER_1_ID),
+                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_1_ID),
                 KeyforgeGameScore::from(3, 1),
                 new \DateTimeImmutable('2022-06-14 10:00:00'),
                 new \DateTimeImmutable('2022-06-14 10:00:00'),
@@ -64,13 +65,13 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
         $this->save(
             new KeyforgeGame(
                 Uuid::from(self::FIXTURE_KEYFORGE_GAME_3_ID),
-                Uuid::from(KeyforgeUsersFixtures::FIXTURE_USER_2_ID),
-                Uuid::from(KeyforgeUsersFixtures::FIXTURE_USER_1_ID),
+                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID),
+                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_1_ID),
                 Uuid::from(KeyforgeDecksFixtures::FIXTURE_KEYFORGE_DECK_4_ID),
                 Uuid::from(KeyforgeDecksFixtures::FIXTURE_KEYFORGE_DECK_1_ID),
                 0,
                 1,
-                Uuid::from(KeyforgeUsersFixtures::FIXTURE_USER_1_ID),
+                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_1_ID),
                 KeyforgeGameScore::from(3, 0),
                 new \DateTimeImmutable('2022-07-01 08:44:00'),
                 new \DateTimeImmutable('2022-07-01 08:44:00'),
@@ -80,13 +81,13 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
         $this->save(
             new KeyforgeGame(
                 Uuid::from(self::FIXTURE_KEYFORGE_GAME_4_ID),
-                Uuid::from(KeyforgeUsersFixtures::FIXTURE_USER_1_ID),
-                Uuid::from(KeyforgeUsersFixtures::FIXTURE_USER_2_ID),
+                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_1_ID),
+                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID),
                 Uuid::from(KeyforgeDecksFixtures::FIXTURE_KEYFORGE_DECK_1_ID),
                 Uuid::from(KeyforgeDecksFixtures::FIXTURE_KEYFORGE_DECK_4_ID),
                 0,
                 0,
-                Uuid::from(KeyforgeUsersFixtures::FIXTURE_USER_2_ID),
+                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID),
                 KeyforgeGameScore::from(3, 2),
                 new \DateTimeImmutable('2022-07-02 00:00:00'),
                 new \DateTimeImmutable('2022-07-02 08:44:00'),
@@ -96,13 +97,13 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
         $this->save(
             new KeyforgeGame(
                 Uuid::from(self::FIXTURE_KEYFORGE_GAME_5_ID),
-                Uuid::from(KeyforgeUsersFixtures::FIXTURE_USER_1_ID),
-                Uuid::from(KeyforgeUsersFixtures::FIXTURE_USER_2_ID),
+                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_1_ID),
+                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID),
                 Uuid::from(KeyforgeDecksFixtures::FIXTURE_KEYFORGE_DECK_6_ID),
                 Uuid::from(KeyforgeDecksFixtures::FIXTURE_KEYFORGE_DECK_7_ID),
                 0,
                 0,
-                Uuid::from(KeyforgeUsersFixtures::FIXTURE_USER_1_ID),
+                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_1_ID),
                 KeyforgeGameScore::from(3, 1),
                 new \DateTimeImmutable('2022-07-03 00:00:00'),
                 new \DateTimeImmutable('2022-07-03 08:15:00'),
@@ -112,13 +113,13 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
         $this->save(
             new KeyforgeGame(
                 Uuid::from(self::FIXTURE_KEYFORGE_GAME_6_ID),
-                Uuid::from(KeyforgeUsersFixtures::FIXTURE_USER_1_ID),
-                Uuid::from(KeyforgeUsersFixtures::FIXTURE_USER_2_ID),
+                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_1_ID),
+                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID),
                 Uuid::from(KeyforgeDecksFixtures::FIXTURE_KEYFORGE_DECK_6_ID),
                 Uuid::from(KeyforgeDecksFixtures::FIXTURE_KEYFORGE_DECK_7_ID),
                 0,
                 0,
-                Uuid::from(KeyforgeUsersFixtures::FIXTURE_USER_1_ID),
+                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_1_ID),
                 KeyforgeGameScore::from(3, 1),
                 new \DateTimeImmutable('2022-07-11 00:00:00'),
                 new \DateTimeImmutable('2022-07-11 02:00:00'),
@@ -128,13 +129,13 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
         $this->save(
             new KeyforgeGame(
                 Uuid::from(self::FIXTURE_KEYFORGE_GAME_7_ID),
-                Uuid::from(KeyforgeUsersFixtures::FIXTURE_USER_1_ID),
-                Uuid::from(KeyforgeUsersFixtures::FIXTURE_USER_2_ID),
+                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_1_ID),
+                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID),
                 Uuid::from(KeyforgeDecksFixtures::FIXTURE_KEYFORGE_DECK_3_ID),
                 Uuid::from(KeyforgeDecksFixtures::FIXTURE_KEYFORGE_DECK_2_ID),
                 0,
                 0,
-                Uuid::from(KeyforgeUsersFixtures::FIXTURE_USER_2_ID),
+                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID),
                 KeyforgeGameScore::from(3, 2),
                 new \DateTimeImmutable('2022-07-12 00:00:00'),
                 new \DateTimeImmutable('2022-07-12 08:00:00'),
@@ -145,13 +146,13 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
         $this->save(
             new KeyforgeGame(
                 Uuid::from(self::FIXTURE_KEYFORGE_GAME_8_ID),
-                Uuid::from(KeyforgeUsersFixtures::FIXTURE_USER_1_ID),
-                Uuid::from(KeyforgeUsersFixtures::FIXTURE_USER_2_ID),
+                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_1_ID),
+                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID),
                 Uuid::from(KeyforgeDecksFixtures::FIXTURE_KEYFORGE_DECK_5_ID),
                 Uuid::from(KeyforgeDecksFixtures::FIXTURE_KEYFORGE_DECK_7_ID),
                 0,
                 0,
-                Uuid::from(KeyforgeUsersFixtures::FIXTURE_USER_2_ID),
+                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID),
                 KeyforgeGameScore::from(3, 2),
                 new \DateTimeImmutable('2022-07-03 00:00:00'),
                 new \DateTimeImmutable('2022-07-03 08:45:00'),
@@ -161,13 +162,13 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
         $this->save(
             new KeyforgeGame(
                 Uuid::from(self::FIXTURE_KEYFORGE_GAME_9_ID),
-                Uuid::from(KeyforgeUsersFixtures::FIXTURE_USER_1_ID),
-                Uuid::from(KeyforgeUsersFixtures::FIXTURE_USER_2_ID),
+                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_1_ID),
+                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID),
                 Uuid::from(KeyforgeDecksFixtures::FIXTURE_KEYFORGE_DECK_3_ID),
                 Uuid::from(KeyforgeDecksFixtures::FIXTURE_KEYFORGE_DECK_1_ID),
                 0,
                 0,
-                Uuid::from(KeyforgeUsersFixtures::FIXTURE_USER_2_ID),
+                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID),
                 KeyforgeGameScore::from(3, 2),
                 new \DateTimeImmutable('2022-07-03 00:00:00'),
                 new \DateTimeImmutable('2022-07-03 08:45:00'),
@@ -177,13 +178,13 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
         $this->save(
             new KeyforgeGame(
                 Uuid::from(self::FIXTURE_KEYFORGE_GAME_10_ID),
-                Uuid::from(KeyforgeUsersFixtures::FIXTURE_USER_2_ID),
-                Uuid::from(KeyforgeUsersFixtures::FIXTURE_USER_1_ID),
+                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID),
+                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_1_ID),
                 Uuid::from(KeyforgeDecksFixtures::FIXTURE_KEYFORGE_DECK_4_ID),
                 Uuid::from(KeyforgeDecksFixtures::FIXTURE_KEYFORGE_DECK_5_ID),
                 0,
                 0,
-                Uuid::from(KeyforgeUsersFixtures::FIXTURE_USER_2_ID),
+                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID),
                 KeyforgeGameScore::from(3, 2),
                 new \DateTimeImmutable('2022-07-03 00:00:00'),
                 new \DateTimeImmutable('2022-07-03 08:45:00'),
@@ -193,13 +194,13 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
         $this->save(
             new KeyforgeGame(
                 Uuid::from(self::FIXTURE_KEYFORGE_GAME_11_ID),
-                Uuid::from(KeyforgeUsersFixtures::FIXTURE_USER_1_ID),
-                Uuid::from(KeyforgeUsersFixtures::FIXTURE_USER_2_ID),
+                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_1_ID),
+                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID),
                 Uuid::from(KeyforgeDecksFixtures::FIXTURE_KEYFORGE_DECK_2_ID),
                 Uuid::from(KeyforgeDecksFixtures::FIXTURE_KEYFORGE_DECK_1_ID),
                 0,
                 0,
-                Uuid::from(KeyforgeUsersFixtures::FIXTURE_USER_2_ID),
+                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID),
                 KeyforgeGameScore::from(3, 2),
                 new \DateTimeImmutable('2022-07-23 00:00:00'),
                 new \DateTimeImmutable('2022-07-23 16:01:00'),
@@ -209,16 +210,32 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
         $this->save(
             new KeyforgeGame(
                 Uuid::from(self::FIXTURE_KEYFORGE_GAME_12_ID),
-                Uuid::from(KeyforgeUsersFixtures::FIXTURE_USER_1_ID),
-                Uuid::from(KeyforgeUsersFixtures::FIXTURE_USER_2_ID),
+                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_1_ID),
+                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID),
                 Uuid::from(KeyforgeDecksFixtures::FIXTURE_KEYFORGE_DECK_7_ID),
                 Uuid::from(KeyforgeDecksFixtures::FIXTURE_KEYFORGE_DECK_4_ID),
                 0,
                 0,
-                Uuid::from(KeyforgeUsersFixtures::FIXTURE_USER_2_ID),
+                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID),
                 KeyforgeGameScore::from(3, 1),
                 new \DateTimeImmutable('2022-07-23 00:00:00'),
                 new \DateTimeImmutable('2022-07-23 16:01:00'),
+            ),
+        );
+
+        $this->save(
+            new KeyforgeGame(
+                Uuid::from(self::FIXTURE_KEYFORGE_GAME_13_ID),
+                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID),
+                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_3_ID),
+                Uuid::from(KeyforgeDecksFixtures::FIXTURE_KEYFORGE_DECK_4_ID),
+                Uuid::from(KeyforgeDecksFixtures::FIXTURE_KEYFORGE_DECK_1_ID),
+                0,
+                0,
+                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID),
+                KeyforgeGameScore::from(3, 1),
+                new \DateTimeImmutable('2022-07-23 00:00:00'),
+                new \DateTimeImmutable('2022-07-23 16:41:00'),
             ),
         );
 

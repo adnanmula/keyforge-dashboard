@@ -68,6 +68,7 @@ final class CreateGameCommandHandler
     private function updateDeckWinRate(KeyforgeDeck $winnerDeck, KeyforgeDeck $loserDeck): void
     {
         $games1 = $this->gameRepository->search(new SearchTerms(
+            SearchTermType::AND,
             new SearchTerm(
                 SearchTermType::OR,
                 new Filter('winner_deck', $winnerDeck->id()->value()),
@@ -76,6 +77,7 @@ final class CreateGameCommandHandler
         ), null, null);
 
         $games2 = $this->gameRepository->search(new SearchTerms(
+            SearchTermType::AND,
             new SearchTerm(
                 SearchTermType::OR,
                 new Filter('winner_deck', $loserDeck->id()->value()),

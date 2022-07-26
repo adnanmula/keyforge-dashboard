@@ -11,6 +11,25 @@ final class UserDbalRepository extends DbalRepository implements UserRepository
 {
     private const TABLE = 'users';
 
+    public function byId(Uuid $id): ?User
+    {
+        $result = $this->connection
+            ->createQueryBuilder()
+            ->select('a.id, a.name, a.password, a.roles')
+            ->from(self::TABLE, 'a')
+            ->where('a.id = :id')
+            ->setParameter('id', $id->value())
+            ->setMaxResults(1)
+            ->execute()
+            ->fetchAssociative();
+
+        if (false === $result) {
+            return null;
+        }
+
+        return $this->map($result);
+    }
+
     public function byName(string $name): ?User
     {
         $result = $this->connection

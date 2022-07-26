@@ -49,8 +49,9 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
                 ),
                 71,
                 1,
-                1,
+                2,
                 Json::decode($rawExtraData1),
+                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_1_ID),
             ),
         );
 
@@ -68,6 +69,7 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
                 1,
                 3,
                 Json::decode($rawExtraData2),
+                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID),
             ),
         );
 
@@ -85,6 +87,7 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
                 3,
                 0,
                 Json::decode($rawExtraData3),
+                null,
             ),
         );
 
@@ -99,9 +102,10 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
                     KeyforgeHouse::STAR_ALLIANCE,
                 ),
                 61,
-                2,
+                3,
                 2,
                 Json::decode($rawExtraData4),
+                null,
             ),
         );
 
@@ -119,6 +123,7 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
                 1,
                 1,
                 Json::decode($rawExtraData5),
+                null,
             ),
         );
 
@@ -136,6 +141,7 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
                 2,
                 0,
                 Json::decode($rawExtraData6),
+                null,
             ),
         );
 
@@ -153,6 +159,7 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
                 1,
                 3,
                 Json::decode($rawExtraData7),
+                null,
             ),
         );
 

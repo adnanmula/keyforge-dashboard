@@ -36,6 +36,7 @@ final class GetUsersQueryHandler
         }
 
         $searchTerms = new SearchTerms(
+            SearchTermType::AND,
             new SearchTerm(
                 SearchTermType::OR,
                 ...$filters,

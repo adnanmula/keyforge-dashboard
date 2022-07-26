@@ -2,52 +2,37 @@
 
 namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\Stats\Game;
 
-use AdnanMula\Cards\Application\Query\Keyforge\Game\GetGamesQuery;
-use AdnanMula\Cards\Domain\Model\Shared\Filter;
-use AdnanMula\Cards\Domain\Model\Shared\SearchTerm;
-use AdnanMula\Cards\Domain\Model\Shared\SearchTerms;
-use AdnanMula\Cards\Domain\Model\Shared\SearchTermType;
+use AdnanMula\Cards\Application\Query\Keyforge\Deck\GetDecksQuery;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 final class ListGamesByDeckController extends Controller
 {
-    public function __invoke(string $deckId): Response
+    public function __invoke(Request $request, string $deckId): Response
     {
-        $games = $this->extractResult(
-            $this->bus->dispatch(new GetGamesQuery(
-                null,
-                new SearchTerms(
-                    new SearchTerm(
-                        SearchTermType::OR,
-                        new Filter('winner_deck', $deckId),
-                        new Filter('loser_deck', $deckId),
-                    ),
-                ),
-                null,
-            )),
+        $userId = $request->get('userId');
+
+        $deck = $this->extractResult(
+            $this->bus->dispatch(new GetDecksQuery(0, 1, null, null, null, null, $deckId, $userId)),
         );
+
+        $deckName = null;
+        $deckOwner = null;
+
+        if (\count($deck['decks']) > 0) {
+            $deckName = $deck['decks'][0]->name();
+            $deckOwner = $deck['decks'][0]->owner()?->value();
+        }
 
         return $this->render(
             'Keyforge/Stats/Game/list_games_by_deck.html.twig',
-            ['games' => $games, 'reference' => $deckId, 'name' => $this->getReferenceName($games['games'][0] ?? null, $deckId)],
+            [
+                'reference' => $deckId,
+                'userId' => $userId,
+                'deck_name' => $deckName,
+                'deck_owner' => $deckOwner,
+            ],
         );
-    }
-
-    private function getReferenceName(?array $game, string $deckId): string
-    {
-        if (null === $game) {
-            return '';
-        }
-
-        if ($game['winner_deck'] === $deckId) {
-            return $game['winner_deck_name'];
-        }
-
-        if ($game['loser_deck'] === $deckId) {
-            return $game['loser_deck_name'];
-        }
-
-        return '';
     }
 }

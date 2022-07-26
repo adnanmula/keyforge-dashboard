@@ -37,6 +37,16 @@ keyforge_deck_list:
     controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Stats\Deck\ListDecksController
     methods: [ GET ]
 
+keyforge_deck_list_by_owner:
+  path: /keyforge/my-decks
+  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Stats\Deck\MyDecksController
+  methods: [ GET ]
+
+keyforge_deck_claim:
+  path: /keyforge/deck/claim
+  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Deck\ClaimController
+  methods: [ POST ]
+
 keyforge_decks_json:
   path: /keyforge/decks/json
   controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Stats\Deck\GetDecksController
