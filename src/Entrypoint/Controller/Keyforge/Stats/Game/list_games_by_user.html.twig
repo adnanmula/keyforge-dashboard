@@ -19,7 +19,7 @@
 
         <div class="row m-2">
             {% if (null != best_deck) %}
-                <a href="/keyforge/games/deck/{{ best_deck.id }}" class="btn btn-dark col-3 border col-12 col-sm-6 col-lg-3">
+                <a href="/keyforge/games/deck/{{ best_deck.id }}?userId={{ userId }}" class="btn btn-dark col-3 border col-12 col-sm-6 col-lg-3">
                     <h5>Best performance</h5>
                     <p>{{ best_deck.name }}</p>
                     <p>{{ best_deck.wins }}/{{ best_deck.losses }} (WR: {{ best_deck.win_rate }}%/PR: {{ best_deck.pick_rate }}%)</p>
@@ -27,7 +27,7 @@
             {% endif %}
 
             {% if (null != worse_deck) %}
-                <a href="/keyforge/games/deck/{{ worse_deck.id }}" class="btn btn-dark border col-12 col-sm-6 col-lg-3">
+                <a href="/keyforge/games/deck/{{ worse_deck.id }}?userId={{ userId }}" class="btn btn-dark border col-12 col-sm-6 col-lg-3">
                     <h5>Worse performance</h5>
                     <p>{{ worse_deck.name }}</p>
                     <p>{{ worse_deck.wins }}/{{ worse_deck.losses }} (WR: {{ worse_deck.win_rate }}%/PR: {{ worse_deck.pick_rate }}%)</p>
