@@ -35,7 +35,7 @@
             {% endif %}
 
             {% if (null != favorite_deck) %}
-                <a href="/keyforge/games/deck/{{ favorite_deck.id }}" class="btn btn-dark border col-12 col-sm-6 col-lg-3">
+                <a href="/keyforge/games/deck/{{ favorite_deck.id }}?userId={{ userId }}" class="btn btn-dark border col-12 col-sm-6 col-lg-3">
                     <h5>Favorite</h5>
                     <p>{{ favorite_deck.name }}</p>
                     <p>Played {{ favorite_deck.wins + favorite_deck.losses }} times</p>

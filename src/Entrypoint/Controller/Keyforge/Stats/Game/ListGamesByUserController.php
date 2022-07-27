@@ -17,6 +17,7 @@ final class ListGamesByUserController extends Controller
             [
                 'games' => $result['games'],
                 'reference' => $userId,
+                'userId' => $userId,
                 'name' => $this->getReferenceName($result['games'][0] ?? null, $userId),
                 'win_rate_vs_users' => $result['win_rate_vs_users'],
                 'pick_rate_vs_users' => $result['pick_rate_vs_users'],
