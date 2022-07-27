@@ -109,6 +109,14 @@ final class GetDecksQueryHandler
             $deck->updateLosses($deckLosses);
         }
 
+        \usort($decks, static function (KeyforgeDeck $a, KeyforgeDeck $b) {
+            if ($a->wins() === $b->wins()) {
+                return $a->losses() <=> $b->losses();
+            }
+
+            return $b->wins() <=> $a->wins();
+        });
+
         return $decks;
     }
 }
