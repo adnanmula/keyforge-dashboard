@@ -105,7 +105,7 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
                 3,
                 2,
                 Json::decode($rawExtraData4),
-                null,
+                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID),
             ),
         );
 
@@ -183,8 +183,8 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
         $stmt = $this->connection->prepare(
             \sprintf(
                 '
-                    INSERT INTO %s (id, name, set, houses, sas, wins, losses, extra_data)
-                    VALUES (:id, :name, :set, :houses, :sas, :wins, :losses, :extra_data)
+                    INSERT INTO %s (id, name, set, houses, sas, wins, losses, extra_data, owner)
+                    VALUES (:id, :name, :set, :houses, :sas, :wins, :losses, :extra_data, :owner)
                     ON CONFLICT (id) DO UPDATE SET
                         id = :id,
                         name = :name,
@@ -193,7 +193,8 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
                         sas = :sas,
                         wins = :wins,
                         losses = :losses,
-                        extra_data = :extra_data
+                        extra_data = :extra_data,
+                        owner = :owner
                     ',
                 self::TABLE,
             ),
@@ -202,11 +203,12 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
         $stmt->bindValue(':id', $deck->id()->value());
         $stmt->bindValue(':name', $deck->name());
         $stmt->bindValue(':set', $deck->set()->name);
-        $stmt->bindValue(':houses', \json_encode($deck->houses()->value()));
+        $stmt->bindValue(':houses', Json::encode($deck->houses()->value()));
         $stmt->bindValue(':sas', $deck->sas());
         $stmt->bindValue(':wins', $deck->wins());
         $stmt->bindValue(':losses', $deck->losses());
-        $stmt->bindValue(':extra_data', \json_encode($deck->extraData()));
+        $stmt->bindValue(':extra_data', Json::encode($deck->extraData()));
+        $stmt->bindValue(':owner', $deck->owner()?->value());
 
         $stmt->execute();
     }

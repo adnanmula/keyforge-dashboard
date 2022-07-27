@@ -5,7 +5,11 @@
 {% block body %}
     <div class="shadow-lg p-3 mb-5 bg-white rounded">
         <div class="d-flex flex-row">
-            <h4>Games of {{ deck_name }}</h4>
+            {% if userId is defined and userId is not null %}
+                <h4>Your games with {{ deck_name }}</h4>
+            {% else %}
+                <h4>Games of {{ deck_name }}</h4>
+            {% endif %}
         </div>
 
         {% if (null != deck_owner) %}
