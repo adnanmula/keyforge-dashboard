@@ -150,12 +150,14 @@ final class UserStatsQueryHandler
 
         $resultWinRateByUser = [];
         $resultPickRateByUser = [];
+        $resultWinsByUser = [];
 
         foreach ($winRateVsUser as $userId => $winRate) {
             $name = $indexedUsers[$userId];
 
             $resultWinRateByUser[$name] = $this->winRate($winRate['wins'], $winRate['losses']);
             $resultPickRateByUser[$name] = $this->pickRate($winRate['wins'] + $winRate['losses'], \count($games));
+            $resultWinsByUser[$name] = ['wins' => $winRate['wins'], 'losses' => $winRate['losses']];
         }
 
         $result['win_rate_vs_users'] = $resultWinRateByUser;
@@ -208,6 +210,8 @@ final class UserStatsQueryHandler
             'pick_rate' => 0,
         ];
 
+        $decksStats = [];
+
         foreach ($bestAndWorseDecks as $id => $bestAndWorseDeck) {
             $winRate = $this->winRate($bestAndWorseDeck['wins'], $bestAndWorseDeck['losses']);
 
@@ -249,13 +253,22 @@ final class UserStatsQueryHandler
                     'pick_rate' => $this->pickRate($bestAndWorseDeck['wins'] + $bestAndWorseDeck['losses'], \count($games)),
                 ];
             }
+
+            $decksStats[$indexedDecks[$id]] = [
+                'wins' => $bestAndWorseDeck['wins'],
+                'losses' => $bestAndWorseDeck['losses'],
+                'win_rate' => $winRate,
+                'pick_rate' => $this->pickRate($bestAndWorseDeck['wins'] + $bestAndWorseDeck['losses'], \count($games)),
+            ];
         }
 
         $result['wins_by_date'] = $resultWinsByDate;
         $result['losses_by_date'] = $resultLossesByDate;
+        $result['wins_vs_users'] = $resultWinsByUser;
         $result['best_deck'] = null === $bestDeck['id'] ? null : $bestDeck;
         $result['worse_deck'] = null === $worseDeck['id'] ? null : $worseDeck;
         $result['favorite_deck'] = null === $favoriteDeck['id'] ? null : $favoriteDeck;
+        $result['decks_stats'] = $decksStats;
 
         return $result;
     }

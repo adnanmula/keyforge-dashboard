@@ -9,13 +9,39 @@
         <div class="divider py-2"></div>
 
         <div class="row mt-3">
-            <div class="col-12 col-sm-6 col-lg-3">
+            <div class="col-3">
                 <canvas id="winRateVsUsers" height="310"></canvas>
             </div>
-            <div class="col-12 col-sm-12 col-lg-9">
+            <div class="col-3">
+                <canvas id="winsVsUsers" height="310"></canvas>
+            </div>
+        </div>
+
+        <div class="divider py-2"></div>
+
+        <div class="row">
+            <div class="col">
                 <canvas id="winsByDate" height="100"></canvas>
             </div>
         </div>
+
+        <div class="divider py-2"></div>
+
+        <div class="row">
+            <div class="col">
+                <canvas id="winsByDeck" height="200"></canvas>
+            </div>
+        </div>
+
+        <div class="divider py-2"></div>
+
+        <div class="row">
+            <div class="col">
+                <canvas id="winRateByDeck" height="200"></canvas>
+            </div>
+        </div>
+
+        <div class="divider py-2"></div>
 
         <div class="row m-2">
             {% if (null != best_deck) %}
@@ -65,6 +91,28 @@
         let pickRateVsUsers = JSON.parse('{{ pick_rate_vs_users|json_encode|raw }}');
         let winsByDate = JSON.parse('{{ wins_by_date|json_encode|raw }}');
         let lossesByDate = JSON.parse('{{ losses_by_date|json_encode|raw }}');
+        let winsByUsers = JSON.parse('{{ wins_vs_users|json_encode|raw }}');
+        let decksStats = JSON.parse('{{ decks_stats|json_encode|raw }}');
+
+        let winsByUser = [];
+        let lossesByUser = [];
+
+        $.each(winsByUsers, function(index, value) {
+            winsByUser[index] = value['wins'];
+            lossesByUser[index] = value['losses'];
+        });
+
+        let winsByDeck = [];
+        let lossesByDeck = [];
+        let winRateByDeck = [];
+        let pickRateByDeck = [];
+
+        $.each(decksStats, function(index, value) {
+            winsByDeck[index] = value['wins'];
+            lossesByDeck[index] = value['losses'];
+            winRateByDeck[index] = value['win_rate'];
+            pickRateByDeck[index] = value['pick_rate'];
+        });
 
         const winRateVsUsersChart = new Chart(document.getElementById('winRateVsUsers').getContext('2d'), {
             type: 'bar',
@@ -80,8 +128,8 @@
                     {
                         label: 'PickRate%',
                         data: Object.values(pickRateVsUsers),
-                        borderColor: 'rgb(37, 41, 33)',
-                        backgroundColor: 'rgb(37, 41, 33)',
+                        borderColor: 'rgb(115, 115, 115)',
+                        backgroundColor: 'rgb(115, 115, 115)',
                     },
                 ]
             },
@@ -97,6 +145,120 @@
                         text: 'Win/Pick Rate'
                     }
                 }
+            },
+        });
+
+        const winsVsUsersChart = new Chart(document.getElementById('winsVsUsers').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: Object.keys(winsByUser),
+                datasets: [
+                    {
+                        label: 'Wins',
+                        data: Object.values(winsByUser),
+                        borderColor: 'rgb(70,113,26)',
+                        backgroundColor: 'rgb(70,113,26)',
+                    },
+                    {
+                        label: 'Losses',
+                        data: Object.values(lossesByUser),
+                        borderColor: 'rgb(148,22,68)',
+                        backgroundColor: 'rgb(148,22,68)',
+                    },
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false,
+                        position: 'bottom',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Win/Losses'
+                    }
+                }
+            },
+        });
+
+        const winsByDecksChart = new Chart(document.getElementById('winsByDeck').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: Object.keys(winsByDeck),
+                datasets: [
+                    {
+                        label: 'Wins',
+                        data: Object.values(winsByDeck),
+                        borderColor: 'rgb(70,113,26)',
+                        backgroundColor: 'rgb(70,113,26)',
+                    },
+                    {
+                        label: 'Losses',
+                        data: Object.values(lossesByDeck),
+                        borderColor: 'rgb(148,22,68)',
+                        backgroundColor: 'rgb(148,22,68)',
+                    },
+                ]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                    },
+                    title: {
+                        display: false,
+                        text: 'Wins/Losses by deck'
+                    }
+                },
+                scale: {
+                    ticks: {
+                        precision: 0,
+                    },
+                },
+            },
+        });
+
+        const winRateByDecksChart = new Chart(document.getElementById('winRateByDeck').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: Object.keys(winRateByDeck),
+                datasets: [
+                    {
+                        label: 'Win Rate',
+                        data: Object.values(winRateByDeck),
+                        borderColor: 'rgb(37, 41, 33)',
+                        backgroundColor: 'rgb(37, 41, 33)',
+                    },
+                    {
+                        label: 'Pick Rate',
+                        data: Object.values(pickRateByDeck),
+                        borderColor: 'rgb(115, 115, 115)',
+                        backgroundColor: 'rgb(115, 115, 115)',
+                    },
+                ]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                    },
+                    title: {
+                        display: false,
+                        text: 'Win/Pick rate by deck'
+                    }
+                },
+                scale: {
+                    ticks: {
+                        precision: 0,
+                    },
+                },
             },
         });
 
@@ -130,7 +292,12 @@
                         display: true,
                         text: 'Wins/Losses along time',
                     }
-                }
+                },
+                scale: {
+                    ticks: {
+                        precision: 0,
+                    },
+                },
             },
         });
 
