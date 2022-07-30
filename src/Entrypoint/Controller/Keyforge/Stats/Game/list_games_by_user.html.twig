@@ -6,17 +6,20 @@
     <div class="shadow-lg p-3 mb-5 bg-white rounded">
         <div class="divider py-2"></div>
         <h3>Games of {{ name }}</h3>
+
+        <div class="divider py-2"></div>
         <div class="divider py-2"></div>
 
         <div class="row mt-3">
-            <div class="col-3">
+            <div class="col-12 col-sm-6 col-md-6 col-lg-3">
                 <canvas id="winRateVsUsers" height="310"></canvas>
             </div>
-            <div class="col-3">
+            <div class="col-12 col-sm-6 col-md-6 col-lg-3">
                 <canvas id="winsVsUsers" height="310"></canvas>
             </div>
         </div>
 
+        <div class="divider py-2"></div>
         <div class="divider py-2"></div>
 
         <div class="row">
@@ -26,6 +29,7 @@
         </div>
 
         <div class="divider py-2"></div>
+        <div class="divider py-2"></div>
 
         <div class="row">
             <div class="col">
@@ -34,6 +38,7 @@
         </div>
 
         <div class="divider py-2"></div>
+        <div class="divider py-2"></div>
 
         <div class="row">
             <div class="col">
@@ -41,6 +46,7 @@
             </div>
         </div>
 
+        <div class="divider py-2"></div>
         <div class="divider py-2"></div>
 
         <div class="row m-2">
@@ -67,9 +73,9 @@
                     <p>Played {{ favorite_deck.wins + favorite_deck.losses }} times</p>
                 </a>
             {% endif %}
-
         </div>
 
+        <div class="divider py-2"></div>
         <div class="divider py-2"></div>
 
         <table id="gamesList" class="table table-responsive-sm table-hover" style="width:100%;">
@@ -283,6 +289,7 @@
             },
             options: {
                 responsive: true,
+                aspectRatio: 2,
                 plugins: {
                     legend: {
                         display: false,

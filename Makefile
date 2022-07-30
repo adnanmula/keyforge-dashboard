@@ -32,6 +32,9 @@ update: ## update dependencies
 init: ## initialize environment
 	docker-compose -f ${FILE} exec --user=${UID} php-fpm sh -c "console environment:init"
 
+clear: ## cache clear
+	docker-compose -f ${FILE} exec --user=${UID} php-fpm sh -c "console cache:clear"
+
 .PHONY: migrations
 migrations:
 	docker-compose -f ${FILE} exec --user=${UID} php-fpm sh -c "console environment:migrations"
