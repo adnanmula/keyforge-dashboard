@@ -5,44 +5,50 @@
 {% block body %}
     <div class="shadow-lg p-3 mb-5 bg-white rounded">
         <div class="divider py-2"></div>
-        <h3>Games of {{ name }}</h3>
 
-        <div class="divider py-2"></div>
-        <div class="divider py-2"></div>
-
-        <div class="row mt-3">
-            <div class="col-12 col-sm-6 col-md-6 col-lg-3">
-                <canvas id="winRateVsUsers" height="310"></canvas>
+        <div class="row">
+            <div class="col-10 d-flex justify-content-start">
+                <h3>Games of {{ name }}</h3>
             </div>
-            <div class="col-12 col-sm-6 col-md-6 col-lg-3">
-                <canvas id="winsVsUsers" height="310"></canvas>
+
+            <div class="col-2 d-flex justify-content-end">
+                <a class="btn btn-dark" data-bs-toggle="collapse" href="#userStats" role="button" aria-expanded="false" aria-controls="collapseExample">Show/Hide stats</a>
             </div>
         </div>
 
         <div class="divider py-2"></div>
-        <div class="divider py-2"></div>
 
-        <div class="row">
-            <div class="col">
-                <canvas id="winsByDate" height="100"></canvas>
-            </div>
-        </div>
+        <div class="collapse" id="userStats">
+            <div class="card card-body">
+                <div class="row mt-3">
+                    <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                        <canvas id="winRateVsUsers" width="200" height="200"></canvas>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                        <canvas id="setWins" width="200" height="200"></canvas>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                        <canvas id="houseWins" width="200" height="200"></canvas>
+                    </div>
+                </div>
 
-        <div class="divider py-2"></div>
-        <div class="divider py-2"></div>
+                <div class="divider py-2"></div>
+                <div class="divider py-2"></div>
 
-        <div class="row">
-            <div class="col">
-                <canvas id="winsByDeck" height="200"></canvas>
-            </div>
-        </div>
+                <div class="row">
+                    <div class="col">
+                        <canvas id="winsByDate" height="100"></canvas>
+                    </div>
+                </div>
 
-        <div class="divider py-2"></div>
-        <div class="divider py-2"></div>
+                <div class="divider py-2"></div>
+                <div class="divider py-2"></div>
 
-        <div class="row">
-            <div class="col">
-                <canvas id="winRateByDeck" height="200"></canvas>
+                <div class="row">
+                    <div class="col">
+                        <canvas id="winsByDeck" height="250"></canvas>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -99,6 +105,8 @@
         let lossesByDate = JSON.parse('{{ losses_by_date|json_encode|raw }}');
         let winsByUsers = JSON.parse('{{ wins_vs_users|json_encode|raw }}');
         let decksStats = JSON.parse('{{ decks_stats|json_encode|raw }}');
+        let winsBySet = JSON.parse('{{ wins_by_set|json_encode|raw }}');
+        let winsByHouse = JSON.parse('{{ wins_by_house|json_encode|raw }}');
 
         let winsByUser = [];
         let lossesByUser = [];
@@ -130,12 +138,32 @@
                         data: Object.values(winRateVsUsers),
                         borderColor: 'rgb(37, 41, 33)',
                         backgroundColor: 'rgb(37, 41, 33)',
+                        maxBarThickness: 50,
+                        yAxisID: 'percentage',
                     },
                     {
                         label: 'PickRate%',
                         data: Object.values(pickRateVsUsers),
                         borderColor: 'rgb(115, 115, 115)',
                         backgroundColor: 'rgb(115, 115, 115)',
+                        maxBarThickness: 50,
+                        yAxisID: 'percentage',
+                    },
+                    {
+                        label: 'Wins',
+                        data: Object.values(winsByUser),
+                        borderColor: 'rgb(70,113,26)',
+                        backgroundColor: 'rgb(70,113,26)',
+                        maxBarThickness: 50,
+                        yAxisID: 'wins',
+                    },
+                    {
+                        label: 'Losses',
+                        data: Object.values(lossesByUser),
+                        borderColor: 'rgb(148,22,68)',
+                        backgroundColor: 'rgb(148,22,68)',
+                        maxBarThickness: 50,
+                        yAxisID: 'wins',
                     },
                 ]
             },
@@ -150,28 +178,53 @@
                         display: true,
                         text: 'Win/Pick Rate'
                     }
-                }
+                },
+                scale: {
+                    ticks: {
+                        precision: 0,
+                    },
+                },
+                scales: {
+                    percentage: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        min: 0,
+                        max: 100,
+                        grid: {
+                            drawOnChartArea: false,
+                        },
+                        stacked: false,
+                    },
+                    wins: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        grid: {
+                            drawOnChartArea: true,
+                        },
+                        stacked: false,
+                    },
+                },
             },
         });
 
-        const winsVsUsersChart = new Chart(document.getElementById('winsVsUsers').getContext('2d'), {
-            type: 'bar',
+        const setWinsChart = new Chart(document.getElementById('setWins').getContext('2d'), {
+            type: 'doughnut',
             data: {
-                labels: Object.keys(winsByUser),
                 datasets: [
                     {
-                        label: 'Wins',
-                        data: Object.values(winsByUser),
-                        borderColor: 'rgb(70,113,26)',
-                        backgroundColor: 'rgb(70,113,26)',
+                        data: Object.values(winsBySet),
+                        backgroundColor: [
+                            'rgb(255, 99, 132)',
+                            'rgb(54, 162, 235)',
+                            'rgb(210, 145, 188)',
+                            'rgb(179, 217, 178)',
+                            'rgb(114, 99, 143)',
+                        ],
                     },
-                    {
-                        label: 'Losses',
-                        data: Object.values(lossesByUser),
-                        borderColor: 'rgb(148,22,68)',
-                        backgroundColor: 'rgb(148,22,68)',
-                    },
-                ]
+                ],
+                labels: Object.keys(winsBySet),
             },
             options: {
                 responsive: true,
@@ -182,7 +235,44 @@
                     },
                     title: {
                         display: true,
-                        text: 'Win/Losses'
+                        text: 'Set wins'
+                    }
+                }
+            },
+        });
+
+        const houseWinsChart = new Chart(document.getElementById('houseWins').getContext('2d'), {
+            type: 'doughnut',
+            data: {
+                datasets: [
+                    {
+                        data: Object.values(winsByHouse),
+                        backgroundColor: [
+                            'rgb(41, 128, 185)', //Sanctum
+                            'rgb(225, 78, 183)', //Dis
+                            'rgb(46, 204, 113)', //Mars
+                            'rgb(125, 60, 152)', //Star Alliance
+                            'rgb(22, 160, 133)', //Saurian
+                            'rgb(81, 90, 90)',   //Shadows
+                            'rgb(20, 90, 50)',   //Untamed
+                            'rgb(231, 76, 60)',  //Brobnar
+                            'rgb(21, 67, 96)',   //Unfathomable
+                            'rgb(52, 152, 219)', //Logos
+                        ],
+                    }
+                ],
+                labels: Object.keys(winsByHouse),
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false,
+                        position: 'bottom',
+                    },
+                    title: {
+                        display: true,
+                        text: 'House wins'
                     }
                 }
             },
@@ -194,16 +284,32 @@
                 labels: Object.keys(winsByDeck),
                 datasets: [
                     {
+                        label: 'Win Rate',
+                        data: Object.values(winRateByDeck),
+                        borderColor: 'rgb(37, 41, 33)',
+                        backgroundColor: 'rgb(37, 41, 33)',
+                        xAxisID: 'percentage',
+                    },
+                    {
+                        label: 'Pick Rate',
+                        data: Object.values(pickRateByDeck),
+                        borderColor: 'rgb(115, 115, 115)',
+                        backgroundColor: 'rgb(115, 115, 115)',
+                        xAxisID: 'percentage',
+                    },
+                    {
                         label: 'Wins',
                         data: Object.values(winsByDeck),
                         borderColor: 'rgb(70,113,26)',
                         backgroundColor: 'rgb(70,113,26)',
+                        xAxisID: 'wins',
                     },
                     {
                         label: 'Losses',
                         data: Object.values(lossesByDeck),
                         borderColor: 'rgb(148,22,68)',
                         backgroundColor: 'rgb(148,22,68)',
+                        xAxisID: 'wins',
                     },
                 ]
             },
@@ -225,44 +331,26 @@
                         precision: 0,
                     },
                 },
-            },
-        });
-
-        const winRateByDecksChart = new Chart(document.getElementById('winRateByDeck').getContext('2d'), {
-            type: 'bar',
-            data: {
-                labels: Object.keys(winRateByDeck),
-                datasets: [
-                    {
-                        label: 'Win Rate',
-                        data: Object.values(winRateByDeck),
-                        borderColor: 'rgb(37, 41, 33)',
-                        backgroundColor: 'rgb(37, 41, 33)',
+                scales: {
+                    wins: {
+                        type: 'linear',
+                        display: true,
+                        position: 'bottom',
+                        grid: {
+                            drawOnChartArea: true,
+                        },
+                        stacked: false,
                     },
-                    {
-                        label: 'Pick Rate',
-                        data: Object.values(pickRateByDeck),
-                        borderColor: 'rgb(115, 115, 115)',
-                        backgroundColor: 'rgb(115, 115, 115)',
-                    },
-                ]
-            },
-            options: {
-                indexAxis: 'y',
-                responsive: true,
-                plugins: {
-                    legend: {
+                    percentage: {
+                        type: 'linear',
                         display: true,
                         position: 'top',
-                    },
-                    title: {
-                        display: false,
-                        text: 'Win/Pick rate by deck'
-                    }
-                },
-                scale: {
-                    ticks: {
-                        precision: 0,
+                        min: 0,
+                        max: 100,
+                        grid: {
+                            drawOnChartArea: false,
+                        },
+                        stacked: false,
                     },
                 },
             },
@@ -395,6 +483,5 @@
                 ],
             });
         });
-
     </script>
 {% endblock %}

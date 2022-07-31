@@ -6,6 +6,9 @@ use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeck;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGameRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUserRepository;
+use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeDeckHouses;
+use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeHouse;
+use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeSet;
 use AdnanMula\Cards\Domain\Model\Shared\Filter;
 use AdnanMula\Cards\Domain\Model\Shared\SearchTerm;
 use AdnanMula\Cards\Domain\Model\Shared\SearchTerms;
@@ -46,11 +49,17 @@ final class UserStatsQueryHandler
         $users = $this->userRepository->byIds(...$userIds);
 
         $indexedDecks = [];
+        $indexedDeckSets = [];
+        /** @var array<KeyforgeDeckHouses> $indexedDeckHouses */
+        $indexedDeckHouses = [];
 
+        /** @var KeyforgeDeck $deck */
         foreach ($decks as $deck) {
             $indexedDecks[$deck->id()->value()] = $deck->name();
+            $indexedDeckSets[$deck->id()->value()] = $deck->set()->fullName();
+            $indexedDeckHouses[$deck->id()->value()] = $deck->houses();
         }
-
+        
         $bestAndWorseDecks = [];
 
         foreach ($indexedDecks as $id => $deck) {
@@ -60,6 +69,27 @@ final class UserStatsQueryHandler
                 'losses' => 0,
             ];
         }
+
+        $winsBySet = [
+            KeyforgeSet::CotA->fullName() => 0,
+            KeyforgeSet::AoA->fullName() => 0,
+            KeyforgeSet::WC->fullName() => 0,
+            KeyforgeSet::MM->fullName() => 0,
+            KeyforgeSet::DT->fullName() => 0,
+        ];
+
+        $winsByHouse = [
+            KeyforgeHouse::SANCTUM->name => 0,
+            KeyforgeHouse::DIS->name => 0,
+            KeyforgeHouse::MARS->name => 0,
+            KeyforgeHouse::STAR_ALLIANCE->name => 0,
+            KeyforgeHouse::SAURIAN->name => 0,
+            KeyforgeHouse::SHADOWS->name => 0,
+            KeyforgeHouse::UNTAMED->name => 0,
+            KeyforgeHouse::BROBNAR->name => 0,
+            KeyforgeHouse::UNFATHOMABLE->name => 0,
+            KeyforgeHouse::LOGOS->name => 0,
+        ];
 
         foreach ($games as $game) {
             if ($game->winner()->equalTo($query->userId())) {
@@ -71,6 +101,13 @@ final class UserStatsQueryHandler
                     'wins' => $bestAndWorseDecks[$game->winnerDeck()->value()]['wins'] + 1,
                     'losses' => $bestAndWorseDecks[$game->winnerDeck()->value()]['losses'],
                 ];
+
+                $winsBySet[$indexedDeckSets[$game->winnerDeck()->value()]] += 1;
+                $houses = $indexedDeckHouses[$game->winnerDeck()->value()];
+
+                $winsByHouse[$houses->value()[0]->value] += 1;
+                $winsByHouse[$houses->value()[1]->value] += 1;
+                $winsByHouse[$houses->value()[2]->value] += 1;
             }
 
             if ($game->loser()->equalTo($query->userId())) {
@@ -269,6 +306,8 @@ final class UserStatsQueryHandler
         $result['worse_deck'] = null === $worseDeck['id'] ? null : $worseDeck;
         $result['favorite_deck'] = null === $favoriteDeck['id'] ? null : $favoriteDeck;
         $result['decks_stats'] = $decksStats;
+        $result['wins_by_set'] = $winsBySet;
+        $result['wins_by_house'] = $winsByHouse;
 
         return $result;
     }
