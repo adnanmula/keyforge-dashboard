@@ -24,14 +24,18 @@ final class UserStatsQueryHandler
 
     public function __invoke(UserStatsQuery $query): array
     {
-        $games = $this->gameRepository->search(new SearchTerms(
-            SearchTermType::AND,
-            new SearchTerm(
-                SearchTermType::OR,
-                new Filter('winner', $query->userId()->value()),
-                new Filter('loser', $query->userId()->value()),
+        $games = $this->gameRepository->search(
+            new SearchTerms(
+                SearchTermType::AND,
+                new SearchTerm(
+                    SearchTermType::OR,
+                    new Filter('winner', $query->userId()->value()),
+                    new Filter('loser', $query->userId()->value()),
+                ),
             ),
-        ), null, null);
+            null,
+            null,
+        );
 
         $userIds = [];
         $decksIds = [];
@@ -44,7 +48,6 @@ final class UserStatsQueryHandler
         }
 
         $decks = $this->deckRepository->byIds(...$decksIds);
-        $decks = \array_filter($decks, static fn (KeyforgeDeck $deck) => $deck->owner()?->value() === $query->userId()->value());
 
         $users = $this->userRepository->byIds(...$userIds);
 
@@ -55,7 +58,10 @@ final class UserStatsQueryHandler
 
         /** @var KeyforgeDeck $deck */
         foreach ($decks as $deck) {
-            $indexedDecks[$deck->id()->value()] = $deck->name();
+            if (null !== $deck->owner() && $deck->owner()->equalTo($query->userId())) {
+                $indexedDecks[$deck->id()->value()] = $deck->name();
+            }
+
             $indexedDeckSets[$deck->id()->value()] = $deck->set()->fullName();
             $indexedDeckHouses[$deck->id()->value()] = $deck->houses();
         }
@@ -91,8 +97,23 @@ final class UserStatsQueryHandler
             KeyforgeHouse::LOGOS->name => 0,
         ];
 
+        $currentWinStreak = 0;
+        $longestWinStreak = 0;
+
         foreach ($games as $game) {
             if ($game->winner()->equalTo($query->userId())) {
+                $currentWinStreak++;
+
+                if ($currentWinStreak > $longestWinStreak) {
+                    $longestWinStreak = $currentWinStreak;
+                }
+
+                $winsBySet[$indexedDeckSets[$game->winnerDeck()->value()]] += 1;
+                $houses = $indexedDeckHouses[$game->winnerDeck()->value()];
+                $winsByHouse[$houses->value()[0]->value] += 1;
+                $winsByHouse[$houses->value()[1]->value] += 1;
+                $winsByHouse[$houses->value()[2]->value] += 1;
+
                 if (false === \array_key_exists($game->winnerDeck()->value(), $bestAndWorseDecks)) {
                     continue;
                 }
@@ -101,16 +122,11 @@ final class UserStatsQueryHandler
                     'wins' => $bestAndWorseDecks[$game->winnerDeck()->value()]['wins'] + 1,
                     'losses' => $bestAndWorseDecks[$game->winnerDeck()->value()]['losses'],
                 ];
-
-                $winsBySet[$indexedDeckSets[$game->winnerDeck()->value()]] += 1;
-                $houses = $indexedDeckHouses[$game->winnerDeck()->value()];
-
-                $winsByHouse[$houses->value()[0]->value] += 1;
-                $winsByHouse[$houses->value()[1]->value] += 1;
-                $winsByHouse[$houses->value()[2]->value] += 1;
             }
 
             if ($game->loser()->equalTo($query->userId())) {
+                $currentWinStreak = 0;
+
                 if (false === \array_key_exists($game->loserDeck()->value(), $bestAndWorseDecks)) {
                     continue;
                 }
@@ -308,6 +324,7 @@ final class UserStatsQueryHandler
         $result['decks_stats'] = $decksStats;
         $result['wins_by_set'] = $winsBySet;
         $result['wins_by_house'] = $winsByHouse;
+        $result['win_streak'] = $longestWinStreak;
 
         return $result;
     }

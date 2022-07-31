@@ -19,35 +19,33 @@
         <div class="divider py-2"></div>
 
         <div class="collapse" id="userStats">
-            <div class="card card-body">
-                <div class="row mt-3">
-                    <div class="col-12 col-sm-12 col-md-4 col-lg-4">
-                        <canvas id="winRateVsUsers" width="200" height="200"></canvas>
-                    </div>
-                    <div class="col-12 col-sm-12 col-md-4 col-lg-4">
-                        <canvas id="setWins" width="200" height="200"></canvas>
-                    </div>
-                    <div class="col-12 col-sm-12 col-md-4 col-lg-4">
-                        <canvas id="houseWins" width="200" height="200"></canvas>
-                    </div>
+            <div class="row mt-3">
+                <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                    <canvas id="winRateVsUsers" width="200" height="210"></canvas>
                 </div>
-
-                <div class="divider py-2"></div>
-                <div class="divider py-2"></div>
-
-                <div class="row">
-                    <div class="col">
-                        <canvas id="winsByDate" height="100"></canvas>
-                    </div>
+                <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                    <canvas id="setWins" width="200" height="200"></canvas>
                 </div>
+                <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                    <canvas id="houseWins" width="200" height="200"></canvas>
+                </div>
+            </div>
 
-                <div class="divider py-2"></div>
-                <div class="divider py-2"></div>
+            <div class="divider py-2"></div>
+            <div class="divider py-2"></div>
 
-                <div class="row">
-                    <div class="col">
-                        <canvas id="winsByDeck" height="250"></canvas>
-                    </div>
+            <div class="row">
+                <div class="col">
+                    <canvas id="winsByDate" height="100"></canvas>
+                </div>
+            </div>
+
+            <div class="divider py-2"></div>
+            <div class="divider py-2"></div>
+
+            <div class="row">
+                <div class="col">
+                    <canvas id="winsByDeck" height="300"></canvas>
                 </div>
             </div>
         </div>
@@ -77,6 +75,14 @@
                     <h5>Favorite</h5>
                     <p>{{ favorite_deck.name }}</p>
                     <p>Played {{ favorite_deck.wins + favorite_deck.losses }} times</p>
+                </a>
+            {% endif %}
+
+            {% if (null != win_streak) %}
+                <a class="btn btn-dark border col-12 col-sm-6 col-lg-3">
+                    <h5>Longest win streak</h5>
+                    <p></p>
+                    <p>{{ win_streak }}</p>
                 </a>
             {% endif %}
         </div>

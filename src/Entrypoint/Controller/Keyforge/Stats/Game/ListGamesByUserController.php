@@ -30,6 +30,7 @@ final class ListGamesByUserController extends Controller
                 'decks_stats' => $result['decks_stats'],
                 'wins_by_set' => $result['wins_by_set'],
                 'wins_by_house' => $result['wins_by_house'],
+                'win_streak' => $result['win_streak'],
             ],
         );
     }
