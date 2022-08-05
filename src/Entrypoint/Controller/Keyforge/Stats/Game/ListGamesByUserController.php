@@ -15,7 +15,6 @@ final class ListGamesByUserController extends Controller
         return $this->render(
             'Keyforge/Stats/Game/list_games_by_user.html.twig',
             [
-                'games' => $result['games'],
                 'reference' => $userId,
                 'userId' => $userId,
                 'name' => $this->getReferenceName($result['games'][0] ?? null, $userId),

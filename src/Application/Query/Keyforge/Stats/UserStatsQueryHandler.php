@@ -144,26 +144,6 @@ final class UserStatsQueryHandler
             $indexedUsers[$user->id()->value()] = $user->name();
         }
 
-        $result = [
-            'games' => [],
-        ];
-
-        foreach ($games as $game) {
-            $result['games'][] = [
-                'winner' => $game->winner()->value(),
-                'winner_name' => $indexedUsers[$game->winner()->value()],
-                'winner_deck' => $game->winnerDeck()->value(),
-                'winner_deck_name' => $indexedDecks[$game->winnerDeck()->value()] ?? '',
-                'loser' => $game->loser()->value(),
-                'loser_name' => $indexedUsers[$game->loser()->value()],
-                'loser_deck' => $game->loserDeck()->value(),
-                'loser_deck_name' => $indexedDecks[$game->loserDeck()->value()] ?? '',
-                'score' => $game->score()->winnerScore() . '/' . $game->score()->loserScore(),
-                'first_turn' => null === $game->firstTurn() ? null : $indexedUsers[$game->firstTurn()->value()],
-                'date' => $game->date()->format('Y-m-d'),
-            ];
-        }
-
         $winRateVsUser = [];
 
         foreach ($users as $user) {
@@ -212,9 +192,6 @@ final class UserStatsQueryHandler
             $resultPickRateByUser[$name] = $this->pickRate($winRate['wins'] + $winRate['losses'], \count($games));
             $resultWinsByUser[$name] = ['wins' => $winRate['wins'], 'losses' => $winRate['losses']];
         }
-
-        $result['win_rate_vs_users'] = $resultWinRateByUser;
-        $result['pick_rate_vs_users'] = $resultPickRateByUser;
 
         $dates = \array_values(\array_unique(\array_merge(\array_keys($winsByDate), \array_keys($lossesByDate))));
 
@@ -315,18 +292,20 @@ final class UserStatsQueryHandler
             ];
         }
 
-        $result['wins_by_date'] = $resultWinsByDate;
-        $result['losses_by_date'] = $resultLossesByDate;
-        $result['wins_vs_users'] = $resultWinsByUser;
-        $result['best_deck'] = null === $bestDeck['id'] ? null : $bestDeck;
-        $result['worse_deck'] = null === $worseDeck['id'] ? null : $worseDeck;
-        $result['favorite_deck'] = null === $favoriteDeck['id'] ? null : $favoriteDeck;
-        $result['decks_stats'] = $decksStats;
-        $result['wins_by_set'] = $winsBySet;
-        $result['wins_by_house'] = $winsByHouse;
-        $result['win_streak'] = $longestWinStreak;
-
-        return $result;
+        return [
+            'win_rate_vs_users' => $resultWinRateByUser,
+            'pick_rate_vs_users' => $resultPickRateByUser,
+            'wins_by_date' => $resultWinsByDate,
+            'losses_by_date' => $resultLossesByDate,
+            'wins_vs_users' => $resultWinsByUser,
+            'best_deck' => null === $bestDeck['id'] ? null : $bestDeck,
+            'worse_deck' => null === $worseDeck['id'] ? null : $worseDeck,
+            'favorite_deck' => null === $favoriteDeck['id'] ? null : $favoriteDeck,
+            'decks_stats' => $decksStats,
+            'wins_by_set' => $winsBySet,
+            'wins_by_house' => $winsByHouse,
+            'win_streak' => $longestWinStreak,
+        ];
     }
 
     private function winRate(int $wins, int $losses): float
