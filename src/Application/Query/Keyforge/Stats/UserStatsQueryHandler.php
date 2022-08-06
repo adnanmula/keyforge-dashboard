@@ -292,7 +292,16 @@ final class UserStatsQueryHandler
             ];
         }
 
+        $username = '';
+
+        foreach ($users as $user) {
+            if ($query->userId()->equalTo($user->id())) {
+                $username = $user->name();
+            }
+        }
+
         return [
+            'username' => $username,
             'win_rate_vs_users' => $resultWinRateByUser,
             'pick_rate_vs_users' => $resultPickRateByUser,
             'wins_by_date' => $resultWinsByDate,

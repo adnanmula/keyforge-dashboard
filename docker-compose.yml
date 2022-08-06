@@ -27,14 +27,14 @@ services:
     image: adminer:latest
     container_name: cards_adminer
     ports:
-      - ${ADMINER_PORT}:8080
+      - 127.0.0.1:${ADMINER_PORT}:8080
     networks:
       - network_cards
   postgres:
     image: postgres:11.1-alpine
     container_name: cards_postgres
     ports:
-      - ${DATABASE_PORT}:5432
+      - 127.0.0.1:${DATABASE_PORT}:5432
     environment:
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
     networks:

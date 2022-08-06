@@ -17,7 +17,7 @@ final class ListGamesByUserController extends Controller
             [
                 'reference' => $userId,
                 'userId' => $userId,
-                'name' => $this->getReferenceName($result['games'][0] ?? null, $userId),
+                'name' => $result['username'],
                 'win_rate_vs_users' => $result['win_rate_vs_users'],
                 'pick_rate_vs_users' => $result['pick_rate_vs_users'],
                 'wins_by_date' => $result['wins_by_date'],
@@ -32,22 +32,5 @@ final class ListGamesByUserController extends Controller
                 'win_streak' => $result['win_streak'],
             ],
         );
-    }
-
-    private function getReferenceName(?array $game, string $userId): string
-    {
-        if (null === $game) {
-            return '';
-        }
-
-        if ($game['winner'] === $userId) {
-            return $game['winner_name'];
-        }
-
-        if ($game['loser'] === $userId) {
-            return $game['loser_name'];
-        }
-
-        return '';
     }
 }
