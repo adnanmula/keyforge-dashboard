@@ -6,6 +6,7 @@ use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGameRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeHouse;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeSet;
+use AdnanMula\Cards\Infrastructure\Criteria\Criteria;
 
 final class GeneralStatsQueryHandler
 {
@@ -16,7 +17,7 @@ final class GeneralStatsQueryHandler
 
     public function __invoke(GeneralStatsQuery $query): array
     {
-        $decks = $this->deckRepository->all(0, 2000);
+        $decks = $this->deckRepository->search(new Criteria(null, null, null));
 
         $housePresence = [
             KeyforgeHouse::SANCTUM->name => 0,

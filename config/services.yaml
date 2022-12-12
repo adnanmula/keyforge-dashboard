@@ -9,32 +9,25 @@ services:
     public: false
 
   AdnanMula\Cards\Application\Command\:
-    autowire: true
-    autoconfigure: true
     resource: '../src/Application/Command/*/*/*/*Handler.php'
     tags: [{ name: messenger.message_handler, bus: messenger.bus.command }]
 
   AdnanMula\Cards\Application\Query\:
-    autowire: true
-    autoconfigure: true
     resource: '../src/Application/Query/*/*/*Handler.php'
     tags: [{ name: messenger.message_handler, bus: messenger.bus.command }]
 
   AdnanMula\Cards\Domain\Service\:
-    autowire: true
-    autoconfigure: true
     resource: '../src/Domain/Service'
 
   AdnanMula\Cards\Entrypoint\Controller\:
-    autowire: true
-    autoconfigure: true
     resource: '../src/Entrypoint/Controller'
     tags: ['controller.service_arguments']
 
   AdnanMula\Cards\Infrastructure\Persistence\Repository\:
-      autowire: true
-      autoconfigure: true
-      resource: '../src/Infrastructure/Persistence/Repository'
+    resource: '../src/Infrastructure/Persistence/Repository'
+
+  AdnanMula\Cards\Infrastructure\Security\:
+    resource: '../src/Infrastructure/Security'
 
   AdnanMula\Cards\Infrastructure\Fixtures\:
       autoconfigure: true
@@ -58,3 +51,4 @@ imports:
     - { resource: context/system/buses.yaml }
     - { resource: context/system/repositories.yaml }
     - { resource: context/keyforge/repositories.yaml }
+    - { resource: context/gwent/repositories.yaml }

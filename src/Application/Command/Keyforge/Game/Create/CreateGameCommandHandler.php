@@ -7,11 +7,14 @@ use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGame;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGameRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeGameScore;
-use AdnanMula\Cards\Domain\Model\Shared\Filter;
-use AdnanMula\Cards\Domain\Model\Shared\SearchTerm;
-use AdnanMula\Cards\Domain\Model\Shared\SearchTerms;
-use AdnanMula\Cards\Domain\Model\Shared\SearchTermType;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
+use AdnanMula\Cards\Infrastructure\Criteria\Criteria;
+use AdnanMula\Cards\Infrastructure\Criteria\Filter\Filter;
+use AdnanMula\Cards\Infrastructure\Criteria\Filter\Filters;
+use AdnanMula\Cards\Infrastructure\Criteria\Filter\FilterType;
+use AdnanMula\Cards\Infrastructure\Criteria\FilterField\FilterField;
+use AdnanMula\Cards\Infrastructure\Criteria\FilterValue\FilterOperator;
+use AdnanMula\Cards\Infrastructure\Criteria\FilterValue\StringFilterValue;
 
 final class CreateGameCommandHandler
 {
@@ -67,23 +70,29 @@ final class CreateGameCommandHandler
 
     private function updateDeckWinRate(KeyforgeDeck $winnerDeck, KeyforgeDeck $loserDeck): void
     {
-        $games1 = $this->gameRepository->search(new SearchTerms(
-            SearchTermType::AND,
-            new SearchTerm(
-                SearchTermType::OR,
-                new Filter('winner_deck', $winnerDeck->id()->value()),
-                new Filter('loser_deck', $winnerDeck->id()->value()),
+        $games1 = $this->gameRepository->search(new Criteria(
+            null,
+            null,
+            null,
+            new Filters(
+                FilterType::AND,
+                FilterType::OR,
+                new Filter(new FilterField('winner_deck'), new StringFilterValue($winnerDeck->id()->value()), FilterOperator::EQUAL),
+                new Filter(new FilterField('loser_deck'), new StringFilterValue($winnerDeck->id()->value()), FilterOperator::EQUAL),
             ),
-        ), null, null);
+        ));
 
-        $games2 = $this->gameRepository->search(new SearchTerms(
-            SearchTermType::AND,
-            new SearchTerm(
-                SearchTermType::OR,
-                new Filter('winner_deck', $loserDeck->id()->value()),
-                new Filter('loser_deck', $loserDeck->id()->value()),
+        $games2 = $this->gameRepository->search(new Criteria(
+            null,
+            null,
+            null,
+            new Filters(
+                FilterType::AND,
+                FilterType::OR,
+                new Filter(new FilterField('winner_deck'), new StringFilterValue($loserDeck->id()->value()), FilterOperator::EQUAL),
+                new Filter(new FilterField('loser_deck'), new StringFilterValue($loserDeck->id()->value()), FilterOperator::EQUAL),
             ),
-        ), null, null);
+        ));
 
         $deck1Wins = 0;
         $deck1Losses = 0;

@@ -20,7 +20,7 @@ services:
     alias: repository.dbal.connection
 
   repository.dbal.base:
-    class: AdnanMula\Cards\Notifier\Infrastructure\Persistence\Repository\DbalRepository
+    class: AdnanMula\Cards\Infrastructure\Persistence\Repository\DbalRepository
     arguments:
       - '@repository.dbal.connection'
 

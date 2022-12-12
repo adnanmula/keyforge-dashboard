@@ -5,6 +5,7 @@ namespace AdnanMula\Cards\Application\Query\Keyforge\Game;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGameRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUserRepository;
+use AdnanMula\Cards\Infrastructure\Criteria\Criteria;
 
 final class GetGamesQueryHandler
 {
@@ -16,8 +17,16 @@ final class GetGamesQueryHandler
 
     public function __invoke(GetGamesQuery $query): array
     {
-        $games = $this->gameRepository->search($query->search(), $query->pagination(), $query->order());
-        $total = $this->gameRepository->count($query->search());
+        $games = $this->gameRepository->search($query->criteria());
+
+        $criteriaWithoutOrder = new Criteria(
+            null,
+            null,
+            null,
+            ...$query->criteria()->filters(),
+        );
+
+        $total = $this->gameRepository->count($criteriaWithoutOrder);
 
         $userIds = [];
         $decksIds = [];

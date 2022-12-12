@@ -10,6 +10,8 @@ use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeHouse;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeSet;
 use AdnanMula\Cards\Domain\Model\Shared\QueryOrder;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
+use AdnanMula\Cards\Infrastructure\Criteria\Criteria;
+use AdnanMula\Cards\Infrastructure\Criteria\DbalCriteriaAdapter;
 use AdnanMula\Cards\Infrastructure\Persistence\Repository\DbalRepository;
 use Doctrine\DBAL\Connection;
 
@@ -17,100 +19,30 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
 {
     private const TABLE = 'keyforge_decks';
 
-    public function all(
-        int $start,
-        int $length,
-        ?string $deckName = null,
-        ?string $set = null,
-        ?string $house = null,
-        ?Uuid $owner = null,
-        ?QueryOrder $order = null
-    ): array {
+    public function search(Criteria $criteria): array
+    {
         $builder = $this->connection->createQueryBuilder();
 
         $query = $builder->select('a.id, a.name, a.set, a.houses, a.sas, a.wins, a.losses, a.extra_data, a.owner')
-            ->from(self::TABLE, 'a')
-            ->setFirstResult($start)
-            ->setMaxResults($length);
+            ->from(self::TABLE, 'a');
 
-//      TODO quitar esto de aqui
-        if (null !== $order) {
-            if ('win_rate' === $order->field()) {
-                if (\strtolower($order->order()) === 'desc') {
-                    $query->orderBy('a.wins', 'DESC')
-                        ->addOrderBy('a.losses', 'ASC');
-                } else {
-                    $query->orderBy('a.wins', 'ASC')
-                        ->addOrderBy('a.losses', 'DESC');
-                }
-            } else {
-                $query->orderBy('a.' . $order->field(), $order->order());
-            }
-        } else {
-            $query->orderBy('a.wins', 'DESC')
-                ->addOrderBy('a.losses', 'ASC');
-        }
-
-        if (null !== $owner) {
-            $query->andWhere('a.owner = :owner')
-                ->setParameter('owner', $owner->value());
-        }
-
-        if (null !== $deckName) {
-            $query->andWhere('a.name ilike :deck_name')
-                ->setParameter('deck_name', '%' . $deckName . '%');
-        }
-
-        if (null !== $set) {
-            $query->andWhere('a.set = :set')
-                ->setParameter('set', $set);
-        }
-
-        if (null !== $house) {
-            $query->andWhere($builder->expr()->or(
-                'a.houses->>0 = :house',
-                'a.houses->>1 = :house',
-                'a.houses->>2 = :house',
-            ))->setParameter('house', $house);
-        }
+        (new DbalCriteriaAdapter($builder))->execute($criteria);
 
         $result = $query->execute()->fetchAllAssociative();
 
         return \array_map(fn (array $row) => $this->map($row), $result);
     }
 
-    public function count(?string $deckName = null, ?string $set = null, ?string $house = null, ?Uuid $owner = null): int
+    public function count(Criteria $criteria): int
     {
         $builder = $this->connection->createQueryBuilder();
         $query = $builder->select('COUNT(a.id)')
             ->from(self::TABLE, 'a');
 
-        if (null !== $owner) {
-            $query->andWhere('a.owner = :owner')
-                ->setParameter('owner', $owner->value());
-        }
-
-        if (null !== $deckName) {
-            $query->andWhere('a.name ilike :deck_name')
-                ->setParameter('deck_name', '%' . $deckName . '%');
-        }
-
-        if (null !== $set) {
-            $query->andWhere('a.set = :set')
-                ->setParameter('set', $set);
-        }
-
-        if (null !== $house) {
-            $query->andWhere($builder->expr()->or(
-                'a.houses->>0 = :house',
-                'a.houses->>1 = :house',
-                'a.houses->>2 = :house',
-            ))->setParameter('house', $house);
-        }
+        (new DbalCriteriaAdapter($builder))->execute($criteria);
 
         return $query->execute()->fetchOne();
     }
-
 
     public function byId(Uuid $id): ?KeyforgeDeck
     {

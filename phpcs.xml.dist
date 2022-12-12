@@ -14,6 +14,7 @@
     <exclude name="SlevomatCodingStandard.Classes.RequireAbstractOrFinal.ClassNeitherAbstractNorFinal" />
     <exclude name="SlevomatCodingStandard.Classes.RequireConstructorPropertyPromotion.RequiredConstructorPropertyPromotion" />
     <exclude name="SlevomatCodingStandard.Classes.RequireSingleLineMethodSignature.RequiredSingleLineSignature" />
+    <exclude name="SlevomatCodingStandard.Classes.SuperfluousInterfaceNaming.SuperfluousSuffix" />
     <exclude name="SlevomatCodingStandard.ControlStructures.DisallowNullSafeObjectOperator.DisallowedNullSafeObjectOperator" />
     <exclude name="SlevomatCodingStandard.ControlStructures.DisallowYodaComparison.DisallowedYodaComparison" />
     <exclude name="SlevomatCodingStandard.ControlStructures.EarlyExit.EarlyExitNotUsed" />
@@ -45,6 +46,7 @@
     <exclude name="Squiz.Functions.MultiLineFunctionDeclaration.BraceOnSameLine" />
     <exclude name="Squiz.WhiteSpace.ScopeClosingBrace.ContentBefore" />
     <!-- TODO enable -->
+    <exclude name="SlevomatCodingStandard.Classes.RequireMultiLineMethodSignature.RequiredMultiLineSignature" />
     <exclude name="SlevomatCodingStandard.Functions.RequireMultiLineCall.RequiredMultiLineCall" />
     <exclude name="SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter" />
     <exclude name="SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingAnyTypeHint" />

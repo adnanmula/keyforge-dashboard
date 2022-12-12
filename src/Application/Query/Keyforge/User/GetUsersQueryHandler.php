@@ -6,10 +6,13 @@ use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGame;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGameRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUser;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUserRepository;
-use AdnanMula\Cards\Domain\Model\Shared\Filter;
-use AdnanMula\Cards\Domain\Model\Shared\SearchTerm;
-use AdnanMula\Cards\Domain\Model\Shared\SearchTerms;
-use AdnanMula\Cards\Domain\Model\Shared\SearchTermType;
+use AdnanMula\Cards\Infrastructure\Criteria\Criteria;
+use AdnanMula\Cards\Infrastructure\Criteria\Filter\Filter;
+use AdnanMula\Cards\Infrastructure\Criteria\Filter\Filters;
+use AdnanMula\Cards\Infrastructure\Criteria\Filter\FilterType;
+use AdnanMula\Cards\Infrastructure\Criteria\FilterField\FilterField;
+use AdnanMula\Cards\Infrastructure\Criteria\FilterValue\FilterOperator;
+use AdnanMula\Cards\Infrastructure\Criteria\FilterValue\StringFilterValue;
 
 final class GetUsersQueryHandler
 {
@@ -31,19 +34,16 @@ final class GetUsersQueryHandler
         $filters = [];
 
         foreach ($userIds as $userId) {
-            $filters[] = new Filter('winner', $userId);
-            $filters[] = new Filter('loser', $userId);
+            $filters[] = new Filter(new FilterField('winner'), new StringFilterValue($userId), FilterOperator::EQUAL);
+            $filters[] = new Filter(new FilterField('loser'), new StringFilterValue($userId), FilterOperator::EQUAL);
         }
 
-        $searchTerms = new SearchTerms(
-            SearchTermType::AND,
-            new SearchTerm(
-                SearchTermType::OR,
-                ...$filters,
-            ),
-        );
-
-        $games = $this->gameRepository->search($searchTerms, null, null);
+        $games = $this->gameRepository->search(new Criteria(
+            null,
+            null,
+            null,
+            new Filters(FilterType::AND, FilterType::OR, ...$filters),
+        ));
 
         $result = [];
 

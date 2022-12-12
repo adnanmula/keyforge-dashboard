@@ -3,8 +3,11 @@
 namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\Stats\Deck;
 
 use AdnanMula\Cards\Application\Query\Keyforge\Deck\GetDecksQuery;
-use AdnanMula\Cards\Domain\Model\Shared\QueryOrder;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
+use AdnanMula\Cards\Infrastructure\Criteria\FilterField\FilterField;
+use AdnanMula\Cards\Infrastructure\Criteria\Sorting\Order;
+use AdnanMula\Cards\Infrastructure\Criteria\Sorting\OrderType;
+use AdnanMula\Cards\Infrastructure\Criteria\Sorting\Sorting;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -12,7 +15,7 @@ final class GetDecksController extends Controller
 {
     public function __invoke(Request $request): JsonResponse
     {
-        $order = null;
+        $sorting = null;
         $queryOrder = $request->get('order');
 
         $searchDeck = null;
@@ -62,7 +65,14 @@ final class GetDecksController extends Controller
             $orderType = $queryOrder[0]['dir'] ?? null;
 
             if (null !== $orderField && null !== $orderType) {
-                $order = new QueryOrder(field: $orderField, order: $orderType);
+                if ($orderField === 'win_rate') {
+                    $sorting = new Sorting(
+                        new Order(new FilterField('wins'), OrderType::from($orderType)),
+                        new Order(new FilterField('losses'), OrderType::from($orderType) === OrderType::ASC ? OrderType::DESC : OrderType::ASC),
+                    );
+                } else {
+                    $sorting = new Sorting(new Order(new FilterField($orderField), OrderType::from($orderType)));
+                }
             }
         }
 
@@ -73,7 +83,7 @@ final class GetDecksController extends Controller
                 $searchDeck,
                 $searchSet,
                 $searchHouse,
-                $order,
+                $sorting,
                 null,
                 $searchOwner,
             )),

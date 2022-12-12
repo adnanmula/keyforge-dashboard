@@ -2,18 +2,18 @@
 
 namespace AdnanMula\Cards\Application\Query\Keyforge\Deck;
 
-use AdnanMula\Cards\Domain\Model\Shared\QueryOrder;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
+use AdnanMula\Cards\Infrastructure\Criteria\Sorting\Sorting;
 use Assert\Assert;
 
 final class GetDecksQuery
 {
-    private int $start;
-    private int $length;
+    private ?int $start;
+    private ?int $length;
     private ?string $deck;
     private ?string $set;
     private ?string $house;
-    private ?QueryOrder $order;
+    private ?Sorting $sorting;
     private ?Uuid $deckId;
     private ?Uuid $owner;
 
@@ -23,35 +23,35 @@ final class GetDecksQuery
         ?string $deck,
         ?string $set,
         ?string $house,
-        ?QueryOrder $order,
+        ?Sorting $sorting,
         ?string $deckId = null,
         ?string $owner = null,
     ) {
         Assert::lazy()
-            ->that($start, 'start')->integerish()->greaterOrEqualThan(0)
-            ->that($length, 'length')->integerish()->greaterThan(0)
+            ->that($start, 'start')->nullOr()->integerish()->greaterOrEqualThan(0)
+            ->that($length, 'length')->nullOr()->integerish()->greaterThan(0)
             ->that($deck, 'deck')->nullOr()->string()->notBlank()
             ->that($set, 'set')->nullOr()->string()->notBlank()
             ->that($house, 'house')->nullOr()->string()->notBlank()
             ->that($deckId, 'deckId')->nullOr()->uuid()
             ->that($owner, 'owner')->nullOr()->uuid();
 
-        $this->start = (int) $start;
-        $this->length = (int) $length;
+        $this->start = null === $start ? null : (int) $start;
+        $this->length = null === $length ? null : (int) $length;
         $this->deck= $deck;
         $this->set = $set;
         $this->house = $house;
-        $this->order = $order;
+        $this->sorting = $sorting;
         $this->deckId = null !== $deckId ? Uuid::from($deckId) : null;
         $this->owner = null !== $owner ? Uuid::from($owner) : null;
     }
 
-    public function start(): int
+    public function start(): ?int
     {
         return $this->start;
     }
 
-    public function length(): int
+    public function length(): ?int
     {
         return $this->length;
     }
@@ -71,9 +71,9 @@ final class GetDecksQuery
         return $this->house;
     }
 
-    public function order(): ?QueryOrder
+    public function sorting(): ?Sorting
     {
-        return $this->order;
+        return $this->sorting;
     }
 
     public function deckId(): ?Uuid

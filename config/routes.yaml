@@ -12,77 +12,15 @@ logout:
   path: /logout
   methods: [ GET ]
 
-gwent_home:
-  path: /gwent
-  controller: AdnanMula\Cards\Entrypoint\Controller\Gwent\Test\TestController
-  methods: [ GET ]
-
 home:
   path: /
   controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Stats\GeneralStatsController
   methods: [ GET ]
 
-keyforge_home:
-  path: /keyforge
-  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Stats\GeneralStatsController
-  methods: [ GET ]
+keyforge:
+  resource: context/keyforge/routes.yaml
+  prefix: /keyforge
 
-keyforge_user_list:
-  path: /keyforge/users
-  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Stats\User\ListUsersController
-  methods: [ GET ]
-
-keyforge_deck_list:
-    path: /keyforge/decks
-    controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Stats\Deck\ListDecksController
-    methods: [ GET ]
-
-keyforge_deck_list_by_owner:
-  path: /keyforge/my-decks
-  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Stats\Deck\MyDecksController
-  methods: [ GET ]
-
-keyforge_deck_claim:
-  path: /keyforge/deck/claim
-  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Deck\ClaimController
-  methods: [ POST ]
-
-keyforge_decks_json:
-  path: /keyforge/decks/json
-  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Stats\Deck\GetDecksController
-  methods: [ GET ]
-
-keyforge_games_json:
-  path: /keyforge/games/json
-  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Stats\Game\GetGamesController
-  methods: [ GET ]
-
-keyforge_wiki:
-  path: /keyforge/wiki
-  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Wiki\WikiController
-  methods: [ GET ]
-
-keyforge_game_list_by_user:
-  path: /keyforge/games/user/{userId}
-  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Stats\Game\ListGamesByUserController
-  methods: [ GET ]
-
-keyforge_game_list_by_deck:
-  path: /keyforge/games/deck/{deckId}
-  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Stats\Game\ListGamesByDeckController
-  methods: [ GET ]
-
-keyforge_deck_import:
-  path: /keyforge/decks/import
-  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Deck\ImportDeckController
-  methods: [ GET,POST ]
-
-keyforge_game_create:
-  path: /keyforge/games/add
-  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Game\CreateGameController
-  methods: [ GET,POST ]
-
-keyforge_game_chain_calculator:
-  path: /keyforge/games/chains
-  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Game\ChainsCalculatorController
-  methods: [ GET ]
+gwent:
+  resource: context/gwent/routes.yaml
+  prefix: /gwent

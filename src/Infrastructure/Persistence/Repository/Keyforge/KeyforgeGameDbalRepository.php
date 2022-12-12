@@ -7,47 +7,23 @@ use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGame;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGameRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeGameScore;
 use AdnanMula\Cards\Domain\Model\Shared\Pagination;
-use AdnanMula\Cards\Domain\Model\Shared\QueryOrder;
-use AdnanMula\Cards\Domain\Model\Shared\SearchTerm;
-use AdnanMula\Cards\Domain\Model\Shared\SearchTerms;
-use AdnanMula\Cards\Domain\Model\Shared\SearchTermType;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
+use AdnanMula\Cards\Infrastructure\Criteria\Criteria;
+use AdnanMula\Cards\Infrastructure\Criteria\DbalCriteriaAdapter;
 use AdnanMula\Cards\Infrastructure\Persistence\Repository\DbalRepository;
-use Doctrine\DBAL\Query\QueryBuilder;
 
 final class KeyforgeGameDbalRepository extends DbalRepository implements KeyforgeGameRepository
 {
     private const TABLE = 'keyforge_games';
 
-    public function search(?SearchTerms $search, ?Pagination $pagination, ?QueryOrder $order): array
+    public function search(Criteria $criteria): array
     {
         $builder = $this->connection->createQueryBuilder();
 
         $query = $builder->select('a.*')
             ->from(self::TABLE, 'a');
 
-        if (null !== $search) {
-            $query = $this->applySearch($search, $builder, $query);
-        }
-
-        if (null !== $pagination) {
-            $query->setFirstResult($pagination->start())->setMaxResults($pagination->length());
-        }
-
-        if (null === $order) {
-            $query->orderBy('a.date', 'DESC')
-                ->addOrderBy('a.created_at', 'DESC');
-        } else {
-            $query->orderBy($order->field(), $order->order());
-
-            if ($order->field() === 'date') {
-                if ($order->order() === 'asc') {
-                    $query->addOrderBy('a.created_at', 'ASC');
-                } else {
-                    $query->addOrderBy('a.created_at', 'DESC');
-                }
-            }
-        }
+        (new DbalCriteriaAdapter($query))->execute($criteria);
 
         $result = $query->execute()->fetchAllAssociative();
 
@@ -80,16 +56,14 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
         return \array_map(fn (array $game) => $this->map($game), $result);
     }
 
-    public function count(?SearchTerms $search = null): int
+    public function count(Criteria $criteria): int
     {
         $builder = $this->connection->createQueryBuilder();
 
         $query = $builder->select('count(a.*)')
             ->from(self::TABLE, 'a');
 
-        if (null !== $search) {
-            $this->applySearch($search, $builder, $query);
-        }
+        (new DbalCriteriaAdapter($query))->execute($criteria);
 
         return $query->execute()->fetchOne();
     }
@@ -150,41 +124,5 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
             new \DateTimeImmutable($game['date']),
             new \DateTimeImmutable($game['created_at']),
         );
-    }
-
-    private function applySearch(SearchTerms $terms, QueryBuilder $builder, QueryBuilder $query): QueryBuilder
-    {
-        /** @var SearchTerm $term */
-        foreach ($terms as $term) {
-            $firstFilter = \sprintf('%s = :%s', $term->filters()[0]->field(), $term->filters()[0]->field() . '0');
-
-            if ($term->type() === SearchTermType::OR) {
-                $expression = $builder->expr()->or($firstFilter);
-            } else {
-                $expression = $builder->expr()->and($firstFilter);
-            }
-
-            foreach ($term->filters() as $index => $filter) {
-                if ($index === 0) {
-                    continue;
-                }
-
-                $expression = $expression->with(\sprintf('%s = :%s', $filter->field(), $filter->field() . $index));
-            }
-
-            if ($terms->type() === SearchTermType::AND) {
-                $query->andWhere($expression);
-            }
-
-            if ($terms->type() === SearchTermType::OR) {
-                $query->orWhere($expression);
-            }
-
-            foreach ($term->filters() as $index => $filter) {
-                $query->setParameter($filter->field() . $index, $filter->value());
-            }
-        }
-
-        return $query;
     }
 }

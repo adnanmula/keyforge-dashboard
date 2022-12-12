@@ -23,14 +23,14 @@ final class UserFixtures extends DbalFixture implements Fixture
             Uuid::from(self::FIXTURE_USER_1_ID),
             'a',
             '$2y$13$sn3JyhOwj1wsvfQQ.0TwZeXVISv8fpFo8v09sa9cSfm0C2Psh49mO',
-            ['ROLE_BASIC', 'ROLE_KEYFORGE'],
+            ['ROLE_ADMIN'],
         ));
 
         $this->save(new User(
             Uuid::from(self::FIXTURE_USER_2_ID),
             'b',
             '$2y$13$K8M5NdlCkAQUrOCh0cr.CuM.nX4DVeGxbeZBrUi.FTAY/gW/7NpJm',
-            ['ROLE_BASIC', 'ROLE_KEYFORGE'],
+            ['ROLE_KEYFORGE'],
         ));
 
         $this->loaded = true;

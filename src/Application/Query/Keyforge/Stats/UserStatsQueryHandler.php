@@ -9,10 +9,16 @@ use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUserRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeDeckHouses;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeHouse;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeSet;
-use AdnanMula\Cards\Domain\Model\Shared\Filter;
-use AdnanMula\Cards\Domain\Model\Shared\SearchTerm;
-use AdnanMula\Cards\Domain\Model\Shared\SearchTerms;
-use AdnanMula\Cards\Domain\Model\Shared\SearchTermType;
+use AdnanMula\Cards\Infrastructure\Criteria\Criteria;
+use AdnanMula\Cards\Infrastructure\Criteria\Filter\Filter;
+use AdnanMula\Cards\Infrastructure\Criteria\Filter\Filters;
+use AdnanMula\Cards\Infrastructure\Criteria\Filter\FilterType;
+use AdnanMula\Cards\Infrastructure\Criteria\FilterField\FilterField;
+use AdnanMula\Cards\Infrastructure\Criteria\FilterValue\FilterOperator;
+use AdnanMula\Cards\Infrastructure\Criteria\FilterValue\StringFilterValue;
+use AdnanMula\Cards\Infrastructure\Criteria\Sorting\Order;
+use AdnanMula\Cards\Infrastructure\Criteria\Sorting\OrderType;
+use AdnanMula\Cards\Infrastructure\Criteria\Sorting\Sorting;
 
 final class UserStatsQueryHandler
 {
@@ -24,18 +30,20 @@ final class UserStatsQueryHandler
 
     public function __invoke(UserStatsQuery $query): array
     {
-        $games = $this->gameRepository->search(
-            new SearchTerms(
-                SearchTermType::AND,
-                new SearchTerm(
-                    SearchTermType::OR,
-                    new Filter('winner', $query->userId()->value()),
-                    new Filter('loser', $query->userId()->value()),
-                ),
+        $games = $this->gameRepository->search(new Criteria(
+            new Sorting(
+                new Order(new FilterField('date'), OrderType::DESC),
+                new Order(new FilterField('created_at'), OrderType::DESC),
             ),
             null,
             null,
-        );
+            new Filters(
+                FilterType::AND,
+                FilterType::OR,
+                new Filter(new FilterField('winner'), new StringFilterValue($query->userId()->value()), FilterOperator::EQUAL),
+                new Filter(new FilterField('loser'), new StringFilterValue($query->userId()->value()), FilterOperator::EQUAL),
+            ),
+        ));
 
         $userIds = [];
         $decksIds = [];

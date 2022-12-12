@@ -2,27 +2,15 @@
 
 namespace AdnanMula\Cards\Domain\Model\Keyforge;
 
-use AdnanMula\Cards\Domain\Model\Shared\QueryOrder;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
+use AdnanMula\Cards\Infrastructure\Criteria\Criteria;
 
 interface KeyforgeDeckRepository
 {
-    public function all(
-        int $start,
-        int $length,
-        ?string $deckName = null,
-        ?string $set = null,
-        ?string $house = null,
-        ?Uuid $owner = null,
-        ?QueryOrder $order = null,
-    ): array;
+    /** @return array<KeyforgeDeck> */
+    public function search(Criteria $criteria): array;
 
-    public function count(
-        ?string $deckName = null,
-        ?string $set = null,
-        ?string $house = null,
-        ?Uuid $owner = null,
-    ): int;
+    public function count(Criteria $criteria): int;
 
     public function byId(Uuid $id): ?KeyforgeDeck;
 
