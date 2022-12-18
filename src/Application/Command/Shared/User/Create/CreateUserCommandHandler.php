@@ -26,7 +26,7 @@ final class CreateUserCommandHandler
             Uuid::v4(),
             $command->name(),
             '',
-            ['ROLE_BASIC', 'ROLE_KEYFORGE'],
+            ['ROLE_BASIC'],
         );
 
         $hashedPassword = $this->hasher->hashPassword(
