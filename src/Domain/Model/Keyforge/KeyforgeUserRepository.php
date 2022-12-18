@@ -11,6 +11,8 @@ interface KeyforgeUserRepository
 
     public function byId(Uuid $id): ?KeyforgeUser;
 
+    public function byName(string $name): ?KeyforgeUser;
+
     /** @return array<KeyforgeUser> */
     public function byIds(Uuid ...$id): array;
 

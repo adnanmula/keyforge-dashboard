@@ -15,4 +15,9 @@ class Uuid extends StringValueObject
     {
         return new static(VendorUuid::uuid4()->toString());
     }
+
+    public static function isValid(string $uuid): bool
+    {
+        return VendorUuid::isValid($uuid);
+    }
 }

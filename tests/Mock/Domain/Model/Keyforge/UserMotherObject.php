@@ -12,16 +12,18 @@ final class UserMotherObject
 
     private Uuid $id;
     private string $name;
+    private bool $external;
 
     public function __construct()
     {
         $this->id = Uuid::from(self::MOCK_ID);
         $this->name = self::MOCK_NAME;
+        $this->external = false;
     }
 
     public function build(): KeyforgeUser
     {
-        return KeyforgeUser::create($this->id, $this->name);
+        return KeyforgeUser::create($this->id, $this->name, $this->external);
     }
 
     public function setId(Uuid $id): self
@@ -38,11 +40,19 @@ final class UserMotherObject
         return $this;
     }
 
+    public function setExternal(bool $external): self
+    {
+        $this->external = $external;
+
+        return $this;
+    }
+
     public static function buildDefault(): KeyforgeUser
     {
         return KeyforgeUser::create(
             Uuid::from(self::MOCK_ID),
             self::MOCK_NAME,
+            false,
         );
     }
 }

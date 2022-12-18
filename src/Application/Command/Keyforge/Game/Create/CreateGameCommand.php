@@ -8,14 +8,14 @@ use Assert\Assert;
 
 final class CreateGameCommand
 {
-    private Uuid $winner;
+    private string $winner;
     private string $winnerDeck;
     private int $winnerChains;
-    private Uuid $loser;
+    private string $loser;
     private string $loserDeck;
     private int $loserChains;
     private int $loserScore;
-    private ?Uuid $firstTurn;
+    private ?string $firstTurn;
     private \DateTimeImmutable $date;
     private KeyforgeCompetition $competition;
     private string $notes;
@@ -34,34 +34,32 @@ final class CreateGameCommand
         $notes,
     ) {
         Assert::lazy()
-            ->that($winner, 'winner')->uuid()
+            ->that($winner, 'winner')->string()
             ->that($winnerDeck, 'winnerDeck')->string()->notBlank()->notEq($loserDeck)
             ->that($winnerChains, 'winnerChains')->integerish()->min(0)
-            ->that($loser, 'loser')->uuid()
+            ->that($loser, 'loser')->string()
             ->that($loserDeck, 'loserDeck')->string()->notBlank()->notEq($winnerDeck)
             ->that($loserChains, 'loserChains')->integerish()->min(0)
             ->that($loserScore, 'loserScore')->integerish()->min(0)->max(2)
-            ->that($firstTurn, 'firstTurn')->nullOr()->uuid()
+            ->that($firstTurn, 'firstTurn')->nullOr()->string()
             ->that($date, 'date')->date('Y-m-d H:i:s')
             ->that($competition, 'competition')->inArray(KeyforgeCompetition::cases())
             ->that($notes, 'notes')->string()->maxLength(512);
 
-        $this->winner = Uuid::from($winner);
+        $this->winner = $winner;
         $this->winnerDeck = $winnerDeck;
         $this->winnerChains = (int) $winnerChains;
-        $this->loser = Uuid::from($loser);
+        $this->loser = $loser;
         $this->loserDeck = $loserDeck;
         $this->loserChains = (int) $loserChains;
         $this->loserScore = (int) $loserScore;
-        $this->firstTurn = null === $firstTurn
-            ? null
-            : Uuid::from($firstTurn);
+        $this->firstTurn = $firstTurn;
         $this->date = new \DateTimeImmutable($date);
         $this->competition = KeyforgeCompetition::fromName($competition);
         $this->notes = $notes;
     }
 
-    public function winner(): Uuid
+    public function winner(): string
     {
         return $this->winner;
     }
@@ -76,7 +74,7 @@ final class CreateGameCommand
         return $this->winnerChains;
     }
 
-    public function loser(): Uuid
+    public function loser(): string
     {
         return $this->loser;
     }
@@ -96,7 +94,7 @@ final class CreateGameCommand
         return $this->loserScore;
     }
 
-    public function firstTurn(): ?Uuid
+    public function firstTurn(): ?string
     {
         return $this->firstTurn;
     }

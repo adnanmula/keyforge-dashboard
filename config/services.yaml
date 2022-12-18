@@ -29,6 +29,9 @@ services:
   AdnanMula\Cards\Infrastructure\Security\:
     resource: '../src/Infrastructure/Security'
 
+  AdnanMula\Cards\Infrastructure\Service\:
+    resource: '../src/Infrastructure/Service'
+
   AdnanMula\Cards\Infrastructure\Fixtures\:
       autoconfigure: true
       autowire: true

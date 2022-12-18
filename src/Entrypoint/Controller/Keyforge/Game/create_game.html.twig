@@ -9,12 +9,22 @@
         </div>
     {% endif %}
 
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip({
+                'container': 'body',
+                'placement': 'right'
+            })
+        })
+    </script>
+
     <div class="shadow-lg p-3 mb-5 bg-white rounded">
         <form action="{{ path('keyforge_game_create') }}" method="post">
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
                         <label for="competition" class="form-label">Competition</label>
+
                         <select class="form-select" name="competition" id="competition">
                             <option value="FRIENDS" selected>With friends</option>
                             <option value="TCO_CASUAL">TCO Casual</option>
@@ -33,11 +43,23 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="winner" class="form-label">Winner</label>
+
+                        <svg data-toggle="tooltip" title="Al jugar con randoms pega el nombre de usuario en winner/loser aunque no salga en el selector" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                            <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                        </svg>
+
                         <input class="form-control selector" list="winnerOptions" id="winner" placeholder="Type to search..." name="winner" autocomplete="off" required>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <label for="loser" class="form-label">Loser</label>
+
+                    <svg data-toggle="tooltip" title="Al jugar con randoms pega el nombre de usuario en winner/loser aunque no salga en el selector" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                        <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                    </svg>
+
                     <input class="form-control selector" list="loserOptions" id="loser" placeholder="Type to search..." name="loser" autocomplete="off" required>
                 </div>
             </div>
@@ -172,10 +194,12 @@
                 let listId = input.getAttribute('list');
 
                 option = document.querySelector('#' + listId + ' option[value="' + input.value + '"]');
+                let hiddenInput = document.querySelector('#hidden-' + input.getAttribute('id'));
 
                 if (null !== option) {
-                    let hiddenInput = document.querySelector('#hidden-' + input.getAttribute('id'));
                     hiddenInput.value = option.getAttribute('data-value');
+                } else {
+                    hiddenInput.value = this.value;
                 }
             });
         });

@@ -9,11 +9,12 @@ final class KeyforgeUser
     private function __construct(
         private Uuid $id,
         private string $name,
+        private bool $external,
     ) {}
 
-    public static function create(Uuid $id, string $name): self
+    public static function create(Uuid $id, string $name, bool $external): self
     {
-        return new self($id, $name);
+        return new self($id, $name, $external);
     }
 
     public function id(): Uuid
@@ -24,5 +25,10 @@ final class KeyforgeUser
     public function name(): string
     {
         return $this->name;
+    }
+
+    public function external(): bool
+    {
+        return $this->external;
     }
 }

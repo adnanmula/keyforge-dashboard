@@ -7,6 +7,7 @@ use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUserRepository;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Infrastructure\Persistence\Repository\DbalRepository;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\ParameterType;
 
 final class KeyforgeUserDbalRepository extends DbalRepository implements KeyforgeUserRepository
 {
@@ -14,9 +15,8 @@ final class KeyforgeUserDbalRepository extends DbalRepository implements Keyforg
 
     public function all(): array
     {
-        $result = $this->connection
-            ->createQueryBuilder()
-            ->select('a.id, a.name')
+        $result = $this->connection->createQueryBuilder()
+            ->select('a.id, a.name, a.external')
             ->from(self::TABLE, 'a')
             ->execute()
             ->fetchAllAssociative();
@@ -26,9 +26,8 @@ final class KeyforgeUserDbalRepository extends DbalRepository implements Keyforg
 
     public function byId(Uuid $id): ?KeyforgeUser
     {
-        $result = $this->connection
-            ->createQueryBuilder()
-            ->select('a.id, a.name')
+        $result = $this->connection->createQueryBuilder()
+            ->select('a.id, a.name, a.external')
             ->from(self::TABLE, 'a')
             ->where('a.id = :id')
             ->setParameter('id', $id->value())
@@ -43,11 +42,28 @@ final class KeyforgeUserDbalRepository extends DbalRepository implements Keyforg
         return $this->map($result);
     }
 
+    public function byName(string $name): ?KeyforgeUser
+    {
+        $result = $this->connection->createQueryBuilder()
+            ->select('a.id, a.name, a.external')
+            ->from(self::TABLE, 'a')
+            ->where('a.name = :name')
+            ->setParameter('name', $name)
+            ->setMaxResults(1)
+            ->execute()
+            ->fetchAssociative();
+
+        if (false === $result) {
+            return null;
+        }
+
+        return $this->map($result);
+    }
+
     public function byIds(Uuid ...$ids): array
     {
-        $result = $this->connection
-            ->createQueryBuilder()
-            ->select('a.id, a.name')
+        $result = $this->connection->createQueryBuilder()
+            ->select('a.id, a.name, a.external')
             ->from(self::TABLE, 'a')
             ->where('a.id in (:ids)')
             ->setParameter('ids', \array_map(static fn (Uuid $id) => $id->value(), $ids), Connection::PARAM_STR_ARRAY)
@@ -65,17 +81,19 @@ final class KeyforgeUserDbalRepository extends DbalRepository implements Keyforg
     {
         $stmt = $this->connection->prepare(
             \sprintf(
-                'INSERT INTO %s (id, name)
-                VALUES (:id, :name)
+                'INSERT INTO %s (id, name, external)
+                VALUES (:id, :name, :external)
                 ON CONFLICT (id) DO UPDATE SET
                 id = :id,
-                name = :name',
+                name = :name,
+                external = :external',
                 self::TABLE,
             ),
         );
 
         $stmt->bindValue(':id', $user->id()->value());
         $stmt->bindValue(':name', $user->name());
+        $stmt->bindValue(':external', $user->external(), ParameterType::BOOLEAN);
 
         $stmt->execute();
     }
@@ -85,6 +103,7 @@ final class KeyforgeUserDbalRepository extends DbalRepository implements Keyforg
         return KeyforgeUser::create(
             Uuid::from($user['id']),
             $user['name'],
+            $user['external'],
         );
     }
 }

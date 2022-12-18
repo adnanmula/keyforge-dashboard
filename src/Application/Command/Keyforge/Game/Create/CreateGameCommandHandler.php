@@ -6,8 +6,11 @@ use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeck;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGame;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGameRepository;
+use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUser;
+use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUserRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeGameScore;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
+use AdnanMula\Cards\Domain\Service\Keyforge\ImportDeckService;
 use AdnanMula\Cards\Infrastructure\Criteria\Criteria;
 use AdnanMula\Cards\Infrastructure\Criteria\Filter\Filter;
 use AdnanMula\Cards\Infrastructure\Criteria\Filter\Filters;
@@ -19,45 +22,26 @@ use AdnanMula\Cards\Infrastructure\Criteria\FilterValue\StringFilterValue;
 final class CreateGameCommandHandler
 {
     public function __construct(
+        private KeyforgeUserRepository $userRepository,
         private KeyforgeGameRepository $gameRepository,
         private KeyforgeDeckRepository $deckRepository,
+        private ImportDeckService $importDeckService,
     ) {}
 
     public function __invoke(CreateGameCommand $command): void
     {
-        $decks = $this->deckRepository->byNames(
-            $command->winnerDeck(),
-            $command->loserDeck(),
-        );
-
-        $winnerDeck = null;
-        $loserDeck = null;
-
-        foreach ($decks as $deck) {
-            if ($deck->name() === $command->winnerDeck()) {
-                $winnerDeck = $deck;
-
-                continue;
-            }
-
-            if ($deck->name() === $command->loserDeck()) {
-                $loserDeck = $deck;
-            }
-        }
-
-        if (null === $winnerDeck || null === $loserDeck) {
-            throw new \InvalidArgumentException('Deck not found');
-        }
+        [$winner, $loser, $firstTurn] = $this->getUsers($command->winner(), $command->loser(), $command->firstTurn());
+        [$winnerDeck, $loserDeck] = $this->getDecks($command->winnerDeck(), $command->loserDeck());
 
         $game = new KeyforgeGame(
             Uuid::v4(),
-            $command->winner(),
-            $command->loser(),
+            Uuid::from($winner),
+            Uuid::from($loser),
             $winnerDeck->id(),
             $loserDeck->id(),
             $command->winnerChains(),
             $command->loserChains(),
-            $command->firstTurn(),
+            Uuid::from($firstTurn),
             KeyforgeGameScore::from(3, $command->loserScore()),
             $command->date(),
             new \DateTimeImmutable(),
@@ -127,5 +111,55 @@ final class CreateGameCommandHandler
 
         $this->deckRepository->save($winnerDeck);
         $this->deckRepository->save($loserDeck);
+    }
+
+    private function getUsers(string $winner, string $loser, string $firstTurn): array
+    {
+        if (false === Uuid::isValid($winner)) {
+            $winner = $this->fetchUserOrCreate($winner)->id()->value();
+        }
+
+        if (false === Uuid::isValid($loser)) {
+            $loser = $this->fetchUserOrCreate($loser)->id()->value();
+        }
+
+        if (false === Uuid::isValid($firstTurn)) {
+            $firstTurn = $this->fetchUserOrCreate($firstTurn)->id()->value();
+        }
+
+        return [$winner, $loser, $firstTurn];
+    }
+
+    private function fetchUserOrCreate(string $name): KeyforgeUser
+    {
+        $user = $this->userRepository->byName($name);
+
+        if (null === $user) {
+            $user = KeyforgeUser::create(Uuid::v4(), $name, true);
+            $this->userRepository->save($user);
+        }
+
+        return $user;
+    }
+
+    private function getDecks(string $winnerDeck, string $loserDeck): array
+    {
+        if (Uuid::isValid($winnerDeck)) {
+            $winnerDeck = $this->importDeckService->execute(Uuid::from($winnerDeck));
+        } else {
+            $winnerDeck = $this->deckRepository->byNames($winnerDeck)[0] ?? null;
+        }
+
+        if (Uuid::isValid($loserDeck)) {
+            $loserDeck = $this->importDeckService->execute(Uuid::from($loserDeck));
+        } else {
+            $loserDeck = $this->deckRepository->byNames($loserDeck)[0] ?? null;
+        }
+
+        if (null === $winnerDeck || null === $loserDeck) {
+            throw new \Exception('Deck not found');
+        }
+
+        return [$winnerDeck, $loserDeck];
     }
 }
