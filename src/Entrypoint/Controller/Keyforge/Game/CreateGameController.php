@@ -56,6 +56,8 @@ final class CreateGameController extends Controller
                     $request->request->get('loserScore'),
                     $request->request->get('firstTurnId') === '' ? null : $request->request->get('firstTurnId'),
                     $request->request->get('date'),
+                    $request->request->get('competition'),
+                    $request->request->get('notes'),
                 ));
 
                 return $this->render(

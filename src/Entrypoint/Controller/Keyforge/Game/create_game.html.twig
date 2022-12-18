@@ -12,6 +12,24 @@
     <div class="shadow-lg p-3 mb-5 bg-white rounded">
         <form action="{{ path('keyforge_game_create') }}" method="post">
             <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="competition" class="form-label">Competition</label>
+                        <select class="form-select" name="competition" id="competition">
+                            <option value="FRIENDS" selected>With friends</option>
+                            <option value="TCO_CASUAL">TCO Casual</option>
+                            <option value="TCO_COMPETITIVE">TCO Competitive</option>
+                            <option value="NKFL_LEAGUE_SEASON_19">NKFL League Season 19</option>
+                            <option value="NKFL_LEAGUE_CUP_SEASON_19">NKFL League Cup Season 19</option>
+                            <option value="NKFL_ARCHON_TOURNAMENT">NKFL Archon Tournament</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="divider py-1"></div>
+
+            <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="winner" class="form-label">Winner</label>
@@ -89,6 +107,13 @@
                 <div class="col-md-6">
                     <label for="date" class="form-label">Date</label> <br>
                     <input class="form-control" type="date" name="date" id="datepicker" min="2022-01-01" max="2030-12-31" required>
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-md-12">
+                    <label for="notes" class="form-label">Notes</label>
+                    <textarea class="form-control" name="notes" id="notes" rows="5"></textarea>
                 </div>
             </div>
 

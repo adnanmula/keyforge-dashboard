@@ -2,6 +2,7 @@
 
 namespace AdnanMula\Cards\Application\Command\Keyforge\Game\Create;
 
+use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeCompetition;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use Assert\Assert;
 
@@ -16,6 +17,8 @@ final class CreateGameCommand
     private int $loserScore;
     private ?Uuid $firstTurn;
     private \DateTimeImmutable $date;
+    private KeyforgeCompetition $competition;
+    private string $notes;
 
     public function __construct(
         $winner,
@@ -27,6 +30,8 @@ final class CreateGameCommand
         $loserScore,
         $firstTurn,
         $date,
+        $competition,
+        $notes,
     ) {
         Assert::lazy()
             ->that($winner, 'winner')->uuid()
@@ -37,7 +42,9 @@ final class CreateGameCommand
             ->that($loserChains, 'loserChains')->integerish()->min(0)
             ->that($loserScore, 'loserScore')->integerish()->min(0)->max(2)
             ->that($firstTurn, 'firstTurn')->nullOr()->uuid()
-            ->that($date, 'date')->date('Y-m-d H:i:s');
+            ->that($date, 'date')->date('Y-m-d H:i:s')
+            ->that($competition, 'competition')->inArray(KeyforgeCompetition::cases())
+            ->that($notes, 'notes')->string()->maxLength(512);
 
         $this->winner = Uuid::from($winner);
         $this->winnerDeck = $winnerDeck;
@@ -50,6 +57,8 @@ final class CreateGameCommand
             ? null
             : Uuid::from($firstTurn);
         $this->date = new \DateTimeImmutable($date);
+        $this->competition = KeyforgeCompetition::fromName($competition);
+        $this->notes = $notes;
     }
 
     public function winner(): Uuid
@@ -95,5 +104,15 @@ final class CreateGameCommand
     public function date(): \DateTimeImmutable
     {
         return $this->date;
+    }
+
+    public function competition(): KeyforgeCompetition
+    {
+        return $this->competition;
+    }
+
+    public function notes(): string
+    {
+        return $this->notes;
     }
 }

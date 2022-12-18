@@ -61,6 +61,8 @@ final class CreateGameCommandHandler
             KeyforgeGameScore::from(3, $command->loserScore()),
             $command->date(),
             new \DateTimeImmutable(),
+            $command->competition(),
+            $command->notes(),
         );
 
         $this->gameRepository->save($game);

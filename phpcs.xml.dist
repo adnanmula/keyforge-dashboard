@@ -45,6 +45,8 @@
     <exclude name="SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingTraversableTypeHintSpecification" />
     <exclude name="Squiz.Functions.MultiLineFunctionDeclaration.BraceOnSameLine" />
     <exclude name="Squiz.WhiteSpace.ScopeClosingBrace.ContentBefore" />
+    <exclude name="SlevomatCodingStandard.ControlStructures.BlockControlStructureSpacing.IncorrectLinesCountAfterControlStructure" />
+    <exclude name="SlevomatCodingStandard.ControlStructures.BlockControlStructureSpacing.IncorrectLinesCountBeforeControlStructure" />
     <!-- TODO enable -->
     <exclude name="SlevomatCodingStandard.Classes.RequireMultiLineMethodSignature.RequiredMultiLineSignature" />
     <exclude name="SlevomatCodingStandard.Functions.RequireMultiLineCall.RequiredMultiLineCall" />

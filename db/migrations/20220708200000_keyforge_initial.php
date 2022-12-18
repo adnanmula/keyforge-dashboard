@@ -43,6 +43,8 @@ final class KeyforgeInitial extends AbstractMigration
                 created_at TIMESTAMP WITH TIME ZONE NULL,
                 winner_chains integer NOT NULL,
                 loser_chains integer NOT NULL,
+                competition character varying(64) NOT NULL,
+                notes character varying(512) NOT NULL,
                 PRIMARY KEY(id)
             )',
         );

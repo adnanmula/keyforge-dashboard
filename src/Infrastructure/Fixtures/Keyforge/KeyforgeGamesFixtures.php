@@ -3,6 +3,7 @@
 namespace AdnanMula\Cards\Infrastructure\Fixtures\Keyforge;
 
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGame;
+use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeCompetition;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeGameScore;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Domain\Service\Persistence\Fixture;
@@ -43,6 +44,8 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                 KeyforgeGameScore::from(3, 2),
                 new \DateTimeImmutable('2022-05-24 16:00:00'),
                 new \DateTimeImmutable('2022-05-24 16:00:00'),
+                KeyforgeCompetition::FRIENDS,
+                '',
             ),
         );
 
@@ -59,6 +62,8 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                 KeyforgeGameScore::from(3, 1),
                 new \DateTimeImmutable('2022-06-14 10:00:00'),
                 new \DateTimeImmutable('2022-06-14 10:00:00'),
+                KeyforgeCompetition::FRIENDS,
+                '',
             ),
         );
 
@@ -75,6 +80,8 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                 KeyforgeGameScore::from(3, 0),
                 new \DateTimeImmutable('2022-07-01 08:44:00'),
                 new \DateTimeImmutable('2022-07-01 08:44:00'),
+                KeyforgeCompetition::FRIENDS,
+                '',
             ),
         );
 
@@ -91,6 +98,8 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                 KeyforgeGameScore::from(3, 2),
                 new \DateTimeImmutable('2022-07-02 00:00:00'),
                 new \DateTimeImmutable('2022-07-02 08:44:00'),
+                KeyforgeCompetition::FRIENDS,
+                '',
             ),
         );
 
@@ -107,6 +116,8 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                 KeyforgeGameScore::from(3, 1),
                 new \DateTimeImmutable('2022-07-03 00:00:00'),
                 new \DateTimeImmutable('2022-07-03 08:15:00'),
+                KeyforgeCompetition::FRIENDS,
+                '',
             ),
         );
 
@@ -123,6 +134,8 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                 KeyforgeGameScore::from(3, 1),
                 new \DateTimeImmutable('2022-07-11 00:00:00'),
                 new \DateTimeImmutable('2022-07-11 02:00:00'),
+                KeyforgeCompetition::FRIENDS,
+                '',
             ),
         );
 
@@ -139,6 +152,8 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                 KeyforgeGameScore::from(3, 2),
                 new \DateTimeImmutable('2022-07-12 00:00:00'),
                 new \DateTimeImmutable('2022-07-12 08:00:00'),
+                KeyforgeCompetition::FRIENDS,
+                '',
             ),
         );
 
@@ -156,6 +171,8 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                 KeyforgeGameScore::from(3, 2),
                 new \DateTimeImmutable('2022-07-03 00:00:00'),
                 new \DateTimeImmutable('2022-07-03 08:45:00'),
+                KeyforgeCompetition::FRIENDS,
+                '',
             ),
         );
 
@@ -172,6 +189,8 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                 KeyforgeGameScore::from(3, 2),
                 new \DateTimeImmutable('2022-07-03 00:00:00'),
                 new \DateTimeImmutable('2022-07-03 08:45:00'),
+                KeyforgeCompetition::FRIENDS,
+                '',
             ),
         );
 
@@ -188,6 +207,8 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                 KeyforgeGameScore::from(3, 2),
                 new \DateTimeImmutable('2022-07-03 00:00:00'),
                 new \DateTimeImmutable('2022-07-03 08:45:00'),
+                KeyforgeCompetition::FRIENDS,
+                '',
             ),
         );
 
@@ -204,6 +225,8 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                 KeyforgeGameScore::from(3, 2),
                 new \DateTimeImmutable('2022-07-23 00:00:00'),
                 new \DateTimeImmutable('2022-07-23 16:01:00'),
+                KeyforgeCompetition::FRIENDS,
+                '',
             ),
         );
 
@@ -220,6 +243,8 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                 KeyforgeGameScore::from(3, 1),
                 new \DateTimeImmutable('2022-07-23 00:00:00'),
                 new \DateTimeImmutable('2022-07-23 16:01:00'),
+                KeyforgeCompetition::NKFL_LEAGUE_SEASON_19,
+                '',
             ),
         );
 
@@ -236,6 +261,8 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                 KeyforgeGameScore::from(3, 1),
                 new \DateTimeImmutable('2022-07-23 00:00:00'),
                 new \DateTimeImmutable('2022-07-23 16:41:00'),
+                KeyforgeCompetition::NKFL_LEAGUE_SEASON_19,
+                '',
             ),
         );
 
@@ -260,8 +287,8 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
         $stmt = $this->connection->prepare(
             \sprintf(
                 '
-                    INSERT INTO %s (id, winner, loser, winner_deck, loser_deck, first_turn, score, date, created_at, winner_chains, loser_chains)
-                    VALUES (:id, :winner, :loser, :winner_deck, :loser_deck, :first_turn, :score, :date, :created_at, :winner_chains, :loser_chains)
+                    INSERT INTO %s (id, winner, loser, winner_deck, loser_deck, first_turn, score, date, created_at, winner_chains, loser_chains, competition, notes)
+                    VALUES (:id, :winner, :loser, :winner_deck, :loser_deck, :first_turn, :score, :date, :created_at, :winner_chains, :loser_chains, :competition, :notes)
                     ON CONFLICT (id) DO UPDATE SET
                         id = :id,
                         winner = :winner,
@@ -273,7 +300,9 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                         date = :date,
                         created_at = :created_at,
                         winner_chains = :winner_chains,
-                        loser_chains = :loser_chains
+                        loser_chains = :loser_chains,
+                        competition = :competition,
+                        notes = :notes
                     ',
                 self::TABLE,
             ),
@@ -290,6 +319,8 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
         $stmt->bindValue(':score', \json_encode($game->score()));
         $stmt->bindValue(':date', $game->date()->format(\DateTimeInterface::ATOM));
         $stmt->bindValue(':created_at', $game->createdAt()->format(\DateTimeInterface::ATOM));
+        $stmt->bindValue(':competition', $game->competition()->name);
+        $stmt->bindValue(':notes', $game->notes());
 
         $stmt->execute();
     }

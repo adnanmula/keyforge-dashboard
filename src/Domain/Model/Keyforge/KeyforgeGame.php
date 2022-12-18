@@ -2,6 +2,7 @@
 
 namespace AdnanMula\Cards\Domain\Model\Keyforge;
 
+use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeCompetition;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeGameScore;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 
@@ -19,6 +20,8 @@ final class KeyforgeGame
         private KeyforgeGameScore $score,
         private \DateTimeImmutable $date,
         private \DateTimeImmutable $createdAt,
+        private KeyforgeCompetition $competition,
+        private string $notes,
     ) {}
 
     public function id(): Uuid
@@ -74,5 +77,15 @@ final class KeyforgeGame
     public function createdAt(): \DateTimeImmutable
     {
         return $this->createdAt;
+    }
+
+    public function competition(): KeyforgeCompetition
+    {
+        return $this->competition;
+    }
+
+    public function notes(): string
+    {
+        return $this->notes;
     }
 }
