@@ -9,12 +9,16 @@
   <rule ref="PSR2" />
 
   <rule ref="vendor/slevomat/coding-standard/SlevomatCodingStandard/ruleset.xml">
+    <exclude name="SlevomatCodingStandard.Classes.ClassLength.ClassTooLong" />
     <exclude name="SlevomatCodingStandard.Classes.ClassStructure.IncorrectGroupOrder" />
     <exclude name="SlevomatCodingStandard.Classes.DisallowConstructorPropertyPromotion.DisallowedConstructorPropertyPromotion" />
     <exclude name="SlevomatCodingStandard.Classes.RequireAbstractOrFinal.ClassNeitherAbstractNorFinal" />
     <exclude name="SlevomatCodingStandard.Classes.RequireConstructorPropertyPromotion.RequiredConstructorPropertyPromotion" />
     <exclude name="SlevomatCodingStandard.Classes.RequireSingleLineMethodSignature.RequiredSingleLineSignature" />
     <exclude name="SlevomatCodingStandard.Classes.SuperfluousInterfaceNaming.SuperfluousSuffix" />
+    <exclude name="SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh" />
+    <exclude name="SlevomatCodingStandard.ControlStructures.BlockControlStructureSpacing.IncorrectLinesCountAfterControlStructure" />
+    <exclude name="SlevomatCodingStandard.ControlStructures.BlockControlStructureSpacing.IncorrectLinesCountBeforeControlStructure" />
     <exclude name="SlevomatCodingStandard.ControlStructures.DisallowNullSafeObjectOperator.DisallowedNullSafeObjectOperator" />
     <exclude name="SlevomatCodingStandard.ControlStructures.DisallowYodaComparison.DisallowedYodaComparison" />
     <exclude name="SlevomatCodingStandard.ControlStructures.EarlyExit.EarlyExitNotUsed" />
@@ -22,6 +26,7 @@
     <exclude name="SlevomatCodingStandard.ControlStructures.RequireMultiLineTernaryOperator.MultiLineTernaryOperatorNotUsed" />
     <exclude name="SlevomatCodingStandard.ControlStructures.RequireYodaComparison.RequiredYodaComparison" />
     <exclude name="SlevomatCodingStandard.Exceptions.DisallowNonCapturingCatch.DisallowedNonCapturingCatch" />
+    <exclude name="SlevomatCodingStandard.Files.FileLength.FileTooLong" />
     <exclude name="SlevomatCodingStandard.Files.FunctionLength.FunctionLength" />
     <exclude name="SlevomatCodingStandard.Files.LineLength.LineTooLong" />
     <exclude name="SlevomatCodingStandard.Files.TypeNameMatchesFileName.NoMatchBetweenTypeNameAndFileName" />
@@ -45,8 +50,6 @@
     <exclude name="SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingTraversableTypeHintSpecification" />
     <exclude name="Squiz.Functions.MultiLineFunctionDeclaration.BraceOnSameLine" />
     <exclude name="Squiz.WhiteSpace.ScopeClosingBrace.ContentBefore" />
-    <exclude name="SlevomatCodingStandard.ControlStructures.BlockControlStructureSpacing.IncorrectLinesCountAfterControlStructure" />
-    <exclude name="SlevomatCodingStandard.ControlStructures.BlockControlStructureSpacing.IncorrectLinesCountBeforeControlStructure" />
     <!-- TODO enable -->
     <exclude name="SlevomatCodingStandard.Classes.RequireMultiLineMethodSignature.RequiredMultiLineSignature" />
     <exclude name="SlevomatCodingStandard.Functions.RequireMultiLineCall.RequiredMultiLineCall" />

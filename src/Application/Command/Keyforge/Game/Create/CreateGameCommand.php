@@ -3,7 +3,6 @@
 namespace AdnanMula\Cards\Application\Command\Keyforge\Game\Create;
 
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeCompetition;
-use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use Assert\Assert;
 
 final class CreateGameCommand

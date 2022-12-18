@@ -29,7 +29,7 @@ final class ImportDeckFromDokService implements ImportDeckService
 
         try {
             $response = $this->dokClient->request(Request::METHOD_GET, '/public-api/v3/decks/' . $uuid);
-        } catch (\Throwable $a) {
+        } catch (\Throwable) {
             return null;
         }
 

@@ -144,17 +144,13 @@ final class CreateGameCommandHandler
 
     private function getDecks(string $winnerDeck, string $loserDeck): array
     {
-        if (Uuid::isValid($winnerDeck)) {
-            $winnerDeck = $this->importDeckService->execute(Uuid::from($winnerDeck));
-        } else {
-            $winnerDeck = $this->deckRepository->byNames($winnerDeck)[0] ?? null;
-        }
+        $winnerDeck = Uuid::isValid($winnerDeck)
+            ? $this->importDeckService->execute(Uuid::from($winnerDeck))
+            : $this->deckRepository->byNames($winnerDeck)[0] ?? null;
 
-        if (Uuid::isValid($loserDeck)) {
-            $loserDeck = $this->importDeckService->execute(Uuid::from($loserDeck));
-        } else {
-            $loserDeck = $this->deckRepository->byNames($loserDeck)[0] ?? null;
-        }
+        $loserDeck = Uuid::isValid($loserDeck)
+            ? $this->importDeckService->execute(Uuid::from($loserDeck))
+            : $this->deckRepository->byNames($loserDeck)[0] ?? null;
 
         if (null === $winnerDeck || null === $loserDeck) {
             throw new \Exception('Deck not found');
