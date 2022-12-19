@@ -68,6 +68,8 @@ final class GetGamesQueryHandler
                 'score' => $game->score()->winnerScore() . '/' . $game->score()->loserScore(),
                 'first_turn' => null === $game->firstTurn() ? null : $indexedUsers[$game->firstTurn()->value()],
                 'date' => $game->date()->format('Y-m-d'),
+                'competition' => $game->competition()->value,
+                'notes' => $game->notes(),
             ];
         }
 
