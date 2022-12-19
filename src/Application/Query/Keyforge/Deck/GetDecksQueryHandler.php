@@ -169,16 +169,11 @@ final class GetDecksQueryHandler
     /** @return array<KeyforgeDeck> */
     private function removeNotOwnedStats(KeyforgeDeck ...$decks): array
     {
-        $filters = [new Filters(
-            FilterType::AND,
-            FilterType::OR,
-        )];
-
         $users = $this->userRepository->all(false);
         $nonExternalUsersIds = \array_map(static fn (KeyforgeUser $user) => $user->id()->value(), $users);
 
         foreach ($decks as $deck) {
-            $games = $this->gameRepository->search(new Criteria(null, null, null, ...$filters));
+            $games = $this->gameRepository->search(new Criteria(null, null, null));
 
             $games = \array_values(\array_filter($games, static function (KeyforgeGame $game) use ($nonExternalUsersIds) {
                 return \in_array($game->winner()->value(), $nonExternalUsersIds, true)
