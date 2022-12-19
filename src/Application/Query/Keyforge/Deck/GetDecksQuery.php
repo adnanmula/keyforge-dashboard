@@ -37,7 +37,8 @@ final class GetDecksQuery
             ->that($house, 'house')->nullOr()->string()->notBlank()
             ->that($deckId, 'deckId')->nullOr()->uuid()
             ->that($owner, 'owner')->nullOr()->uuid()
-            ->that($onlyOwned, 'onlyOwned')->boolean();
+            ->that($onlyOwned, 'onlyOwned')->boolean()
+            ->verifyNow();
 
         $this->start = null === $start ? null : (int) $start;
         $this->length = null === $length ? null : (int) $length;

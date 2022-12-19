@@ -14,7 +14,8 @@ final class ClaimDeckCommand
     {
         Assert::lazy()
             ->that($userId, 'userId')->uuid()
-            ->that($deckId, 'deckId')->uuid();
+            ->that($deckId, 'deckId')->uuid()
+            ->verifyNow();
 
         $this->userId = Uuid::from($userId);
         $this->deckId = Uuid::from($deckId);

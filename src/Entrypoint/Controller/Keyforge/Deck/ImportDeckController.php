@@ -3,6 +3,7 @@
 namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\Deck;
 
 use AdnanMula\Cards\Application\Command\Keyforge\Deck\Import\ImportDeckCommand;
+use AdnanMula\Cards\Domain\Model\Shared\User;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
 use Ramsey\Uuid\Exception\InvalidUuidStringException;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,9 +19,12 @@ final class ImportDeckController extends Controller
 
         if ($request->getMethod() === Request::METHOD_POST) {
             try {
-                $this->bus->dispatch(new ImportDeckCommand($request->request->get('deck')));
+                /** @var User $user */
+                $user = $this->getUser();
 
-                return $this->render('Keyforge/Deck/import_deck.html.twig', ['result' => 'Que bien jugado caralmendra', 'success' => true]);
+                $this->bus->dispatch(new ImportDeckCommand($request->request->get('deck'), $user->id()->value()));
+
+                return $this->render('Keyforge/Deck/import_deck.html.twig', ['result' => 'Que bien jugado caralmendra, ir a barajas', 'success' => true]);
             } catch (InvalidUuidStringException) {
                 return $this->render('Keyforge/Deck/import_deck.html.twig', ['result' => 'Esto  no es un id, melón', 'success' => false]);
             } catch (\Throwable $exception) {

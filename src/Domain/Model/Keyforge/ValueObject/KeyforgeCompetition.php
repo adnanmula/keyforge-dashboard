@@ -30,4 +30,16 @@ enum KeyforgeCompetition: string
                 return self::FRIENDS;
         }
     }
+
+    public static function allowedValues(): array
+    {
+        return [
+            self::FRIENDS->name,
+            self::TCO_CASUAL->name,
+            self::TCO_COMPETITIVE->name,
+            self::NKFL_LEAGUE_SEASON_19->name,
+            self::NKFL_LEAGUE_CUP_SEASON_19->name,
+            self::NKFL_ARCHON_TOURNAMENT->name,
+        ];
+    }
 }

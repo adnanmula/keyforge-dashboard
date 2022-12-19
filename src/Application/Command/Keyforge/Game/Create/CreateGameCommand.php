@@ -41,9 +41,10 @@ final class CreateGameCommand
             ->that($loserChains, 'loserChains')->integerish()->min(0)
             ->that($loserScore, 'loserScore')->integerish()->min(0)->max(2)
             ->that($firstTurn, 'firstTurn')->nullOr()->string()
-            ->that($date, 'date')->date('Y-m-d H:i:s')
-            ->that($competition, 'competition')->inArray(KeyforgeCompetition::cases())
-            ->that($notes, 'notes')->string()->maxLength(512);
+            ->that($date, 'date')->date('Y-m-d')
+            ->that($competition, 'competition')->inArray(KeyforgeCompetition::allowedValues())
+            ->that($notes, 'notes')->string()->maxLength(512)
+            ->verifyNow();
 
         $this->winner = $winner;
         $this->winnerDeck = $winnerDeck;

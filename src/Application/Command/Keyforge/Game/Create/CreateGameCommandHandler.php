@@ -145,11 +145,11 @@ final class CreateGameCommandHandler
     private function getDecks(string $winnerDeck, string $loserDeck): array
     {
         $winnerDeck = Uuid::isValid($winnerDeck)
-            ? $this->importDeckService->execute(Uuid::from($winnerDeck))
+            ? $this->importDeckService->execute(Uuid::from($winnerDeck), null)
             : $this->deckRepository->byNames($winnerDeck)[0] ?? null;
 
         $loserDeck = Uuid::isValid($loserDeck)
-            ? $this->importDeckService->execute(Uuid::from($loserDeck))
+            ? $this->importDeckService->execute(Uuid::from($loserDeck), null)
             : $this->deckRepository->byNames($loserDeck)[0] ?? null;
 
         if (null === $winnerDeck || null === $loserDeck) {

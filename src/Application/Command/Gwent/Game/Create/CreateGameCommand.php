@@ -29,7 +29,8 @@ final class CreateGameCommand
             ->that($coin, 'coin')->string()->inArray([GwentCoin::BLUE->name, GwentCoin::RED->name])
             ->that($playerScore, 'playerScore')->integerish()->min(0)->max(2)
             ->that($opponentScore, 'opponentScore')->integerish()->min(0)->max(2)
-            ->that($date, 'date')->date('Y-m-d H:i:s');
+            ->that($date, 'date')->date('Y-m-d H:i:s')
+            ->verifyNow();
 
 
         $this->userId = $userId;

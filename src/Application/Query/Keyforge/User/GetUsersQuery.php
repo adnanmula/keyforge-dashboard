@@ -17,7 +17,8 @@ final class GetUsersQuery
             ->that($page, 'page')->nullOr()->integerish()->greaterOrEqualThan(0)
             ->that($pageSize, 'page_size')->nullOr()->integerish()->greaterThan(0)
             ->that($withGames, 'with_games')->boolean()
-            ->that($withExternal, 'with_external')->boolean();
+            ->that($withExternal, 'with_external')->boolean()
+            ->verifyNow();
 
         $this->page = null === $page ? null : (int) $page;
         $this->pageSize = null === $pageSize ? null : (int) $pageSize;

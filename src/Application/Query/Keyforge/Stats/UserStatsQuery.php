@@ -11,7 +11,7 @@ final class UserStatsQuery
 
     public function __construct($userId)
     {
-        Assert::lazy()->that($userId, 'user_id')->uuid();
+        Assert::lazy()->that($userId, 'user_id')->uuid()->verifyNow();
 
         $this->userId = Uuid::from($userId);
     }

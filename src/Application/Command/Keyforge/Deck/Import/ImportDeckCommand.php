@@ -8,16 +8,26 @@ use Assert\Assert;
 final class ImportDeckCommand
 {
     private Uuid $deckId;
+    private Uuid $userId;
 
-    public function __construct($deckId)
+    public function __construct($deckId, $userId)
     {
-        Assert::lazy()->that($deckId, 'deckId')->uuid();
+        Assert::lazy()
+            ->that($deckId, 'deckId')->uuid()
+            ->that($userId, 'userId')->uuid()
+            ->verifyNow();
 
         $this->deckId = Uuid::from($deckId);
+        $this->userId = Uuid::from($userId);
     }
 
     public function deckId(): Uuid
     {
         return $this->deckId;
+    }
+
+    public function userId(): Uuid
+    {
+        return $this->userId;
     }
 }

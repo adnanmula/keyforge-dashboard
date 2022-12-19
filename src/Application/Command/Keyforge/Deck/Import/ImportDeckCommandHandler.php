@@ -12,6 +12,6 @@ final class ImportDeckCommandHandler
 
     public function __invoke(ImportDeckCommand $command): void
     {
-        $this->service->execute($command->deckId());
+        $this->service->execute($command->deckId(), $command->userId());
     }
 }

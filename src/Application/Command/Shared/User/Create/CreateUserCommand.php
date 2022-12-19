@@ -15,7 +15,8 @@ final class CreateUserCommand
         Assert::lazy()
             ->that($name, 'name')->string()->notBlank()
             ->that($password, 'password')->string()->notBlank()
-            ->that($roles, 'roles')->all()->string();
+            ->that($roles, 'roles')->all()->string()
+            ->verifyNow();
 
         $this->name = $name;
         $this->password = $password;

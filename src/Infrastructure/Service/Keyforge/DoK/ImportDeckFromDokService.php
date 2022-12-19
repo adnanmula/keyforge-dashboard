@@ -19,7 +19,7 @@ final class ImportDeckFromDokService implements ImportDeckService
         private HttpClientInterface $dokClient,
     ) {}
 
-    public function execute(Uuid $uuid): ?KeyforgeDeck
+    public function execute(Uuid $uuid, ?Uuid $owner = null): ?KeyforgeDeck
     {
         $deck = $this->repository->byId($uuid);
 
@@ -50,7 +50,7 @@ final class ImportDeckFromDokService implements ImportDeckService
             0,
             0,
             $deck,
-            null,
+            $owner,
         );
 
         $this->repository->save($newDeck);
