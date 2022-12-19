@@ -86,7 +86,7 @@ final class GetDecksController extends Controller
                 $sorting,
                 null,
                 $searchOwner,
-                true,
+                $request->get('onlyOwned') === 'true',
             )),
         );
 

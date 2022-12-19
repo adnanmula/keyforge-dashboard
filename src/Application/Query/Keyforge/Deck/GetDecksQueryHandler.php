@@ -6,6 +6,8 @@ use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeck;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGame;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGameRepository;
+use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUser;
+use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUserRepository;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Infrastructure\Criteria\Criteria;
 use AdnanMula\Cards\Infrastructure\Criteria\Filter\Filter;
@@ -23,6 +25,7 @@ final class GetDecksQueryHandler
 {
     public function __construct(
         private KeyforgeDeckRepository $repository,
+        private KeyforgeUserRepository $userRepository,
         private KeyforgeGameRepository $gameRepository,
     ) {}
 
@@ -88,6 +91,14 @@ final class GetDecksQueryHandler
             }
         }
 
+        if ($query->onlyOwned()) {
+            $decks = $this->removeNotOwnedStats(...$decks);
+
+            if (null !== $query->sorting() && $query->sorting()->has('wins')) {
+                $decks = $this->reorderDecks($query->sorting()->get('wins'), ...$decks);
+            }
+        }
+
         $countCriteria = new Criteria(
             null,
             null,
@@ -144,6 +155,51 @@ final class GetDecksQueryHandler
                 }
 
                 if ($game->loser()->equalTo($userId) && $game->loserDeck()->equalTo($deck->id())) {
+                    $deckLosses++;
+                }
+            }
+
+            $deck->updateWins($deckWins);
+            $deck->updateLosses($deckLosses);
+        }
+
+        return $decks;
+    }
+
+    /** @return array<KeyforgeDeck> */
+    private function removeNotOwnedStats(KeyforgeDeck ...$decks): array
+    {
+        $filters = [new Filters(
+            FilterType::AND,
+            FilterType::OR,
+        )];
+
+        $users = $this->userRepository->all(false);
+        $nonExternalUsersIds = \array_map(static fn (KeyforgeUser $user) => $user->id()->value(), $users);
+
+        foreach ($decks as $deck) {
+            $games = $this->gameRepository->search(new Criteria(null, null, null, ...$filters));
+
+            $games = \array_values(\array_filter($games, static function (KeyforgeGame $game) use ($nonExternalUsersIds) {
+                return \in_array($game->winner()->value(), $nonExternalUsersIds, true)
+                    && \in_array($game->loser()->value(), $nonExternalUsersIds, true);
+            }));
+
+            $deckWins = 0;
+            $deckLosses = 0;
+
+            /** @var KeyforgeGame $game */
+            foreach ($games as $game) {
+                if (false === $game->winnerDeck()->equalTo($deck->id())
+                    && false === $game->loserDeck()->equalTo($deck->id())) {
+                    continue;
+                }
+
+                if ($game->winnerDeck()->equalTo($deck->id())) {
+                    $deckWins++;
+                }
+
+                if ($game->loserDeck()->equalTo($deck->id())) {
                     $deckLosses++;
                 }
             }
