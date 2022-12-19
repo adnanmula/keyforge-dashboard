@@ -7,7 +7,7 @@ use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 interface KeyforgeUserRepository
 {
     /** @return array<KeyforgeUser> */
-    public function all(): array;
+    public function all(bool $withExternal): array;
 
     public function byId(Uuid $id): ?KeyforgeUser;
 

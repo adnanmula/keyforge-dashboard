@@ -23,7 +23,8 @@ final class GetUsersQueryHandler
 
     public function __invoke(GetUsersQuery $query): array
     {
-        $users = $this->repository->all();
+        //TODO criteria
+        $users = $this->repository->all($query->withExternal());
 
         if (false === $query->withGames()) {
             return $users;

@@ -13,13 +13,17 @@ final class KeyforgeUserDbalRepository extends DbalRepository implements Keyforg
 {
     private const TABLE = 'keyforge_users';
 
-    public function all(): array
+    public function all(bool $withExternal): array
     {
-        $result = $this->connection->createQueryBuilder()
+        $query = $this->connection->createQueryBuilder()
             ->select('a.id, a.name, a.external')
-            ->from(self::TABLE, 'a')
-            ->execute()
-            ->fetchAllAssociative();
+            ->from(self::TABLE, 'a');
+
+        if (false === $withExternal) {
+            $query->andWhere('a.external is false');
+        }
+
+        $result = $query->execute()->fetchAllAssociative();
 
         return \array_map(fn (array $row) => $this->map($row), $result);
     }

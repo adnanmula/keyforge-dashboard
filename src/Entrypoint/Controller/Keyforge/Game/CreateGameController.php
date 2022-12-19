@@ -20,7 +20,7 @@ final class CreateGameController extends Controller
     public function __invoke(Request $request): Response
     {
         $users = $this->extractResult(
-            $this->bus->dispatch(new GetUsersQuery(null, null, false)),
+            $this->bus->dispatch(new GetUsersQuery(null, null, false, false)),
         );
 
         $decks = $this->extractResult(

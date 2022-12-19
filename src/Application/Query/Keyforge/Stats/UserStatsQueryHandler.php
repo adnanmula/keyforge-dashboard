@@ -4,7 +4,9 @@ namespace AdnanMula\Cards\Application\Query\Keyforge\Stats;
 
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeck;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeckRepository;
+use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGame;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGameRepository;
+use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUser;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUserRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeDeckHouses;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeHouse;
@@ -59,6 +61,15 @@ final class UserStatsQueryHandler
 
         $users = $this->userRepository->byIds(...$userIds);
 
+        $nonExternalUsers = \array_values(\array_filter($users, static fn (KeyforgeUser $user) => $user->external() === false));
+
+        $nonExternalUsersIds = \array_map(static fn (KeyforgeUser $user) => $user->id()->value(), $nonExternalUsers);
+
+        $games = \array_values(\array_filter($games, static function (KeyforgeGame $game) use ($nonExternalUsersIds) {
+            return \in_array($game->winner()->value(), $nonExternalUsersIds, true)
+                && \in_array($game->loser()->value(), $nonExternalUsersIds, true);
+        }));
+
         $indexedDecks = [];
         $indexedDeckSets = [];
         /** @var array<KeyforgeDeckHouses> $indexedDeckHouses */
@@ -73,7 +84,7 @@ final class UserStatsQueryHandler
             $indexedDeckSets[$deck->id()->value()] = $deck->set()->fullName();
             $indexedDeckHouses[$deck->id()->value()] = $deck->houses();
         }
-        
+
         $bestAndWorseDecks = [];
 
         foreach ($indexedDecks as $id => $deck) {
@@ -194,6 +205,10 @@ final class UserStatsQueryHandler
         $resultWinsByUser = [];
 
         foreach ($winRateVsUser as $userId => $winRate) {
+            if (false === \in_array($userId, $nonExternalUsersIds, true)) {
+                continue;
+            }
+
             $name = $indexedUsers[$userId];
 
             $resultWinRateByUser[$name] = $this->winRate($winRate['wins'], $winRate['losses']);

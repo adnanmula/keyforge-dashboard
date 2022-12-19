@@ -128,6 +128,10 @@
                     },
                     {
                         render: function (data, type, row) {
+                            if ('' === row.notes) {
+                                return '-';
+                            }
+
                             $(function () {
                                 $('[data-toggle="tooltip"]').tooltip({
                                     'container': 'body',
