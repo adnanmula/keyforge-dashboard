@@ -86,6 +86,7 @@ final class GetDecksController extends Controller
                 $sorting,
                 null,
                 $searchOwner,
+                true,
             )),
         );
 

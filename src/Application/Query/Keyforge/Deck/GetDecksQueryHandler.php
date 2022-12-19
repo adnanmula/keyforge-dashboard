@@ -14,6 +14,7 @@ use AdnanMula\Cards\Infrastructure\Criteria\Filter\FilterType;
 use AdnanMula\Cards\Infrastructure\Criteria\FilterField\ArrayElementFilterField;
 use AdnanMula\Cards\Infrastructure\Criteria\FilterField\FilterField;
 use AdnanMula\Cards\Infrastructure\Criteria\FilterValue\FilterOperator;
+use AdnanMula\Cards\Infrastructure\Criteria\FilterValue\NullFilterValue;
 use AdnanMula\Cards\Infrastructure\Criteria\FilterValue\StringFilterValue;
 use AdnanMula\Cards\Infrastructure\Criteria\Sorting\Order;
 use AdnanMula\Cards\Infrastructure\Criteria\Sorting\OrderType;
@@ -51,6 +52,10 @@ final class GetDecksQueryHandler
 
         if (null !== $query->deck()) {
             $expressions[] = new Filter(new FilterField('name'), new StringFilterValue($query->deck()), FilterOperator::CONTAINS);
+        }
+
+        if ($query->onlyOwned()) {
+            $expressions[] = new Filter(new FilterField('owner'), new NullFilterValue(), FilterOperator::IS_NOT_NULL);
         }
 
         $filters = [new Filters(FilterType::AND, FilterType::AND, ...$expressions)];

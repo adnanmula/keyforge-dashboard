@@ -16,6 +16,7 @@ final class GetDecksQuery
     private ?Sorting $sorting;
     private ?Uuid $deckId;
     private ?Uuid $owner;
+    private bool $onlyOwned;
 
     public function __construct(
         $start,
@@ -26,6 +27,7 @@ final class GetDecksQuery
         ?Sorting $sorting,
         ?string $deckId = null,
         ?string $owner = null,
+        bool $onlyOwned = false,
     ) {
         Assert::lazy()
             ->that($start, 'start')->nullOr()->integerish()->greaterOrEqualThan(0)
@@ -34,7 +36,8 @@ final class GetDecksQuery
             ->that($set, 'set')->nullOr()->string()->notBlank()
             ->that($house, 'house')->nullOr()->string()->notBlank()
             ->that($deckId, 'deckId')->nullOr()->uuid()
-            ->that($owner, 'owner')->nullOr()->uuid();
+            ->that($owner, 'owner')->nullOr()->uuid()
+            ->that($onlyOwned, 'onlyOwned')->boolean();
 
         $this->start = null === $start ? null : (int) $start;
         $this->length = null === $length ? null : (int) $length;
@@ -44,6 +47,7 @@ final class GetDecksQuery
         $this->sorting = $sorting;
         $this->deckId = null !== $deckId ? Uuid::from($deckId) : null;
         $this->owner = null !== $owner ? Uuid::from($owner) : null;
+        $this->onlyOwned = $onlyOwned;
     }
 
     public function start(): ?int
@@ -84,5 +88,10 @@ final class GetDecksQuery
     public function owner(): ?Uuid
     {
         return $this->owner;
+    }
+
+    public function onlyOwned(): bool
+    {
+        return $this->onlyOwned;
     }
 }
