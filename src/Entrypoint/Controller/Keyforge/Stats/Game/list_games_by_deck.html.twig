@@ -3,19 +3,31 @@
 {% block title %}Games{% endblock %}
 
 {% block body %}
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip({
+                'container': 'body',
+                'placement': 'right'
+            })
+        })
+    </script>
+
     <div class="shadow-lg p-3 mb-5 bg-white rounded">
         <div class="d-flex flex-row">
             {% if userId is defined and userId is not null %}
-                <h4>Your games with {{ deck_name }}</h4>
+                <h4>Your games with {{ deck_name }}
+                    {% if (null != deck_owner) %}
+                        <i class="bi bi-info-circle" data-toggle="tooltip" title="Owner {{ deck_owner }}"></i>
+                    {% endif %}
+                </h4>
             {% else %}
-                <h4>Games of {{ deck_name }}</h4>
+                <h4>Games of {{ deck_name }}
+                    {% if (null != deck_owner) %}
+                        <i class="bi bi-info-circle" data-toggle="tooltip" title="Owner {{ deck_owner }}"></i>
+                    {% endif %}
+                </h4>
             {% endif %}
         </div>
-
-        {% if (null != deck_owner) %}
-{#            <h6><a href="/keyforge/games/user/{{ deck_owner }}" target="_blank">Claimed</a></h6>#}
-            <h6>Claimed</h6>
-        {% endif %}
 
         <div class="alert" id="result" style="display: none"></div>
 
@@ -24,9 +36,9 @@
             <a href="https://decksofkeyforge.com/decks/{{ reference }}" target="_blank"><img class="img-thumbnail" width="40px" style="min-width: 40px" src="{{ asset('assets/keyforge/logos/dok.svg') }}" alt="DoK"/></a>
             <a href="https://keyforgegame.com/deck-details/{{ reference }}" target="_blank"><img class="img-thumbnail" width="50px" style="min-width: 50px" src="{{ asset('assets/keyforge/logos/vault.png') }}" alt="Vault"/></a>
 
-            {% if (is_granted('ROLE_KEYFORGE')) and null == deck_owner %}
-                <div class="btn btn-sm btn-dark" id="claimDeckButton">Claim</div>
-            {% endif %}
+{#            {% if (is_granted('ROLE_KEYFORGE')) and null == deck_owner %}#}
+{#                <div class="btn btn-sm btn-dark" id="claimDeckButton">Claim</div>#}
+{#            {% endif %}#}
         </div>
 
         <table id="gamesList" class="table table-responsive-sm table-hover" style="width:100%;">
