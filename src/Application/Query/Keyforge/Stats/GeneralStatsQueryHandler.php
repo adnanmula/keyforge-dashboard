@@ -7,6 +7,12 @@ use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGameRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeHouse;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeSet;
 use AdnanMula\Cards\Infrastructure\Criteria\Criteria;
+use AdnanMula\Cards\Infrastructure\Criteria\Filter\Filter;
+use AdnanMula\Cards\Infrastructure\Criteria\Filter\Filters;
+use AdnanMula\Cards\Infrastructure\Criteria\Filter\FilterType;
+use AdnanMula\Cards\Infrastructure\Criteria\FilterField\FilterField;
+use AdnanMula\Cards\Infrastructure\Criteria\FilterValue\FilterOperator;
+use AdnanMula\Cards\Infrastructure\Criteria\FilterValue\NullFilterValue;
 
 final class GeneralStatsQueryHandler
 {
@@ -17,28 +23,20 @@ final class GeneralStatsQueryHandler
 
     public function __invoke(GeneralStatsQuery $query): array
     {
-        $decks = $this->deckRepository->search(new Criteria(null, null, null));
+        $decks = $this->deckRepository->search(
+            new Criteria(
+                null,
+                null,
+                null,
+                new Filters(
+                    FilterType::AND,
+                    FilterType::AND,
+                    new Filter(new FilterField('owner'), new NullFilterValue(), FilterOperator::IS_NOT_NULL),
+                ),
+            ),
+        );
 
-        $housePresence = [
-            KeyforgeHouse::SANCTUM->name => 0,
-            KeyforgeHouse::DIS->name => 0,
-            KeyforgeHouse::MARS->name => 0,
-            KeyforgeHouse::STAR_ALLIANCE->name => 0,
-            KeyforgeHouse::SAURIAN->name => 0,
-            KeyforgeHouse::SHADOWS->name => 0,
-            KeyforgeHouse::UNTAMED->name => 0,
-            KeyforgeHouse::BROBNAR->name => 0,
-            KeyforgeHouse::UNFATHOMABLE->name => 0,
-            KeyforgeHouse::LOGOS->name => 0,
-        ];
-
-        $setPresence = [
-            KeyforgeSet::CotA->name => 0,
-            KeyforgeSet::AoA->name => 0,
-            KeyforgeSet::WC->name => 0,
-            KeyforgeSet::MM->name => 0,
-            KeyforgeSet::DT->name => 0,
-        ];
+        [$setWins, $houseWins, $houseLosses, $housePresence, $setLosses, $setPresence] = $this->initializeCounters();
 
         $maxSas = 0;
         $maxSasResult = [];
@@ -99,50 +97,14 @@ final class GeneralStatsQueryHandler
 
         $games = $this->gameRepository->all(null);
 
-        $setWins = [
-            KeyforgeSet::CotA->name => 0,
-            KeyforgeSet::AoA->name => 0,
-            KeyforgeSet::WC->name => 0,
-            KeyforgeSet::MM->name => 0,
-            KeyforgeSet::DT->name => 0,
-        ];
-
-        $houseWins = [
-            KeyforgeHouse::SANCTUM->name => 0,
-            KeyforgeHouse::DIS->name => 0,
-            KeyforgeHouse::MARS->name => 0,
-            KeyforgeHouse::STAR_ALLIANCE->name => 0,
-            KeyforgeHouse::SAURIAN->name => 0,
-            KeyforgeHouse::SHADOWS->name => 0,
-            KeyforgeHouse::UNTAMED->name => 0,
-            KeyforgeHouse::BROBNAR->name => 0,
-            KeyforgeHouse::UNFATHOMABLE->name => 0,
-            KeyforgeHouse::LOGOS->name => 0,
-        ];
-
-        $setLosses = [
-            KeyforgeSet::CotA->name => 0,
-            KeyforgeSet::AoA->name => 0,
-            KeyforgeSet::WC->name => 0,
-            KeyforgeSet::MM->name => 0,
-            KeyforgeSet::DT->name => 0,
-        ];
-
-        $houseLosses = [
-            KeyforgeHouse::SANCTUM->name => 0,
-            KeyforgeHouse::DIS->name => 0,
-            KeyforgeHouse::MARS->name => 0,
-            KeyforgeHouse::STAR_ALLIANCE->name => 0,
-            KeyforgeHouse::SAURIAN->name => 0,
-            KeyforgeHouse::SHADOWS->name => 0,
-            KeyforgeHouse::UNTAMED->name => 0,
-            KeyforgeHouse::BROBNAR->name => 0,
-            KeyforgeHouse::UNFATHOMABLE->name => 0,
-            KeyforgeHouse::LOGOS->name => 0,
-        ];
+        $gamesCount = 0;
 
         foreach ($games as $game) {
             if (false === \array_key_exists($game->winnerDeck()->value(), $indexedDecks)) {
+                continue;
+            }
+
+            if (false === \array_key_exists($game->loserDeck()->value(), $indexedDecks)) {
                 continue;
             }
 
@@ -161,6 +123,8 @@ final class GeneralStatsQueryHandler
             foreach ($loserDeck->houses()->value() as $house) {
                 $houseLosses[$house->name]++;
             }
+
+            $gamesCount++;
         }
 
         $setWinRate = [
@@ -184,9 +148,8 @@ final class GeneralStatsQueryHandler
             KeyforgeHouse::LOGOS->name => $this->winRate($houseWins[KeyforgeHouse::LOGOS->name], $houseLosses[KeyforgeHouse::LOGOS->name]),
         ];
 
-
-        $totalSetPicks = \count($games) * 2;
-        $totalHousePicks = \count($games) * 6;
+        $totalSetPicks = $gamesCount * 2;
+        $totalHousePicks = $gamesCount * 6;
 
         $setPickRate = [
             KeyforgeSet::CotA->name => $this->pickRate($setWins[KeyforgeSet::CotA->name] + $setLosses[KeyforgeSet::CotA->name], $totalSetPicks),
@@ -213,7 +176,7 @@ final class GeneralStatsQueryHandler
             'deck_count' => \count($decks),
             'set_presence' => $setPresence,
             'house_presence' => $housePresence,
-            'games_played' => \count($games),
+            'games_played' => $gamesCount,
             'deck_win_rate' => $maxWinRateResult,
             'deck_max_sas' => $maxSasResult,
             'deck_min_sas' => $minSasResult,
@@ -244,5 +207,73 @@ final class GeneralStatsQueryHandler
         }
 
         return \round($picks / $games * 100, 2);
+    }
+
+    private function initializeCounters(): array
+    {
+        $setWins = [
+            KeyforgeSet::CotA->name => 0,
+            KeyforgeSet::AoA->name => 0,
+            KeyforgeSet::WC->name => 0,
+            KeyforgeSet::MM->name => 0,
+            KeyforgeSet::DT->name => 0,
+        ];
+
+        $houseWins = [
+            KeyforgeHouse::SANCTUM->name => 0,
+            KeyforgeHouse::DIS->name => 0,
+            KeyforgeHouse::MARS->name => 0,
+            KeyforgeHouse::STAR_ALLIANCE->name => 0,
+            KeyforgeHouse::SAURIAN->name => 0,
+            KeyforgeHouse::SHADOWS->name => 0,
+            KeyforgeHouse::UNTAMED->name => 0,
+            KeyforgeHouse::BROBNAR->name => 0,
+            KeyforgeHouse::UNFATHOMABLE->name => 0,
+            KeyforgeHouse::LOGOS->name => 0,
+        ];
+
+        $houseLosses = [
+            KeyforgeHouse::SANCTUM->name => 0,
+            KeyforgeHouse::DIS->name => 0,
+            KeyforgeHouse::MARS->name => 0,
+            KeyforgeHouse::STAR_ALLIANCE->name => 0,
+            KeyforgeHouse::SAURIAN->name => 0,
+            KeyforgeHouse::SHADOWS->name => 0,
+            KeyforgeHouse::UNTAMED->name => 0,
+            KeyforgeHouse::BROBNAR->name => 0,
+            KeyforgeHouse::UNFATHOMABLE->name => 0,
+            KeyforgeHouse::LOGOS->name => 0,
+        ];
+
+        $housePresence = [
+            KeyforgeHouse::SANCTUM->name => 0,
+            KeyforgeHouse::DIS->name => 0,
+            KeyforgeHouse::MARS->name => 0,
+            KeyforgeHouse::STAR_ALLIANCE->name => 0,
+            KeyforgeHouse::SAURIAN->name => 0,
+            KeyforgeHouse::SHADOWS->name => 0,
+            KeyforgeHouse::UNTAMED->name => 0,
+            KeyforgeHouse::BROBNAR->name => 0,
+            KeyforgeHouse::UNFATHOMABLE->name => 0,
+            KeyforgeHouse::LOGOS->name => 0,
+        ];
+
+        $setLosses = [
+            KeyforgeSet::CotA->name => 0,
+            KeyforgeSet::AoA->name => 0,
+            KeyforgeSet::WC->name => 0,
+            KeyforgeSet::MM->name => 0,
+            KeyforgeSet::DT->name => 0,
+        ];
+
+        $setPresence = [
+            KeyforgeSet::CotA->name => 0,
+            KeyforgeSet::AoA->name => 0,
+            KeyforgeSet::WC->name => 0,
+            KeyforgeSet::MM->name => 0,
+            KeyforgeSet::DT->name => 0,
+        ];
+
+        return [$setWins, $houseWins, $houseLosses, $housePresence, $setLosses, $setPresence];
     }
 }
