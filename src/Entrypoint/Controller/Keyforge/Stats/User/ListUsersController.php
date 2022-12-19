@@ -22,7 +22,10 @@ final class ListUsersController extends Controller
 
         return $this->render(
             'Keyforge/Stats/User/list_users.html.twig',
-            ['users' => $users],
+            [
+                'users' => $users,
+                'withExternal' => $request->get('withExternal') !== null,
+            ],
         );
     }
 }

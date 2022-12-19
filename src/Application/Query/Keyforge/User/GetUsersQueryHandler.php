@@ -46,6 +46,10 @@ final class GetUsersQueryHandler
             new Filters(FilterType::AND, FilterType::OR, ...$filters),
         ));
 
+        if (false === $query->withExternal()) {
+            $games = $this->excludeGamesWithExternalUsers($users, $games);
+        }
+
         $result = [];
 
         foreach ($users as $user) {
@@ -75,5 +79,15 @@ final class GetUsersQueryHandler
         });
 
         return $result;
+    }
+
+    private function excludeGamesWithExternalUsers(array $users, array $games): array
+    {
+        $userIds = \array_map(static fn (KeyforgeUser $user) => $user->id()->value(), $users);
+
+        return \array_values(\array_filter($games, static function (KeyforgeGame $game) use ($userIds) {
+            return \in_array($game->winner()->value(), $userIds, true)
+                && \in_array($game->loser()->value(), $userIds, true);
+        }));
     }
 }
