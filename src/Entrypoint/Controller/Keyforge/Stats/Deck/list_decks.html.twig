@@ -116,7 +116,29 @@
                         render: function (data, type, row) {
                             let size = data === 'WC' ? 37 : 33;
 
-                            return '<img width="' + size + 'px" src="' + '/assets/keyforge/sets/' + data + '.svg' + '" alt="' + data + '"/>';
+                            let setNumber = 0;
+                            switch (data) {
+                                case 'CotA':
+                                    setNumber = 1;
+                                    break;
+                                case 'AoA':
+                                    setNumber = 2;
+                                    break;
+                                case 'WC':
+                                    setNumber = 3;
+                                    break;
+                                case 'MM':
+                                    setNumber = 4;
+                                    break;
+                                case 'DT':
+                                    setNumber = 5;
+                                    break;
+                                case 'WoE':
+                                    setNumber = 6;
+                                    break;
+                            }
+
+                            return '<img width="' + size + 'px" src="' + '/assets/keyforge/sets/' + data + '.svg' + '" alt="' + data + '"/><h6>' + setNumber + '</h6>';
                         },
                         targets: 1, //Set
                     },
