@@ -1,4 +1,4 @@
-FROM php:8.1-fpm-alpine
+FROM php:8.2-fpm-alpine
 RUN apk update && apk add --no-cache \
     oniguruma-dev \
     postgresql-dev \
@@ -12,7 +12,6 @@ RUN apk update && apk add --no-cache \
 RUN mkdir /.composer \
     && chown -R www-data:www-data /.composer
 
-run ls
 COPY config/php.ini /usr/local/etc/php/
 COPY config/www.conf /usr/local/etc/php-fpm.d/www.conf
 
