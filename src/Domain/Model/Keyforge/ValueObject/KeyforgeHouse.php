@@ -14,6 +14,7 @@ enum KeyforgeHouse: string implements \JsonSerializable
     case SAURIAN = 'SAURIAN';
     case STAR_ALLIANCE = 'STAR_ALLIANCE';
     case UNFATHOMABLE = 'UNFATHOMABLE';
+    case EKWIDON = 'EKWIDON';
 
     public static function fromDokName(string $house): static
     {
@@ -28,6 +29,23 @@ enum KeyforgeHouse: string implements \JsonSerializable
         }
 
         throw new \InvalidArgumentException($house);
+    }
+
+    public function fullName(): string
+    {
+        return match ($this) {
+            self::BROBNAR => 'Brobnar',
+            self::DIS => 'Dis',
+            self::MARS => 'Mars',
+            self::SHADOWS => 'Shadows',
+            self::UNTAMED => 'Untamed',
+            self::SANCTUM => 'Sanctum',
+            self::LOGOS => 'Logos',
+            self::SAURIAN => 'Saurian',
+            self::STAR_ALLIANCE => 'Star Alliance',
+            self::UNFATHOMABLE => 'Unfathomable',
+            self::EKWIDON => 'The Merchant Compacts of Ekwidon',
+        };
     }
 
     public function jsonSerialize(): mixed

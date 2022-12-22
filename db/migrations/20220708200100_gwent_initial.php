@@ -54,9 +54,9 @@ final class GwentInitial extends AbstractMigration
 
     public function down(): void
     {
-        $this->execute('DROP TABLE IF EXISTS "gwent_users"');
+        $this->execute('DROP TABLE IF EXISTS "gwent_games"');
         $this->execute('DROP TABLE IF EXISTS "gwent_decks"');
         $this->execute('DROP TABLE IF EXISTS "gwent_archetypes"');
-        $this->execute('DROP TABLE IF EXISTS "gwent_games"');
+        $this->execute('DROP TABLE IF EXISTS "gwent_users"');
     }
 }

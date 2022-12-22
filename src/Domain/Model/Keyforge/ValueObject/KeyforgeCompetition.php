@@ -9,6 +9,7 @@ enum KeyforgeCompetition: string
     case TCO_COMPETITIVE = 'TCO Competitive';
     case NKFL_LEAGUE_SEASON_19 = 'NKFL League Season 19';
     case NKFL_LEAGUE_CUP_SEASON_19 = 'NKFL League Cup Season 19';
+    case NKFL_LEAGUE_CUP_REVERSAL_SEASON_19 = 'NKFL League Cup Reversal Season 19';
     case NKFL_ARCHON_TOURNAMENT = 'NKFL Archon Tournament';
 
     public static function fromName(string $name): static
@@ -24,6 +25,8 @@ enum KeyforgeCompetition: string
                 return self::NKFL_LEAGUE_SEASON_19;
             case self::NKFL_LEAGUE_CUP_SEASON_19->name:
                 return self::NKFL_LEAGUE_CUP_SEASON_19;
+            case self::NKFL_LEAGUE_CUP_REVERSAL_SEASON_19->name:
+                return self::NKFL_LEAGUE_CUP_REVERSAL_SEASON_19;
             case self::NKFL_ARCHON_TOURNAMENT->name:
                 return self::NKFL_ARCHON_TOURNAMENT;
             default:
@@ -39,6 +42,7 @@ enum KeyforgeCompetition: string
             self::TCO_COMPETITIVE->name,
             self::NKFL_LEAGUE_SEASON_19->name,
             self::NKFL_LEAGUE_CUP_SEASON_19->name,
+            self::NKFL_LEAGUE_CUP_REVERSAL_SEASON_19->name,
             self::NKFL_ARCHON_TOURNAMENT->name,
         ];
     }

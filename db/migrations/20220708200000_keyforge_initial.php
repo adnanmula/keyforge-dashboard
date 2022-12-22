@@ -49,12 +49,46 @@ final class KeyforgeInitial extends AbstractMigration
                 PRIMARY KEY(id)
             )',
         );
+
+        $this->execute(
+            'CREATE TABLE keyforge_competitions (
+                id uuid NOT NULL,
+                reference character varying(64) NOT NULL
+                   CONSTRAINT reference_unique UNIQUE,
+                name character varying(64) NOT NULL
+                   CONSTRAINT competition_name_unique UNIQUE,
+                competition_type character varying(64) NOT NULL,
+                users jsonb NOT NULL,
+                description character varying(512) NOT NULL,
+                created_at TIMESTAMP WITH TIME ZONE NOT NULL,
+                started_at TIMESTAMP WITH TIME ZONE NULL,
+                finished_at TIMESTAMP WITH TIME ZONE NULL,
+                winner uuid NULL,
+                PRIMARY KEY(id)
+            )',
+        );
+
+        $this->execute(
+            'CREATE TABLE keyforge_competition_fixtures (
+                id uuid NOT NULL,
+                reference character varying(64) NOT NULL,
+                users jsonb NOT NULL,
+                fixture_type character varying(64) NOT NULL,
+                position integer NOT NULL,
+                created_at TIMESTAMP WITH TIME ZONE NULL,
+                played_at TIMESTAMP WITH TIME ZONE NULL,
+                game uuid NULL,
+                PRIMARY KEY(id)
+            )',
+        );
     }
 
     public function down(): void
     {
-        $this->execute('DROP TABLE IF EXISTS "keyforge_users"');
-        $this->execute('DROP TABLE IF EXISTS "keyforge_decks"');
+        $this->execute('DROP TABLE IF EXISTS "keyforge_competition_fixtures"');
+        $this->execute('DROP TABLE IF EXISTS "keyforge_competitions"');
         $this->execute('DROP TABLE IF EXISTS "keyforge_games"');
+        $this->execute('DROP TABLE IF EXISTS "keyforge_decks"');
+        $this->execute('DROP TABLE IF EXISTS "keyforge_users"');
     }
 }

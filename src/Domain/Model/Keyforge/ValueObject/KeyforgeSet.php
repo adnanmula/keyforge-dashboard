@@ -9,6 +9,7 @@ enum KeyforgeSet: string
     case WC = 'WC';
     case MM = 'MM';
     case DT = 'DT';
+    case WoE = 'WoE';
 
     public function fullName(): string
     {
@@ -18,6 +19,7 @@ enum KeyforgeSet: string
             self::WC => 'Worlds Collide',
             self::MM => 'Mass Mutation',
             self::DT => 'Dark Tidings',
+            self::WoE => 'Winds of Exchange',
         };
     }
 
@@ -41,6 +43,10 @@ enum KeyforgeSet: string
 
         if ($set === 'DARK_TIDINGS') {
             return KeyforgeSet::DT;
+        }
+
+        if ($set === 'WINDS_OF_EXCHANGE') {
+            return KeyforgeSet::WoE;
         }
 
         throw new \InvalidArgumentException($set);
