@@ -7,6 +7,9 @@ services:
     autowire: true
     autoconfigure: true
     public: false
+    bind:
+      Doctrine\DBAL\Connection $defaultConnection: '@repository.dbal.connection_default'
+      Doctrine\DBAL\Connection $connection: '@repository.dbal.connection'
 
   AdnanMula\Cards\Application\Command\:
     resource: '../src/Application/Command/*/*/*/*Handler.php'
@@ -45,9 +48,6 @@ services:
     autowire: true
     autoconfigure: true
     resource: '../src/Entrypoint/Command'
-    bind:
-      Doctrine\DBAL\Connection $defaultConnection: '@repository.dbal.connection_default'
-      Doctrine\DBAL\Connection $connection: '@repository.dbal.connection'
     tags: [ 'console.command' ]
 
 imports:

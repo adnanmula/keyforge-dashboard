@@ -3,6 +3,7 @@
 namespace AdnanMula\Cards\Entrypoint\Command;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception\DatabaseDoesNotExist;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -26,9 +27,14 @@ final class CreateDatabaseCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->defaultConnection->getSchemaManager()->dropAndCreateDatabase(
-            $this->connection->getDatabase(),
-        );
+        $dbName = $this->connection->getParams()['dbname'];
+
+        try {
+            $this->defaultConnection->createSchemaManager()->dropDatabase($dbName);
+        } catch (DatabaseDoesNotExist) {
+        }
+
+        $this->defaultConnection->createSchemaManager()->createDatabase($dbName);
 
         return Command::SUCCESS;
     }

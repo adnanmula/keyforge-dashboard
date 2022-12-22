@@ -2,7 +2,7 @@
 
 namespace AdnanMula\Cards\Infrastructure\Fixtures;
 
-use Doctrine\DBAL\Driver\Connection;
+use Doctrine\DBAL\Connection;
 
 abstract class DbalFixture
 {
