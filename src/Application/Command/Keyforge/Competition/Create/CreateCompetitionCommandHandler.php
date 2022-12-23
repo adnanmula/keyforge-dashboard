@@ -54,7 +54,7 @@ final class CreateCompetitionCommandHandler
         ));
 
         if (\count($withConflict) > 0) {
-            throw new \Exception('Name or reference already exists.');
+            throw new \Exception('Name already in use.');
         }
     }
 }

@@ -1,0 +1,90 @@
+{% extends "Keyforge/Shared/keyforge_base.html.twig" %}
+
+{% block title %}Create competition{% endblock %}
+
+{% block header %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css">
+{% endblock %}
+
+{% block body %}
+
+    {% if result != false %}
+        <div class="alert alert-{% if success == true %}success{% else %}danger{% endif %}" role="alert">
+            {{ result }}
+        </div>
+    {% endif %}
+
+    <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
+
+    <div class="shadow-lg p-3 mb-5 bg-white rounded">
+        <form action="{{ path('keyforge_competition_create') }}" method="post">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="type" class="form-label">Type</label>
+                        <select class="form-select" name="type" id="type">
+                            <option value="ROUND_ROBIN_1" selected>Round robin (1 round)</option>
+                            <option value="ROUND_ROBIN_2">Round robin (2 rounds)</option>
+                            <option value="ELIMINATION">Elimination</option>
+                            <option value="ROUND_ROBIN_1_ELIMINATION">Round robin (1 round) and elimination</option>
+                            <option value="ROUND_ROBIN_2_ELIMINATION">Round robin (2 rounds) and elimination</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="divider py-1"></div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="name" name="name">
+                    </div>
+                </div>
+            </div>
+
+            <div class="divider py-1"></div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="users" class="form-label">Users</label>
+                        <select id="users" name="users[]" multiple>
+                            {% for user in users %}
+                                <option value="{{ user.id }}"> {{ user.name }} </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row mt-3">
+                <div class="col-md-12">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea class="form-control" name="description" id="description" rows="5" maxlength="512"></textarea>
+                </div>
+            </div>
+
+            <div class="divider py-1"></div>
+
+            <div class="row mt-3">
+                <div class="col-md-12">
+                    <button type="submit" class="btn btn-block btn-dark w-100">Save</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        $(document).ready(function(){
+            let usersSelect = new Choices('#users', {
+                removeItemButton: true,
+                maxItemCount: null,
+                searchResultLimit: null,
+                renderChoiceLimit: null,
+            });
+        });
+    </script>
+{% endblock %}

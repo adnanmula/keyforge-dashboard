@@ -62,3 +62,8 @@ keyforge_game_chain_calculator:
   path: /games/chains
   controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Game\ChainsCalculatorController
   methods: [ GET ]
+
+keyforge_competition_create:
+  path: /competition
+  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Competition\CreateCompetitionController
+  methods: [ GET,POST ]

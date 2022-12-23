@@ -91,12 +91,12 @@ final class KeyforgeCompetitionDbalRepository extends DbalRepository implements 
         $stmt->bindValue(':id', $competition->id()->value());
         $stmt->bindValue(':reference', $competition->reference());
         $stmt->bindValue(':name', $competition->name());
-        $stmt->bindValue(':competition_type', $competition->type());
+        $stmt->bindValue(':competition_type', $competition->type()->name);
         $stmt->bindValue(':users', Json::encode($competition->users()));
         $stmt->bindValue(':description', $competition->description());
-        $stmt->bindValue(':created_at', $competition->createdAt());
-        $stmt->bindValue(':started_at', $competition->startAt());
-        $stmt->bindValue(':finished_at', $competition->finishedAt());
+        $stmt->bindValue(':created_at', $competition->createdAt()->format(\DateTimeInterface::ATOM));
+        $stmt->bindValue(':started_at', $competition->startAt()?->format(\DateTimeInterface::ATOM));
+        $stmt->bindValue(':finished_at', $competition->finishedAt()?->format(\DateTimeInterface::ATOM));
         $stmt->bindValue(':winner', $competition->winner()?->value());
 
         $stmt->execute();
@@ -109,7 +109,7 @@ final class KeyforgeCompetitionDbalRepository extends DbalRepository implements 
             $row['reference'],
             $row['name'],
             CompetitionType::from($row['competition_type']),
-            \array_map(static fn (string $id): Uuid => Uuid::from($id), $row['users']),
+            \array_map(static fn (string $id): Uuid => Uuid::from($id), Json::decode($row['users'])),
             $row['description'],
             null === $row['created_at']
                 ? null
