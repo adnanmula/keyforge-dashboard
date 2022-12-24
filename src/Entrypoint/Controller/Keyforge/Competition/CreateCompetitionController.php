@@ -40,24 +40,20 @@ class CreateCompetitionController extends Controller
                         $request->request->get('description'),
                     ));
 
-                    return $this->render(
-                        'Keyforge/Competition/create_competition.html.twig',
-                        [
-                            'users' => $users,
-                            'result' => 'Torneo creado',
-                            'success' => true,
-                        ],
-                    );
+                    $payload = [
+                        'users' => $users,
+                        'result' => 'Torneo creado',
+                        'success' => true,
+                    ];
                 } catch (\Throwable $exception) {
-                    return $this->render(
-                        'Keyforge/Competition/create_competition.html.twig',
-                        [
-                            'users' => $users,
-                            'result' => $exception->getMessage(),
-                            'success' => false,
-                        ],
-                    );
+                    $payload = [
+                        'users' => $users,
+                        'result' => $exception->getMessage(),
+                        'success' => false,
+                    ];
                 }
+
+                return $this->render('Keyforge/Competition/create_competition.html.twig', $payload);
             }
 
             throw new \InvalidArgumentException('Error');

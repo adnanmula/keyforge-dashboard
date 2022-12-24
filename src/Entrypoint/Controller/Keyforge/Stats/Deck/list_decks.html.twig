@@ -2,13 +2,52 @@
 
 {% block title %}Decks{% endblock %}
 
-{% block body %}
-    <div class="shadow-lg p-3 mb-5 bg-white rounded">
-        <div class="form-check float-end">
-            <input class="form-check-input" type="checkbox" value="" id="with_external">
-            <label class="form-check-label" for="with_external">External decks/users</label>
-        </div>
+{% block header %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css">
+{% endblock %}
 
+{% block body %}
+
+    <div class="row float-end">
+        <a class="btn btn-dark" data-bs-toggle="collapse" href="#filters" role="button" aria-expanded="false">Show/Hide filters</a>
+    </div>
+
+    <div class="collapse" id="filters">
+        <div class="shadow-lg p-3 mb-5 bg-white rounded">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="tags" class="form-label">Tags</label>
+                        <select id="tags" name="tags[]" multiple>
+                            {% for tag in tags %}
+                                <option value="{{ tag.id }}"> {{ tag.name }} </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="divider py-1"></div>
+
+                    <label for="tags" class="form-label">Additional options</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="with_external">
+                        <label class="form-check-label" for="with_external">External decks/users</label>
+                    </div>
+
+                    <div class="divider py-1"></div>
+
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <button class="btn btn-block btn-dark w-100" id="applyFilters">Apply</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="shadow-lg p-3 mb-5 bg-white rounded">
         <table id="deckList" class="table table-responsive-sm table-hover" style="width:100%;">
             <thead>
                 <tr>
@@ -23,15 +62,33 @@
         </table>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
+
     <script>
         function onlyOwned() {
             return false === $('#with_external')[0].checked;
         }
 
-        $(document).ready(function () {
-            const checkbox = $("#with_external");
+        function tags() {
+            const options = $('select#tags.choices__input.is-hidden')[0].options;
 
-            checkbox.change(function(event) {
+            const tagIds = [];
+            Array.prototype.forEach.call(options, function(option) {
+                tagIds.push(option.value);
+            });
+
+            return tagIds;
+        }
+
+        $(document).ready(function () {
+            new Choices('#tags', {
+                removeItemButton: true,
+                maxItemCount: null,
+                searchResultLimit: null,
+                renderChoiceLimit: null,
+            });
+
+            $("#applyFilters").click(function(event) {
                 $('#deckList').DataTable().ajax.reload();
             });
 
@@ -94,7 +151,8 @@
                 ajax: {
                     url: '/keyforge/decks/json',
                     data: function(d){
-                        d.onlyOwned = onlyOwned();
+                        d.extraFilterOnlyOwned = onlyOwned();
+                        d.extraFilterTags = tags();
                     }
                 },
                 columns: [

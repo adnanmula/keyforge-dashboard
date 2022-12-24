@@ -86,7 +86,8 @@ final class GetDecksController extends Controller
                 $sorting,
                 null,
                 $searchOwner,
-                $request->get('onlyOwned') === 'true',
+                $request->get('extraFilterOnlyOwned') === 'true',
+                $request->query->all()['extraFilterTags'] ?? [],
             )),
         );
 

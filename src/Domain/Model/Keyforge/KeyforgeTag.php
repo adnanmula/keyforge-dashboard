@@ -1,0 +1,24 @@
+<?php declare(strict_types=1);
+
+namespace AdnanMula\Cards\Domain\Model\Keyforge;
+
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\TagVisibility;
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
+
+final readonly class KeyforgeTag implements \JsonSerializable
+{
+    public function __construct(
+        public Uuid $id,
+        public string $name,
+        public TagVisibility $visibility,
+    ) {}
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'id' => $this->id->value(),
+            'name' => $this->name,
+            'visibility' => $this->visibility->name,
+        ];
+    }
+}

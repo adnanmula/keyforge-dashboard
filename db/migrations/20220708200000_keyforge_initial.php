@@ -32,6 +32,23 @@ final class KeyforgeInitial extends AbstractMigration
         );
 
         $this->execute(
+            'CREATE TABLE keyforge_tags (
+                id uuid NOT NULL,
+                name character varying(64) NOT NULL,
+                visibility character varying(16) NOT NULL,
+                PRIMARY KEY(id)
+            )',
+        );
+
+        $this->execute(
+            'CREATE TABLE keyforge_deck_tags (
+                id uuid NOT NULL,
+                deck_id uuid NOT NULL,
+                PRIMARY KEY(id)
+            )',
+        );
+
+        $this->execute(
             'CREATE TABLE keyforge_games (
                 id uuid NOT NULL,
                 winner uuid NOT NULL,

@@ -7,3 +7,5 @@ services:
     alias: AdnanMula\Cards\Infrastructure\Persistence\Repository\Keyforge\KeyforgeUserDbalRepository
   AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeCompetitionRepository:
     alias: AdnanMula\Cards\Infrastructure\Persistence\Repository\Keyforge\KeyforgeCompetitionDbalRepository
+  AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeTagRepository:
+    alias: AdnanMula\Cards\Infrastructure\Persistence\Repository\Keyforge\KeyforgeTagDbalRepository

@@ -17,6 +17,7 @@ final class GetDecksQuery
     private ?Uuid $deckId;
     private ?Uuid $owner;
     private bool $onlyOwned;
+    private array $tags;
 
     public function __construct(
         $start,
@@ -28,6 +29,7 @@ final class GetDecksQuery
         ?string $deckId = null,
         ?string $owner = null,
         bool $onlyOwned = false,
+        array $tags = [],
     ) {
         Assert::lazy()
             ->that($start, 'start')->nullOr()->integerish()->greaterOrEqualThan(0)
@@ -38,6 +40,7 @@ final class GetDecksQuery
             ->that($deckId, 'deckId')->nullOr()->uuid()
             ->that($owner, 'owner')->nullOr()->uuid()
             ->that($onlyOwned, 'onlyOwned')->boolean()
+            ->that($tags, 'tags')->all()->uuid()
             ->verifyNow();
 
         $this->start = null === $start ? null : (int) $start;
@@ -49,6 +52,7 @@ final class GetDecksQuery
         $this->deckId = null !== $deckId ? Uuid::from($deckId) : null;
         $this->owner = null !== $owner ? Uuid::from($owner) : null;
         $this->onlyOwned = $onlyOwned;
+        $this->tags = \array_map(static fn (string $id): Uuid => Uuid::from($id), $tags);
     }
 
     public function start(): ?int
@@ -94,5 +98,10 @@ final class GetDecksQuery
     public function onlyOwned(): bool
     {
         return $this->onlyOwned;
+    }
+
+    public function tags(): array
+    {
+        return $this->tags;
     }
 }
