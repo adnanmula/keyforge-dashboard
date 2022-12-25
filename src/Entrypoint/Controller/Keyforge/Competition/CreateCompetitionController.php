@@ -11,51 +11,51 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CreateCompetitionController extends Controller
 {
-        public function __invoke(Request $request): Response
-        {
-            $users = $this->extractResult(
-                $this->bus->dispatch(new GetUsersQuery(null, null, false, false)),
+    public function __invoke(Request $request): Response
+    {
+        $users = $this->extractResult(
+            $this->bus->dispatch(new GetUsersQuery(null, null, false, false)),
+        );
+
+        $users = \array_map(static fn (KeyforgeUser $user) => ['id' => $user->id()->value(), 'name' => $user->name()], $users);
+
+        if ($request->getMethod() === Request::METHOD_GET) {
+            return $this->render(
+                'Keyforge/Competition/create_competition.html.twig',
+                [
+                    'users' => $users,
+                    'result' => false,
+                    'success' => null,
+                ],
             );
-
-            $users = \array_map(static fn (KeyforgeUser $user) => ['id' => $user->id()->value(), 'name' => $user->name()], $users);
-
-            if ($request->getMethod() === Request::METHOD_GET) {
-                return $this->render(
-                    'Keyforge/Competition/create_competition.html.twig',
-                    [
-                        'users' => $users,
-                        'result' => false,
-                        'success' => null,
-                    ],
-                );
-            }
-
-            if ($request->getMethod() === Request::METHOD_POST) {
-                try {
-                    $this->bus->dispatch(new CreateCompetitionCommand(
-                        \str_replace(' ', '_', \strtoupper($request->request->get('name'))),
-                        $request->request->get('name'),
-                        $request->request->get('type'),
-                        $request->request->all()['users'] ?? [],
-                        $request->request->get('description'),
-                    ));
-
-                    $payload = [
-                        'users' => $users,
-                        'result' => 'Torneo creado',
-                        'success' => true,
-                    ];
-                } catch (\Throwable $exception) {
-                    $payload = [
-                        'users' => $users,
-                        'result' => $exception->getMessage(),
-                        'success' => false,
-                    ];
-                }
-
-                return $this->render('Keyforge/Competition/create_competition.html.twig', $payload);
-            }
-
-            throw new \InvalidArgumentException('Error');
         }
+
+        if ($request->getMethod() === Request::METHOD_POST) {
+            try {
+                $this->bus->dispatch(new CreateCompetitionCommand(
+                    \str_replace(' ', '_', \strtoupper($request->request->get('name'))),
+                    $request->request->get('name'),
+                    $request->request->get('type'),
+                    $request->request->all()['users'] ?? [],
+                    $request->request->get('description'),
+                ));
+
+                $payload = [
+                    'users' => $users,
+                    'result' => 'Torneo creado',
+                    'success' => true,
+                ];
+            } catch (\Throwable $exception) {
+                $payload = [
+                    'users' => $users,
+                    'result' => $exception->getMessage(),
+                    'success' => false,
+                ];
+            }
+
+            return $this->render('Keyforge/Competition/create_competition.html.twig', $payload);
+        }
+
+        throw new \InvalidArgumentException('Error');
+    }
 }

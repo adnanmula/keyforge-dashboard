@@ -8,7 +8,6 @@ use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeDeckHouses;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeHouse;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeSet;
-use AdnanMula\Cards\Domain\Model\Shared\QueryOrder;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Infrastructure\Criteria\Criteria;
 use AdnanMula\Cards\Infrastructure\Criteria\DbalCriteriaAdapter;
@@ -18,17 +17,34 @@ use Doctrine\DBAL\Connection;
 final class KeyforgeDeckDbalRepository extends DbalRepository implements KeyforgeDeckRepository
 {
     private const TABLE = 'keyforge_decks';
+    private const TABLE_TAG_RELATION = 'keyforge_deck_tags';
+
+    private const MAPPING = [
+        'id' => 'a.id',
+        'name' => 'a.name',
+        'set' => 'a.set',
+        'houses' => 'a.houses',
+        'sas' => 'a.sas',
+        'wins' => 'a.wins',
+        'losses' => 'a.losses',
+        'extra_data' => 'a.extra_data',
+        'owner' => 'a.owner',
+        'tags' => 'b.id',
+    ];
 
     public function search(Criteria $criteria): array
     {
         $builder = $this->connection->createQueryBuilder();
 
         $query = $builder->select('a.id, a.name, a.set, a.houses, a.sas, a.wins, a.losses, a.extra_data, a.owner')
-            ->from(self::TABLE, 'a');
+            ->addSelect('string_agg(b.id::varchar, \',\') as tags')
+            ->from(self::TABLE, 'a')
+            ->leftJoin('a', self::TABLE_TAG_RELATION, 'b', 'a.id = b.deck_id')
+            ->groupBy('a.id');
 
-        (new DbalCriteriaAdapter($builder))->execute($criteria);
+        (new DbalCriteriaAdapter($builder, self::MAPPING))->execute($criteria);
 
-        $result = $query->execute()->fetchAllAssociative();
+        $result = $query->executeQuery()->fetchAllAssociative();
 
         return \array_map(fn (array $row) => $this->map($row), $result);
     }
@@ -37,11 +53,12 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
     {
         $builder = $this->connection->createQueryBuilder();
         $query = $builder->select('COUNT(a.id)')
-            ->from(self::TABLE, 'a');
+            ->from(self::TABLE, 'a')
+            ->leftJoin('a', self::TABLE_TAG_RELATION, 'b', 'a.id = b.deck_id');
 
-        (new DbalCriteriaAdapter($builder))->execute($criteria);
+        (new DbalCriteriaAdapter($builder, self::MAPPING))->execute($criteria);
 
-        return $query->execute()->fetchOne();
+        return $query->executeQuery()->fetchOne();
     }
 
     public function byId(Uuid $id): ?KeyforgeDeck
@@ -148,6 +165,9 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
             $deck['losses'],
             \json_decode($deck['extra_data'], true, 512, \JSON_THROW_ON_ERROR),
             null === $deck['owner'] ? null : Uuid::from($deck['owner']),
+            null === $deck['tags']
+                ? []
+                : \explode(',', $deck['tags']),
         );
     }
 }

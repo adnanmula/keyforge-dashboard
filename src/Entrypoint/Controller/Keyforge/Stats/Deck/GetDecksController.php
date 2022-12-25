@@ -29,24 +29,24 @@ final class GetDecksController extends Controller
         $searchSet = null;
         $searchOwner = null;
 
-        if (\array_key_exists(1, $columnFilters)) {
-            $value = $columnFilters[1]['search']['value'];
+        if (\array_key_exists(2, $columnFilters)) {
+            $value = $columnFilters[2]['search']['value'];
 
             if ('' !== $value) {
                 $searchSet = $value;
             }
         }
 
-        if (\array_key_exists(2, $columnFilters)) {
-            $value = $columnFilters[2]['search']['value'];
+        if (\array_key_exists(3, $columnFilters)) {
+            $value = $columnFilters[3]['search']['value'];
 
             if ('' !== $value) {
                 $searchHouse = $value;
             }
         }
 
-        if (\array_key_exists(6, $columnFilters)) {
-            $value = $columnFilters[6]['search']['value'];
+        if (\array_key_exists(7, $columnFilters)) {
+            $value = $columnFilters[7]['search']['value'];
 
             if ('' !== $value) {
                 $searchOwner = $value;
@@ -55,10 +55,10 @@ final class GetDecksController extends Controller
 
         if (\count($queryOrder) > 0) {
             $orderColumns = [
-                0 => 'name',
-                1 => 'set',
-                3 => 'win_rate',
-                4 => 'sas',
+                1 => 'name',
+                2 => 'set',
+                4 => 'win_rate',
+                5 => 'sas',
             ];
 
             $orderField = $orderColumns[(int) $queryOrder[0]['column']] ?? null;

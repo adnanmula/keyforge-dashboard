@@ -8,8 +8,10 @@
 
 {% block body %}
 
-    <div class="row float-end">
-        <a class="btn btn-dark" data-bs-toggle="collapse" href="#filters" role="button" aria-expanded="false">Show/Hide filters</a>
+    <div class="row">
+        <div class="float-end">
+            <a class="btn btn-dark" data-bs-toggle="collapse" href="#filters" role="button" aria-expanded="false"><i class="bi bi-filter"></i></a>
+        </div>
     </div>
 
     <div class="collapse" id="filters">
@@ -30,7 +32,7 @@
                     <label for="tags" class="form-label">Additional options</label>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" value="" id="with_external">
-                        <label class="form-check-label" for="with_external">External decks/users</label>
+                        <label class="form-check-label" for="with_external">External decks</label>
                     </div>
 
                     <div class="divider py-1"></div>
@@ -51,6 +53,7 @@
         <table id="deckList" class="table table-responsive-sm table-hover" style="width:100%;">
             <thead>
                 <tr>
+                    <th scope="col">Tags</th>
                     <th scope="col">Deck</th>
                     <th scope="col">Set</th>
                     <th scope="col">Houses</th>
@@ -80,6 +83,16 @@
             return tagIds;
         }
 
+        function tagName(id) {
+            let tagsJson = JSON.parse('{{ tags|json_encode|raw }}');
+
+            tagsJson.each(function (item) {
+                console.log(item);
+            })
+
+            return 'tagIds';
+        }
+
         $(document).ready(function () {
             new Choices('#tags', {
                 removeItemButton: true,
@@ -102,6 +115,24 @@
                         .columns([2])
                         .every(function () {
                             var column = this;
+                            var select = $('<select class="form-control form-control-sm"><option value="">Set</option></select>');
+
+                            select.appendTo($(column.header()).empty()).on('change', function () {
+                                var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                                column.search(val, false, false).draw();
+                            });
+
+                            select.append('<option value="CotA">Call of the Archons</option>');
+                            select.append('<option value="AoA">Age of Ascension</option>');
+                            select.append('<option value="WC">Worlds Collide</option>');
+                            select.append('<option value="MM">Mass Mutation</option>');
+                            select.append('<option value="DT">Dark Tidings</option>');
+                        });
+
+                    this.api()
+                        .columns([3])
+                        .every(function () {
+                            var column = this;
                             var select = $('<select class="form-control form-control-sm"><option value="">Houses</option></select>');
 
                             select.appendTo($(column.header()).empty()).on('change', function () {
@@ -120,24 +151,6 @@
                             select.append('<option value="STAR_ALLIANCE">Star Alliance</option>');
                             select.append('<option value="UNFATHOMABLE">Unfathomable</option>');
                         });
-
-                    this.api()
-                        .columns([1])
-                        .every(function () {
-                            var column = this;
-                            var select = $('<select class="form-control form-control-sm"><option value="">Set</option></select>');
-
-                            select.appendTo($(column.header()).empty()).on('change', function () {
-                                var val = $.fn.dataTable.util.escapeRegex($(this).val());
-                                column.search(val, false, false).draw();
-                            });
-
-                            select.append('<option value="CotA">Call of the Archons</option>');
-                            select.append('<option value="AoA">Age of Ascension</option>');
-                            select.append('<option value="WC">Worlds Collide</option>');
-                            select.append('<option value="MM">Mass Mutation</option>');
-                            select.append('<option value="DT">Dark Tidings</option>');
-                        });
                 },
                 searching: true,
                 paging: true,
@@ -145,7 +158,7 @@
                 responsive: true,
                 processing: true,
                 serverSide: true,
-                order: [[3, 'desc']],
+                order: [[4, 'desc']],
                 lengthMenu: [10, 25, 50, 100],
                 iDisplayLength: 25,
                 ajax: {
@@ -156,6 +169,7 @@
                     }
                 },
                 columns: [
+                    { data: "tags" },
                     { data: "name" },
                     { data: "set" },
                     { data: "houses" },
@@ -166,9 +180,26 @@
                 columnDefs: [
                     {
                         render: function (data, type, row) {
+                            let tagsJson = JSON.parse('{{ tags|json_encode|raw }}');
+                            let tagNames = [];
+
+                            data.forEach(function (tagId) {
+                                tagsJson.forEach(function (item) {
+                                    if (tagId === item.id) {
+                                        tagNames.push(item.name);
+                                    }
+                                })
+                            })
+
+                            return tagNames.sort().join('<br>');
+                        },
+                        targets: 0, //Tags
+                    },
+                    {
+                        render: function (data, type, row) {
                             return '<a href="/keyforge/games/deck/' + row.id + '">' + data + '</a>';
                         },
-                        targets: 0, //Deck
+                        targets: 1, //Deck
                     },
                     {
                         render: function (data, type, row) {
@@ -198,7 +229,7 @@
 
                             return '<img width="' + size + 'px" src="' + '/assets/keyforge/sets/' + data + '.svg' + '" alt="' + data + '"/><h6>' + setNumber + '</h6>';
                         },
-                        targets: 1, //Set
+                        targets: 2, //Set
                     },
                     {
                         render: function (data, type, row) {
@@ -210,7 +241,7 @@
                                 '<img width="35px" src="' + house1 + '" alt="' + data[1] +'"/>' +
                                 '<img width="35px" src="' + house2 + '" alt="' + data[2] +'"/>';
                         },
-                        targets: 2, //Houses
+                        targets: 3, //Houses
                     },
                     {
                         render: function (data, type, row) {
@@ -225,13 +256,13 @@
 
                             return wins + '/' + losses + ' (' + win_rate + '%)';
                         },
-                        targets: 3, //Win Rate
+                        targets: 4, //Win Rate
                     },
                     {
                         render: function (data, type, row) {
                             return data;
                         },
-                        targets: 4, //Sas
+                        targets: 5, //Sas
                     },
                     {
                         render: function (data, type, row) {
@@ -250,24 +281,24 @@
                                 '<a href="' + wikiLink + '" target="_blank">' +
                                 '<img class="img-thumbnail" width="50px" style="min-width: 40px" src="' + wikiLogo + '" alt="Wiki"/></a>';
                         },
-                        targets: 5, //Buttons
+                        targets: 6, //Buttons
                     },
                     {
-                        targets: [0, 1, 3, 4, 5],
+                        targets: [0, 1, 2, 4, 5, 6],
                         searchable: false,
                         visible: true,
                     },
                     {
-                        targets: [2],
+                        targets: [3],
                         searchable: true,
                         visible: true,
                     },
                     {
-                        targets: [1, 2, 5],
+                        targets: [0, 2, 3, 6],
                         orderable: false
                     },
                     {
-                        targets: [0, 3, 4],
+                        targets: [1, 4, 5],
                         orderable: true
                     },
                 ],

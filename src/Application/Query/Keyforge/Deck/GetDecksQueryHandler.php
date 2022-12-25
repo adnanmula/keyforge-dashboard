@@ -63,6 +63,21 @@ final class GetDecksQueryHandler
 
         $filters = [new Filters(FilterType::AND, FilterType::AND, ...$expressions)];
 
+        if (\count($query->tags()) > 0) {
+            $tagExpressions = [];
+
+            foreach ($query->tags() as $tag) {
+                $tagExpressions[] = new Filter(new FilterField('tags'), new StringFilterValue($tag->value()), FilterOperator::EQUAL);
+            }
+
+            $filters[] = new Filters(FilterType::AND, FilterType::OR, ...$tagExpressions);
+//            $filters[] = new Filters(
+//                FilterType::AND,
+//                FilterType::AND,
+//                new Filter(new FilterField('visibility'), new StringFilterValue(TagVisibility::PUBLIC->name), FilterOperator::EQUAL),
+//            );
+        }
+
         if (null !== $query->house()) {
             $filters[] = new Filters(
                 FilterType::AND,

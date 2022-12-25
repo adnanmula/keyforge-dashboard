@@ -82,7 +82,7 @@ final class DbalCriteriaAdapter implements CriteriaAdapter
     {
         $this->parameterIndex++;
 
-        $parameterName = $filter->field()->name() . $this->parameterIndex;
+        $parameterName = \str_replace('.', '', $filter->field()->name()) . $this->parameterIndex;
 
         $this->queryBuilder->setParameter(
             $parameterName,

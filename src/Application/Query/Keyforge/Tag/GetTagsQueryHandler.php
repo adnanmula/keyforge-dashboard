@@ -27,6 +27,15 @@ final readonly class GetTagsQueryHandler
 
         $filters = [new Filters(FilterType::AND, FilterType::AND, ...$expressions)];
 
+        if (null !== $query->ids()) {
+            $idsExpressions = [];
+            foreach ($query->ids() as $id) {
+                $idsExpressions[] = new Filter(new FilterField('id'), new StringFilterValue($id->value()), FilterOperator::EQUAL);
+            }
+
+            $filters[] = new Filters(FilterType::AND, FilterType::OR, ...$idsExpressions);
+        }
+
         $criteria = new Criteria(
             null,
             null,
