@@ -13,13 +13,13 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Install dependencies
+      run: docker-compose -f ./docker-compose.yml exec -T --user=$(id -u) php-fpm sh -c "composer install --ignore-platform-reqs --prefer-dist --no-progress --no-suggest"
+
     - name: Build environment
       run: |
         make build
         make up
-
-    - name: Install dependencies
-      run: docker-compose -f ./docker-compose.yml exec -T --user=$(id -u) php-fpm sh -c "composer install --ignore-platform-reqs --prefer-dist --no-progress --no-suggest"
 
     - name: Code sniffer
       run: docker-compose -f ./docker-compose.yml exec -T --user=$(id -u) php-fpm sh -c "phpcs --standard=phpcs.xml.dist"
