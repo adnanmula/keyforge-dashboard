@@ -28,6 +28,46 @@
                     </div>
 
                     <div class="divider py-1"></div>
+                    <div class="divider py-1"></div>
+
+                    <div class="form-group">
+                        <label for="houses" class="form-label">Houses</label>
+                        <input class="form-check-input house_type_selector" type="radio" name="houses_filter_type" id="houses_filter_type_1" value="all" checked>
+                        <label class="form-check-label" for="houses_filter_type_1">All</label>
+                        <input class="form-check-input house_type_selector" type="radio" name="houses_filter_type" id="houses_filter_type_2" value="any">
+                        <label class="form-check-label" for="houses_filter_type_2">Any</label>
+
+                        </br>
+                        </br>
+                        <input class="form-check-input houses_selector" type="checkbox" value="BROBNAR" id="check_house_brobnar">
+                        <img width="35px" src="/assets/keyforge/houses/BROBNAR.png" alt="BROBNAR"/>
+                        <input class="form-check-input houses_selector" type="checkbox" value="DIS" id="check_house_dis">
+                        <img width="35px" src="/assets/keyforge/houses/DIS.png" alt="DIS"/>
+                        <input class="form-check-input houses_selector" type="checkbox" value="MARS" id="check_house_mars">
+                        <img width="35px" src="/assets/keyforge/houses/MARS.png" alt="MARS"/>
+                        <input class="form-check-input houses_selector" type="checkbox" value="SHADOWS" id="check_house_shadows">
+                        <img width="35px" src="/assets/keyforge/houses/SHADOWS.png" alt="SHADOWS"/>
+                        <input class="form-check-input houses_selector" type="checkbox" value="UNTAMED" id="check_house_untamed">
+                        <img width="35px" src="/assets/keyforge/houses/UNTAMED.png" alt="UNTAMED"/>
+                        </br>
+                        </br>
+                        <input class="form-check-input houses_selector" type="checkbox" value="SANCTUM" id="check_house_sanctum">
+                        <img width="35px" src="/assets/keyforge/houses/SANCTUM.png" alt="SANCTUM"/>
+                        <input class="form-check-input houses_selector" type="checkbox" value="LOGOS" id="check_house_logos">
+                        <img width="35px" src="/assets/keyforge/houses/LOGOS.png" alt="LOGOS"/>
+                        <input class="form-check-input houses_selector" type="checkbox" value="SAURIAN" id="check_house_saurian">
+                        <img width="35px" src="/assets/keyforge/houses/SAURIAN.png" alt="SAURIAN"/>
+                        <input class="form-check-input houses_selector" type="checkbox" value="STAR_ALLIANCE" id="check_house_star_alliance">
+                        <img width="35px" src="/assets/keyforge/houses/STAR_ALLIANCE.png" alt="STAR_ALLIANCE"/>
+                        <input class="form-check-input houses_selector" type="checkbox" value="UNFATHOMABLE" id="check_house_unfathomable">
+                        <img width="35px" src="/assets/keyforge/houses/UNFATHOMABLE.png" alt="UNFATHOMABLE"/>
+                    </div>
+
+
+                    <div class="divider py-1"></div>
+                    <div class="divider py-1"></div>
+
+
 
                     <label for="tags" class="form-label">Additional options</label>
                     <div class="form-check">
@@ -46,8 +86,6 @@
             </div>
         </div>
     </div>
-
-
 
     <div class="shadow-lg p-3 mb-5 bg-white rounded">
         <table id="deckList" class="table table-responsive-sm table-hover" style="width:100%;">
@@ -93,6 +131,21 @@
             return 'tagIds';
         }
 
+        function houseFilterType() {
+            return $('.house_type_selector:checked')[0].value;
+        }
+
+        function houses() {
+            const checkboxes = $('.houses_selector:checked');
+            let houses = [];
+
+            checkboxes.each(function (index, check) {
+                houses.push(check.value);
+            });
+
+            return houses;
+        }
+
         $(document).ready(function () {
             new Choices('#tags', {
                 removeItemButton: true,
@@ -128,29 +181,6 @@
                             select.append('<option value="MM">Mass Mutation</option>');
                             select.append('<option value="DT">Dark Tidings</option>');
                         });
-
-                    this.api()
-                        .columns([3])
-                        .every(function () {
-                            var column = this;
-                            var select = $('<select class="form-control form-control-sm"><option value="">Houses</option></select>');
-
-                            select.appendTo($(column.header()).empty()).on('change', function () {
-                                var val = $.fn.dataTable.util.escapeRegex($(this).val());
-                                column.search(val, false, false).draw();
-                            });
-
-                            select.append('<option value="BROBNAR">Brobnar</option>');
-                            select.append('<option value="DIS">Dis</option>');
-                            select.append('<option value="MARS">Mars</option>');
-                            select.append('<option value="SHADOWS">Shadows</option>');
-                            select.append('<option value="UNTAMED">Untamed</option>');
-                            select.append('<option value="SANCTUM">Sanctum</option>');
-                            select.append('<option value="LOGOS">Logos</option>');
-                            select.append('<option value="SAURIAN">Saurian</option>');
-                            select.append('<option value="STAR_ALLIANCE">Star Alliance</option>');
-                            select.append('<option value="UNFATHOMABLE">Unfathomable</option>');
-                        });
                 },
                 searching: true,
                 paging: true,
@@ -166,6 +196,8 @@
                     data: function(d){
                         d.extraFilterOnlyOwned = onlyOwned();
                         d.extraFilterTags = tags();
+                        d.extraFilterHouses = houses();
+                        d.extraFilterHouseFilterType = houseFilterType();
                     }
                 },
                 columns: [
@@ -288,13 +320,8 @@
                         targets: 6, //Buttons
                     },
                     {
-                        targets: [0, 1, 2, 4, 5, 6],
+                        targets: [0, 1, 2, 3, 4, 5, 6],
                         searchable: false,
-                        visible: true,
-                    },
-                    {
-                        targets: [3],
-                        searchable: true,
                         visible: true,
                     },
                     {

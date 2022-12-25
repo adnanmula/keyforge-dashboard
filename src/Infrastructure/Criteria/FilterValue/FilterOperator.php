@@ -16,4 +16,5 @@ enum FilterOperator
     case NOT_IN;
     case IS_NULL;
     case IS_NOT_NULL;
+    case IN_ARRAY;
 }

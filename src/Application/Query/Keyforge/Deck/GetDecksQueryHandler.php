@@ -13,8 +13,8 @@ use AdnanMula\Cards\Infrastructure\Criteria\Criteria;
 use AdnanMula\Cards\Infrastructure\Criteria\Filter\Filter;
 use AdnanMula\Cards\Infrastructure\Criteria\Filter\Filters;
 use AdnanMula\Cards\Infrastructure\Criteria\Filter\FilterType;
-use AdnanMula\Cards\Infrastructure\Criteria\FilterField\ArrayElementFilterField;
 use AdnanMula\Cards\Infrastructure\Criteria\FilterField\FilterField;
+use AdnanMula\Cards\Infrastructure\Criteria\FilterValue\ArrayElementFilterValue;
 use AdnanMula\Cards\Infrastructure\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Cards\Infrastructure\Criteria\FilterValue\NullFilterValue;
 use AdnanMula\Cards\Infrastructure\Criteria\FilterValue\StringFilterValue;
@@ -78,14 +78,18 @@ final class GetDecksQueryHandler
 //            );
         }
 
-        if (null !== $query->house()) {
-            $filters[] = new Filters(
+        if (null !== $query->houses()) {
+            $houseFilterExpressions = [];
+
+            foreach ($query->houses() as $house) {
+                $houseFilterExpressions[] = new Filter(new FilterField('houses'), new ArrayElementFilterValue($house), FilterOperator::IN_ARRAY);
+            }
+
+            $filters = [new Filters(
                 FilterType::AND,
-                FilterType::OR,
-                new Filter(new ArrayElementFilterField('houses', 0), new StringFilterValue($query->house()), FilterOperator::EQUAL),
-                new Filter(new ArrayElementFilterField('houses', 1), new StringFilterValue($query->house()), FilterOperator::EQUAL),
-                new Filter(new ArrayElementFilterField('houses', 2), new StringFilterValue($query->house()), FilterOperator::EQUAL),
-            );
+                $query->houseFilterType() === 'any' ? FilterType::OR : FilterType::AND,
+                ...$houseFilterExpressions,
+            )];
         }
 
         $criteria = new Criteria(

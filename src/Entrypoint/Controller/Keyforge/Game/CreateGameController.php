@@ -24,7 +24,7 @@ final class CreateGameController extends Controller
         );
 
         $decks = $this->extractResult(
-            $this->bus->dispatch(new GetDecksQuery(null, null, null, null, null, new Sorting(new Order(new FilterField('name'), OrderType::ASC)))),
+            $this->bus->dispatch(new GetDecksQuery(null, null, null, null, null, null, new Sorting(new Order(new FilterField('name'), OrderType::ASC)))),
         );
 
         $users = \array_map(static fn (KeyforgeUser $user) => ['id' => $user->id()->value(), 'name' => $user->name()], $users);

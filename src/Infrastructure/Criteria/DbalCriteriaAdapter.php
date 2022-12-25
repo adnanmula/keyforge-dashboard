@@ -118,6 +118,8 @@ final class DbalCriteriaAdapter implements CriteriaAdapter
                 return $this->queryBuilder->expr()->isNull($field);
             case FilterOperator::IS_NOT_NULL:
                 return $this->queryBuilder->expr()->isNotNull($field);
+            case FilterOperator::IN_ARRAY:
+                return $field . '::jsonb @> ' . $value . '::jsonb';
         }
 
         throw new \InvalidArgumentException('Invalid operator');

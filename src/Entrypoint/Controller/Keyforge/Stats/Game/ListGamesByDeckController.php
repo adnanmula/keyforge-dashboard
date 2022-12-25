@@ -14,7 +14,7 @@ final class ListGamesByDeckController extends Controller
         $userId = $request->get('userId');
 
         $deck = $this->extractResult(
-            $this->bus->dispatch(new GetDecksQuery(0, 1, null, null, null, null, $deckId, $userId)),
+            $this->bus->dispatch(new GetDecksQuery(0, 1, null, null, null, null, null, $deckId, $userId)),
         );
 
         $deckName = null;

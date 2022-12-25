@@ -2,6 +2,7 @@
 
 namespace AdnanMula\Cards\Application\Query\Keyforge\Deck;
 
+use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeHouse;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Infrastructure\Criteria\Sorting\Sorting;
 use Assert\Assert;
@@ -12,7 +13,8 @@ final class GetDecksQuery
     private ?int $length;
     private ?string $deck;
     private ?string $set;
-    private ?string $house;
+    private ?string $houseFilterType;
+    private ?array $houses;
     private ?Sorting $sorting;
     private ?Uuid $deckId;
     private ?Uuid $owner;
@@ -24,7 +26,8 @@ final class GetDecksQuery
         $length,
         ?string $deck,
         ?string $set,
-        ?string $house,
+        ?string $houseFilterType,
+        ?array $houses,
         ?Sorting $sorting,
         ?string $deckId = null,
         ?string $owner = null,
@@ -36,7 +39,8 @@ final class GetDecksQuery
             ->that($length, 'length')->nullOr()->integerish()->greaterThan(0)
             ->that($deck, 'deck')->nullOr()->string()->notBlank()
             ->that($set, 'set')->nullOr()->string()->notBlank()
-            ->that($house, 'house')->nullOr()->string()->notBlank()
+            ->that($houseFilterType, 'houseFilterType')->nullOr()->string()->inArray(['all', 'any'])
+            ->that($houses, 'house')->nullOr()->all()->inArray(KeyforgeHouse::allowedValues())
             ->that($deckId, 'deckId')->nullOr()->uuid()
             ->that($owner, 'owner')->nullOr()->uuid()
             ->that($onlyOwned, 'onlyOwned')->boolean()
@@ -47,7 +51,8 @@ final class GetDecksQuery
         $this->length = null === $length ? null : (int) $length;
         $this->deck= $deck;
         $this->set = $set;
-        $this->house = $house;
+        $this->houseFilterType = $houseFilterType;
+        $this->houses = $houses;
         $this->sorting = $sorting;
         $this->deckId = null !== $deckId ? Uuid::from($deckId) : null;
         $this->owner = null !== $owner ? Uuid::from($owner) : null;
@@ -75,9 +80,14 @@ final class GetDecksQuery
         return $this->set;
     }
 
-    public function house(): ?string
+    public function houseFilterType(): ?string
     {
-        return $this->house;
+        return $this->houseFilterType;
+    }
+
+    public function houses(): ?array
+    {
+        return $this->houses;
     }
 
     public function sorting(): ?Sorting

@@ -31,7 +31,7 @@ services:
     networks:
       - network_cards
   postgres:
-    image: postgres:11.1-alpine
+    image: postgres:14.6-alpine
     container_name: cards_postgres
     ports:
       - 127.0.0.1:${DATABASE_PORT}:5432
