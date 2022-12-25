@@ -32,7 +32,7 @@ final class MyDecksController extends Controller
 
         $tags = $this->extractResult($this->bus->dispatch(new GetTagsQuery(
             null,
-            TagVisibility::PUBLIC->name,
+            null,
         )));
 
         return $this->render(
