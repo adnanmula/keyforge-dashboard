@@ -30,49 +30,91 @@ final class KeyforgeTagsFixtures extends DbalFixture implements Fixture
             Uuid::from(self::FIXTURE_TAG_1_ID),
             'Tag 1',
             TagVisibility::PUBLIC,
-            TagStyle::from(['color' => '#8da832']),
+            TagStyle::from(
+                [
+                    TagStyle::COLOR_BG => '#8da832',
+                    TagStyle::COLOR_TEXT => '#000000',
+                    TagStyle::COLOR_OUTLINE => '#8da832',
+                ],
+            ),
         ));
 
         $this->save(new KeyforgeTag(
             Uuid::from(self::FIXTURE_TAG_2_ID),
             'Tag 2',
             TagVisibility::PUBLIC,
-            TagStyle::from(['color' => '#8da832']),
+            TagStyle::from(
+                [
+                    TagStyle::COLOR_BG => '#42a4f5',
+                    TagStyle::COLOR_TEXT => '#000000',
+                    TagStyle::COLOR_OUTLINE => '#42a4f5',
+                ],
+            ),
         ));
 
         $this->save(new KeyforgeTag(
             Uuid::from(self::FIXTURE_TAG_3_ID),
             'Tag 3',
             TagVisibility::PUBLIC,
-            TagStyle::from(['color' => '#8da832']),
+            TagStyle::from(
+                [
+                    TagStyle::COLOR_BG => '#8da832',
+                    TagStyle::COLOR_TEXT => '#000000',
+                    TagStyle::COLOR_OUTLINE => '#8da832',
+                ],
+            ),
         ));
 
         $this->save(new KeyforgeTag(
             Uuid::from(self::FIXTURE_TAG_4_ID),
             'Tag 4',
             TagVisibility::PUBLIC,
-            TagStyle::from(['color' => '#8da832']),
+            TagStyle::from(
+                [
+                    TagStyle::COLOR_BG => '#d61e1e',
+                    TagStyle::COLOR_TEXT => '#000000',
+                    TagStyle::COLOR_OUTLINE => '#d61e1e',
+                ],
+            ),
         ));
 
         $this->save(new KeyforgeTag(
             Uuid::from(self::FIXTURE_TAG_5_ID),
             'Tag 5',
             TagVisibility::PUBLIC,
-            TagStyle::from(['color' => '#8da832']),
+            TagStyle::from(
+                [
+                    TagStyle::COLOR_BG => '#8da832',
+                    TagStyle::COLOR_TEXT => '#000000',
+                    TagStyle::COLOR_OUTLINE => '#000000',
+                ],
+            ),
         ));
 
         $this->save(new KeyforgeTag(
             Uuid::from(self::FIXTURE_TAG_6_ID),
             'Tag 6',
             TagVisibility::PUBLIC,
-            TagStyle::from(['color' => '#8da832']),
+            TagStyle::from(
+                [
+                    TagStyle::COLOR_BG => '#f1f507',
+                    TagStyle::COLOR_TEXT => '#000000',
+                    TagStyle::COLOR_OUTLINE => '#000000',
+                ],
+            ),
         ));
 
         $this->save(new KeyforgeTag(
             Uuid::from(self::FIXTURE_TAG_7_ID),
             'Tag 7',
             TagVisibility::PUBLIC,
-            TagStyle::from(['color' => '#8da832']),
+            TagStyle::from(
+                [
+                    TagStyle::COLOR_BG => '#8da832',
+                    TagStyle::COLOR_TEXT => '#000000',
+                    TagStyle::COLOR_OUTLINE => '#000000',
+                ],
+            ),
         ));
 
         $this->loaded = true;

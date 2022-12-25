@@ -36,12 +36,7 @@ final readonly class GetTagsQueryHandler
             $filters[] = new Filters(FilterType::AND, FilterType::OR, ...$idsExpressions);
         }
 
-        $criteria = new Criteria(
-            null,
-            null,
-            null,
-            ...$filters,
-        );
+        $criteria = new Criteria(null, null, null, ...$filters);
 
         $tags = $this->repository->search($criteria);
 
