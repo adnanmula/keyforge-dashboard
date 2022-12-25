@@ -69,9 +69,13 @@ final class GetDecksController extends Controller
                     $sorting = new Sorting(
                         new Order(new FilterField('wins'), OrderType::from($orderType)),
                         new Order(new FilterField('losses'), OrderType::from($orderType) === OrderType::ASC ? OrderType::DESC : OrderType::ASC),
+                        new Order(new FilterField('id'), OrderType::ASC),
                     );
                 } else {
-                    $sorting = new Sorting(new Order(new FilterField($orderField), OrderType::from($orderType)));
+                    $sorting = new Sorting(
+                        new Order(new FilterField($orderField), OrderType::from($orderType)),
+                        new Order(new FilterField('id'), OrderType::ASC),
+                    );
                 }
             }
         }
