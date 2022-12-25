@@ -25,16 +25,7 @@ final class GetDecksController extends Controller
         }
 
         $columnFilters = $request->get('columns', []);
-        $searchSet = null;
         $searchOwner = null;
-
-        if (\array_key_exists(2, $columnFilters)) {
-            $value = $columnFilters[2]['search']['value'];
-
-            if ('' !== $value) {
-                $searchSet = $value;
-            }
-        }
 
         if (\array_key_exists(7, $columnFilters)) {
             $value = $columnFilters[7]['search']['value'];
@@ -76,13 +67,14 @@ final class GetDecksController extends Controller
                 $request->get('start'),
                 $request->get('length'),
                 $searchDeck,
-                $searchSet,
+                $request->query->all()['extraFilterSet'] ?? null,
                 $request->query->get('extraFilterHouseFilterType'),
                 $request->query->all()['extraFilterHouses'] ?? null,
                 $sorting,
                 null,
                 $searchOwner,
                 $request->get('extraFilterOnlyOwned') === 'true',
+                $request->get('extraFilterTagType'),
                 $request->query->all()['extraFilterTags'] ?? [],
             )),
         );

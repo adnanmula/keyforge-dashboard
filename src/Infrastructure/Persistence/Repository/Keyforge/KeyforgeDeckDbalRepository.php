@@ -83,9 +83,12 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
     {
         $result = $this->connection->createQueryBuilder()
             ->select('a.id, a.name, a.set, a.houses, a.sas, a.wins, a.losses, a.extra_data, a.owner')
+            ->addSelect('string_agg(b.id::varchar, \',\') as tags')
             ->from(self::TABLE, 'a')
+            ->leftJoin('a', self::TABLE_TAG_RELATION, 'b', 'a.id = b.deck_id')
             ->where('a.id in (:ids)')
             ->setParameter('ids', \array_map(static fn (Uuid $id) => $id->value(), $ids), Connection::PARAM_STR_ARRAY)
+            ->groupBy('a.id')
             ->execute()
             ->fetchAllAssociative();
 
@@ -157,7 +160,7 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
             KeyforgeDeckHouses::from(
                 ...\array_map(
                     static fn (string $house) => KeyforgeHouse::from($house),
-                    \json_decode($deck['houses'], true, 512, \JSON_THROW_ON_ERROR),
+                    Json::decode($deck['houses']),
                 ),
             ),
             $deck['sas'],

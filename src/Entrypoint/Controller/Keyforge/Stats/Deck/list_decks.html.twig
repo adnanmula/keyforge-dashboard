@@ -20,6 +20,10 @@
                 <div class="col-md-12">
                     <div class="form-group">
                         <label for="tags" class="form-label">Tags</label>
+{#                        <input class="form-check-input tag_type_selector" type="radio" name="tags_filter_type" id="tags_filter_type_1" value="all" checked>#}
+{#                        <label class="form-check-label" for="tags_filter_type_1">All</label>#}
+{#                        <input class="form-check-input tag_type_selector" type="radio" name="tags_filter_type" id="tags_filter_type_2" value="any">#}
+{#                        <label class="form-check-label" for="tags_filter_type_2">Any</label>#}
                         <select id="tags" name="tags[]" multiple>
                             {% for tag in tags %}
                                 <option value="{{ tag.id }}"> {{ tag.name }} </option>
@@ -31,13 +35,27 @@
                     <div class="divider py-1"></div>
 
                     <div class="form-group">
+                        <label for="houses" class="form-label">Set</label>
+                        <br>
+                        <input class="form-check-input set_selector" type="checkbox" value="CotA" id="check_set_cota">
+                        <img width="33px" src="/assets/keyforge/sets/CotA.svg" alt="CotA"/>
+                        <input class="form-check-input set_selector" type="checkbox" value="AoA" id="check_set_aoa">
+                        <img width="33px" src="/assets/keyforge/sets/AoA.svg" alt="AoA"/>
+                        <input class="form-check-input set_selector" type="checkbox" value="WC" id="check_set_wc">
+                        <img width="33px" src="/assets/keyforge/sets/WC.svg" alt="WC"/>
+                        <input class="form-check-input set_selector" type="checkbox" value="MM" id="check_set_mm">
+                        <img width="33px" src="/assets/keyforge/sets/MM.svg" alt="MM"/>
+                        <input class="form-check-input set_selector" type="checkbox" value="DT" id="check_set_dt">
+                        <img width="33px" src="/assets/keyforge/sets/DT.svg" alt="DT"/>
+                    </div>
+                    </br>
+                    <div class="form-group">
                         <label for="houses" class="form-label">Houses</label>
                         <input class="form-check-input house_type_selector" type="radio" name="houses_filter_type" id="houses_filter_type_1" value="all" checked>
                         <label class="form-check-label" for="houses_filter_type_1">All</label>
                         <input class="form-check-input house_type_selector" type="radio" name="houses_filter_type" id="houses_filter_type_2" value="any">
                         <label class="form-check-label" for="houses_filter_type_2">Any</label>
 
-                        </br>
                         </br>
                         <input class="form-check-input houses_selector" type="checkbox" value="BROBNAR" id="check_house_brobnar">
                         <img width="35px" src="/assets/keyforge/houses/BROBNAR.png" alt="BROBNAR"/>
@@ -63,16 +81,17 @@
                         <img width="35px" src="/assets/keyforge/houses/UNFATHOMABLE.png" alt="UNFATHOMABLE"/>
                     </div>
 
-
                     <div class="divider py-1"></div>
                     <div class="divider py-1"></div>
-
-
 
                     <label for="tags" class="form-label">Additional options</label>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" value="" id="with_external">
                         <label class="form-check-label" for="with_external">External decks</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="test">
+                        <label class="form-check-label" for="test">Test</label>
                     </div>
 
                     <div class="divider py-1"></div>
@@ -110,6 +129,10 @@
             return false === $('#with_external')[0].checked;
         }
 
+        // function tagFilterType() {
+        //     return $('.tag_type_selector:checked')[0].value;
+        // }
+
         function tags() {
             const options = $('select#tags.choices__input.is-hidden')[0].options;
 
@@ -146,6 +169,17 @@
             return houses;
         }
 
+        function set() {
+            const checkboxes = $('.set_selector:checked');
+            let sets = [];
+
+            checkboxes.each(function (index, check) {
+                sets.push(check.value);
+            });
+
+            return sets;
+        }
+
         $(document).ready(function () {
             new Choices('#tags', {
                 removeItemButton: true,
@@ -163,25 +197,7 @@
             });
 
             $('#deckList').DataTable({
-                initComplete: function () {
-                    this.api()
-                        .columns([2])
-                        .every(function () {
-                            var column = this;
-                            var select = $('<select class="form-control form-control-sm"><option value="">Set</option></select>');
-
-                            select.appendTo($(column.header()).empty()).on('change', function () {
-                                var val = $.fn.dataTable.util.escapeRegex($(this).val());
-                                column.search(val, false, false).draw();
-                            });
-
-                            select.append('<option value="CotA">Call of the Archons</option>');
-                            select.append('<option value="AoA">Age of Ascension</option>');
-                            select.append('<option value="WC">Worlds Collide</option>');
-                            select.append('<option value="MM">Mass Mutation</option>');
-                            select.append('<option value="DT">Dark Tidings</option>');
-                        });
-                },
+                initComplete: function () {},
                 searching: true,
                 paging: true,
                 info: true,
@@ -195,9 +211,11 @@
                     url: '/keyforge/decks/json',
                     data: function(d){
                         d.extraFilterOnlyOwned = onlyOwned();
+                        // d.extraFilterTagType = tagFilterType();
                         d.extraFilterTags = tags();
                         d.extraFilterHouses = houses();
                         d.extraFilterHouseFilterType = houseFilterType();
+                        d.extraFilterSet = set();
                     }
                 },
                 columns: [

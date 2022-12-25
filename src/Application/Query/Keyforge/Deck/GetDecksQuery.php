@@ -3,6 +3,7 @@
 namespace AdnanMula\Cards\Application\Query\Keyforge\Deck;
 
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeHouse;
+use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeSet;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Infrastructure\Criteria\Sorting\Sorting;
 use Assert\Assert;
@@ -12,51 +13,55 @@ final class GetDecksQuery
     private ?int $start;
     private ?int $length;
     private ?string $deck;
-    private ?string $set;
+    private ?array $sets;
     private ?string $houseFilterType;
     private ?array $houses;
     private ?Sorting $sorting;
     private ?Uuid $deckId;
     private ?Uuid $owner;
     private bool $onlyOwned;
+    private ?string $tagFilterType;
     private array $tags;
 
     public function __construct(
         $start,
         $length,
         ?string $deck,
-        ?string $set,
+        ?array $sets,
         ?string $houseFilterType,
         ?array $houses,
         ?Sorting $sorting,
         ?string $deckId = null,
         ?string $owner = null,
         bool $onlyOwned = false,
+        ?string $tagFilterType = null,
         array $tags = [],
     ) {
         Assert::lazy()
             ->that($start, 'start')->nullOr()->integerish()->greaterOrEqualThan(0)
             ->that($length, 'length')->nullOr()->integerish()->greaterThan(0)
             ->that($deck, 'deck')->nullOr()->string()->notBlank()
-            ->that($set, 'set')->nullOr()->string()->notBlank()
-            ->that($houseFilterType, 'houseFilterType')->nullOr()->string()->inArray(['all', 'any'])
+            ->that($sets, 'set')->nullOr()->all()->inArray(KeyforgeSet::allowedValues())
+            ->that($houseFilterType, 'houseFilterType')->nullOr()->inArray(['all', 'any'])
             ->that($houses, 'house')->nullOr()->all()->inArray(KeyforgeHouse::allowedValues())
             ->that($deckId, 'deckId')->nullOr()->uuid()
             ->that($owner, 'owner')->nullOr()->uuid()
             ->that($onlyOwned, 'onlyOwned')->boolean()
+            ->that($tagFilterType, 'tagFilterType')->nullOr()->inArray(['all', 'any'])
             ->that($tags, 'tags')->all()->uuid()
             ->verifyNow();
 
         $this->start = null === $start ? null : (int) $start;
         $this->length = null === $length ? null : (int) $length;
         $this->deck= $deck;
-        $this->set = $set;
+        $this->sets = $sets;
         $this->houseFilterType = $houseFilterType;
         $this->houses = $houses;
         $this->sorting = $sorting;
         $this->deckId = null !== $deckId ? Uuid::from($deckId) : null;
         $this->owner = null !== $owner ? Uuid::from($owner) : null;
         $this->onlyOwned = $onlyOwned;
+        $this->tagFilterType = $tagFilterType;
         $this->tags = \array_map(static fn (string $id): Uuid => Uuid::from($id), $tags);
     }
 
@@ -75,9 +80,9 @@ final class GetDecksQuery
         return $this->deck;
     }
 
-    public function set(): ?string
+    public function sets(): ?array
     {
-        return $this->set;
+        return $this->sets;
     }
 
     public function houseFilterType(): ?string
@@ -108,6 +113,11 @@ final class GetDecksQuery
     public function onlyOwned(): bool
     {
         return $this->onlyOwned;
+    }
+
+    public function tagFilterType(): ?string
+    {
+        return $this->tagFilterType;
     }
 
     public function tags(): array

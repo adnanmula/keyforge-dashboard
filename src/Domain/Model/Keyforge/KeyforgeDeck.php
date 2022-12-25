@@ -92,6 +92,14 @@ final class KeyforgeDeck implements \JsonSerializable
         return $this;
     }
 
+    /** @param array<string> $tags */
+    public function updateTags(array $tags): self
+    {
+        $this->tags = $tags;
+
+        return $this;
+    }
+
     public function jsonSerialize(): array
     {
         return [

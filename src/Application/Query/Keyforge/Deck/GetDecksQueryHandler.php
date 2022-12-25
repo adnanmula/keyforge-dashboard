@@ -17,6 +17,7 @@ use AdnanMula\Cards\Infrastructure\Criteria\FilterField\FilterField;
 use AdnanMula\Cards\Infrastructure\Criteria\FilterValue\ArrayElementFilterValue;
 use AdnanMula\Cards\Infrastructure\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Cards\Infrastructure\Criteria\FilterValue\NullFilterValue;
+use AdnanMula\Cards\Infrastructure\Criteria\FilterValue\StringArrayFilterValue;
 use AdnanMula\Cards\Infrastructure\Criteria\FilterValue\StringFilterValue;
 use AdnanMula\Cards\Infrastructure\Criteria\Sorting\Order;
 use AdnanMula\Cards\Infrastructure\Criteria\Sorting\OrderType;
@@ -49,10 +50,6 @@ final class GetDecksQueryHandler
             $expressions[] = new Filter(new FilterField('owner'), new StringFilterValue($query->owner()->value()), FilterOperator::EQUAL);
         }
 
-        if (null !== $query->set()) {
-            $expressions[] = new Filter(new FilterField('set'), new StringFilterValue($query->set()), FilterOperator::CONTAINS);
-        }
-
         if (null !== $query->deck()) {
             $expressions[] = new Filter(new FilterField('name'), new StringFilterValue($query->deck()), FilterOperator::CONTAINS);
         }
@@ -64,18 +61,29 @@ final class GetDecksQueryHandler
         $filters = [new Filters(FilterType::AND, FilterType::AND, ...$expressions)];
 
         if (\count($query->tags()) > 0) {
-            $tagExpressions = [];
+            $filters[] = new Filters(
+                FilterType::AND,
+                FilterType::AND,
+                new Filter(
+                    new FilterField('tags'),
+                    new StringArrayFilterValue(...\array_map(static fn (Uuid $id): string => $id->value(), $query->tags())),
+                    FilterOperator::IN,
+                ),
+            );
+        }
 
-            foreach ($query->tags() as $tag) {
-                $tagExpressions[] = new Filter(new FilterField('tags'), new StringFilterValue($tag->value()), FilterOperator::EQUAL);
+        if (null !== $query->sets()) {
+            $setFilterExpressions = [];
+
+            foreach ($query->sets() as $set) {
+                $setFilterExpressions[] = new Filter(new FilterField('set'), new StringFilterValue($set), FilterOperator::EQUAL);
             }
 
-            $filters[] = new Filters(FilterType::AND, FilterType::OR, ...$tagExpressions);
-//            $filters[] = new Filters(
-//                FilterType::AND,
-//                FilterType::AND,
-//                new Filter(new FilterField('visibility'), new StringFilterValue(TagVisibility::PUBLIC->name), FilterOperator::EQUAL),
-//            );
+            $filters[] = new Filters(
+                FilterType::AND,
+                FilterType::OR,
+                ...$setFilterExpressions,
+            );
         }
 
         if (null !== $query->houses()) {
@@ -85,11 +93,11 @@ final class GetDecksQueryHandler
                 $houseFilterExpressions[] = new Filter(new FilterField('houses'), new ArrayElementFilterValue($house), FilterOperator::IN_ARRAY);
             }
 
-            $filters = [new Filters(
+            $filters[] = new Filters(
                 FilterType::AND,
                 $query->houseFilterType() === 'any' ? FilterType::OR : FilterType::AND,
                 ...$houseFilterExpressions,
-            )];
+            );
         }
 
         $criteria = new Criteria(
@@ -101,7 +109,10 @@ final class GetDecksQueryHandler
 
         $decks = $this->repository->search($criteria);
 
-//      TODO ñapa
+//      TODO ñapas
+
+        $decks = $this->addMissingTags(...$decks);
+
         if (null !== $query->owner()) {
             $decks = $this->recalculateWins($query->owner(), $query->deckId(), ...$decks);
 
@@ -109,6 +120,8 @@ final class GetDecksQueryHandler
                 $decks = $this->reorderDecks($query->sorting()->get('wins'), ...$decks);
             }
         }
+
+//      end ñapas
 
         if ($query->onlyOwned()) {
             $decks = $this->removeNotOwnedStats(...$decks);
@@ -246,6 +259,25 @@ final class GetDecksQueryHandler
 
                 return $a->wins() <=> $b->wins();
             });
+        }
+
+        return $decks;
+    }
+
+    /** @return array<KeyforgeDeck> */
+    private function addMissingTags(KeyforgeDeck ...$decks): array
+    {
+        $deckIds = \array_map(static fn (KeyforgeDeck $deck): Uuid => $deck->id(), $decks);
+
+        $decksWithAllTags = $this->repository->byIds(...$deckIds);
+
+        $indexedDecksWithTags = [];
+        foreach ($decksWithAllTags as $deckWithTags) {
+            $indexedDecksWithTags[$deckWithTags->id()->value()] = $deckWithTags->tags();
+        }
+
+        foreach ($decks as $deck) {
+            $deck->updateTags($indexedDecksWithTags[$deck->id()->value()]);
         }
 
         return $decks;

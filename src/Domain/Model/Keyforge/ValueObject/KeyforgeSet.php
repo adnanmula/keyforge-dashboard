@@ -51,4 +51,16 @@ enum KeyforgeSet: string
 
         throw new \InvalidArgumentException($set);
     }
+
+    public static function allowedValues(): array
+    {
+        return [
+            self::CotA->name,
+            self::AoA->name,
+            self::WC->name,
+            self::MM->name,
+            self::DT->name,
+            self::WoE->name,
+        ];
+    }
 }
