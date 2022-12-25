@@ -165,7 +165,7 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
             $deck['losses'],
             \json_decode($deck['extra_data'], true, 512, \JSON_THROW_ON_ERROR),
             null === $deck['owner'] ? null : Uuid::from($deck['owner']),
-            \array_key_exists('tags', $deck)
+            \array_key_exists('tags', $deck) && null !== $deck['tags']
                 ? \explode(',', $deck['tags'])
                 : [],
         );
