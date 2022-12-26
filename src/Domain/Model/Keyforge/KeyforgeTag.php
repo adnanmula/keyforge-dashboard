@@ -6,7 +6,7 @@ use AdnanMula\Cards\Domain\Model\Shared\ValueObject\TagStyle;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\TagVisibility;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 
-final class KeyforgeTag implements \JsonSerializable
+class KeyforgeTag implements \JsonSerializable
 {
     public function __construct(
         public Uuid $id,

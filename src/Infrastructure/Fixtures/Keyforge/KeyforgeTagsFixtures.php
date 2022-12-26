@@ -4,6 +4,11 @@ namespace AdnanMula\Cards\Infrastructure\Fixtures\Keyforge;
 
 use AdnanMula\Cards\Application\Service\Json;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeTag;
+use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeTagPercentile05;
+use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeTagPercentile60;
+use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeTagPercentile70;
+use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeTagPercentile80;
+use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeTagPercentile90;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\TagStyle;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\TagVisibility;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
@@ -116,6 +121,12 @@ final class KeyforgeTagsFixtures extends DbalFixture implements Fixture
                 ],
             ),
         ));
+
+        $this->save(new KeyforgeTagPercentile05());
+        $this->save(new KeyforgeTagPercentile60());
+        $this->save(new KeyforgeTagPercentile70());
+        $this->save(new KeyforgeTagPercentile80());
+        $this->save(new KeyforgeTagPercentile90());
 
         $this->loaded = true;
     }

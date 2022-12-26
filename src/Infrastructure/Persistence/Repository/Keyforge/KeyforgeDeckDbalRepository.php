@@ -151,6 +151,34 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
         $stmt->execute();
     }
 
+    public function assignTags(Uuid $deckId, array $tags): void
+    {
+        $stmtDelete = $this->connection->prepare(
+            \sprintf(
+                'DELETE FROM %s WHERE deck_id = :deck_id',
+                self::TABLE_TAG_RELATION,
+            ),
+        );
+
+        $stmtDelete->bindValue(':deck_id', $deckId->value());
+
+        $stmtDelete->execute();
+
+        foreach ($tags as $tag) {
+            $stmt = $this->connection->prepare(
+                \sprintf(
+                    'INSERT INTO %s (id, deck_id) VALUES (:id, :deck_id)',
+                    self::TABLE_TAG_RELATION,
+                ),
+            );
+
+            $stmt->bindValue(':id', $tag);
+            $stmt->bindValue(':deck_id', $deckId->value());
+
+            $stmt->execute();
+        }
+    }
+
     private function map(array $deck): KeyforgeDeck
     {
         return new KeyforgeDeck(
