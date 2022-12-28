@@ -11,6 +11,7 @@ use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagAmberControlHigh;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagAmberControlLow;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagAmberExpectedHigh;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagAmberExpectedLow;
+use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagAntiSynergyHigh;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagArchiveCardCountHigh;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagArtifactControlHigh;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagArtifactControlLow;
@@ -24,9 +25,11 @@ use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagEffectivePowerHigh;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagEfficiencyHigh;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagEfficiencyLow;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasAnomaly;
+use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasBoardWipes;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasKeyCheats;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasLegacy;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasMaverick;
+use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasScalingAmberControl;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagPercentile05;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagPercentile60;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagPercentile70;
@@ -34,6 +37,7 @@ use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagPercentile80;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagPercentile90;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagPercentile99;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagRecursionHigh;
+use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagSynergyHigh;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagUpgradeCountHigh;
 use AdnanMula\Cards\Infrastructure\Criteria\Criteria;
 use Symfony\Component\Console\Command\Command;
@@ -64,13 +68,6 @@ final class ApplyTagsCommand extends Command
             /** @var array $data */
             $data = $deck->extraData()['deck'];
 
-//            TODO more predefined tags
-//            $synergyRating = $data['synergyRating'];
-//            $antisynergyRating = $data['antisynergyRating'];
-//            $other = $data['other'];
-//            $boardWipes (checkcards todo)
-//            $scalingAmberControl (checkcards todo)
-
             [$maverickCount, $legacyCount, $anomalyCount] = $this->specialCardsCount($data);
 
             $newTags[] = $this->tagPercentiles($data);
@@ -91,10 +88,12 @@ final class ApplyTagsCommand extends Command
             $newTags[] = $this->tagCreatureControl($data);
             $newTags[] = $this->tagArtifactControl($data);
             $newTags[] = $this->tagCreatureProtection($data);
-
             $newTags[] = $this->tagRecursion($data);
             $newTags[] = $this->tagDisruption($data);
-
+            $newTags[] = $this->tagHasScalingAmberControl($data);
+            $newTags[] = $this->tagHasBoardWipes($data);
+            $newTags[] = $this->tagSynergy($data);
+            $newTags[] = $this->tagAntiSynergy($data);
 
             $newTags = \array_filter($newTags);
 
@@ -388,6 +387,110 @@ final class ApplyTagsCommand extends Command
 
         if ($value >= 9) {
             return new KeyforgeTagDisruptionHigh();
+        }
+
+        return null;
+    }
+
+    private function tagHasScalingAmberControl(array $data): ? KeyforgeTag
+    {
+        $cards = [
+            'Burn the Stockpile',
+            'Effervescent Principle',
+            'Too Much to Protect',
+            'Interdimensional Graft',
+            'Shatter Storm',
+            'Doorstep to Heaven',
+            'Deusillus',
+        ];
+
+        $count = 0;
+
+        foreach ($data['housesAndCards'] as $house) {
+            foreach ($house['cards'] as $card) {
+                if (\in_array($card['cardTitle'], $cards)) {
+                    $count++;
+                }
+            }
+        }
+
+        if ($count > 0) {
+            return new KeyforgeTagHasScalingAmberControl();
+        }
+
+        return null;
+    }
+
+    private function tagHasBoardWipes(array $data): ? KeyforgeTag
+    {
+        $cards = [
+            'Ballcano',
+            'Axiom of Grist',
+            'Spartasaur',
+            'Key to Dis',
+            'Harbinger of Doom',
+            'Ragnarok',
+            'Unnatural Selection',
+            'Strange Gizmo',
+            'Red Alert',
+            'Champion’s Challenge',
+            'Unlocked Gateway',
+            'Coward’s End',
+            'Earthshaker',
+            'The Big One',
+            'Gateway to Dis',
+            'Savage Clash',
+            'Skixuno',
+            'Onyx Knight',
+            'Groundbreaking Discovery',
+            'Krrrzzzaaap',
+            'Ammonia Clouds',
+            'Numquid the Fair',
+            'The Spirit’s Way',
+            'Opal Knight',
+            'Crushing Charge',
+            'Mind Bullets',
+            'Grand Alliance Council',
+            'General Sherman',
+            "Kiligog's Trench",
+            'Mælstrom',
+            'Æmberlution',
+        ];
+
+        $count = 0;
+
+        foreach ($data['housesAndCards'] as $house) {
+            foreach ($house['cards'] as $card) {
+                if (\in_array($card['cardTitle'], $cards)) {
+                    $count++;
+                }
+            }
+        }
+
+        if ($count > 0) {
+            return new KeyforgeTagHasBoardWipes();
+        }
+
+        return null;
+    }
+
+    private function tagSynergy(array $data): ? KeyforgeTag
+    {
+        $value = $data['synergyRating'] ?? 0;
+
+        if ($value >= 15) {
+            return new KeyforgeTagSynergyHigh();
+        }
+
+        return null;
+    }
+
+    private function tagAntiSynergy(array $data): ? KeyforgeTag
+    {
+        $value = $data['antisynergyRating'] ?? 0;
+
+        if ($value >= 2) {
+            return new KeyforgeTagAntiSynergyHigh();
         }
 
         return null;

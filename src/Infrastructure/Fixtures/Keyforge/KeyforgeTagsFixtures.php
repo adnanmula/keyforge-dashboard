@@ -11,6 +11,7 @@ use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagAmberControlHigh;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagAmberControlLow;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagAmberExpectedHigh;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagAmberExpectedLow;
+use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagAntiSynergyHigh;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagArchiveCardCountHigh;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagArtifactControlHigh;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagArtifactControlLow;
@@ -24,9 +25,11 @@ use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagEffectivePowerHigh;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagEfficiencyHigh;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagEfficiencyLow;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasAnomaly;
+use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasBoardWipes;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasKeyCheats;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasLegacy;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasMaverick;
+use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasScalingAmberControl;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagPercentile05;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagPercentile60;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagPercentile70;
@@ -34,6 +37,7 @@ use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagPercentile80;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagPercentile90;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagPercentile99;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagRecursionHigh;
+use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagSynergyHigh;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagUpgradeCountHigh;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\TagStyle;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\TagVisibility;
@@ -179,6 +183,10 @@ final class KeyforgeTagsFixtures extends DbalFixture implements Fixture
         $this->save(new KeyforgeTagPercentile99());
         $this->save(new KeyforgeTagRecursionHigh());
         $this->save(new KeyforgeTagUpgradeCountHigh());
+        $this->save(new KeyforgeTagHasBoardWipes());
+        $this->save(new KeyforgeTagHasScalingAmberControl());
+        $this->save(new KeyforgeTagSynergyHigh());
+        $this->save(new KeyforgeTagAntiSynergyHigh());
 
         $this->loaded = true;
     }
