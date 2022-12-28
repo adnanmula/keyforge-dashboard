@@ -1,7 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace AdnanMula\Cards\Entrypoint\Command;
+namespace AdnanMula\Cards\Application\Service;
 
+use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeck;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeTag;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagActionCountHigh;
@@ -39,68 +40,50 @@ use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagPercentile99;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagRecursionHigh;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagSynergyHigh;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagUpgradeCountHigh;
-use AdnanMula\Cards\Infrastructure\Criteria\Criteria;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 
-final class ApplyTagsCommand extends Command
+final class ApplyPredefinedTagsService
 {
-    public const NAME = 'tags:apply';
+    public function __construct(
+        private readonly KeyforgeDeckRepository $repository,
+    ) {}
 
-    public function __construct(private readonly KeyforgeDeckRepository $deckRepository)
+    public function execute(KeyforgeDeck $deck): void
     {
-        parent::__construct(self::NAME);
-    }
+        $newTags = [];
 
-    protected function configure(): void
-    {
-        $this->setDescription('');
-    }
+        /** @var array $data */
+        $data = $deck->extraData()['deck'];
 
-    protected function execute(InputInterface $input, OutputInterface $output): int
-    {
-        $decks = $this->deckRepository->search(new Criteria(null, null, null));
+        [$maverickCount, $legacyCount, $anomalyCount] = $this->specialCardsCount($data);
 
-        foreach ($decks as $deck) {
-            $newTags = [];
+        $newTags[] = $this->tagPercentiles($data);
+        $newTags[] = $this->tagHasMaverick($maverickCount);
+        $newTags[] = $this->tagHasLegacy($legacyCount);
+        $newTags[] = $this->tagHasAnomaly($anomalyCount);
+        $newTags[] = $this->tagHasKeyCheats($data);
+        $newTags[] = $this->tagExpectedAmber($data);
+        $newTags[] = $this->tagBonusAmber($data);
+        $newTags[] = $this->tagEffectivePower($data);
+        $newTags[] = $this->tagEfficiency($data);
+        $newTags[] = $this->tagArtifactCount($data);
+        $newTags[] = $this->tagActionCount($data);
+        $newTags[] = $this->tagCreatureCount($data);
+        $newTags[] = $this->tagArchiveCardCount($data);
+        $newTags[] = $this->tagUpgradeCount($data);
+        $newTags[] = $this->tagAmberControl($data);
+        $newTags[] = $this->tagCreatureControl($data);
+        $newTags[] = $this->tagArtifactControl($data);
+        $newTags[] = $this->tagCreatureProtection($data);
+        $newTags[] = $this->tagRecursion($data);
+        $newTags[] = $this->tagDisruption($data);
+        $newTags[] = $this->tagHasScalingAmberControl($data);
+        $newTags[] = $this->tagHasBoardWipes($data);
+        $newTags[] = $this->tagSynergy($data);
+        $newTags[] = $this->tagAntiSynergy($data);
 
-            /** @var array $data */
-            $data = $deck->extraData()['deck'];
+        $newTags = \array_filter($newTags);
 
-            [$maverickCount, $legacyCount, $anomalyCount] = $this->specialCardsCount($data);
-
-            $newTags[] = $this->tagPercentiles($data);
-            $newTags[] = $this->tagHasMaverick($maverickCount);
-            $newTags[] = $this->tagHasLegacy($legacyCount);
-            $newTags[] = $this->tagHasAnomaly($anomalyCount);
-            $newTags[] = $this->tagHasKeyCheats($data);
-            $newTags[] = $this->tagExpectedAmber($data);
-            $newTags[] = $this->tagBonusAmber($data);
-            $newTags[] = $this->tagEffectivePower($data);
-            $newTags[] = $this->tagEfficiency($data);
-            $newTags[] = $this->tagArtifactCount($data);
-            $newTags[] = $this->tagActionCount($data);
-            $newTags[] = $this->tagCreatureCount($data);
-            $newTags[] = $this->tagArchiveCardCount($data);
-            $newTags[] = $this->tagUpgradeCount($data);
-            $newTags[] = $this->tagAmberControl($data);
-            $newTags[] = $this->tagCreatureControl($data);
-            $newTags[] = $this->tagArtifactControl($data);
-            $newTags[] = $this->tagCreatureProtection($data);
-            $newTags[] = $this->tagRecursion($data);
-            $newTags[] = $this->tagDisruption($data);
-            $newTags[] = $this->tagHasScalingAmberControl($data);
-            $newTags[] = $this->tagHasBoardWipes($data);
-            $newTags[] = $this->tagSynergy($data);
-            $newTags[] = $this->tagAntiSynergy($data);
-
-            $newTags = \array_filter($newTags);
-
-            $this->deckRepository->assignTags($deck->id(), $this->mergeTags($deck->tags(), $newTags));
-        }
-
-        return self::SUCCESS;
+        $this->repository->assignTags($deck->id(), $this->mergeTags($deck->tags(), $newTags));
     }
 
     private function mergeTags(array $currentTags, array $newTags): array
@@ -110,7 +93,7 @@ final class ApplyTagsCommand extends Command
         ));
     }
 
-    private function specialCardsCount($data): array
+    private function specialCardsCount(array $data): array
     {
         $maverickCount = 0;
         $legacyCount = 0;
@@ -125,6 +108,7 @@ final class ApplyTagsCommand extends Command
                 if ($card['maverick']) {
                     $maverickCount++;
                 }
+
                 if ($card['anomaly']) {
                     $anomalyCount++;
                 }
@@ -392,7 +376,7 @@ final class ApplyTagsCommand extends Command
         return null;
     }
 
-    private function tagHasScalingAmberControl(array $data): ? KeyforgeTag
+    private function tagHasScalingAmberControl(array $data): ?KeyforgeTag
     {
         $cards = [
             'Burn the Stockpile',
@@ -408,7 +392,7 @@ final class ApplyTagsCommand extends Command
 
         foreach ($data['housesAndCards'] as $house) {
             foreach ($house['cards'] as $card) {
-                if (\in_array($card['cardTitle'], $cards)) {
+                if (\in_array($card['cardTitle'], $cards, true)) {
                     $count++;
                 }
             }
@@ -421,7 +405,7 @@ final class ApplyTagsCommand extends Command
         return null;
     }
 
-    private function tagHasBoardWipes(array $data): ? KeyforgeTag
+    private function tagHasBoardWipes(array $data): ?KeyforgeTag
     {
         $cards = [
             'Ballcano',
@@ -461,7 +445,7 @@ final class ApplyTagsCommand extends Command
 
         foreach ($data['housesAndCards'] as $house) {
             foreach ($house['cards'] as $card) {
-                if (\in_array($card['cardTitle'], $cards)) {
+                if (\in_array($card['cardTitle'], $cards, true)) {
                     $count++;
                 }
             }
@@ -474,7 +458,7 @@ final class ApplyTagsCommand extends Command
         return null;
     }
 
-    private function tagSynergy(array $data): ? KeyforgeTag
+    private function tagSynergy(array $data): ?KeyforgeTag
     {
         $value = $data['synergyRating'] ?? 0;
 
@@ -485,7 +469,7 @@ final class ApplyTagsCommand extends Command
         return null;
     }
 
-    private function tagAntiSynergy(array $data): ? KeyforgeTag
+    private function tagAntiSynergy(array $data): ?KeyforgeTag
     {
         $value = $data['antisynergyRating'] ?? 0;
 

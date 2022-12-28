@@ -1,10 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace AdnanMula\Cards\Entrypoint\Command;
+namespace AdnanMula\Cards\Entrypoint\Command\Environment;
 
 use AdnanMula\Cards\Infrastructure\Fixtures\FixturesRegistry;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -16,13 +17,12 @@ final class LoadFixturesCommand extends Command
         private FixturesRegistry $registry,
         private Connection $connection,
     ) {
-        parent::__construct(null);
+        parent::__construct(self::NAME);
     }
 
     protected function configure(): void
     {
-        $this->setName(self::NAME)
-            ->setDescription('Load fixtures');
+        $this->setDescription('Load fixtures');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -33,6 +33,21 @@ final class LoadFixturesCommand extends Command
 
         $this->registry->execute();
 
+        $this->applyTags($output);
+
         return Command::SUCCESS;
+    }
+
+    private function applyTags(OutputInterface $output): void
+    {
+        $app = $this->getApplication();
+
+        if (null === $app) {
+            throw new \RuntimeException('Kernel not initialized');
+        }
+
+        $app->setAutoExit(false);
+
+        $app->run(new ArrayInput(['command' => 'tags:apply']));
     }
 }

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace AdnanMula\Cards\Entrypoint\Command;
+namespace AdnanMula\Cards\Entrypoint\Command\Environment;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception\DatabaseDoesNotExist;

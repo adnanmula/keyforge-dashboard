@@ -4,6 +4,13 @@
 
 {% block header %}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css">
+
+    <style>
+        .btn-xs > .btn, .btn-xs {
+            font-size  : .700rem;
+            line-height  : .75;
+        }
+    </style>
 {% endblock %}
 
 {% block body %}
@@ -232,7 +239,7 @@
                             data.forEach(function (tagId) {
                                 tagsJson.forEach(function (item) {
                                     if (tagId === item.id) {
-                                        const tag = '<button type="button" class="btn btn-outline-dark" data-value="' + item.name
+                                        const tag = '<button type="button" class="btn btn-xs btn-outline-dark" data-value="' + item.name
                                             + '" style="background-color: ' + item.style.color_bg + '; color: ' + item.style.color_text + '; border-color: ' + item.style.color_outline + '">'
                                             + item.name + '</button>';
 
@@ -241,7 +248,7 @@
                                 })
                             })
 
-                            return tags.sort().join('<br>');
+                            return tags.sort().join('');
                         },
                         targets: 0, //Tags
                     },
@@ -350,6 +357,10 @@
                         targets: [1, 4, 5],
                         orderable: true
                     },
+                    {
+                        targets: 0,
+                        width: 250
+                    }
                 ],
             });
         });

@@ -19,6 +19,9 @@ services:
     resource: '../src/Application/Query/*/*/*Handler.php'
     tags: [{ name: messenger.message_handler, bus: messenger.bus.command }]
 
+  AdnanMula\Cards\Application\Service\:
+    resource: '../src/Application/Service'
+
   AdnanMula\Cards\Domain\Service\:
     resource: '../src/Domain/Service'
 
