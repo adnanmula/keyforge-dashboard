@@ -68,8 +68,8 @@ final class ApplyPredefinedTagsService
         $newTags[] = $this->tagArtifactCount($data);
         $newTags[] = $this->tagActionCount($data);
         $newTags[] = $this->tagCreatureCount($data);
-        $newTags[] = $this->tagArchiveCardCount($data);
         $newTags[] = $this->tagUpgradeCount($data);
+        $newTags[] = $this->tagArchiveCardCount($data);
         $newTags[] = $this->tagAmberControl($data);
         $newTags[] = $this->tagCreatureControl($data);
         $newTags[] = $this->tagArtifactControl($data);
@@ -278,9 +278,9 @@ final class ApplyPredefinedTagsService
 
     private function tagArchiveCardCount(array $data): ?KeyforgeTag
     {
-        $creatures = $data['cardArchiveCount'] ?? 0;
+        $value = $data['cardArchiveCount'] ?? 0;
 
-        if ($creatures >= 6) {
+        if ($value >= 6) {
             return new KeyforgeTagArchiveCardCountHigh();
         }
 

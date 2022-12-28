@@ -33,12 +33,12 @@ final class LoadFixturesCommand extends Command
 
         $this->registry->execute();
 
-        $this->applyTags($output);
+        $this->applyTags();
 
         return Command::SUCCESS;
     }
 
-    private function applyTags(OutputInterface $output): void
+    private function applyTags(): void
     {
         $app = $this->getApplication();
 
@@ -48,6 +48,6 @@ final class LoadFixturesCommand extends Command
 
         $app->setAutoExit(false);
 
-        $app->run(new ArrayInput(['command' => 'tags:apply']));
+        $app->run(new ArrayInput(['command' => 'tags:predefined:apply']));
     }
 }

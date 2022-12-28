@@ -2,6 +2,20 @@
 
 {% block title %}Wiki{% endblock %}
 
+{% block header %}
+    <style>
+        #tableHousesBySet td, #tableHousesBySet th {
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        #tableTagCriteria td, #tableTagCriteria th {
+            text-align: left;
+        }
+
+    </style>
+{% endblock %}
+
 {% block body %}
     <div class="divider py-1"></div>
 
@@ -21,6 +35,232 @@
             <a href="https://archonarcana.com/Tournament_Concepts" target="_blank" class="list-group-item list-group-item-action">Reglas de torneo</a>
             <a href="https://sites.google.com/view/keyforgeadventures" target="_blank" class="list-group-item list-group-item-action">Adventures</a>
             <a href="https://nkfl.online/" target="_blank" class="list-group-item list-group-item-action">NKFL community</a>
+
+            <a class="list-group-item list-group-item-action" data-bs-toggle="collapse" data-bs-target="#divTableHousesBySet">Casas en cada set</a>
+
+            <div class="collapse" id="divTableHousesBySet">
+                <table class="table" id="tableHousesBySet">
+                    <tr>
+                        <th></th>
+                        <th><img width="35px" src="/assets/keyforge/houses/BROBNAR.png" alt="BROBNAR"/></th>
+                        <th><img width="35px" src="/assets/keyforge/houses/DIS.png" alt="DIS"/></th>
+                        <th><img width="35px" src="/assets/keyforge/houses/LOGOS.png" alt="LOGOS"/></th>
+                        <th><img width="35px" src="/assets/keyforge/houses/MARS.png" alt="MARS"/></th>
+                        <th><img width="35px" src="/assets/keyforge/houses/SANCTUM.png" alt="SANCTUM"/></th>
+                        <th><img width="35px" src="/assets/keyforge/houses/SAURIAN.png" alt="SAURIAN"/></th>
+                        <th><img width="35px" src="/assets/keyforge/houses/SHADOWS.png" alt="SHADOWS"/></th>
+                        <th><img width="35px" src="/assets/keyforge/houses/STAR_ALLIANCE.png" alt="STAR_ALLIANCE"/></th>
+                        <th><img width="35px" src="/assets/keyforge/houses/UNFATHOMABLE.png" alt="UNFATHOMABLE"/></th>
+                        <th><img width="35px" src="/assets/keyforge/houses/UNTAMED.png" alt="UNTAMED"/></th>
+                    </tr>
+                    <tbody>
+                        <tr>
+                            <td style="text-align: right;">Call of the Archons</td>
+                            <td><i class="bi bi-check"></i></td>
+                            <td><i class="bi bi-check"></i></td>
+                            <td><i class="bi bi-check"></i></td>
+                            <td><i class="bi bi-check"></i></td>
+                            <td><i class="bi bi-check"></i></td>
+                            <td></td>
+                            <td><i class="bi bi-check"></i></td>
+                            <td></td>
+                            <td></td>
+                            <td><i class="bi bi-check"></i></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: right;">Age of Ascension</td>
+                            <td><i class="bi bi-check"></i></td>
+                            <td><i class="bi bi-check"></i></td>
+                            <td><i class="bi bi-check"></i></td>
+                            <td><i class="bi bi-check"></i></td>
+                            <td><i class="bi bi-check"></i></td>
+                            <td></td>
+                            <td><i class="bi bi-check"></i></td>
+                            <td></td>
+                            <td></td>
+                            <td><i class="bi bi-check"></i></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: right;">Worlds Collide</td>
+                            <td><i class="bi bi-check"></i></td>
+                            <td><i class="bi bi-check"></i></td>
+                            <td><i class="bi bi-check"></i></td>
+                            <td></td>
+                            <td></td>
+                            <td><i class="bi bi-check"></i></td>
+                            <td><i class="bi bi-check"></i></td>
+                            <td><i class="bi bi-check"></i></td>
+                            <td></td>
+                            <td><i class="bi bi-check"></i></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: right;">Mass Mutation</td>
+                            <td></td>
+                            <td><i class="bi bi-check"></i></td>
+                            <td><i class="bi bi-check"></i></td>
+                            <td></td>
+                            <td><i class="bi bi-check"></i></td>
+                            <td><i class="bi bi-check"></i></td>
+                            <td><i class="bi bi-check"></i></td>
+                            <td><i class="bi bi-check"></i></td>
+                            <td></td>
+                            <td><i class="bi bi-check"></i></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: right;">Dark Tidings</td>
+                            <td></td>
+                            <td></td>
+                            <td><i class="bi bi-check"></i></td>
+                            <td></td>
+                            <td><i class="bi bi-check"></i></td>
+                            <td><i class="bi bi-check"></i></td>
+                            <td><i class="bi bi-check"></i></td>
+                            <td><i class="bi bi-check"></i></td>
+                            <td><i class="bi bi-check"></i></td>
+                            <td><i class="bi bi-check"></i></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <a class="list-group-item list-group-item-action" data-bs-toggle="collapse" data-bs-target="#divTableTagCriteria">Criterio de asignación de tags</a>
+
+            <div class="collapse" id="divTableTagCriteria">
+                <table class="table" id="tableTagCriteria">
+                    <tr>
+                        <th>Tag</th>
+                        <th>Criterio</th>
+                        <th></th>
+                    </tr>
+                    <tbody>
+                    <tr>
+                        <td style="white-space: nowrap;">Ámbar esperado alto</td>
+                        <td>Puntuación de expectedAmber mayor o igual a 25</td>
+                        <td>Cuanto ambar puedes esperar generar. No tiene en cuenta el cosechado de criaturas a no ser que tengan habilidades especiales como "Cosecha: Gana 1 Amber". El ambar base de algunas cartas dificiles de jugar se ha reducido, y se ha incrementado para otras cartas que permiten el uso inmediato de criaturas.</td>
+                    </tr>
+                    <tr>
+                        <td style="white-space: nowrap;">Ambar esperado bajo</td>
+                        <td>Puntuación de expectedAmber menor o igual a 5</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space: nowrap;">Muchos pimpollos de ambar</td>
+                        <td>Tiene 15 o más iconos de ámbar impresos en sus cartas</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space: nowrap;">Muchos pimpollos de ambar</td>
+                        <td>Tiene 5 o menos pimpollos de ámbar impresos en sus cartas</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space: nowrap;">Poder efectivo alto</td>
+                        <td style="white-space: nowrap;">Poder efectivo mayor o igual a 110</td>
+                        <td>Poder real usable de las criaturas de la baraja. Para criaturas que muchas veces no pueden ser jugadas o usadas se reduce. El poder efectivo tambien tiene en cuenta armadura y otras habilidades que afectan a la supervivencia como elusivo, escaramuza, dañino, asalto y curaciones</td>
+                    </tr>
+                    <tr>
+                        <td style="white-space: nowrap;">Eficiencia alta</td>
+                        <td>Eficiencia mayor o igual a 15</td>
+                        <td>Mide los efectos que te permiten jugar cartas extra. Se reduce por cartas que impiden jugar o robar cartas, como cartas que dan cadenas o Bad Penny</td>
+                    </tr>
+                    <tr>
+                        <td style="white-space: nowrap;">Eficiencia baja</td>
+                        <td>Eficiencia menor o igual a -1</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space: nowrap;">Muchos artefactos</td>
+                        <td>Tiene 6 o más artefactos</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space: nowrap;">Muchas acciones</td>
+                        <td>Tiene 18 o más acciones</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space: nowrap;">Muchas criaturas</td>
+                        <td>Tiene 22 o más criaturas</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space: nowrap;">Muchas mejoras</td>
+                        <td>Tiene 9 o más mejoras</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space: nowrap;">Archiva mucho</td>
+                        <td>Tiene 6 o más cartas que archivan</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space: nowrap;">Control de ambar alto</td>
+                        <td>Puntuación de 15 o más</td>
+                        <td>Representa la camtidad de ámbar que la baraja puede denegar a su oponente. El ámbar perdido o robado tiene mas valor que el capturado y los incrementos de coste de llave.</td>
+                    </tr>
+                    <tr>
+                        <td style="white-space: nowrap;">Control de ambar bajo</td>
+                        <td>Puntuación de 2 o menos</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space: nowrap;">Control de criaturas alto</td>
+                        <td>Puntuacion de 15 o más</td>
+                        <td>Representa cartas que hacen daño, destruyen o inhabilitan criaturas enemigas.</td>
+                    </tr>
+                    <tr>
+                        <td style="white-space: nowrap;">Control de criaturas bajo</td>
+                        <td>Puntuacion menor a 4</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space: nowrap;">Control de artefactos alto</td>
+                        <td>Puntuación de 2 o más</td>
+                        <td>Representa la destrucción de artefactos enemigos o el poder denegar su uso</td>
+                    </tr>
+                    <tr>
+                        <td style="white-space: nowrap;">Sin control de artefactos</td>
+                        <td>Puntuación de 0, no tiene forma de destruir o denegar el uso de artefactos</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space: nowrap;">Proteccion de criaturas</td>
+                        <td>Puntuacion de 6 o más</td>
+                        <td>Incluye cualquier carta con efectos que incrementan poder, protegen de luchas, daño o eliminación.</td>
+                    </tr>
+                    <tr>
+                        <td style="white-space: nowrap;">Recursion alta</td>
+                        <td>Puntuacion de 6 o más</td>
+                        <td>Efectos que permiten jugar cartas que ya han sido jugadas.</td>
+                    </tr>
+                    <tr>
+                        <td style="white-space: nowrap;">Disrupción alta</td>
+                        <td>Puntuacion de 9 o más</td>
+                        <td>Efectos que reducen el numero de cartas que tu oponente puede jugar.</td>
+                    </tr>
+                    <tr>
+                        <td style="white-space: nowrap;">Tiene control de ambar escalado</td>
+                        <td>Tiene cartas permiten denegar más ámbar cuanto más tiene el rival</td>
+                        <td>Cartas consideradas: Burn the Stockpile, Effervescent Principle, Too Much to Protect, Interdimensional Graft, Shatter Storm, Doorstep to Heaven, Deusillus</td>
+                    </tr>
+                    <tr>
+                        <td style="white-space: nowrap;">Tiene board wipes</td>
+                        <td>Tiene cartas capacez de limpia el tablero de criaturas en mayor o menor medida</td>
+                        <td>Cartas consideradas: Æmberlution, Ammonia Clouds, Axiom of Grist, Ballcano, Champion’s Challenge, Coward’s End, Crushing Charge, Earthshaker, Gateway to Dis, General Sherman, Grand Alliance Council, Groundbreaking Discovery, Harbinger of Doom, Key to Dis, Kiligog's Trench, Krrrzzzaaap, Mind Bullets, Mælstrom, Numquid the Fair, Onyx Knight, Opal Knight, Ragnarok, Red Alert, Savage Clash, Skixuno, Spartasaur, Strange Gizmo, The Big One, The Spirit’s Way, Unlocked Gateway, Unnatural Selection</td>
+                    </tr>
+                    <tr>
+                        <td style="white-space: nowrap;">Sinérgico</td>
+                        <td>Puntuacion de 15 o más</td>
+                        <td>Aproximación de la calidad de una baraja, puede ayudar a detectar sinérgias y antisinérgias.</td>
+                    </tr>
+                    <tr>
+                        <td style="white-space: nowrap;">Antisinérgico</td>
+                        <td>Menor o igual a -2</td>
+                        <td></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 {% endblock %}
