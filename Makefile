@@ -62,3 +62,7 @@ cs: ## check code style
 
 grump: ## run grumphp
 	docker-compose -f ${FILE} exec --user=${UID} php-fpm sh -c "grumphp run"
+
+# Application
+tags: ## Apply predefined tags
+	docker-compose -f ${FILE} exec --user=${UID} php-fpm sh -c "console tags:predefined:apply"

@@ -22,7 +22,6 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
     public const FIXTURE_KEYFORGE_DECK_7_ID = '098a2c7e-02f2-4c53-b7cd-8714ea0bbe41';
 
     private const TABLE = 'keyforge_decks';
-    private const TABLE_TAG_RELATION = 'keyforge_deck_tags';
 
     private bool $loaded = false;
 
@@ -56,9 +55,6 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
             ),
         );
 
-        $this->saveTag(Uuid::from(self::FIXTURE_KEYFORGE_DECK_1_ID), Uuid::from(KeyforgeTagsFixtures::FIXTURE_TAG_1_ID));
-        $this->saveTag(Uuid::from(self::FIXTURE_KEYFORGE_DECK_1_ID), Uuid::from(KeyforgeTagsFixtures::FIXTURE_TAG_2_ID));
-
         $this->save(
             new KeyforgeDeck(
                 Uuid::from(self::FIXTURE_KEYFORGE_DECK_2_ID),
@@ -77,9 +73,6 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
             ),
         );
 
-        $this->saveTag(Uuid::from(self::FIXTURE_KEYFORGE_DECK_2_ID), Uuid::from(KeyforgeTagsFixtures::FIXTURE_TAG_2_ID));
-        $this->saveTag(Uuid::from(self::FIXTURE_KEYFORGE_DECK_2_ID), Uuid::from(KeyforgeTagsFixtures::FIXTURE_TAG_3_ID));
-
         $this->save(
             new KeyforgeDeck(
                 Uuid::from(self::FIXTURE_KEYFORGE_DECK_3_ID),
@@ -97,9 +90,6 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
                 null,
             ),
         );
-
-        $this->saveTag(Uuid::from(self::FIXTURE_KEYFORGE_DECK_3_ID), Uuid::from(KeyforgeTagsFixtures::FIXTURE_TAG_5_ID));
-        $this->saveTag(Uuid::from(self::FIXTURE_KEYFORGE_DECK_3_ID), Uuid::from(KeyforgeTagsFixtures::FIXTURE_TAG_6_ID));
 
         $this->save(
             new KeyforgeDeck(
@@ -220,21 +210,6 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
         $stmt->bindValue(':losses', $deck->losses());
         $stmt->bindValue(':extra_data', Json::encode($deck->extraData()));
         $stmt->bindValue(':owner', $deck->owner()?->value());
-
-        $stmt->execute();
-    }
-
-    private function saveTag(Uuid $deckId, Uuid $tagId): void
-    {
-        $stmt = $this->connection->prepare(
-            \sprintf(
-                'INSERT INTO %s (id, deck_id) VALUES (:id, :deck_id)',
-                self::TABLE_TAG_RELATION,
-            ),
-        );
-
-        $stmt->bindValue(':id', $tagId->value());
-        $stmt->bindValue(':deck_id', $deckId->value());
 
         $stmt->execute();
     }

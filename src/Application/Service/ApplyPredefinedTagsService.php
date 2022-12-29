@@ -38,6 +38,12 @@ use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasRats;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasScalingAmberControl;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasSins;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasTimetraveller;
+use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagOwnerBuko;
+use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagOwnerDani;
+use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagOwnerFran;
+use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagOwnerIsmalelo;
+use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagOwnerNan;
+use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagOwnerNull;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagPercentile05;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagPercentile60;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagPercentile70;
@@ -94,6 +100,7 @@ final class ApplyPredefinedTagsService
         $newTags[] = $this->tagHasBoardWipes($data);
         $newTags[] = $this->tagSynergy($data);
         $newTags[] = $this->tagAntiSynergy($data);
+        $newTags[] = $this->tagOwner($deck);
 
         $newTags = \array_filter($newTags);
 
@@ -607,5 +614,36 @@ final class ApplyPredefinedTagsService
         }
 
         return false;
+    }
+
+    private function tagOwner(KeyforgeDeck $deck): ?KeyforgeTag
+    {
+        $owner = $deck->owner()?->value();
+
+        if (null === $owner) {
+            return new KeyforgeTagOwnerNull();
+        }
+
+        if ($owner === '4ec5768e-f09f-4c9c-ab94-ff5bcb3e38c1') {
+            return new KeyforgeTagOwnerNan();
+        }
+
+        if ($owner === 'dd055fa6-cafd-4356-b283-54ce606f86b2') {
+            return new KeyforgeTagOwnerBuko();
+        }
+
+        if ($owner === 'f752ba28-e975-4ae8-869f-f56e02e67922') {
+            return new KeyforgeTagOwnerIsmalelo();
+        }
+
+        if ($owner === 'c98fd22a-c355-4fb9-88c9-2a2123a43321') {
+            return new KeyforgeTagOwnerFran();
+        }
+
+        if ($owner === 'b86488f4-336e-4c23-a34d-e92f06b51c04') {
+            return new KeyforgeTagOwnerDani();
+        }
+
+        return null;
     }
 }

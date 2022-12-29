@@ -37,6 +37,12 @@ use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasRats;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasScalingAmberControl;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasSins;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasTimetraveller;
+use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagOwnerBuko;
+use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagOwnerDani;
+use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagOwnerFran;
+use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagOwnerIsmalelo;
+use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagOwnerNan;
+use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagOwnerNull;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagPercentile05;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagPercentile60;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagPercentile70;
@@ -46,119 +52,17 @@ use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagPercentile99;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagRecursionHigh;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagSynergyHigh;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagUpgradeCountHigh;
-use AdnanMula\Cards\Domain\Model\Shared\ValueObject\TagStyle;
-use AdnanMula\Cards\Domain\Model\Shared\ValueObject\TagVisibility;
-use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Domain\Service\Persistence\Fixture;
 use AdnanMula\Cards\Infrastructure\Fixtures\DbalFixture;
 
 final class KeyforgeTagsFixtures extends DbalFixture implements Fixture
 {
-    public const FIXTURE_TAG_1_ID = '0d8ec28f-2fc5-4f8f-af71-7ca78efb5a66';
-    public const FIXTURE_TAG_2_ID = '8d0f77a9-b5c4-4520-8ea1-e8d5187e512e';
-    public const FIXTURE_TAG_3_ID = 'ee07a75f-b52d-4266-ba7f-852b1d35648f';
-    public const FIXTURE_TAG_4_ID = 'd1a3dbbe-b44c-4a92-9b25-c9f811720ff2';
-    public const FIXTURE_TAG_5_ID = '0c168066-0a43-45ad-87d4-0ff653370666';
-    public const FIXTURE_TAG_6_ID = '5302e938-15fc-452e-8c83-a7d7d393ba2f';
-    public const FIXTURE_TAG_7_ID = '3325edeb-69c7-45ce-a408-da81bbceb49f';
-
     private const TABLE = 'keyforge_tags';
 
     private bool $loaded = false;
 
     public function load(): void
     {
-        $this->save(new KeyforgeTag(
-            Uuid::from(self::FIXTURE_TAG_1_ID),
-            'Tag 1',
-            TagVisibility::PUBLIC,
-            TagStyle::from(
-                [
-                    TagStyle::COLOR_BG => '#8da832',
-                    TagStyle::COLOR_TEXT => '#000000',
-                    TagStyle::COLOR_OUTLINE => '#8da832',
-                ],
-            ),
-        ));
-
-        $this->save(new KeyforgeTag(
-            Uuid::from(self::FIXTURE_TAG_2_ID),
-            'Tag 2',
-            TagVisibility::PUBLIC,
-            TagStyle::from(
-                [
-                    TagStyle::COLOR_BG => '#42a4f5',
-                    TagStyle::COLOR_TEXT => '#000000',
-                    TagStyle::COLOR_OUTLINE => '#42a4f5',
-                ],
-            ),
-        ));
-
-        $this->save(new KeyforgeTag(
-            Uuid::from(self::FIXTURE_TAG_3_ID),
-            'Tag 3',
-            TagVisibility::PUBLIC,
-            TagStyle::from(
-                [
-                    TagStyle::COLOR_BG => '#8da832',
-                    TagStyle::COLOR_TEXT => '#000000',
-                    TagStyle::COLOR_OUTLINE => '#8da832',
-                ],
-            ),
-        ));
-
-        $this->save(new KeyforgeTag(
-            Uuid::from(self::FIXTURE_TAG_4_ID),
-            'Tag 4',
-            TagVisibility::PUBLIC,
-            TagStyle::from(
-                [
-                    TagStyle::COLOR_BG => '#d61e1e',
-                    TagStyle::COLOR_TEXT => '#000000',
-                    TagStyle::COLOR_OUTLINE => '#d61e1e',
-                ],
-            ),
-        ));
-
-        $this->save(new KeyforgeTag(
-            Uuid::from(self::FIXTURE_TAG_5_ID),
-            'Tag 5',
-            TagVisibility::PUBLIC,
-            TagStyle::from(
-                [
-                    TagStyle::COLOR_BG => '#8da832',
-                    TagStyle::COLOR_TEXT => '#000000',
-                    TagStyle::COLOR_OUTLINE => '#000000',
-                ],
-            ),
-        ));
-
-        $this->save(new KeyforgeTag(
-            Uuid::from(self::FIXTURE_TAG_6_ID),
-            'Tag 6',
-            TagVisibility::PUBLIC,
-            TagStyle::from(
-                [
-                    TagStyle::COLOR_BG => '#f1f507',
-                    TagStyle::COLOR_TEXT => '#000000',
-                    TagStyle::COLOR_OUTLINE => '#000000',
-                ],
-            ),
-        ));
-
-        $this->save(new KeyforgeTag(
-            Uuid::from(self::FIXTURE_TAG_7_ID),
-            'Tag 7',
-            TagVisibility::PUBLIC,
-            TagStyle::from(
-                [
-                    TagStyle::COLOR_BG => '#8da832',
-                    TagStyle::COLOR_TEXT => '#000000',
-                    TagStyle::COLOR_OUTLINE => '#000000',
-                ],
-            ),
-        ));
-
         $this->save(new KeyforgeTagActionCountHigh());
         $this->save(new KeyforgeTagAmberBonusHigh());
         $this->save(new KeyforgeTagAmberBonusLow());
@@ -166,6 +70,7 @@ final class KeyforgeTagsFixtures extends DbalFixture implements Fixture
         $this->save(new KeyforgeTagAmberControlLow());
         $this->save(new KeyforgeTagAmberExpectedHigh());
         $this->save(new KeyforgeTagAmberExpectedLow());
+        $this->save(new KeyforgeTagAntiSynergyHigh());
         $this->save(new KeyforgeTagArchiveCardCountHigh());
         $this->save(new KeyforgeTagArtifactControlHigh());
         $this->save(new KeyforgeTagArtifactControlLow());
@@ -178,10 +83,25 @@ final class KeyforgeTagsFixtures extends DbalFixture implements Fixture
         $this->save(new KeyforgeTagEffectivePowerHigh());
         $this->save(new KeyforgeTagEfficiencyHigh());
         $this->save(new KeyforgeTagEfficiencyLow());
+        $this->save(new KeyforgeTagHasAgentZ());
         $this->save(new KeyforgeTagHasAnomaly());
+        $this->save(new KeyforgeTagHasBoardWipes());
+        $this->save(new KeyforgeTagHasDoubleCards());
+        $this->save(new KeyforgeTagHasFangtoothCavern());
+        $this->save(new KeyforgeTagHasHorseman());
         $this->save(new KeyforgeTagHasKeyCheats());
         $this->save(new KeyforgeTagHasLegacy());
         $this->save(new KeyforgeTagHasMaverick());
+        $this->save(new KeyforgeTagHasRats());
+        $this->save(new KeyforgeTagHasScalingAmberControl());
+        $this->save(new KeyforgeTagHasSins());
+        $this->save(new KeyforgeTagHasTimetraveller());
+        $this->save(new KeyforgeTagOwnerBuko());
+        $this->save(new KeyforgeTagOwnerDani());
+        $this->save(new KeyforgeTagOwnerFran());
+        $this->save(new KeyforgeTagOwnerIsmalelo());
+        $this->save(new KeyforgeTagOwnerNan());
+        $this->save(new KeyforgeTagOwnerNull());
         $this->save(new KeyforgeTagPercentile05());
         $this->save(new KeyforgeTagPercentile60());
         $this->save(new KeyforgeTagPercentile70());
@@ -189,18 +109,8 @@ final class KeyforgeTagsFixtures extends DbalFixture implements Fixture
         $this->save(new KeyforgeTagPercentile90());
         $this->save(new KeyforgeTagPercentile99());
         $this->save(new KeyforgeTagRecursionHigh());
-        $this->save(new KeyforgeTagUpgradeCountHigh());
-        $this->save(new KeyforgeTagHasBoardWipes());
-        $this->save(new KeyforgeTagHasScalingAmberControl());
         $this->save(new KeyforgeTagSynergyHigh());
-        $this->save(new KeyforgeTagAntiSynergyHigh());
-        $this->save(new KeyforgeTagHasAgentZ());
-        $this->save(new KeyforgeTagHasDoubleCards());
-        $this->save(new KeyforgeTagHasFangtoothCavern());
-        $this->save(new KeyforgeTagHasHorseman());
-        $this->save(new KeyforgeTagHasRats());
-        $this->save(new KeyforgeTagHasSins());
-        $this->save(new KeyforgeTagHasTimetraveller());
+        $this->save(new KeyforgeTagUpgradeCountHigh());
 
         $this->loaded = true;
     }
