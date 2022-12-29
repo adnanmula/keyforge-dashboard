@@ -13,7 +13,7 @@ final class KeyforgeTagHasAgentZ extends KeyforgeTag
     {
         parent::__construct(
             Uuid::from('b0c3e776-45f3-4605-af70-3c35933fb36c'),
-            'Tiene viajero del tiempo',
+            'Tiene agente Z',
             TagVisibility::PUBLIC,
             TagStyle::from([
                 TagStyle::COLOR_BG => '#ffffff',

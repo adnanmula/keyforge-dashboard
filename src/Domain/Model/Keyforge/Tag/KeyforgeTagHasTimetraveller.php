@@ -12,7 +12,7 @@ final class KeyforgeTagHasTimetraveller extends KeyforgeTag
     public function __construct()
     {
         parent::__construct(
-            Uuid::from('b0c3e776-45f3-4605-af70-3c35933fb36c'),
+            Uuid::from('68a20151-7d7c-47c1-9802-0640d2e61f8e'),
             'Tiene viajero del tiempo',
             TagVisibility::PUBLIC,
             TagStyle::from([
