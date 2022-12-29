@@ -25,8 +25,10 @@ use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagDisruptionHigh;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagEffectivePowerHigh;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagEfficiencyHigh;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagEfficiencyLow;
+use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasAgentZ;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasAnomaly;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasBoardWipes;
+use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasFangtoothCavern;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasKeyCheats;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasLegacy;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasMaverick;
@@ -61,6 +63,13 @@ final class ApplyPredefinedTagsService
         $newTags[] = $this->tagHasLegacy($legacyCount);
         $newTags[] = $this->tagHasAnomaly($anomalyCount);
         $newTags[] = $this->tagHasKeyCheats($data);
+        $newTags[] = $this->tagHasCavern($data);
+        $newTags[] = $this->tagHasAgentZ($data);
+        $newTags[] = $this->tagHasTimetraveller($data);
+        $newTags[] = $this->tagHasRats($data);
+        $newTags[] = $this->tagHasSins($data);
+        $newTags[] = $this->tagHasHorseman($data);
+        $newTags[] = $this->tagHasDoubleCards($data);
         $newTags[] = $this->tagExpectedAmber($data);
         $newTags[] = $this->tagBonusAmber($data);
         $newTags[] = $this->tagEffectivePower($data);
@@ -478,5 +487,120 @@ final class ApplyPredefinedTagsService
         }
 
         return null;
+    }
+
+    private function tagHasCavern(array $data): ?KeyforgeTag
+    {
+        $cards = [
+            'Fangtooth Cavern',
+        ];
+
+        if ($this->hasCard($cards, $data)) {
+            return new KeyforgeTagHasFangtoothCavern();
+        }
+
+        return null;
+    }
+
+    private function tagHasAgentZ(array $data): ?KeyforgeTag
+    {
+        $cards = [
+            'Z-Force Agent 14',
+        ];
+
+        if ($this->hasCard($cards, $data)) {
+            return new KeyforgeTagHasAgentZ();
+        }
+
+        return null;
+    }
+
+    private function tagHasTimetraveller(array $data): ?KeyforgeTag
+    {
+        $cards = [
+            'Timetraveller',
+        ];
+
+        if ($this->hasCard($cards, $data)) {
+            return new KeyforgeTagHasFangtoothCavern();
+        }
+
+        return null;
+    }
+
+    private function tagHasRats(array $data): ?KeyforgeTag
+    {
+        $cards = [
+            'Plague Rat',
+        ];
+
+        if ($this->hasCard($cards, $data)) {
+            return new KeyforgeTagHasAgentZ();
+        }
+
+        return null;
+    }
+
+    private function tagHasDoubleCards(array $data): ?KeyforgeTag
+    {
+        $cards = [
+            'Deusillus',
+            'Ultra Gravitron',
+            'Niffle Kong',
+        ];
+
+        if ($this->hasCard($cards, $data)) {
+            return new KeyforgeTagHasAgentZ();
+        }
+
+        return null;
+    }
+
+    private function tagHasHorseman(array $data): ?KeyforgeTag
+    {
+        $cards = [
+            'Horseman of Death',
+            'Horseman of Famine',
+            'Horseman of Pestilence',
+            'Horseman of War',
+        ];
+
+        if ($this->hasCard($cards, $data)) {
+            return new KeyforgeTagHasAgentZ();
+        }
+
+        return null;
+    }
+
+    private function tagHasSins(array $data): ?KeyforgeTag
+    {
+        $cards = [
+            'Gluttony',
+            'Envy',
+            'Desire',
+            'Greed',
+            'Pride',
+            'Sloth',
+            'Wrath',
+        ];
+
+        if ($this->hasCard($cards, $data)) {
+            return new KeyforgeTagHasAgentZ();
+        }
+
+        return null;
+    }
+
+    private function hasCard(array $cards, array $data): bool
+    {
+        foreach ($data['housesAndCards'] as $house) {
+            foreach ($house['cards'] as $card) {
+                if (\in_array($card['cardTitle'], $cards, true)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }
