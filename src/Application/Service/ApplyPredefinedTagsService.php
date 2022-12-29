@@ -28,11 +28,16 @@ use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagEfficiencyLow;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasAgentZ;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasAnomaly;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasBoardWipes;
+use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasDoubleCards;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasFangtoothCavern;
+use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasHorseman;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasKeyCheats;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasLegacy;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasMaverick;
+use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasRats;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasScalingAmberControl;
+use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasSins;
+use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasTimetraveller;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagPercentile05;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagPercentile60;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagPercentile70;
@@ -522,7 +527,7 @@ final class ApplyPredefinedTagsService
         ];
 
         if ($this->hasCard($cards, $data)) {
-            return new KeyforgeTagHasFangtoothCavern();
+            return new KeyforgeTagHasTimetraveller();
         }
 
         return null;
@@ -535,7 +540,7 @@ final class ApplyPredefinedTagsService
         ];
 
         if ($this->hasCard($cards, $data)) {
-            return new KeyforgeTagHasAgentZ();
+            return new KeyforgeTagHasRats();
         }
 
         return null;
@@ -550,7 +555,7 @@ final class ApplyPredefinedTagsService
         ];
 
         if ($this->hasCard($cards, $data)) {
-            return new KeyforgeTagHasAgentZ();
+            return new KeyforgeTagHasDoubleCards();
         }
 
         return null;
@@ -566,7 +571,7 @@ final class ApplyPredefinedTagsService
         ];
 
         if ($this->hasCard($cards, $data)) {
-            return new KeyforgeTagHasAgentZ();
+            return new KeyforgeTagHasHorseman();
         }
 
         return null;
@@ -585,7 +590,7 @@ final class ApplyPredefinedTagsService
         ];
 
         if ($this->hasCard($cards, $data)) {
-            return new KeyforgeTagHasAgentZ();
+            return new KeyforgeTagHasSins();
         }
 
         return null;
