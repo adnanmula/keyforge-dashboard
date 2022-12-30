@@ -90,21 +90,23 @@
         <div class="divider py-2"></div>
         <div class="divider py-2"></div>
 
-        <table id="gamesList" class="table table-responsive-sm table-hover" style="width:100%;">
-            <thead>
-            <tr>
-                <th scope="col">Winner</th>
-                <th scope="col">Winner deck</th>
-                <th scope="col">Loser</th>
-                <th scope="col">Loser deck</th>
-                <th scope="col">Score</th>
-                <th scope="col">First turn</th>
-                <th scope="col">Date</th>
-                <th scope="col">Competition</th>
-                <th scope="col">Notes</th>
-            </tr>
-            </thead>
-        </table>
+        <div class="" style="display: flex; overflow-x: auto">
+            <table id="gamesList" class="table table-responsive-sm table-hover" style="width:100%;">
+                <thead>
+                <tr>
+                    <th scope="col">Winner</th>
+                    <th scope="col">Winner deck</th>
+                    <th scope="col">Loser</th>
+                    <th scope="col">Loser deck</th>
+                    <th scope="col">Score</th>
+                    <th scope="col">First turn</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Competition</th>
+                    <th scope="col">Notes</th>
+                </tr>
+                </thead>
+            </table>
+        </div>
     </div>
     <script>
         let winRateVsUsers = JSON.parse('{{ win_rate_vs_users|json_encode|raw }}');
@@ -507,6 +509,12 @@
                         targets: [6],
                         orderable: true,
                     },
+                    { width: 150, targets: 0 },
+                    { width: 300, targets: 1 },
+                    { width: 150, targets: 2 },
+                    { width: 300, targets: 3 },
+                    { width: 100, targets: 6 },
+                    { width: 250, targets: 7 },
                 ],
             });
         });

@@ -31,6 +31,8 @@
 
         <div class="alert" id="result" style="display: none"></div>
 
+        <div class="divider py-1"></div>
+
         <div class="d-flex flex-row-reverse">
             <a href="https://archonarcana.com/Deck:{{ reference }}" target="_blank"><img class="img-thumbnail" width="50px" style="min-width: 40px" src="{{ asset('assets/keyforge/logos/wiki.jpg') }}" alt="Wiki"/></a>
             <a href="https://decksofkeyforge.com/decks/{{ reference }}" target="_blank"><img class="img-thumbnail" width="40px" style="min-width: 40px" src="{{ asset('assets/keyforge/logos/dok.svg') }}" alt="DoK"/></a>
@@ -41,21 +43,27 @@
 {#            {% endif %}#}
         </div>
 
-        <table id="gamesList" class="table table-responsive-sm table-hover" style="width:100%;">
-            <thead>
-            <tr>
-                <th scope="col">Winner</th>
-                <th scope="col">Winner deck</th>
-                <th scope="col">Loser</th>
-                <th scope="col">Loser deck</th>
-                <th scope="col">Score</th>
-                <th scope="col">First turn</th>
-                <th scope="col">Date</th>
-                <th scope="col">Competition</th>
-                <th scope="col">Notes</th>
-            </tr>
-            </thead>
-        </table>
+        <div class="divider py-1"></div>
+        <div class="divider py-1"></div>
+        <div class="divider py-1"></div>
+
+        <div class="" style="display: flex; overflow-x: auto">
+            <table id="gamesList" class="table table-responsive-sm table-hover" style="width:100%;">
+                <thead>
+                <tr>
+                    <th scope="col">Winner</th>
+                    <th scope="col">Winner deck</th>
+                    <th scope="col">Loser</th>
+                    <th scope="col">Loser deck</th>
+                    <th scope="col">Score</th>
+                    <th scope="col">First turn</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Competition</th>
+                    <th scope="col">Notes</th>
+                </tr>
+                </thead>
+            </table>
+        </div>
     </div>
 
     <script>
@@ -168,6 +176,12 @@
                         targets: [6],
                         orderable: true,
                     },
+                    { width: 150, targets: 0 },
+                    { width: 300, targets: 1 },
+                    { width: 150, targets: 2 },
+                    { width: 300, targets: 3 },
+                    { width: 100, targets: 6 },
+                    { width: 250, targets: 7 },
                 ],
             });
 
