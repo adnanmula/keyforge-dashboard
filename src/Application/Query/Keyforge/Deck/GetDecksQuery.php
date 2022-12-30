@@ -22,6 +22,8 @@ final class GetDecksQuery
     private bool $onlyOwned;
     private ?string $tagFilterType;
     private array $tags;
+    private int $maxSas;
+    private int $minSas;
 
     public function __construct(
         $start,
@@ -36,6 +38,8 @@ final class GetDecksQuery
         bool $onlyOwned = false,
         ?string $tagFilterType = null,
         array $tags = [],
+        $maxSas = 150,
+        $minSas = 0,
     ) {
         Assert::lazy()
             ->that($start, 'start')->nullOr()->integerish()->greaterOrEqualThan(0)
@@ -49,6 +53,8 @@ final class GetDecksQuery
             ->that($onlyOwned, 'onlyOwned')->boolean()
             ->that($tagFilterType, 'tagFilterType')->nullOr()->inArray(['all', 'any'])
             ->that($tags, 'tags')->all()->uuid()
+            ->that($maxSas, 'maxSas')->integerish()
+            ->that($minSas, 'minSas')->integerish()
             ->verifyNow();
 
         $this->start = null === $start ? null : (int) $start;
@@ -63,6 +69,8 @@ final class GetDecksQuery
         $this->onlyOwned = $onlyOwned;
         $this->tagFilterType = $tagFilterType;
         $this->tags = \array_map(static fn (string $id): Uuid => Uuid::from($id), $tags);
+        $this->maxSas = (int) $maxSas;
+        $this->minSas = (int) $minSas;
     }
 
     public function start(): ?int
@@ -123,5 +131,15 @@ final class GetDecksQuery
     public function tags(): array
     {
         return $this->tags;
+    }
+
+    public function maxSas(): int
+    {
+        return $this->maxSas;
+    }
+
+    public function minSas(): int
+    {
+        return $this->minSas;
     }
 }
