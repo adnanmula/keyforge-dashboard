@@ -17,7 +17,6 @@ use AdnanMula\Cards\Infrastructure\Criteria\FilterField\FilterField;
 use AdnanMula\Cards\Infrastructure\Criteria\FilterValue\ArrayElementFilterValue;
 use AdnanMula\Cards\Infrastructure\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Cards\Infrastructure\Criteria\FilterValue\NullFilterValue;
-use AdnanMula\Cards\Infrastructure\Criteria\FilterValue\StringArrayFilterValue;
 use AdnanMula\Cards\Infrastructure\Criteria\FilterValue\StringFilterValue;
 use AdnanMula\Cards\Infrastructure\Criteria\Sorting\Order;
 use AdnanMula\Cards\Infrastructure\Criteria\Sorting\OrderType;
@@ -61,14 +60,16 @@ final class GetDecksQueryHandler
         $filters = [new Filters(FilterType::AND, FilterType::AND, ...$expressions)];
 
         if (\count($query->tags()) > 0) {
+            $tagsExpressions = [];
+
+            foreach ($query->tags() as $tag) {
+                $tagsExpressions[] = new Filter(new FilterField('tags'), new ArrayElementFilterValue($tag->value()), FilterOperator::IN_ARRAY);
+            }
+
             $filters[] = new Filters(
                 FilterType::AND,
-                FilterType::AND,
-                new Filter(
-                    new FilterField('tags'),
-                    new StringArrayFilterValue(...\array_map(static fn (Uuid $id): string => $id->value(), $query->tags())),
-                    FilterOperator::IN,
-                ),
+                $query->tagFilterType() === 'any' ? FilterType::OR : FilterType::AND,
+                ...$tagsExpressions,
             );
         }
 
@@ -110,8 +111,6 @@ final class GetDecksQueryHandler
         $decks = $this->repository->search($criteria);
 
 //      TODO ñapas
-
-        $decks = $this->addMissingTags(...$decks);
 
         if (null !== $query->owner()) {
             $decks = $this->recalculateWins($query->owner(), $query->deckId(), ...$decks);
@@ -259,25 +258,6 @@ final class GetDecksQueryHandler
 
                 return $a->wins() <=> $b->wins();
             });
-        }
-
-        return $decks;
-    }
-
-    /** @return array<KeyforgeDeck> */
-    private function addMissingTags(KeyforgeDeck ...$decks): array
-    {
-        $deckIds = \array_map(static fn (KeyforgeDeck $deck): Uuid => $deck->id(), $decks);
-
-        $decksWithAllTags = $this->repository->byIds(...$deckIds);
-
-        $indexedDecksWithTags = [];
-        foreach ($decksWithAllTags as $deckWithTags) {
-            $indexedDecksWithTags[$deckWithTags->id()->value()] = $deckWithTags->tags();
-        }
-
-        foreach ($decks as $deck) {
-            $deck->updateTags($indexedDecksWithTags[$deck->id()->value()]);
         }
 
         return $decks;

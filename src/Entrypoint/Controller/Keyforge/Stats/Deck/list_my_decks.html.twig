@@ -27,10 +27,10 @@
                 <div class="col-md-12">
                     <div class="form-group">
                         <label for="tags" class="form-label">Tags</label>
-{#                        <input class="form-check-input tag_type_selector" type="radio" name="tags_filter_type" id="tags_filter_type_1" value="all" checked>#}
-{#                        <label class="form-check-label" for="tags_filter_type_1">All</label>#}
-{#                        <input class="form-check-input tag_type_selector" type="radio" name="tags_filter_type" id="tags_filter_type_2" value="any">#}
-{#                        <label class="form-check-label" for="tags_filter_type_2">Any</label>#}
+                        <input class="form-check-input tag_type_selector" type="radio" name="tags_filter_type" id="tags_filter_type_1" value="all" checked>
+                        <label class="form-check-label" for="tags_filter_type_1">All</label>
+                        <input class="form-check-input tag_type_selector" type="radio" name="tags_filter_type" id="tags_filter_type_2" value="any">
+                        <label class="form-check-label" for="tags_filter_type_2">Any</label>
                         <select id="tags" name="tags[]" multiple>
                             {% for tag in tags %}
                                 <option value="{{ tag.id }}"> {{ tag.name }} </option>
@@ -131,9 +131,9 @@
             return false;
         }
 
-        // function tagFilterType() {
-        //     return $('.tag_type_selector:checked')[0].value;
-        // }
+        function tagFilterType() {
+            return $('.tag_type_selector:checked')[0].value;
+        }
 
         function tags() {
             const options = $('select#tags.choices__input.is-hidden')[0].options;
@@ -213,7 +213,7 @@
                     url: '/keyforge/decks/json',
                     data: function(d){
                         d.extraFilterOnlyOwned = onlyOwned();
-                        // d.extraFilterTagType = tagFilterType();
+                        d.extraFilterTagType = tagFilterType();
                         d.extraFilterTags = tags();
                         d.extraFilterHouses = houses();
                         d.extraFilterHouseFilterType = houseFilterType();

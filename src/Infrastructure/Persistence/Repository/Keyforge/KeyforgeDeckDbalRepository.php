@@ -17,32 +17,15 @@ use Doctrine\DBAL\Connection;
 final class KeyforgeDeckDbalRepository extends DbalRepository implements KeyforgeDeckRepository
 {
     private const TABLE = 'keyforge_decks';
-    private const TABLE_TAG_RELATION = 'keyforge_deck_tags';
-
-    private const MAPPING = [
-        'id' => 'a.id',
-        'name' => 'a.name',
-        'set' => 'a.set',
-        'houses' => 'a.houses',
-        'sas' => 'a.sas',
-        'wins' => 'a.wins',
-        'losses' => 'a.losses',
-        'extra_data' => 'a.extra_data',
-        'owner' => 'a.owner',
-        'tags' => 'b.id',
-    ];
 
     public function search(Criteria $criteria): array
     {
         $builder = $this->connection->createQueryBuilder();
 
-        $query = $builder->select('a.id, a.name, a.set, a.houses, a.sas, a.wins, a.losses, a.extra_data, a.owner')
-            ->addSelect('string_agg(b.id::varchar, \',\') as tags')
-            ->from(self::TABLE, 'a')
-            ->leftJoin('a', self::TABLE_TAG_RELATION, 'b', 'a.id = b.deck_id')
-            ->groupBy('a.id');
+        $query = $builder->select('a.id, a.name, a.set, a.houses, a.sas, a.wins, a.losses, a.extra_data, a.owner, a.tags')
+            ->from(self::TABLE, 'a');
 
-        (new DbalCriteriaAdapter($builder, self::MAPPING))->execute($criteria);
+        (new DbalCriteriaAdapter($builder))->execute($criteria);
 
         $result = $query->executeQuery()->fetchAllAssociative();
 
@@ -53,19 +36,17 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
     {
         $builder = $this->connection->createQueryBuilder();
         $query = $builder->select('COUNT(a.id)')
-            ->from(self::TABLE, 'a')
-            ->leftJoin('a', self::TABLE_TAG_RELATION, 'b', 'a.id = b.deck_id')
-            ->groupBy('a.id');
+            ->from(self::TABLE, 'a');
 
-        (new DbalCriteriaAdapter($builder, self::MAPPING))->execute($criteria);
+        (new DbalCriteriaAdapter($builder))->execute($criteria);
 
-        return $query->executeQuery()->rowCount();
+        return $query->executeQuery()->fetchOne();
     }
 
     public function byId(Uuid $id): ?KeyforgeDeck
     {
         $result = $this->connection->createQueryBuilder()
-            ->select('a.id, a.name, a.set, a.houses, a.sas, a.wins, a.losses, a.extra_data, a.owner')
+            ->select('a.id, a.name, a.set, a.houses, a.sas, a.wins, a.losses, a.extra_data, a.owner, a.tags')
             ->from(self::TABLE, 'a')
             ->where('a.id = :id')
             ->setParameter('id', $id->value())
@@ -83,13 +64,10 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
     public function byIds(Uuid ...$ids): array
     {
         $result = $this->connection->createQueryBuilder()
-            ->select('a.id, a.name, a.set, a.houses, a.sas, a.wins, a.losses, a.extra_data, a.owner')
-            ->addSelect('string_agg(b.id::varchar, \',\') as tags')
+            ->select('a.id, a.name, a.set, a.houses, a.sas, a.wins, a.losses, a.extra_data, a.owner, a.tags')
             ->from(self::TABLE, 'a')
-            ->leftJoin('a', self::TABLE_TAG_RELATION, 'b', 'a.id = b.deck_id')
             ->where('a.id in (:ids)')
             ->setParameter('ids', \array_map(static fn (Uuid $id) => $id->value(), $ids), Connection::PARAM_STR_ARRAY)
-            ->groupBy('a.id')
             ->execute()
             ->fetchAllAssociative();
 
@@ -103,7 +81,7 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
     public function byNames(string ...$decks): array
     {
         $result = $this->connection->createQueryBuilder()
-            ->select('a.id, a.name, a.set, a.houses, a.sas, a.wins, a.losses, a.extra_data, a.owner')
+            ->select('a.id, a.name, a.set, a.houses, a.sas, a.wins, a.losses, a.extra_data, a.owner, a.tags')
             ->from(self::TABLE, 'a')
             ->where('a.name in (:decks)')
             ->setParameter('decks', $decks, Connection::PARAM_STR_ARRAY)
@@ -122,8 +100,8 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
         $stmt = $this->connection->prepare(
             \sprintf(
                 '
-                    INSERT INTO %s (id, name, set, houses, sas, wins, losses, extra_data, owner)
-                    VALUES (:id, :name, :set, :houses, :sas, :wins, :losses, :extra_data, :owner)
+                    INSERT INTO %s (id, name, set, houses, sas, wins, losses, extra_data, owner, tags)
+                    VALUES (:id, :name, :set, :houses, :sas, :wins, :losses, :extra_data, :owner, :tags)
                     ON CONFLICT (id) DO UPDATE SET
                         id = :id,
                         name = :name,
@@ -133,7 +111,8 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
                         wins = :wins,
                         losses = :losses,
                         extra_data = :extra_data,
-                        owner = :owner
+                        owner = :owner,
+                        tags = :tags
                     ',
                 self::TABLE,
             ),
@@ -148,36 +127,9 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
         $stmt->bindValue(':losses', $deck->losses());
         $stmt->bindValue(':extra_data', Json::encode($deck->extraData()));
         $stmt->bindValue(':owner', $deck->owner()?->value());
+        $stmt->bindValue(':tags', Json::encode($deck->tags()));
 
         $stmt->execute();
-    }
-
-    public function assignTags(Uuid $deckId, array $tags): void
-    {
-        $stmtDelete = $this->connection->prepare(
-            \sprintf(
-                'DELETE FROM %s WHERE deck_id = :deck_id',
-                self::TABLE_TAG_RELATION,
-            ),
-        );
-
-        $stmtDelete->bindValue(':deck_id', $deckId->value());
-
-        $stmtDelete->execute();
-
-        foreach ($tags as $tag) {
-            $stmt = $this->connection->prepare(
-                \sprintf(
-                    'INSERT INTO %s (id, deck_id) VALUES (:id, :deck_id)',
-                    self::TABLE_TAG_RELATION,
-                ),
-            );
-
-            $stmt->bindValue(':id', $tag);
-            $stmt->bindValue(':deck_id', $deckId->value());
-
-            $stmt->execute();
-        }
     }
 
     private function map(array $deck): KeyforgeDeck
@@ -195,11 +147,9 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
             $deck['sas'],
             $deck['wins'],
             $deck['losses'],
-            \json_decode($deck['extra_data'], true, 512, \JSON_THROW_ON_ERROR),
+            Json::decode($deck['extra_data']),
             null === $deck['owner'] ? null : Uuid::from($deck['owner']),
-            \array_key_exists('tags', $deck) && null !== $deck['tags']
-                ? \explode(',', $deck['tags'])
-                : [],
+            Json::decode($deck['tags']),
         );
     }
 }

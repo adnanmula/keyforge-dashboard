@@ -21,6 +21,4 @@ interface KeyforgeDeckRepository
     public function byNames(string ...$decks): array;
 
     public function save(KeyforgeDeck $deck): void;
-
-    public function assignTags(Uuid $deckId, array $tags): void;
 }

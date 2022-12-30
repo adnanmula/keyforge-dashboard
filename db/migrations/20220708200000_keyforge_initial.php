@@ -27,6 +27,7 @@ final class KeyforgeInitial extends AbstractMigration
                 losses integer NOT NULL,
                 extra_data jsonb NOT NULL,
                 owner uuid,
+                tags jsonb NOT NULL DEFAULT \'[]\',
                 PRIMARY KEY(id)
             )',
         );
@@ -38,14 +39,6 @@ final class KeyforgeInitial extends AbstractMigration
                 visibility character varying(16) NOT NULL,
                 style jsonb NOT NULL,
                 PRIMARY KEY(id)
-            )',
-        );
-
-        $this->execute(
-            'CREATE TABLE keyforge_deck_tags (
-                id uuid NOT NULL,
-                deck_id uuid NOT NULL,
-                PRIMARY KEY(id, deck_id)
             )',
         );
 
@@ -103,7 +96,6 @@ final class KeyforgeInitial extends AbstractMigration
 
     public function down(): void
     {
-        $this->execute('DROP TABLE IF EXISTS "keyforge_deck_tags"');
         $this->execute('DROP TABLE IF EXISTS "keyforge_tags"');
         $this->execute('DROP TABLE IF EXISTS "keyforge_competition_fixtures"');
         $this->execute('DROP TABLE IF EXISTS "keyforge_competitions"');

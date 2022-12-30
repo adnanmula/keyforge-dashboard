@@ -104,7 +104,9 @@ final class ApplyPredefinedTagsService
 
         $newTags = \array_filter($newTags);
 
-        $this->repository->assignTags($deck->id(), $this->mergeTags($deck->tags(), $newTags));
+        $deck->updateTags(...$this->mergeTags($deck->tags(), $newTags));
+
+        $this->repository->save($deck);
     }
 
     private function mergeTags(array $currentTags, array $newTags): array
