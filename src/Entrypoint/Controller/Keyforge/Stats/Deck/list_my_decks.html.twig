@@ -108,7 +108,7 @@
         </div>
     </div>
 
-    <div class="shadow-lg p-3 mb-5 bg-white rounded">
+    <div class="shadow-lg p-3 mb-5 bg-white rounded" style="display: flex; overflow-x: auto">
         <table id="deckList" class="table table-responsive-sm table-hover" style="width:100%;">
             <thead>
             <tr>
@@ -357,10 +357,11 @@
                         targets: [1, 4, 5],
                         orderable: true
                     },
-                    {
-                        targets: 0,
-                        width: 250
-                    }
+                    { width: 250, targets: 0 },
+                    { width: 350, targets: 1 },
+                    { width: 50, targets: 2 },
+                    { width: 150, targets: 3 },
+                    { width: 150, targets: 6 },
                 ],
             });
         });
