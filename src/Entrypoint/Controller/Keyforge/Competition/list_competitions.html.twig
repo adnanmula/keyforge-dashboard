@@ -1,0 +1,155 @@
+{% extends "Keyforge/Shared/keyforge_base.html.twig" %}
+
+{% block title %}Competitions{% endblock %}
+
+{% block body %}
+    {% if result != false %}
+        <div class="alert alert-{% if success == true %}success{% else %}danger{% endif %}" role="alert">
+            {{ result }}
+        </div>
+    {% endif %}
+
+    <div class="shadow-lg p-3 mb-5 bg-white rounded col-12" style="display: flex; overflow-x: auto">
+        <table id="competitionsList" class="table table-responsive-sm table-hover" style="width:100%;">
+            <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Reference</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Tipo</th>
+                <th scope="col">Jugadores</th>
+                <th scope="col">Description</th>
+                <th scope="col">Creado</th>
+                <th scope="col">Empezó</th>
+                <th scope="col">Terminó</th>
+                <th scope="col">Ganador</th>
+            </tr>
+            </thead>
+        </table>
+        <div class="row">
+            <div class="float-end">
+                <a class="btn btn-dark" href="/keyforge/competitions/new" role="button" aria-expanded="false">Nuevo</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            let users = JSON.parse('{{ users|json_encode|raw }}');
+
+            $(window).on('resize', function() {
+                $('#competitionsList.dataTable').resize;
+            });
+
+            $('#competitionsList').DataTable({
+                searching: false,
+                paging: true,
+                info: true,
+                responsive: true,
+                processing: true,
+                serverSide: true,
+                order: [[6, 'desc']],
+                lengthMenu: [10, 25, 50, 100],
+                iDisplayLength: 25,
+                ajax: '/keyforge/competitions/json',
+                columns: [
+                    { data: "id" },
+                    { data: "reference" },
+                    { data: "name" },
+                    { data: "type" },
+                    { data: "users" },
+                    { data: "description" },
+                    { data: "createdAt" },
+                    { data: "startedAt" },
+                    { data: "finishedAt" },
+                    { data: "winner" },
+                ],
+                columnDefs: [
+                    {
+                        render: function (data, type, row) {
+                            return '<a href="/keyforge/competitions/' + row.reference + '">' + data + '</a>';
+                        },
+                        targets: 2, //Name
+                    },
+                    {
+                        render: function (data, type, row) {
+                            let userNames = [];
+
+                            data.forEach(function (userId) {
+                                users.forEach(function (user) {
+                                    if (user.id === userId) {
+                                        userNames.push(user.name);
+                                    }
+                                });
+                            });
+
+                            return userNames.join(', ');
+                        },
+                        targets: 4, //Users
+                    },
+                    {
+                        render: function (data, type, row) {
+                            if (data === '') {
+                                return '-';
+                            }
+
+                            $('[data-toggle="tooltip"]').tooltip({
+                                'container': 'body',
+                                'placement': 'right'
+                            });
+
+                            return '<i class="bi bi-info-circle" data-toggle="tooltip" title="' + data + '"></i>';
+                        },
+                        targets: 5, //Description
+                    },
+                    {
+                        render: function (data, type, row) {
+                            if (null === data) {
+                                return '-';
+                            }
+
+                            return data;
+                        },
+                        targets: 7, //Started At
+                    },
+                    {
+                        render: function (data, type, row) {
+                            if (null === data) {
+                                return '-';
+                            }
+
+                            return data;
+                        },
+                        targets: 8, //Finished At
+                    },
+                    {
+                        render: function (data, type, row) {
+                            if (null === data) {
+                                return '-';
+                            }
+
+                            return data;
+                        },
+                        targets: 9, //Winner
+                    },
+                    {
+                        targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+                        orderable: false,
+                        searchable: false,
+                    },
+                    {
+                        targets: [0, 1, 6],
+                        visible: false,
+                    },
+                    { width: 300, targets: 2 },
+                    { width: 200, targets: 3 },
+                    { width: 400, targets: 4 },
+                    { width: 50, targets: 5 },
+                    { width: 100, targets: 7 },
+                    { width: 100, targets: 8 },
+                    { width: 100, targets: 9 },
+                ],
+            });
+        });
+    </script>
+{% endblock %}

@@ -1,4 +1,4 @@
 gwent_home:
   path: /
   controller: AdnanMula\Cards\Entrypoint\Controller\Gwent\Test\TestController
-  methods: [ GET ]
+  methods: [GET]

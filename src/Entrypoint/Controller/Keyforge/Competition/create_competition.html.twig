@@ -7,7 +7,6 @@
 {% endblock %}
 
 {% block body %}
-
     {% if result != false %}
         <div class="alert alert-{% if success == true %}success{% else %}danger{% endif %}" role="alert">
             {{ result }}
@@ -25,9 +24,9 @@
                         <select class="form-select" name="type" id="type">
                             <option value="ROUND_ROBIN_1" selected>Round robin (1 round)</option>
                             <option value="ROUND_ROBIN_2">Round robin (2 rounds)</option>
-                            <option value="ELIMINATION">Elimination</option>
-                            <option value="ROUND_ROBIN_1_ELIMINATION">Round robin (1 round) and elimination</option>
-                            <option value="ROUND_ROBIN_2_ELIMINATION">Round robin (2 rounds) and elimination</option>
+                            <option value="ELIMINATION" disabled>Elimination</option>
+                            <option value="ROUND_ROBIN_1_ELIMINATION" disabled>Round robin (1 round) and elimination</option>
+                            <option value="ROUND_ROBIN_2_ELIMINATION" disabled>Round robin (2 rounds) and elimination</option>
                         </select>
                     </div>
                 </div>
@@ -58,7 +57,6 @@
                     </div>
                 </div>
             </div>
-
 
             <div class="row mt-3">
                 <div class="col-md-12">

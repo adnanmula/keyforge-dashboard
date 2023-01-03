@@ -6,7 +6,7 @@ use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeCompetition;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeGameScore;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 
-final class KeyforgeGame
+final class KeyforgeGame implements \JsonSerializable
 {
     public function __construct(
         private Uuid $id,
@@ -87,5 +87,24 @@ final class KeyforgeGame
     public function notes(): string
     {
         return $this->notes;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'id' => $this->id()->value(),
+            'winner' => $this->winner()->value(),
+            'loser' => $this->loser()->value(),
+            'winnerDeck' => $this->winnerDeck()->value(),
+            'loserDeck' => $this->loserDeck()->value(),
+            'winnerChains' => $this->winnerChains(),
+            'loserChains' => $this->loserChains(),
+            'firstTurn' => $this->firstTurn()?->value(),
+            'score' => $this->score()->jsonSerialize(),
+            'date' => $this->date()->format('Y-m-d'),
+            'createdAt' => $this->createdAt()->format('Y-m-d'),
+            'competition' => $this->competition()->name,
+            'notes' => $this->notes(),
+        ];
     }
 }

@@ -1,0 +1,60 @@
+{% extends "Keyforge/Shared/keyforge_base.html.twig" %}
+
+{% block title %}{{ competition.name }}{% endblock %}
+
+{% block body %}
+    <div class="shadow-lg p-3 mb-5 bg-white rounded col-12" style="overflow-x: auto">
+
+        <div class="row">
+            <h2>{{ competition.name }}</h2>
+        </div>
+        <div class="row">
+            &nbsp;&nbsp;[{{ competition.type }}]  {{ competition.description }}
+        </div>
+
+        <div class="divider py-2"></div>
+
+        <table style="width:100%;">
+            <thead>
+                <tr>
+                    <th>Posicion</th>
+                    <th>Jugador</th>
+                    <th>W</th>
+                    <th>L</th>
+                    <th><i class="bi bi-key"></i> a favor</th>
+                    <th><i class="bi bi-key"></i> en contra</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for player in classification%}
+                    <tr>
+                        <td>{{ player.position }}</td>
+                        <td>{{ player.username }}</td>
+                        <td>{{ player.wins }}</td>
+                        <td>{{ player.losses }}</td>
+                        <td>{{ player.keys_forged }}</td>
+                        <td>{{ player.keys_opponent_forged }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="divider py-2"></div>
+        <div class="divider py-2"></div>
+
+        {% for fixtureGroup in fixtures %}
+            <div class="divider py-2"></div>
+
+            <h6>{{ fixtureGroup.0.reference }}</h6>
+            <ul class="list-group">
+                {% for fixture in fixtureGroup %}
+                    {% if fixture.game is not same as null %}
+                        <li class="list-group-item">{{ fixture.users.0.name }} {{ fixture.game.score.winner_score }} - {{ fixture.game.score.loser_score }} {{ fixture.users.1.name }}</li>
+                    {% else %}
+                        <li class="list-group-item">{{ fixture.users.0.name }} 0 - 0 {{ fixture.users.1.name }}</li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        {% endfor %}
+    </div>
+{% endblock %}

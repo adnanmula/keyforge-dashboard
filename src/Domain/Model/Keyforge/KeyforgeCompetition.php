@@ -5,7 +5,7 @@ namespace AdnanMula\Cards\Domain\Model\Keyforge;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\CompetitionType;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 
-final class KeyforgeCompetition implements \JsonSerializable
+final readonly class KeyforgeCompetition implements \JsonSerializable
 {
     public function __construct(
         private Uuid $id,
@@ -55,7 +55,7 @@ final class KeyforgeCompetition implements \JsonSerializable
         return $this->createdAt;
     }
 
-    public function startAt(): ?\DateTimeImmutable
+    public function startedAt(): ?\DateTimeImmutable
     {
         return $this->startAt;
     }
@@ -73,16 +73,16 @@ final class KeyforgeCompetition implements \JsonSerializable
     public function jsonSerialize(): array
     {
         return [
-            'id' => $this->id(),
+            'id' => $this->id()->value(),
             'reference' => $this->reference(),
             'name' => $this->name(),
-            'type' => $this->type(),
+            'type' => $this->type()->name,
             'users' => $this->users(),
             'description' => $this->description(),
-            'createdAt' => $this->createdAt(),
-            'startAt' => $this->startAt(),
-            'finishedAt' => $this->finishedAt(),
-            'winner' => $this->winner(),
+            'createdAt' => $this->createdAt()?->format(\DateTimeInterface::ATOM),
+            'startedAt' => $this->startedAt()?->format('Y-m-d'),
+            'finishedAt' => $this->finishedAt()?->format('Y-m-d'),
+            'winner' => $this->winner()?->value(),
         ];
     }
 }

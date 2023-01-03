@@ -33,27 +33,31 @@ class CreateCompetitionController extends Controller
         if ($request->getMethod() === Request::METHOD_POST) {
             try {
                 $this->bus->dispatch(new CreateCompetitionCommand(
-                    \str_replace(' ', '_', \strtoupper($request->request->get('name'))),
+                    \preg_replace("/[\W_]+/u", '_', $request->request->get('name')),
                     $request->request->get('name'),
                     $request->request->get('type'),
                     $request->request->all()['users'] ?? [],
                     $request->request->get('description'),
                 ));
+            } catch (\Throwable $exception) {
+                return $this->render(
+                    'Keyforge/Competition/create_competition.html.twig',
+                    [
+                        'users' => $users,
+                        'result' => $exception->getMessage(),
+                        'success' => false,
+                    ],
+                );
+            }
 
-                $payload = [
+            return $this->render(
+                'Keyforge/Competition/list_competitions.html.twig',
+                [
                     'users' => $users,
                     'result' => 'Torneo creado',
                     'success' => true,
-                ];
-            } catch (\Throwable $exception) {
-                $payload = [
-                    'users' => $users,
-                    'result' => $exception->getMessage(),
-                    'success' => false,
-                ];
-            }
-
-            return $this->render('Keyforge/Competition/create_competition.html.twig', $payload);
+                ]
+            );
         }
 
         throw new \InvalidArgumentException('Error');

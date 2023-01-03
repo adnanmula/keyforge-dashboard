@@ -82,12 +82,14 @@ final class KeyforgeInitial extends AbstractMigration
         $this->execute(
             'CREATE TABLE keyforge_competition_fixtures (
                 id uuid NOT NULL,
+                competition_id uuid NOT NULL,
                 reference character varying(64) NOT NULL,
                 users jsonb NOT NULL,
                 fixture_type character varying(64) NOT NULL,
                 position integer NOT NULL,
                 created_at TIMESTAMP WITH TIME ZONE NULL,
                 played_at TIMESTAMP WITH TIME ZONE NULL,
+                winner uuid NULL,
                 game uuid NULL,
                 PRIMARY KEY(id)
             )',

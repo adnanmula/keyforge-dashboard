@@ -7,6 +7,7 @@ use AdnanMula\Cards\Infrastructure\Criteria\Criteria;
 
 interface KeyforgeGameRepository
 {
+    /** @return array<KeyforgeGame> */
     public function search(Criteria $criteria): array;
 
     /** @return array<KeyforgeGame> */

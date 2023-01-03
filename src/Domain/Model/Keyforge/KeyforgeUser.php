@@ -4,7 +4,7 @@ namespace AdnanMula\Cards\Domain\Model\Keyforge;
 
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 
-final class KeyforgeUser
+final class KeyforgeUser implements \JsonSerializable
 {
     private function __construct(
         private Uuid $id,
@@ -30,5 +30,14 @@ final class KeyforgeUser
     public function external(): bool
     {
         return $this->external;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'id' => $this->id->value(),
+            'name' => $this->name(),
+            'external' => $this->external(),
+        ];
     }
 }
