@@ -100,11 +100,13 @@ final readonly class GetCompetitionDetailQueryHandler
                     if ($user->value() === $fixture['game']['winner']) {
                         $player['wins']++;
                         $player['keys_forged'] += $fixture['game']['score']['winner_score'];
+                        $player['keys_opponent_forged'] += $fixture['game']['score']['loser_score'];
                     }
 
                     if ($user->value() === $fixture['game']['loser']) {
                         $player['losses']++;
-                        $player['keys_opponent_forged'] += $fixture['game']['score']['loser_score'];
+                        $player['keys_forged'] += $fixture['game']['score']['loser_score'];
+                        $player['keys_opponent_forged'] += $fixture['game']['score']['winner_score'];
                     }
                 }
             }
