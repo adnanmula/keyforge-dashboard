@@ -8,7 +8,7 @@
             <h2>{{ competition.name }}</h2>
         </div>
         <div class="row">
-            &nbsp;&nbsp;[{{ competition.type }}]  {{ competition.description }}
+            {{ competition.description }}
         </div>
 
         <div class="divider py-2"></div>
@@ -48,7 +48,7 @@
                 <div class="divider py-2"></div>
                 <h6>{{ fixtureGroup.0.reference }}</h6>
                 {% for fixture in fixtureGroup %}
-                    <a class="btn btn-clear border col-12 col-sm-3 col-lg-3">
+                    <a class="btn btn-clear border col-12 col-sm-12 col-md-5 col-lg-3">
                         {% if fixture.game is not same as null %}
 
                             {% if fixture.game.winner is same as fixture.users.0.id %}
@@ -254,8 +254,8 @@
             $('#registerGameWinnerOption2')[0].value = playerTwoId;
             $('#registerGameWinnerOption1Label')[0].innerText = playerOneName;
             $('#registerGameWinnerOption2Label')[0].innerText = playerTwoName;
-            $('#registerGameCompetitionName')[0].innerText = competitionName;
-            $('#registerGameFixtureRef')[0].innerText = fixtureRef;
+            $('#registerGameCompetitionName')[0].value = competitionName;
+            $('#registerGameFixtureRef')[0].value = fixtureRef;
             $('#registerGameFixtureId')[0].value = fixtureId;
         });
 

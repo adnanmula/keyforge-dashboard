@@ -6,6 +6,7 @@ use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeCompetition;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeCompetitionFixture;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeCompetitionRepository;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\CompetitionFixtureType;
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\CompetitionType;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Infrastructure\Criteria\Criteria;
 use AdnanMula\Cards\Infrastructure\Criteria\Filter\Filter;
@@ -43,6 +44,42 @@ final class CreateCompetitionCommandHandler
         $fixtures = [];
         if ($command->type->isRoundRobin()) {
             $fixtures = $this->generateFixtures($competition);
+
+            $lastFixture = \end($fixtures);
+            $position = $lastFixture->position() + 1;
+            $reference = (int) \substr($lastFixture->reference(), \strlen($lastFixture->reference()) - 1, \strlen($lastFixture->reference())) + 1;
+
+            if ($command->type === CompetitionType::ROUND_ROBIN_2) {
+                $secondHalfFixtures = [];
+
+                $count = 0;
+                foreach ($fixtures as $fixture) {
+                    $secondHalfFixtures[] = new KeyforgeCompetitionFixture(
+                        Uuid::v4(),
+                        $fixture->competitionId(),
+                        'Jornada ' . $reference,
+                        \array_reverse($fixture->users()),
+                        $fixture->type(),
+                        $position,
+                        new \DateTimeImmutable(),
+                        null,
+                        null,
+                        null,
+                    );
+
+                    $count++;
+
+                    if ($count === (\count($command->users) / 2)) {
+                        $reference++;
+                        $count = 0;
+                    }
+
+                    $position++;
+                }
+
+
+                $fixtures = \array_merge($fixtures, $secondHalfFixtures);
+            }
         }
 
         $this->repository->save($competition);

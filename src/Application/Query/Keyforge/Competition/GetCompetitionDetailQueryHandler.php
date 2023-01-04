@@ -142,7 +142,11 @@ final readonly class GetCompetitionDetailQueryHandler
             });
         }
 
-        \ksort($indexedFixtures);
+        \array_multisort(
+            \array_keys($indexedFixtures),
+            SORT_NATURAL,
+            $indexedFixtures,
+        );
 
         return $indexedFixtures;
     }
