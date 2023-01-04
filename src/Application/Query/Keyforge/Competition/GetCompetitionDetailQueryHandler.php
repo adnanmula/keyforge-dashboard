@@ -125,18 +125,25 @@ final readonly class GetCompetitionDetailQueryHandler
             $player['position'] = $position + 1;
         }
 
-//        dd(
-//            [
-//                'competition' => $competition->jsonSerialize(),
-//                'fixtures' => $indexedFixtures,
-//                'classification' => $classification,
-//            ]
-//        );
+        $indexedFixtures = $this->order($indexedFixtures);
 
         return [
             'competition' => $competition->jsonSerialize(),
             'fixtures' => $indexedFixtures,
             'classification' => $classification,
         ];
+    }
+
+    private function order(array $indexedFixtures): array
+    {
+        foreach ($indexedFixtures as &$fixturesToSort) {
+            usort($fixturesToSort, function (array $a, array $b) {
+                return $a['position'] <=> $b['position'];
+            });
+        }
+
+        \ksort($indexedFixtures);
+
+        return $indexedFixtures;
     }
 }

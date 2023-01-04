@@ -18,6 +18,7 @@ final class CreateGameCommand
     private \DateTimeImmutable $date;
     private KeyforgeCompetition $competition;
     private string $notes;
+    private ?string $fixtureId;
 
     public function __construct(
         $winner,
@@ -31,6 +32,7 @@ final class CreateGameCommand
         $date,
         $competition,
         $notes,
+        $fixtureId = null,
     ) {
         Assert::lazy()
             ->that($winner, 'winner')->string()
@@ -44,6 +46,7 @@ final class CreateGameCommand
             ->that($date, 'date')->date('Y-m-d')
             ->that($competition, 'competition')->inArray(KeyforgeCompetition::allowedValues())
             ->that($notes, 'notes')->string()->maxLength(512)
+            ->that($fixtureId, 'competitionId')->nullOr()->uuid()
             ->verifyNow();
 
         $this->winner = $winner;
@@ -57,6 +60,7 @@ final class CreateGameCommand
         $this->date = new \DateTimeImmutable($date);
         $this->competition = KeyforgeCompetition::fromName($competition);
         $this->notes = $notes;
+        $this->fixtureId = $fixtureId;
     }
 
     public function winner(): string
@@ -112,5 +116,10 @@ final class CreateGameCommand
     public function notes(): string
     {
         return $this->notes;
+    }
+
+    public function fixtureId(): ?string
+    {
+        return $this->fixtureId;
     }
 }

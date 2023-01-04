@@ -136,6 +136,23 @@ final class KeyforgeCompetitionDbalRepository extends DbalRepository implements 
         return \array_map(fn (array $row) => $this->mapFixture($row), $result);
     }
 
+    public function fixtureById(Uuid $id): ?KeyforgeCompetitionFixture
+    {
+        $result = $this->connection->createQueryBuilder()
+            ->select('a.*')
+            ->from(self::TABLE_FIXTURES, 'a')
+            ->where('a.id = :id')
+            ->setParameter('id', $id->value())
+            ->execute()
+            ->fetchAssociative();
+
+        if ([] === $result || false === $result) {
+            return null;
+        }
+
+        return $this->mapFixture($result);
+    }
+
     public function saveFixture(KeyforgeCompetitionFixture $fixture): void
     {
         $stmt = $this->connection->prepare(

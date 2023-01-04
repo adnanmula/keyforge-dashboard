@@ -26,7 +26,7 @@ final class ImportDeckFromDokService implements ImportDeckService
         $deck = $this->repository->byId($uuid);
 
         if (null !== $deck) {
-            return null;
+            return $deck;
         }
 
         try {

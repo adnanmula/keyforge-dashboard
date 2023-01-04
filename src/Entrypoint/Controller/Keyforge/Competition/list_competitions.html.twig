@@ -14,11 +14,11 @@
             <thead>
             <tr>
                 <th scope="col">Id</th>
-                <th scope="col">Reference</th>
+                <th scope="col">Ref</th>
                 <th scope="col">Nombre</th>
                 <th scope="col">Tipo</th>
                 <th scope="col">Jugadores</th>
-                <th scope="col">Description</th>
+                <th scope="col">Descripción</th>
                 <th scope="col">Creado</th>
                 <th scope="col">Empezó</th>
                 <th scope="col">Terminó</th>
@@ -70,6 +70,20 @@
                             return '<a href="/keyforge/competitions/' + row.reference + '">' + data + '</a>';
                         },
                         targets: 2, //Name
+                    },
+                    {
+                        render: function (data, type, row) {
+                            if (data === 'ROUND_ROBIN_1') {
+                                return 'Liga (Solo ida)';
+                            }
+
+                            if (data === 'ROUND_ROBIN_2') {
+                                return 'Liga (Ida y vuelta)';
+                            }
+
+                            return data;
+                        },
+                        targets: 3, //Type
                     },
                     {
                         render: function (data, type, row) {

@@ -3,8 +3,7 @@
 {% block title %}{{ competition.name }}{% endblock %}
 
 {% block body %}
-    <div class="shadow-lg p-3 mb-5 bg-white rounded col-12" style="overflow-x: auto">
-
+    <div class="shadow-lg p-3 mb-5 bg-white rounded col-12">
         <div class="row">
             <h2>{{ competition.name }}</h2>
         </div>
@@ -14,18 +13,19 @@
 
         <div class="divider py-2"></div>
 
-        <table style="width:100%;">
-            <thead>
+        <div style="overflow-x: auto">
+            <table style="width:100%;" class="table table-hover table-responsive">
+                <thead>
                 <tr>
-                    <th>Posicion</th>
+                    <th>#</th>
                     <th>Jugador</th>
-                    <th>W</th>
-                    <th>L</th>
-                    <th><i class="bi bi-key"></i> a favor</th>
-                    <th><i class="bi bi-key"></i> en contra</th>
+                    <th>G</th>
+                    <th>P</th>
+                    <th>⚷ F</th>
+                    <th>⚷ C</th>
                 </tr>
-            </thead>
-            <tbody>
+                </thead>
+                <tbody>
                 {% for player in classification%}
                     <tr>
                         <td>{{ player.position }}</td>
@@ -36,25 +36,243 @@
                         <td>{{ player.keys_opponent_forged }}</td>
                     </tr>
                 {% endfor %}
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
 
         <div class="divider py-2"></div>
         <div class="divider py-2"></div>
 
-        {% for fixtureGroup in fixtures %}
-            <div class="divider py-2"></div>
-
-            <h6>{{ fixtureGroup.0.reference }}</h6>
-            <ul class="list-group">
+         <div class="col-12">
+            {% for fixtureGroup in fixtures %}
+                <div class="divider py-2"></div>
+                <h6>{{ fixtureGroup.0.reference }}</h6>
                 {% for fixture in fixtureGroup %}
-                    {% if fixture.game is not same as null %}
-                        <li class="list-group-item">{{ fixture.users.0.name }} {{ fixture.game.score.winner_score }} - {{ fixture.game.score.loser_score }} {{ fixture.users.1.name }}</li>
-                    {% else %}
-                        <li class="list-group-item">{{ fixture.users.0.name }} 0 - 0 {{ fixture.users.1.name }}</li>
-                    {% endif %}
+                    <a class="btn btn-clear border col-12 col-sm-3 col-lg-3">
+                        {% if fixture.game is not same as null %}
+
+                            {% if fixture.game.winner is same as fixture.users.0.id %}
+                                <p>{{ fixture.users.0.name }} {{ fixture.game.score.winner_score }} - {{ fixture.game.score.loser_score }} {{ fixture.users.1.name }}</p>
+                                <p>{{ indexedDecks[fixture.game.winnerDeck] }} - {{ indexedDecks[fixture.game.loserDeck] }}</p>
+                            {% else %}
+                                <p>{{ fixture.users.0.name }} {{ fixture.game.score.loser_score }} - {{ fixture.game.score.winner_score }} {{ fixture.users.1.name }}</p>
+                                <p>{{ indexedDecks[fixture.game.loserDeck] }} - {{ indexedDecks[fixture.game.winnerDeck] }}</p>
+                            {% endif %}
+
+                            <p>{{ fixture.playedAt }}</p>
+                        {% else %}
+                            <p>{{ fixture.users.0.name }} 0 - 0 {{ fixture.users.1.name }}</p>
+                            <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#registerCompetitionGame"
+                                data-player-one-name="{{ fixture.users.0.name }}"
+                                data-player-two-name="{{ fixture.users.1.name }}"
+                                data-player-one-id="{{ fixture.users.0.id }}"
+                                data-player-two-id="{{ fixture.users.1.id }}"
+                                data-competition-name="{{ competition.name }}"
+                                data-fixture-ref="{{ fixture.reference }}"
+                                data-fixture-id="{{ fixture.id }}"
+                            >Guardar</button>
+                        {% endif %}
+                    </a>
                 {% endfor %}
-            </ul>
-        {% endfor %}
+            {% endfor %}
+        </div>
     </div>
+
+    <div class="modal fade" id="registerCompetitionGame" tabindex="-1" role="dialog" aria-labelledby="registerCompetitionGame" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modelaTitleLabel">Registrar partida</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="registerGameForm">
+                        <div class="row">
+                            <label for="winnerScore" class="form-label">Ganador</label>
+                            <div class="col-12">
+                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                    <label class="btn btn-dark">
+                                        <input class="form-check-input" type="radio" id="registerGameWinnerOption1" name="registerGameWinner" value="" autocomplete="off" checked>
+                                        <label for="registerGameWinnerOption1" id="registerGameWinnerOption1Label"></label>
+                                    </label>
+                                    <label class="btn btn-dark">
+                                        <input class="form-check-input" type="radio" id="registerGameWinnerOption2" name="registerGameWinner" value="" autocomplete="off">
+                                        <label for="registerGameWinnerOption2" id="registerGameWinnerOption2Label"></label>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="divider py-1"></div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="winnerDeck" class="form-label">Baraja ganadora</label>
+                                    <input class="form-control selector" list="winnerDeckOptions" id="winnerDeck" placeholder="Type to search..." name="winnerDeck" autocomplete="off" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="loserDeck" class="form-label">Baraja perdedora</label>
+                                <input class="form-control selector" list="loserDeckOptions" id="loserDeck" placeholder="Type to search..." name="loserDeck"  autocomplete="off" required>
+                            </div>
+                        </div>
+
+                        <div class="divider py-1"></div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="winnerScore" class="form-label">Winner score</label>
+                                <br>
+                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                    <label class="btn btn-dark">
+                                        <input class="form-check-input" type="radio" name="winnerScore" id="inlineRadio3" value="3" checked>  3
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="loserScore" class="form-label">Loser score</label>
+                                <br>
+                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                    <label class="btn btn-dark">
+                                        <input class="form-check-input" type="radio" name="loserScore" value="0" autocomplete="off" checked>  0
+                                    </label>
+                                    <label class="btn btn-dark">
+                                        <input class="form-check-input" type="radio" name="loserScore" value="1" autocomplete="off">  1
+                                    </label>
+                                    <label class="btn btn-dark">
+                                        <input class="form-check-input" type="radio" name="loserScore" value="2" autocomplete="off">  2
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <label for="firstTurn" class="form-label">First turn</label>
+                                <input class="form-control selector" list="firstTurnOptions" id="firstTurn" placeholder="Type to search..." name="firstTurn" autocomplete="off" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="date" class="form-label">Date</label> <br>
+                                <input class="form-control" type="date" name="date" id="datepicker" min="2022-01-01" max="2030-12-31" required>
+                            </div>
+                        </div>
+
+                        <div class="divider py-1"></div>
+
+                        <div>
+                            <datalist id="winnerDeckOptions">
+                                {% for winnerDeck in winnerDecks %}
+                                    <option data-value="{{ winnerDeck.id }}" value="{{ winnerDeck.name }}"> {{ winnerDeck.id }} </option>
+                                {% endfor %}
+                            </datalist>
+
+                            <datalist id="loserDeckOptions">
+                                {% for loserDeck in loserDecks %}
+                                    <option data-value="{{ loserDeck.id }}" value="{{ loserDeck.name }}"> {{ loserDeck.id }} </option>
+                                {% endfor %}
+                            </datalist>
+
+                            <datalist id="firstTurnOptions">
+                                {% for user in users %}
+                                    <option data-value="{{ user.id }}" value="{{ user.name }}"> {{ user.id }} </option>
+                                {% endfor %}
+                            </datalist>
+
+                            <input type="hidden" id="registerGameCompetitionName" value="">
+                            <input type="hidden" id="registerGameFixtureRef" value="">
+                            <input type="hidden" id="registerGameFixtureId" value="">
+                            <input type="hidden" id="hidden-winnerDeck" name="winnerId" value="">
+                            <input type="hidden" id="hidden-loserDeck" name="loserId" value="">
+                            <input type="hidden" id="hidden-firstTurn" name="firstTurnId" value="">
+                        </div>
+
+                        <div class="divider py-1"></div>
+
+                        <button type="submit" id="registerGameSubmit" class="btn btn-block btn-dark" style="width: 100%">Guardar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $('#registerCompetitionGame').on('hidden.bs.modal', function () {
+            $(this).find('form').trigger('reset');
+        })
+
+        $('#registerGameForm').submit(function (e) {
+            e.preventDefault();
+
+            let winnerId = $('input[name=registerGameWinner]:checked')[0].value;
+            let loserId = $('input[name=registerGameWinner]:not(:checked)')[0].value;
+            let winnerDeck = $('#hidden-winnerDeck')[0].value;
+            let loserDeck = $('#hidden-loserDeck')[0].value;
+            let firstTurn = $('#hidden-firstTurn')[0].value;
+            let loserScore = $('input[name=loserScore]:checked')[0].value;
+            let date = $('#datepicker')[0].value;
+            let competitionName = $('#registerGameCompetitionName')[0].value;
+            let fixtureRef = $('#registerGameFixtureRef')[0].value;
+            let fixtureId = $('#registerGameFixtureId')[0].value;
+
+            $.post({
+                url: "/keyforge/competition/" + fixtureId + "/game/new",
+                method: "POST",
+                dataType: 'json',
+                data: {
+                    'winner': winnerId,
+                    'winnerDeck': winnerDeck,
+                    'winnerChains': 0,
+                    'loser': loserId,
+                    'loserDeck': loserDeck,
+                    'loserChains': 0,
+                    'loserScore': loserScore,
+                    'firstTurn': firstTurn,
+                    'date': date,
+                    'competition': 'LOCAL_LEAGUE',
+                    'notes': competitionName + ' ' + fixtureRef,
+                },
+            }).done(function() {
+                $('#registerCompetitionGame').modal('hide');
+                location.reload();
+            });
+        })
+
+        $('#registerCompetitionGame').on('show.bs.modal', function (event) {
+            const button = $(event.relatedTarget) // Button that triggered the modal
+            const playerOneName = button.data('player-one-name');
+            const playerTwoName = button.data('player-two-name');
+            const playerOneId = button.data('player-one-id');
+            const playerTwoId = button.data('player-two-id');
+            const competitionName = button.data('competition-name');
+            const fixtureRef = button.data('fixture-ref');
+            const fixtureId = button.data('fixture-id');
+
+            $('#registerGameWinnerOption1')[0].value = playerOneId;
+            $('#registerGameWinnerOption2')[0].value = playerTwoId;
+            $('#registerGameWinnerOption1Label')[0].innerText = playerOneName;
+            $('#registerGameWinnerOption2Label')[0].innerText = playerTwoName;
+            $('#registerGameCompetitionName')[0].innerText = competitionName;
+            $('#registerGameFixtureRef')[0].innerText = fixtureRef;
+            $('#registerGameFixtureId')[0].value = fixtureId;
+        });
+
+        let selectors = document.querySelectorAll('.selector');
+
+        selectors.forEach(selector => {
+            selector.addEventListener("change", function (e) {
+                let input = e.target;
+                let listId = input.getAttribute('list');
+
+                option = document.querySelector('#' + listId + ' option[value="' + input.value + '"]');
+
+                if (null !== option) {
+                    let hiddenInput = document.querySelector('#hidden-' + input.getAttribute('id'));
+                    hiddenInput.value = option.getAttribute('data-value');
+                }
+            });
+        });
+    </script>
 {% endblock %}

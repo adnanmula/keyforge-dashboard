@@ -77,7 +77,7 @@ final class KeyforgeCompetitionFixture implements \JsonSerializable
 
     public function updateWinner(Uuid $id): void
     {
-        $this->game = $id;
+        $this->winner = $id;
     }
 
     public function updateGame(Uuid $id): void

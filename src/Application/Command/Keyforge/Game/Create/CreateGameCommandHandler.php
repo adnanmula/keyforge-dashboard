@@ -2,6 +2,7 @@
 
 namespace AdnanMula\Cards\Application\Command\Keyforge\Game\Create;
 
+use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeCompetitionRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeck;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGame;
@@ -25,6 +26,7 @@ final class CreateGameCommandHandler
         private KeyforgeUserRepository $userRepository,
         private KeyforgeGameRepository $gameRepository,
         private KeyforgeDeckRepository $deckRepository,
+        private KeyforgeCompetitionRepository $competitionRepository,
         private ImportDeckService $importDeckService,
     ) {}
 
@@ -52,6 +54,14 @@ final class CreateGameCommandHandler
         $this->gameRepository->save($game);
 
         $this->updateDeckWinRate($winnerDeck, $loserDeck);
+
+        if (null !== $command->fixtureId()) {
+            $fixture = $this->competitionRepository->fixtureById(Uuid::from($command->fixtureId()));
+            $fixture->updateGame($game->id());
+            $fixture->updateWinner(Uuid::from($winner));
+            $fixture->updatePlayedAt($command->date());
+            $this->competitionRepository->saveFixture($fixture);
+        }
     }
 
     private function updateDeckWinRate(KeyforgeDeck $winnerDeck, KeyforgeDeck $loserDeck): void

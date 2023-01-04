@@ -82,3 +82,8 @@ keyforge_competition_view:
   path: /competitions/{reference}
   controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Competition\CompetitionDetailController
   methods: [GET,POST]
+
+keyforge_competition_game_create:
+  path: /competition/{fixtureId}/game/new
+  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Competition\CreateCompetitionGameController
+  methods: [POST]

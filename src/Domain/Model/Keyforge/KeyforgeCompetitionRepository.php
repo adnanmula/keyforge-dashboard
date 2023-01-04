@@ -21,5 +21,7 @@ interface KeyforgeCompetitionRepository
     /** @return array<KeyforgeCompetitionFixture> */
     public function fixtures(Uuid $competitionId): array;
 
+    public function fixtureById(Uuid $id): ?KeyforgeCompetitionFixture;
+
     public function saveFixture(KeyforgeCompetitionFixture $fixture): void;
 }

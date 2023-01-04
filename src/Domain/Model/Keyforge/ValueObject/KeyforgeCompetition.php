@@ -11,27 +11,23 @@ enum KeyforgeCompetition: string
     case NKFL_LEAGUE_CUP_SEASON_19 = 'NKFL League Cup Season 19';
     case NKFL_LEAGUE_CUP_REVERSAL_SEASON_19 = 'NKFL League Cup Reversal Season 19';
     case NKFL_ARCHON_TOURNAMENT = 'NKFL Archon Tournament';
+    case LOCAL_LEAGUE = 'Local League';
+    case LOCAL_CUP = 'Local Cup';
 
-    public static function fromName(string $name): static
+    public static function fromName(string $name): self
     {
-        switch ($name) {
-            case self::FRIENDS->name:
-                return self::FRIENDS;
-            case self::TCO_CASUAL->name:
-                return self::TCO_CASUAL;
-            case self::TCO_COMPETITIVE->name:
-                return self::TCO_COMPETITIVE;
-            case self::NKFL_LEAGUE_SEASON_19->name:
-                return self::NKFL_LEAGUE_SEASON_19;
-            case self::NKFL_LEAGUE_CUP_SEASON_19->name:
-                return self::NKFL_LEAGUE_CUP_SEASON_19;
-            case self::NKFL_LEAGUE_CUP_REVERSAL_SEASON_19->name:
-                return self::NKFL_LEAGUE_CUP_REVERSAL_SEASON_19;
-            case self::NKFL_ARCHON_TOURNAMENT->name:
-                return self::NKFL_ARCHON_TOURNAMENT;
-            default:
-                return self::FRIENDS;
-        }
+        return match ($name) {
+            self::FRIENDS->name => self::FRIENDS,
+            self::TCO_CASUAL->name => self::TCO_CASUAL,
+            self::TCO_COMPETITIVE->name => self::TCO_COMPETITIVE,
+            self::NKFL_LEAGUE_SEASON_19->name => self::NKFL_LEAGUE_SEASON_19,
+            self::NKFL_LEAGUE_CUP_SEASON_19->name => self::NKFL_LEAGUE_CUP_SEASON_19,
+            self::NKFL_LEAGUE_CUP_REVERSAL_SEASON_19->name => self::NKFL_LEAGUE_CUP_REVERSAL_SEASON_19,
+            self::NKFL_ARCHON_TOURNAMENT->name => self::NKFL_ARCHON_TOURNAMENT,
+            self::LOCAL_LEAGUE->name => self::LOCAL_LEAGUE,
+            self::LOCAL_CUP->name => self::LOCAL_CUP,
+            default => self::FRIENDS,
+        };
     }
 
     public static function allowedValues(): array
@@ -44,6 +40,8 @@ enum KeyforgeCompetition: string
             self::NKFL_LEAGUE_CUP_SEASON_19->name,
             self::NKFL_LEAGUE_CUP_REVERSAL_SEASON_19->name,
             self::NKFL_ARCHON_TOURNAMENT->name,
+            self::LOCAL_LEAGUE->name,
+            self::LOCAL_CUP->name,
         ];
     }
 }

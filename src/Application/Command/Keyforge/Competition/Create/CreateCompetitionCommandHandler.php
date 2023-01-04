@@ -54,6 +54,10 @@ final class CreateCompetitionCommandHandler
 
     private function assertName(CreateCompetitionCommand $command): void
     {
+        if ('new' === $command->reference) {
+            throw new \Exception('Invalid name.');
+        }
+
         $withConflict = $this->repository->search(new Criteria(
             null,
             null,
@@ -89,6 +93,8 @@ final class CreateCompetitionCommandHandler
     private function generateFixtures(KeyforgeCompetition $competition): array
     {
         $users = \array_map(static fn (Uuid $id): string => $id->value(), $competition->users());
+
+        \shuffle($users);
 
         if (\count($users) % 2 !== 0) {
             $users[] = null;
