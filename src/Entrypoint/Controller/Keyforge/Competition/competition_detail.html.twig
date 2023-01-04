@@ -12,6 +12,15 @@
 {% endblock %}
 
 {% block body %}
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip({
+                'container': 'body',
+                'placement': 'top'
+            })
+        })
+    </script>
+
     <div class="shadow-lg p-3 mb-5 bg-white rounded col-12">
         <div class="row">
             <h2>{{ competition.name }}</h2>
@@ -61,38 +70,21 @@
                 {% for fixture in fixtureGroup %}
                     <a class="btn btn-clear border col-12 col-sm-12 col-md-6 col-lg-6 overflow-wrap inline-block">
                         {% if fixture.game is not same as null %}
-
-                            {% if fixture.game.winner is same as fixture.users.0.id %}
-                                <p>
-                                <div class="row">
-                                    <div class="col-4">{{ fixture.users.0.name }}</div>
-                                    <div class="col-4">{{ fixture.game.score.winner_score }} - {{ fixture.game.score.loser_score }}</div>
-                                    <div class="col-4">{{ fixture.users.1.name }}</div>
-                                </div>
-                                </p>
-                                <p>
-                                <div class="row">
-                                    <div class="col-4">{{ indexedDecks[fixture.game.winnerDeck] }}</div>
-                                    <div class="col-4">vs</div>
-                                    <div class="col-4">{{ indexedDecks[fixture.game.loserDeck] }}</div>
-                                </div>
-                                </p>
-                            {% else %}
-                                <p>
-                                <div class="row">
-                                    <div class="col-4">{{ fixture.users.0.name }}</div>
-                                    <div class="col-4">{{ fixture.game.score.loser_score }} - {{ fixture.game.score.winner_score }}</div>
-                                    <div class="col-4">{{ fixture.users.1.name }}</div>
-                                </div>
-                                </p>
-                                <p>
-                                <div class="row">
-                                    <div class="col-4">{{ indexedDecks[fixture.game.loserDeck] }}</div>
-                                    <div class="col-4">vs</div>
-                                    <div class="col-4">{{ indexedDecks[fixture.game.winnerDeck] }}</div>
-                                </div>
-                                </p>
-                            {% endif %}
+                            <p>
+                                {% if fixture.game.winner is same as fixture.users.0.id %}
+                                    <div class="row">
+                                        <div class="col-4" data-toggle="tooltip" title="{{ indexedDecks[fixture.game.winnerDeck] }}">{{ fixture.users.0.name }}</div>
+                                        <div class="col-4">{{ fixture.game.score.winner_score }} - {{ fixture.game.score.loser_score }}</div>
+                                        <div class="col-4" data-toggle="tooltip" title="{{ indexedDecks[fixture.game.loserDeck] }}">{{ fixture.users.1.name }}</div>
+                                    </div>
+                                {% else %}
+                                    <div class="row">
+                                        <div class="col-4" data-toggle="tooltip" title="{{ indexedDecks[fixture.game.loserDeck] }}">{{ fixture.users.0.name }}</div>
+                                        <div class="col-4">{{ fixture.game.score.loser_score }} - {{ fixture.game.score.winner_score }}</div>
+                                        <div class="col-4" data-toggle="tooltip" title="{{ indexedDecks[fixture.game.winnerDeck] }}">{{ fixture.users.1.name }}</div>
+                                    </div>
+                                {% endif %}
+                            </p>
                             <p>
                                 <div class="row">
                                     <div class="col-12">{{ fixture.playedAt }}</div>
