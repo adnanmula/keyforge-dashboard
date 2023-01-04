@@ -38,18 +38,6 @@ final class CompetitionDetailController extends Controller
             $this->bus->dispatch(new GetCompetitionDetailQuery($reference)),
         );
 
-
-
-
-//        dd([
-//            'users' => \array_map(static fn (KeyforgeUser $user) => $user->jsonSerialize(), $users),
-//            'competition' => $detail['competition'],
-//            'fixtures' => $detail['fixtures'],
-//            'classification' => $detail['classification'],
-//            'winnerDecks' => $decks,
-//            'loserDecks' => $decks,
-//        ]);
-
         return $this->render('Keyforge/Competition/competition_detail.html.twig', [
             'users' => \array_map(static fn (KeyforgeUser $user) => $user->jsonSerialize(), $users),
             'competition' => $detail['competition'],

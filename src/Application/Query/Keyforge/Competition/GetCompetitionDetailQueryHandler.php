@@ -39,7 +39,7 @@ final readonly class GetCompetitionDetailQueryHandler
 
         $fixtures = $this->repository->fixtures($competition->id());
 
-        $gameIds = \array_filter(\array_map(static fn (KeyforgeCompetitionFixture $fixture): ?string => $fixture->game()?->value() , $fixtures));
+        $gameIds = \array_filter(\array_map(static fn (KeyforgeCompetitionFixture $fixture): ?string => $fixture->game()?->value(), $fixtures));
 
         $games = $this->gameRepository->search(new Criteria(
             null,
@@ -91,7 +91,7 @@ final readonly class GetCompetitionDetailQueryHandler
                 'keys_opponent_forged' => 0,
             ];
 
-            foreach ($indexedFixtures as $groupName => $fixtures) {
+            foreach ($indexedFixtures as $fixtures) {
                 foreach ($fixtures as $fixture) {
                     if (null === $fixture['game']) {
                         continue;
@@ -113,7 +113,7 @@ final readonly class GetCompetitionDetailQueryHandler
         }
 
 
-        \usort($classification, function (array $a, array $b) {
+        \usort($classification, static function (array $a, array $b) {
             if ($b['wins'] === $a['wins']) {
                 return $a['losses'] <=> $b['losses'];
             }
@@ -137,14 +137,16 @@ final readonly class GetCompetitionDetailQueryHandler
     private function order(array $indexedFixtures): array
     {
         foreach ($indexedFixtures as &$fixturesToSort) {
-            usort($fixturesToSort, function (array $a, array $b) {
+            \usort($fixturesToSort, static function (array $a, array $b) {
                 return $a['position'] <=> $b['position'];
             });
         }
 
+        $keys = \array_keys($indexedFixtures);
+
         \array_multisort(
-            \array_keys($indexedFixtures),
-            SORT_NATURAL,
+            $keys,
+            \SORT_NATURAL,
             $indexedFixtures,
         );
 

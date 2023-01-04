@@ -79,7 +79,7 @@ final readonly class KeyforgeCompetition implements \JsonSerializable
             'type' => $this->type()->name,
             'users' => $this->users(),
             'description' => $this->description(),
-            'createdAt' => $this->createdAt()?->format(\DateTimeInterface::ATOM),
+            'createdAt' => $this->createdAt()->format(\DateTimeInterface::ATOM),
             'startedAt' => $this->startedAt()?->format('Y-m-d'),
             'finishedAt' => $this->finishedAt()?->format('Y-m-d'),
             'winner' => $this->winner()?->value(),

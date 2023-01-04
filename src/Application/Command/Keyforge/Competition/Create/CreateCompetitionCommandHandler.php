@@ -69,7 +69,11 @@ final class CreateCompetitionCommandHandler
 
                     $count++;
 
-                    if ($count === (\count($command->users) / 2)) {
+                    $halfCount = \count($command->users) % 2 === 0
+                        ? \ceil(\count($command->users) / 2)
+                        : \ceil(\count($command->users) / 2) - 1;
+
+                    if ($count >= $halfCount) {
                         $reference++;
                         $count = 0;
                     }
@@ -153,7 +157,7 @@ final class CreateCompetitionCommandHandler
                 $fixtures[] = new KeyforgeCompetitionFixture(
                     Uuid::v4(),
                     $competition->id(),
-                    'Jornada ' . $i + 1,
+                    'Jornada ' . ($i + 1),
                     [$user1, $user2],
                     CompetitionFixtureType::BEST_OF_1,
                     $position,
@@ -178,10 +182,6 @@ final class CreateCompetitionCommandHandler
 
         $lastPlayer = \array_pop($users);
 
-        return [
-            $firstPlayer,
-            $lastPlayer,
-            ...$users,
-        ];
+        return [$firstPlayer, $lastPlayer, ...$users];
     }
 }

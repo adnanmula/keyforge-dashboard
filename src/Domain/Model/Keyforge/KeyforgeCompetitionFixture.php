@@ -88,13 +88,13 @@ final class KeyforgeCompetitionFixture implements \JsonSerializable
     public function jsonSerialize(): array
     {
         return [
-            'id' => $this->id()?->value(),
-            'competition_id' => $this->competitionId()?->value(),
+            'id' => $this->id()->value(),
+            'competition_id' => $this->competitionId()->value(),
             'reference' => $this->reference(),
             'users' => \array_map(static fn (Uuid $id): string => $id->value(), $this->users()),
             'type' => $this->type()->name,
             'position' => $this->position(),
-            'createdAt' => $this->createdAt()?->format(\DateTimeInterface::ATOM),
+            'createdAt' => $this->createdAt()->format(\DateTimeInterface::ATOM),
             'playedAt' => $this->playedAt()?->format('Y-m-d'),
             'winner' => $this->winner()?->value(),
             'game' => $this->game()?->value(),

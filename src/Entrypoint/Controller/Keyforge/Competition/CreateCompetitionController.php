@@ -56,7 +56,7 @@ class CreateCompetitionController extends Controller
                     'users' => $users,
                     'result' => 'Torneo creado',
                     'success' => true,
-                ]
+                ],
             );
         }
 
