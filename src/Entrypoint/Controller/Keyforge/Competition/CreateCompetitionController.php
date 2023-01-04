@@ -33,7 +33,7 @@ class CreateCompetitionController extends Controller
         if ($request->getMethod() === Request::METHOD_POST) {
             try {
                 $this->bus->dispatch(new CreateCompetitionCommand(
-                    \preg_replace("/[\W_]+/u", '_', $request->request->get('name')),
+                    \strtolower(\preg_replace("/[\W_]+/u", '_', $request->request->get('name'))),
                     $request->request->get('name'),
                     $request->request->get('type'),
                     $request->request->all()['users'] ?? [],

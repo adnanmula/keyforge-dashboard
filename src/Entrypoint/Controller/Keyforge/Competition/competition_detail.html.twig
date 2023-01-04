@@ -73,7 +73,7 @@
                                 <p>
                                 <div class="row">
                                     <div class="col-4">{{ indexedDecks[fixture.game.winnerDeck] }}</div>
-                                    <div class="col-4">-</div>
+                                    <div class="col-4">vs</div>
                                     <div class="col-4">{{ indexedDecks[fixture.game.loserDeck] }}</div>
                                 </div>
                                 </p>
@@ -88,7 +88,7 @@
                                 <p>
                                 <div class="row">
                                     <div class="col-4">{{ indexedDecks[fixture.game.loserDeck] }}</div>
-                                    <div class="col-4">-</div>
+                                    <div class="col-4">vs</div>
                                     <div class="col-4">{{ indexedDecks[fixture.game.winnerDeck] }}</div>
                                 </div>
                                 </p>
@@ -106,17 +106,19 @@
                                     <div class="col-4">{{ fixture.users.1.name }}</div>
                                 </div>
                             </p>
-                            <p>
-                                <button type="button" class="btn btn-dark btn-xs" data-bs-toggle="modal" data-bs-target="#registerCompetitionGame"
-                                        data-player-one-name="{{ fixture.users.0.name }}"
-                                        data-player-two-name="{{ fixture.users.1.name }}"
-                                        data-player-one-id="{{ fixture.users.0.id }}"
-                                        data-player-two-id="{{ fixture.users.1.id }}"
-                                        data-competition-name="{{ competition.name }}"
-                                        data-fixture-ref="{{ fixture.reference }}"
-                                        data-fixture-id="{{ fixture.id }}"
-                                >Guardar</button>
-                            </p>
+                            {% if is_granted('ROLE_KEYFORGE') %}
+                                <p>
+                                    <button type="button" class="btn btn-dark btn-xs" data-bs-toggle="modal" data-bs-target="#registerCompetitionGame"
+                                            data-player-one-name="{{ fixture.users.0.name }}"
+                                            data-player-two-name="{{ fixture.users.1.name }}"
+                                            data-player-one-id="{{ fixture.users.0.id }}"
+                                            data-player-two-id="{{ fixture.users.1.id }}"
+                                            data-competition-name="{{ competition.name }}"
+                                            data-fixture-ref="{{ fixture.reference }}"
+                                            data-fixture-id="{{ fixture.id }}"
+                                    >Guardar</button>
+                                </p>
+                            {% endif %}
                         {% endif %}
                     </a>
                 {% endfor %}

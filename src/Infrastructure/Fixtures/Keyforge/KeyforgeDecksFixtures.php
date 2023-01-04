@@ -76,7 +76,7 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
         $this->save(
             new KeyforgeDeck(
                 Uuid::from(self::FIXTURE_KEYFORGE_DECK_3_ID),
-                'Harrison "Sátiro", Rebelde del Foro',
+                'Harrison “Sátiro”, Rebelde del Foro',
                 KeyforgeSet::MM,
                 KeyforgeDeckHouses::from(
                     KeyforgeHouse::DIS,
@@ -112,7 +112,7 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
         $this->save(
             new KeyforgeDeck(
                 Uuid::from(self::FIXTURE_KEYFORGE_DECK_5_ID),
-                '"Fantasma", Rufián de Conton',
+                '“Fantasma”, Rufián de Conton',
                 KeyforgeSet::CotA,
                 KeyforgeDeckHouses::from(
                     KeyforgeHouse::DIS,

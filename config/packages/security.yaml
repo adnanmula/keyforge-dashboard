@@ -22,7 +22,7 @@ security:
     access_control:
          - { path: ^/keyforge/games/add, roles: ROLE_KEYFORGE }
          - { path: ^/keyforge/decks/import, roles: ROLE_KEYFORGE }
-         - { path: ^/keyforge/competitions, roles: ROLE_KEYFORGE }
+         - { path: ^/keyforge/competitions/new, roles: ROLE_KEYFORGE }
          - { path: ^/keyforge/users, roles: ROLE_KEYFORGE }
          - { path: ^/gwent, roles: ROLE_GWENT }
 
