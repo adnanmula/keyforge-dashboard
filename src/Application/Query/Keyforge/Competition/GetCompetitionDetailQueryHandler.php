@@ -116,6 +116,21 @@ final readonly class GetCompetitionDetailQueryHandler
 
 
         \usort($classification, static function (array $a, array $b) {
+            if ($b['wins'] === $a['wins'] && $a['losses'] === $b['losses']) {
+                $aDiff = $a['keys_forged'] - $a['keys_opponent_forged'];
+                $bDiff = $b['keys_forged'] - $b['keys_opponent_forged'];
+
+                if ($aDiff === $bDiff) {
+                    if ($a['keys_forged'] === $b['keys_forged']) {
+                        return $a['keys_opponent_forged'] <=> $b['keys_opponent_forged'];
+                    }
+
+                    return $b['keys_forged'] <=> $a['keys_forged'];
+                }
+
+                return $bDiff <=> $aDiff;
+            }
+
             if ($b['wins'] === $a['wins']) {
                 return $a['losses'] <=> $b['losses'];
             }

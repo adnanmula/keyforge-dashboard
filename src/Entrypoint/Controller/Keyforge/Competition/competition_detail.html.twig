@@ -2,6 +2,15 @@
 
 {% block title %}{{ competition.name }}{% endblock %}
 
+{% block header %}
+    <style>
+        .btn-xs > .btn, .btn-xs {
+            font-size  : .700rem;
+            line-height  : .75;
+        }
+    </style>
+{% endblock %}
+
 {% block body %}
     <div class="shadow-lg p-3 mb-5 bg-white rounded col-12">
         <div class="row">
@@ -21,6 +30,7 @@
                     <th>Jugador</th>
                     <th>G</th>
                     <th>P</th>
+                    <th>⚷ D</th>
                     <th>⚷ F</th>
                     <th>⚷ C</th>
                 </tr>
@@ -32,6 +42,7 @@
                         <td>{{ player.username }}</td>
                         <td>{{ player.wins }}</td>
                         <td>{{ player.losses }}</td>
+                        <td>{{ player.keys_forged - player.keys_opponent_forged }}</td>
                         <td>{{ player.keys_forged }}</td>
                         <td>{{ player.keys_opponent_forged }}</td>
                     </tr>
@@ -43,34 +54,69 @@
         <div class="divider py-2"></div>
         <div class="divider py-2"></div>
 
-         <div class="col-12">
+        <div class="row" style="margin: auto;">
             {% for fixtureGroup in fixtures %}
                 <div class="divider py-2"></div>
                 <h6>{{ fixtureGroup.0.reference }}</h6>
                 {% for fixture in fixtureGroup %}
-                    <a class="btn btn-clear border col-12 col-sm-12 col-md-5 col-lg-3">
+                    <a class="btn btn-clear border col-12 col-sm-12 col-md-6 col-lg-6 overflow-wrap inline-block">
                         {% if fixture.game is not same as null %}
 
                             {% if fixture.game.winner is same as fixture.users.0.id %}
-                                <p>{{ fixture.users.0.name }} {{ fixture.game.score.winner_score }} - {{ fixture.game.score.loser_score }} {{ fixture.users.1.name }}</p>
-                                <p>{{ indexedDecks[fixture.game.winnerDeck] }} - {{ indexedDecks[fixture.game.loserDeck] }}</p>
+                                <p>
+                                <div class="row">
+                                    <div class="col-4">{{ fixture.users.0.name }}</div>
+                                    <div class="col-4">{{ fixture.game.score.winner_score }} - {{ fixture.game.score.loser_score }}</div>
+                                    <div class="col-4">{{ fixture.users.1.name }}</div>
+                                </div>
+                                </p>
+                                <p>
+                                <div class="row">
+                                    <div class="col-4">{{ indexedDecks[fixture.game.winnerDeck] }}</div>
+                                    <div class="col-4">-</div>
+                                    <div class="col-4">{{ indexedDecks[fixture.game.loserDeck] }}</div>
+                                </div>
+                                </p>
                             {% else %}
-                                <p>{{ fixture.users.0.name }} {{ fixture.game.score.loser_score }} - {{ fixture.game.score.winner_score }} {{ fixture.users.1.name }}</p>
-                                <p>{{ indexedDecks[fixture.game.loserDeck] }} - {{ indexedDecks[fixture.game.winnerDeck] }}</p>
+                                <p>
+                                <div class="row">
+                                    <div class="col-4">{{ fixture.users.0.name }}</div>
+                                    <div class="col-4">{{ fixture.game.score.loser_score }} - {{ fixture.game.score.winner_score }}</div>
+                                    <div class="col-4">{{ fixture.users.1.name }}</div>
+                                </div>
+                                </p>
+                                <p>
+                                <div class="row">
+                                    <div class="col-4">{{ indexedDecks[fixture.game.loserDeck] }}</div>
+                                    <div class="col-4">-</div>
+                                    <div class="col-4">{{ indexedDecks[fixture.game.winnerDeck] }}</div>
+                                </div>
+                                </p>
                             {% endif %}
-
-                            <p>{{ fixture.playedAt }}</p>
+                            <p>
+                                <div class="row">
+                                    <div class="col-12">{{ fixture.playedAt }}</div>
+                                </div>
+                            </p>
                         {% else %}
-                            <p>{{ fixture.users.0.name }} 0 - 0 {{ fixture.users.1.name }}</p>
-                            <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#registerCompetitionGame"
-                                data-player-one-name="{{ fixture.users.0.name }}"
-                                data-player-two-name="{{ fixture.users.1.name }}"
-                                data-player-one-id="{{ fixture.users.0.id }}"
-                                data-player-two-id="{{ fixture.users.1.id }}"
-                                data-competition-name="{{ competition.name }}"
-                                data-fixture-ref="{{ fixture.reference }}"
-                                data-fixture-id="{{ fixture.id }}"
-                            >Guardar</button>
+                            <p>
+                                <div class="row">
+                                    <div class="col-4">{{ fixture.users.0.name }}</div>
+                                    <div class="col-4"> 0 - 0 </div>
+                                    <div class="col-4">{{ fixture.users.1.name }}</div>
+                                </div>
+                            </p>
+                            <p>
+                                <button type="button" class="btn btn-dark btn-xs" data-bs-toggle="modal" data-bs-target="#registerCompetitionGame"
+                                        data-player-one-name="{{ fixture.users.0.name }}"
+                                        data-player-two-name="{{ fixture.users.1.name }}"
+                                        data-player-one-id="{{ fixture.users.0.id }}"
+                                        data-player-two-id="{{ fixture.users.1.id }}"
+                                        data-competition-name="{{ competition.name }}"
+                                        data-fixture-ref="{{ fixture.reference }}"
+                                        data-fixture-id="{{ fixture.id }}"
+                                >Guardar</button>
+                            </p>
                         {% endif %}
                     </a>
                 {% endfor %}
