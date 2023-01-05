@@ -1,15 +1,16 @@
 <?php declare(strict_types=1);
 
-namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\Stats\Deck;
+namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\Deck\UpdateNotes;
 
-use AdnanMula\Cards\Application\Query\Keyforge\Tag\GetTagsQuery;
+use AdnanMula\Cards\Application\Command\Keyforge\Deck\UpdateNotes\UpdateDeckNotesCommand;
 use AdnanMula\Cards\Domain\Model\Shared\User;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 
-final class MyDecksController extends Controller
+final class UpdateDeckNotesController extends Controller
 {
     private Security $security;
 
@@ -20,7 +21,7 @@ final class MyDecksController extends Controller
         parent::__construct($bus);
     }
 
-    public function __invoke(): Response
+    public function __invoke(Request $request): Response
     {
         if (false === $this->security->isGranted('ROLE_KEYFORGE')) {
             return new Response('Forbidden', Response::HTTP_FORBIDDEN);
@@ -29,17 +30,12 @@ final class MyDecksController extends Controller
         /** @var User $user */
         $user = $this->security->getUser();
 
-        $tags = $this->extractResult($this->bus->dispatch(new GetTagsQuery(
-            null,
-            null,
-        )));
+        $this->bus->dispatch(new UpdateDeckNotesCommand(
+            $request->get('deckId'),
+            $request->get('notes'),
+            $user->id()->value(),
+        ));
 
-        return $this->render(
-            'Keyforge/Stats/Deck/list_my_decks.html.twig',
-            [
-                'owner' => $user->id()->value(),
-                'tags' => $tags['tags'],
-            ],
-        );
+        return new Response('', Response::HTTP_OK);
     }
 }

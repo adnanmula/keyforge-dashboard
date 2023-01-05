@@ -21,7 +21,12 @@ keyforge_deck_list_by_owner:
 keyforge_deck_claim:
   path: /deck/claim
   controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Deck\ClaimController
-  methods: [ POST ]
+  methods: [POST]
+
+keyforge_deck_update_notes:
+  path: /deck/notes
+  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Deck\UpdateNotes\UpdateDeckNotesController
+  methods: [POST]
 
 keyforge_decks_json:
   path: /decks/json
@@ -77,7 +82,7 @@ keyforge_competition_create:
   path: /competitions/new
   controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Competition\CreateCompetitionController
   methods: [GET,POST]
-  
+
 keyforge_competition_view:
   path: /competitions/{reference}
   controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Competition\CompetitionDetailController

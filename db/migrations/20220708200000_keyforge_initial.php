@@ -28,6 +28,7 @@ final class KeyforgeInitial extends AbstractMigration
                 extra_data jsonb NOT NULL,
                 owner uuid,
                 tags jsonb NOT NULL DEFAULT \'[]\',
+                notes character varying(512) NOT NULL,
                 PRIMARY KEY(id)
             )',
         );

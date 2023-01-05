@@ -110,7 +110,6 @@
                             <div class="form-check col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2" style="display: flex; align-items: center;">
                                 <input class="form-check-input houses_selector" type="checkbox" value="SAURIAN" id="check_house_saurian">
                                 <label for="check_house_saurian"><img width="35px" src="/assets/keyforge/houses/SAURIAN.png" alt="SAURIAN"/>Saurios</label>
-
                             </div>
                             <div class="form-check col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2" style="display: flex; align-items: center;">
                                 <input class="form-check-input houses_selector" type="checkbox" value="STAR_ALLIANCE" id="check_house_star_alliance">
@@ -161,38 +160,49 @@
                 <th scope="col">Tags</th>
                 <th scope="col">Deck</th>
                 <th scope="col">Set</th>
-                <th scope="col">Houses</th>
+                <th scope="col">Casas</th>
                 <th scope="col">Win Rate</th>
                 <th scope="col">SAS</th>
+                <th scope="col">Notas</th>
                 <th scope="col"></th>
             </tr>
             </thead>
         </table>
     </div>
 
+    <div class="modal fade" id="deckUpdateNotes" tabindex="-1" role="dialog" aria-labelledby="deckUpdateNotes" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modelaTitleLabel">Notas</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="updateDeckNotesForm">
+                        <div class="row mt-3">
+                            <div class="col-md-12">
+                                <textarea class="form-control" name="notes" id="deckNotesInput" rows="5" maxlength="512"></textarea>
+                            </div>
+                        </div>
+
+                        <div>
+                            <input type="hidden" id="hiddenDeckId" value="">
+                        </div>
+
+                        <div class="divider py-1"></div>
+
+                        <button type="submit" id="updateNotesSubmit" class="btn btn-block btn-dark" style="width: 100%">Guardar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
 
     <script>
-
-        $(".image-checkbox").each(function () {
-            if ($(this).find('input[type="checkbox"]').first().attr("checked")) {
-                $(this).addClass('image-checkbox-checked');
-            }
-            else {
-                $(this).removeClass('image-checkbox-checked');
-            }
-        });
-
-        // sync the state to the input
-        $(".image-checkbox").on("click", function (e) {
-            $(this).toggleClass('image-checkbox-checked');
-            var $checkbox = $(this).find('input[type="checkbox"]');
-            $checkbox.prop("checked",!$checkbox.prop("checked"))
-
-            e.preventDefault();
-        });
-
-
         function onlyOwned() {
             return false;
         }
@@ -298,6 +308,7 @@
                     { data: "houses" },
                     { data: "wins" },
                     { data: "sas" },
+                    { data: "notes" },
                     { data: "sas" },
                 ],
                 columnDefs: [
@@ -397,6 +408,12 @@
                     },
                     {
                         render: function (data, type, row) {
+                            return '<div id="notesCell-'+ row.id + '">' + data.replace(/\n/g, '<br>') + '</div>';
+                        },
+                        targets: 6, //Notes
+                    },
+                    {
+                        render: function (data, type, row) {
                             vaultLink = 'https://www.keyforgegame.com/deck-details/' + row.id;
                             dokLink = 'https://decksofkeyforge.com/decks/' + row.id;
                             wikiLink = 'https://archonarcana.com/Deck:' + row.id;
@@ -405,22 +422,28 @@
                             dokLogo = '/assets/keyforge/logos/dok.svg';
                             wikiLogo = '/assets/keyforge/logos/wiki.jpg';
 
+                            const notesButton = '<button type="button" class="btn btn-dark btn-sm" style="width: 40px; height: 50px" data-bs-toggle="modal" data-bs-target="#deckUpdateNotes" '
+                                + 'data-deck-id="' + row.id + '" '
+                                + 'data-notes="' + row.notes + '" '
+                                + '><i class="bi bi-pencil"></i></button>';
+
                             return '<a href="' + vaultLink + '" target="_blank">' +
                                 '<img class="img-thumbnail" width="50px" style="min-width: 50px" src="' + vaultLogo + '" alt="Vault"/></a>' +
                                 '<a href="' + dokLink + '" target="_blank">' +
                                 '<img class="img-thumbnail" width="40px" style="min-width: 40px" src="' + dokLogo + '" alt="DoK"/></a>' +
                                 '<a href="' + wikiLink + '" target="_blank">' +
-                                '<img class="img-thumbnail" width="50px" style="min-width: 40px" src="' + wikiLogo + '" alt="Wiki"/></a>';
+                                '<img class="img-thumbnail" width="50px" style="min-width: 40px" src="' + wikiLogo + '" alt="Wiki"/></a>' +
+                                notesButton;
                         },
-                        targets: 6, //Buttons
+                        targets: 7, //Buttons
                     },
                     {
-                        targets: [0, 1, 2, 3, 4, 5, 6],
+                        targets: [0, 1, 2, 3, 4, 5, 6, 7],
                         searchable: false,
                         visible: true,
                     },
                     {
-                        targets: [0, 2, 3, 6],
+                        targets: [0, 2, 3, 6, 7],
                         orderable: false
                     },
                     {
@@ -431,8 +454,45 @@
                     { width: 350, targets: 1 },
                     { width: 50, targets: 2 },
                     { width: 150, targets: 3 },
-                    { width: 150, targets: 6 },
+                    { width: 100, targets: 6 },
+                    { width: 150, targets: 7 },
                 ],
+            });
+        });
+
+        const modal = $('#deckUpdateNotes');
+
+        modal.on('hidden.bs.modal', function () {
+            $(this).find('form').trigger('reset');
+        });
+
+        modal.on('show.bs.modal', function (event) {
+            const button = $(event.relatedTarget);
+
+            $('#hiddenDeckId')[0].value = button.data('deck-id');
+            $('#deckNotesInput')[0].value = button.data('notes');
+        });
+
+        modal.on('hidden.bs.modal', function () {
+            $(this).find('form').trigger('reset');
+        });
+
+        $('#updateDeckNotesForm').submit(function (e) {
+            e.preventDefault();
+
+            let deckId = $('#hiddenDeckId')[0].value;
+            let notes = $('#deckNotesInput')[0].value;
+
+            $.post({
+                url: "/keyforge/deck/notes",
+                method: "POST",
+                data: {
+                    'deckId': deckId,
+                    'notes': notes,
+                },
+            }).done(function() {
+                $('#notesCell-' + deckId)[0].innerText = notes.replace(/\n/g, '<br>')
+                modal.modal('hide');
             });
         });
     </script>

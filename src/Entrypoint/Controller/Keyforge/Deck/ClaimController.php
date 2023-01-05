@@ -5,10 +5,10 @@ namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\Deck;
 use AdnanMula\Cards\Application\Command\Keyforge\Deck\Claim\ClaimDeckCommand;
 use AdnanMula\Cards\Domain\Model\Shared\User;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Security\Core\Security;
 
 final class ClaimController extends Controller
 {

@@ -18,6 +18,7 @@ final class KeyforgeDeck implements \JsonSerializable
         private int $losses,
         private array $extraData,
         private ?Uuid $owner,
+        private string $notes,
         private array $tags = [],
     ) {}
 
@@ -66,6 +67,11 @@ final class KeyforgeDeck implements \JsonSerializable
         return $this->owner;
     }
 
+    public function notes(): string
+    {
+        return $this->notes;
+    }
+
     public function tags(): array
     {
         return $this->tags;
@@ -92,6 +98,13 @@ final class KeyforgeDeck implements \JsonSerializable
         return $this;
     }
 
+    public function updateNotes(string $notes): self
+    {
+        $this->notes = $notes;
+
+        return $this;
+    }
+
     public function updateTags(string ...$tags): self
     {
         $this->tags = $tags;
@@ -112,6 +125,7 @@ final class KeyforgeDeck implements \JsonSerializable
             'extraData' => $this->extraData(),
             'owner' => $this->owner()?->value(),
             'tags' => $this->tags(),
+            'notes' => $this->notes(),
         ];
     }
 }

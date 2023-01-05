@@ -28,17 +28,24 @@ use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagEfficiencyLow;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasAgentZ;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasAnomaly;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasBoardWipes;
+use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasBRIG;
+use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasCollectorWorm;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasDoubleCards;
+use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasDysania;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasFangtoothCavern;
+use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasGenKa;
+use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasHeartOfTheForest;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasHorseman;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasKeyCheats;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasLegacy;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasMaverick;
+use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasOrtannu;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasRats;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasScalingAmberControl;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasSins;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasTimetraveller;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagOwnerBuko;
+use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagOwnerChopi;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagOwnerDani;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagOwnerFran;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagOwnerIsmalelo;
@@ -101,6 +108,14 @@ final class ApplyPredefinedTagsService
         $newTags[] = $this->tagSynergy($data);
         $newTags[] = $this->tagAntiSynergy($data);
         $newTags[] = $this->tagOwner($deck);
+        $newTags[] = $this->tagOwner($deck);
+
+        $newTags[] = $this->tagHasDysania($data);
+        $newTags[] = $this->tagHasOrtannu($data);
+        $newTags[] = $this->tagHasCollectorWorm($data);
+        $newTags[] = $this->tagHasGenKa($data);
+        $newTags[] = $this->tagHasBRIG($data);
+        $newTags[] = $this->tagHasHeartOfTheForest($data);
 
         $newTags = \array_filter($newTags);
 
@@ -605,6 +620,68 @@ final class ApplyPredefinedTagsService
         return null;
     }
 
+    private function tagHasDysania(array $data): ?KeyforgeTag
+    {
+        $cards = ['Dysania'];
+
+        if ($this->hasCard($cards, $data)) {
+            return new KeyforgeTagHasDysania();
+        }
+
+        return null;
+    }
+
+    private function tagHasOrtannu(array $data): ?KeyforgeTag
+    {
+        $cards = ['Ortannu the Chained'];
+
+        if ($this->hasCard($cards, $data)) {
+            return new KeyforgeTagHasOrtannu();
+        }
+
+        return null;
+    }
+
+    private function tagHasCollectorWorm(array $data): ?KeyforgeTag
+    {
+        $cards = ['Collector Worm'];
+
+        if ($this->hasCard($cards, $data)) {
+            return new KeyforgeTagHasCollectorWorm();
+        }
+
+        return null;
+    }
+
+    private function tagHasGenKa(array $data): ?KeyforgeTag
+    {
+        if ($this->hasCard(['Martian Generosity'], $data) && $this->hasCard(['Key Abduction'], $data)) {
+            return new KeyforgeTagHasGenKa();
+        }
+
+        return null;
+    }
+
+    private function tagHasBRIG(array $data): ?KeyforgeTag
+    {
+        if ($this->hasCard(['Binate Rupture'], $data) && $this->hasCard(['Interdimensional Graft'], $data)) {
+            return new KeyforgeTagHasBRIG();
+        }
+
+        return null;
+    }
+
+    private function tagHasHeartOfTheForest(array $data): ?KeyforgeTag
+    {
+        $cards = ['Heart of the Forest'];
+
+        if ($this->hasCard($cards, $data)) {
+            return new KeyforgeTagHasHeartOfTheForest();
+        }
+
+        return null;
+    }
+
     private function hasCard(array $cards, array $data): bool
     {
         foreach ($data['housesAndCards'] as $house) {
@@ -644,6 +721,10 @@ final class ApplyPredefinedTagsService
 
         if ($owner === 'b86488f4-336e-4c23-a34d-e92f06b51c04') {
             return new KeyforgeTagOwnerDani();
+        }
+
+        if ($owner === 'f6f51a9f-28d1-416c-aeb0-28c5d8c23d9c') {
+            return new KeyforgeTagOwnerChopi();
         }
 
         return null;

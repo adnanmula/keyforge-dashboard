@@ -22,7 +22,7 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
     {
         $builder = $this->connection->createQueryBuilder();
 
-        $query = $builder->select('a.id, a.name, a.set, a.houses, a.sas, a.wins, a.losses, a.extra_data, a.owner, a.tags')
+        $query = $builder->select('a.*')
             ->from(self::TABLE, 'a');
 
         (new DbalCriteriaAdapter($builder))->execute($criteria);
@@ -46,7 +46,7 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
     public function byId(Uuid $id): ?KeyforgeDeck
     {
         $result = $this->connection->createQueryBuilder()
-            ->select('a.id, a.name, a.set, a.houses, a.sas, a.wins, a.losses, a.extra_data, a.owner, a.tags')
+            ->select('a.*')
             ->from(self::TABLE, 'a')
             ->where('a.id = :id')
             ->setParameter('id', $id->value())
@@ -64,7 +64,7 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
     public function byIds(Uuid ...$ids): array
     {
         $result = $this->connection->createQueryBuilder()
-            ->select('a.id, a.name, a.set, a.houses, a.sas, a.wins, a.losses, a.extra_data, a.owner, a.tags')
+            ->select('a.*')
             ->from(self::TABLE, 'a')
             ->where('a.id in (:ids)')
             ->setParameter('ids', \array_map(static fn (Uuid $id) => $id->value(), $ids), Connection::PARAM_STR_ARRAY)
@@ -81,7 +81,7 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
     public function byNames(string ...$decks): array
     {
         $result = $this->connection->createQueryBuilder()
-            ->select('a.id, a.name, a.set, a.houses, a.sas, a.wins, a.losses, a.extra_data, a.owner, a.tags')
+            ->select('a.*')
             ->from(self::TABLE, 'a')
             ->where('a.name in (:decks)')
             ->setParameter('decks', $decks, Connection::PARAM_STR_ARRAY)
@@ -100,8 +100,8 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
         $stmt = $this->connection->prepare(
             \sprintf(
                 '
-                    INSERT INTO %s (id, name, set, houses, sas, wins, losses, extra_data, owner, tags)
-                    VALUES (:id, :name, :set, :houses, :sas, :wins, :losses, :extra_data, :owner, :tags)
+                    INSERT INTO %s (id, name, set, houses, sas, wins, losses, extra_data, owner, tags, notes)
+                    VALUES (:id, :name, :set, :houses, :sas, :wins, :losses, :extra_data, :owner, :tags, :notes)
                     ON CONFLICT (id) DO UPDATE SET
                         id = :id,
                         name = :name,
@@ -112,7 +112,8 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
                         losses = :losses,
                         extra_data = :extra_data,
                         owner = :owner,
-                        tags = :tags
+                        tags = :tags,
+                        notes = :notes
                     ',
                 self::TABLE,
             ),
@@ -128,6 +129,7 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
         $stmt->bindValue(':extra_data', Json::encode($deck->extraData()));
         $stmt->bindValue(':owner', $deck->owner()?->value());
         $stmt->bindValue(':tags', Json::encode($deck->tags()));
+        $stmt->bindValue(':notes', $deck->notes());
 
         $stmt->execute();
     }
@@ -149,6 +151,7 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
             $deck['losses'],
             Json::decode($deck['extra_data']),
             null === $deck['owner'] ? null : Uuid::from($deck['owner']),
+            $deck['notes'],
             Json::decode($deck['tags']),
         );
     }
