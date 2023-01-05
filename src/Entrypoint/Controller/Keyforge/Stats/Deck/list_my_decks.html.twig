@@ -183,7 +183,7 @@
                     <form id="updateDeckNotesForm">
                         <div class="row mt-3">
                             <div class="col-md-12">
-                                <textarea class="form-control" name="notes" id="deckNotesInput" rows="5" maxlength="512"></textarea>
+                                <textarea class="form-control" name="notes" id="deckNotesInput" rows="8" maxlength="512"></textarea>
                             </div>
                         </div>
 
@@ -408,32 +408,33 @@
                     },
                     {
                         render: function (data, type, row) {
-                            return '<div id="notesCell-'+ row.id + '">' + data.replace(/\n/g, '<br>') + '</div>';
+                            return '<div id="notesCell-'+ row.id + '"><small style="font-size: x-small">' + data.replace(/\n/g, '<br>') + '</small></div>';
                         },
                         targets: 6, //Notes
                     },
                     {
                         render: function (data, type, row) {
-                            vaultLink = 'https://www.keyforgegame.com/deck-details/' + row.id;
-                            dokLink = 'https://decksofkeyforge.com/decks/' + row.id;
-                            wikiLink = 'https://archonarcana.com/Deck:' + row.id;
+                            const vaultLink = 'https://www.keyforgegame.com/deck-details/' + row.id;
+                            const dokLink = 'https://decksofkeyforge.com/decks/' + row.id;
+                            const wikiLink = 'https://archonarcana.com/Deck:' + row.id;
 
-                            vaultLogo = '/assets/keyforge/logos/vault.png';
-                            dokLogo = '/assets/keyforge/logos/dok.svg';
-                            wikiLogo = '/assets/keyforge/logos/wiki.jpg';
+                            const vaultLogo = '/assets/keyforge/logos/vault.png';
+                            const dokLogo = '/assets/keyforge/logos/dok.svg';
+                            const wikiLogo = '/assets/keyforge/logos/wiki.jpg';
 
-                            const notesButton = '<button type="button" class="btn btn-dark btn-sm" style="width: 40px; height: 50px" data-bs-toggle="modal" data-bs-target="#deckUpdateNotes" '
+                            const vaultButton = '<a href="' + vaultLink + '" target="_blank"><img class="img-thumbnail" width="50px" style="min-width: 50px" src="' + vaultLogo + '" alt="Vault"/></a>';
+                            const dokButton = '<a href="' + dokLink + '" target="_blank"><img class="img-thumbnail" width="40px" style="min-width: 40px" src="' + dokLogo + '" alt="DoK"/></a>';
+                            const wikiButton = '<a href="' + wikiLink + '" target="_blank"><img class="img-thumbnail" width="50px" style="min-width: 50px" src="' + wikiLogo + '" alt="Wiki"/></a>';
+
+                            const notesButton = '<button type="button" class="btn btn-dark btn-sm ml-1" style="width: 39px; height: 49px" data-bs-toggle="modal" data-bs-target="#deckUpdateNotes" '
                                 + 'data-deck-id="' + row.id + '" '
                                 + 'data-notes="' + row.notes + '" '
                                 + '><i class="bi bi-pencil"></i></button>';
 
-                            return '<a href="' + vaultLink + '" target="_blank">' +
-                                '<img class="img-thumbnail" width="50px" style="min-width: 50px" src="' + vaultLogo + '" alt="Vault"/></a>' +
-                                '<a href="' + dokLink + '" target="_blank">' +
-                                '<img class="img-thumbnail" width="40px" style="min-width: 40px" src="' + dokLogo + '" alt="DoK"/></a>' +
-                                '<a href="' + wikiLink + '" target="_blank">' +
-                                '<img class="img-thumbnail" width="50px" style="min-width: 40px" src="' + wikiLogo + '" alt="Wiki"/></a>' +
-                                notesButton;
+                            return '<div class="row">' + '<div class="col-6">' + vaultButton + '</div>'
+                                + '<div class="col-6">' +  dokButton + '</div>'+ '</div>'
+                                + '<div class="row">' + '<div class="col-6">' + wikiButton + '</div>'
+                                + '<div class="col-6">' + notesButton + '</div>'+ '</div>';
                         },
                         targets: 7, //Buttons
                     },
@@ -469,8 +470,18 @@
         modal.on('show.bs.modal', function (event) {
             const button = $(event.relatedTarget);
 
+            $.get({
+                url: "/keyforge/decks/json",
+                method: "GET",
+                dataType: "json",
+                data: {
+                    'extraDeckId': button.data('deck-id'),
+                },
+            }).done(function(response) {
+                $('#deckNotesInput')[0].value = response.data[0].notes;
+            });
+
             $('#hiddenDeckId')[0].value = button.data('deck-id');
-            $('#deckNotesInput')[0].value = button.data('notes');
         });
 
         modal.on('hidden.bs.modal', function () {
@@ -491,7 +502,7 @@
                     'notes': notes,
                 },
             }).done(function() {
-                $('#notesCell-' + deckId)[0].innerText = notes.replace(/\n/g, '<br>')
+                $('#notesCell-' + deckId)[0].innerHTML = '<small style="font-size: x-small">' + notes.replace(/\n/g, '<br>') + '</small>';
                 modal.modal('hide');
             });
         });

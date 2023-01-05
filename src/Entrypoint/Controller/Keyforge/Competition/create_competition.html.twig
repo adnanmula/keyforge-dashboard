@@ -20,13 +20,13 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label for="type" class="form-label">Type</label>
+                        <label for="type" class="form-label">Tipo</label>
                         <select class="form-select" name="type" id="type">
-                            <option value="ROUND_ROBIN_1" selected>Round robin (1 round)</option>
-                            <option value="ROUND_ROBIN_2">Round robin (2 rounds)</option>
-                            <option value="ELIMINATION" disabled>Elimination</option>
-                            <option value="ROUND_ROBIN_1_ELIMINATION" disabled>Round robin (1 round) and elimination</option>
-                            <option value="ROUND_ROBIN_2_ELIMINATION" disabled>Round robin (2 rounds) and elimination</option>
+                            <option value="ROUND_ROBIN_1" selected>Round robin (1 ronda)</option>
+                            <option value="ROUND_ROBIN_2">Round robin (2 rondas)</option>
+                            <option value="ELIMINATION" disabled>Eliminación</option>
+                            <option value="ROUND_ROBIN_1_ELIMINATION" disabled>Round robin (1 ronda) y eliminación</option>
+                            <option value="ROUND_ROBIN_2_ELIMINATION" disabled>Round robin (2 rondas) y eliminación</option>
                         </select>
                     </div>
                 </div>
@@ -37,7 +37,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label for="name" class="form-label">Name</label>
+                        <label for="name" class="form-label">Nombre</label>
                         <input type="text" class="form-control" id="name" name="name">
                     </div>
                 </div>
@@ -48,7 +48,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label for="users" class="form-label">Users</label>
+                        <label for="users" class="form-label">Jugadores</label>
                         <select id="users" name="users[]" multiple>
                             {% for user in users %}
                                 <option value="{{ user.id }}"> {{ user.name }} </option>
@@ -60,7 +60,7 @@
 
             <div class="row mt-3">
                 <div class="col-md-12">
-                    <label for="description" class="form-label">Description</label>
+                    <label for="description" class="form-label">Descripción</label>
                     <textarea class="form-control" name="description" id="description" rows="5" maxlength="512"></textarea>
                 </div>
             </div>
@@ -69,7 +69,7 @@
 
             <div class="row mt-3">
                 <div class="col-md-12">
-                    <button type="submit" class="btn btn-block btn-dark w-100">Save</button>
+                    <button type="submit" class="btn btn-block btn-dark w-100">Guardas</button>
                 </div>
             </div>
         </form>

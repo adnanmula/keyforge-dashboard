@@ -38,7 +38,7 @@
                     <ul class="navbar-nav me-auto mb-lg-0">
                         {% if is_granted('ROLE_KEYFORGE') %}
                         <li class="nav-item">
-                            <a class="nav-link" href="/keyforge/users">Users<span class="sr-only"></span></a>
+                            <a class="nav-link" href="/keyforge/users">Usuarios<span class="sr-only"></span></a>
                         </li>
                         {% endif %}
 
@@ -48,21 +48,21 @@
 
                         {% if is_granted('ROLE_KEYFORGE') %}
                         <li class="nav-item">
-                            <a class="nav-link" href="/keyforge/my-decks">My Decks<span class="sr-only"></span></a>
+                            <a class="nav-link" href="/keyforge/my-decks">Mis Decks<span class="sr-only"></span></a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" href="/keyforge/games/add">Register games<span class="sr-only"></span></a>
+                            <a class="nav-link" href="/keyforge/games/add">Registrar partidas<span class="sr-only"></span></a>
                         </li>
                         {% endif %}
 
                         <li class="nav-item">
-                            <a class="nav-link" href="/keyforge/competitions">Competitions<span class="sr-only"></span></a>
+                            <a class="nav-link" href="/keyforge/competitions">Torneos<span class="sr-only"></span></a>
                         </li>
 
                         {% if is_granted('ROLE_KEYFORGE') %}
                         <li class="nav-item">
-                            <a class="nav-link" href="/keyforge/decks/import">Import deck<span class="sr-only"></span></a>
+                            <a class="nav-link" href="/keyforge/decks/import">Importar<span class="sr-only"></span></a>
                         </li>
                         {% endif %}
 

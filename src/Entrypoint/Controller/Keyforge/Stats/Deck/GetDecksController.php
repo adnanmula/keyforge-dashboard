@@ -24,7 +24,7 @@ final class GetDecksController extends Controller
             $searchDeck = $request->get('search')['value'];
         }
 
-        if (\count($queryOrder) > 0) {
+        if (null !== $queryOrder && \count($queryOrder) > 0) {
             $orderColumns = [
                 1 => 'name',
                 2 => 'set',
@@ -60,7 +60,7 @@ final class GetDecksController extends Controller
                 $request->query->get('extraFilterHouseFilterType'),
                 $request->query->all()['extraFilterHouses'] ?? null,
                 $sorting,
-                null,
+                $request->get('extraDeckId'),
                 $request->get('extraFilterOwner'),
                 $request->get('extraFilterOnlyOwned') === 'true',
                 $request->get('extraFilterTagType'),
