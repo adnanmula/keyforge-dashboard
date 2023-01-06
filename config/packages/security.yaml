@@ -24,12 +24,10 @@ security:
          - { path: ^/keyforge/decks/import, roles: ROLE_KEYFORGE }
          - { path: ^/keyforge/competitions/new, roles: ROLE_KEYFORGE }
          - { path: ^/keyforge/users, roles: ROLE_KEYFORGE }
-         - { path: ^/gwent, roles: ROLE_GWENT }
 
     role_hierarchy:
-        ROLE_ADMIN: [ ROLE_KEYFORGE, ROLE_GWENT ]
+        ROLE_ADMIN: [ ROLE_KEYFORGE ]
         ROLE_KEYFORGE: ROLE_BASIC
-        ROLE_GWENT: ROLE_BASIC
 
 when@test:
     security:

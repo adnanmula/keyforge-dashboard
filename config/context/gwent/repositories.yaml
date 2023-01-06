@@ -1,7 +1,0 @@
-services:
-  AdnanMula\Cards\Domain\Model\Gwent\GwentDeckRepository:
-    alias: AdnanMula\Cards\Infrastructure\Persistence\Repository\Gwent\GwentDeckDbalRepository
-  AdnanMula\Cards\Domain\Model\Gwent\GwentGameRepository:
-    alias: AdnanMula\Cards\Infrastructure\Persistence\Repository\Gwent\GwentGameDbalRepository
-#  AdnanMula\Cards\Domain\Model\Gwent\GwentUserRepository:
-#    alias: AdnanMula\Cards\Infrastructure\Persistence\Repository\Gwent\GwentUserDbalRepository

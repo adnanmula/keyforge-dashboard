@@ -21,6 +21,3 @@ keyforge:
   resource: context/keyforge/routes.yaml
   prefix: /keyforge
 
-gwent:
-  resource: context/gwent/routes.yaml
-  prefix: /gwent
