@@ -44,6 +44,7 @@ use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasRats;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasScalingAmberControl;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasSins;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasTimetraveller;
+use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasXenos;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagOwnerBuko;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagOwnerChopi;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagOwnerDani;
@@ -116,6 +117,8 @@ final class ApplyPredefinedTagsService
         $newTags[] = $this->tagHasGenKa($data);
         $newTags[] = $this->tagHasBRIG($data);
         $newTags[] = $this->tagHasHeartOfTheForest($data);
+        $newTags[] = $this->tagHasXenos($data);
+
 
         $newTags = \array_filter($newTags);
 
@@ -677,6 +680,17 @@ final class ApplyPredefinedTagsService
 
         if ($this->hasCard($cards, $data)) {
             return new KeyforgeTagHasHeartOfTheForest();
+        }
+
+        return null;
+    }
+
+    private function tagHasXenos(array $data): ?KeyforgeTag
+    {
+        $cards = ['Xenos Bloodshadow'];
+
+        if ($this->hasCard($cards, $data)) {
+            return new KeyforgeTagHasXenos();
         }
 
         return null;

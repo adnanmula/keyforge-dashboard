@@ -43,6 +43,7 @@ use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasRats;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasScalingAmberControl;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasSins;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasTimetraveller;
+use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasXenos;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagOwnerBuko;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagOwnerChopi;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagOwnerDani;
@@ -125,6 +126,7 @@ final class KeyforgeTagsFixtures extends DbalFixture implements Fixture
         $this->save(new KeyforgeTagRecursionHigh());
         $this->save(new KeyforgeTagSynergyHigh());
         $this->save(new KeyforgeTagUpgradeCountHigh());
+        $this->save(new KeyforgeTagHasXenos());
 
         $this->loaded = true;
     }
