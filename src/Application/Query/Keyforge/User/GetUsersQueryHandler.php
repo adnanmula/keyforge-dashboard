@@ -67,6 +67,7 @@ final class GetUsersQueryHandler
             $result[] = [
                 'id' => $user->id()->value(),
                 'name' => $user->name(),
+                'is_external' => $user->external(),
                 'wins' => $wins,
                 'losses' => $losses,
                 'win_rate' => $winRate,

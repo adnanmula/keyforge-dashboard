@@ -3,6 +3,15 @@
 {% block title %}Users{% endblock %}
 
 {% block body %}
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip({
+                'container': 'body',
+                'placement': 'top'
+            })
+        })
+    </script>
+
     <div class="shadow-lg p-3 mb-5 bg-white rounded">
 
         <div class="form-check float-end">
@@ -11,24 +20,29 @@
             {% else %}
                 <input class="form-check-input" type="checkbox" value="" id="with_external">
             {% endif %}
-            <label class="form-check-label" for="with_external">External users</label>
+            <label class="form-check-label" for="with_external">Otros jugadores
+            <i class="bi bi-info-circle" data-toggle="tooltip" title="Gente de TCO o NKFL contra la que hemos jugado"></i>
+            </label>
         </div>
 
-        <div class="border borderless">
+        <div class="">
             <table class="table table-responsive-sm table-hover">
                 <thead>
-                    <tr class="table-dark">
-                        <th scope="col">Name</th>
-                        <th scope="col">Wins</th>
-                        <th scope="col">Losses</th>
-                        <th scope="col">Win Rate</th>
-                        <th scope="col">Games played</th>
+                    <tr>
+                        <th scope="col"></th>
+                        <th scope="col">Victorias</th>
+                        <th scope="col">Derrotas</th>
+                        <th scope="col">Win rate</th>
+                        <th scope="col">Partidas jugadas</th>
                     </tr>
                 </thead>
                 <tbody>
                 {% for user in users %}
                     <tr>
-                        <td><a href="/keyforge/games/user/{{ user.id }}">{{ user.name }}</a></td>
+                        <td>
+                            <a href="/keyforge/games/user/{{ user.id }}">{{ user.name }}</a>
+                            {% if user.is_external == false %}🥚{% endif %}
+                        </td>
                         <td>{{ user.wins }}</td>
                         <td>{{ user.losses }}</td>
                         <td>{{ user.win_rate|round(2) }}%</td>

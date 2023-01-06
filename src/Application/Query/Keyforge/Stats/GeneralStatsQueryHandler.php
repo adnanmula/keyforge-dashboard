@@ -2,6 +2,7 @@
 
 namespace AdnanMula\Cards\Application\Query\Keyforge\Stats;
 
+use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeCompetitionRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGameRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeHouse;
@@ -19,6 +20,7 @@ final class GeneralStatsQueryHandler
     public function __construct(
         private KeyforgeDeckRepository $deckRepository,
         private KeyforgeGameRepository $gameRepository,
+        private KeyforgeCompetitionRepository $competitionRepository,
     ) {}
 
     public function __invoke(GeneralStatsQuery $query): array
@@ -172,6 +174,8 @@ final class GeneralStatsQueryHandler
             KeyforgeHouse::LOGOS->name => $this->pickRate($houseWins[KeyforgeHouse::LOGOS->name] + $houseLosses[KeyforgeHouse::LOGOS->name], $totalHousePicks),
         ];
 
+        $competitionCount = $this->competitionRepository->count(new Criteria(null, null, null));
+
         return [
             'deck_count' => \count($decks),
             'set_presence' => $setPresence,
@@ -186,6 +190,8 @@ final class GeneralStatsQueryHandler
             'house_win_rate' => $houseWinRate,
             'set_pick_rate' => $setPickRate,
             'house_pick_rate' => $housePickRate,
+            'competition_count' => $competitionCount,
+            'player_count' => '🥚🥚🥚🥚🥚🥚',
         ];
     }
 
