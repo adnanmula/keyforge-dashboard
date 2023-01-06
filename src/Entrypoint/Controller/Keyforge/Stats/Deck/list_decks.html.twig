@@ -139,14 +139,14 @@
                         <input class="form-check-input" type="checkbox" value="" id="with_external">
                         <label class="form-check-label" for="with_external">External decks</label>
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="test">
-                    </div>
 
                     <div class="divider py-1"></div>
 
                     <div class="row mt-3">
-                        <div class="col-md-12">
+                        <div class="col-4 col-md-2">
+                            <button class="btn btn-block btn-dark w-100" id="clearFilters">Clear</button>
+                        </div>
+                        <div class="col-8 col-md-10">
                             <button class="btn btn-block btn-dark w-100" id="applyFilters">Apply</button>
                         </div>
                     </div>
@@ -241,6 +241,10 @@
 
             $(window).on('resize', function() {
                 $('#deckList.dataTable').resize;
+            });
+
+            $("#clearFilters").click(function(event) {
+                location.reload();
             });
 
             $('#deckList').DataTable({

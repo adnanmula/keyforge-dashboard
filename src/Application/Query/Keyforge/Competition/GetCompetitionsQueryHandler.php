@@ -5,7 +5,6 @@ namespace AdnanMula\Cards\Application\Query\Keyforge\Competition;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeCompetitionRepository;
 use AdnanMula\Cards\Infrastructure\Criteria\Criteria;
 use AdnanMula\Cards\Infrastructure\Criteria\FilterField\FilterField;
-use AdnanMula\Cards\Infrastructure\Criteria\FilterField\FilterFieldInterface;
 use AdnanMula\Cards\Infrastructure\Criteria\Sorting\Order;
 use AdnanMula\Cards\Infrastructure\Criteria\Sorting\OrderType;
 use AdnanMula\Cards\Infrastructure\Criteria\Sorting\Sorting;
@@ -22,7 +21,7 @@ final readonly class GetCompetitionsQueryHandler
             new Sorting(
                 new Order(
                     new FilterField('created_at'),
-                    OrderType::DESC
+                    OrderType::DESC,
                 ),
             ),
             $query->start(),
