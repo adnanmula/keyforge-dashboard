@@ -17,9 +17,11 @@ final class CompetitionStartController extends Controller
     public function __construct(MessageBusInterface $bus, Security $security)
     {
         $this->security = $security;
+
         if (false === $this->security->isGranted('ROLE_KEYFORGE')) {
             throw new AccessDeniedException();
         }
+
         parent::__construct($bus);
     }
 
