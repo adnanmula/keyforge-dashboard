@@ -58,7 +58,6 @@ final class ImportDeckFromDokService implements ImportDeckService
         );
 
         $this->repository->save($newDeck);
-
         $this->tagsService->execute($newDeck);
 
         return $newDeck;

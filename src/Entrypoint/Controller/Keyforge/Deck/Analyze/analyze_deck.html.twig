@@ -1,0 +1,67 @@
+{% extends "Keyforge/Shared/keyforge_base.html.twig" %}
+
+{% block title %}Threat analyzer{% endblock %}
+
+{% block body %}
+    <div class="divider py-1"></div>
+
+
+        {% if loaded == false %}
+            <form action="{{ path('keyforge_deck_analyze') }}" method="post">
+                <div class="row">
+                    <div class="col-1 col-sm-4 col-lg-3"></div>
+                    <div class="col-12 col-sm-12 col-lg-6">
+                        <div class="shadow-lg p-3 mb-5 bg-white rounded">
+                            <input type="text" class="form-control" id="deck" name="deck" placeholder="Deck id, dok or vault link" required>
+
+                            <div class="divider py-2"></div>
+
+                            <button type="submit" class="col-4 btn btn-block btn-dark w-100">Analyze</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        {% else %}
+
+            <div class="shadow-lg p-3 mb-5 bg-white rounded col-12">
+
+                <div class="row">
+                    <a href="https://decksofkeyforge.com/decks/{{ deck_id }}">{{ deck_name }} SAS: {{ deck_sas }}</a>
+                </div>
+
+                <div class="divider py-1"></div>
+                <div class="divider py-1"></div>
+                <div class="divider py-1"></div>
+                <div class="divider py-1"></div>
+
+                <div class="row">
+                    {% for key,value in detail %}
+                        <div class="row">
+                            <div class="col-12">
+
+                                <h6>{{ key }}</h6>
+
+
+                                <ul class="list-group">
+
+
+                                {% for infoKey,info in value %}
+
+                                    <li class="list-group-item">{{ infoKey }}: {{ info|join(',') }}</li>
+
+
+                                {% endfor %}
+
+
+                                </ul>
+
+
+                                <div class="divider py-1"></div>
+                                <div class="divider py-1"></div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+        </div>
+    {% endif %}
+{% endblock %}

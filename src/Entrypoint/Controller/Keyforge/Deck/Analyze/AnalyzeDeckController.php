@@ -1,19 +1,17 @@
 <?php declare(strict_types=1);
 
-namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\Deck;
+namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\Deck\Analyze;
 
-use AdnanMula\Cards\Application\Command\Keyforge\Deck\Import\ImportDeckCommand;
-use AdnanMula\Cards\Domain\Model\Shared\User;
+use AdnanMula\Cards\Application\Command\Keyforge\Deck\Analyze\AnalyzeDeckThreatsCommand;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
-use Ramsey\Uuid\Exception\InvalidUuidStringException;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-final class ImportDeckController extends Controller
+final class AnalyzeDeckController extends Controller
 {
     private Security $security;
 
@@ -31,26 +29,28 @@ final class ImportDeckController extends Controller
         }
 
         if ($request->getMethod() === Request::METHOD_GET) {
-            return $this->render('Keyforge/Deck/import_deck.html.twig', ['result' => false, 'success' => null]);
+            return $this->render('Keyforge/Deck/Analyze/analyze_deck.html.twig', [
+                'loaded' => false,
+                'deck_id' => null,
+                'deck_name' => null,
+                'deck_sas' => null,
+                'detail' => null,
+            ]);
         }
 
-        if ($request->getMethod() === Request::METHOD_POST) {
-            try {
-                /** @var User $user */
-                $user = $this->getUser();
-                $deckId = $this->parseDeck($request->request->get('deck'));
+        $data = $this->extractResult(
+            $this->bus->dispatch(new AnalyzeDeckThreatsCommand(
+                $this->parseDeck($request->request->get('deck')),
+            )),
+        );
 
-                $this->bus->dispatch(new ImportDeckCommand($deckId, $user->id()->value()));
-
-                return $this->render('Keyforge/Deck/import_deck.html.twig', ['result' => 'Que bien jugado caralmendra', 'success' => true]);
-            } catch (InvalidUuidStringException) {
-                return $this->render('Keyforge/Deck/import_deck.html.twig', ['result' => 'Esto  no es un id ni un link válido, melón', 'success' => false]);
-            } catch (\Throwable $exception) {
-                return $this->render('Keyforge/Deck/import_deck.html.twig', ['result' => $exception->getMessage(), 'success' => false]);
-            }
-        }
-
-        throw new \InvalidArgumentException('Error');
+        return $this->render('Keyforge/Deck/Analyze/analyze_deck.html.twig', [
+            'loaded' => true,
+            'deck_id' => $data['deck_id'],
+            'deck_name' => $data['deck_name'],
+            'deck_sas' => $data['deck_sas'],
+            'detail' => $data['detail'],
+        ]);
     }
 
     private function parseDeck(string $idOrLink): string
@@ -63,6 +63,7 @@ final class ImportDeckController extends Controller
         $idOrLink = \preg_replace('/http:\/\/decksofkeyforge.com\/decks\//i', '', $idOrLink);
         $idOrLink = \preg_replace('/https:\/\/www.keyforgegame.com\/deck-details\//i', '', $idOrLink);
         $idOrLink = \preg_replace('/http:\/\/www.keyforgegame.com\/deck-details\//i', '', $idOrLink);
+        $idOrLink = \preg_replace('/http:\/\/www.adnanmula.com\/keyforge\/games\/deck\//i', '', $idOrLink);
 
         return $idOrLink;
     }

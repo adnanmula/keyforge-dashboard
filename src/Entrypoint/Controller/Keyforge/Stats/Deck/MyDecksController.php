@@ -8,6 +8,7 @@ use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 final class MyDecksController extends Controller
 {
@@ -23,7 +24,7 @@ final class MyDecksController extends Controller
     public function __invoke(): Response
     {
         if (false === $this->security->isGranted('ROLE_KEYFORGE')) {
-            return new Response('Forbidden', Response::HTTP_FORBIDDEN);
+            throw new AccessDeniedException();
         }
 
         /** @var User $user */

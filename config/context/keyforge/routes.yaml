@@ -58,6 +58,11 @@ keyforge_deck_import:
   controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Deck\ImportDeckController
   methods: [GET,POST]
 
+keyforge_deck_analyze:
+  path: /decks/analyze
+  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Deck\Analyze\AnalyzeDeckController
+  methods: [GET,POST]
+
 keyforge_game_create:
   path: /games/add
   controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Game\CreateGameController

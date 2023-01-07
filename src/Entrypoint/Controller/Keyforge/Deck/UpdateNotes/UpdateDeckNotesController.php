@@ -9,6 +9,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 final class UpdateDeckNotesController extends Controller
 {
@@ -24,7 +25,7 @@ final class UpdateDeckNotesController extends Controller
     public function __invoke(Request $request): Response
     {
         if (false === $this->security->isGranted('ROLE_KEYFORGE')) {
-            return new Response('Forbidden', Response::HTTP_FORBIDDEN);
+            throw new AccessDeniedException();
         }
 
         /** @var User $user */

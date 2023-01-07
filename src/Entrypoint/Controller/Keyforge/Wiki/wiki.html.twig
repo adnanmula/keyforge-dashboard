@@ -21,7 +21,7 @@
 
     <div class="shadow-lg p-3 mb-5 bg-white rounded">
         <div class="list-group">
-            <h4>Useful stuff</h4>
+            <h4>Cosas y tal</h4>
 
             <div class="divider py-1"></div>
 
@@ -38,7 +38,7 @@
 
             <a class="list-group-item list-group-item-action" data-bs-toggle="collapse" data-bs-target="#divTableHousesBySet">Casas en cada set</a>
 
-            <div class="collapse" id="divTableHousesBySet">
+            <div class="collapse" id="divTableHousesBySet" style="overflow-x: auto">
                 <table class="table" id="tableHousesBySet">
                     <tr>
                         <th></th>
@@ -119,13 +119,26 @@
                             <td><i class="bi bi-check"></i></td>
                             <td><i class="bi bi-check"></i></td>
                         </tr>
+                        <tr>
+                            <td style="text-align: right;">Winds of Exchange</td>
+                            <td><i class="bi bi-check"></i></td>
+                            <td><i class="bi bi-check"></i></td>
+                            <td></td>
+                            <td><i class="bi bi-check"></i></td>
+                            <td><i class="bi bi-check"></i></td>
+                            <td><i class="bi bi-check"></i></td>
+                            <td></td>
+                            <td><i class="bi bi-check"></i></td>
+                            <td><i class="bi bi-check"></i></td>
+                            <td></td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
 
             <a class="list-group-item list-group-item-action" data-bs-toggle="collapse" data-bs-target="#divTableTagCriteria">Criterio de asignación de tags</a>
 
-            <div class="collapse" id="divTableTagCriteria">
+            <div class="collapse" id="divTableTagCriteria" style="overflow-x: auto">
                 <table class="table" id="tableTagCriteria">
                     <tr>
                         <th>Tag</th>
@@ -261,6 +274,8 @@
                     </tbody>
                 </table>
             </div>
+
+            <a href="/keyforge/decks/analyze" target="_blank" class="list-group-item list-group-item-action">Analizador de barajas</a>
         </div>
     </div>
 {% endblock %}
