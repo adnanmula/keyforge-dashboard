@@ -26,11 +26,14 @@
             </tr>
             </thead>
         </table>
-        <div class="row">
-            <div class="float-end">
-                <a class="btn btn-dark" href="/keyforge/competitions/new" role="button" aria-expanded="false">Nuevo</a>
+        {% if is_granted('ROLE_KEYFORGE') %}
+
+            <div class="row">
+                <div class="float-end">
+                    <a class="btn btn-dark" href="/keyforge/competitions/new" role="button" aria-expanded="false">Nuevo</a>
+                </div>
             </div>
-        </div>
+        {% endif %}
     </div>
 
     <script>
