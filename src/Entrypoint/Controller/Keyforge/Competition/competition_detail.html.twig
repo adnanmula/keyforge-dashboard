@@ -27,14 +27,16 @@
                 <h2>{{ competition.name }}</h2>
             </div>
             <div class="col-4">
-                {% if competition.startedAt is null %}
-                    <div class="float-end">
-                        <button type="button" class="btn btn-dark" id="startCompetition">Empezar</button>
-                    </div>
-                {% elseif competition.finishedAt is null %}
-                    <div class="float-end">
-                        <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#finishCompetition">Terminar</button>
-                    </div>
+                {% if is_granted('ROLE_KEYFORGE') %}
+                    {% if competition.startedAt is null %}
+                        <div class="float-end">
+                            <button type="button" class="btn btn-dark" id="startCompetition">Empezar</button>
+                        </div>
+                    {% elseif competition.finishedAt is null %}
+                        <div class="float-end">
+                            <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#finishCompetition">Terminar</button>
+                        </div>
+                    {% endif %}
                 {% endif %}
             </div>
         </div>
