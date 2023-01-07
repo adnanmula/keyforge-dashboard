@@ -7,7 +7,7 @@ use AdnanMula\Cards\Domain\Service\Keyforge\ImportDeckService;
 
 final class AnalyzeDeckThreatsCommandHandler
 {
-    public function __construct(private ImportDeckService $importDeckService)
+    public function __construct(private readonly ImportDeckService $importDeckService)
     {
     }
 
@@ -17,6 +17,8 @@ final class AnalyzeDeckThreatsCommandHandler
 
         $creaturePosition = [];
         $nonDestructiveRemoval = [];
+        $artifactsRemoval = [];
+        $areaDamage = [];
 
         if ($this->hasCard(['Mini Groupthink Tank'], $deck)) {
             $creaturePosition['Puede hacer mucho daño si vecinos comparten casa'][] = 'Mini Groupthink Tank';
@@ -31,8 +33,12 @@ final class AnalyzeDeckThreatsCommandHandler
             $nonDestructiveRemoval['Puede levantar criaturas en flancos'][] = 'Kymoor Eclipse';
         }
 
-        if ($this->hasCard(['Harland Mindlock'], $deck)) {
-            $creaturePosition['Puede robar criaturas en flancos'][] = 'Harland Mindlock';
+        if ($deck->extraData()['deck']['artifactControl'] === 0) {
+            $artifactsRemoval['No tiene ningun tipo de control de artefactos'][] = '';
+        }
+
+        if ($this->hasCard(['Kymoor Eclipse'], $deck)) {
+            $areaDamage['Puede aprovechar el daño en area'][] = 'Oleada cur';
         }
 
         return [
@@ -42,6 +48,8 @@ final class AnalyzeDeckThreatsCommandHandler
             'detail' => [
                 'Posicionamiento de criaturas' => $creaturePosition,
                 'Eliminación no destructiva' => $nonDestructiveRemoval,
+                'Artefactos' => $artifactsRemoval,
+                'Daño en area' => $areaDamage,
             ],
         ];
     }

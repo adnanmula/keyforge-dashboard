@@ -1,9 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\Deck;
+namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\Competition;
 
-use AdnanMula\Cards\Application\Command\Keyforge\Deck\Claim\ClaimDeckCommand;
-use AdnanMula\Cards\Domain\Model\Shared\User;
+use AdnanMula\Cards\Application\Command\Keyforge\Competition\Finish\FinishCompetitionCommand;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-final class ClaimController extends Controller
+final class CompetitionFinishController extends Controller
 {
     private Security $security;
 
@@ -30,12 +29,10 @@ final class ClaimController extends Controller
             throw new AccessDeniedException();
         }
 
-        /** @var User $user */
-        $user = $this->security->getUser();
-
-        $this->bus->dispatch(new ClaimDeckCommand(
-            $user->id()->value(),
-            $request->get('deckId'),
+        $this->bus->dispatch(new FinishCompetitionCommand(
+            $request->get('competitionId'),
+            $request->get('winnerId'),
+            $request->get('date'),
         ));
 
         return new Response('', Response::HTTP_OK);

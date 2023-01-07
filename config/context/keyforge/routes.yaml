@@ -88,6 +88,16 @@ keyforge_competition_create:
   controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Competition\CreateCompetitionController
   methods: [GET,POST]
 
+keyforge_competition_start:
+  path: /competition/start
+  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Competition\CompetitionStartController
+  methods: [POST]
+
+keyforge_competition_game_finish:
+  path: /competition/finish
+  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Competition\CompetitionFinishController
+  methods: [POST]
+
 keyforge_competition_view:
   path: /competitions/{reference}
   controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Competition\CompetitionDetailController

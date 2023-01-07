@@ -23,13 +23,61 @@
 
     <div class="shadow-lg p-3 mb-5 bg-white rounded col-12">
         <div class="row">
-            <h2>{{ competition.name }}</h2>
+            <div class="col-8">
+                <h2>{{ competition.name }}</h2>
+            </div>
+            <div class="col-4">
+                {% if competition.startedAt is null %}
+                    <div class="float-end">
+                        <button type="button" class="btn btn-dark" id="startCompetition">Empezar</button>
+                    </div>
+                {% elseif competition.finishedAt is null %}
+                    <div class="float-end">
+                        <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#finishCompetition">Terminar</button>
+                    </div>
+                {% endif %}
+            </div>
         </div>
         <div class="row">
             <div class="col-12">
                 {{ competition.description }}
             </div>
         </div>
+
+        {% if competition.winner is not null %}
+            <script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js"></script>
+
+            <script>
+                const confetti = new JSConfetti();
+
+                setInterval(function () {
+                    confetti.addConfetti({emojis: ['🥚']})
+                    confetti.addConfetti()
+                }, 1500);
+            </script>
+
+            <div class="divider py-2"></div>
+            <div class="divider py-2"></div>
+
+            <div class="row">
+                <div class="col-12" style="text-align: center;">
+                    <i class="bi bi-trophy" style="font-size: 7em; "></i>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12" style="text-align: center; font-size: 2em;">
+                    {% for user in users %}
+                        {% if competition.winner == user.id %}
+                            Campeón {{ user.name }}, oleee!
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="divider py-2"></div>
+            <div class="divider py-2"></div>
+        {% endif %}
 
         <div class="divider py-2"></div>
         <div class="divider py-2"></div>
@@ -101,18 +149,20 @@
                                     <div class="col-4">{{ fixture.users.1.name }}</div>
                                 </div>
                             </p>
-                            {% if is_granted('ROLE_KEYFORGE') %}
-                                <p>
-                                    <button type="button" class="btn btn-dark btn-xs" data-bs-toggle="modal" data-bs-target="#registerCompetitionGame"
-                                            data-player-one-name="{{ fixture.users.0.name }}"
-                                            data-player-two-name="{{ fixture.users.1.name }}"
-                                            data-player-one-id="{{ fixture.users.0.id }}"
-                                            data-player-two-id="{{ fixture.users.1.id }}"
-                                            data-competition-name="{{ competition.name }}"
-                                            data-fixture-ref="{{ fixture.reference }}"
-                                            data-fixture-id="{{ fixture.id }}"
-                                    >Guardar</button>
-                                </p>
+                            {% if competition.winner is null and competition.startedAt is not null and competition.finishedAt is null %}
+                                {% if is_granted('ROLE_KEYFORGE') %}
+                                    <p>
+                                        <button type="button" class="btn btn-dark btn-xs" data-bs-toggle="modal" data-bs-target="#registerCompetitionGame"
+                                                data-player-one-name="{{ fixture.users.0.name }}"
+                                                data-player-two-name="{{ fixture.users.1.name }}"
+                                                data-player-one-id="{{ fixture.users.0.id }}"
+                                                data-player-two-id="{{ fixture.users.1.id }}"
+                                                data-competition-name="{{ competition.name }}"
+                                                data-fixture-ref="{{ fixture.reference }}"
+                                                data-fixture-id="{{ fixture.id }}"
+                                        >Guardar</button>
+                                    </p>
+                                {% endif %}
                             {% endif %}
                         {% endif %}
                     </a>
@@ -241,6 +291,48 @@
         </div>
     </div>
 
+    <div class="modal fade" id="finishCompetition" tabindex="-1" role="dialog" aria-labelledby="finishCompetition" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modelaTitleLabel">Coronar ganador</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="finishCompetitionForm">
+                        <div class="row">
+                            <div class="col-md-7">
+                                <label for="firstTurn" class="form-label">Ganador</label>
+                                <input class="form-control selector" list="competitionWinnerOptions" id="finishFormWinnerInput" placeholder="Type to search..." name="firstTurn" autocomplete="off" required>
+                            </div>
+                            <div class="col-md-5">
+                                <label for="date" class="form-label">Fecha</label> <br>
+                                <input class="form-control" type="date" name="date" id="datepicker-finish-competition" min="2022-01-01" max="2030-12-31" required>
+                            </div>
+                        </div>
+
+
+                        <datalist id="competitionWinnerOptions">
+                            {% for user in users %}
+                                <option data-value="{{ user.id }}" value="{{ user.name }}"> {{ user.id }} </option>
+                            {% endfor %}
+                        </datalist>
+
+                        <input type="hidden" id="hiddenCompetitionId" value="{{ competition.id }}">
+                        <input type="hidden" id="hidden-finishFormWinnerInput" name="competitionWinnerId" value="">
+
+                        <div class="divider py-1"></div>
+                        <div class="divider py-1"></div>
+
+                        <button type="submit" id="registerGameSubmit" class="btn btn-block btn-dark" style="width: 100%">Guardar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         $('#registerCompetitionGame').on('hidden.bs.modal', function () {
             $(this).find('form').trigger('reset');
@@ -282,6 +374,40 @@
                 location.reload();
             });
         })
+
+        $('#startCompetition').click(function () {
+            console.log('A');
+            $.post({
+                url: '/keyforge/competition/start',
+                method: 'POST',
+                data: {
+                    'competitionId': $('#hiddenCompetitionId')[0].value,
+                },
+            }).done(function() {
+                location.reload();
+            });
+        });
+
+        $('#finishCompetitionForm').submit(function (e) {
+            e.preventDefault();
+
+            let competitionId = $('#hiddenCompetitionId')[0].value;
+            let winnerId = $('#hidden-finishFormWinnerInput')[0].value;
+            let date = $('#datepicker-finish-competition')[0].value;
+
+            $.post({
+                url: '/keyforge/competition/finish',
+                method: 'POST',
+                data: {
+                    'competitionId': competitionId,
+                    'winnerId': winnerId,
+                    'date': date,
+                },
+            }).done(function() {
+                $('#finishCompetition').modal('hide');
+                location.reload();
+            });
+        });
 
         $('#registerCompetitionGame').on('show.bs.modal', function (event) {
             const button = $(event.relatedTarget) // Button that triggered the modal

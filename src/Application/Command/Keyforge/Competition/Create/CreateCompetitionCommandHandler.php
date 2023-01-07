@@ -95,7 +95,7 @@ final class CreateCompetitionCommandHandler
 
     private function assertName(CreateCompetitionCommand $command): void
     {
-        if ('new' === $command->reference) {
+        if (\in_array($command->reference, ['new', 'start', 'finish'])) {
             throw new \Exception('Invalid name.');
         }
 

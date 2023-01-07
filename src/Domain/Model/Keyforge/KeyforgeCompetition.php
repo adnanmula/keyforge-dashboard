@@ -5,16 +5,16 @@ namespace AdnanMula\Cards\Domain\Model\Keyforge;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\CompetitionType;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 
-final readonly class KeyforgeCompetition implements \JsonSerializable
+final class KeyforgeCompetition implements \JsonSerializable
 {
     public function __construct(
-        private Uuid $id,
-        private string $reference,
-        private string $name,
-        private CompetitionType $type,
-        private array $users,
-        private string $description,
-        private \DateTimeImmutable $createdAt,
+        private readonly Uuid $id,
+        private readonly string $reference,
+        private readonly string $name,
+        private readonly CompetitionType $type,
+        private readonly array $users,
+        private readonly string $description,
+        private readonly \DateTimeImmutable $createdAt,
         private ?\DateTimeImmutable $startAt,
         private ?\DateTimeImmutable $finishedAt,
         private ?Uuid $winner,
@@ -68,6 +68,27 @@ final readonly class KeyforgeCompetition implements \JsonSerializable
     public function winner(): ?Uuid
     {
         return $this->winner;
+    }
+
+    public function updateStartDate(\DateTimeImmutable $date): self
+    {
+        $this->startAt = $date;
+
+        return $this;
+    }
+
+    public function updateFinishDate(\DateTimeImmutable $date): self
+    {
+        $this->finishedAt = $date;
+
+        return $this;
+    }
+
+    public function updateWinner(Uuid $winnerId): self
+    {
+        $this->winner = $winnerId;
+
+        return $this;
     }
 
     public function jsonSerialize(): array
