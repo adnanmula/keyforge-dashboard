@@ -124,15 +124,15 @@ final class GetDecksQueryHandler
             }
         }
 
-//      end ñapas
-
         if ($query->onlyOwned()) {
-            $decks = $this->removeNotOwnedStats(...$decks);
+            $decks = $this->removeNotOwnedStats($query->owner(), ...$decks);
 
             if (null !== $query->sorting() && $query->sorting()->has('wins')) {
                 $decks = $this->reorderDecks($query->sorting()->get('wins'), ...$decks);
             }
         }
+
+//      end ñapas
 
         $countCriteria = new Criteria(
             null,
@@ -202,7 +202,7 @@ final class GetDecksQueryHandler
     }
 
     /** @return array<KeyforgeDeck> */
-    private function removeNotOwnedStats(KeyforgeDeck ...$decks): array
+    private function removeNotOwnedStats(?Uuid $owner, KeyforgeDeck ...$decks): array
     {
         $users = $this->userRepository->all(false);
         $nonExternalUsersIds = \array_map(static fn (KeyforgeUser $user) => $user->id()->value(), $users);
@@ -220,6 +220,19 @@ final class GetDecksQueryHandler
 
             /** @var KeyforgeGame $game */
             foreach ($games as $game) {
+                if (null !== $owner) {
+                    $okWinner = $game->winnerDeck()->equalTo($deck->id()) && $game->winner()->equalTo($owner);
+                    $okLoser = $game->loserDeck()->equalTo($deck->id()) && $game->loser()->equalTo($owner);
+
+                    if (false === $okWinner && false === $okLoser) {
+                        continue;
+                    }
+
+                    if (false === $game->winner()->equalTo($owner) && false === $game->loser()->equalTo($owner)) {
+                        continue;
+                    }
+                }
+
                 if (false === $game->winnerDeck()->equalTo($deck->id())
                     && false === $game->loserDeck()->equalTo($deck->id())) {
                     continue;

@@ -42,11 +42,11 @@ final class ImportDeckController extends Controller
 
                 $this->bus->dispatch(new ImportDeckCommand($deckId, $user->id()->value()));
 
-                return $this->render('Keyforge/Deck/import_deck.html.twig', ['result' => 'Que bien jugado caralmendra', 'success' => true]);
+                return $this->render('Keyforge/Deck/import_deck.html.twig', ['result' => 'Bien', 'success' => true, 'deckId' => $deckId]);
             } catch (InvalidUuidStringException) {
-                return $this->render('Keyforge/Deck/import_deck.html.twig', ['result' => 'Esto  no es un id ni un link válido, melón', 'success' => false]);
+                return $this->render('Keyforge/Deck/import_deck.html.twig', ['result' => 'Id/link no válido :/', 'success' => false, 'deckId' => null]);
             } catch (\Throwable $exception) {
-                return $this->render('Keyforge/Deck/import_deck.html.twig', ['result' => $exception->getMessage(), 'success' => false]);
+                return $this->render('Keyforge/Deck/import_deck.html.twig', ['result' => $exception->getMessage(), 'success' => false, 'deckId' => null]);
             }
         }
 

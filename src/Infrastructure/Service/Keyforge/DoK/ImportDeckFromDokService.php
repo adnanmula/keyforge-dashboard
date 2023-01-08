@@ -32,10 +32,14 @@ final class ImportDeckFromDokService implements ImportDeckService
         try {
             $response = $this->dokClient->request(Request::METHOD_GET, '/public-api/v3/decks/' . $uuid);
         } catch (\Throwable) {
-            return null;
+            throw new \Exception('Error desconocido');
         }
 
         $deck = $response->toArray();
+
+        if ($deck['deck'] === []) {
+            throw new \Exception('Baraja no encontrada');
+        }
 
         $houses = \array_map(static fn (array $data) => $data['house'], $deck['deck']['housesAndCards']);
 
