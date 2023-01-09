@@ -57,7 +57,7 @@ final class CreateGameCommandHandler
 
         if (null !== $command->fixtureId()) {
             $fixture = $this->competitionRepository->fixtureById(Uuid::from($command->fixtureId()));
-            $fixture->updateGame($game->id());
+            $fixture->updateGames($game->id());
             $fixture->updateWinner(Uuid::from($winner));
             $fixture->updatePlayedAt($command->date());
             $this->competitionRepository->saveFixture($fixture);

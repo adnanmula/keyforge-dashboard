@@ -91,7 +91,7 @@ final class KeyforgeInitial extends AbstractMigration
                 created_at TIMESTAMP WITH TIME ZONE NULL,
                 played_at TIMESTAMP WITH TIME ZONE NULL,
                 winner uuid NULL,
-                game uuid NULL,
+                games jsonb NOT NULL,
                 PRIMARY KEY(id)
             )',
         );
@@ -99,10 +99,10 @@ final class KeyforgeInitial extends AbstractMigration
 
     public function down(): void
     {
-        $this->execute('DROP TABLE IF EXISTS "keyforge_tags"');
         $this->execute('DROP TABLE IF EXISTS "keyforge_competition_fixtures"');
         $this->execute('DROP TABLE IF EXISTS "keyforge_competitions"');
         $this->execute('DROP TABLE IF EXISTS "keyforge_games"');
+        $this->execute('DROP TABLE IF EXISTS "keyforge_tags"');
         $this->execute('DROP TABLE IF EXISTS "keyforge_decks"');
         $this->execute('DROP TABLE IF EXISTS "keyforge_users"');
     }

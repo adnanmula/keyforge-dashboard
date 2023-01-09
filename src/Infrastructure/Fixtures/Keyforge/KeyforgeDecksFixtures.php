@@ -135,7 +135,7 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
         $this->save(
             new KeyforgeDeck(
                 Uuid::from(self::FIXTURE_KEYFORGE_DECK_6_ID),
-                'Directora "Ratona" Davenport',
+                'Directora ”Ratona” Davenport',
                 KeyforgeSet::CotA,
                 KeyforgeDeckHouses::from(
                     KeyforgeHouse::BROBNAR,

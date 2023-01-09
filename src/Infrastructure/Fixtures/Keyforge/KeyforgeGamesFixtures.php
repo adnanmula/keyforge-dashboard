@@ -24,6 +24,9 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
     public const FIXTURE_KEYFORGE_GAME_11_ID = 'fa894952-3e79-43ad-aa83-69ebecf213fc';
     public const FIXTURE_KEYFORGE_GAME_12_ID = '5da99bd0-563a-4247-8d04-8a904c8542ab';
     public const FIXTURE_KEYFORGE_GAME_13_ID = 'a4e32bc2-f3ed-4c56-a742-e8d75dd2acb3';
+    public const FIXTURE_KEYFORGE_GAME_14_ID = '99ab217f-bb7f-47f4-a567-4895c2550b12';
+    public const FIXTURE_KEYFORGE_GAME_15_ID = 'efa54d26-a5a7-4b1e-8719-03ce61c95867';
+    public const FIXTURE_KEYFORGE_GAME_16_ID = '71fa478b-df90-4563-924c-c29636afacaf';
 
     private const TABLE = 'keyforge_games';
 
@@ -263,6 +266,60 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                 new \DateTimeImmutable('2022-07-23 16:41:00'),
                 KeyforgeCompetition::NKFL_LEAGUE_SEASON_19,
                 '',
+            ),
+        );
+
+        $this->save(
+            new KeyforgeGame(
+                Uuid::from(self::FIXTURE_KEYFORGE_GAME_14_ID),
+                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_1_ID),
+                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID),
+                Uuid::from(KeyforgeDecksFixtures::FIXTURE_KEYFORGE_DECK_4_ID),
+                Uuid::from(KeyforgeDecksFixtures::FIXTURE_KEYFORGE_DECK_1_ID),
+                0,
+                0,
+                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID),
+                KeyforgeGameScore::from(3, 1),
+                new \DateTimeImmutable('2022-07-23 00:00:00'),
+                new \DateTimeImmutable('2022-07-23 16:41:00'),
+                KeyforgeCompetition::LOCAL_LEAGUE,
+                'Torneo 1 | Jornada 1',
+            ),
+        );
+
+        $this->save(
+            new KeyforgeGame(
+                Uuid::from(self::FIXTURE_KEYFORGE_GAME_15_ID),
+                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_1_ID),
+                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_3_ID),
+                Uuid::from(KeyforgeDecksFixtures::FIXTURE_KEYFORGE_DECK_4_ID),
+                Uuid::from(KeyforgeDecksFixtures::FIXTURE_KEYFORGE_DECK_1_ID),
+                0,
+                0,
+                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_1_ID),
+                KeyforgeGameScore::from(3, 1),
+                new \DateTimeImmutable('2022-07-23 00:00:00'),
+                new \DateTimeImmutable('2022-07-23 16:41:00'),
+                KeyforgeCompetition::LOCAL_LEAGUE,
+                'Torneo 1 | Jornada 2',
+            ),
+        );
+
+        $this->save(
+            new KeyforgeGame(
+                Uuid::from(self::FIXTURE_KEYFORGE_GAME_16_ID),
+                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID),
+                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_3_ID),
+                Uuid::from(KeyforgeDecksFixtures::FIXTURE_KEYFORGE_DECK_4_ID),
+                Uuid::from(KeyforgeDecksFixtures::FIXTURE_KEYFORGE_DECK_1_ID),
+                0,
+                0,
+                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_3_ID),
+                KeyforgeGameScore::from(3, 1),
+                new \DateTimeImmutable('2022-07-23 00:00:00'),
+                new \DateTimeImmutable('2022-07-23 16:41:00'),
+                KeyforgeCompetition::LOCAL_LEAGUE,
+                'Torneo 1 | Jornada 3',
             ),
         );
 

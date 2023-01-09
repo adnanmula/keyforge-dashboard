@@ -40,6 +40,7 @@ final class TagsApplyPredefinedCommand extends Command
 
         foreach ($decks as $deck) {
             $this->service->execute($deck);
+            $output->writeln($deck->name());
         }
 
         return self::SUCCESS;

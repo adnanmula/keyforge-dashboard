@@ -12,7 +12,6 @@ use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Infrastructure\Criteria\Criteria;
 use AdnanMula\Cards\Infrastructure\Criteria\DbalCriteriaAdapter;
 use AdnanMula\Cards\Infrastructure\Persistence\Repository\DbalRepository;
-use Doctrine\DBAL\Connection;
 
 final class KeyforgeCompetitionDbalRepository extends DbalRepository implements KeyforgeCompetitionRepository
 {
@@ -158,8 +157,8 @@ final class KeyforgeCompetitionDbalRepository extends DbalRepository implements 
         $stmt = $this->connection->prepare(
             \sprintf(
                 '
-                    INSERT INTO %s (id, competition_id, reference, users, fixture_type, position, created_at, played_at, winner, game)
-                    VALUES (:id, :competition_id, :reference, :users, :fixture_type, :position, :created_at, :played_at, :winner, :game)
+                    INSERT INTO %s (id, competition_id, reference, users, fixture_type, position, created_at, played_at, winner, games)
+                    VALUES (:id, :competition_id, :reference, :users, :fixture_type, :position, :created_at, :played_at, :winner, :games)
                     ON CONFLICT (id) DO UPDATE SET
                         competition_id = :competition_id,
                         reference = :reference,
@@ -169,7 +168,7 @@ final class KeyforgeCompetitionDbalRepository extends DbalRepository implements 
                         created_at = :created_at,
                         played_at = :played_at,
                         winner = :winner,
-                        game = :game
+                        games = :games
                     ',
                 self::TABLE_FIXTURES,
             ),
@@ -184,7 +183,7 @@ final class KeyforgeCompetitionDbalRepository extends DbalRepository implements 
         $stmt->bindValue(':created_at', $fixture->createdAt()->format(\DateTimeInterface::ATOM));
         $stmt->bindValue(':played_at', $fixture->playedAt()?->format('Y-m-d'));
         $stmt->bindValue(':winner', $fixture->winner()?->value());
-        $stmt->bindValue(':game', $fixture->game()?->value());
+        $stmt->bindValue(':games', Json::encode($fixture->games()));
 
         $stmt->execute();
     }
@@ -229,9 +228,7 @@ final class KeyforgeCompetitionDbalRepository extends DbalRepository implements 
             null === $row['winner']
                 ? null
                 : Uuid::from($row['winner']),
-            null === $row['game']
-                ? null
-                : Uuid::from($row['game']),
+            \array_map(static fn (string $id) => Uuid::from($id), Json::decode($row['games'])),
         );
     }
 }

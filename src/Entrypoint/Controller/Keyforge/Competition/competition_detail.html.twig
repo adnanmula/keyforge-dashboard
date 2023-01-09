@@ -52,10 +52,16 @@
             <script>
                 const confetti = new JSConfetti();
 
-                setInterval(function () {
-                    confetti.addConfetti({emojis: ['🥚']})
-                    confetti.addConfetti()
-                }, 1500);
+                for (var i = 0; i < 5; i++) {
+                    setTimeout(function () {
+                        confetti.addConfetti();
+                        confetti.addConfetti({
+                            emojis: ['🥚'],
+                            emojiSize: 50,
+                            confettiNumber: 5,
+                        });
+                    }, i * 1500)
+                }
             </script>
 
             <div class="divider py-2"></div>
@@ -63,7 +69,7 @@
 
             <div class="row">
                 <div class="col-12" style="text-align: center;">
-                    <i class="bi bi-trophy" style="font-size: 7em; "></i>
+                    <i class="bi bi-trophy" style="font-size: 7em;"></i>
                 </div>
             </div>
 
@@ -122,19 +128,19 @@
                 <h6>{{ fixtureGroup.0.reference }}</h6>
                 {% for fixture in fixtureGroup %}
                     <a class="btn btn-clear border col-12 col-sm-12 col-md-6 col-lg-6 overflow-wrap inline-block">
-                        {% if fixture.game is not same as null %}
+                        {% if fixture.games|length > 0 %}
                             <p>
-                                {% if fixture.game.winner is same as fixture.users.0.id %}
+                                {% if fixture.games.0.winner is same as fixture.users.0.id %}
                                     <div class="row">
-                                        <div class="col-4" data-toggle="tooltip" title="{{ indexedDecks[fixture.game.winnerDeck] }}">{{ fixture.users.0.name }}</div>
-                                        <div class="col-4">{{ fixture.game.score.winner_score }} - {{ fixture.game.score.loser_score }}</div>
-                                        <div class="col-4" data-toggle="tooltip" title="{{ indexedDecks[fixture.game.loserDeck] }}">{{ fixture.users.1.name }}</div>
+                                        <div class="col-4" data-toggle="tooltip" title="{{ indexedDecks[fixture.games.0.winnerDeck] }}">{{ fixture.users.0.name }}</div>
+                                        <div class="col-4">{{ fixture.games.0.score.winner_score }} - {{ fixture.games.0.score.loser_score }}</div>
+                                        <div class="col-4" data-toggle="tooltip" title="{{ indexedDecks[fixture.games.0.loserDeck] }}">{{ fixture.users.1.name }}</div>
                                     </div>
                                 {% else %}
                                     <div class="row">
-                                        <div class="col-4" data-toggle="tooltip" title="{{ indexedDecks[fixture.game.loserDeck] }}">{{ fixture.users.0.name }}</div>
-                                        <div class="col-4">{{ fixture.game.score.loser_score }} - {{ fixture.game.score.winner_score }}</div>
-                                        <div class="col-4" data-toggle="tooltip" title="{{ indexedDecks[fixture.game.winnerDeck] }}">{{ fixture.users.1.name }}</div>
+                                        <div class="col-4" data-toggle="tooltip" title="{{ indexedDecks[fixture.games.0.loserDeck] }}">{{ fixture.users.0.name }}</div>
+                                        <div class="col-4">{{ fixture.games.0.score.loser_score }} - {{ fixture.games.0.score.winner_score }}</div>
+                                        <div class="col-4" data-toggle="tooltip" title="{{ indexedDecks[fixture.games.0.winnerDeck] }}">{{ fixture.users.1.name }}</div>
                                     </div>
                                 {% endif %}
                             </p>

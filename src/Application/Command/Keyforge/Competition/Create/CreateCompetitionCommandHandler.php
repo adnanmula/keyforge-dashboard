@@ -64,7 +64,7 @@ final class CreateCompetitionCommandHandler
                         new \DateTimeImmutable(),
                         null,
                         null,
-                        null,
+                        [],
                     );
 
                     $count++;
@@ -164,7 +164,7 @@ final class CreateCompetitionCommandHandler
                     new \DateTimeImmutable(),
                     null,
                     null,
-                    null,
+                    [],
                 );
 
                 $position++;

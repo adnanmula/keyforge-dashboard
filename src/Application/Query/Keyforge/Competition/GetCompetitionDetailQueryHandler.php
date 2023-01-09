@@ -2,7 +2,6 @@
 
 namespace AdnanMula\Cards\Application\Query\Keyforge\Competition;
 
-use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeCompetitionFixture;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeCompetitionRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGameRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUserRepository;
@@ -39,7 +38,13 @@ final readonly class GetCompetitionDetailQueryHandler
 
         $fixtures = $this->repository->fixtures($competition->id());
 
-        $gameIds = \array_filter(\array_map(static fn (KeyforgeCompetitionFixture $fixture): ?string => $fixture->game()?->value(), $fixtures));
+        $gameIds = [];
+
+        foreach ($fixtures as $fixture) {
+            foreach ($fixture->games() as $gameId) {
+                $gameIds[] = $gameId->value();
+            }
+        }
 
         $games = $this->gameRepository->search(new Criteria(
             null,
@@ -70,9 +75,11 @@ final readonly class GetCompetitionDetailQueryHandler
 
             $fixtureArray = $fixture->jsonSerialize();
             $fixtureArray['users'] = $users;
-            $fixtureArray['game'] = null;
-            if (null !== $fixture->game()) {
-                $fixtureArray['game'] = $indexedGames[$fixture->game()->value()]->jsonSerialize();
+            $fixtureArray['games'] = [];
+            if (\count($fixture->games()) > 0) {
+                foreach ($fixture->games() as $gameId) {
+                    $fixtureArray['games'][] = $indexedGames[$gameId->value()]->jsonSerialize();
+                }
             }
 
             $indexedFixtures[$fixture->reference()][] = $fixtureArray;
@@ -93,20 +100,22 @@ final readonly class GetCompetitionDetailQueryHandler
 
             foreach ($indexedFixtures as $fixtures) {
                 foreach ($fixtures as $fixture) {
-                    if (null === $fixture['game']) {
+                    if (\count($fixture['games']) === 0) {
                         continue;
                     }
 
-                    if ($user->value() === $fixture['game']['winner']) {
+                    $game = $fixture['games'][0];
+
+                    if ($user->value() === $game['winner']) {
                         $player['wins']++;
-                        $player['keys_forged'] += $fixture['game']['score']['winner_score'];
-                        $player['keys_opponent_forged'] += $fixture['game']['score']['loser_score'];
+                        $player['keys_forged'] += $game['score']['winner_score'];
+                        $player['keys_opponent_forged'] += $game['score']['loser_score'];
                     }
 
-                    if ($user->value() === $fixture['game']['loser']) {
+                    if ($user->value() === $game['loser']) {
                         $player['losses']++;
-                        $player['keys_forged'] += $fixture['game']['score']['loser_score'];
-                        $player['keys_opponent_forged'] += $fixture['game']['score']['winner_score'];
+                        $player['keys_forged'] += $game['score']['loser_score'];
+                        $player['keys_opponent_forged'] += $game['score']['winner_score'];
                     }
                 }
             }

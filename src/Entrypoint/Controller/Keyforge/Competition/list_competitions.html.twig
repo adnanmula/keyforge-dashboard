@@ -1,6 +1,6 @@
 {% extends "Keyforge/Shared/keyforge_base.html.twig" %}
 
-{% block title %}Competitions{% endblock %}
+{% block title %}Torneos{% endblock %}
 
 {% block body %}
     {% if result != false %}
@@ -27,7 +27,6 @@
             </thead>
         </table>
         {% if is_granted('ROLE_KEYFORGE') %}
-
             <div class="row">
                 <div class="float-end">
                     <a class="btn btn-dark" href="/keyforge/competitions/new" role="button" aria-expanded="false">Nuevo</a>
@@ -144,6 +143,12 @@
                             if (null === data) {
                                 return '-';
                             }
+
+                            users.forEach(function (user) {
+                                if (user.id === data) {
+                                    return user.name;
+                                }
+                            });
 
                             return data;
                         },
