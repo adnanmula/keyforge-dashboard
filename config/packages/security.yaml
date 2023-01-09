@@ -22,11 +22,11 @@ security:
     access_control:
          - { path: ^/keyforge/games/add, roles: ROLE_KEYFORGE }
          - { path: ^/keyforge/decks/import, roles: ROLE_KEYFORGE }
-         - { path: ^/keyforge/competitions/new, roles: ROLE_KEYFORGE }
+         - { path: ^/keyforge/competitions, roles: ROLE_KEYFORGE }
          - { path: ^/keyforge/users, roles: ROLE_KEYFORGE }
 
     role_hierarchy:
-        ROLE_ADMIN: [ ROLE_KEYFORGE ]
+        ROLE_ADMIN: ROLE_KEYFORGE
         ROLE_KEYFORGE: ROLE_BASIC
 
 when@test:
