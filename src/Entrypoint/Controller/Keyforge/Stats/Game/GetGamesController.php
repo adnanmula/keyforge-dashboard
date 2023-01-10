@@ -29,6 +29,7 @@ final class GetGamesController extends Controller
             'recordsTotal' => $result['total'],
             'recordsFiltered' => $result['totalFiltered'],
             'data' => $result['games'],
+            'draw' => (int) $request->get('draw'),
         ];
 
         return new JsonResponse($response);

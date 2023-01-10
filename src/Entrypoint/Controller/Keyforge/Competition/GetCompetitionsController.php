@@ -22,6 +22,7 @@ final class GetCompetitionsController extends Controller
             'recordsTotal' => $result['total'],
             'recordsFiltered' => $result['totalFiltered'],
             'data' => $result['competitions'],
+            'draw' => (int) $request->get('draw'),
         ];
 
         return new JsonResponse($response);

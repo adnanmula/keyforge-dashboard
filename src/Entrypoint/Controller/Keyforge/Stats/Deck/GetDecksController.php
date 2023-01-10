@@ -74,6 +74,7 @@ final class GetDecksController extends Controller
             'recordsTotal' => $decks['total'],
             'recordsFiltered' => $decks['totalFiltered'],
             'data' => $decks['decks'],
+            'draw' => (int) $request->get('draw'),
         ];
 
         return new JsonResponse($response);
