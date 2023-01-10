@@ -108,8 +108,12 @@ final class DbalCriteriaAdapter implements CriteriaAdapter
                 return $this->queryBuilder->expr()->lte($field, $value);
             case FilterOperator::CONTAINS:
                 return $this->queryBuilder->expr()->like($field, $value);
+            case FilterOperator::CONTAINS_INSENSITIVE:
+                return $field . ' ilike ' . $value;
             case FilterOperator::NOT_CONTAINS:
                 return $this->queryBuilder->expr()->notLike($field, $value);
+            case FilterOperator::NOT_CONTAINS_INSENSITIVE:
+                return $field . ' not ilike ' . $field;
             case FilterOperator::IN:
                 return $this->queryBuilder->expr()->in($field, $value);
             case FilterOperator::NOT_IN:
@@ -127,7 +131,9 @@ final class DbalCriteriaAdapter implements CriteriaAdapter
 
     private function mapParameterValue(Filter $filter): mixed
     {
-        if (FilterOperator::CONTAINS === $filter->operator() || FilterOperator::NOT_CONTAINS === $filter->operator()) {
+        $containOperators = [FilterOperator::CONTAINS, FilterOperator::CONTAINS_INSENSITIVE, FilterOperator::NOT_CONTAINS, FilterOperator::NOT_CONTAINS_INSENSITIVE];
+
+        if (in_array($filter->operator(), $containOperators, true)) {
             return '%' . $filter->value()->value() . '%';
         }
 

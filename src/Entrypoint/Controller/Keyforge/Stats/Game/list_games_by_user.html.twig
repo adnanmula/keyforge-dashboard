@@ -92,8 +92,8 @@
 
                     <div class="row">
                         {% for win in competition_wins %}
-                            <div class="col-2">
-                                <a href="/keyforge/competitions/{{ win.reference }}" style="color: white">
+                            <div class="col-12 col-sm-4 col-md-3 col-xl-2">
+                                <a class="text-decoration-none" href="/keyforge/competitions/{{ win.reference }}" style="color: white">
                                     <div class="row">
                                         <i class="bi bi-trophy" style="font-size: 3em;"></i>
                                     </div>
@@ -105,7 +105,6 @@
                                     </div>
                                 </a>
                             </div>
-
                         {% endfor %}
                     </div>
                 </div>
@@ -119,15 +118,15 @@
             <table id="gamesList" class="table table-responsive-sm table-hover" style="width:100%;">
                 <thead>
                 <tr>
-                    <th scope="col">Winner</th>
-                    <th scope="col">Winner deck</th>
-                    <th scope="col">Loser</th>
-                    <th scope="col">Loser deck</th>
+                    <th scope="col">Ganador</th>
+                    <th scope="col">Baraja ganadora</th>
+                    <th scope="col">Perdedor</th>
+                    <th scope="col">Baraja perdedora</th>
                     <th scope="col">Score</th>
-                    <th scope="col">First turn</th>
-                    <th scope="col">Date</th>
+                    <th scope="col">Primer turno</th>
+                    <th scope="col">Fecha</th>
                     <th scope="col">Competition</th>
-                    <th scope="col">Notes</th>
+                    <th scope="col">Notas</th>
                 </tr>
                 </thead>
             </table>

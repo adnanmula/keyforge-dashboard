@@ -51,7 +51,7 @@ final class GetDecksQueryHandler
         }
 
         if (null !== $query->deck()) {
-            $expressions[] = new Filter(new FilterField('name'), new StringFilterValue($query->deck()), FilterOperator::CONTAINS);
+            $expressions[] = new Filter(new FilterField('name'), new StringFilterValue($query->deck()), FilterOperator::CONTAINS_INSENSITIVE);
         }
 
         if ($query->onlyOwned()) {

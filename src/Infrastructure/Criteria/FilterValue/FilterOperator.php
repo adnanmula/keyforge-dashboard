@@ -12,6 +12,8 @@ enum FilterOperator
     case LESS_OR_EQUAL;
     case CONTAINS;
     case NOT_CONTAINS;
+    case CONTAINS_INSENSITIVE;
+    case NOT_CONTAINS_INSENSITIVE;
     case IN;
     case NOT_IN;
     case IS_NULL;
