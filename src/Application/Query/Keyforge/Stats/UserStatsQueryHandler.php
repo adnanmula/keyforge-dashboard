@@ -2,6 +2,8 @@
 
 namespace AdnanMula\Cards\Application\Query\Keyforge\Stats;
 
+use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeCompetition;
+use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeCompetitionRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeck;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGame;
@@ -11,6 +13,7 @@ use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUserRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeDeckHouses;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeHouse;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeSet;
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Infrastructure\Criteria\Criteria;
 use AdnanMula\Cards\Infrastructure\Criteria\Filter\Filter;
 use AdnanMula\Cards\Infrastructure\Criteria\Filter\Filters;
@@ -28,6 +31,7 @@ final class UserStatsQueryHandler
         private KeyforgeDeckRepository $deckRepository,
         private KeyforgeGameRepository $gameRepository,
         private KeyforgeUserRepository $userRepository,
+        private KeyforgeCompetitionRepository $competitionRepository,
     ) {}
 
     public function __invoke(UserStatsQuery $query): array
@@ -337,6 +341,7 @@ final class UserStatsQueryHandler
             'wins_by_set' => $winsBySet,
             'wins_by_house' => $winsByHouse,
             'win_streak' => $longestWinStreak,
+            'competition_wins' => $this->competitionWins($query->userId()),
         ];
     }
 
@@ -358,5 +363,33 @@ final class UserStatsQueryHandler
         }
 
         return \round($picks / $games * 100, 2);
+    }
+
+    private function competitionWins(Uuid $id): array
+    {
+        $criteria = new Criteria(
+            new Sorting(
+                new Order(
+                    new FilterField('finished_at'),
+                    OrderType::ASC,
+                ),
+            ),
+            null,
+            null,
+            new Filters(
+                FilterType::AND,
+                FilterType::AND,
+                new Filter(new FilterField('winner'), new StringFilterValue($id->value()), FilterOperator::EQUAL),
+            ),
+        );
+
+        return \array_map(
+            static fn (KeyforgeCompetition $competition): array => [
+                'name' => $competition->name(),
+                'date' => $competition->finishedAt()->format('Y-m-d'),
+                'reference' => $competition->reference(),
+            ],
+            $this->competitionRepository->search($criteria),
+        );
     }
 }

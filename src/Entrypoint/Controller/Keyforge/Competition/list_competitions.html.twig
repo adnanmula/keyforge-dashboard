@@ -144,13 +144,15 @@
                                 return '-';
                             }
 
+                            let userName = data;
+
                             users.forEach(function (user) {
                                 if (user.id === data) {
-                                    return user.name;
+                                    userName = user.name;
                                 }
                             });
 
-                            return data;
+                            return userName;
                         },
                         targets: 9, //Winner
                     },

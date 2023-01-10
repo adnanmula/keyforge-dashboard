@@ -85,6 +85,31 @@
                     <p>{{ win_streak }}</p>
                 </a>
             {% endif %}
+
+            {% if (null != competition_wins and competition_wins | length) %}
+                <div class="btn btn-dark border">
+                    <h5>Palmarés</h5>
+
+                    <div class="row">
+                        {% for win in competition_wins %}
+                            <div class="col-2">
+                                <a href="/keyforge/competitions/{{ win.reference }}" style="color: white">
+                                    <div class="row">
+                                        <i class="bi bi-trophy" style="font-size: 3em;"></i>
+                                    </div>
+                                    <div class="row">
+                                        <span>{{ win.name }}</span>
+                                    </div>
+                                    <div class="row">
+                                        <span>{{ win.date }}</span>
+                                    </div>
+                                </a>
+                            </div>
+
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
         </div>
 
         <div class="divider py-2"></div>
