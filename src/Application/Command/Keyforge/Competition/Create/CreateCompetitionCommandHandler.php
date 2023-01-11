@@ -2,11 +2,9 @@
 
 namespace AdnanMula\Cards\Application\Command\Keyforge\Competition\Create;
 
+use AdnanMula\Cards\Application\Service\FixturesGeneratorService;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeCompetition;
-use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeCompetitionFixture;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeCompetitionRepository;
-use AdnanMula\Cards\Domain\Model\Shared\ValueObject\CompetitionFixtureType;
-use AdnanMula\Cards\Domain\Model\Shared\ValueObject\CompetitionType;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Infrastructure\Criteria\Criteria;
 use AdnanMula\Cards\Infrastructure\Criteria\Filter\Filter;
@@ -20,6 +18,7 @@ final class CreateCompetitionCommandHandler
 {
     public function __construct(
         private KeyforgeCompetitionRepository $repository,
+        private FixturesGeneratorService $fixturesService,
     ) {}
 
     public function __invoke(CreateCompetitionCommand $command): void
@@ -43,47 +42,7 @@ final class CreateCompetitionCommandHandler
 
         $fixtures = [];
         if ($command->type->isRoundRobin()) {
-            $fixtures = $this->generateFixtures($competition);
-
-            $lastFixture = \end($fixtures);
-            $position = $lastFixture->position() + 1;
-            $reference = (int) \substr($lastFixture->reference(), \strlen($lastFixture->reference()) - 1, \strlen($lastFixture->reference())) + 1;
-
-            if ($command->type === CompetitionType::ROUND_ROBIN_2) {
-                $secondHalfFixtures = [];
-
-                $count = 0;
-                foreach ($fixtures as $fixture) {
-                    $secondHalfFixtures[] = new KeyforgeCompetitionFixture(
-                        Uuid::v4(),
-                        $fixture->competitionId(),
-                        'Jornada ' . $reference,
-                        \array_reverse($fixture->users()),
-                        $fixture->type(),
-                        $position,
-                        new \DateTimeImmutable(),
-                        null,
-                        null,
-                        [],
-                    );
-
-                    $count++;
-
-                    $halfCount = \count($command->users) % 2 === 0
-                        ? \ceil(\count($command->users) / 2)
-                        : \ceil(\count($command->users) / 2) - 1;
-
-                    if ($count >= $halfCount) {
-                        $reference++;
-                        $count = 0;
-                    }
-
-                    $position++;
-                }
-
-
-                $fixtures = \array_merge($fixtures, $secondHalfFixtures);
-            }
+            $fixtures = $this->fixturesService->execute($competition);
         }
 
         $this->repository->save($competition);
@@ -128,60 +87,5 @@ final class CreateCompetitionCommandHandler
         if (false === $command->type->isRoundRobin()) {
             throw new \Exception('Type not supported yet, only Round Robin (1/2) are available');
         }
-    }
-
-    /** @return array<KeyforgeCompetitionFixture> */
-    private function generateFixtures(KeyforgeCompetition $competition): array
-    {
-        $users = \array_map(static fn (Uuid $id): string => $id->value(), $competition->users());
-
-        \shuffle($users);
-
-        if (\count($users) % 2 !== 0) {
-            $users[] = null;
-        }
-
-        $fixtures = [];
-        $halfCount = \count($users) / 2;
-        $position = 0;
-
-        for ($i = 0; $i < \count($users) - 1; $i++) {
-            for ($j = 0; $j <= $halfCount - 1; $j++) {
-                $user1 = $users[$j];
-                $user2 = $users[\count($users) - $j - 1];
-
-                if (null === $user1 || null === $user2) {
-                    continue;
-                }
-
-                $fixtures[] = new KeyforgeCompetitionFixture(
-                    Uuid::v4(),
-                    $competition->id(),
-                    'Jornada ' . ($i + 1),
-                    [$user1, $user2],
-                    CompetitionFixtureType::BEST_OF_1,
-                    $position,
-                    new \DateTimeImmutable(),
-                    null,
-                    null,
-                    [],
-                );
-
-                $position++;
-            }
-
-            $users = $this->rotate($users);
-        }
-
-        return $fixtures;
-    }
-
-    private function rotate(array $users): array {
-        $firstPlayer = $users[0];
-        unset($users[0]);
-
-        $lastPlayer = \array_pop($users);
-
-        return [$firstPlayer, $lastPlayer, ...$users];
     }
 }

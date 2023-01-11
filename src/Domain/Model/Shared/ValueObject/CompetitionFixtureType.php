@@ -7,4 +7,7 @@ enum CompetitionFixtureType: string
     case BEST_OF_1 = 'BEST_OF_1';
     case BEST_OF_3 = 'BEST_OF_3';
     case BEST_OF_5 = 'BEST_OF_5';
+    case GAMES_2 = '2_GAMES';
+    case GAMES_3 = '3_GAMES';
+    case GAMES_5 = '5_GAMES';
 }

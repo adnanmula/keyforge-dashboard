@@ -9,30 +9,39 @@
         </div>
     {% endif %}
 
-    <div class="shadow-lg p-3 mb-5 bg-white rounded col-12" style="display: flex; overflow-x: auto">
-        <table id="competitionsList" class="table table-responsive-sm table-hover" style="width:100%;">
-            <thead>
-            <tr>
-                <th scope="col">Id</th>
-                <th scope="col">Ref</th>
-                <th scope="col">Nombre</th>
-                <th scope="col">Tipo</th>
-                <th scope="col">Jugadores</th>
-                <th scope="col">Descripción</th>
-                <th scope="col">Creado</th>
-                <th scope="col">Inicio</th>
-                <th scope="col">Fin</th>
-                <th scope="col">Ganador</th>
-            </tr>
-            </thead>
-        </table>
-        {% if is_granted('ROLE_KEYFORGE') %}
-            <div class="row">
-                <div class="float-end">
-                    <a class="btn btn-dark" href="/keyforge/competitions/new" role="button" aria-expanded="false">Nuevo</a>
+    <div class="shadow-lg p-3 mb-5 bg-white rounded" style="display: flex; overflow-x: auto">
+
+        <div class="row">
+            <div class="d-flex flex-row">
+                <div class="col-6">
+                    <h3>Torneos</h3>
                 </div>
+                {% if is_granted('ROLE_KEYFORGE') %}
+                    <div class="d-flex flex-row-reverse col-6">
+                        <a class="btn btn-dark" href="/keyforge/competitions/new" role="button" aria-expanded="false">Nuevo</a>
+                    </div>
+                {% endif %}
             </div>
-        {% endif %}
+
+            <div class="divider py-2"></div>
+
+            <table id="competitionsList" class="table table-responsive-sm table-hover" style="width:100%;">
+                <thead>
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Ref</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Tipo</th>
+                    <th scope="col">Jugadores</th>
+                    <th scope="col">Descripción</th>
+                    <th scope="col">Creado</th>
+                    <th scope="col">Inicio</th>
+                    <th scope="col">Fin</th>
+                    <th scope="col">Ganador</th>
+                </tr>
+                </thead>
+            </table>
+        </div>
     </div>
 
     <script>

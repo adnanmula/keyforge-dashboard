@@ -75,11 +75,11 @@
         }
 
         function tags() {
-            const options = $('select#tags.choices__input.is-hidden')[0].options;
+            const inputs = $('.tagButton > input:checked');
 
             const tagIds = [];
-            Array.prototype.forEach.call(options, function(option) {
-                tagIds.push(option.value);
+            Array.prototype.forEach.call(inputs, function(input) {
+                tagIds.push(input.value);
             });
 
             return tagIds;

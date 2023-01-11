@@ -10,6 +10,9 @@ use AdnanMula\Cards\Infrastructure\Criteria\Filter\FilterType;
 use AdnanMula\Cards\Infrastructure\Criteria\FilterField\FilterField;
 use AdnanMula\Cards\Infrastructure\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Cards\Infrastructure\Criteria\FilterValue\StringFilterValue;
+use AdnanMula\Cards\Infrastructure\Criteria\Sorting\Order;
+use AdnanMula\Cards\Infrastructure\Criteria\Sorting\OrderType;
+use AdnanMula\Cards\Infrastructure\Criteria\Sorting\Sorting;
 
 final readonly class GetTagsQueryHandler
 {
@@ -36,7 +39,17 @@ final readonly class GetTagsQueryHandler
             $filters[] = new Filters(FilterType::AND, FilterType::OR, ...$idsExpressions);
         }
 
-        $criteria = new Criteria(null, null, null, ...$filters);
+        $criteria = new Criteria(
+            new Sorting(
+                new Order(
+                    new FilterField('name'),
+                    OrderType::ASC,
+                ),
+            ),
+            null,
+            null,
+            ...$filters,
+        );
 
         $tags = $this->repository->search($criteria);
 
