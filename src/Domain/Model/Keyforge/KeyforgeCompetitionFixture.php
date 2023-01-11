@@ -76,7 +76,7 @@ final class KeyforgeCompetitionFixture implements \JsonSerializable
         $this->playedAt = $at;
     }
 
-    public function updateWinner(Uuid $id): void
+    public function updateWinner(?Uuid $id): void
     {
         $this->winner = $id;
     }
@@ -86,10 +86,10 @@ final class KeyforgeCompetitionFixture implements \JsonSerializable
         $this->games = $games;
     }
 
-//    public function updateGame(Uuid $id): void
-//    {
-//        $this->game = $id;
-//    }
+    public function addGame(Uuid $id): void
+    {
+        $this->games[] = $id;
+    }
 
     public function jsonSerialize(): array
     {
@@ -103,7 +103,7 @@ final class KeyforgeCompetitionFixture implements \JsonSerializable
             'createdAt' => $this->createdAt()->format(\DateTimeInterface::ATOM),
             'playedAt' => $this->playedAt()?->format('Y-m-d'),
             'winner' => $this->winner()?->value(),
-            'game' => \array_map(static fn (Uuid $id): string => $id->value(), $this->games),
+            'games' => \array_map(static fn (Uuid $id): string => $id->value(), $this->games),
         ];
     }
 }

@@ -98,6 +98,8 @@
                     <th>Jugador</th>
                     <th>G</th>
                     <th>P</th>
+                    <th>GG</th>
+                    <th>GP</th>
                     <th>⚷ D</th>
                     <th>⚷ F</th>
                     <th>⚷ C</th>
@@ -110,6 +112,8 @@
                         <td>{{ player.username }}</td>
                         <td>{{ player.wins }}</td>
                         <td>{{ player.losses }}</td>
+                        <td>{{ player.game_wins }}</td>
+                        <td>{{ player.game_losses }}</td>
                         <td>{{ player.keys_forged - player.keys_opponent_forged }}</td>
                         <td>{{ player.keys_forged }}</td>
                         <td>{{ player.keys_opponent_forged }}</td>
@@ -130,19 +134,21 @@
                     <a class="btn btn-clear border col-12 col-sm-12 col-md-6 col-lg-6 overflow-wrap inline-block">
                         {% if fixture.games|length > 0 %}
                             <p>
-                                {% if fixture.games.0.winner is same as fixture.users.0.id %}
-                                    <div class="row">
-                                        <div class="col-4" data-toggle="tooltip" title="{{ indexedDecks[fixture.games.0.winnerDeck] }}">{{ fixture.users.0.name }}</div>
-                                        <div class="col-4">{{ fixture.games.0.score.winner_score }} - {{ fixture.games.0.score.loser_score }}</div>
-                                        <div class="col-4" data-toggle="tooltip" title="{{ indexedDecks[fixture.games.0.loserDeck] }}">{{ fixture.users.1.name }}</div>
-                                    </div>
-                                {% else %}
-                                    <div class="row">
-                                        <div class="col-4" data-toggle="tooltip" title="{{ indexedDecks[fixture.games.0.loserDeck] }}">{{ fixture.users.0.name }}</div>
-                                        <div class="col-4">{{ fixture.games.0.score.loser_score }} - {{ fixture.games.0.score.winner_score }}</div>
-                                        <div class="col-4" data-toggle="tooltip" title="{{ indexedDecks[fixture.games.0.winnerDeck] }}">{{ fixture.users.1.name }}</div>
-                                    </div>
-                                {% endif %}
+                                {% for game in fixture.games %}
+                                    {% if game.winner is same as fixture.users.0.id %}
+                                        <div class="row">
+                                            <div class="col-4" data-toggle="tooltip" title="{{ indexedDecks[game.winnerDeck] }}">{{ fixture.users.0.name }}</div>
+                                            <div class="col-4">{{ game.score.winner_score }} - {{ game.score.loser_score }}</div>
+                                            <div class="col-4" data-toggle="tooltip" title="{{ indexedDecks[game.loserDeck] }}">{{ fixture.users.1.name }}</div>
+                                        </div>
+                                    {% else %}
+                                        <div class="row">
+                                            <div class="col-4" data-toggle="tooltip" title="{{ indexedDecks[game.loserDeck] }}">{{ fixture.users.0.name }}</div>
+                                            <div class="col-4">{{ game.score.loser_score }} - {{ game.score.winner_score }}</div>
+                                            <div class="col-4" data-toggle="tooltip" title="{{ indexedDecks[game.winnerDeck] }}">{{ fixture.users.1.name }}</div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
                             </p>
                             <p>
                                 <div class="row">
@@ -157,20 +163,21 @@
                                     <div class="col-4">{{ fixture.users.1.name }}</div>
                                 </div>
                             </p>
-                            {% if competition.winner is null and competition.startedAt is not null and competition.finishedAt is null %}
-                                {% if is_granted('ROLE_KEYFORGE') %}
-                                    <p>
-                                        <button type="button" class="btn btn-dark btn-xs" data-bs-toggle="modal" data-bs-target="#registerCompetitionGame"
-                                                data-player-one-name="{{ fixture.users.0.name }}"
-                                                data-player-two-name="{{ fixture.users.1.name }}"
-                                                data-player-one-id="{{ fixture.users.0.id }}"
-                                                data-player-two-id="{{ fixture.users.1.id }}"
-                                                data-competition-name="{{ competition.name }}"
-                                                data-fixture-ref="{{ fixture.reference }}"
-                                                data-fixture-id="{{ fixture.id }}"
-                                        >Guardar</button>
-                                    </p>
-                                {% endif %}
+                        {% endif %}
+
+                        {% if competition.winner is null and competition.startedAt is not null and competition.finishedAt is null and fixture.winner is null %}
+                            {% if is_granted('ROLE_KEYFORGE') %}
+                                <p>
+                                    <button type="button" class="btn btn-dark btn-xs" data-bs-toggle="modal" data-bs-target="#registerCompetitionGame"
+                                            data-player-one-name="{{ fixture.users.0.name }}"
+                                            data-player-two-name="{{ fixture.users.1.name }}"
+                                            data-player-one-id="{{ fixture.users.0.id }}"
+                                            data-player-two-id="{{ fixture.users.1.id }}"
+                                            data-competition-name="{{ competition.name }}"
+                                            data-fixture-ref="{{ fixture.reference }}"
+                                            data-fixture-id="{{ fixture.id }}"
+                                    >Guardar</button>
+                                </p>
                             {% endif %}
                         {% endif %}
                     </a>

@@ -56,6 +56,7 @@ class CreateCompetitionController extends Controller
                     \strtolower(\preg_replace("/[\W_]+/u", '_', $request->request->get('name'))),
                     $request->request->get('name'),
                     $request->request->get('type'),
+                    $request->request->get('fixtures_type'),
                     $request->request->all()['users'] ?? [],
                     $request->request->get('description'),
                 ));

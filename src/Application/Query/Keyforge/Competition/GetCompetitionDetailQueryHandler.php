@@ -96,33 +96,50 @@ final readonly class GetCompetitionDetailQueryHandler
                 'losses' => 0,
                 'keys_forged' => 0,
                 'keys_opponent_forged' => 0,
+                'game_wins' => 0,
+                'game_losses' => 0,
             ];
 
             foreach ($indexedFixtures as $fixtures) {
                 foreach ($fixtures as $fixture) {
+                    if (null === $fixture['winner']) {
+                        continue;
+                    }
+
+                    if (false === \in_array($user->value(), \array_map(static fn (array $user): string => $user['id'], $fixture['users']), true)) {
+                        continue;
+                    }
+
                     if (\count($fixture['games']) === 0) {
                         continue;
                     }
 
-                    $game = $fixture['games'][0];
-
-                    if ($user->value() === $game['winner']) {
-                        $player['wins']++;
-                        $player['keys_forged'] += $game['score']['winner_score'];
-                        $player['keys_opponent_forged'] += $game['score']['loser_score'];
+                    if (null !== $fixture['winner']) {
+                        if ($user->value() === $fixture['winner']) {
+                            $player['wins']++;
+                        } else {
+                            $player['losses']++;
+                        }
                     }
 
-                    if ($user->value() === $game['loser']) {
-                        $player['losses']++;
-                        $player['keys_forged'] += $game['score']['loser_score'];
-                        $player['keys_opponent_forged'] += $game['score']['winner_score'];
+                    foreach ($fixture['games'] as $game) {
+                        if ($user->value() === $game['winner']) {
+                            $player['game_wins']++;
+                            $player['keys_forged'] += $game['score']['winner_score'];
+                            $player['keys_opponent_forged'] += $game['score']['loser_score'];
+                        }
+
+                        if ($user->value() === $game['loser']) {
+                            $player['game_losses']++;
+                            $player['keys_forged'] += $game['score']['loser_score'];
+                            $player['keys_opponent_forged'] += $game['score']['winner_score'];
+                        }
                     }
                 }
             }
 
             $classification[] = $player;
         }
-
 
         \usort($classification, static function (array $a, array $b) {
             if ($b['wins'] === $a['wins'] && $a['losses'] === $b['losses']) {

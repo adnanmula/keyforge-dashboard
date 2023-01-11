@@ -2,13 +2,13 @@
 
 namespace AdnanMula\Cards\Infrastructure\Service\Keyforge\DoK;
 
-use AdnanMula\Cards\Application\Service\ApplyPredefinedTagsService;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeck;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeDeckHouses;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeHouse;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeSet;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
+use AdnanMula\Cards\Domain\Service\Keyforge\Deck\DeckApplyPredefinedTagsService;
 use AdnanMula\Cards\Domain\Service\Keyforge\ImportDeckService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -18,7 +18,7 @@ final class ImportDeckFromDokService implements ImportDeckService
     public function __construct(
         private KeyforgeDeckRepository $repository,
         private HttpClientInterface $dokClient,
-        private ApplyPredefinedTagsService $tagsService,
+        private DeckApplyPredefinedTagsService $tagsService,
     ) {}
 
     public function execute(Uuid $uuid, ?Uuid $owner = null): ?KeyforgeDeck

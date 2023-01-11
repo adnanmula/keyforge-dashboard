@@ -2,10 +2,10 @@
 
 namespace AdnanMula\Cards\Application\Command\Keyforge\Competition\Create;
 
-use AdnanMula\Cards\Application\Service\FixturesGeneratorService;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeCompetition;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeCompetitionRepository;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
+use AdnanMula\Cards\Domain\Service\Keyforge\Competition\FixturesGeneratorService;
 use AdnanMula\Cards\Infrastructure\Criteria\Criteria;
 use AdnanMula\Cards\Infrastructure\Criteria\Filter\Filter;
 use AdnanMula\Cards\Infrastructure\Criteria\Filter\Filters;
@@ -42,7 +42,7 @@ final class CreateCompetitionCommandHandler
 
         $fixtures = [];
         if ($command->type->isRoundRobin()) {
-            $fixtures = $this->fixturesService->execute($competition);
+            $fixtures = $this->fixturesService->execute($competition, $command->fixturesType);
         }
 
         $this->repository->save($competition);

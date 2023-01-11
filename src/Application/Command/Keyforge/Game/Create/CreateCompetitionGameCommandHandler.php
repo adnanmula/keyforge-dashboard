@@ -2,15 +2,15 @@
 
 namespace AdnanMula\Cards\Application\Command\Keyforge\Game\Create;
 
+use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeCompetitionFixture;
+use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeCompetitionRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeck;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGame;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGameRepository;
-use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUser;
-use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUserRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeGameScore;
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\CompetitionFixtureType;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
-use AdnanMula\Cards\Domain\Service\Keyforge\ImportDeckService;
 use AdnanMula\Cards\Infrastructure\Criteria\Criteria;
 use AdnanMula\Cards\Infrastructure\Criteria\Filter\Filter;
 use AdnanMula\Cards\Infrastructure\Criteria\Filter\Filters;
@@ -19,39 +19,66 @@ use AdnanMula\Cards\Infrastructure\Criteria\FilterField\FilterField;
 use AdnanMula\Cards\Infrastructure\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Cards\Infrastructure\Criteria\FilterValue\StringFilterValue;
 
-final class CreateGameCommandHandler
+final class CreateCompetitionGameCommandHandler
 {
     public function __construct(
-        private KeyforgeUserRepository $userRepository,
         private KeyforgeGameRepository $gameRepository,
         private KeyforgeDeckRepository $deckRepository,
-        private ImportDeckService $importDeckService,
+        private KeyforgeCompetitionRepository $competitionRepository,
     ) {}
 
-    public function __invoke(CreateGameCommand $command): void
+    public function __invoke(CreateCompetitionGameCommand $command): void
     {
-        [$winner, $loser, $firstTurn] = $this->getUsers($command->winner(), $command->loser(), $command->firstTurn());
-        [$winnerDeck, $loserDeck] = $this->getDecks($command->winnerDeck(), $command->loserDeck());
+        [$winnerDeck, $loserDeck] = $this->getDecks($command->winnerDeck, $command->loserDeck);
 
         $game = new KeyforgeGame(
             Uuid::v4(),
-            Uuid::from($winner),
-            Uuid::from($loser),
+            $command->winner,
+            $command->loser,
             $winnerDeck->id(),
             $loserDeck->id(),
-            $command->winnerChains(),
-            $command->loserChains(),
-            Uuid::from($firstTurn),
-            KeyforgeGameScore::from(3, $command->loserScore()),
-            $command->date(),
+            $command->winnerChains,
+            $command->loserChains,
+            $command->firstTurn,
+            KeyforgeGameScore::from(3, $command->loserScore),
+            $command->date,
             new \DateTimeImmutable(),
-            $command->competition(),
-            $command->notes(),
+            $command->competition,
+            $command->notes,
         );
 
         $this->gameRepository->save($game);
 
         $this->updateDeckWinRate($winnerDeck, $loserDeck);
+
+        $this->updateFixture($command, $game);
+    }
+
+    private function updateFixture(CreateCompetitionGameCommand $command, KeyforgeGame $game): void
+    {
+        $fixture = $this->competitionRepository->fixtureById($command->fixtureId);
+
+        if (null === $fixture) {
+            return;
+        }
+
+        $fixture->addGame($game->id());
+        $fixture->updateWinner($this->fixtureWinner($fixture, $game));
+        $fixture->updatePlayedAt($command->date);
+
+        $this->competitionRepository->saveFixture($fixture);
+    }
+
+    private function getDecks(string $winnerDeck, string $loserDeck): array
+    {
+        $winnerDeck = $this->deckRepository->byId(Uuid::from($winnerDeck));
+        $loserDeck = $this->deckRepository->byId(Uuid::from($loserDeck));
+
+        if (null === $winnerDeck || null === $loserDeck) {
+            throw new \Exception('Deck not found');
+        }
+
+        return [$winnerDeck, $loserDeck];
     }
 
     private function updateDeckWinRate(KeyforgeDeck $winnerDeck, KeyforgeDeck $loserDeck): void
@@ -113,49 +140,60 @@ final class CreateGameCommandHandler
         $this->deckRepository->save($loserDeck);
     }
 
-    private function getUsers(string $winner, string $loser, string $firstTurn): array
+    private function fixtureWinner(KeyforgeCompetitionFixture $fixture, KeyforgeGame $game): ?Uuid
     {
-        if (false === Uuid::isValid($winner)) {
-            $winner = $this->fetchUserOrCreate($winner)->id()->value();
+        if ($fixture->type() === CompetitionFixtureType::BEST_OF_1) {
+            return $game->winner();
         }
 
-        if (false === Uuid::isValid($loser)) {
-            $loser = $this->fetchUserOrCreate($loser)->id()->value();
+        $filters = [];
+
+        foreach ($fixture->games() as $gameId) {
+            $filters[] = new Filter(new FilterField('id'), new StringFilterValue($gameId->value()), FilterOperator::EQUAL);
         }
 
-        if (false === Uuid::isValid($firstTurn)) {
-            $firstTurn = $this->fetchUserOrCreate($firstTurn)->id()->value();
+        $criteria = new Criteria(
+            null,
+            null,
+            null,
+            new Filters(FilterType::AND, FilterType::OR, ...$filters),
+        );
+
+        $games = $this->gameRepository->search($criteria);
+
+        $winners = [
+            $fixture->users()[0]->value() => 0,
+            $fixture->users()[1]->value() => 0,
+        ];
+
+        foreach ($games as $game) {
+            $winners[$game->winner()->value()] += 1;
         }
 
-        return [$winner, $loser, $firstTurn];
-    }
+        if ($fixture->type() === CompetitionFixtureType::BEST_OF_3) {
+            if ($winners[$fixture->users()[0]->value()] === 2) {
+                return $fixture->users()[0];
+            }
 
-    private function fetchUserOrCreate(string $name): KeyforgeUser
-    {
-        $user = $this->userRepository->byName($name);
+            if ($winners[$fixture->users()[1]->value()] === 2) {
+                return $fixture->users()[1];
+            }
 
-        if (null === $user) {
-            $user = KeyforgeUser::create(Uuid::v4(), $name, true);
-            $this->userRepository->save($user);
+            return null;
         }
 
-        return $user;
-    }
+        if ($fixture->type() === CompetitionFixtureType::BEST_OF_5) {
+            if ($winners[$fixture->users()[0]->value()] === 3) {
+                return $fixture->users()[0];
+            }
 
-    private function getDecks(string $winnerDeck, string $loserDeck): array
-    {
-        $winnerDeck = Uuid::isValid($winnerDeck)
-            ? $this->importDeckService->execute(Uuid::from($winnerDeck), null)
-            : $this->deckRepository->byNames($winnerDeck)[0] ?? null;
+            if ($winners[$fixture->users()[1]->value()] === 3) {
+                return $fixture->users()[1];
+            }
 
-        $loserDeck = Uuid::isValid($loserDeck)
-            ? $this->importDeckService->execute(Uuid::from($loserDeck), null)
-            : $this->deckRepository->byNames($loserDeck)[0] ?? null;
-
-        if (null === $winnerDeck || null === $loserDeck) {
-            throw new \Exception('Deck not found');
+            return null;
         }
 
-        return [$winnerDeck, $loserDeck];
+        return null;
     }
 }

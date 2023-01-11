@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace AdnanMula\Cards\Application\Service;
+namespace AdnanMula\Cards\Domain\Service\Keyforge\Competition;
 
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeCompetition;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeCompetitionFixture;
@@ -10,46 +10,12 @@ use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 
 final class FixturesGeneratorService
 {
-    public function execute(KeyforgeCompetition $competition): array
+    public function execute(KeyforgeCompetition $competition, CompetitionFixtureType $fixtureType): array
     {
-        $fixtures = $this->generateFixtures($competition);
-
-        $lastFixture = \end($fixtures);
-        $position = $lastFixture->position() + 1;
-        $reference = (int) \substr($lastFixture->reference(), \strlen($lastFixture->reference()) - 1, \strlen($lastFixture->reference())) + 1;
+        $fixtures = $this->generateFixtures($competition, $fixtureType);
 
         if ($competition->type() === CompetitionType::ROUND_ROBIN_2) {
-            $secondHalfFixtures = [];
-
-            $count = 0;
-            foreach ($fixtures as $fixture) {
-                $secondHalfFixtures[] = new KeyforgeCompetitionFixture(
-                    Uuid::v4(),
-                    $fixture->competitionId(),
-                    'Jornada ' . $reference,
-                    \array_reverse($fixture->users()),
-                    $fixture->type(),
-                    $position,
-                    new \DateTimeImmutable(),
-                    null,
-                    null,
-                    [],
-                );
-
-                $count++;
-
-                $halfCount = \count($competition->users()) % 2 === 0
-                    ? \ceil(\count($competition->users()) / 2)
-                    : \ceil(\count($competition->users()) / 2) - 1;
-
-                if ($count >= $halfCount) {
-                    $reference++;
-                    $count = 0;
-                }
-
-                $position++;
-            }
-
+            $secondHalfFixtures = $this->reverseFixtures($competition, $fixtures);
             $fixtures = \array_merge($fixtures, $secondHalfFixtures);
         }
 
@@ -57,7 +23,7 @@ final class FixturesGeneratorService
     }
 
     /** @return array<KeyforgeCompetitionFixture> */
-    private function generateFixtures(KeyforgeCompetition $competition): array
+    private function generateFixtures(KeyforgeCompetition $competition, CompetitionFixtureType $fixtureType): array
     {
         $users = \array_map(static fn (Uuid $id): string => $id->value(), $competition->users());
 
@@ -85,7 +51,7 @@ final class FixturesGeneratorService
                     $competition->id(),
                     'Jornada ' . ($i + 1),
                     [$user1, $user2],
-                    CompetitionFixtureType::BEST_OF_1,
+                    $fixtureType,
                     $position,
                     new \DateTimeImmutable(),
                     null,
@@ -109,5 +75,46 @@ final class FixturesGeneratorService
         $lastPlayer = \array_pop($users);
 
         return [$firstPlayer, $lastPlayer, ...$users];
+    }
+
+    /** @return array<KeyforgeCompetitionFixture> */
+    private function reverseFixtures(KeyforgeCompetition $competition, array $fixtures): array
+    {
+        $lastFixture = \end($fixtures);
+        $position = $lastFixture->position() + 1;
+        $reference = (int) \substr($lastFixture->reference(), \strlen($lastFixture->reference()) - 1, \strlen($lastFixture->reference())) + 1;
+
+        $secondHalfFixtures = [];
+        $count = 0;
+
+        foreach ($fixtures as $fixture) {
+            $secondHalfFixtures[] = new KeyforgeCompetitionFixture(
+                Uuid::v4(),
+                $fixture->competitionId(),
+                'Jornada ' . $reference,
+                \array_reverse($fixture->users()),
+                $fixture->type(),
+                $position,
+                new \DateTimeImmutable(),
+                null,
+                null,
+                [],
+            );
+
+            $count++;
+
+            $halfCount = \count($competition->users()) % 2 === 0
+                ? \ceil(\count($competition->users()) / 2)
+                : \ceil(\count($competition->users()) / 2) - 1;
+
+            if ($count >= $halfCount) {
+                $reference++;
+                $count = 0;
+            }
+
+            $position++;
+        }
+
+        return $secondHalfFixtures;
     }
 }

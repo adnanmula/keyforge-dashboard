@@ -10,4 +10,16 @@ enum CompetitionFixtureType: string
     case GAMES_2 = '2_GAMES';
     case GAMES_3 = '3_GAMES';
     case GAMES_5 = '5_GAMES';
+
+    public static function allowedValues(): array
+    {
+        return [
+            self::BEST_OF_1->name,
+            self::BEST_OF_3->name,
+            self::BEST_OF_5->name,
+            self::GAMES_2->name,
+            self::GAMES_3->name,
+            self::GAMES_5->name,
+        ];
+    }
 }

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace AdnanMula\Cards\Application\Service;
+namespace AdnanMula\Cards\Domain\Service\Keyforge\Deck;
 
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeck;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeckRepository;
@@ -62,7 +62,7 @@ use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagRecursionHigh;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagSynergyHigh;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagUpgradeCountHigh;
 
-final class ApplyPredefinedTagsService
+final class DeckApplyPredefinedTagsService
 {
     public function __construct(
         private readonly KeyforgeDeckRepository $repository,

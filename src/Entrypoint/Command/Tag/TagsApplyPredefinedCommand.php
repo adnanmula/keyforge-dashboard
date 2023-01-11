@@ -2,9 +2,9 @@
 
 namespace AdnanMula\Cards\Entrypoint\Command\Tag;
 
-use AdnanMula\Cards\Application\Service\ApplyPredefinedTagsService;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
+use AdnanMula\Cards\Domain\Service\Keyforge\Deck\DeckApplyPredefinedTagsService;
 use AdnanMula\Cards\Infrastructure\Criteria\Criteria;
 use AdnanMula\Cards\Infrastructure\Criteria\Filter\Filter;
 use AdnanMula\Cards\Infrastructure\Criteria\Filter\Filters;
@@ -23,7 +23,7 @@ final class TagsApplyPredefinedCommand extends Command
 
     public function __construct(
         private readonly KeyforgeDeckRepository $deckRepository,
-        private readonly ApplyPredefinedTagsService $service,
+        private readonly DeckApplyPredefinedTagsService $service,
     ) {
         parent::__construct(self::NAME);
     }

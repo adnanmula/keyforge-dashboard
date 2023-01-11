@@ -2,7 +2,7 @@
 
 namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\Competition;
 
-use AdnanMula\Cards\Application\Command\Keyforge\Game\Create\CreateGameCommand;
+use AdnanMula\Cards\Application\Command\Keyforge\Game\Create\CreateCompetitionGameCommand;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -28,7 +28,7 @@ final class CreateCompetitionGameController extends Controller
             throw new AccessDeniedException();
         }
 
-        $this->bus->dispatch(new CreateGameCommand(
+        $this->bus->dispatch(new CreateCompetitionGameCommand(
             $request->request->get('winner'),
             $request->request->get('winnerDeck'),
             $request->request->get('winnerChains'),
