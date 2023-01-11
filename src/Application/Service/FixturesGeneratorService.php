@@ -50,8 +50,10 @@ final class FixturesGeneratorService
                 $position++;
             }
 
-            return \array_merge($fixtures, $secondHalfFixtures);
+            $fixtures = \array_merge($fixtures, $secondHalfFixtures);
         }
+
+        return $fixtures;
     }
 
     /** @return array<KeyforgeCompetitionFixture> */
