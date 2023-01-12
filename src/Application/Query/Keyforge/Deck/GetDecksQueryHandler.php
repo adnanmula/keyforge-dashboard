@@ -9,18 +9,18 @@ use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGameRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUser;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUserRepository;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
-use AdnanMula\Cards\Infrastructure\Criteria\Criteria;
-use AdnanMula\Cards\Infrastructure\Criteria\Filter\Filter;
-use AdnanMula\Cards\Infrastructure\Criteria\Filter\Filters;
-use AdnanMula\Cards\Infrastructure\Criteria\Filter\FilterType;
-use AdnanMula\Cards\Infrastructure\Criteria\FilterField\FilterField;
-use AdnanMula\Cards\Infrastructure\Criteria\FilterValue\ArrayElementFilterValue;
-use AdnanMula\Cards\Infrastructure\Criteria\FilterValue\FilterOperator;
-use AdnanMula\Cards\Infrastructure\Criteria\FilterValue\IntFilterValue;
-use AdnanMula\Cards\Infrastructure\Criteria\FilterValue\NullFilterValue;
-use AdnanMula\Cards\Infrastructure\Criteria\FilterValue\StringFilterValue;
-use AdnanMula\Cards\Infrastructure\Criteria\Sorting\Order;
-use AdnanMula\Cards\Infrastructure\Criteria\Sorting\OrderType;
+use AdnanMula\Criteria\Criteria;
+use AdnanMula\Criteria\Filter\Filter;
+use AdnanMula\Criteria\Filter\Filters;
+use AdnanMula\Criteria\Filter\FilterType;
+use AdnanMula\Criteria\FilterField\FilterField;
+use AdnanMula\Criteria\FilterValue\ArrayElementFilterValue;
+use AdnanMula\Criteria\FilterValue\FilterOperator;
+use AdnanMula\Criteria\FilterValue\IntFilterValue;
+use AdnanMula\Criteria\FilterValue\NullFilterValue;
+use AdnanMula\Criteria\FilterValue\StringFilterValue;
+use AdnanMula\Criteria\Sorting\Order;
+use AdnanMula\Criteria\Sorting\OrderType;
 
 final class GetDecksQueryHandler
 {

@@ -8,8 +8,8 @@ use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeTagRepository;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\TagStyle;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\TagVisibility;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
-use AdnanMula\Cards\Infrastructure\Criteria\Criteria;
-use AdnanMula\Cards\Infrastructure\Criteria\DbalCriteriaAdapter;
+use AdnanMula\Criteria\Criteria;
+use AdnanMula\Criteria\DbalCriteriaAdapter;
 use AdnanMula\Cards\Infrastructure\Persistence\Repository\DbalRepository;
 
 final class KeyforgeTagDbalRepository extends DbalRepository implements KeyforgeTagRepository

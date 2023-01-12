@@ -2,7 +2,7 @@
 
 namespace AdnanMula\Cards\Application\Query\Keyforge\Game;
 
-use AdnanMula\Cards\Infrastructure\Criteria\Criteria;
+use AdnanMula\Criteria\Criteria;
 
 final class GetGamesQuery
 {

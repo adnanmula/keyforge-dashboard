@@ -11,13 +11,13 @@ use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUserRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeGameScore;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Domain\Service\Keyforge\ImportDeckService;
-use AdnanMula\Cards\Infrastructure\Criteria\Criteria;
-use AdnanMula\Cards\Infrastructure\Criteria\Filter\Filter;
-use AdnanMula\Cards\Infrastructure\Criteria\Filter\Filters;
-use AdnanMula\Cards\Infrastructure\Criteria\Filter\FilterType;
-use AdnanMula\Cards\Infrastructure\Criteria\FilterField\FilterField;
-use AdnanMula\Cards\Infrastructure\Criteria\FilterValue\FilterOperator;
-use AdnanMula\Cards\Infrastructure\Criteria\FilterValue\StringFilterValue;
+use AdnanMula\Criteria\Criteria;
+use AdnanMula\Criteria\Filter\Filter;
+use AdnanMula\Criteria\Filter\Filters;
+use AdnanMula\Criteria\Filter\FilterType;
+use AdnanMula\Criteria\FilterField\FilterField;
+use AdnanMula\Criteria\FilterValue\FilterOperator;
+use AdnanMula\Criteria\FilterValue\StringFilterValue;
 
 final class CreateGameCommandHandler
 {

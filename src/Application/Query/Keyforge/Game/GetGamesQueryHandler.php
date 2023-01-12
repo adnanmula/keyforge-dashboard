@@ -5,7 +5,7 @@ namespace AdnanMula\Cards\Application\Query\Keyforge\Game;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGameRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUserRepository;
-use AdnanMula\Cards\Infrastructure\Criteria\Criteria;
+use AdnanMula\Criteria\Criteria;
 
 final class GetGamesQueryHandler
 {

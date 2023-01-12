@@ -8,6 +8,7 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "ext-json": "*",
+        "adnanmula/criteria": "^0.0.1",
         "beberlei/assert": "^3.3",
         "doctrine/dbal": "^3.5",
         "ramsey/uuid": "^4.7",
@@ -24,12 +25,12 @@
         "symfony/yaml": "6.2.*"
     },
     "require-dev": {
+        "adnanmula/coding-standard": "^0.0.6",
         "behat/behat": "^3.10",
         "friends-of-behat/symfony-extension": "^2.0",
         "phpro/grumphp": "^1.14",
         "phpstan/phpstan": "^1.8",
-        "phpunit/phpunit": "^9.5",
-        "slevomat/coding-standard": "^8.7.1"
+        "phpunit/phpunit": "^9.5"
     },
     "config": {
         "optimize-autoloader": true,

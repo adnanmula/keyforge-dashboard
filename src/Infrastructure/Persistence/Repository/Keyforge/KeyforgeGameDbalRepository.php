@@ -9,8 +9,8 @@ use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeCompetition;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeGameScore;
 use AdnanMula\Cards\Domain\Model\Shared\Pagination;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
-use AdnanMula\Cards\Infrastructure\Criteria\Criteria;
-use AdnanMula\Cards\Infrastructure\Criteria\DbalCriteriaAdapter;
+use AdnanMula\Criteria\Criteria;
+use AdnanMula\Criteria\DbalCriteriaAdapter;
 use AdnanMula\Cards\Infrastructure\Persistence\Repository\DbalRepository;
 
 final class KeyforgeGameDbalRepository extends DbalRepository implements KeyforgeGameRepository

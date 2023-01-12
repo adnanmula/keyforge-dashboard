@@ -3,7 +3,7 @@
 namespace AdnanMula\Cards\Domain\Model\Keyforge;
 
 use AdnanMula\Cards\Domain\Model\Shared\Pagination;
-use AdnanMula\Cards\Infrastructure\Criteria\Criteria;
+use AdnanMula\Criteria\Criteria;
 
 interface KeyforgeGameRepository
 {

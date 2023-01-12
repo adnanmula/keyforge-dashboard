@@ -9,9 +9,9 @@ use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeDeckHouses;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeHouse;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeSet;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
-use AdnanMula\Cards\Infrastructure\Criteria\Criteria;
-use AdnanMula\Cards\Infrastructure\Criteria\DbalCriteriaAdapter;
 use AdnanMula\Cards\Infrastructure\Persistence\Repository\DbalRepository;
+use AdnanMula\Criteria\Criteria;
+use AdnanMula\Criteria\DbalCriteriaAdapter;
 use Doctrine\DBAL\Connection;
 
 final class KeyforgeDeckDbalRepository extends DbalRepository implements KeyforgeDeckRepository

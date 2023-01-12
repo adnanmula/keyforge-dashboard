@@ -2,7 +2,7 @@
 
 namespace AdnanMula\Cards\Domain\Model\Keyforge;
 
-use AdnanMula\Cards\Infrastructure\Criteria\Criteria;
+use AdnanMula\Criteria\Criteria;
 
 interface KeyforgeTagRepository
 {

@@ -9,9 +9,9 @@ use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeCompetitionRepository;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\CompetitionFixtureType;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\CompetitionType;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
-use AdnanMula\Cards\Infrastructure\Criteria\Criteria;
-use AdnanMula\Cards\Infrastructure\Criteria\DbalCriteriaAdapter;
 use AdnanMula\Cards\Infrastructure\Persistence\Repository\DbalRepository;
+use AdnanMula\Criteria\Criteria;
+use AdnanMula\Criteria\DbalCriteriaAdapter;
 
 final class KeyforgeCompetitionDbalRepository extends DbalRepository implements KeyforgeCompetitionRepository
 {
