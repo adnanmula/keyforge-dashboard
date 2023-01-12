@@ -152,14 +152,12 @@ final class CreateCompetitionGameCommandHandler
             $filters[] = new Filter(new FilterField('id'), new StringFilterValue($gameId->value()), FilterOperator::EQUAL);
         }
 
-        $criteria = new Criteria(
+        $games = $this->gameRepository->search(new Criteria(
             null,
             null,
             null,
             new Filters(FilterType::AND, FilterType::OR, ...$filters),
-        );
-
-        $games = $this->gameRepository->search($criteria);
+        ));
 
         $winners = [
             $fixture->users()[0]->value() => 0,
@@ -171,27 +169,42 @@ final class CreateCompetitionGameCommandHandler
         }
 
         if ($fixture->type() === CompetitionFixtureType::BEST_OF_3) {
-            if ($winners[$fixture->users()[0]->value()] === 2) {
-                return $fixture->users()[0];
-            }
+            return $this->checkWins($fixture, $winners, 2);
+        }
 
-            if ($winners[$fixture->users()[1]->value()] === 2) {
-                return $fixture->users()[1];
+        if ($fixture->type() === CompetitionFixtureType::BEST_OF_5) {
+            return $this->checkWins($fixture, $winners, 3);
+        }
+
+        $gamesCount = $winners[$fixture->users()[0]->value()] + $winners[$fixture->users()[1]->value()];
+
+        if ($fixture->type() === CompetitionFixtureType::GAMES_3) {
+            if ($gamesCount === 3) {
+                return $this->checkWins($fixture, $winners, 2);
             }
 
             return null;
         }
 
-        if ($fixture->type() === CompetitionFixtureType::BEST_OF_5) {
-            if ($winners[$fixture->users()[0]->value()] === 3) {
-                return $fixture->users()[0];
-            }
-
-            if ($winners[$fixture->users()[1]->value()] === 3) {
-                return $fixture->users()[1];
+        if ($fixture->type() === CompetitionFixtureType::GAMES_5) {
+            if ($gamesCount === 5) {
+                return $this->checkWins($fixture, $winners, 3);
             }
 
             return null;
+        }
+
+        return null;
+    }
+
+    private function checkWins(KeyforgeCompetitionFixture $fixture, array $winners, int $expectedWins): ?Uuid
+    {
+        if ($winners[$fixture->users()[0]->value()] >= $expectedWins) {
+            return $fixture->users()[0];
+        }
+
+        if ($winners[$fixture->users()[1]->value()] >= $expectedWins) {
+            return $fixture->users()[1];
         }
 
         return null;

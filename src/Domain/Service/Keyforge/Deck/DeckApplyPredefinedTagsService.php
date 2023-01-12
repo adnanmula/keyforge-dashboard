@@ -111,12 +111,23 @@ final class DeckApplyPredefinedTagsService
         $newTags[] = $this->tagHasSins($data);
         $newTags[] = $this->tagHasTimetraveller($data);
         $newTags[] = $this->tagHasXenos($data);
-        $newTags[] = $this->tagOwner($deck);
         $newTags[] = $this->tagPercentiles($data);
         $newTags[] = $this->tagRecursion($data);
         $newTags[] = $this->tagSynergy($data);
         $newTags[] = $this->tagUpgradeCount($data);
 
+        $draftDecks = [
+            '19ee9a3b-cbe5-4fe5-b4a5-388a1cc3c37a',
+            '37259b93-1cdd-4ea8-8206-767b071b2643',
+            'eaa1eb19-6ec9-400f-8881-b88eeddd06bc',
+            'dcbc4eae-b03b-4a75-a8ba-65742f1ca1c6',
+        ];
+
+        if (\in_array($deck->id()->value(), $draftDecks, true)) {
+            $newTags = [];
+        }
+
+        $newTags[] = $this->tagOwner($deck);
 
         $newTags = \array_filter($newTags);
 
