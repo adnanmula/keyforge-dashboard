@@ -41,6 +41,7 @@ final class CreateCompetitionCommandHandler
         );
 
         $fixtures = [];
+
         if ($command->type->isRoundRobin()) {
             $fixtures = $this->fixturesService->execute($competition, $command->fixturesType);
         }

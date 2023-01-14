@@ -19,6 +19,19 @@ final class FixturesGeneratorService
             $fixtures = \array_merge($fixtures, $secondHalfFixtures);
         }
 
+        if ($competition->type() === CompetitionType::ROUND_ROBIN_3) {
+            $secondHalfFixtures = $this->reverseFixtures($competition, $fixtures);
+            $thirdHalfFixtures = $this->reverseFixtures($competition, $secondHalfFixtures);
+            $fixtures = \array_merge($fixtures, $secondHalfFixtures, $thirdHalfFixtures);
+        }
+
+        if ($competition->type() === CompetitionType::ROUND_ROBIN_4) {
+            $secondHalfFixtures = $this->reverseFixtures($competition, $fixtures);
+            $thirdHalfFixtures = $this->reverseFixtures($competition, $secondHalfFixtures);
+            $fourthHalfFixtures = $this->reverseFixtures($competition, $thirdHalfFixtures);
+            $fixtures = \array_merge($fixtures, $secondHalfFixtures, $thirdHalfFixtures, $fourthHalfFixtures);
+        }
+
         return $fixtures;
     }
 
@@ -82,7 +95,9 @@ final class FixturesGeneratorService
     {
         $lastFixture = \end($fixtures);
         $position = $lastFixture->position() + 1;
-        $reference = (int) \substr($lastFixture->reference(), \strlen($lastFixture->reference()) - 1, \strlen($lastFixture->reference())) + 1;
+
+        $referenceParts = \explode(' ', \trim($lastFixture->reference()));
+        $reference = ((int) \end($referenceParts)) + 1;
 
         $secondHalfFixtures = [];
         $count = 0;

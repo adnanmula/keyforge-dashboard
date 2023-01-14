@@ -6,6 +6,8 @@ enum CompetitionType implements \JsonSerializable
 {
     case ROUND_ROBIN_1;
     case ROUND_ROBIN_2;
+    case ROUND_ROBIN_3;
+    case ROUND_ROBIN_4;
     case ELIMINATION;
     case ROUND_ROBIN_1_ELIMINATION;
     case ROUND_ROBIN_2_ELIMINATION;
@@ -15,10 +17,11 @@ enum CompetitionType implements \JsonSerializable
         return match ($value) {
             self::ROUND_ROBIN_1->name => self::ROUND_ROBIN_1,
             self::ROUND_ROBIN_2->name => self::ROUND_ROBIN_2,
+            self::ROUND_ROBIN_3->name => self::ROUND_ROBIN_3,
+            self::ROUND_ROBIN_4->name => self::ROUND_ROBIN_4,
             self::ELIMINATION->name => self::ELIMINATION,
             self::ROUND_ROBIN_1_ELIMINATION->name => self::ROUND_ROBIN_1_ELIMINATION,
             self::ROUND_ROBIN_2_ELIMINATION->name => self::ROUND_ROBIN_2_ELIMINATION,
-            default => self::ROUND_ROBIN_1,
         };
     }
 
@@ -27,6 +30,8 @@ enum CompetitionType implements \JsonSerializable
         return [
             self::ROUND_ROBIN_1->name,
             self::ROUND_ROBIN_2->name,
+            self::ROUND_ROBIN_3->name,
+            self::ROUND_ROBIN_4->name,
             self::ELIMINATION->name,
             self::ROUND_ROBIN_1_ELIMINATION->name,
             self::ROUND_ROBIN_2_ELIMINATION->name,
@@ -35,7 +40,10 @@ enum CompetitionType implements \JsonSerializable
 
     public function isRoundRobin(): bool
     {
-        return $this === self::ROUND_ROBIN_1 || $this === self::ROUND_ROBIN_2;
+        return $this === self::ROUND_ROBIN_1
+            || $this === self::ROUND_ROBIN_2
+            || $this === self::ROUND_ROBIN_3
+            || $this === self::ROUND_ROBIN_4;
     }
 
     public function jsonSerialize(): string
