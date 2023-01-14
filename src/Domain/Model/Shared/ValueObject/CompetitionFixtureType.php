@@ -20,4 +20,11 @@ enum CompetitionFixtureType: string
             self::GAMES_5->name,
         ];
     }
+
+    public function isBestOf(): bool
+    {
+        return $this === self::BEST_OF_1
+            || $this === self::BEST_OF_3
+            || $this === self::BEST_OF_5;
+    }
 }

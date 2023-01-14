@@ -63,7 +63,11 @@ final readonly class GetCompetitionDetailQueryHandler
         }
 
         $indexedFixtures = [];
+        $fixturesIsMatch = false;
+
         foreach ($fixtures as $fixture) {
+            $fixturesIsMatch = $fixture->type()->isBestOf();
+
             $users = [];
 
             foreach ($fixture->users() as $user) {
@@ -139,6 +143,13 @@ final readonly class GetCompetitionDetailQueryHandler
             }
 
             $classification[] = $player;
+        }
+
+        if (false === $fixturesIsMatch) {
+            foreach ($classification as &$position) {
+                $position['wins'] = $position['game_wins'];
+                $position['losses'] = $position['game_losses'];
+            }
         }
 
         \usort($classification, static function (array $a, array $b) {
