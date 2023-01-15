@@ -77,6 +77,20 @@ final class GetDecksQueryHandler
             );
         }
 
+        if (\count($query->tagsExcluded()) > 0) {
+            $tagsExpressions = [];
+
+            foreach ($query->tagsExcluded() as $tag) {
+                $tagsExpressions[] = new Filter(new FilterField('tags'), new ArrayElementFilterValue($tag->value()), FilterOperator::NOT_IN_ARRAY);
+            }
+
+            $filters[] = new Filters(
+                FilterType::AND,
+                FilterType::AND,
+                ...$tagsExpressions,
+            );
+        }
+
         if (null !== $query->sets()) {
             $setFilterExpressions = [];
 

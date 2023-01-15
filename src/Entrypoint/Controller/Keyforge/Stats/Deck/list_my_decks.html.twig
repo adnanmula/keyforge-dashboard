@@ -3,8 +3,6 @@
 {% block title %}My Decks{% endblock %}
 
 {% block header %}
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css">
-
     <style>
         .btn-xs > .btn, .btn-xs {
             font-size  : .700rem;
@@ -63,8 +61,6 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
-
     <script>
         function onlyOwned() {
             return false === $('#with_external')[0].checked;
@@ -76,6 +72,17 @@
 
         function tags() {
             const inputs = $('.tagButton > input:checked');
+
+            const tagIds = [];
+            Array.prototype.forEach.call(inputs, function(input) {
+                tagIds.push(input.value);
+            });
+
+            return tagIds;
+        }
+
+        function tagsExcluded() {
+            const inputs = $('.tagButton > input:indeterminate');
 
             const tagIds = [];
             Array.prototype.forEach.call(inputs, function(input) {
@@ -120,13 +127,6 @@
         }
 
         $(document).ready(function () {
-            new Choices('#tags', {
-                removeItemButton: true,
-                maxItemCount: null,
-                searchResultLimit: null,
-                renderChoiceLimit: null,
-            });
-
             $("#applyFilters").click(function(event) {
                 $('#deckList').DataTable().ajax.reload();
             });
@@ -156,6 +156,7 @@
                         d.extraFilterOnlyOwned = onlyOwned();
                         d.extraFilterTagType = tagFilterType();
                         d.extraFilterTags = tags();
+                        d.extraFilterTagsExcluded = tagsExcluded();
                         d.extraFilterHouses = houses();
                         d.extraFilterHouseFilterType = houseFilterType();
                         d.extraFilterSet = set();

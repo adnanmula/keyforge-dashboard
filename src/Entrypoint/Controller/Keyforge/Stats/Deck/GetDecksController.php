@@ -65,6 +65,7 @@ final class GetDecksController extends Controller
                 $request->get('extraFilterOnlyOwned') === 'true',
                 $request->get('extraFilterTagType'),
                 $request->query->all()['extraFilterTags'] ?? [],
+                $request->query->all()['extraFilterTagsExcluded'] ?? [],
                 $request->get('extraFilterMaxSas', 150),
                 $request->get('extraFilterMinSas', 0),
             )),

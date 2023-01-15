@@ -47,7 +47,6 @@
                         <div class="form-check col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2" style="display: flex; align-items: center;">
                             <input class="form-check-input houses_selector" type="checkbox" value="BROBNAR" id="check_house_brobnar">
                             <label for="check_house_brobnar"><img width="35px" src="/assets/keyforge/houses/BROBNAR.png" alt="BROBNAR"/>Brobnar</label>
-
                         </div>
                         <div class="form-check col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2" style="display: flex; align-items: center;">
                             <input class="form-check-input houses_selector" type="checkbox" value="DIS" id="check_house_dis">
@@ -157,6 +156,29 @@
             return;
         }
 
-        input.checked = input.checked ? false : true;
+        console.log(
+            input.indeterminate + '/' +
+            input.checked
+        );
+
+        if (input.indeterminate) {
+            input.indeterminate = false;
+            input.checked = false;
+
+            return;
+        }
+
+        if (input.checked) {
+            input.indeterminate = true;
+            input.checked = false;
+        } else {
+            input.indeterminate = false;
+            input.checked = true;
+        }
+
+        console.log(
+            input.indeterminate + '/' +
+            input.checked
+        );
     });
 </script>

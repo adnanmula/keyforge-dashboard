@@ -22,6 +22,7 @@ final class GetDecksQuery
     private bool $onlyOwned;
     private ?string $tagFilterType;
     private array $tags;
+    private array $tagsExcluded;
     private int $maxSas;
     private int $minSas;
 
@@ -38,6 +39,7 @@ final class GetDecksQuery
         bool $onlyOwned = false,
         ?string $tagFilterType = null,
         array $tags = [],
+        array $tagsExcluded = [],
         $maxSas = 150,
         $minSas = 0,
     ) {
@@ -53,6 +55,7 @@ final class GetDecksQuery
             ->that($onlyOwned, 'onlyOwned')->boolean()
             ->that($tagFilterType, 'tagFilterType')->nullOr()->inArray(['all', 'any'])
             ->that($tags, 'tags')->all()->uuid()
+            ->that($tagsExcluded, 'tagsExcluded')->all()->uuid()
             ->that($maxSas, 'maxSas')->integerish()
             ->that($minSas, 'minSas')->integerish()
             ->verifyNow();
@@ -69,6 +72,7 @@ final class GetDecksQuery
         $this->onlyOwned = $onlyOwned;
         $this->tagFilterType = $tagFilterType;
         $this->tags = \array_map(static fn (string $id): Uuid => Uuid::from($id), $tags);
+        $this->tagsExcluded = \array_map(static fn (string $id): Uuid => Uuid::from($id), $tagsExcluded);
         $this->maxSas = (int) $maxSas;
         $this->minSas = (int) $minSas;
     }
@@ -131,6 +135,11 @@ final class GetDecksQuery
     public function tags(): array
     {
         return $this->tags;
+    }
+
+    public function tagsExcluded(): array
+    {
+        return $this->tagsExcluded;
     }
 
     public function maxSas(): int
