@@ -37,179 +37,22 @@
             <a href="https://archonarcana.com/Deck:{{ reference }}" target="_blank"><img class="img-thumbnail" width="50px" style="min-width: 40px" src="{{ asset('assets/keyforge/logos/wiki.jpg') }}" alt="Wiki"/></a>
             <a href="https://decksofkeyforge.com/decks/{{ reference }}" target="_blank"><img class="img-thumbnail" width="40px" style="min-width: 40px" src="{{ asset('assets/keyforge/logos/dok.svg') }}" alt="DoK"/></a>
             <a href="https://keyforgegame.com/deck-details/{{ reference }}" target="_blank"><img class="img-thumbnail" width="50px" style="min-width: 50px" src="{{ asset('assets/keyforge/logos/vault.png') }}" alt="Vault"/></a>
-
-{#            {% if (is_granted('ROLE_KEYFORGE')) and null == deck_owner %}#}
-{#                <div class="btn btn-sm btn-dark" id="claimDeckButton">Claim</div>#}
-{#            {% endif %}#}
         </div>
 
         <div class="divider py-1"></div>
         <div class="divider py-1"></div>
         <div class="divider py-1"></div>
 
-        <div class="" style="display: flex; overflow-x: auto">
-            <table id="gamesList" class="table table-responsive-sm table-hover" style="width:100%;">
-                <thead>
-                <tr>
-                    <th scope="col">Ganador</th>
-                    <th scope="col">Baraja ganadora</th>
-                    <th scope="col">Perdedor</th>
-                    <th scope="col">Baraja perdedora</th>
-                    <th scope="col">Score</th>
-                    <th scope="col">Primer turno</th>
-                    <th scope="col">Fecha</th>
-                    <th scope="col">Competition</th>
-                    <th scope="col">Notas</th>
-                </tr>
-                </thead>
-            </table>
-        </div>
+        {% if userId != null %}
+            {% set endpoint = '/keyforge/games/json?deckId=' ~ reference ~ '&userId=' ~ userId %}
+        {% else %}
+            {% set endpoint = '/keyforge/games/json?deckId=' ~ reference %}
+        {% endif %}
+
+        {% include 'Keyforge/Stats/Game/game_list.html.twig' with {
+            'endpoint': endpoint,
+            'reference': reference,
+            'reference_type': 'winner_deck',
+        } %}
     </div>
-
-    <script>
-        $(document).ready(function () {
-            $(window).on('resize', function() {
-                $('#gamesList.dataTable').resize;
-            });
-
-            {% if userId != null %}
-                let endpoint = '/keyforge/games/json?deckId={{ reference }}&userId={{ userId }}';
-            {% else %}
-                let endpoint = '/keyforge/games/json?deckId={{ reference }}';
-            {% endif %}
-
-            $('#gamesList').DataTable({
-                searching: false,
-                paging: true,
-                info: true,
-                responsive: true,
-                processing: true,
-                serverSide: true,
-                order: [[6, 'desc']],
-                lengthMenu: [10, 25, 50, 100],
-                iDisplayLength: 25,
-                ajax: endpoint,
-                createdRow: function(row, data, dataIndex) {
-                    let deck = '{{ reference }}';
-
-                    if (deck === data.winner_deck) {
-                        $(row).addClass('table-success');
-                    } else {
-                        $(row).addClass('table-danger');
-                    }
-                },
-                columns: [
-                    { data: "winner_name" },
-                    { data: "winner_deck_name" },
-                    { data: "loser_name" },
-                    { data: "loser_deck_name" },
-                    { data: "score" },
-                    { data: "first_turn" },
-                    { data: "date" },
-                    { data: "competition" },
-                    { data: "notes" },
-                ],
-                columnDefs: [
-                    {
-                        render: function (data, type, row) {
-                            return '<a href="/keyforge/games/user/' + row.winner + '">' + data + '</a>';
-                        },
-                        targets: 0, //Winner
-                    },
-                    {
-                        render: function (data, type, row) {
-                            let reference = '{{ reference }}';
-
-                            if (reference === row.winner_deck) {
-                                return data;
-                            } else {
-                                return '<a href="/keyforge/games/deck/' + row.winner_deck + '">' + data + '</a>';
-                            }
-                        },
-                        targets: 1, //Winner deck
-                    },
-                    {
-                        render: function (data, type, row) {
-                            return '<a href="/keyforge/games/user/' + row.loser + '">' + data + '</a>';
-                        },
-                        targets: 2, //Loser
-                    },
-                    {
-                        render: function (data, type, row) {
-                            let reference = '{{ reference }}';
-
-                            if (reference === row.loser_deck) {
-                                return data;
-                            } else {
-                                return '<a href="/keyforge/games/deck/' + row.loser_deck + '">' + data + '</a>';
-                            }
-                        },
-                        targets: 3, //Loser deck
-                    },
-                    {
-                        render: function (data, type, row) {
-                            if ('' === row.notes) {
-                                return '-';
-                            }
-
-                            $(function () {
-                                $('[data-toggle="tooltip"]').tooltip({
-                                    'container': 'body',
-                                    'placement': 'top'
-                                })
-                            })
-
-                            return '<i class="bi bi-info-circle" data-toggle="tooltip" title="' + row.notes + '"></i>';
-                        },
-                        targets: 8, //Notes
-                    },
-                    {
-                        targets: [0, 1, 2, 3, 4, 5, 6, 7, 8],
-                        searchable: false,
-                        visible: true,
-                    },
-                    {
-                        targets: [0, 1, 2, 3, 4, 5, 7, 8],
-                        orderable: false,
-                    },
-                    {
-                        targets: [6],
-                        orderable: true,
-                    },
-                    { width: 150, targets: 0 },
-                    { width: 300, targets: 1 },
-                    { width: 150, targets: 2 },
-                    { width: 300, targets: 3 },
-                    { width: 100, targets: 6 },
-                    { width: 250, targets: 7 },
-                ],
-            });
-
-            $('#claimDeckButton').click(function () {
-                $.ajax({
-                    url: '/keyforge/deck/claim',
-                    type: "post",
-                    data: {
-                        deckId: '{{ reference }}',
-                    },
-                    success: function (response) {
-                        $('#claimDeckButton').hide();
-
-                        let alert = $('#result');
-                        alert.removeClass('alert-success');
-                        alert.removeClass('alert-danger');
-                        alert.addClass('alert-success').text('Es tuya mostro, que la disfrutes').show();
-                        alert.delay(3000).fadeOut('slow');
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        let alert = $('#result');
-                        alert.removeClass('alert-success');
-                        alert.removeClass('alert-danger');
-                        alert.addClass('alert-danger').text('Algo fue mal, que lo revise nan supongo...').show();
-                        alert.delay(3000).fadeOut('slow');
-                    }
-                });
-            });
-        });
-    </script>
 {% endblock %}

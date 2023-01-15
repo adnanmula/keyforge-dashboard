@@ -1,0 +1,132 @@
+<div class="" style="display: flex; overflow-x: auto">
+    <table id="gamesList" class="table table-responsive-sm table-hover" style="width:100%;">
+        <thead>
+        <tr>
+            <th scope="col">Ganador</th>
+            <th scope="col">Baraja ganadora</th>
+            <th scope="col">Perdedor</th>
+            <th scope="col">Baraja perdedora</th>
+            <th scope="col">Score</th>
+            <th scope="col">Primer turno</th>
+            <th scope="col">Fecha</th>
+            <th scope="col">Competition</th>
+            <th scope="col">Notas</th>
+        </tr>
+        </thead>
+    </table>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $(window).on('resize', function() {
+            $('#gamesList.dataTable').resize;
+        });
+
+        $('#gamesList').DataTable({
+            searching: false,
+            paging: true,
+            info: true,
+            responsive: true,
+            processing: true,
+            serverSide: true,
+            order: [[6, 'desc']],
+            lengthMenu: [10, 25, 50, 100],
+            iDisplayLength: 25,
+            ajax: '{{ endpoint }}',
+            createdRow: function(row, data, dataIndex) {
+                let deck = '{{ reference }}';
+
+                if (deck === data.{{ reference_type }}) {
+                    $(row).addClass('table-success');
+                } else {
+                    $(row).addClass('table-danger');
+                }
+            },
+            columns: [
+                { data: "winner_name" },
+                { data: "winner_deck_name" },
+                { data: "loser_name" },
+                { data: "loser_deck_name" },
+                { data: "score" },
+                { data: "first_turn" },
+                { data: "date" },
+                { data: "competition" },
+                { data: "notes" },
+            ],
+            columnDefs: [
+                {
+                    render: function (data, type, row) {
+                        return '<a href="/keyforge/games/user/' + row.winner + '">' + data + '</a>';
+                    },
+                    targets: 0, //Winner
+                },
+                {
+                    render: function (data, type, row) {
+                        let reference = '{{ reference }}';
+
+                        if (reference === row.winner_deck) {
+                            return data;
+                        } else {
+                            return '<a href="/keyforge/games/deck/' + row.winner_deck + '">' + data + '</a>';
+                        }
+                    },
+                    targets: 1, //Winner deck
+                },
+                {
+                    render: function (data, type, row) {
+                        return '<a href="/keyforge/games/user/' + row.loser + '">' + data + '</a>';
+                    },
+                    targets: 2, //Loser
+                },
+                {
+                    render: function (data, type, row) {
+                        let reference = '{{ reference }}';
+
+                        if (reference === row.loser_deck) {
+                            return data;
+                        } else {
+                            return '<a href="/keyforge/games/deck/' + row.loser_deck + '">' + data + '</a>';
+                        }
+                    },
+                    targets: 3, //Loser deck
+                },
+                {
+                    render: function (data, type, row) {
+                        if ('' === row.notes) {
+                            return '-';
+                        }
+
+                        $(function () {
+                            $('[data-toggle="tooltip"]').tooltip({
+                                'container': 'body',
+                                'placement': 'top'
+                            })
+                        })
+
+                        return '<i class="bi bi-info-circle" data-toggle="tooltip" title="' + row.notes + '"></i>';
+                    },
+                    targets: 8, //Notes
+                },
+                {
+                    targets: [0, 1, 2, 3, 4, 5, 6, 7, 8],
+                    searchable: false,
+                    visible: true,
+                },
+                {
+                    targets: [0, 1, 2, 3, 4, 5, 7, 8],
+                    orderable: false,
+                },
+                {
+                    targets: [6],
+                    orderable: true,
+                },
+                { width: 150, targets: 0 },
+                { width: 300, targets: 1 },
+                { width: 150, targets: 2 },
+                { width: 300, targets: 3 },
+                { width: 100, targets: 6 },
+                { width: 250, targets: 7 },
+            ],
+        });
+    });
+</script>

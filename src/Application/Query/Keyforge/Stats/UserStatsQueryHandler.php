@@ -320,15 +320,20 @@ final class UserStatsQueryHandler
         }
 
         $username = '';
+        $userIsExternal = false;
 
         foreach ($users as $user) {
             if ($query->userId()->equalTo($user->id())) {
                 $username = $user->name();
+                $userIsExternal = $user->external();
+
+                break;
             }
         }
 
         return [
             'username' => $username,
+            'user_is_external' => $userIsExternal,
             'win_rate_vs_users' => $resultWinRateByUser,
             'pick_rate_vs_users' => $resultPickRateByUser,
             'wins_by_date' => $resultWinsByDate,

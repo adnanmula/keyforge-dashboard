@@ -1,6 +1,6 @@
 {% extends "Keyforge/Shared/keyforge_base.html.twig" %}
 
-{% block title %}Games{% endblock %}
+{% block title %}Partidas{% endblock %}
 
 {% block body %}
     <div class="shadow-lg p-3 mb-5 bg-white rounded">
@@ -8,17 +8,20 @@
 
         <div class="row">
             <div class="col-10 d-flex justify-content-start">
-                <h3>Games of {{ name }}</h3>
+                <h3>Partidas de {{ name }}</h3>
             </div>
 
-            <div class="col-2 d-flex justify-content-end">
-                <a class="btn btn-dark" data-bs-toggle="collapse" href="#userStats" role="button" aria-expanded="false" aria-controls="collapseExample">Show/Hide stats</a>
-            </div>
+            {% if user_is_external == false %}
+                <div class="col-2 d-flex justify-content-end">
+                    <a class="btn btn-dark" data-bs-toggle="collapse" href="#userStats" role="button" aria-expanded="false" aria-controls="collapseExample">Mostrar/Ocultar estadísticas</a>
+                </div>
+            {% endif %}
         </div>
 
         <div class="divider py-2"></div>
 
-        <div class="collapse" id="userStats">
+        {% if user_is_external == false %}
+            <div class="collapse" id="userStats">
             <div class="row mt-3">
                 <div class="col-12 col-sm-12 col-md-4 col-lg-4">
                     <canvas id="winRateVsUsers" width="200" height="210"></canvas>
@@ -49,6 +52,7 @@
                 </div>
             </div>
         </div>
+        {% endif %}
 
         <div class="divider py-2"></div>
         <div class="divider py-2"></div>
@@ -114,25 +118,22 @@
         <div class="divider py-2"></div>
         <div class="divider py-2"></div>
 
-        <div class="" style="display: flex; overflow-x: auto">
-            <table id="gamesList" class="table table-responsive-sm table-hover" style="width:100%;">
-                <thead>
-                <tr>
-                    <th scope="col">Ganador</th>
-                    <th scope="col">Baraja ganadora</th>
-                    <th scope="col">Perdedor</th>
-                    <th scope="col">Baraja perdedora</th>
-                    <th scope="col">Score</th>
-                    <th scope="col">Primer turno</th>
-                    <th scope="col">Fecha</th>
-                    <th scope="col">Competition</th>
-                    <th scope="col">Notas</th>
-                </tr>
-                </thead>
-            </table>
-        </div>
+        {% if userId != null %}
+            {% set endpoint = '/keyforge/games/json?deckId=' ~ reference ~ '&userId=' ~ userId %}
+        {% else %}
+            {% set endpoint = '/keyforge/games/json?deckId=' ~ reference %}
+        {% endif %}
+
+        {% include 'Keyforge/Stats/Game/game_list.html.twig' with {
+            'endpoint': '/keyforge/games/json?userId=' ~ reference,
+            'reference': reference,
+            'reference_type': 'winner',
+        } %}
     </div>
+
     <script>
+        {% if user_is_external == false %}
+
         let winRateVsUsers = JSON.parse('{{ win_rate_vs_users|json_encode|raw }}');
         let pickRateVsUsers = JSON.parse('{{ pick_rate_vs_users|json_encode|raw }}');
         let winsByDate = JSON.parse('{{ wins_by_date|json_encode|raw }}');
@@ -430,117 +431,6 @@
             },
         });
 
-        $(document).ready(function () {
-            $(window).on('resize', function() {
-                $('#gamesList.dataTable').resize;
-            });
-
-            $('#gamesList').DataTable({
-                searching: false,
-                paging: true,
-                info: true,
-                responsive: true,
-                processing: true,
-                serverSide: true,
-                order: [[6, 'desc']],
-                lengthMenu: [10, 25, 50, 100],
-                iDisplayLength: 25,
-                ajax: '/keyforge/games/json?userId={{ reference }}',
-                createdRow: function(row, data, dataIndex) {
-                    let winner = '{{ reference }}';
-
-                    if (winner === data.winner) {
-                        $(row).addClass('table-success');
-                    } else {
-                        $(row).addClass('table-danger');
-                    }
-                },
-                columns: [
-                    { data: "winner_name" },
-                    { data: "winner_deck_name" },
-                    { data: "loser_name" },
-                    { data: "loser_deck_name" },
-                    { data: "score" },
-                    { data: "first_turn" },
-                    { data: "date" },
-                    { data: "competition" },
-                    { data: "notes" },
-                ],
-                columnDefs: [
-                    {
-                        render: function (data, type, row) {
-                            return '<a href="/keyforge/games/user/' + row.winner + '">' + data + '</a>';
-                        },
-                        targets: 0, //Winner
-                    },
-                    {
-                        render: function (data, type, row) {
-                            let reference = '{{ reference }}';
-
-                            if (reference === row.winner_deck) {
-                                return data;
-                            } else {
-                                return '<a href="/keyforge/games/deck/' + row.winner_deck + '">' + data + '</a>';
-                            }
-                        },
-                        targets: 1, //Winner deck
-                    },
-                    {
-                        render: function (data, type, row) {
-                            return '<a href="/keyforge/games/user/' + row.loser + '">' + data + '</a>';
-                        },
-                        targets: 2, //Loser
-                    },
-                    {
-                        render: function (data, type, row) {
-                            let reference = '{{ reference }}';
-
-                            if (reference === row.loser_deck) {
-                                return data;
-                            } else {
-                                return '<a href="/keyforge/games/deck/' + row.loser_deck + '">' + data + '</a>';
-                            }
-                        },
-                        targets: 3, //Loser deck
-                    },
-                    {
-                        render: function (data, type, row) {
-                            if ('' === row.notes) {
-                                return '-';
-                            }
-
-                            $(function () {
-                                $('[data-toggle="tooltip"]').tooltip({
-                                    'container': 'body',
-                                    'placement': 'top'
-                                })
-                            })
-
-                            return '<i class="bi bi-info-circle" data-toggle="tooltip" title="' + row.notes + '"></i>';
-                        },
-                        targets: 8, //Notes
-                    },
-                    {
-                        targets: [0, 1, 2, 3, 4, 5, 6, 7 ,8],
-                        searchable: false,
-                        visible: true,
-                    },
-                    {
-                        targets: [0, 1, 2, 3, 4, 5, 7, 8],
-                        orderable: false,
-                    },
-                    {
-                        targets: [6],
-                        orderable: true,
-                    },
-                    { width: 150, targets: 0 },
-                    { width: 300, targets: 1 },
-                    { width: 150, targets: 2 },
-                    { width: 300, targets: 3 },
-                    { width: 100, targets: 6 },
-                    { width: 250, targets: 7 },
-                ],
-            });
-        });
+        {% endif %}
     </script>
 {% endblock %}

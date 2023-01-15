@@ -97,7 +97,7 @@ final class FixturesGeneratorService
         $position = $lastFixture->position() + 1;
 
         $referenceParts = \explode(' ', \trim($lastFixture->reference()));
-        $reference = ((int) \end($referenceParts)) + 1;
+        $reference = (int) \end($referenceParts) + 1;
 
         $secondHalfFixtures = [];
         $count = 0;
