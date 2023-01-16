@@ -22,6 +22,7 @@ enum CompetitionType implements \JsonSerializable
             self::ELIMINATION->name => self::ELIMINATION,
             self::ROUND_ROBIN_1_ELIMINATION->name => self::ROUND_ROBIN_1_ELIMINATION,
             self::ROUND_ROBIN_2_ELIMINATION->name => self::ROUND_ROBIN_2_ELIMINATION,
+            default => self::ROUND_ROBIN_1,
         };
     }
 

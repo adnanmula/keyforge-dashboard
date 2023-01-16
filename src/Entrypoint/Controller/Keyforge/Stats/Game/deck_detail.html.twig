@@ -1,0 +1,99 @@
+
+
+
+<div class="row" style="background-color: aquamarine">
+    <div class="col-9">
+        <h2>{{ deck.name }}</h2>
+    </div>
+    <div class="col-2">
+        <h2>{{ deck.sas }}</h2>
+    </div>
+    <div class="col-1">
+        <h2>{{ deck.set }}</h2>
+    </div>
+</div>
+
+<div class="row" style="background-color: antiquewhite">
+    <div class="col-9">
+        <div class="row">
+            <div class="col-4">
+                <h4>{{ deck.houses.0 }}</h4>
+                {% for card in deck.extraData.deck.housesAndCards.0.cards %}
+                    <h6>{{ card.cardTitle }}</h6>
+                {% endfor %}
+            </div>
+
+            <div class="col-4">
+                <h4>{{ deck.houses.1 }}</h4>
+                {% for card in deck.extraData.deck.housesAndCards.1.cards %}
+                    <h6>{{ card.cardTitle }}</h6>
+                {% endfor %}
+            </div>
+
+            <div class="col-4">
+                <h4>{{ deck.houses.2 }}</h4>
+                {% for card in deck.extraData.deck.housesAndCards.2.cards %}
+                    <h6>{{ card.cardTitle }}</h6>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-3" style="background-color: grey">
+        <div class="row">
+            <div class="col-6">
+                {{ deck.data.amberControl }}
+                <img src="{{ asset('assets/keyforge/logos/amber_control.svg') }}" alt="Amber control" style="font-size: 2em"/>
+            </div>
+            <div class="col-6">
+                {{ deck.data.artifactControl }}
+                <img src="{{ asset('assets/keyforge/logos/artifact_control.svg') }}" alt="Artifact control"/>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-6">
+                {{ deck.data.expectedAmber }}
+                <img src="{{ asset('assets/keyforge/logos/expected_amber.svg') }}" alt="Expected amber"/>
+            </div>
+            <div class="col-6">
+                {{ deck.data.creatureControl }}
+                <img src="{{ asset('assets/keyforge/logos/creature_control.svg') }}" alt="Creature control"/>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-6">
+                {{ deck.data.efficiency }}
+                <img src="{{ asset('assets/keyforge/logos/efficiency.svg') }}" alt="Efficiency"/>
+            </div>
+            <div class="col-6">
+                {{ deck.data.effectivePower }}
+                <img src="{{ asset('assets/keyforge/logos/power.svg') }}" alt="Effective power"/>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-6">
+                {{ deck.data.recursion }}
+                <img src="{{ asset('assets/keyforge/logos/recursion.svg') }}" alt="Recursion"/>
+            </div>
+            <div class="col-6">
+                {{ deck.data.creatureProtection }}
+                <img src="{{ asset('assets/keyforge/logos/creature_protection.svg') }}" alt="Creature protection"/>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-6">
+                {{ deck.data.disruption }}
+                <img src="{{ asset('assets/keyforge/logos/disruption.svg') }}" alt="Disruption"/>
+            </div>
+            <div class="col-6">
+                {{ deck.data.other }}
+                <img src="{{ asset('assets/keyforge/logos/other.svg') }}" alt="Other"/>
+            </div>
+        </div>
+    </div>
+</div>

@@ -5,7 +5,7 @@ namespace AdnanMula\Cards\Domain\Model\Shared\ValueObject;
 class StringValueObject implements \JsonSerializable
 {
     final protected function __construct(
-        private string $value,
+        private readonly string $value,
     ) {}
 
     public function value(): string

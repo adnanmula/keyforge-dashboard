@@ -2,7 +2,7 @@
 
 namespace AdnanMula\Cards\Domain\Model\Keyforge\ValueObject;
 
-final class KeyforgeDeckHouses
+final class KeyforgeDeckHouses implements \JsonSerializable
 {
     private array $value;
 
@@ -35,5 +35,10 @@ final class KeyforgeDeckHouses
                 throw new \InvalidArgumentException('Invalid house configuration');
             }
         }
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [$this->value[0]->name, $this->value[1]->name, $this->value[2]->name];
     }
 }

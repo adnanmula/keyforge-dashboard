@@ -16,7 +16,7 @@ enum KeyforgeHouse: string implements \JsonSerializable
     case UNFATHOMABLE = 'UNFATHOMABLE';
     case EKWIDON = 'EKWIDON';
 
-    public static function fromDokName(string $house): static
+    public static function fromDokName(string $house): self
     {
         $houses = \array_map(static fn (KeyforgeHouse $case) => $case->name, self::cases());
 
@@ -48,7 +48,7 @@ enum KeyforgeHouse: string implements \JsonSerializable
         };
     }
 
-    public function jsonSerialize(): mixed
+    public function jsonSerialize(): string
     {
         return $this->name;
     }

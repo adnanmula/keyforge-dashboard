@@ -19,10 +19,12 @@ final class ListGamesByDeckController extends Controller
 
         $deckName = null;
         $deckOwner = null;
+        $deckSerialized = null;
 
         if (\count($deck['decks']) > 0) {
             $deckName = $deck['decks'][0]->name();
             $deckOwner = $deck['decks'][0]->owner()?->value();
+            $deckSerialized = $deck['decks'][0]->jsonSerialize();
         }
 
         return $this->render(
@@ -32,6 +34,7 @@ final class ListGamesByDeckController extends Controller
                 'userId' => $userId,
                 'deck_name' => $deckName,
                 'deck_owner' => $deckOwner,
+                'deck' => $deckSerialized,
             ],
         );
     }

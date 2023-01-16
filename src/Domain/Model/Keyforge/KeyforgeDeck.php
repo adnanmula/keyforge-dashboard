@@ -2,12 +2,15 @@
 
 namespace AdnanMula\Cards\Domain\Model\Keyforge;
 
+use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeDeckData;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeDeckHouses;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeSet;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 
 final class KeyforgeDeck implements \JsonSerializable
 {
+    private KeyforgeDeckData $data;
+
     public function __construct(
         private Uuid $id,
         private string $name,
@@ -20,7 +23,9 @@ final class KeyforgeDeck implements \JsonSerializable
         private ?Uuid $owner,
         private string $notes,
         private array $tags = [],
-    ) {}
+    ) {
+        $this->data = KeyforgeDeckData::fromDokData($extraData);
+    }
 
     public function id(): Uuid
     {
@@ -55,6 +60,11 @@ final class KeyforgeDeck implements \JsonSerializable
     public function losses(): int
     {
         return $this->losses;
+    }
+
+    private function data(): KeyforgeDeckData
+    {
+        return $this->data;
     }
 
     public function extraData(): array
@@ -118,10 +128,11 @@ final class KeyforgeDeck implements \JsonSerializable
             'id' => $this->id()->value(),
             'name' => $this->name(),
             'set' => $this->set()->value,
-            'houses' => $this->houses()->value(),
+            'houses' => $this->houses()->jsonSerialize(),
             'sas' => $this->sas(),
             'wins' => $this->wins(),
             'losses' => $this->losses(),
+            'data' => $this->data()->jsonSerialize(),
             'extraData' => $this->extraData(),
             'owner' => $this->owner()?->value(),
             'tags' => $this->tags(),
