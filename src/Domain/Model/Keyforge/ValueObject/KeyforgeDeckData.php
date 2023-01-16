@@ -15,6 +15,7 @@ final class KeyforgeDeckData implements \JsonSerializable
         public float $effectivePower,
         public float $creatureProtection,
         public float $other,
+        public KeyforgeCards $cards,
     ) {}
 
     public static function fromDokData(array $data): self
@@ -30,6 +31,7 @@ final class KeyforgeDeckData implements \JsonSerializable
             $data['deck']['effectivePower'] ?? 0,
             $data['deck']['creatureProtection'] ?? 0,
             $data['deck']['other'] ?? 0,
+            KeyforgeCards::fromDokData($data),
         );
     }
 
@@ -46,6 +48,7 @@ final class KeyforgeDeckData implements \JsonSerializable
             'effectivePower' => \round($this->effectivePower, 2),
             'creatureProtection' => \round($this->creatureProtection, 2),
             'other' => \round($this->other, 2),
+            'cards' => $this->cards->jsonSerialize(),
         ];
     }
 }

@@ -1,98 +1,204 @@
+{% block header %}
+    <style>
+        .img_stat {
+            width: 60px;
+            height: 60px;
+        }
+    </style>
+{% endblock %}
 
-
-
-<div class="row" style="background-color: aquamarine">
-    <div class="col-9">
+<div class="row" style="background-color: #bfa3f5">
+    <div class="col-12 col-md-9">
         <h2>{{ deck.name }}</h2>
     </div>
-    <div class="col-2">
+    <div class="col-6 col-md-2">
         <h2>{{ deck.sas }}</h2>
     </div>
-    <div class="col-1">
-        <h2>{{ deck.set }}</h2>
+    <div class="col-6 col-md-1">
+        <img width="33px" src="/assets/keyforge/sets/{{ deck.set }}.svg" alt="{{ deck.set }}"/>
     </div>
 </div>
 
-<div class="row" style="background-color: antiquewhite">
+<div class="row" style="background-color: aliceblue">
     <div class="col-9">
         <div class="row">
-            <div class="col-4">
-                <h4>{{ deck.houses.0 }}</h4>
-                {% for card in deck.extraData.deck.housesAndCards.0.cards %}
-                    <h6>{{ card.cardTitle }}</h6>
+            <div class="col-12 col-lg-4">
+                <img width="33px" src="/assets/keyforge/houses/{{ deck.houses.0 }}.png" alt="{{ deck.houses.0 }}"/> <span style="font-size: 1.2em;">{{ deck.houses.0 }}</span>
+                {% for card in deck.data.cards.firstPodCards %}
+                    <div class="row">
+                        <div class="col-2">
+                            <img src="/assets/keyforge/rarities/{{ card.rarity }}.png" alt="{{ card.rarity }}" class="img-fluid" style="width: 75%"/>
+                        </div>
+                        <div class="col-10">
+                            <span style="font-size: 1.2em;" data-toggle="tooltip" title="{{ '<img src="https://keyforge-card-images.s3-us-west-2.amazonaws.com/card-imgs/' ~ card.serializedName ~ '.png">' }}">{{ card.name }}</span>
+                        </div>
+                    </div>
                 {% endfor %}
             </div>
 
-            <div class="col-4">
-                <h4>{{ deck.houses.1 }}</h4>
-                {% for card in deck.extraData.deck.housesAndCards.1.cards %}
-                    <h6>{{ card.cardTitle }}</h6>
+            <div class="col-12 col-lg-4">
+                <img width="33px" src="/assets/keyforge/houses/{{ deck.houses.1 }}.png" alt="{{ deck.houses.1 }}"/> <span style="font-size: 1.2em;">{{ deck.houses.1 }}</span>
+                {% for card in deck.data.cards.secondPodCards %}
+                    <div class="row">
+                        <div class="col-2">
+                            <img src="/assets/keyforge/rarities/{{ card.rarity }}.png" alt="{{ card.rarity }}" class="img-fluid" style="width: 75%"/>
+                        </div>
+                        <div class="col-10">
+                            <span style="font-size: 1.2em;" data-toggle="tooltip" title="{{ '<img src="https://keyforge-card-images.s3-us-west-2.amazonaws.com/card-imgs/' ~ card.serializedName ~ '.png">' }}">{{ card.name }}</span>
+                        </div>
+                    </div>
                 {% endfor %}
             </div>
 
-            <div class="col-4">
-                <h4>{{ deck.houses.2 }}</h4>
-                {% for card in deck.extraData.deck.housesAndCards.2.cards %}
-                    <h6>{{ card.cardTitle }}</h6>
+            <div class="col-12 col-lg-4">
+                <img width="33px" src="/assets/keyforge/houses/{{ deck.houses.2 }}.png" alt="{{ deck.houses.2 }}"/> <span style="font-size: 1.2em;">{{ deck.houses.2 }}</span>
+                {% for card in deck.data.cards.thirdPodCards %}
+                    <div class="row">
+                        <div class="col-2">
+                            <img src="/assets/keyforge/rarities/{{ card.rarity }}.png" alt="{{ card.rarity }}" class="img-fluid" style="width: 75%"/>
+                        </div>
+                        <div class="col-10">
+                            <span style="font-size: 1.2em;" data-toggle="tooltip" title="{{ '<img src="https://keyforge-card-images.s3-us-west-2.amazonaws.com/card-imgs/' ~ card.serializedName ~ '.png">' }}">{{ card.name }}</span>
+                        </div>
+                    </div>
                 {% endfor %}
             </div>
         </div>
     </div>
 
-
-    <div class="col-3" style="background-color: grey">
+    <div class="col-3" style="background-color: lightgray">
         <div class="row">
-            <div class="col-6">
-                {{ deck.data.amberControl }}
-                <img src="{{ asset('assets/keyforge/logos/amber_control.svg') }}" alt="Amber control" style="font-size: 2em"/>
+            <div class="col-12 col-lg-6">
+                <div data-toggle="tooltip" title="Control de ambar">
+                    <div class="row" style="display: flex; align-items: center; margin-right: 2px; margin-left: 0px;">
+                        <div class="col-7" style="font-size: 1.6em">
+                            {{ deck.data.amberControl }}
+                        </div>
+                        <div class="col-2">
+                            <img src="{{ asset('assets/keyforge/logos/amber_control.svg') }}" alt="Amber control" class="img_stat"/>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="col-6">
-                {{ deck.data.artifactControl }}
-                <img src="{{ asset('assets/keyforge/logos/artifact_control.svg') }}" alt="Artifact control"/>
+            <div class="col-12 col-lg-6">
+                <div data-toggle="tooltip" title="Control de artefactos">
+                    <div class="row" style="display: flex; align-items: center; margin-right: 12px; margin-left: 0px;">
+                        <div class="col-7" style="font-size: 1.6em">
+                            {{ deck.data.artifactControl }}
+                        </div>
+                        <div class="col-2">
+                            <img src="{{ asset('assets/keyforge/logos/artifact_control.svg') }}" alt="Artifact control" class="img_stat"/>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
         <div class="row">
-            <div class="col-6">
-                {{ deck.data.expectedAmber }}
-                <img src="{{ asset('assets/keyforge/logos/expected_amber.svg') }}" alt="Expected amber"/>
+            <div class="col-12 col-lg-6">
+                <div data-toggle="tooltip" title="Ambar esperado">
+                    <div class="row" style="display: flex; align-items: center; margin-right: 2px; margin-left: 0px;">
+                        <div class="col-7" style="font-size: 1.6em">
+                            {{ deck.data.expectedAmber }}
+                        </div>
+                        <div class="col-2">
+                            <img src="{{ asset('assets/keyforge/logos/expected_amber.svg') }}" alt="Expected amber" class="img_stat"/>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="col-6">
-                {{ deck.data.creatureControl }}
-                <img src="{{ asset('assets/keyforge/logos/creature_control.svg') }}" alt="Creature control"/>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-6">
-                {{ deck.data.efficiency }}
-                <img src="{{ asset('assets/keyforge/logos/efficiency.svg') }}" alt="Efficiency"/>
-            </div>
-            <div class="col-6">
-                {{ deck.data.effectivePower }}
-                <img src="{{ asset('assets/keyforge/logos/power.svg') }}" alt="Effective power"/>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-6">
-                {{ deck.data.recursion }}
-                <img src="{{ asset('assets/keyforge/logos/recursion.svg') }}" alt="Recursion"/>
-            </div>
-            <div class="col-6">
-                {{ deck.data.creatureProtection }}
-                <img src="{{ asset('assets/keyforge/logos/creature_protection.svg') }}" alt="Creature protection"/>
+            <div class="col-12 col-lg-6">
+                <div data-toggle="tooltip" title="Control de criaturas">
+                    <div class="row" style="display: flex; align-items: center; margin-right: 12px; margin-left: 0px;">
+                        <div class="col-7" style="font-size: 1.6em">
+                            {{ deck.data.creatureControl }}
+                        </div>
+                        <div class="col-2">
+                            <img src="{{ asset('assets/keyforge/logos/creature_control.svg') }}" alt="Creature control" class="img_stat"/>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
         <div class="row">
-            <div class="col-6">
-                {{ deck.data.disruption }}
-                <img src="{{ asset('assets/keyforge/logos/disruption.svg') }}" alt="Disruption"/>
+            <div class="col-12 col-lg-6">
+                <div data-toggle="tooltip" title="Eficiencia">
+                    <div class="row" style="display: flex; align-items: center; margin-right: 2px; margin-left: 0px;">
+                        <div class="col-7" style="font-size: 1.6em">
+                            {{ deck.data.efficiency }}
+                        </div>
+                        <div class="col-2">
+                            <img src="{{ asset('assets/keyforge/logos/efficiency.svg') }}" alt="Efficiency" class="img_stat"/>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="col-6">
-                {{ deck.data.other }}
-                <img src="{{ asset('assets/keyforge/logos/other.svg') }}" alt="Other"/>
+            <div class="col-12 col-lg-6">
+                <div data-toggle="tooltip" title="Poder efectivo">
+                    <div class="row" style="display: flex; align-items: center; margin-right: 20px; margin-left: 0px;">
+                        <div class="col-7" style="font-size: 1.6em">
+                            {{ deck.data.effectivePower }}
+                        </div>
+                        <div class="col-2">
+                            <img src="{{ asset('assets/keyforge/logos/power.svg') }}" alt="Effective power" class="img_stat"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-lg-6">
+                <div data-toggle="tooltip" title="Recursión">
+                    <div class="row" style="display: flex; align-items: center; margin-right: 2px; margin-left: 0px;">
+                        <div class="col-7" style="font-size: 1.6em">
+                            {{ deck.data.recursion }}
+                        </div>
+                        <div class="col-2">
+                            <img src="{{ asset('assets/keyforge/logos/recursion.svg') }}" alt="Recursion" class="img_stat"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-6">
+                <div data-toggle="tooltip" title="Protección de criaturas">
+                    <div class="row" style="display: flex; align-items: center; margin-right: 12px; margin-left: 0px;">
+                        <div class="col-7" style="font-size: 1.6em">
+                            {{ deck.data.creatureProtection }}
+                        </div>
+                        <div class="col-2">
+                            <img src="{{ asset('assets/keyforge/logos/creature_protection.svg') }}" alt="Creature protection" class="img_stat"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-lg-6">
+                <div data-toggle="tooltip" title="Disrupción">
+                    <div class="row" style="display: flex; align-items: center; margin-right: 2px; margin-left: 0px;">
+                        <div class="col-7" style="font-size: 1.6em">
+                            {{ deck.data.disruption }}
+                        </div>
+                        <div class="col-2">
+                            <img src="{{ asset('assets/keyforge/logos/disruption.svg') }}" alt="Disruption" class="img_stat"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-6">
+                <div data-toggle="tooltip" title="Otros">
+                    <div class="row" style="display: flex; align-items: center; margin-right: 12px; margin-left: 0px;">
+                        <div class="col-7" style="font-size: 1.6em">
+                            {{ deck.data.other }}
+                        </div>
+                        <div class="col-2">
+                            <img src="{{ asset('assets/keyforge/logos/other.svg') }}" alt="Other" class="img_stat"/>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

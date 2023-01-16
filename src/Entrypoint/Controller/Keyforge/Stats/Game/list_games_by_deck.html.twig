@@ -2,48 +2,34 @@
 
 {% block title %}Games{% endblock %}
 
+{% block header %}
+    <style>
+        .tooltip.show {
+            opacity: 1;
+        }
+    </style>
+{% endblock %}
+
 {% block body %}
     <script>
         $(function () {
             $('[data-toggle="tooltip"]').tooltip({
                 'container': 'body',
-                'placement': 'right'
+                'placement': 'right',
+                'html': true,
+                'animation': false,
             });
         })
     </script>
 
     <div class="shadow-lg p-3 mb-5 bg-white rounded">
-        <div class="d-flex flex-row">
-            {% if userId is defined and userId is not null %}
-                <h4>Your games with {{ deck_name }}
-                    {% if (null != deck_owner) %}
-                        <i class="bi bi-info-circle" data-toggle="tooltip" title="Owner {{ deck_owner }}"></i>
-                    {% endif %}
-                </h4>
-            {% else %}
-                <h4>Games of {{ deck_name }}
-                    {% if (null != deck_owner) %}
-                        <i class="bi bi-info-circle" data-toggle="tooltip" title="Owner {{ deck_owner }}"></i>
-                    {% endif %}
-                </h4>
-            {% endif %}
-        </div>
-
-        <div class="alert" id="result" style="display: none"></div>
-
-        <div class="divider py-1"></div>
+        {% include 'Keyforge/Stats/Game/deck_detail.html.twig' %}
 
         <div class="d-flex flex-row-reverse">
             <a href="https://archonarcana.com/Deck:{{ reference }}" target="_blank"><img class="img-thumbnail" width="50px" style="min-width: 40px" src="{{ asset('assets/keyforge/logos/wiki.jpg') }}" alt="Wiki"/></a>
             <a href="https://decksofkeyforge.com/decks/{{ reference }}" target="_blank"><img class="img-thumbnail" width="40px" style="min-width: 40px" src="{{ asset('assets/keyforge/logos/dok.svg') }}" alt="DoK"/></a>
             <a href="https://keyforgegame.com/deck-details/{{ reference }}" target="_blank"><img class="img-thumbnail" width="50px" style="min-width: 50px" src="{{ asset('assets/keyforge/logos/vault.png') }}" alt="Vault"/></a>
         </div>
-
-        {% include 'Keyforge/Stats/Game/deck_detail.html.twig' %}
-
-        <div class="divider py-1"></div>
-        <div class="divider py-1"></div>
-        <div class="divider py-1"></div>
 
         {% if userId != null %}
             {% set endpoint = '/keyforge/games/json?deckId=' ~ reference ~ '&userId=' ~ userId %}
