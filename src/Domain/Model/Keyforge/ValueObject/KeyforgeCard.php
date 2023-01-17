@@ -16,11 +16,10 @@ final readonly class KeyforgeCard implements \JsonSerializable
 
     public static function fromDokData(array $data): self
     {
-        $serializedName = \preg_replace(
-            '/[^A-Za-z0-9\-]/',
-            '',
-            \str_replace(' ', '-', \strtolower($data['cardTitle'])),
-        );
+        $serializedName = \strtolower($data['cardTitle']);
+        $serializedName = \str_replace('-', '', $serializedName);
+        $serializedName = \str_replace(' ', '-', $serializedName);
+        $serializedName = \preg_replace('/[^A-Za-z0-9\-]/', '', $serializedName);
 
         return new self(
             $data['cardTitle'],

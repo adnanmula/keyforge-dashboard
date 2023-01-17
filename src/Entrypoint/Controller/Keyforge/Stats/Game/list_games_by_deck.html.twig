@@ -2,14 +2,6 @@
 
 {% block title %}Games{% endblock %}
 
-{% block header %}
-    <style>
-        .tooltip.show {
-            opacity: 1;
-        }
-    </style>
-{% endblock %}
-
 {% block body %}
     <script>
         $(function () {
@@ -22,15 +14,9 @@
         })
     </script>
 
+    {% include 'Keyforge/Stats/Game/deck_detail.html.twig' %}
+
     <div class="shadow-lg p-3 mb-5 bg-white rounded">
-        {% include 'Keyforge/Stats/Game/deck_detail.html.twig' %}
-
-        <div class="d-flex flex-row-reverse">
-            <a href="https://archonarcana.com/Deck:{{ reference }}" target="_blank"><img class="img-thumbnail" width="50px" style="min-width: 40px" src="{{ asset('assets/keyforge/logos/wiki.jpg') }}" alt="Wiki"/></a>
-            <a href="https://decksofkeyforge.com/decks/{{ reference }}" target="_blank"><img class="img-thumbnail" width="40px" style="min-width: 40px" src="{{ asset('assets/keyforge/logos/dok.svg') }}" alt="DoK"/></a>
-            <a href="https://keyforgegame.com/deck-details/{{ reference }}" target="_blank"><img class="img-thumbnail" width="50px" style="min-width: 50px" src="{{ asset('assets/keyforge/logos/vault.png') }}" alt="Vault"/></a>
-        </div>
-
         {% if userId != null %}
             {% set endpoint = '/keyforge/games/json?deckId=' ~ reference ~ '&userId=' ~ userId %}
         {% else %}
