@@ -8,6 +8,53 @@
         .tooltip.show {
             opacity: 1;
         }
+
+        .card_name {
+            display: inline-block;
+            text-overflow: ellipsis;
+            overflow:hidden;
+            white-space:nowrap;
+            margin-left: 5px;
+            vertical-align: middle;
+            font-size: 1.2em;
+            min-width: 0;
+        }
+
+        @media (min-width: 501px) {
+            .card_name {
+                max-width: 300px;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .card_name {
+                max-width: 150px;
+            }
+        }
+
+        @media (max-width: 450px) {
+            .card_name {
+                max-width: 100px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .card_name {
+                max-width: 80px;
+            }
+        }
+
+        @media (max-width: 280px) {
+            .card_name {
+                max-width: 60px;
+            }
+        }
+
+        @media (max-width: 255px) {
+            .card_name {
+                max-width: 40px;
+            }
+        }
     </style>
 {% endblock %}
 <div class="shadow-lg p-3 mb-5 bg-white rounded">
@@ -30,7 +77,7 @@
                         {% for card in deck.data.cards.firstPodCards %}
                             <div class="col-6 col-lg-12">
                                 <img width="18px" src="/assets/keyforge/rarities/{{ card.rarity }}.png" alt="{{ card.rarity }}" class="img-fluid"/>
-                                <span style="font-size: 1.2em; margin-left: 5px; vertical-align: middle" data-toggle="tooltip" title="{{ '<img src="https://keyforge-card-images.s3-us-west-2.amazonaws.com/card-imgs/' ~ card.serializedName ~ '.png">' }}">{{ card.name }}</span>
+                                <span class="card_name" data-toggle="tooltip" title="{{ '<img src="https://keyforge-card-images.s3-us-west-2.amazonaws.com/card-imgs/' ~ card.serializedName ~ '.png">' }}">{{ card.name }}</span>
                             </div>
                         {% endfor %}
                     </div>
@@ -42,7 +89,7 @@
                         {% for card in deck.data.cards.secondPodCards %}
                             <div class="col-6 col-lg-12" style="display: block">
                                 <img width="18px" src="/assets/keyforge/rarities/{{ card.rarity }}.png" alt="{{ card.rarity }}" class="img-fluid"/>
-                                <span style="display: inline-block; text-overflow: ellipsis; overflow:hidden; white-space:nowrap;min-width: 0; max-width: 180px; font-size: 1.2em; margin-left: 5px; vertical-align: middle;" data-toggle="tooltip" title="{{ '<img src="https://keyforge-card-images.s3-us-west-2.amazonaws.com/card-imgs/' ~ card.serializedName ~ '.png">' }}">{{ card.name }}</span>
+                                <span class="card_name"  data-toggle="tooltip" title="{{ '<img src="https://keyforge-card-images.s3-us-west-2.amazonaws.com/card-imgs/' ~ card.serializedName ~ '.png">' }}">{{ card.name }}</span>
                             </div>
                         {% endfor %}
                     </div>
@@ -54,7 +101,7 @@
                         {% for card in deck.data.cards.thirdPodCards %}
                             <div class="col-6 col-lg-12">
                                 <img width="18px" src="/assets/keyforge/rarities/{{ card.rarity }}.png" alt="{{ card.rarity }}" class="img-fluid"/>
-                                <span class="cutccc" style="font-size: 1.2em; margin-left: 5px; vertical-align: middle" data-toggle="tooltip" title="{{ '<img src="https://keyforge-card-images.s3-us-west-2.amazonaws.com/card-imgs/' ~ card.serializedName ~ '.png">' }}">{{ card.name }}</span>
+                                <span class="card_name" data-toggle="tooltip" title="{{ '<img src="https://keyforge-card-images.s3-us-west-2.amazonaws.com/card-imgs/' ~ card.serializedName ~ '.png">' }}">{{ card.name }}</span>
                             </div>
                         {% endfor %}
                     </div>
