@@ -18,7 +18,7 @@
                 </div>
                 {% if is_granted('ROLE_KEYFORGE') %}
                     <div class="d-flex flex-row-reverse col-6">
-                        <a class="btn btn-dark" href="/keyforge/competitions/new" role="button" aria-expanded="false">Nuevo</a>
+                        <a class="btn btn-dark" href="{{ path('keyforge_competition_create') }}" role="button" aria-expanded="false">Nuevo</a>
                     </div>
                 {% endif %}
             </div>
@@ -62,7 +62,7 @@
                 order: [[6, 'desc']],
                 lengthMenu: [10, 25, 50, 100],
                 iDisplayLength: 25,
-                ajax: '/keyforge/competitions/json',
+                ajax: '{{ path('keyforge_competitions_json') }}',
                 columns: [
                     { data: "id" },
                     { data: "reference" },
@@ -78,7 +78,7 @@
                 columnDefs: [
                     {
                         render: function (data, type, row) {
-                            return '<a href="/keyforge/competitions/' + row.reference + '">' + data + '</a>';
+                            return '<a href="/competitions/' + row.reference + '">' + data + '</a>';
                         },
                         targets: 2, //Name
                     },

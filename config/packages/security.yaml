@@ -20,10 +20,10 @@ security:
               path: logout
 
     access_control:
-         - { path: ^/keyforge/games/add, roles: ROLE_KEYFORGE }
-         - { path: ^/keyforge/decks/import, roles: ROLE_KEYFORGE }
-         - { path: ^/keyforge/competitions, roles: ROLE_KEYFORGE }
-         - { path: ^/keyforge/users, roles: ROLE_KEYFORGE }
+         - { path: ^/games/add, roles: ROLE_KEYFORGE }
+         - { path: ^/decks/import, roles: ROLE_KEYFORGE }
+         - { path: ^/competitions, roles: ROLE_KEYFORGE }
+         - { path: ^/users, roles: ROLE_KEYFORGE }
 
     role_hierarchy:
         ROLE_ADMIN: ROLE_KEYFORGE

@@ -12,7 +12,6 @@
         #tableTagCriteria td, #tableTagCriteria th {
             text-align: left;
         }
-
     </style>
 {% endblock %}
 
@@ -42,16 +41,16 @@
                 <table class="table" id="tableHousesBySet">
                     <tr>
                         <th></th>
-                        <th><img width="35px" src="/assets/keyforge/houses/BROBNAR.png" alt="BROBNAR"/></th>
-                        <th><img width="35px" src="/assets/keyforge/houses/DIS.png" alt="DIS"/></th>
-                        <th><img width="35px" src="/assets/keyforge/houses/LOGOS.png" alt="LOGOS"/></th>
-                        <th><img width="35px" src="/assets/keyforge/houses/MARS.png" alt="MARS"/></th>
-                        <th><img width="35px" src="/assets/keyforge/houses/SANCTUM.png" alt="SANCTUM"/></th>
-                        <th><img width="35px" src="/assets/keyforge/houses/SAURIAN.png" alt="SAURIAN"/></th>
-                        <th><img width="35px" src="/assets/keyforge/houses/SHADOWS.png" alt="SHADOWS"/></th>
-                        <th><img width="35px" src="/assets/keyforge/houses/STAR_ALLIANCE.png" alt="STAR_ALLIANCE"/></th>
-                        <th><img width="35px" src="/assets/keyforge/houses/UNFATHOMABLE.png" alt="UNFATHOMABLE"/></th>
-                        <th><img width="35px" src="/assets/keyforge/houses/UNTAMED.png" alt="UNTAMED"/></th>
+                        <th><img width="35px" src="{{ asset('assets/keyforge/houses/BROBNAR.png') }}" alt="BROBNAR"/></th>
+                        <th><img width="35px" src="{{ asset('assets/keyforge/houses/DIS.png') }}" alt="DIS"/></th>
+                        <th><img width="35px" src="{{ asset('assets/keyforge/houses/LOGOS.png') }}" alt="LOGOS"/></th>
+                        <th><img width="35px" src="{{ asset('assets/keyforge/houses/MARS.png') }}" alt="MARS"/></th>
+                        <th><img width="35px" src="{{ asset('assets/keyforge/houses/SANCTUM.png') }}" alt="SANCTUM"/></th>
+                        <th><img width="35px" src="{{ asset('assets/keyforge/houses/SAURIAN.png') }}" alt="SAURIAN"/></th>
+                        <th><img width="35px" src="{{ asset('assets/keyforge/houses/SHADOWS.png') }}" alt="SHADOWS"/></th>
+                        <th><img width="35px" src="{{ asset('assets/keyforge/houses/STAR_ALLIANCE.png') }}" alt="STAR_ALLIANCE"/></th>
+                        <th><img width="35px" src="{{ asset('assets/keyforge/houses/UNFATHOMABLE.png') }}" alt="UNFATHOMABLE"/></th>
+                        <th><img width="35px" src="{{ asset('assets/keyforge/houses/UNTAMED.png') }}" alt="UNTAMED"/></th>
                     </tr>
                     <tbody>
                         <tr>
@@ -275,7 +274,7 @@
                 </table>
             </div>
 
-            <a href="/keyforge/decks/analyze" target="_blank" class="list-group-item list-group-item-action">Analizador de barajas</a>
+            <a href="{{ path('keyforge_deck_analyze') }}" target="_blank" class="list-group-item list-group-item-action">Analizador de barajas</a>
         </div>
     </div>
 {% endblock %}

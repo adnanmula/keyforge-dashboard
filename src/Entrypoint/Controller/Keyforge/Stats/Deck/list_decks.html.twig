@@ -120,7 +120,7 @@
                 lengthMenu: [10, 25, 50, 100],
                 iDisplayLength: 25,
                 ajax: {
-                    url: '/keyforge/decks/json',
+                    url: '/decks/json',
                     data: function(d){
                         d.extraFilterOnlyOwned = onlyOwned();
                         d.extraFilterTagType = tagFilterType();
@@ -166,7 +166,7 @@
                     },
                     {
                         render: function (data, type, row) {
-                            return '<a href="/keyforge/games/deck/' + row.id + '">' + data + '</a>';
+                            return '<a href="/deck/' + row.id + '">' + data + '</a>';
                         },
                         targets: 1, //Deck
                     },

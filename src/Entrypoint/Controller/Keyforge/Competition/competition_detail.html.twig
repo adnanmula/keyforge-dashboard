@@ -345,6 +345,11 @@
     </div>
 
     <script>
+        $(document).ready(function () {
+            $('#datepicker')[0].value = new Date().toISOString().split('T')[0];
+            $('#datepicker-finish-competition')[0].value = new Date().toISOString().split('T')[0];
+        });
+
         $('#registerCompetitionGame').on('hidden.bs.modal', function () {
             $(this).find('form').trigger('reset');
         })
@@ -364,7 +369,7 @@
             let fixtureId = $('#registerGameFixtureId')[0].value;
 
             $.post({
-                url: "/keyforge/competition/" + fixtureId + "/game/new",
+                url: "/competition/" + fixtureId + "/game/new",
                 method: "POST",
                 dataType: 'json',
                 data: {
@@ -389,7 +394,7 @@
         $('#startCompetition').click(function () {
             console.log('A');
             $.post({
-                url: '/keyforge/competition/start',
+                url: '{{ path('keyforge_competition_start') }}',
                 method: 'POST',
                 data: {
                     'competitionId': $('#hiddenCompetitionId')[0].value,
@@ -407,7 +412,7 @@
             let date = $('#datepicker-finish-competition')[0].value;
 
             $.post({
-                url: '/keyforge/competition/finish',
+                url: '{{ path('keyforge_competition_game_finish') }}',
                 method: 'POST',
                 data: {
                     'competitionId': competitionId,

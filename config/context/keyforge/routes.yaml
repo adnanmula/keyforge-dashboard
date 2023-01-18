@@ -8,12 +8,12 @@ keyforge_user_list:
   controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Stats\User\ListUsersController
   methods: [GET]
 
-keyforge_deck_list:
+keyforge_decks:
   path: /decks
   controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Stats\Deck\ListDecksController
   methods: [GET]
 
-keyforge_deck_list_by_owner:
+keyforge_my_decks:
   path: /my-decks
   controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Stats\Deck\MyDecksController
   methods: [GET]
@@ -49,7 +49,7 @@ keyforge_game_list_by_user:
   methods: [GET]
 
 keyforge_game_list_by_deck:
-  path: /games/deck/{deckId}
+  path: /deck/{deckId}
   controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Stats\Game\ListGamesByDeckController
   methods: [GET]
 

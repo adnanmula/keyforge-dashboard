@@ -26,7 +26,7 @@
         <nav class="navbar navbar-expand-md navbar-expand-lg navbar-dark bg-dark">
             <div class="container-fluid">
                 <nav class="navbar navbar-dark bg-dark">
-                    <a class="navbar-brand" href="/keyforge">
+                    <a class="navbar-brand" href="{{ path('keyforge_home') }}">
                         <img src="{{ asset('icons/icon_white_32.png') }}" width="30" height="30" class="d-inline-block align-top" alt="">
                         Keyforge
                     </a>
@@ -38,34 +38,34 @@
                     <ul class="navbar-nav me-auto mb-lg-0">
                         {% if is_granted('ROLE_KEYFORGE') %}
                         <li class="nav-item">
-                            <a class="nav-link" href="/keyforge/users">Usuarios<span class="sr-only"></span></a>
+                            <a class="nav-link" href="{{ path('keyforge_user_list') }}">Usuarios<span class="sr-only"></span></a>
                         </li>
                         {% endif %}
 
                         <li class="nav-item">
-                            <a class="nav-link" href="/keyforge/decks">Decks<span class="sr-only"></span></a>
+                            <a class="nav-link" href="{{ path('keyforge_decks') }}">Decks<span class="sr-only"></span></a>
                         </li>
 
                         {% if is_granted('ROLE_KEYFORGE') %}
                         <li class="nav-item">
-                            <a class="nav-link" href="/keyforge/my-decks" style="white-space:nowrap;">Mis Decks<span class="sr-only"></span></a>
+                            <a class="nav-link" href="{{ path('keyforge_my_decks') }}" style="white-space:nowrap;">Mis Decks<span class="sr-only"></span></a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" href="/keyforge/games/add" style="white-space:nowrap;">Registrar partidas<span class="sr-only"></span></a>
+                            <a class="nav-link" href="{{ path('keyforge_game_create') }}" style="white-space:nowrap;">Registrar partidas<span class="sr-only"></span></a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" href="/keyforge/competitions">Torneos<span class="sr-only"></span></a>
+                            <a class="nav-link" href="{{ path('keyforge_competition_list') }}">Torneos<span class="sr-only"></span></a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" href="/keyforge/decks/import">Importar<span class="sr-only"></span></a>
+                            <a class="nav-link" href="{{ path('keyforge_deck_import') }}">Importar<span class="sr-only"></span></a>
                         </li>
                         {% endif %}
 
                         <li class="nav-item">
-                            <a class="nav-link" href="/keyforge/wiki">Wiki<span class="sr-only"></span></a>
+                            <a class="nav-link" href="{{ path('keyforge_wiki') }}">Wiki<span class="sr-only"></span></a>
                         </li>
                     </ul>
 
@@ -73,14 +73,14 @@
                         <div class="my-lg-0">
                             <ul class="navbar-nav me-auto mb-lg-0">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="/logout">Logout<span class="sr-only"></span></a>
+                                    <a class="nav-link" href="{{ path('logout') }}">Logout<span class="sr-only"></span></a>
                                 </li>
                             </ul>
                         </div>
                         <div class="my-lg-0">
                             <ul class="navbar-nav me-auto mb-lg-0">
                                 <li class="nav-item text-light">
-                                    <a href="/keyforge/games/user/{{ app.user.id.value() }}" class="text-decoration-none link-light">{{ app.user.name() }} <span class="sr-only"></span></a>
+                                    <a href="/games/user/{{ app.user.id.value() }}" class="text-decoration-none link-light">{{ app.user.name() }} <span class="sr-only"></span></a>
                                 </li>
                             </ul>
                         </div>
@@ -88,10 +88,10 @@
                         <div class="my-lg-0">
                             <ul class="navbar-nav me-auto mb-lg-0">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="/register">Register<span class="sr-only"></span></a>
+                                    <a class="nav-link" href="{{ path('register') }}">Register<span class="sr-only"></span></a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="/login">Login<span class="sr-only"></span></a>
+                                    <a class="nav-link" href="{{ path('login') }}">Login<span class="sr-only"></span></a>
                                 </li>
                             </ul>
                         </div>

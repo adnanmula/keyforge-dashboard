@@ -59,7 +59,7 @@
 
         <div class="row m-2">
             {% if (null != best_deck) %}
-                <a href="/keyforge/games/deck/{{ best_deck.id }}?userId={{ userId }}" class="btn btn-dark col-3 border col-12 col-sm-6 col-lg-3">
+                <a href="/deck/{{ best_deck.id }}?userId={{ userId }}" class="btn btn-dark col-3 border col-12 col-sm-6 col-lg-3">
                     <h5>Best performance</h5>
                     <p>{{ best_deck.name }}</p>
                     <p>{{ best_deck.wins }}/{{ best_deck.losses }} (WR: {{ best_deck.win_rate }}%/PR: {{ best_deck.pick_rate }}%)</p>
@@ -67,7 +67,7 @@
             {% endif %}
 
             {% if (null != worse_deck) %}
-                <a href="/keyforge/games/deck/{{ worse_deck.id }}?userId={{ userId }}" class="btn btn-dark border col-12 col-sm-6 col-lg-3">
+                <a href="/deck/{{ worse_deck.id }}?userId={{ userId }}" class="btn btn-dark border col-12 col-sm-6 col-lg-3">
                     <h5>Worse performance</h5>
                     <p>{{ worse_deck.name }}</p>
                     <p>{{ worse_deck.wins }}/{{ worse_deck.losses }} (WR: {{ worse_deck.win_rate }}%/PR: {{ worse_deck.pick_rate }}%)</p>
@@ -75,7 +75,7 @@
             {% endif %}
 
             {% if (null != favorite_deck) %}
-                <a href="/keyforge/games/deck/{{ favorite_deck.id }}?userId={{ userId }}" class="btn btn-dark border col-12 col-sm-6 col-lg-3">
+                <a href="/deck/{{ favorite_deck.id }}?userId={{ userId }}" class="btn btn-dark border col-12 col-sm-6 col-lg-3">
                     <h5>Favorite</h5>
                     <p>{{ favorite_deck.name }}</p>
                     <p>Played {{ favorite_deck.wins + favorite_deck.losses }} times</p>
@@ -97,7 +97,7 @@
                     <div class="row">
                         {% for win in competition_wins %}
                             <div class="col-12 col-sm-4 col-md-3 col-xl-2">
-                                <a class="text-decoration-none" href="/keyforge/competitions/{{ win.reference }}" style="color: white">
+                                <a class="text-decoration-none" href="/competitions/{{ win.reference }}" style="color: white">
                                     <div class="row">
                                         <i class="bi bi-trophy" style="font-size: 3em;"></i>
                                     </div>
@@ -119,13 +119,13 @@
         <div class="divider py-2"></div>
 
         {% if userId != null %}
-            {% set endpoint = '/keyforge/games/json?deckId=' ~ reference ~ '&userId=' ~ userId %}
+            {% set endpoint = '/games/json?deckId=' ~ reference ~ '&userId=' ~ userId %}
         {% else %}
-            {% set endpoint = '/keyforge/games/json?deckId=' ~ reference %}
+            {% set endpoint = '/games/json?deckId=' ~ reference %}
         {% endif %}
 
         {% include 'Keyforge/Stats/Game/game_list.html.twig' with {
-            'endpoint': '/keyforge/games/json?userId=' ~ reference,
+            'endpoint': '/games/json?userId=' ~ reference,
             'reference': reference,
             'reference_type': 'winner',
         } %}

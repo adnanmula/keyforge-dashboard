@@ -30,8 +30,7 @@
                             <option value="TCO_CASUAL">TCO Casual</option>
                             <option value="TCO_COMPETITIVE">TCO Competitive</option>
                             <option value="NKFL_LEAGUE_SEASON_19">NKFL League Season 19</option>
-                            <option value="NKFL_LEAGUE_CUP_SEASON_19">NKFL League Cup Season 19</option>
-                            <option value="NKFL_LEAGUE_CUP_REVERSAL_SEASON_19">NKFL League Cup Reversal Season 19</option>
+                            <option value="NKFL_LEAGUE_CUP_SEASON_19">NKFL League Cups Season 19</option>
                             <option value="NKFL_ARCHON_TOURNAMENT">NKFL Archon Tournament</option>
                         </select>
                     </div>
@@ -180,6 +179,10 @@
     </div>
 
     <script>
+        $(document).ready(function () {
+            $('#datepicker')[0].value = new Date().toISOString().split('T')[0];
+        });
+
         let selectors = document.querySelectorAll('.selector');
 
         selectors.forEach(selector => {

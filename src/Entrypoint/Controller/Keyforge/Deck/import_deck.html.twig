@@ -9,7 +9,7 @@
             <div class="col-12 col-sm-12 col-lg-6">
                 {% if success == true %}
                     <div class="alert alert-success" role="alert">
-                        Baraja importada. <a href="/keyforge/games/deck/{{ deckId }}">Ir a baraja.</a>
+                        Baraja importada. <a href="{{ path('keyforge_game_list_by_deck', {'deckId': deckId}) }}">Ir a baraja.</a>
                     </div>
                 {% elseif success == false %}
                     <div class="alert alert-danger" role="alert">{{ result }}</div>

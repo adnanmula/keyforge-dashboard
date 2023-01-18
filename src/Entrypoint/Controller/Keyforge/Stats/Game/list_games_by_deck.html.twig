@@ -18,9 +18,9 @@
 
     <div class="shadow-lg p-3 mb-5 bg-white rounded">
         {% if userId != null %}
-            {% set endpoint = '/keyforge/games/json?deckId=' ~ reference ~ '&userId=' ~ userId %}
+            {% set endpoint = '/games/json?deckId=' ~ reference ~ '&userId=' ~ userId %}
         {% else %}
-            {% set endpoint = '/keyforge/games/json?deckId=' ~ reference %}
+            {% set endpoint = '/games/json?deckId=' ~ reference %}
         {% endif %}
 
         {% include 'Keyforge/Stats/Game/game_list.html.twig' with {
