@@ -56,7 +56,7 @@
             columnDefs: [
                 {
                     render: function (data, type, row) {
-                        return '<a href="/games/user/' + row.winner + '">' + data + '</a>';
+                        return '<a href="/user/' + row.winner + '">' + data + '</a>';
                     },
                     targets: 0, //Winner
                 },
@@ -67,14 +67,14 @@
                         if (reference === row.winner_deck) {
                             return data;
                         } else {
-                            return '<a href="/games/deck/' + row.winner_deck + '">' + data + '</a>';
+                            return '<a href="/deck/' + row.winner_deck + '">' + data + '</a>';
                         }
                     },
                     targets: 1, //Winner deck
                 },
                 {
                     render: function (data, type, row) {
-                        return '<a href="/games/user/' + row.loser + '">' + data + '</a>';
+                        return '<a href="/user/' + row.loser + '">' + data + '</a>';
                     },
                     targets: 2, //Loser
                 },
@@ -85,7 +85,7 @@
                         if (reference === row.loser_deck) {
                             return data;
                         } else {
-                            return '<a href="/games/deck/' + row.loser_deck + '">' + data + '</a>';
+                            return '<a href="/deck/' + row.loser_deck + '">' + data + '</a>';
                         }
                     },
                     targets: 3, //Loser deck

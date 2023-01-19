@@ -202,7 +202,7 @@
                             {% if owner != null and owner != '' %}
                             return '<a href="/deck/' + row.id + '?userId={{ owner }}">' + data + '</a>';
                             {% else %}
-                            return '<a href="/keyforge/games/deck/' + row.id + '">' + data + '</a>';
+                            return '<a href="/deck/' + row.id + '">' + data + '</a>';
                             {% endif %}
                         },
                         targets: 1, //Deck
