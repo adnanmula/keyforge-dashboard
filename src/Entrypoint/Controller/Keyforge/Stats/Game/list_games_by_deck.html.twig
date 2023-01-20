@@ -16,17 +16,19 @@
 
     {% include 'Keyforge/Stats/Game/deck_detail.html.twig' %}
 
-    <div class="shadow-lg p-3 mb-5 bg-white rounded">
-        {% if userId != null %}
-            {% set endpoint = '/games/json?deckId=' ~ reference ~ '&userId=' ~ userId %}
-        {% else %}
-            {% set endpoint = '/games/json?deckId=' ~ reference %}
-        {% endif %}
+    {% if is_granted('ROLE_KEYFORGE') %}
+        <div class="shadow-lg p-3 mb-5 bg-white rounded">
+            {% if userId != null %}
+                {% set endpoint = '/games/json?deckId=' ~ reference ~ '&userId=' ~ userId %}
+            {% else %}
+                {% set endpoint = '/games/json?deckId=' ~ reference %}
+            {% endif %}
 
-        {% include 'Keyforge/Stats/Game/game_list.html.twig' with {
-            'endpoint': endpoint,
-            'reference': reference,
-            'reference_type': 'winner_deck',
-        } %}
-    </div>
+            {% include 'Keyforge/Stats/Game/game_list.html.twig' with {
+                'endpoint': endpoint,
+                'reference': reference,
+                'reference_type': 'winner_deck',
+            } %}
+        </div>
+    {% endif %}
 {% endblock %}

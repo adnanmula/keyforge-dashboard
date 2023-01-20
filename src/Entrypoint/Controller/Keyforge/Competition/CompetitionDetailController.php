@@ -34,6 +34,11 @@ final class CompetitionDetailController extends Controller
             $indexedDecks[$deck['id']] = $deck['name'];
         }
 
+        $indexedUsers = [];
+        foreach ($users as $user) {
+            $indexedUsers[$user->id()->value()] = $user->jsonSerialize();
+        }
+
         $detail = $this->extractResult(
             $this->bus->dispatch(new GetCompetitionDetailQuery($reference)),
         );
@@ -46,6 +51,7 @@ final class CompetitionDetailController extends Controller
             'winnerDecks' => $decks,
             'loserDecks' => $decks,
             'indexedDecks' => $indexedDecks,
+            'indexedUsers' => $indexedUsers,
         ]);
     }
 }

@@ -98,7 +98,7 @@ final class KeyforgeCompetition implements \JsonSerializable
             'reference' => $this->reference(),
             'name' => $this->name(),
             'type' => $this->type()->name,
-            'users' => $this->users(),
+            'users' => \array_map(static fn (Uuid $id): string => $id->value(), $this->users()),
             'description' => $this->description(),
             'createdAt' => $this->createdAt()->format(\DateTimeInterface::ATOM),
             'startedAt' => $this->startedAt()?->format('Y-m-d'),

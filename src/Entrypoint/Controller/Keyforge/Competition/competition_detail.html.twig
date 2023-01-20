@@ -279,11 +279,7 @@
                                 {% endfor %}
                             </datalist>
 
-                            <datalist id="firstTurnOptions">
-                                {% for user in users %}
-                                    <option data-value="{{ user.id }}" value="{{ user.name }}"> {{ user.id }} </option>
-                                {% endfor %}
-                            </datalist>
+                            <datalist id="firstTurnOptions"></datalist>
 
                             <input type="hidden" id="registerGameCompetitionName" value="">
                             <input type="hidden" id="registerGameFixtureRef" value="">
@@ -316,7 +312,7 @@
                         <div class="row">
                             <div class="col-md-7">
                                 <label for="firstTurn" class="form-label">Ganador</label>
-                                <input class="form-control selector" list="competitionWinnerOptions" id="finishFormWinnerInput" placeholder="Type to search..." name="firstTurn" autocomplete="off" required>
+                                <input class="form-control selector" list="competitionWinnerOptions" id="finishFormWinnerInput" placeholder="Type to search..." name="competitionWinnerFinish" autocomplete="off" required>
                             </div>
                             <div class="col-md-5">
                                 <label for="date" class="form-label">Fecha</label> <br>
@@ -324,10 +320,9 @@
                             </div>
                         </div>
 
-
                         <datalist id="competitionWinnerOptions">
-                            {% for user in users %}
-                                <option data-value="{{ user.id }}" value="{{ user.name }}"> {{ user.id }} </option>
+                            {% for userId in competition.users %}
+                                <option data-value="{{ indexedUsers[userId].id }}" value="{{ indexedUsers[userId].name }}"> {{ indexedUsers[userId].id }}</option>
                             {% endfor %}
                         </datalist>
 
@@ -346,7 +341,6 @@
 
     <script>
         $(document).ready(function () {
-            $('#datepicker')[0].value = new Date().toISOString().split('T')[0];
             $('#datepicker-finish-competition')[0].value = new Date().toISOString().split('T')[0];
         });
 
@@ -426,7 +420,7 @@
         });
 
         $('#registerCompetitionGame').on('show.bs.modal', function (event) {
-            const button = $(event.relatedTarget) // Button that triggered the modal
+            const button = $(event.relatedTarget);
             const playerOneName = button.data('player-one-name');
             const playerTwoName = button.data('player-two-name');
             const playerOneId = button.data('player-one-id');
@@ -442,6 +436,9 @@
             $('#registerGameCompetitionName')[0].value = competitionName;
             $('#registerGameFixtureRef')[0].value = fixtureRef;
             $('#registerGameFixtureId')[0].value = fixtureId;
+            $('#datepicker')[0].value = new Date().toISOString().split('T')[0];
+            $('#firstTurnOptions')[0].innerHTML = '<option data-value="' + playerOneId + '" value="' + playerOneName + '"> ' + playerOneId + ' </option>'
+                + '<option data-value="' + playerTwoId + '" value="' + playerTwoName + '"> ' + playerTwoId + ' </option>';
         });
 
         let selectors = document.querySelectorAll('.selector');

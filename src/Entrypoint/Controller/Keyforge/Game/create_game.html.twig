@@ -165,11 +165,7 @@
                     {% endfor %}
                 </datalist>
 
-                <datalist id="firstTurnOptions">
-                    {% for winner in winners %}
-                        <option data-value="{{ winner.id }}" value="{{ winner.name }}"> {{ winner.id }} </option>
-                    {% endfor %}
-                </datalist>
+                <datalist id="firstTurnOptions"></datalist>
 
                 <input type="hidden" id="hidden-winner" name="winnerId" value="">
                 <input type="hidden" id="hidden-loser" name="loserId" value="">
@@ -200,5 +196,23 @@
                 }
             });
         });
+
+        $('#winner').change(function(e) {
+            refreshFirstPlayerInput();
+        });
+
+        $('#loser').change(function(e) {
+            refreshFirstPlayerInput();
+        });
+
+        function refreshFirstPlayerInput() {
+            const playerOneId = $('#hidden-winner')[0].value;
+            const playerOneName = $('#winner')[0].value;
+            const playerTwoId = $('#hidden-loser')[0].value;
+            const playerTwoName = $('#loser')[0].value;
+
+            $('#firstTurnOptions')[0].innerHTML = '<option data-value="' + playerOneId + '" value="' + playerOneName + '"> ' + playerOneId + ' </option>'
+                + '<option data-value="' + playerTwoId + '" value="' + playerTwoName + '"> ' + playerTwoId + ' </option>';
+        }
     </script>
 {% endblock %}
