@@ -10,6 +10,8 @@ final class ListGamesByUserController extends Controller
 {
     public function __invoke(string $userId): Response
     {
+        $this->assertIsLogged();
+
         $result = $this->extractResult($this->bus->dispatch(new UserStatsQuery($userId)));
 
         return $this->render(

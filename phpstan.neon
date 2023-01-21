@@ -8,7 +8,6 @@ parameters:
         -   public/*
         -   src/Kernel.php
         -   config/bootstrap.php
-        -   src/Domain/Service/Keyforge/ChainsCalculator.php
     ignoreErrors:
         -
             message: '#Strict comparison using === between false and non-empty-array\<int, array\<string, mixed\>\> will always evaluate to false#'

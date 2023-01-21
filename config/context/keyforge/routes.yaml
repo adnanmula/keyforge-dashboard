@@ -18,11 +18,6 @@ keyforge_my_decks:
   controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Stats\Deck\MyDecksController
   methods: [GET]
 
-keyforge_deck_claim:
-  path: /deck/claim
-  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Deck\ClaimController
-  methods: [POST]
-
 keyforge_deck_update_notes:
   path: /deck/notes
   controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Deck\UpdateNotes\UpdateDeckNotesController
@@ -67,11 +62,6 @@ keyforge_game_create:
   path: /games/add
   controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Game\CreateGameController
   methods: [GET,POST]
-
-keyforge_game_chain_calculator:
-  path: /games/chains
-  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Game\ChainsCalculatorController
-  methods: [GET]
 
 keyforge_competition_list:
   path: /competitions

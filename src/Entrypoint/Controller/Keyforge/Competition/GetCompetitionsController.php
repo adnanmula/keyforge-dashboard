@@ -11,6 +11,8 @@ final class GetCompetitionsController extends Controller
 {
     public function __invoke(Request $request): JsonResponse
     {
+        $this->assertIsLogged();
+
         $result = $this->extractResult(
             $this->bus->dispatch(new GetCompetitionsQuery(
                 $request->get('start', 0),

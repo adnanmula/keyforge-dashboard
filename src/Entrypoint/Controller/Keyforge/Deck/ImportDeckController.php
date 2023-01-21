@@ -7,28 +7,14 @@ use AdnanMula\Cards\Domain\Model\Shared\User;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
 use Ramsey\Uuid\Exception\InvalidUuidStringException;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 final class ImportDeckController extends Controller
 {
-    private Security $security;
-
-    public function __construct(MessageBusInterface $bus, Security $security)
-    {
-        $this->security = $security;
-
-        parent::__construct($bus);
-    }
-
     public function __invoke(Request $request): Response
     {
-        if (false === $this->security->isGranted('ROLE_KEYFORGE')) {
-            throw new AccessDeniedException();
-        }
+        $this->assertIsLogged();
 
         if ($request->getMethod() === Request::METHOD_GET) {
             return $this->render('Keyforge/Deck/import_deck.html.twig', ['result' => false, 'success' => null]);

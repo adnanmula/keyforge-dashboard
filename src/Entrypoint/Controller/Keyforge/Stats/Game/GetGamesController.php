@@ -21,6 +21,8 @@ final class GetGamesController extends Controller
 {
     public function __invoke(Request $request): JsonResponse
     {
+        $this->assertIsLogged();
+
         $result = $this->extractResult(
             $this->bus->dispatch(new GetGamesQuery($this->getSearch($request))),
         );

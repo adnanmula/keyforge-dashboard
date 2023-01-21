@@ -5,28 +5,14 @@ namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\Deck\Analyze;
 use AdnanMula\Cards\Application\Command\Keyforge\Deck\Analyze\AnalyzeDeckThreatsCommand;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 final class AnalyzeDeckController extends Controller
 {
-    private Security $security;
-
-    public function __construct(MessageBusInterface $bus, Security $security)
-    {
-        $this->security = $security;
-
-        parent::__construct($bus);
-    }
-
     public function __invoke(Request $request): Response
     {
-        if (false === $this->security->isGranted('ROLE_KEYFORGE')) {
-            throw new AccessDeniedException();
-        }
+        $this->assertIsLogged();
 
         if ($request->getMethod() === Request::METHOD_GET) {
             return $this->render('Keyforge/Deck/Analyze/analyze_deck.html.twig', [

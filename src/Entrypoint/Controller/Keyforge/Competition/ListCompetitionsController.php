@@ -12,6 +12,8 @@ final class ListCompetitionsController extends Controller
 {
     public function __invoke(Request $request): Response
     {
+        $this->assertIsLogged();
+
         $users = $this->extractResult(
             $this->bus->dispatch(new GetUsersQuery(null, null, false, false)),
         );

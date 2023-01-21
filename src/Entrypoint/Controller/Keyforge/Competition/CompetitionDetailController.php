@@ -19,6 +19,8 @@ final class CompetitionDetailController extends Controller
 {
     public function __invoke(Request $request, string $reference): Response
     {
+        $this->assertIsLogged();
+
         $users = $this->extractResult(
             $this->bus->dispatch(new GetUsersQuery(null, null, false, false)),
         );

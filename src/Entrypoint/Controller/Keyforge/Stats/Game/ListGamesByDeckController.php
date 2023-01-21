@@ -4,6 +4,7 @@ namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\Stats\Game;
 
 use AdnanMula\Cards\Application\Query\Keyforge\Deck\GetDecksQuery;
 use AdnanMula\Cards\Application\Query\Keyforge\User\GetUsersQuery;
+use AdnanMula\Cards\Domain\Model\Shared\User;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,11 +23,19 @@ final class ListGamesByDeckController extends Controller
         $deckOwner = null;
         $deckOwnerName = null;
         $deckSerialized = null;
+        $deckNotes = null;
 
         if (\count($deck['decks']) > 0) {
             $deckName = $deck['decks'][0]->name();
             $deckOwner = $deck['decks'][0]->owner()?->value();
             $deckSerialized = $deck['decks'][0]->jsonSerialize();
+
+            /** @var User $user */
+            $user = $this->security->getUser();
+
+            if (null !== $user && $user->id()->value() === $deck['decks'][0]->owner()?->value()) {
+                $deckNotes = $deck['decks'][0]->notes();
+            }
         }
 
         if (null !== $deckOwner) {
@@ -50,6 +59,7 @@ final class ListGamesByDeckController extends Controller
                 'deck_owner' => $deckOwner,
                 'deck_owner_name' => $deckOwnerName,
                 'deck' => $deckSerialized,
+                'deck_notes' => $deckNotes,
             ],
         );
     }
