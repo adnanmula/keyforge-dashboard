@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\Stats\Game;
+namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\Game\List;
 
 use AdnanMula\Cards\Application\Query\Keyforge\Game\GetGamesQuery;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\Deck;
+namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\Deck\Import;
 
 use AdnanMula\Cards\Application\Command\Keyforge\Deck\Import\ImportDeckCommand;
 use AdnanMula\Cards\Domain\Model\Shared\User;
@@ -17,7 +17,7 @@ final class ImportDeckController extends Controller
         $this->assertIsLogged();
 
         if ($request->getMethod() === Request::METHOD_GET) {
-            return $this->render('Keyforge/Deck/import_deck.html.twig', ['result' => false, 'success' => null]);
+            return $this->render('Keyforge/Deck/Import/import_deck.html.twig', ['result' => false, 'success' => null]);
         }
 
         if ($request->getMethod() === Request::METHOD_POST) {
@@ -28,11 +28,11 @@ final class ImportDeckController extends Controller
 
                 $this->bus->dispatch(new ImportDeckCommand($deckId, $user->id()->value()));
 
-                return $this->render('Keyforge/Deck/import_deck.html.twig', ['result' => 'Bien', 'success' => true, 'deckId' => $deckId]);
+                return $this->render('Keyforge/Deck/Import/import_deck.html.twig', ['result' => 'Bien', 'success' => true, 'deckId' => $deckId]);
             } catch (InvalidUuidStringException) {
-                return $this->render('Keyforge/Deck/import_deck.html.twig', ['result' => 'Id/link no válido :/', 'success' => false, 'deckId' => null]);
+                return $this->render('Keyforge/Deck/Import/import_deck.html.twig', ['result' => 'Id/link no válido :/', 'success' => false, 'deckId' => null]);
             } catch (\Throwable $exception) {
-                return $this->render('Keyforge/Deck/import_deck.html.twig', ['result' => $exception->getMessage(), 'success' => false, 'deckId' => null]);
+                return $this->render('Keyforge/Deck/Import/import_deck.html.twig', ['result' => $exception->getMessage(), 'success' => false, 'deckId' => null]);
             }
         }
 

@@ -20,7 +20,7 @@ security:
               path: logout
 
     access_control:
-         - { path: ^/games/add, roles: ROLE_KEYFORGE }
+         - { path: ^/games/new, roles: ROLE_KEYFORGE }
          - { path: ^/decks/import, roles: ROLE_KEYFORGE }
          - { path: ^/competitions, roles: ROLE_KEYFORGE }
          - { path: ^/users, roles: ROLE_KEYFORGE }

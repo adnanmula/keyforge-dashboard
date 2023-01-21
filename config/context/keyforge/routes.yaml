@@ -5,7 +5,7 @@ keyforge_home:
 
 keyforge_user_list:
   path: /users
-  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Stats\User\ListUsersController
+  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\User\ListUsersController
   methods: [GET]
 
 keyforge_decks:
@@ -30,7 +30,7 @@ keyforge_decks_json:
 
 keyforge_games_json:
   path: /games/json
-  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Stats\Game\GetGamesController
+  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Game\List\GetGamesController
   methods: [GET]
 
 keyforge_wiki:
@@ -38,19 +38,19 @@ keyforge_wiki:
   controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Wiki\WikiController
   methods: [GET]
 
-keyforge_game_list_by_user:
+keyforge_user_detail:
   path: /user/{userId}
-  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Stats\Game\ListGamesByUserController
+  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\User\UserDetailController
   methods: [GET]
 
-keyforge_game_list_by_deck:
+keyforge_deck_detail:
   path: /deck/{deckId}
-  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Stats\Game\ListGamesByDeckController
+  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Deck\Detail\DeckDetailController
   methods: [GET]
 
 keyforge_deck_import:
   path: /decks/import
-  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Deck\ImportDeckController
+  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Deck\Import\ImportDeckController
   methods: [GET,POST]
 
 keyforge_deck_analyze:
@@ -59,8 +59,8 @@ keyforge_deck_analyze:
   methods: [GET,POST]
 
 keyforge_game_create:
-  path: /games/add
-  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Game\CreateGameController
+  path: /games/new
+  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Game\Create\CreateGameController
   methods: [GET,POST]
 
 keyforge_competition_list:

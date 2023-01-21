@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\Stats\Game;
+namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\Deck\Detail;
 
 use AdnanMula\Cards\Application\Query\Keyforge\Deck\GetDecksQuery;
 use AdnanMula\Cards\Application\Query\Keyforge\User\GetUsersQuery;
@@ -9,7 +9,7 @@ use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-final class ListGamesByDeckController extends Controller
+final class DeckDetailController extends Controller
 {
     public function __invoke(Request $request, string $deckId): Response
     {
@@ -51,7 +51,7 @@ final class ListGamesByDeckController extends Controller
         }
 
         return $this->render(
-            'Keyforge/Stats/Game/list_games_by_deck.html.twig',
+            'Keyforge/Deck/Detail/deck_detail.html.twig',
             [
                 'reference' => $deckId,
                 'userId' => $userId,

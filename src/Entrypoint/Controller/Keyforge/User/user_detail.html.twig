@@ -8,7 +8,7 @@
 
         <div class="row">
             <div class="col-10 d-flex justify-content-start">
-                <h3>Partidas de {{ name }}</h3>
+                <h2>{{ name }}</h2>
             </div>
 
             {% if user_is_external == false %}
@@ -114,17 +114,16 @@
                 </div>
             {% endif %}
         </div>
+    </div>
 
-        <div class="divider py-2"></div>
-        <div class="divider py-2"></div>
-
+    <div class="shadow-lg p-3 mb-5 bg-white rounded">
         {% if userId != null %}
             {% set endpoint = '/games/json?deckId=' ~ reference ~ '&userId=' ~ userId %}
         {% else %}
             {% set endpoint = '/games/json?deckId=' ~ reference %}
         {% endif %}
 
-        {% include 'Keyforge/Stats/Game/game_list.html.twig' with {
+        {% include 'Keyforge/Game/List/game_list.html.twig' with {
             'endpoint': '/games/json?userId=' ~ reference,
             'reference': reference,
             'reference_type': 'winner',

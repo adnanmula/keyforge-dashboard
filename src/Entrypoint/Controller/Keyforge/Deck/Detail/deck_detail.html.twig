@@ -14,7 +14,7 @@
         })
     </script>
 
-    {% include 'Keyforge/Stats/Game/deck_detail.html.twig' %}
+    {% include 'Keyforge/Deck/Detail/deck.html.twig' %}
 
     {% if is_granted('ROLE_KEYFORGE') %}
         <div class="shadow-lg p-3 mb-5 bg-white rounded">
@@ -24,7 +24,7 @@
                 {% set endpoint = '/games/json?deckId=' ~ reference %}
             {% endif %}
 
-            {% include 'Keyforge/Stats/Game/game_list.html.twig' with {
+            {% include 'Keyforge/Game/List/game_list.html.twig' with {
                 'endpoint': endpoint,
                 'reference': reference,
                 'reference_type': 'winner_deck',

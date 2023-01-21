@@ -56,7 +56,7 @@ final class CreateCompetitionCommandHandler
     private function assertName(CreateCompetitionCommand $command): void
     {
         if (\in_array($command->reference, ['new', 'start', 'finish'], true)) {
-            throw new \Exception('Invalid name.');
+            throw new \Exception('Nombre inválido.');
         }
 
         $withConflict = $this->repository->search(new Criteria(
@@ -72,14 +72,14 @@ final class CreateCompetitionCommandHandler
         ));
 
         if (\count($withConflict) > 0) {
-            throw new \Exception('Name already in use.');
+            throw new \Exception('Nombre ya en uso.');
         }
     }
 
     private function assertPlayerCount(CreateCompetitionCommand $command): void
     {
         if (\count($command->users) < 3) {
-            throw new \Exception('Not enough players, minimum of three are required');
+            throw new \Exception('No hay suficientes jugadores, mínimo tres son necesarios.');
         }
     }
 

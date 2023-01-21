@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\Game;
+namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\Game\Create;
 
 use AdnanMula\Cards\Application\Command\Keyforge\Game\Create\CreateGameCommand;
 use AdnanMula\Cards\Application\Query\Keyforge\Deck\GetDecksQuery;
@@ -34,7 +34,7 @@ final class CreateGameController extends Controller
 
         if ($request->getMethod() === Request::METHOD_GET) {
             return $this->render(
-                'Keyforge/Game/create_game.html.twig',
+                'Keyforge/Game/create/create_game.html.twig',
                 [
                     'winners' =>$users,
                     'winnerDecks' => $decks,
@@ -63,7 +63,7 @@ final class CreateGameController extends Controller
                 ));
 
                 return $this->render(
-                    'Keyforge/Game/create_game.html.twig',
+                    'Keyforge/Game/create/create_game.html.twig',
                     [
                         'winners' =>$users,
                         'winnerDecks' => $decks,
@@ -75,7 +75,7 @@ final class CreateGameController extends Controller
                 );
             } catch (\Throwable $exception) {
                 return $this->render(
-                    'Keyforge/Game/create_game.html.twig',
+                    'Keyforge/Game/create/create_game.html.twig',
                     [
                         'winners' =>$users,
                         'winnerDecks' => $decks,

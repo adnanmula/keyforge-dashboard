@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\Stats\User;
+namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\User;
 
 use AdnanMula\Cards\Application\Query\Keyforge\User\GetUsersQuery;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
@@ -23,7 +23,7 @@ final class ListUsersController extends Controller
         );
 
         return $this->render(
-            'Keyforge/Stats/User/list_users.html.twig',
+            'Keyforge/User/list_users.html.twig',
             [
                 'users' => $users,
                 'withExternal' => $request->get('withExternal') !== null,

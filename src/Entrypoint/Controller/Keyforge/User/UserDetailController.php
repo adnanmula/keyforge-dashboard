@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\Stats\Game;
+namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\User;
 
 use AdnanMula\Cards\Application\Query\Keyforge\Stats\UserStatsQuery;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
-final class ListGamesByUserController extends Controller
+final class UserDetailController extends Controller
 {
     public function __invoke(string $userId): Response
     {
@@ -15,7 +15,7 @@ final class ListGamesByUserController extends Controller
         $result = $this->extractResult($this->bus->dispatch(new UserStatsQuery($userId)));
 
         return $this->render(
-            'Keyforge/Stats/Game/list_games_by_user.html.twig',
+            'Keyforge/User/user_detail.html.twig',
             [
                 'reference' => $userId,
                 'userId' => $userId,

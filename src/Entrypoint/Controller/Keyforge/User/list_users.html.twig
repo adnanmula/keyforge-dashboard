@@ -43,7 +43,7 @@
                 {% for user in users %}
                     <tr>
                         <td style="white-space: nowrap;">
-                            <a href="{{ path('keyforge_game_list_by_user', {'userId': user.id}) }}">{{ user.name }}</a>
+                            <a href="{{ path('keyforge_user_detail', {'userId': user.id}) }}">{{ user.name }}</a>
                             {% if user.is_external == false %}🥚{% endif %}
                         </td>
                         <td>{{ user.wins }}</td>
