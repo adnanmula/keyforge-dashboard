@@ -156,11 +156,6 @@
             return;
         }
 
-        console.log(
-            input.indeterminate + '/' +
-            input.checked
-        );
-
         if (input.indeterminate) {
             input.indeterminate = false;
             input.checked = false;
@@ -175,10 +170,5 @@
             input.indeterminate = false;
             input.checked = true;
         }
-
-        console.log(
-            input.indeterminate + '/' +
-            input.checked
-        );
     });
 </script>
