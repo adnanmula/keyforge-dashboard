@@ -34,7 +34,7 @@ final class CreateGameController extends Controller
 
         if ($request->getMethod() === Request::METHOD_GET) {
             return $this->render(
-                'Keyforge/Game/create/create_game.html.twig',
+                'Keyforge/Game/Create/create_game.html.twig',
                 [
                     'winners' =>$users,
                     'winnerDecks' => $decks,
@@ -63,7 +63,7 @@ final class CreateGameController extends Controller
                 ));
 
                 return $this->render(
-                    'Keyforge/Game/create/create_game.html.twig',
+                    'Keyforge/Game/Create/create_game.html.twig',
                     [
                         'winners' =>$users,
                         'winnerDecks' => $decks,
@@ -75,7 +75,7 @@ final class CreateGameController extends Controller
                 );
             } catch (\Throwable $exception) {
                 return $this->render(
-                    'Keyforge/Game/create/create_game.html.twig',
+                    'Keyforge/Game/Create/create_game.html.twig',
                     [
                         'winners' =>$users,
                         'winnerDecks' => $decks,

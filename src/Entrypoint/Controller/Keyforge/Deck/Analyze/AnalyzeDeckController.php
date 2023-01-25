@@ -32,9 +32,12 @@ final class AnalyzeDeckController extends Controller
 
         return $this->render('Keyforge/Deck/Analyze/analyze_deck.html.twig', [
             'loaded' => true,
+            'deck' => $data['deck'],
             'deck_id' => $data['deck_id'],
+            'reference' => $data['deck_id'],
             'deck_name' => $data['deck_name'],
             'deck_sas' => $data['deck_sas'],
+            'deck_notes' => null,
             'detail' => $data['detail'],
         ]);
     }

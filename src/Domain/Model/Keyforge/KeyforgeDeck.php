@@ -9,7 +9,7 @@ use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 
 final class KeyforgeDeck implements \JsonSerializable
 {
-    private KeyforgeDeckData $data;
+    public readonly KeyforgeDeckData $data;
 
     public function __construct(
         private Uuid $id,
@@ -60,11 +60,6 @@ final class KeyforgeDeck implements \JsonSerializable
     public function losses(): int
     {
         return $this->losses;
-    }
-
-    private function data(): KeyforgeDeckData
-    {
-        return $this->data;
     }
 
     public function extraData(): array
@@ -132,7 +127,7 @@ final class KeyforgeDeck implements \JsonSerializable
             'sas' => $this->sas(),
             'wins' => $this->wins(),
             'losses' => $this->losses(),
-            'data' => $this->data()->jsonSerialize(),
+            'data' => $this->data->jsonSerialize(),
             'extraData' => $this->extraData(),
             'owner' => $this->owner()?->value(),
             'tags' => $this->tags(),
