@@ -66,30 +66,16 @@
             return false === $('#with_external')[0].checked;
         }
 
-        // function tagFilterType() {
-        //     return $('.tag_type_selector:checked')[0].value;
-        // }
+        function tagFilterType() {
+            return $('.tag_type_selector:checked')[0].value;
+        }
 
         function tags() {
-            const inputs = $('.tagButton > input:checked');
-
-            const tagIds = [];
-            Array.prototype.forEach.call(inputs, function(input) {
-                tagIds.push(input.value);
-            });
-
-            return tagIds;
+            return $('#tag-selector').val();
         }
 
         function tagsExcluded() {
-            const inputs = $('.tagButton > input:indeterminate');
-
-            const tagIds = [];
-            Array.prototype.forEach.call(inputs, function(input) {
-                tagIds.push(input.value);
-            });
-
-            return tagIds;
+            return $('#tag-selector-exclude').val();
         }
 
         function houseFilterType() {
@@ -158,7 +144,7 @@
                     url: '{{ path('keyforge_decks_json') }}',
                     data: function(d){
                         d.extraFilterOnlyOwned = onlyOwned();
-                        // d.extraFilterTagType = tagFilterType();
+                        d.extraFilterTagType = tagFilterType();
                         d.extraFilterTags = tags();
                         d.extraFilterTagsExcluded = tagsExcluded();
                         d.extraFilterHouses = houses();
@@ -189,7 +175,7 @@
                             data.forEach(function (tagId) {
                                 tagsJson.forEach(function (item) {
                                     if (tagId === item.id) {
-                                        const tag = '<button type="button" class="btn btn-xs btn-outline-dark" data-value="' + item.name
+                                        const tag = '<button type="button" class="btn btn-xs btn-outline-dark" data-type="'+item.type+'" data-value="' + item.name
                                             + '" style="background-color: ' + item.style.color_bg + '; color: ' + item.style.color_text + '; border-color: ' + item.style.color_outline + '">'
                                             + item.name + '</button>';
 

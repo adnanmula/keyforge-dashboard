@@ -101,19 +101,49 @@
                 <div class="divider py-1"></div>
                 <div class="divider py-1"></div>
 
+                <div class="form-group">
+                    <label for="tags" class="form-label">Tags</label>
+                    <input class="form-check-input tag_type_selector" type="radio" name="tags_filter_type" id="tags_filter_type_1" value="all" checked>
+                    <label class="form-check-label" for="tags_filter_type_1">Todas</label>
+                    <input class="form-check-input tag_type_selector" type="radio" name="tags_filter_type" id="tags_filter_type_2" value="any">
+                    <label class="form-check-label" for="tags_filter_type_2">Cualquiera</label>
+
+                    <div class="form-group">
+                        <select id="tag-selector" class="form-select">
+                            {% for tag in tags %}
+                                <option value="{{ tag.id }}">{{ tag.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="divider py-1"></div>
+                    <div class="form-group">
+                        <select id="tag-selector-exclude" class="form-select">
+                            {% for tag in tags %}
+                                <option value="{{ tag.id }}">{{ tag.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="divider py-1"></div>
+                <div class="divider py-1"></div>
+                <div class="divider py-1"></div>
+
                 <div class="row">
-                    <div class="col-md-2 col-sm-4">
+                    <div class="col-md-4 col-sm-12">
                         <label>Min SAS</label>
                         <input type="number" class="form-control" name="min-sas" id="filter_min_sas" min="30" max="108" value="30">
                         <label>Max SAS</label>
                         <input type="number" class="form-control" name="max-sas" id="filter_max_sas" min="30" max="108" value="108">
                     </div>
 
-                    <div class="col-md-2 col-sm-4">
+                    <div class="divider py-1"></div>
+
+                    <div class="col-md-4 col-sm-12">
                         <label for="tags" class="form-label">Otras opciones</label>
 
                         <div class="form-group">
-                            <select id="owner-selector" class="form-select form-control">
+                            <select id="owner-selector" class="form-select">
                                 {% for user in users %}
                                     <option value="{{ user.id }}">{{ user.name }}</option>
                                 {% endfor %}
@@ -125,42 +155,19 @@
 
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" value="" id="with_external">
-                            <label class="form-check-label" for="with_external">External decks/games</label>
+                            <label class="form-check-label" for="with_external">Barajas/partidas externas</label>
                         </div>
                     </div>
                 </div>
 
                 <div class="divider py-1"></div>
-                <div class="divider py-1"></div>
-                <div class="divider py-1"></div>
-
-{#                <div class="form-group">#}
-{#                    <label for="tags" class="form-label">Etiquetas</label>#}
-{#                    <input class="form-check-input tag_type_selector" type="radio" name="tags_filter_type" id="tags_filter_type_1" value="all" checked>#}
-{#                    <label class="form-check-label" for="tags_filter_type_1">Todas</label>#}
-{#                    <input class="form-check-input tag_type_selector" type="radio" name="tags_filter_type" id="tags_filter_type_2" value="any">#}
-{#                    <label class="form-check-label" for="tags_filter_type_2">Cualquiera</label>#}
-{##}
-{#                    <div class="row" style="display: flex; overflow-x: auto">#}
-{#                        {% for tag in tags %}#}
-{#                            <div class="form-check-inline col-5 col-md-4 col-lg-3 col-xl-2 text-nowrap" id="tagsContainer" style="font-size: .6em;">#}
-{#                                <button type="button" class="btn btn-xs btn-outline-dark tagButton" data-value="{{ tag.name }}" data-id="{{ tag.id }}" style="background-color: {{ tag.style.color_bg }}; color: {{ tag.style.color_text }}; border-color: {{ tag.style.color_outline }}">#}
-{#                                    <input class="form-check-input tag_selector" type="checkbox" value="{{ tag.id }}" id="check_tag_{{ tag.id }}">#}
-{#                                    {{ tag.name }}#}
-{#                                </button>#}
-{#                            </div>#}
-{#                        {% endfor %}#}
-{#                    </div>#}
-{#                </div>#}
-
-                <div class="divider py-1"></div>
 
                 <div class="row mt-3">
                     <div class="col-4 col-md-2">
-                        <button class="btn btn-block btn-dark w-100" id="clearFilters">Clear</button>
+                        <button class="btn btn-block btn-dark w-100" id="clearFilters">Limpiar filtros</button>
                     </div>
                     <div class="col-8 col-md-10">
-                        <button class="btn btn-block btn-dark w-100" id="applyFilters">Apply</button>
+                        <button class="btn btn-block btn-dark w-100" id="applyFilters">Buscar</button>
                     </div>
                 </div>
             </div>
@@ -197,8 +204,31 @@
         closeOnSelect: false,
         allowClear: false,
         placeholder: 'Propietario',
+        theme: 'bootstrap-5'
     });
 
     $("#owner-selector").val("")
     $("#owner-selector").trigger("change");
+
+    $('#tag-selector').select2({
+        multiple: true,
+        closeOnSelect: false,
+        allowClear: false,
+        placeholder: 'Incluir',
+        theme: 'bootstrap-5'
+    });
+
+    $("#tag-selector").val("")
+    $("#tag-selector").trigger("change");
+
+    $('#tag-selector-exclude').select2({
+        multiple: true,
+        closeOnSelect: false,
+        allowClear: false,
+        placeholder: 'Excluir',
+        theme: 'bootstrap-5'
+    });
+
+    $("#tag-selector-exclude").val("")
+    $("#tag-selector-exclude").trigger("change");
 </script>

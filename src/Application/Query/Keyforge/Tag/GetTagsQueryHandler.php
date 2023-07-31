@@ -42,7 +42,7 @@ final readonly class GetTagsQueryHandler
         $criteria = new Criteria(
             new Sorting(
                 new Order(
-                    new FilterField('name'),
+                    new FilterField('type'),
                     OrderType::ASC,
                 ),
             ),
