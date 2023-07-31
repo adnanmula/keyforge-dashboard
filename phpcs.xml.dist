@@ -8,5 +8,6 @@
 
   <rule ref="vendor/adnanmula/coding-standard/src/ruleset.xml">
     <exclude name="Generic.Files.LineEndings.InvalidEOLChar" />
+    <exclude name="SlevomatCodingStandard.Classes.TraitUseSpacing.IncorrectLinesCountBeforeFirstUse" />
   </rule>
 </ruleset>

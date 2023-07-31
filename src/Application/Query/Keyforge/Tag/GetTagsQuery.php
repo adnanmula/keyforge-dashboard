@@ -15,7 +15,7 @@ final class GetTagsQuery
     {
         Assert::lazy()
             ->that($ids, 'ids')->nullOr()->all()->uuid()
-            ->that($visibility, 'visibility')->nullOr()->inArray(TagVisibility::allowedValues())
+            ->that($visibility, 'visibility')->nullOr()->inArray(TagVisibility::values())
             ->verifyNow();
 
         $this->ids = null === $ids

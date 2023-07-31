@@ -34,7 +34,7 @@ services:
     image: postgres:11.1-alpine
     container_name: cards_postgres
     ports:
-      - 127.0.0.1:${DATABASE_PORT}:5432
+      - ${DATABASE_PORT}:5432
     environment:
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
     networks:

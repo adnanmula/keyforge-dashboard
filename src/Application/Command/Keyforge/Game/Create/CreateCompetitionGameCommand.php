@@ -45,7 +45,7 @@ final class CreateCompetitionGameCommand
             ->that($loserScore, 'loserScore')->integerish()->min(0)->max(2)
             ->that($firstTurn, 'firstTurn')->nullOr()->uuid()
             ->that($date, 'date')->date('Y-m-d')
-            ->that($competition, 'competition')->inArray(KeyforgeCompetition::allowedValues())
+            ->that($competition, 'competition')->inArray(KeyforgeCompetition::values())
             ->that($notes, 'notes')->string()->maxLength(512)
             ->that($fixtureId, 'competitionId')->uuid()
             ->verifyNow();

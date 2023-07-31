@@ -2,16 +2,12 @@
 
 namespace AdnanMula\Cards\Domain\Model\Shared\ValueObject;
 
+use AdnanMula\Cards\Shared\EnumHelper;
+
 enum TagVisibility: string
 {
+    use EnumHelper;
+
     case PRIVATE = 'PRIVATE';
     case PUBLIC = 'PUBLIC';
-
-    public static function allowedValues(): array
-    {
-        return [
-            self::PRIVATE->name,
-            self::PUBLIC->name,
-        ];
-    }
 }

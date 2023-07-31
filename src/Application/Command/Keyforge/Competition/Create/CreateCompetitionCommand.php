@@ -22,8 +22,8 @@ final readonly class CreateCompetitionCommand
         Assert::lazy()
             ->that($reference, 'reference')->string()->notBlank()
             ->that($name, 'name')->string()->notBlank()
-            ->that($type, 'type')->inArray(CompetitionType::allowedValues())
-            ->that($fixturesType, 'type')->inArray(CompetitionFixtureType::allowedValues())
+            ->that($type, 'type')->inArray(CompetitionType::values())
+            ->that($fixturesType, 'type')->inArray(CompetitionFixtureType::values())
             ->that($users, 'users')->all()->uuid()
             ->that($description, 'description')->string()
             ->verifyNow();

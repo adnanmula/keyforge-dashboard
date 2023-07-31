@@ -2,8 +2,12 @@
 
 namespace AdnanMula\Cards\Domain\Model\Keyforge\ValueObject;
 
+use AdnanMula\Cards\Shared\EnumHelper;
+
 enum KeyforgeCompetition: string
 {
+    use EnumHelper;
+
     case FRIENDS = 'With friends';
     case TCO_CASUAL = 'TCO Casual';
     case TCO_COMPETITIVE = 'TCO Competitive';
@@ -28,20 +32,5 @@ enum KeyforgeCompetition: string
             self::LOCAL_CUP->name => self::LOCAL_CUP,
             default => self::FRIENDS,
         };
-    }
-
-    public static function allowedValues(): array
-    {
-        return [
-            self::FRIENDS->name,
-            self::TCO_CASUAL->name,
-            self::TCO_COMPETITIVE->name,
-            self::NKFL_LEAGUE_SEASON_19->name,
-            self::NKFL_LEAGUE_SEASON_20->name,
-            self::NKFL_LEAGUE_CUP_SEASON_19->name,
-            self::NKFL_ARCHON_TOURNAMENT->name,
-            self::LOCAL_LEAGUE->name,
-            self::LOCAL_CUP->name,
-        ];
     }
 }

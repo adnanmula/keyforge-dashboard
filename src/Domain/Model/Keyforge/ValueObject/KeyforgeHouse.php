@@ -2,8 +2,12 @@
 
 namespace AdnanMula\Cards\Domain\Model\Keyforge\ValueObject;
 
+use AdnanMula\Cards\Shared\EnumHelper;
+
 enum KeyforgeHouse: string implements \JsonSerializable
 {
+    use EnumHelper;
+
     case BROBNAR = 'BROBNAR';
     case DIS = 'DIS';
     case MARS = 'MARS';
@@ -46,27 +50,5 @@ enum KeyforgeHouse: string implements \JsonSerializable
             self::UNFATHOMABLE => 'Unfathomable',
             self::EKWIDON => 'The Merchant Compacts of Ekwidon',
         };
-    }
-
-    public function jsonSerialize(): string
-    {
-        return $this->name;
-    }
-
-    public static function allowedValues(): array
-    {
-        return [
-            self::BROBNAR->value,
-            self::DIS->value,
-            self::MARS->value,
-            self::SHADOWS->value,
-            self::UNTAMED->value,
-            self::SANCTUM->value,
-            self::LOGOS->value,
-            self::SAURIAN->value,
-            self::STAR_ALLIANCE->value,
-            self::UNFATHOMABLE->value,
-            self::EKWIDON->value,
-        ];
     }
 }

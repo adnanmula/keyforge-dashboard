@@ -2,24 +2,17 @@
 
 namespace AdnanMula\Cards\Domain\Model\Shared\ValueObject;
 
+use AdnanMula\Cards\Shared\EnumHelper;
+
 enum CompetitionFixtureType: string
 {
+    use EnumHelper;
+
     case BEST_OF_1 = 'BEST_OF_1';
     case BEST_OF_3 = 'BEST_OF_3';
     case BEST_OF_5 = 'BEST_OF_5';
     case GAMES_3 = 'GAMES_3';
     case GAMES_5 = 'GAMES_5';
-
-    public static function allowedValues(): array
-    {
-        return [
-            self::BEST_OF_1->name,
-            self::BEST_OF_3->name,
-            self::BEST_OF_5->name,
-            self::GAMES_3->name,
-            self::GAMES_5->name,
-        ];
-    }
 
     public function isBestOf(): bool
     {

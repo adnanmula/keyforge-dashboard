@@ -2,8 +2,12 @@
 
 namespace AdnanMula\Cards\Domain\Model\Shared\ValueObject;
 
+use AdnanMula\Cards\Shared\EnumHelper;
+
 enum CompetitionType implements \JsonSerializable
 {
+    use EnumHelper;
+
     case ROUND_ROBIN_1;
     case ROUND_ROBIN_2;
     case ROUND_ROBIN_3;
@@ -24,19 +28,6 @@ enum CompetitionType implements \JsonSerializable
             self::ROUND_ROBIN_2_ELIMINATION->name => self::ROUND_ROBIN_2_ELIMINATION,
             default => self::ROUND_ROBIN_1,
         };
-    }
-
-    public static function allowedValues(): array
-    {
-        return [
-            self::ROUND_ROBIN_1->name,
-            self::ROUND_ROBIN_2->name,
-            self::ROUND_ROBIN_3->name,
-            self::ROUND_ROBIN_4->name,
-            self::ELIMINATION->name,
-            self::ROUND_ROBIN_1_ELIMINATION->name,
-            self::ROUND_ROBIN_2_ELIMINATION->name,
-        ];
     }
 
     public function isRoundRobin(): bool
