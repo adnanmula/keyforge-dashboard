@@ -63,6 +63,20 @@ final class GetDecksQueryHandler
 
         $filters = [new Filters(FilterType::AND, FilterType::AND, ...$expressions)];
 
+        if (\count($query->owners()) > 0) {
+            $ownerExpressions = [];
+
+            foreach ($query->owners() as $owner) {
+                $ownerExpressions[] = new Filter(new FilterField('owner'), new StringFilterValue($owner), FilterOperator::EQUAL);
+            }
+
+            $filters[] = new Filters(
+                FilterType::AND,
+                FilterType::OR,
+                ...$ownerExpressions,
+            );
+        }
+
         if (\count($query->tags()) > 0) {
             $tagsExpressions = [];
 

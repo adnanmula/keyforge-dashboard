@@ -4,6 +4,7 @@ namespace AdnanMula\Cards\Domain\Model\Keyforge\Tag\Base;
 
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeTag;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\TagStyle;
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\TagType;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\TagVisibility;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 
@@ -20,6 +21,7 @@ abstract class KeyforgeTagPositiveTrait extends KeyforgeTag
                 TagStyle::COLOR_TEXT => '#ffffff',
                 TagStyle::COLOR_OUTLINE => '#1e75e6',
             ]),
+            TagType::TRAIT_POSITIVE,
         );
     }
 }

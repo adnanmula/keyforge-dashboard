@@ -13,7 +13,7 @@ class StringValueObject implements \JsonSerializable
         return $this->value;
     }
 
-    public function equalTo(StringValueObject $other): bool
+    public function equalTo(self $other): bool
     {
         return static::class === $other::class && $this->value === $other->value;
     }

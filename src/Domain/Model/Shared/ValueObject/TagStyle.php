@@ -16,7 +16,7 @@ final class TagStyle implements \JsonSerializable
         private readonly string $colorOutline,
     ) {}
 
-    public static function from(array $style): TagStyle
+    public static function from(array $style): self
     {
         Assert::lazy()
             ->that($style)->isArray()

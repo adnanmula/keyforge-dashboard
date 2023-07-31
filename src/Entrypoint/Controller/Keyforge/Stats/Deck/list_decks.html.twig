@@ -35,9 +35,9 @@
             return false === $('#with_external')[0].checked;
         }
 
-        function tagFilterType() {
-            return $('.tag_type_selector:checked')[0].value;
-        }
+        // function tagFilterType() {
+        //     return $('.tag_type_selector:checked')[0].value;
+        // }
 
         function tags() {
             const inputs = $('.tagButton > input:checked');
@@ -95,6 +95,10 @@
             return sets;
         }
 
+        function owners() {
+            return $('#owner-selector').val();
+        }
+
         $(document).ready(function () {
             $("#applyFilters").click(function(event) {
                 $('#deckList').DataTable().ajax.reload();
@@ -123,7 +127,7 @@
                     url: '/decks/json',
                     data: function(d){
                         d.extraFilterOnlyOwned = onlyOwned();
-                        d.extraFilterTagType = tagFilterType();
+                        // d.extraFilterTagType = tagFilterType();
                         d.extraFilterTags = tags();
                         d.extraFilterTagsExcluded = tagsExcluded();
                         d.extraFilterHouses = houses();
@@ -131,6 +135,7 @@
                         d.extraFilterSet = set();
                         d.extraFilterMaxSas = maxSas();
                         d.extraFilterMinSas = minSas();
+                        d.extraFilterOwners = owners();
                     }
                 },
                 columns: [

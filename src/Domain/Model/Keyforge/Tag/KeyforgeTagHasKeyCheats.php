@@ -2,10 +2,10 @@
 
 namespace AdnanMula\Cards\Domain\Model\Keyforge\Tag;
 
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\Base\KeyforgeTagHasCard;
+use AdnanMula\Cards\Domain\Model\Keyforge\Tag\Base\KeyforgeTagPositiveTrait;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 
-final class KeyforgeTagHasKeyCheats extends KeyforgeTagHasCard
+final class KeyforgeTagHasKeyCheats extends KeyforgeTagPositiveTrait
 {
     public function __construct()
     {

@@ -62,6 +62,7 @@ final class GetDecksController extends Controller
                 $sorting,
                 $request->get('extraDeckId'),
                 $request->get('extraFilterOwner'),
+                $request->query->all()['extraFilterOwners'] ?? [],
                 $request->get('extraFilterOnlyOwned') === 'true',
                 $request->get('extraFilterTagType'),
                 $request->query->all()['extraFilterTags'] ?? [],
@@ -72,10 +73,10 @@ final class GetDecksController extends Controller
         );
 
         $response = [
-            'recordsTotal' => $decks['total'],
-            'recordsFiltered' => $decks['totalFiltered'],
             'data' => $decks['decks'],
             'draw' => (int) $request->get('draw'),
+            'recordsFiltered' => $decks['totalFiltered'],
+            'recordsTotal' => $decks['total'],
         ];
 
         return new JsonResponse($response);

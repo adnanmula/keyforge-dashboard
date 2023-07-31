@@ -19,6 +19,7 @@ final class GetDecksQuery
     private ?Sorting $sorting;
     private ?Uuid $deckId;
     private ?Uuid $owner;
+    private array $owners;
     private bool $onlyOwned;
     private ?string $tagFilterType;
     private array $tags;
@@ -36,6 +37,7 @@ final class GetDecksQuery
         ?Sorting $sorting,
         ?string $deckId = null,
         ?string $owner = null,
+        array $owners = [],
         bool $onlyOwned = false,
         ?string $tagFilterType = null,
         array $tags = [],
@@ -52,6 +54,7 @@ final class GetDecksQuery
             ->that($houses, 'house')->nullOr()->all()->inArray(KeyforgeHouse::values())
             ->that($deckId, 'deckId')->nullOr()->uuid()
             ->that($owner, 'owner')->nullOr()->uuid()
+            ->that($owners, 'onlyOwned')->all()->uuid()
             ->that($onlyOwned, 'onlyOwned')->boolean()
             ->that($tagFilterType, 'tagFilterType')->nullOr()->inArray(['all', 'any'])
             ->that($tags, 'tags')->all()->uuid()
@@ -69,6 +72,7 @@ final class GetDecksQuery
         $this->sorting = $sorting;
         $this->deckId = null !== $deckId ? Uuid::from($deckId) : null;
         $this->owner = null !== $owner ? Uuid::from($owner) : null;
+        $this->owners = $owners;
         $this->onlyOwned = $onlyOwned;
         $this->tagFilterType = $tagFilterType;
         $this->tags = \array_map(static fn (string $id): Uuid => Uuid::from($id), $tags);
@@ -125,6 +129,11 @@ final class GetDecksQuery
     public function onlyOwned(): bool
     {
         return $this->onlyOwned;
+    }
+
+    public function owners(): array
+    {
+        return $this->owners;
     }
 
     public function tagFilterType(): ?string

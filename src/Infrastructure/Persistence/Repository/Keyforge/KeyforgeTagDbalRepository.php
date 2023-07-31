@@ -6,6 +6,7 @@ use AdnanMula\Cards\Application\Service\Json;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeTag;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeTagRepository;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\TagStyle;
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\TagType;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\TagVisibility;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Criteria\Criteria;
@@ -20,8 +21,7 @@ final class KeyforgeTagDbalRepository extends DbalRepository implements Keyforge
     {
         $builder = $this->connection->createQueryBuilder();
 
-        $query = $builder->select('a.id, a.name, a.visibility, a.style')
-            ->from(self::TABLE, 'a');
+        $query = $builder->select('a.*')->from(self::TABLE, 'a');
 
         (new DbalCriteriaAdapter($builder))->execute($criteria);
 
@@ -35,22 +35,24 @@ final class KeyforgeTagDbalRepository extends DbalRepository implements Keyforge
         $stmt = $this->connection->prepare(
             \sprintf(
                 '
-                    INSERT INTO %s (id, name, visibility, style)
-                    VALUES (:id, :name, :visibility, :style)
+                    INSERT INTO %s (id, name, visibility, style, type)
+                    VALUES (:id, :name, :visibility, :style, :type)
                     ON CONFLICT (id) DO UPDATE SET
                         id = :id,
                         name = :name,
                         visibility = :visibility,
-                        style = :style
+                        style = :style,
+                        type = :type
                     ',
                 self::TABLE,
             ),
         );
 
         $stmt->bindValue(':id', $tag->id->value());
-        $stmt->bindValue(':name', $tag->name());
-        $stmt->bindValue(':visibility', $tag->visibility()->name);
-        $stmt->bindValue(':style', Json::encode($tag->style()));
+        $stmt->bindValue(':name', $tag->name);
+        $stmt->bindValue(':visibility', $tag->visibility->name);
+        $stmt->bindValue(':style', Json::encode($tag->style));
+        $stmt->bindValue(':type', $tag->type->name);
 
         $stmt->execute();
     }
@@ -62,6 +64,7 @@ final class KeyforgeTagDbalRepository extends DbalRepository implements Keyforge
             $tag['name'],
             TagVisibility::from($tag['visibility']),
             TagStyle::from(Json::decode($tag['style'])),
+            TagType::from($tag['type']),
         );
     }
 }

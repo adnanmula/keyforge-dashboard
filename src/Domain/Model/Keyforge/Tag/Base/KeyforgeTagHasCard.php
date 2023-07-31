@@ -4,6 +4,7 @@ namespace AdnanMula\Cards\Domain\Model\Keyforge\Tag\Base;
 
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeTag;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\TagStyle;
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\TagType;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\TagVisibility;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 
@@ -20,6 +21,7 @@ abstract class KeyforgeTagHasCard extends KeyforgeTag
                 TagStyle::COLOR_TEXT => '#000000',
                 TagStyle::COLOR_OUTLINE => '#e8db1e',
             ]),
+            TagType::OTHER,
         );
     }
 }

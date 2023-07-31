@@ -39,6 +39,7 @@ final class KeyforgeInitial extends AbstractMigration
                 name character varying(64) NOT NULL,
                 visibility character varying(16) NOT NULL,
                 style jsonb NOT NULL,
+                type character varying(64) NOT NULL,
                 PRIMARY KEY(id)
             )',
         );

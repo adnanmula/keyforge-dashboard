@@ -109,8 +109,20 @@
                         <input type="number" class="form-control" name="max-sas" id="filter_max_sas" min="30" max="108" value="108">
                     </div>
 
-                    <div class="col-md-10 col-sm-8">
+                    <div class="col-md-2 col-sm-4">
                         <label for="tags" class="form-label">Otras opciones</label>
+
+                        <div class="form-group">
+                            <select id="owner-selector" class="form-select form-control">
+                                {% for user in users %}
+                                    <option value="{{ user.id }}">{{ user.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="divider py-1"></div>
+                        <div class="divider py-1"></div>
+
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" value="" id="with_external">
                             <label class="form-check-label" for="with_external">External decks/games</label>
@@ -122,24 +134,24 @@
                 <div class="divider py-1"></div>
                 <div class="divider py-1"></div>
 
-                <div class="form-group">
-                    <label for="tags" class="form-label">Etiquetas</label>
-                    <input class="form-check-input tag_type_selector" type="radio" name="tags_filter_type" id="tags_filter_type_1" value="all" checked>
-                    <label class="form-check-label" for="tags_filter_type_1">Todas</label>
-                    <input class="form-check-input tag_type_selector" type="radio" name="tags_filter_type" id="tags_filter_type_2" value="any">
-                    <label class="form-check-label" for="tags_filter_type_2">Cualquiera</label>
-
-                    <div class="row" style="display: flex; overflow-x: auto">
-                        {% for tag in tags %}
-                            <div class="form-check-inline col-5 col-md-4 col-lg-3 col-xl-2 text-nowrap" id="tagsContainer" style="font-size: .6em;">
-                                <button type="button" class="btn btn-xs btn-outline-dark tagButton" data-value="{{ tag.name }}" data-id="{{ tag.id }}" style="background-color: {{ tag.style.color_bg }}; color: {{ tag.style.color_text }}; border-color: {{ tag.style.color_outline }}">
-                                    <input class="form-check-input tag_selector" type="checkbox" value="{{ tag.id }}" id="check_tag_{{ tag.id }}">
-                                    {{ tag.name }}
-                                </button>
-                            </div>
-                        {% endfor %}
-                    </div>
-                </div>
+{#                <div class="form-group">#}
+{#                    <label for="tags" class="form-label">Etiquetas</label>#}
+{#                    <input class="form-check-input tag_type_selector" type="radio" name="tags_filter_type" id="tags_filter_type_1" value="all" checked>#}
+{#                    <label class="form-check-label" for="tags_filter_type_1">Todas</label>#}
+{#                    <input class="form-check-input tag_type_selector" type="radio" name="tags_filter_type" id="tags_filter_type_2" value="any">#}
+{#                    <label class="form-check-label" for="tags_filter_type_2">Cualquiera</label>#}
+{##}
+{#                    <div class="row" style="display: flex; overflow-x: auto">#}
+{#                        {% for tag in tags %}#}
+{#                            <div class="form-check-inline col-5 col-md-4 col-lg-3 col-xl-2 text-nowrap" id="tagsContainer" style="font-size: .6em;">#}
+{#                                <button type="button" class="btn btn-xs btn-outline-dark tagButton" data-value="{{ tag.name }}" data-id="{{ tag.id }}" style="background-color: {{ tag.style.color_bg }}; color: {{ tag.style.color_text }}; border-color: {{ tag.style.color_outline }}">#}
+{#                                    <input class="form-check-input tag_selector" type="checkbox" value="{{ tag.id }}" id="check_tag_{{ tag.id }}">#}
+{#                                    {{ tag.name }}#}
+{#                                </button>#}
+{#                            </div>#}
+{#                        {% endfor %}#}
+{#                    </div>#}
+{#                </div>#}
 
                 <div class="divider py-1"></div>
 
@@ -157,26 +169,36 @@
 </div>
 
 <script>
-    $('.tagButton').click(function (e) {
-        const input = $('#check_tag_' + e.target.getAttribute('data-id'))[0];
+    // $('.tagButton').click(function (e) {
+    //     const input = $('#check_tag_' + e.target.getAttribute('data-id'))[0];
+    //
+    //     if (input == undefined) {
+    //         return;
+    //     }
+    //
+    //     if (input.indeterminate) {
+    //         input.indeterminate = false;
+    //         input.checked = false;
+    //
+    //         return;
+    //     }
+    //
+    //     if (input.checked) {
+    //         input.indeterminate = true;
+    //         input.checked = false;
+    //     } else {
+    //         input.indeterminate = false;
+    //         input.checked = true;
+    //     }
+    // });
 
-        if (input == undefined) {
-            return;
-        }
-
-        if (input.indeterminate) {
-            input.indeterminate = false;
-            input.checked = false;
-
-            return;
-        }
-
-        if (input.checked) {
-            input.indeterminate = true;
-            input.checked = false;
-        } else {
-            input.indeterminate = false;
-            input.checked = true;
-        }
+    $('#owner-selector').select2({
+        multiple: true,
+        closeOnSelect: false,
+        allowClear: false,
+        placeholder: 'Propietario',
     });
+
+    $("#owner-selector").val("")
+    $("#owner-selector").trigger("change");
 </script>

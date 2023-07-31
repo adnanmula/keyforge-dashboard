@@ -30,27 +30,27 @@ enum KeyforgeSet: string
     public static function fromDokName(string $set): self
     {
         if ($set === 'CALL_OF_THE_ARCHONS') {
-            return KeyforgeSet::CotA;
+            return self::CotA;
         }
 
         if ($set === 'AGE_OF_ASCENSION') {
-            return KeyforgeSet::AoA;
+            return self::AoA;
         }
 
         if ($set === 'WORLDS_COLLIDE') {
-            return KeyforgeSet::WC;
+            return self::WC;
         }
 
         if ($set === 'MASS_MUTATION') {
-            return KeyforgeSet::MM;
+            return self::MM;
         }
 
         if ($set === 'DARK_TIDINGS') {
-            return KeyforgeSet::DT;
+            return self::DT;
         }
 
         if ($set === 'WINDS_OF_EXCHANGE') {
-            return KeyforgeSet::WoE;
+            return self::WoE;
         }
 
         throw new \InvalidArgumentException($set);

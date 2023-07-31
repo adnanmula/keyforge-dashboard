@@ -3,6 +3,7 @@
 namespace AdnanMula\Cards\Domain\Model\Keyforge;
 
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\TagStyle;
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\TagType;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\TagVisibility;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 
@@ -13,27 +14,8 @@ class KeyforgeTag implements \JsonSerializable
         public string $name,
         public TagVisibility $visibility,
         public TagStyle $style,
+        public TagType $type,
     ) {}
-
-    public function id(): Uuid
-    {
-        return $this->id;
-    }
-
-    public function name(): string
-    {
-        return $this->name;
-    }
-
-    public function visibility(): TagVisibility
-    {
-        return $this->visibility;
-    }
-
-    public function style(): TagStyle
-    {
-        return $this->style;
-    }
 
     public function jsonSerialize(): array
     {
@@ -42,6 +24,7 @@ class KeyforgeTag implements \JsonSerializable
             'name' => $this->name,
             'visibility' => $this->visibility->name,
             'style' => $this->style->jsonSerialize(),
+            'type' => $this->type->name,
         ];
     }
 }

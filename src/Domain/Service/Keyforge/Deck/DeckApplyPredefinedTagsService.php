@@ -25,39 +25,12 @@ use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagDisruptionHigh;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagEffectivePowerHigh;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagEfficiencyHigh;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagEfficiencyLow;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasAgentZ;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasAnomaly;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasBoardWipes;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasBRIG;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasCollectorWorm;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasDoubleCards;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasDysania;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasFangtoothCavern;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasGenKa;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasHeartOfTheForest;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasHorseman;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasKeyCheats;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasLegacy;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasMaverick;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasOrtannu;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasRats;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasScalingAmberControl;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasSins;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasTimetraveller;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasXenos;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagOwnerBuko;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagOwnerChopi;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagOwnerDani;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagOwnerFran;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagOwnerIsmalelo;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagOwnerNan;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagOwnerNull;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagPercentile05;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagPercentile60;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagPercentile70;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagPercentile80;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagPercentile90;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagPercentile99;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagRecursionHigh;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagSynergyHigh;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagUpgradeCountHigh;
@@ -91,27 +64,12 @@ final class DeckApplyPredefinedTagsService
         $newTags[] = $this->tagEffectivePower($data);
         $newTags[] = $this->tagEfficiency($data);
         $newTags[] = $this->tagExpectedAmber($data);
-        $newTags[] = $this->tagHasAgentZ($data);
         $newTags[] = $this->tagHasAnomaly($anomalyCount);
-        $newTags[] = $this->tagHasBRIG($data);
         $newTags[] = $this->tagHasBoardWipes($data);
-        $newTags[] = $this->tagHasCavern($data);
-        $newTags[] = $this->tagHasCollectorWorm($data);
-        $newTags[] = $this->tagHasDoubleCards($data);
-        $newTags[] = $this->tagHasDysania($data);
-        $newTags[] = $this->tagHasGenKa($data);
-        $newTags[] = $this->tagHasHeartOfTheForest($data);
-        $newTags[] = $this->tagHasHorseman($data);
         $newTags[] = $this->tagHasKeyCheats($data);
         $newTags[] = $this->tagHasLegacy($legacyCount);
         $newTags[] = $this->tagHasMaverick($maverickCount);
-        $newTags[] = $this->tagHasOrtannu($data);
-        $newTags[] = $this->tagHasRats($data);
         $newTags[] = $this->tagHasScalingAmberControl($data);
-        $newTags[] = $this->tagHasSins($data);
-        $newTags[] = $this->tagHasTimetraveller($data);
-        $newTags[] = $this->tagHasXenos($data);
-        $newTags[] = $this->tagPercentiles($data);
         $newTags[] = $this->tagRecursion($data);
         $newTags[] = $this->tagSynergy($data);
         $newTags[] = $this->tagUpgradeCount($data);
@@ -126,8 +84,6 @@ final class DeckApplyPredefinedTagsService
         if (\in_array($deck->id()->value(), $draftDecks, true)) {
             $newTags = [];
         }
-
-        $newTags[] = $this->tagOwner($deck);
 
         $newTags = \array_filter($newTags);
 
@@ -166,37 +122,6 @@ final class DeckApplyPredefinedTagsService
         }
 
         return [$maverickCount, $legacyCount, $anomalyCount];
-    }
-
-    private function tagPercentiles(array $data): ?KeyforgeTag
-    {
-        $sasPercentile = $data['sasPercentile'];
-
-        if ($sasPercentile <= 5) {
-            return new KeyforgeTagPercentile05();
-        }
-
-        if ($sasPercentile >= 60 && $sasPercentile < 70) {
-            return new KeyforgeTagPercentile60();
-        }
-
-        if ($sasPercentile >= 70 && $sasPercentile < 80) {
-            return new KeyforgeTagPercentile70();
-        }
-
-        if ($sasPercentile >= 80 && $sasPercentile < 90) {
-            return new KeyforgeTagPercentile80();
-        }
-
-        if ($sasPercentile >= 90 && $sasPercentile < 99) {
-            return new KeyforgeTagPercentile90();
-        }
-
-        if ($sasPercentile >= 99) {
-            return new KeyforgeTagPercentile99();
-        }
-
-        return null;
     }
 
     private function tagHasMaverick(int $maverick): ?KeyforgeTag
@@ -525,229 +450,6 @@ final class DeckApplyPredefinedTagsService
 
         if ($value >= 2) {
             return new KeyforgeTagAntiSynergyHigh();
-        }
-
-        return null;
-    }
-
-    private function tagHasCavern(array $data): ?KeyforgeTag
-    {
-        $cards = [
-            'Fangtooth Cavern',
-        ];
-
-        if ($this->hasCard($cards, $data)) {
-            return new KeyforgeTagHasFangtoothCavern();
-        }
-
-        return null;
-    }
-
-    private function tagHasAgentZ(array $data): ?KeyforgeTag
-    {
-        $cards = [
-            'Z-Force Agent 14',
-        ];
-
-        if ($this->hasCard($cards, $data)) {
-            return new KeyforgeTagHasAgentZ();
-        }
-
-        return null;
-    }
-
-    private function tagHasTimetraveller(array $data): ?KeyforgeTag
-    {
-        $cards = [
-            'Timetraveller',
-        ];
-
-        if ($this->hasCard($cards, $data)) {
-            return new KeyforgeTagHasTimetraveller();
-        }
-
-        return null;
-    }
-
-    private function tagHasRats(array $data): ?KeyforgeTag
-    {
-        $cards = [
-            'Plague Rat',
-        ];
-
-        if ($this->hasCard($cards, $data)) {
-            return new KeyforgeTagHasRats();
-        }
-
-        return null;
-    }
-
-    private function tagHasDoubleCards(array $data): ?KeyforgeTag
-    {
-        $cards = [
-            'Deusillus',
-            'Ultra Gravitron',
-            'Niffle Kong',
-        ];
-
-        if ($this->hasCard($cards, $data)) {
-            return new KeyforgeTagHasDoubleCards();
-        }
-
-        return null;
-    }
-
-    private function tagHasHorseman(array $data): ?KeyforgeTag
-    {
-        $cards = [
-            'Horseman of Death',
-            'Horseman of Famine',
-            'Horseman of Pestilence',
-            'Horseman of War',
-        ];
-
-        if ($this->hasCard($cards, $data)) {
-            return new KeyforgeTagHasHorseman();
-        }
-
-        return null;
-    }
-
-    private function tagHasSins(array $data): ?KeyforgeTag
-    {
-        $cards = [
-            'Gluttony',
-            'Envy',
-            'Desire',
-            'Greed',
-            'Pride',
-            'Sloth',
-            'Wrath',
-        ];
-
-        if ($this->hasCard($cards, $data)) {
-            return new KeyforgeTagHasSins();
-        }
-
-        return null;
-    }
-
-    private function tagHasDysania(array $data): ?KeyforgeTag
-    {
-        $cards = ['Dysania'];
-
-        if ($this->hasCard($cards, $data)) {
-            return new KeyforgeTagHasDysania();
-        }
-
-        return null;
-    }
-
-    private function tagHasOrtannu(array $data): ?KeyforgeTag
-    {
-        $cards = ['Ortannu the Chained'];
-
-        if ($this->hasCard($cards, $data)) {
-            return new KeyforgeTagHasOrtannu();
-        }
-
-        return null;
-    }
-
-    private function tagHasCollectorWorm(array $data): ?KeyforgeTag
-    {
-        $cards = ['Collector Worm'];
-
-        if ($this->hasCard($cards, $data)) {
-            return new KeyforgeTagHasCollectorWorm();
-        }
-
-        return null;
-    }
-
-    private function tagHasGenKa(array $data): ?KeyforgeTag
-    {
-        if ($this->hasCard(['Martian Generosity'], $data) && $this->hasCard(['Key Abduction'], $data)) {
-            return new KeyforgeTagHasGenKa();
-        }
-
-        return null;
-    }
-
-    private function tagHasBRIG(array $data): ?KeyforgeTag
-    {
-        if ($this->hasCard(['Binate Rupture'], $data) && $this->hasCard(['Interdimensional Graft'], $data)) {
-            return new KeyforgeTagHasBRIG();
-        }
-
-        return null;
-    }
-
-    private function tagHasHeartOfTheForest(array $data): ?KeyforgeTag
-    {
-        $cards = ['Heart of the Forest'];
-
-        if ($this->hasCard($cards, $data)) {
-            return new KeyforgeTagHasHeartOfTheForest();
-        }
-
-        return null;
-    }
-
-    private function tagHasXenos(array $data): ?KeyforgeTag
-    {
-        $cards = ['Xenos Bloodshadow'];
-
-        if ($this->hasCard($cards, $data)) {
-            return new KeyforgeTagHasXenos();
-        }
-
-        return null;
-    }
-
-    private function hasCard(array $cards, array $data): bool
-    {
-        foreach ($data['housesAndCards'] as $house) {
-            foreach ($house['cards'] as $card) {
-                if (\in_array($card['cardTitle'], $cards, true)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    private function tagOwner(KeyforgeDeck $deck): ?KeyforgeTag
-    {
-        $owner = $deck->owner()?->value();
-
-        if (null === $owner) {
-            return new KeyforgeTagOwnerNull();
-        }
-
-        if ($owner === '4ec5768e-f09f-4c9c-ab94-ff5bcb3e38c1') {
-            return new KeyforgeTagOwnerNan();
-        }
-
-        if ($owner === 'dd055fa6-cafd-4356-b283-54ce606f86b2') {
-            return new KeyforgeTagOwnerBuko();
-        }
-
-        if ($owner === 'f752ba28-e975-4ae8-869f-f56e02e67922') {
-            return new KeyforgeTagOwnerIsmalelo();
-        }
-
-        if ($owner === 'c98fd22a-c355-4fb9-88c9-2a2123a43321') {
-            return new KeyforgeTagOwnerFran();
-        }
-
-        if ($owner === 'b86488f4-336e-4c23-a34d-e92f06b51c04') {
-            return new KeyforgeTagOwnerDani();
-        }
-
-        if ($owner === 'f6f51a9f-28d1-416c-aeb0-28c5d8c23d9c') {
-            return new KeyforgeTagOwnerChopi();
         }
 
         return null;
