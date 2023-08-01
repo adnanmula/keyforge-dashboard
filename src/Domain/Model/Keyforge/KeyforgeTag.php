@@ -15,6 +15,7 @@ class KeyforgeTag implements \JsonSerializable
         public TagVisibility $visibility,
         public TagStyle $style,
         public TagType $type,
+        public bool $archived,
     ) {}
 
     public function jsonSerialize(): array
@@ -25,6 +26,7 @@ class KeyforgeTag implements \JsonSerializable
             'visibility' => $this->visibility->name,
             'style' => $this->style->jsonSerialize(),
             'type' => $this->type->name,
+            'archived' => $this->archived,
         ];
     }
 }

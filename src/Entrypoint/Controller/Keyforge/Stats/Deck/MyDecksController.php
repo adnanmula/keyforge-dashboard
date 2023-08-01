@@ -32,6 +32,7 @@ final class MyDecksController extends Controller
         $tags = $this->extractResult($this->bus->dispatch(new GetTagsQuery(
             null,
             null,
+            null,
         )));
 
         $users = $this->userRepository->all(false);

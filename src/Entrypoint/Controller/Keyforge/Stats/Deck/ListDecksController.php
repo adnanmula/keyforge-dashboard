@@ -27,6 +27,7 @@ final class ListDecksController extends Controller
         $tags = $this->extractResult($this->bus->dispatch(new GetTagsQuery(
             null,
             TagVisibility::PUBLIC->name,
+            null,
         )));
 
         $users = $this->userRepository->all(false);

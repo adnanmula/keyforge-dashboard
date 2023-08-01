@@ -22,6 +22,7 @@ abstract class KeyforgeTagNeutralTrait extends KeyforgeTag
                 TagStyle::COLOR_OUTLINE => '#000000',
             ]),
             TagType::TRAIT_NEUTRAL,
+            false,
         );
     }
 }

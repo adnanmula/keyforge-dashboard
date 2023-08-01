@@ -22,6 +22,7 @@ abstract class KeyforgeTagHasCard extends KeyforgeTag
                 TagStyle::COLOR_OUTLINE => '#e8db1e',
             ]),
             TagType::OTHER,
+            false,
         );
     }
 }

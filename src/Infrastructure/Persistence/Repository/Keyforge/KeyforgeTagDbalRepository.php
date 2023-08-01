@@ -12,6 +12,7 @@ use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Criteria\Criteria;
 use AdnanMula\Criteria\DbalCriteriaAdapter;
 use AdnanMula\Cards\Infrastructure\Persistence\Repository\DbalRepository;
+use Doctrine\DBAL\ParameterType;
 
 final class KeyforgeTagDbalRepository extends DbalRepository implements KeyforgeTagRepository
 {
@@ -35,14 +36,15 @@ final class KeyforgeTagDbalRepository extends DbalRepository implements Keyforge
         $stmt = $this->connection->prepare(
             \sprintf(
                 '
-                    INSERT INTO %s (id, name, visibility, style, type)
-                    VALUES (:id, :name, :visibility, :style, :type)
+                    INSERT INTO %s (id, name, visibility, style, type, archived)
+                    VALUES (:id, :name, :visibility, :style, :type, :archived)
                     ON CONFLICT (id) DO UPDATE SET
                         id = :id,
                         name = :name,
                         visibility = :visibility,
                         style = :style,
-                        type = :type
+                        type = :type,
+                        archived = :archived
                     ',
                 self::TABLE,
             ),
@@ -53,6 +55,7 @@ final class KeyforgeTagDbalRepository extends DbalRepository implements Keyforge
         $stmt->bindValue(':visibility', $tag->visibility->name);
         $stmt->bindValue(':style', Json::encode($tag->style));
         $stmt->bindValue(':type', $tag->type->name);
+        $stmt->bindValue(':archived', $tag->archived, ParameterType::BOOLEAN);
 
         $stmt->execute();
     }
@@ -65,6 +68,7 @@ final class KeyforgeTagDbalRepository extends DbalRepository implements Keyforge
             TagVisibility::from($tag['visibility']),
             TagStyle::from(Json::decode($tag['style'])),
             TagType::from($tag['type']),
+            $tag['archived'],
         );
     }
 }

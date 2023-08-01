@@ -22,6 +22,7 @@ abstract class KeyforgeTagPositiveTrait extends KeyforgeTag
                 TagStyle::COLOR_OUTLINE => '#1e75e6',
             ]),
             TagType::TRAIT_POSITIVE,
+            false,
         );
     }
 }

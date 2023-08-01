@@ -10,12 +10,14 @@ final class GetTagsQuery
 {
     private ?array $ids;
     private ?TagVisibility $visibility;
+    private ?bool $archived;
 
-    public function __construct($ids, $visibility)
+    public function __construct($ids, $visibility, $archived)
     {
         Assert::lazy()
             ->that($ids, 'ids')->nullOr()->all()->uuid()
             ->that($visibility, 'visibility')->nullOr()->inArray(TagVisibility::values())
+            ->that($archived, 'archived')->nullOr()->boolean()
             ->verifyNow();
 
         $this->ids = null === $ids
@@ -25,6 +27,8 @@ final class GetTagsQuery
         $this->visibility = null === $visibility
             ? null
             : TagVisibility::from($visibility);
+
+        $this->archived = $archived;
     }
 
     public function ids(): ?array
@@ -35,5 +39,10 @@ final class GetTagsQuery
     public function visibility(): ?TagVisibility
     {
         return $this->visibility;
+    }
+
+    public function archived(): ?bool
+    {
+        return $this->archived;
     }
 }

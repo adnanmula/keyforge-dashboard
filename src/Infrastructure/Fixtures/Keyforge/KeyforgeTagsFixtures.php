@@ -35,6 +35,7 @@ use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagSynergyHigh;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagUpgradeCountHigh;
 use AdnanMula\Cards\Domain\Service\Persistence\Fixture;
 use AdnanMula\Cards\Infrastructure\Fixtures\DbalFixture;
+use Doctrine\DBAL\ParameterType;
 
 final class KeyforgeTagsFixtures extends DbalFixture implements Fixture
 {
@@ -92,14 +93,15 @@ final class KeyforgeTagsFixtures extends DbalFixture implements Fixture
         $stmt = $this->connection->prepare(
             \sprintf(
                 '
-                    INSERT INTO %s (id, name, visibility, style, type)
-                    VALUES (:id, :name, :visibility, :style, :type)
+                    INSERT INTO %s (id, name, visibility, style, type, archived)
+                    VALUES (:id, :name, :visibility, :style, :type, :archived)
                     ON CONFLICT (id) DO UPDATE SET
                         id = :id,
                         name = :name,
                         visibility = :visibility,
                         style = :style,
-                        type = :type
+                        type = :type,
+                        archived = :archived
                     ',
                 self::TABLE,
             ),
@@ -110,6 +112,7 @@ final class KeyforgeTagsFixtures extends DbalFixture implements Fixture
         $stmt->bindValue(':visibility', $tag->visibility->name);
         $stmt->bindValue(':style', Json::encode($tag->style));
         $stmt->bindValue(':type', $tag->type->name);
+        $stmt->bindValue(':archived', $tag->archived, ParameterType::BOOLEAN);
 
         $stmt->execute();
     }

@@ -28,6 +28,10 @@ final readonly class GetTagsQueryHandler
             $expressions[] = new Filter(new FilterField('visibility'), new StringFilterValue($query->visibility()->name), FilterOperator::EQUAL);
         }
 
+        if (null !== $query->archived()) {
+            $expressions[] = new Filter(new FilterField('archived'), new StringFilterValue((string) $query->archived()), FilterOperator::EQUAL);
+        }
+
         $filters = [new Filters(FilterType::AND, FilterType::AND, ...$expressions)];
 
         if (null !== $query->ids()) {

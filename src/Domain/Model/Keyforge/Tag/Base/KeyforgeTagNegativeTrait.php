@@ -22,6 +22,7 @@ abstract class KeyforgeTagNegativeTrait extends KeyforgeTag
                 TagStyle::COLOR_OUTLINE => '#f50529',
             ]),
             TagType::TRAIT_NEGATIVE,
+            false,
         );
     }
 }
