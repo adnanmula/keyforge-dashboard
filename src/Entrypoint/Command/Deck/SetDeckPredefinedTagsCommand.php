@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace AdnanMula\Cards\Entrypoint\Command\Tag;
+namespace AdnanMula\Cards\Entrypoint\Command\Deck;
 
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
@@ -17,9 +17,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-final class TagsApplyPredefinedCommand extends Command
+final class SetDeckPredefinedTagsCommand extends Command
 {
-    public const NAME = 'tags:predefined:apply';
+    public const NAME = 'deck:tag:set';
 
     public function __construct(
         private readonly KeyforgeDeckRepository $deckRepository,
