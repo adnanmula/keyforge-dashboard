@@ -48,6 +48,6 @@ final class LoadFixturesCommand extends Command
 
         $app->setAutoExit(false);
 
-        $app->run(new ArrayInput(['command' => 'tags:predefined:apply']));
+        $app->run(new ArrayInput(['command' => 'deck:tag:set']));
     }
 }

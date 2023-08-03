@@ -22,11 +22,15 @@ final class ImportDeckController extends Controller
 
         if ($request->getMethod() === Request::METHOD_POST) {
             try {
-                /** @var User $user */
-                $user = $this->getUser();
+                $userId = null;
+
+                if (null !== $request->get('setUser')) {
+                    $userId = $this->getUser()->id()->value();
+                }
+
                 $deckId = $this->parseDeck($request->request->get('deck'));
 
-                $this->bus->dispatch(new ImportDeckCommand($deckId, $user->id()->value()));
+                $this->bus->dispatch(new ImportDeckCommand($deckId, $userId));
 
                 return $this->render('Keyforge/Deck/Import/import_deck.html.twig', ['result' => 'Bien', 'success' => true, 'deckId' => $deckId]);
             } catch (InvalidUuidStringException) {

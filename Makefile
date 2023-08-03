@@ -65,4 +65,4 @@ grump: ## run grumphp
 
 # Application
 tags: ## Apply predefined tags
-	docker-compose -f ${FILE} exec --user=${UID} php-fpm sh -c "console tags:predefined:apply"
+	docker-compose -f ${FILE} exec --user=${UID} php-fpm sh -c "console deck:tag:set"

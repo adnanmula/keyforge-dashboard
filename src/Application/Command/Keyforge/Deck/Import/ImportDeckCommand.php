@@ -5,29 +5,19 @@ namespace AdnanMula\Cards\Application\Command\Keyforge\Deck\Import;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use Assert\Assert;
 
-final class ImportDeckCommand
+final readonly class ImportDeckCommand
 {
-    private Uuid $deckId;
-    private Uuid $userId;
+    public Uuid $deckId;
+    public ?Uuid $userId;
 
     public function __construct($deckId, $userId)
     {
         Assert::lazy()
             ->that($deckId, 'deckId')->uuid()
-            ->that($userId, 'userId')->uuid()
+            ->that($userId, 'userId')->nullOr()->uuid()
             ->verifyNow();
 
         $this->deckId = Uuid::from($deckId);
         $this->userId = Uuid::from($userId);
-    }
-
-    public function deckId(): Uuid
-    {
-        return $this->deckId;
-    }
-
-    public function userId(): Uuid
-    {
-        return $this->userId;
     }
 }
