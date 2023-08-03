@@ -4,33 +4,33 @@
 
 {% block body %}
     <div class="shadow-lg p-3 mb-5 bg-white rounded">
+{#        <div class="row">#}
+{#            <a href="{{ path('keyforge_decks') }}" class="btn btn-dark border col-12 col-sm-6 col-lg-3">#}
+{#                <h5>Barajas registradas</h5>#}
+{#                <p></p>#}
+{#                <p>{{ data.deck_count }}</p>#}
+{#            </a>#}
+
+{#            <a class="btn btn-dark border col-12 col-sm-6 col-lg-3">#}
+{#                <h5>Partidas jugadas</h5>#}
+{#                <p></p>#}
+{#                <p>{{ data.games_played }}</p>#}
+{#            </a>#}
+
+{#            <a href="{{ path('keyforge_competition_list') }}" class="btn btn-dark border col-12 col-sm-6 col-lg-3">#}
+{#                <h5>Torneos</h5>#}
+{#                <p></p>#}
+{#                <p>{{ data.competition_count }}</p>#}
+{#            </a>#}
+
+{#            <a href="{{ path('keyforge_user_list') }}" class="btn btn-dark border col-12 col-sm-6 col-lg-3">#}
+{#                <h5>Jugadores</h5>#}
+{#                <p></p>#}
+{#                <p>{{ data.player_count }}</p>#}
+{#            </a>#}
+{#        </div>#}
+
         <div class="row">
-            <a href="{{ path('keyforge_decks') }}" class="btn btn-dark border col-12 col-sm-6 col-lg-3">
-                <h5>Barajas registradas</h5>
-                <p></p>
-                <p>{{ data.deck_count }}</p>
-            </a>
-
-            <a class="btn btn-dark border col-12 col-sm-6 col-lg-3">
-                <h5>Partidas jugadas</h5>
-                <p></p>
-                <p>{{ data.games_played }}</p>
-            </a>
-
-            <a href="{{ path('keyforge_competition_list') }}" class="btn btn-dark border col-12 col-sm-6 col-lg-3">
-                <h5>Torneos</h5>
-                <p></p>
-                <p>{{ data.competition_count }}</p>
-            </a>
-
-            <a href="{{ path('keyforge_user_list') }}" class="btn btn-dark border col-12 col-sm-6 col-lg-3">
-                <h5>Jugadores</h5>
-                <p></p>
-                <p>{{ data.player_count }}</p>
-            </a>
-        </div>
-
-        <div class="row mt-3">
             <div class="col-12 col-sm-6 col-lg-3">
                 <canvas id="setWins" width="400" height="400"></canvas>
             </div>

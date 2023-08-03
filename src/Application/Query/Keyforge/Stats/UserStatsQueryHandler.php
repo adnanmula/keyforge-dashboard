@@ -6,7 +6,6 @@ use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeCompetition;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeCompetitionRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeck;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeckRepository;
-use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGame;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGameRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUser;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUserRepository;
@@ -69,10 +68,10 @@ final class UserStatsQueryHandler
 
         $nonExternalUsersIds = \array_map(static fn (KeyforgeUser $user) => $user->id()->value(), $nonExternalUsers);
 
-        $games = \array_values(\array_filter($games, static function (KeyforgeGame $game) use ($nonExternalUsersIds) {
-            return \in_array($game->winner()->value(), $nonExternalUsersIds, true)
-                && \in_array($game->loser()->value(), $nonExternalUsersIds, true);
-        }));
+//        $games = \array_values(\array_filter($games, static function (KeyforgeGame $game) use ($nonExternalUsersIds) {
+//            return \in_array($game->winner()->value(), $nonExternalUsersIds, true)
+//                && \in_array($game->loser()->value(), $nonExternalUsersIds, true);
+//        }));
 
         $indexedDecks = [];
         $indexedDeckSets = [];
