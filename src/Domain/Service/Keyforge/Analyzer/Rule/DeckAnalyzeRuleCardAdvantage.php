@@ -20,6 +20,8 @@ final class DeckAnalyzeRuleCardAdvantage implements DeckAnalyzeRule
         $r[] = $this->ruleHasCards($deck, 'Triggerea fácilmente el Library Access', 'Library Access', 'Dark Æmber Vault');
         $r[] = $this->ruleHasCards($deck, 'Triggerea fácilmente el Auto-Encoder', 'Auto-Encoder', 'Punctuated Equilibrium');
         $r[] = $this->ruleHasCards($deck, 'Triggerea fácilmente el Auto-Encoder', 'Auto-Encoder', 'Novu Dynamo');
+        $r[] = $this->ruleHasCards($deck, 'Recursión QMechs', 'Fangtooth Cavern', 'Q-Mechs');
+        $r[] = $this->ruleHasCards($deck, 'Recursión Rad Penny', 'Fangtooth Cavern', 'Rad Penny');
 
         $r = \array_values(\array_filter($r));
 

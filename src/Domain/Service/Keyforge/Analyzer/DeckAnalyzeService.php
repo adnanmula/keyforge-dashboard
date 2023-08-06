@@ -8,9 +8,10 @@ use AdnanMula\Cards\Domain\Service\Keyforge\Analyzer\Rule\DeckAnalyzeRuleAmberGe
 use AdnanMula\Cards\Domain\Service\Keyforge\Analyzer\Rule\DeckAnalyzeRuleAreaCreaturePosition;
 use AdnanMula\Cards\Domain\Service\Keyforge\Analyzer\Rule\DeckAnalyzeRuleAreaDamageBenefits;
 use AdnanMula\Cards\Domain\Service\Keyforge\Analyzer\Rule\DeckAnalyzeRuleCardAdvantage;
-use AdnanMula\Cards\Domain\Service\Keyforge\Analyzer\Rule\DeckAnalyzeRuleKeyControl;
+use AdnanMula\Cards\Domain\Service\Keyforge\Analyzer\Rule\DeckAnalyzeRuleControl;
 use AdnanMula\Cards\Domain\Service\Keyforge\Analyzer\Rule\DeckAnalyzeRuleKeyForging;
 use AdnanMula\Cards\Domain\Service\Keyforge\Analyzer\Rule\DeckAnalyzeRuleLocks;
+use AdnanMula\Cards\Domain\Service\Keyforge\Analyzer\Rule\DeckAnalyzeRuleRecursion;
 
 final readonly class DeckAnalyzeService
 {
@@ -19,14 +20,15 @@ final readonly class DeckAnalyzeService
     public function __construct()
     {
         $this->rules = [
-            new DeckAnalyzeRuleAmberGeneration(),
-            new DeckAnalyzeRuleLocks(),
-            new DeckAnalyzeRuleCardAdvantage(),
-            new DeckAnalyzeRuleKeyForging(),
             new DeckAnalyzeRuleAmberControl(),
-            new DeckAnalyzeRuleKeyControl(),
-            new DeckAnalyzeRuleAreaDamageBenefits(),
+            new DeckAnalyzeRuleAmberGeneration(),
             new DeckAnalyzeRuleAreaCreaturePosition(),
+            new DeckAnalyzeRuleAreaDamageBenefits(),
+            new DeckAnalyzeRuleCardAdvantage(),
+            new DeckAnalyzeRuleControl(),
+            new DeckAnalyzeRuleKeyForging(),
+            new DeckAnalyzeRuleLocks(),
+            new DeckAnalyzeRuleRecursion(),
         ];
     }
 

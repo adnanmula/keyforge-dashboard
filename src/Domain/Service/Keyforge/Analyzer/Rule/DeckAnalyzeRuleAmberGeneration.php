@@ -43,6 +43,7 @@ final class DeckAnalyzeRuleAmberGeneration implements DeckAnalyzeRule
         $r[] = $this->ruleHasCards($deck, 'Control y recursión del aguijón', 'The Sting', 'Snudge');
         $r[] = $this->ruleHasCards($deck, 'Control y recursión del aguijón', 'The Sting', 'Vezyma Thinkdrone');
         $r[] = $this->ruleHasCards($deck, 'Control y recursión del aguijón', 'The Sting', 'Barehanded');
+        $r[] = $this->ruleHasCards($deck, 'Doble de beneficio', 'Obsidian Forge', 'Soul Snatcher');
 
         $r = \array_values(\array_filter($r));
 
