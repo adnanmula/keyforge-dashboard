@@ -44,12 +44,17 @@ final readonly class KeyforgeCards implements \JsonSerializable
         ];
     }
 
-    public function has(array $cards): bool
+    public function has(string $card, int $times = 1): bool
     {
         $deckCards = \array_merge($this->firstPodCards, $this->secondPodCards, $this->thirdPodCards);
+        $count = 0;
 
-        foreach ($deckCards as $card) {
-            if (\in_array($card->name, $cards, true)) {
+        foreach ($deckCards as $deckCard) {
+            if ($deckCard->name === $card) {
+                $count++;
+            }
+
+            if ($count >= $times) {
                 return true;
             }
         }

@@ -16,6 +16,8 @@
 
     {% include 'Keyforge/Deck/Detail/deck.html.twig' %}
 
+    {% include 'Keyforge/Deck/Detail/deck_analysis.html.twig' %}
+
     {% if is_granted('ROLE_KEYFORGE') %}
         <div class="shadow-lg p-3 mb-5 bg-white rounded">
             {% if userId != null %}
@@ -31,4 +33,6 @@
             } %}
         </div>
     {% endif %}
+
+    {% include 'Keyforge/Deck/Detail/deck_card_modal.html.twig' %}
 {% endblock %}

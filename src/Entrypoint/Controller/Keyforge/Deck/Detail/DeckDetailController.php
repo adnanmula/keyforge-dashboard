@@ -2,6 +2,7 @@
 
 namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\Deck\Detail;
 
+use AdnanMula\Cards\Application\Command\Keyforge\Deck\Analyze\AnalyzeDeckThreatsCommand;
 use AdnanMula\Cards\Application\Query\Keyforge\Deck\GetDecksQuery;
 use AdnanMula\Cards\Application\Query\Keyforge\User\GetUsersQuery;
 use AdnanMula\Cards\Domain\Model\Shared\User;
@@ -50,6 +51,8 @@ final class DeckDetailController extends Controller
             }
         }
 
+        $analysis = $this->extractResult($this->bus->dispatch(new AnalyzeDeckThreatsCommand($deckId)));
+
         return $this->render(
             'Keyforge/Deck/Detail/deck_detail.html.twig',
             [
@@ -60,6 +63,7 @@ final class DeckDetailController extends Controller
                 'deck_owner_name' => $deckOwnerName,
                 'deck' => $deckSerialized,
                 'deck_notes' => $deckNotes,
+                'analysis' => $analysis['detail'],
             ],
         );
     }

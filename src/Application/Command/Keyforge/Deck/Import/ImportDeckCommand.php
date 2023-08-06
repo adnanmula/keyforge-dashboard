@@ -18,6 +18,6 @@ final readonly class ImportDeckCommand
             ->verifyNow();
 
         $this->deckId = Uuid::from($deckId);
-        $this->userId = Uuid::from($userId);
+        $this->userId = null === $userId ? null : Uuid::from($userId);
     }
 }

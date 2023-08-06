@@ -6,5 +6,5 @@ use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeck;
 
 interface DeckAnalyzeRule
 {
-    public function execute(KeyforgeDeck $deck): ?DeckAnalyzeResult;
+    public function execute(KeyforgeDeck $deck): ?array;
 }

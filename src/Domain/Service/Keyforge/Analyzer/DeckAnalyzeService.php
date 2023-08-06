@@ -3,8 +3,8 @@
 namespace AdnanMula\Cards\Domain\Service\Keyforge\Analyzer;
 
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeck;
-use AdnanMula\Cards\Domain\Service\Keyforge\Analyzer\Rule\DeckAnalyzeAreaDamageRule;
-use AdnanMula\Cards\Domain\Service\Keyforge\Analyzer\Rule\DeckAnalyzeCreaturePositionRule;
+use AdnanMula\Cards\Domain\Service\Keyforge\Analyzer\Rule\DeckAnalyzeRuleAmberGeneration;
+use AdnanMula\Cards\Domain\Service\Keyforge\Analyzer\Rule\DeckAnalyzeRuleLocks;
 
 final readonly class DeckAnalyzeService
 {
@@ -13,8 +13,8 @@ final readonly class DeckAnalyzeService
     public function __construct()
     {
         $this->rules = [
-            new DeckAnalyzeCreaturePositionRule(),
-            new DeckAnalyzeAreaDamageRule(),
+            new DeckAnalyzeRuleAmberGeneration(),
+            new DeckAnalyzeRuleLocks(),
         ];
     }
 
@@ -22,7 +22,6 @@ final readonly class DeckAnalyzeService
     {
         $results = [];
 
-        /** @var DeckAnalyzeRule $rule */
         foreach ($this->rules as $rule) {
             $r = $rule->execute($deck);
 
@@ -30,7 +29,7 @@ final readonly class DeckAnalyzeService
                 continue;
             }
 
-            $results[$r->key] = $r->results;
+            $results[$r['category']][$r['subcategory']] = $r['results'];
         }
 
         return $results;

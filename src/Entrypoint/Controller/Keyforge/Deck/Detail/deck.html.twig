@@ -241,22 +241,6 @@
     </div>
 </div>
 
-<div class="modal fade" id="card_image" tabindex="-1" role="dialog" aria-labelledby="card_image" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalCardImage"></h5>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body text-center">
-                <img id="card_image_render" src="">
-            </div>
-        </div>
-    </div>
-</div>
-
 <div class="modal fade" id="deckUpdateNotes" tabindex="-1" role="dialog" aria-labelledby="deckUpdateNotes" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -288,16 +272,6 @@
 </div>
 
 <script>
-    $('#card_image').on('show.bs.modal', function (event) {
-        const button = $(event.relatedTarget)[0];
-
-        const card = button.getAttribute('data-card');
-        const cardSerialized = button.getAttribute('data-card-serialized');
-
-        $('#modalCardImage')[0].innerText = card;
-        $('#card_image_render')[0].src = 'https://keyforge-card-images.s3-us-west-2.amazonaws.com/card-imgs/' + cardSerialized + '.png';
-    });
-
     const modal = $('#deckUpdateNotes');
 
     modal.on('hidden.bs.modal', function () {

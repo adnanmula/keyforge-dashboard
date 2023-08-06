@@ -104,6 +104,8 @@ final class UserStatsQueryHandler
             KeyforgeSet::WC->fullName() => 0,
             KeyforgeSet::MM->fullName() => 0,
             KeyforgeSet::DT->fullName() => 0,
+            KeyforgeSet::WoE->fullName() => 0,
+            KeyforgeSet::U22->fullName() => 0,
         ];
 
         $winsByHouse = [

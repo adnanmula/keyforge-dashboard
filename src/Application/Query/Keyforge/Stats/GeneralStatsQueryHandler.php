@@ -136,6 +136,7 @@ final class GeneralStatsQueryHandler
             KeyforgeSet::MM->name => $this->winRate($setWins[KeyforgeSet::MM->name], $setLosses[KeyforgeSet::MM->name]),
             KeyforgeSet::DT->name => $this->winRate($setWins[KeyforgeSet::DT->name], $setLosses[KeyforgeSet::DT->name]),
             KeyforgeSet::WoE->name => $this->winRate($setWins[KeyforgeSet::WoE->name], $setLosses[KeyforgeSet::WoE->name]),
+            KeyforgeSet::U22->name => $this->winRate($setWins[KeyforgeSet::U22->name], $setLosses[KeyforgeSet::U22->name]),
         ];
 
         $houseWinRate = [
@@ -162,6 +163,7 @@ final class GeneralStatsQueryHandler
             KeyforgeSet::MM->name => $this->pickRate($setWins[KeyforgeSet::MM->name] + $setLosses[KeyforgeSet::MM->name], $totalSetPicks),
             KeyforgeSet::DT->name => $this->pickRate($setWins[KeyforgeSet::DT->name] + $setLosses[KeyforgeSet::DT->name], $totalSetPicks),
             KeyforgeSet::WoE->name => $this->pickRate($setWins[KeyforgeSet::WoE->name] + $setLosses[KeyforgeSet::WoE->name], $totalSetPicks),
+            KeyforgeSet::U22->name => $this->pickRate($setWins[KeyforgeSet::U22->name] + $setLosses[KeyforgeSet::U22->name], $totalSetPicks),
         ];
 
         $housePickRate = [
@@ -228,6 +230,7 @@ final class GeneralStatsQueryHandler
             KeyforgeSet::MM->name => 0,
             KeyforgeSet::DT->name => 0,
             KeyforgeSet::WoE->name => 0,
+            KeyforgeSet::U22->name => 0,
         ];
 
         $houseArray = [
