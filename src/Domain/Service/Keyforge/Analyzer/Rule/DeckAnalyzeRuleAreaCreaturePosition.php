@@ -12,13 +12,17 @@ final class DeckAnalyzeRuleAreaCreaturePosition implements DeckAnalyzeRule
     public const CATEGORY = 'Posicionamiento de criaturas';
     public const SUBCATEGORY = 'Lo aprovecha';
 
+    private KeyforgeDeck $deck;
+
     public function execute(KeyforgeDeck $deck): ?array
     {
+        $this->deck = $deck;
+
         $r = [];
 
-        $r[] = $this->ruleHasCards($deck, 'Para hacer daño', 'Groupthink Tank');
-        $r[] = $this->ruleHasCards($deck, 'Para hacer daño', 'Mini Groupthink Tank');
-        $r[] = $this->ruleHasCards($deck, 'Para devolver al mazo', 'Kymoor Eclipse');
+        $r[] = $this->ruleHasCards('Para hacer daño', 'Groupthink Tank');
+        $r[] = $this->ruleHasCards('Para hacer daño', 'Mini Groupthink Tank');
+        $r[] = $this->ruleHasCards('Para devolver al mazo', 'Kymoor Eclipse');
 
         $r = \array_values(\array_filter($r));
 

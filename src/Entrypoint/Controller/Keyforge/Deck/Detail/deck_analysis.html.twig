@@ -1,26 +1,26 @@
 {% if analysis|length > 0 %}
-<div class="shadow-lg p-3 mb-5 bg-white rounded">
-    <div class="row">
-        {% for category,categoryData in analysis %}
-            {% for subcategory,data in categoryData %}
-                {% for datum in data %}
-                    <div class="card" style="width: 18rem;">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ category }}</h5>
-                            <h6 class="card-subtitle mb-2 text-muted">{{ subcategory }}</h6>
-                            <p class="card-text">{{ datum.description }}</p>
-                            {% for card,serializedName in datum.cards %}
-                                {% if serializedName is null %}
-                                    <span class="card_name">{{ card }}</span>
-                                {% else %}
-                                    <span class="card_name" data-bs-toggle="modal" data-bs-target="#card_image" data-card="{{ card }}" data-card-serialized="{{ serializedName }}">{{ card }}</span>
-                                {% endif %}
-                            {% endfor %}
+    <div class="shadow-lg p-3 mb-5 bg-white rounded">
+        <div class="row">
+            {% for category,categoryData in analysis %}
+                {% for subcategory,data in categoryData %}
+                    {% for datum in data %}
+                        <div class="card bg-light" style="width: 20rem;">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ category }}</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">{{ subcategory }}</h6>
+                                <p class="card-text">{{ datum.description }}</p>
+                                {% for card,serializedName in datum.cards %}
+                                    {% if serializedName is null %}
+                                        <span class="card_name">{{ card }}</span>
+                                    {% else %}
+                                        <span class="card_name" data-bs-toggle="modal" data-bs-target="#card_image" data-card="{{ card }}" data-card-serialized="{{ serializedName }}">{{ card }}</span>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
                         </div>
-                    </div>
+                    {% endfor %}
                 {% endfor %}
             {% endfor %}
-        {% endfor %}
+        </div>
     </div>
-</div>
 {% endif %}

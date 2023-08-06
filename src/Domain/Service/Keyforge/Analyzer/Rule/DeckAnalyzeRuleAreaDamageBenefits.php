@@ -12,12 +12,16 @@ final class DeckAnalyzeRuleAreaDamageBenefits implements DeckAnalyzeRule
     public const CATEGORY = 'Daño en área';
     public const SUBCATEGORY = 'Lo aprovecha';
 
+    private KeyforgeDeck $deck;
+
     public function execute(KeyforgeDeck $deck): ?array
     {
+        $this->deck = $deck;
+
         $r = [];
 
-        $r[] = $this->ruleHasCards($deck, 'Para generar ámbar', 'Cleansing Wave');
-        $r[] = $this->ruleHasCards($deck, 'Para destruir criaturas', 'Save the Pack');
+        $r[] = $this->ruleHasCards('Para generar ámbar', 'Cleansing Wave');
+        $r[] = $this->ruleHasCards('Para destruir criaturas', 'Save the Pack');
 
         $r = \array_values(\array_filter($r));
 

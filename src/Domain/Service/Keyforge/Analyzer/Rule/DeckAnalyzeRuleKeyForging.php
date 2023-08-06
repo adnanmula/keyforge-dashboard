@@ -12,18 +12,22 @@ final class DeckAnalyzeRuleKeyForging implements DeckAnalyzeRule
     public const CATEGORY = 'Combo';
     public const SUBCATEGORY = 'Forja de llaves';
 
+    private KeyforgeDeck $deck;
+
     public function execute(KeyforgeDeck $deck): ?array
     {
+        $this->deck = $deck;
+
         $r = [];
 
-        $r[] = $this->ruleHasCards($deck, 'GENKA', 'Martian Generosity', 'Key Abduction');
-        $r[] = $this->ruleHasCards($deck, 'Llave potencialmente gratis', 'Battle Fleet', 'Key Abduction');
-        $r[] = $this->ruleHasCards($deck, 'Llave potencialmente gratis', 'Timequake', 'Data Forge');
-        $r[] = $this->ruleHasCards($deck, 'Llave potencialmente gratis', 'Final Analysis', 'Data Forge');
-        $r[] = $this->ruleHasCards($deck, 'Forja con Corazón activo', 'Heart of the Forest', 'Grasping Vines', 'Key Charge');
-        $r[] = $this->ruleHasCards($deck, 'Forja con Corazón activo', 'Heart of the Forest', 'Grasping Vines', 'Chota Hazri');
-        $r[] = $this->ruleHasCards($deck, 'Forja con Corazón activo', 'Heart of the Forest', 'Grasping Vines', 'Keyfrog');
-        $r[] = $this->ruleHasCards($deck, 'Trigger Keyfrog el mismo turno que lo juegas', 'Fangtooth Cavern', 'Keyfrog');
+        $r[] = $this->ruleHasCards('GENKA', 'Martian Generosity', 'Key Abduction');
+        $r[] = $this->ruleHasCards('Llave potencialmente gratis', 'Battle Fleet', 'Key Abduction');
+        $r[] = $this->ruleHasCards('Llave potencialmente gratis', 'Timequake', 'Data Forge');
+        $r[] = $this->ruleHasCards('Llave potencialmente gratis', 'Final Analysis', 'Data Forge');
+        $r[] = $this->ruleHasCards('Forja con Corazón activo', 'Heart of the Forest', 'Grasping Vines', 'Key Charge');
+        $r[] = $this->ruleHasCards('Forja con Corazón activo', 'Heart of the Forest', 'Grasping Vines', 'Chota Hazri');
+        $r[] = $this->ruleHasCards('Forja con Corazón activo', 'Heart of the Forest', 'Grasping Vines', 'Keyfrog');
+        $r[] = $this->ruleHasCards('Trigger Keyfrog el mismo turno que lo juegas', 'Fangtooth Cavern', 'Keyfrog');
 
         $hasTheSting = $deck->data->cards->has('The Sting');
         $hasKeyCheat = ($deck->extraData()['deck']['keyCheatCount'] ?? 0) > 0;

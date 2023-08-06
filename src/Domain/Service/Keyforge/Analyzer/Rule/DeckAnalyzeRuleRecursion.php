@@ -12,16 +12,20 @@ final class DeckAnalyzeRuleRecursion implements DeckAnalyzeRule
     public const CATEGORY = 'Combo';
     public const SUBCATEGORY = 'Control';
 
+    private KeyforgeDeck $deck;
+
     public function execute(KeyforgeDeck $deck): ?array
     {
+        $this->deck = $deck;
+
         $r = [];
 
-        $r[] = $this->ruleHasCards($deck, 'Recursión de CTW', 'Control the Weak', 'Dominator Bauble', 'Witch of the Eye');
-        $r[] = $this->ruleHasCards($deck, 'Recursión de CTW', 'Control the Weak', 'Deipno Spymaster', 'Witch of the Eye');
-        $r[] = $this->ruleHasCards($deck, 'Recursión de CTW', 'Control the Weak', 'Screaming Cave');
-        $r[] = $this->ruleHasCards($deck, 'Alzaos en turno de cualquier casa', 'Masterplan', 'Arise!');
-        $r[] = $this->ruleHasCards($deck, 'Alzaos en turno de cualquier casa', 'Masterplan', 'Arise!');
-        $r[] = $this->ruleHasCards($deck, 'Recursión de Ronnie', 'Ronnie Wristclocks', 'Screaming Cave');
+        $r[] = $this->ruleHasCards('Recursión de CTW', 'Control the Weak', 'Dominator Bauble', 'Witch of the Eye');
+        $r[] = $this->ruleHasCards('Recursión de CTW', 'Control the Weak', 'Deipno Spymaster', 'Witch of the Eye');
+        $r[] = $this->ruleHasCards('Recursión de CTW', 'Control the Weak', 'Screaming Cave');
+        $r[] = $this->ruleHasCards('Alzaos en turno de cualquier casa', 'Masterplan', 'Arise!');
+        $r[] = $this->ruleHasCards('Alzaos en turno de cualquier casa', 'Masterplan', 'Arise!');
+        $r[] = $this->ruleHasCards('Recursión de Ronnie', 'Ronnie Wristclocks', 'Screaming Cave');
 
         $r = \array_values(\array_filter($r));
 

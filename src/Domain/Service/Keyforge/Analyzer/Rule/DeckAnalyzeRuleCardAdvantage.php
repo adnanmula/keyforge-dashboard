@@ -12,16 +12,20 @@ final class DeckAnalyzeRuleCardAdvantage implements DeckAnalyzeRule
     public const CATEGORY = 'Combo';
     public const SUBCATEGORY = 'Ventaja de cartas';
 
+    private KeyforgeDeck $deck;
+
     public function execute(KeyforgeDeck $deck): ?array
     {
+        $this->deck = $deck;
+
         $r = [];
 
-        $r[] = $this->ruleHasCards($deck, 'Triggerea fácilmente la Library Card', 'Library Card', 'Dark Æmber Vault');
-        $r[] = $this->ruleHasCards($deck, 'Triggerea fácilmente el Library Access', 'Library Access', 'Dark Æmber Vault');
-        $r[] = $this->ruleHasCards($deck, 'Triggerea fácilmente el Auto-Encoder', 'Auto-Encoder', 'Punctuated Equilibrium');
-        $r[] = $this->ruleHasCards($deck, 'Triggerea fácilmente el Auto-Encoder', 'Auto-Encoder', 'Novu Dynamo');
-        $r[] = $this->ruleHasCards($deck, 'Recursión QMechs', 'Fangtooth Cavern', 'Q-Mechs');
-        $r[] = $this->ruleHasCards($deck, 'Recursión Rad Penny', 'Fangtooth Cavern', 'Rad Penny');
+        $r[] = $this->ruleHasCards('Triggerea fácilmente la Library Card', 'Library Card', 'Dark Æmber Vault');
+        $r[] = $this->ruleHasCards('Triggerea fácilmente el Library Access', 'Library Access', 'Dark Æmber Vault');
+        $r[] = $this->ruleHasCards('Triggerea fácilmente el Auto-Encoder', 'Auto-Encoder', 'Punctuated Equilibrium');
+        $r[] = $this->ruleHasCards('Triggerea fácilmente el Auto-Encoder', 'Auto-Encoder', 'Novu Dynamo');
+        $r[] = $this->ruleHasCards('Recursión QMechs', 'Fangtooth Cavern', 'Q-Mechs');
+        $r[] = $this->ruleHasCards('Recursión Rad Penny', 'Fangtooth Cavern', 'Rad Penny');
 
         $r = \array_values(\array_filter($r));
 
