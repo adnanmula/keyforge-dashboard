@@ -25,7 +25,9 @@ final class ImportDeckController extends Controller
                 $userId = null;
 
                 if (null !== $request->get('setUser')) {
-                    $userId = $this->getUser()->id()->value();
+                    /** @var User $user */
+                    $user = $this->getUser();
+                    $userId = $user->id()->value();
                 }
 
                 $deckId = $this->parseDeck($request->request->get('deck'));
