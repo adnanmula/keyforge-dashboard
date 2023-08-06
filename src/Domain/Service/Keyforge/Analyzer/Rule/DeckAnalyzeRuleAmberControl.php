@@ -24,6 +24,9 @@ final class DeckAnalyzeRuleAmberControl implements DeckAnalyzeRule
         $r[] = $this->ruleHasCards($deck, 'Recursión de Inforno', 'Infurnace', 'Universal Recycle Bin');
         $r[] = $this->ruleHasCards($deck, 'Trigger fácil de Rad Penny', 'Rad Penny', 'Seeker Needle');
         $r[] = $this->ruleHasCards($deck, 'Recursión fácil de Bo Nithing', 'Safe House', 'Bo Nithing');
+        $r[] = $this->ruleHasCards($deck, 'Recursión de Banda', 'Kymoor Eclipse', 'Chain Gang');
+        $r[] = $this->ruleHasCards($deck, 'Recursión de Ronnie', 'Kymoor Eclipse', 'Ronnie Wristclocks');
+        $r[] = $this->ruleHasCards($deck, 'Recursión de Bo Nithing', 'Kymoor Eclipse', 'Bo Nithing');
 
         $r = \array_values(\array_filter($r));
 
