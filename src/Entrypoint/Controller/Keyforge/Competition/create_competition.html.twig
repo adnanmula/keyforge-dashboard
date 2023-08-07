@@ -2,18 +2,12 @@
 
 {% block title %}Crear torneo{% endblock %}
 
-{% block header %}
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css">
-{% endblock %}
-
 {% block body %}
     {% if result != false %}
         <div class="alert alert-{% if success == true %}success{% else %}danger{% endif %}" role="alert">
             {{ result }}
         </div>
     {% endif %}
-
-    <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
 
     <div class="shadow-lg p-3 mb-5 bg-white rounded">
         <form action="{{ path('keyforge_competition_create') }}" method="post">
@@ -65,10 +59,10 @@
             <div class="divider py-1"></div>
 
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-12">
                     <div class="form-group">
                         <label for="users" class="form-label">Jugadores</label>
-                        <select id="users" name="users[]" multiple>
+                        <select id="users" name="users[]">
                             {% for user in users %}
                                 <option value="{{ user.id }}"> {{ user.name }} </option>
                             {% endfor %}
@@ -96,12 +90,17 @@
 
     <script>
         $(document).ready(function(){
-            let usersSelect = new Choices('#users', {
-                removeItemButton: true,
-                maxItemCount: null,
-                searchResultLimit: null,
-                renderChoiceLimit: null,
+            $('#users').select2({
+                multiple: true,
+                closeOnSelect: false,
+                allowClear: true,
+                placeholder: '',
+                theme: 'bootstrap-5',
+                width: '100%'
             });
+
+            $("#users").val("")
+            $("#users").trigger("change");
         });
     </script>
 {% endblock %}

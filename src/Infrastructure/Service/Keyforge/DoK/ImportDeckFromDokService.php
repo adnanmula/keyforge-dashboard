@@ -21,12 +21,12 @@ final class ImportDeckFromDokService implements ImportDeckService
         private DeckApplyPredefinedTagsService $tagsService,
     ) {}
 
-    public function execute(Uuid $uuid, ?Uuid $owner = null): ?KeyforgeDeck
+    public function execute(Uuid $uuid, ?Uuid $owner = null, bool $forceUpdate = false): ?KeyforgeDeck
     {
-        $deck = $this->repository->byId($uuid);
+        $savedDeck = $this->repository->byId($uuid);
 
-        if (null !== $deck) {
-            return $deck;
+        if (false === $forceUpdate && null !== $savedDeck) {
+            return $savedDeck;
         }
 
         try {
@@ -53,11 +53,11 @@ final class ImportDeckFromDokService implements ImportDeckService
                 KeyforgeHouse::fromDokName($houses[2]),
             ),
             $deck['deck']['sasRating'],
-            0,
-            0,
+            null === $savedDeck ? 0 : $savedDeck->wins(),
+            null === $savedDeck ? 0 : $savedDeck->losses(),
             $deck,
             $owner,
-            '',
+            null === $savedDeck ? '' : $savedDeck->notes(),
             [],
         );
 
