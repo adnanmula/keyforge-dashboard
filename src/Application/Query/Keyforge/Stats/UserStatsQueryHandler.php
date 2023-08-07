@@ -119,6 +119,7 @@ final class UserStatsQueryHandler
             KeyforgeHouse::BROBNAR->name => 0,
             KeyforgeHouse::UNFATHOMABLE->name => 0,
             KeyforgeHouse::LOGOS->name => 0,
+            KeyforgeHouse::EKWIDON->name => 0,
         ];
 
         $currentWinStreak = 0;
