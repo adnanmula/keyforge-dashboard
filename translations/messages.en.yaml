@@ -1,0 +1,29 @@
+menu.players: Players
+menu.wiki: Wiki
+menu.decks: Decks
+menu.mydecks: 'My decks'
+menu.addgame: 'Register game'
+menu.tournaments: Tournaments
+menu.import: Import
+menu.register: Register
+menu.login: Login
+menu.logout: Logout
+competition_detail.start: Start
+competition_detail.end: End
+competition_detail.player: Player
+competition_detail.w: W
+competition_detail.l: L
+competition_detail.key_diff: '⚷ D'
+competition_detail.key_yours: '⚷ F'
+competition_detail.key_opponentes: '⚷ A'
+competition_detail.save: Save
+competition_detail.register_game: 'Register game'
+competition_detail.winner: Winner
+competition_detail.winner_deck: 'Winner deck'
+competition_detail.loser_deck: 'Loser deck'
+competition_detail.winner_score: 'Winner score'
+competition_detail.loser_score: 'Loser score'
+competition_detail.first_turn: 'First turn'
+competition_detail.date: Date
+competition_detail.crown_winner: 'Crown winner'
+competition_detail.champion: 'Champion %player% bravo!'

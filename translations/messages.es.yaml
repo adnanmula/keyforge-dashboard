@@ -1,0 +1,29 @@
+menu.players: Jugadores
+menu.wiki: Wiki
+menu.decks: Barajas
+menu.mydecks: 'Mis barajas'
+menu.addgame: 'Registrar partida'
+menu.tournaments: Torneos
+menu.import: Importar
+menu.register: Registro
+menu.login: Login
+menu.logout: Logout
+competition_detail.start: Empezar
+competition_detail.end: Terminar
+competition_detail.player: Jugador
+competition_detail.w: G
+competition_detail.l: P
+competition_detail.key_diff: '⚷ D'
+competition_detail.key_yours: '⚷ F'
+competition_detail.key_opponentes: '⚷ C'
+competition_detail.save: Guardar
+competition_detail.register_game: 'Registrar partida'
+competition_detail.winner: Ganador
+competition_detail.winner_deck: 'Baraja ganadora'
+competition_detail.loser_deck: 'Baraja perdedora'
+competition_detail.winner_score: 'Puntuación del ganador'
+competition_detail.loser_score: 'Puntuación del perdedor'
+competition_detail.first_turn: 'Primer turno'
+competition_detail.date: Fecha
+competition_detail.crown_winner: 'Coronar ganador'
+competition_detail.champion: 'Campeón %player% oleee!'

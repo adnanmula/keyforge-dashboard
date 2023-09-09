@@ -30,11 +30,11 @@
                 {% if is_granted('ROLE_KEYFORGE') %}
                     {% if competition.startedAt is null %}
                         <div class="float-end">
-                            <button type="button" class="btn btn-dark" id="startCompetition">Empezar</button>
+                            <button type="button" class="btn btn-dark" id="startCompetition">{{ 'competition_detail.start'|trans }}</button>
                         </div>
                     {% elseif competition.finishedAt is null %}
                         <div class="float-end">
-                            <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#finishCompetition">Terminar</button>
+                            <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#finishCompetition">{{ 'competition_detail.end'|trans }}</button>
                         </div>
                     {% endif %}
                 {% endif %}
@@ -77,7 +77,7 @@
                 <div class="col-12" style="text-align: center; font-size: 2em;">
                     {% for user in users %}
                         {% if competition.winner == user.id %}
-                            Campeón {{ user.name }}, oleee!
+                            {{ 'competition_detail.champion'|trans({'%player%': user.name}) }}
                         {% endif %}
                     {% endfor %}
                 </div>
@@ -95,12 +95,12 @@
                 <thead>
                 <tr>
                     <th>#</th>
-                    <th>Jugador</th>
-                    <th>G</th>
-                    <th>P</th>
-                    <th>⚷ D</th>
-                    <th>⚷ F</th>
-                    <th>⚷ C</th>
+                    <th>{{ 'competition_detail.player'|trans }}</th>
+                    <th>{{ 'competition_detail.w'|trans }}</th>
+                    <th>{{ 'competition_detail.l'|trans }}</th>
+                    <th>{{ 'competition_detail.key_diff'|trans }}</th>
+                    <th>{{ 'competition_detail.key_yours'|trans }}</th>
+                    <th>{{ 'competition_detail.key_opponentes'|trans }}</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -172,7 +172,7 @@
                                             data-competition-name="{{ competition.name }}"
                                             data-fixture-ref="{{ fixture.reference }}"
                                             data-fixture-id="{{ fixture.id }}"
-                                    >Guardar</button>
+                                    >{{ 'competition_detail.save'|trans }}</button>
                                 </p>
                             {% endif %}
                         {% endif %}
@@ -186,7 +186,7 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modelaTitleLabel">Registrar partida</h5>
+                    <h5 class="modal-title" id="modelaTitleLabel">{{ 'competition_detail.register_game'|trans }}</h5>
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -194,7 +194,7 @@
                 <div class="modal-body">
                     <form id="registerGameForm">
                         <div class="row">
-                            <label for="winnerScore" class="form-label">Ganador</label>
+                            <label for="winnerScore" class="form-label">{{ 'competition_detail.winner'|trans }}</label>
                             <div class="col-12">
                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                     <label class="btn btn-dark">
@@ -214,12 +214,12 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="winnerDeck" class="form-label">Baraja ganadora</label>
+                                    <label for="winnerDeck" class="form-label">{{ 'competition_detail.winner_deck'|trans }}</label>
                                     <input class="form-control selector" list="winnerDeckOptions" id="winnerDeck" placeholder="Type to search..." name="winnerDeck" autocomplete="off" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <label for="loserDeck" class="form-label">Baraja perdedora</label>
+                                <label for="loserDeck" class="form-label">{{ 'competition_detail.loser_deck'|trans }}</label>
                                 <input class="form-control selector" list="loserDeckOptions" id="loserDeck" placeholder="Type to search..." name="loserDeck"  autocomplete="off" required>
                             </div>
                         </div>
@@ -228,7 +228,7 @@
 
                         <div class="row">
                             <div class="col-md-6">
-                                <label for="winnerScore" class="form-label">Puntuación del ganador</label>
+                                <label for="winnerScore" class="form-label">{{ 'competition_detail.winner_score'|trans }}</label>
                                 <br>
                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                     <label class="btn btn-dark">
@@ -237,7 +237,7 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <label for="loserScore" class="form-label">Puntuación del perdedor</label>
+                                <label for="loserScore" class="form-label">{{ 'competition_detail.loser_score'|trans }}</label>
                                 <br>
                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                     <label class="btn btn-dark">
@@ -255,11 +255,11 @@
 
                         <div class="row mt-3">
                             <div class="col-md-6">
-                                <label for="firstTurn" class="form-label">Primer turno</label>
+                                <label for="firstTurn" class="form-label">{{ 'competition_detail.first_turn'|trans }}</label>
                                 <input class="form-control selector" list="firstTurnOptions" id="firstTurn" placeholder="Type to search..." name="firstTurn" autocomplete="off" required>
                             </div>
                             <div class="col-md-6">
-                                <label for="date" class="form-label">Fecha</label> <br>
+                                <label for="date" class="form-label">{{ 'competition_detail.date'|trans }}</label> <br>
                                 <input class="form-control" type="date" name="date" id="datepicker" min="2022-01-01" max="2030-12-31" required>
                             </div>
                         </div>
@@ -291,7 +291,7 @@
 
                         <div class="divider py-1"></div>
 
-                        <button type="submit" id="registerGameSubmit" class="btn btn-block btn-dark" style="width: 100%">Guardar</button>
+                        <button type="submit" id="registerGameSubmit" class="btn btn-block btn-dark" style="width: 100%">{{ 'competition_detail.save'|trans }}</button>
                     </form>
                 </div>
             </div>
@@ -302,7 +302,7 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modelaTitleLabel">Coronar ganador</h5>
+                    <h5 class="modal-title" id="modelaTitleLabel">{{ 'competition_detail.crown_winner'|trans }}</h5>
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -311,11 +311,11 @@
                     <form id="finishCompetitionForm">
                         <div class="row">
                             <div class="col-md-7">
-                                <label for="firstTurn" class="form-label">Ganador</label>
+                                <label for="firstTurn" class="form-label">{{ 'competition_detail.winner'|trans }}</label>
                                 <input class="form-control selector" list="competitionWinnerOptions" id="finishFormWinnerInput" placeholder="Type to search..." name="competitionWinnerFinish" autocomplete="off" required>
                             </div>
                             <div class="col-md-5">
-                                <label for="date" class="form-label">Fecha</label> <br>
+                                <label for="date" class="form-label">{{ 'competition_detail.date'|trans }}</label> <br>
                                 <input class="form-control" type="date" name="date" id="datepicker-finish-competition" min="2022-01-01" max="2030-12-31" required>
                             </div>
                         </div>
@@ -332,7 +332,7 @@
                         <div class="divider py-1"></div>
                         <div class="divider py-1"></div>
 
-                        <button type="submit" id="registerGameSubmit" class="btn btn-block btn-dark" style="width: 100%">Guardar</button>
+                        <button type="submit" id="registerGameSubmit" class="btn btn-block btn-dark" style="width: 100%">{{ 'competition_detail.save'|trans }}</button>
                     </form>
                 </div>
             </div>
