@@ -10,16 +10,17 @@ use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Translation\LocaleSwitcher;
 
 final class ListDecksController extends Controller
 {
     private KeyforgeUserRepository $userRepository;
 
-    public function __construct(MessageBusInterface $bus, Security $security, KeyforgeUserRepository $userRepository)
+    public function __construct(MessageBusInterface $bus, Security $security, LocaleSwitcher $localeSwitcher, KeyforgeUserRepository $userRepository)
     {
         $this->userRepository = $userRepository;
 
-        parent::__construct($bus, $security);
+        parent::__construct($bus, $security, $localeSwitcher);
     }
 
     public function __invoke(): Response

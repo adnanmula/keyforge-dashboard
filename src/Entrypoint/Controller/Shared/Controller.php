@@ -2,15 +2,21 @@
 
 namespace AdnanMula\Cards\Entrypoint\Controller\Shared;
 
+use AdnanMula\Cards\Domain\Model\Shared\User;
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Locale;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\HandledStamp;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Translation\LocaleSwitcher;
 
 class Controller extends AbstractController
 {
-    public function __construct(protected MessageBusInterface $bus, protected Security $security) {}
+    public function __construct(protected MessageBusInterface $bus, protected Security $security, private LocaleSwitcher $localeSwitcher)
+    {
+        $this->setLocaleToUser();
+    }
 
     final protected function assertIsLogged(): void
     {
@@ -28,5 +34,22 @@ class Controller extends AbstractController
         }
 
         return $stamp->getResult();
+    }
+
+    final protected function setLocaleToUser(): void
+    {
+        /** @var User $user */
+        $user = $this->security->getUser();
+
+        if (null === $user) {
+            return;
+        }
+
+        $this->localeSwitcher->setLocale($user->locale()->value);
+    }
+
+    final protected function setLocale(Locale $locale): void
+    {
+        $this->localeSwitcher->setLocale($locale->value);
     }
 }

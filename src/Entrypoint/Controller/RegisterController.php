@@ -3,6 +3,7 @@
 namespace AdnanMula\Cards\Entrypoint\Controller;
 
 use AdnanMula\Cards\Application\Command\Shared\User\Create\CreateUserCommand;
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Locale;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,7 +19,8 @@ final class RegisterController extends Controller
                 $this->bus->dispatch(new CreateUserCommand(
                     $request->request->get('_username'),
                     $request->request->get('_password'),
-                    ["ROLE_BASIC"],
+                    Locale::es_ES->value,
+                    ['ROLE_BASIC'],
                 ));
             } catch (\Throwable $exception) {
                 $error = $exception->getMessage();

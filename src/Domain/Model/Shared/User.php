@@ -2,6 +2,7 @@
 
 namespace AdnanMula\Cards\Domain\Model\Shared;
 
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Locale;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -12,6 +13,7 @@ final class User implements UserInterface, PasswordAuthenticatedUserInterface
         private Uuid $id,
         private string $name,
         private string $password,
+        private Locale $locale,
         private array $roles,
     ) {}
 
@@ -23,6 +25,11 @@ final class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function name(): string
     {
         return $this->name;
+    }
+
+    public function locale(): Locale
+    {
+        return $this->locale;
     }
 
     public function getRoles(): array

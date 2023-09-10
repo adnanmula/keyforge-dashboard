@@ -12,6 +12,7 @@ final class Initial extends AbstractMigration
                 name character varying(32) NOT NULL
                    CONSTRAINT name_unique UNIQUE,
                 password character varying(64) NOT NULL,
+                locale character varying(5) NOT NULL,
                 roles jsonb NOT NULL,
                 PRIMARY KEY(id)
             )',

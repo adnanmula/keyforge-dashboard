@@ -26,7 +26,8 @@ final class CreateUserCommandHandler
             Uuid::v4(),
             $command->name(),
             '',
-            ['ROLE_BASIC'],
+            $command->locale(),
+            $command->roles(),
         );
 
         $hashedPassword = $this->hasher->hashPassword(

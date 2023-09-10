@@ -4,6 +4,7 @@ namespace AdnanMula\Cards\Infrastructure\Fixtures\User;
 
 use AdnanMula\Cards\Application\Service\Json;
 use AdnanMula\Cards\Domain\Model\Shared\User;
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Locale;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Domain\Service\Persistence\Fixture;
 use AdnanMula\Cards\Infrastructure\Fixtures\DbalFixture;
@@ -23,6 +24,7 @@ final class UserFixtures extends DbalFixture implements Fixture
             Uuid::from(self::FIXTURE_USER_1_ID),
             'a',
             '$2y$13$sn3JyhOwj1wsvfQQ.0TwZeXVISv8fpFo8v09sa9cSfm0C2Psh49mO',
+            Locale::es_ES,
             ['ROLE_ADMIN'],
         ));
 
@@ -30,6 +32,7 @@ final class UserFixtures extends DbalFixture implements Fixture
             Uuid::from(self::FIXTURE_USER_2_ID),
             'b',
             '$2y$13$K8M5NdlCkAQUrOCh0cr.CuM.nX4DVeGxbeZBrUi.FTAY/gW/7NpJm',
+            Locale::en_GB,
             ['ROLE_KEYFORGE'],
         ));
 
@@ -51,8 +54,8 @@ final class UserFixtures extends DbalFixture implements Fixture
         $stmt = $this->connection->prepare(
             \sprintf(
                 '
-                    INSERT INTO %s (id, name, password, roles)
-                    VALUES (:id, :name, :password, :roles)
+                    INSERT INTO %s (id, name, password, locale, roles)
+                    VALUES (:id, :name, :password, :locale, :roles)
                 ',
                 self::TABLE,
             ),
@@ -61,8 +64,9 @@ final class UserFixtures extends DbalFixture implements Fixture
         $stmt->bindValue(':id', $user->id()->value());
         $stmt->bindValue(':name', $user->name());
         $stmt->bindValue(':password', $user->getPassword());
+        $stmt->bindValue(':locale', $user->locale()->value);
         $stmt->bindValue(':roles', Json::encode($user->getRoles()));
 
-        $stmt->execute();
+        $stmt->executeStatement();
     }
 }
