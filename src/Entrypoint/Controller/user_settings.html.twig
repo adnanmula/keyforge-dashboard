@@ -1,0 +1,67 @@
+{% extends "Keyforge/Shared/keyforge_base.html.twig" %}
+
+{% block title %}{{ 'menu.settings'|trans }}{% endblock %}
+
+{% block body %}
+    <div class="divider py-1"></div>
+
+    <div class="row">
+        <div class="col-1 col-sm-4 col-lg-3"></div>
+        <div class="col-12 col-sm-12 col-lg-6">
+
+            {% if error %}
+                <div class="divider py-1"></div>
+                <div class="alert alert-danger" role="alert">{{ error }}</div>
+            {% endif %}
+
+            <div class="shadow-lg p-3 mb-5 bg-white rounded">
+                <form action="{{ path('user_settings') }}" method="post">
+                    <div class="row">
+                        <h3>{{ 'menu.settings'|trans }}</h3>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label class="form-label" for="settingsLocale">{{ 'menu.locale'|trans }}</label>
+                                <select class="form-control" name="settingsLocale" id="settingsLocale">
+                                    <option value="es_ES" {% if (app.locale == 'es_ES') %}selected{% endif %}>{{ 'locale.es'|trans }}</option>
+                                    <option value="en_GB" {% if (app.locale == 'en_GB') %}selected{% endif %}>{{ 'locale.en'|trans }}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="divider py-1"></div>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label class="form-label" for="settingsPassword">{{ 'menu.change_password'|trans }}</label>
+                                <input type="password" class="form-control" name="settingsPassword" placeholder="Password"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="divider py-1"></div>
+
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-block btn-dark w-100">{{ 'menu.save'|trans }}</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $('#settingsLocale').select2({
+            minimumResultsForSearch: Infinity,
+            multiple: false,
+            closeOnSelect: true,
+            allowClear: false,
+            theme: 'bootstrap-5'
+        });
+    </script>
+{% endblock %}

@@ -10,6 +10,9 @@ menu.login: Login
 menu.logout: Logout
 menu.profile: Perfil
 menu.settings: Opciones
+menu.locale: Idioma
+menu.save: Guardar
+menu.change_password: Actualizar contraseña
 competition_detail.start: Empezar
 competition_detail.end: Terminar
 competition_detail.player: Jugador
@@ -29,3 +32,8 @@ competition_detail.first_turn: 'Primer turno'
 competition_detail.date: Fecha
 competition_detail.crown_winner: 'Coronar ganador'
 competition_detail.champion: 'Campeón %player% oleee!'
+error.something_wrong: 'Algo ha ido mal'
+error.error: Error
+error.denied: 'Access denied'
+locale.en: Inglés
+locale.es: Español

@@ -12,6 +12,11 @@ logout:
   path: /logout
   methods: [ GET ]
 
+user_settings:
+  path: /user/settings
+  controller: AdnanMula\Cards\Entrypoint\Controller\UserSettingsController
+  methods: [ GET,POST ]
+
 keyforge:
   resource: context/keyforge/routes.yaml
   prefix: /

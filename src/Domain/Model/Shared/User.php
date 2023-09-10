@@ -32,6 +32,13 @@ final class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->locale;
     }
 
+    public function setLocale(Locale $locale): self
+    {
+        $this->locale = $locale;
+
+        return $this;
+    }
+
     public function getRoles(): array
     {
         return $this->roles;

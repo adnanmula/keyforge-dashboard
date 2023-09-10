@@ -10,6 +10,9 @@ menu.login: Login
 menu.logout: Logout
 menu.profile: Profile
 menu.settings: Settings
+menu.locale: Language
+menu.save: Save
+menu.change_password: Change password
 competition_detail.start: Start
 competition_detail.end: End
 competition_detail.player: Player
@@ -29,3 +32,8 @@ competition_detail.first_turn: 'First turn'
 competition_detail.date: Date
 competition_detail.crown_winner: 'Crown winner'
 competition_detail.champion: 'Champion %player% bravo!'
+error.something_wrong: 'Something went wrong'
+error.error: Error
+error.denied: 'Acceso denegado'
+locale.en: English
+locale.es: Spanish

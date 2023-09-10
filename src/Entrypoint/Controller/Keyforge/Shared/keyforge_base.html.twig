@@ -88,8 +88,8 @@
                                     <li class="nav-item dropdown">
                                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{ app.user.name() }}</a>
                                         <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-                                            <li><a class="dropdown-item" href="/user/{{ app.user.id.value() }}" class="text-decoration-none link-light">{{ app.user.name() }} <span class="sr-only"></span></a></li>
-                                            <li><a class="dropdown-item" href="#">{{ 'menu.settings'|trans }}</a></li>
+                                            <li><a class="dropdown-item" href="{{ path('keyforge_user_detail', {'userId': app.user.id.value() }) }}" class="text-decoration-none link-light">{{ 'menu.profile'|trans }}<span class="sr-only"></span></a></li>
+                                            <li><a class="dropdown-item" href="{{ path('user_settings') }}">{{ 'menu.settings'|trans }}</a></li>
                                         </ul>
                                     </li>
                                 </ul>

@@ -1,6 +1,6 @@
 {% extends "Keyforge/Shared/keyforge_base.html.twig" %}
 
-{% block title %}Login{% endblock %}
+{% block title %}{{ 'menu.login'|trans }}{% endblock %}
 
 {% block body %}
     <div class="divider py-1"></div>
@@ -41,7 +41,7 @@
 
                     <div class="row mt-3">
                         <div class="col-12">
-                            <button type="submit" class="btn btn-block btn-dark w-100">Login</button>
+                            <button type="submit" class="btn btn-block btn-dark w-100">{{ 'menu.login'|trans }}</button>
                         </div>
                     </div>
                 </form>

@@ -56,6 +56,11 @@ final class UserDbalRepository extends DbalRepository implements UserRepository
                 '
                     INSERT INTO %s (id, name, password, locale, roles)
                     VALUES (:id, :name, :password, :locale, :roles)
+                   ON CONFLICT (id) DO UPDATE SET
+                        name = :name,
+                        password = :password,
+                        locale = :locale,
+                        roles = :roles
                 ',
                 self::TABLE,
             ),
@@ -65,7 +70,7 @@ final class UserDbalRepository extends DbalRepository implements UserRepository
         $stmt->bindValue(':name', $user->name());
         $stmt->bindValue(':password', $user->getPassword());
         $stmt->bindValue(':locale', $user->locale()->value);
-        $stmt->bindValue(':roles', \json_encode($user->getRoles()));
+        $stmt->bindValue(':roles', Json::encode($user->getRoles()));
 
         $stmt->execute();
     }
