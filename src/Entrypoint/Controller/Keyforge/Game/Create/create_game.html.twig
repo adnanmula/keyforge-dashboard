@@ -46,14 +46,14 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="winner" class="form-label">{{ 'game.winner'|trans }}</label>
-                        <i class="bi bi-info-circle" data-toggle="tooltip" title="Al jugar con randoms pega el nombre de usuario en winner/loser aunque no salga en el selector"></i>
-                        <input class="form-control selector" list="winnerOptions" id="winner" placeholder="Type to search..." name="winner" autocomplete="off" required>
+                        <i class="bi bi-info-circle" data-toggle="tooltip" title="{{ 'menu.user_select_tooltip'|trans }}"></i>
+                        <input class="form-control selector" list="winnerOptions" id="winner" placeholder="{{ 'menu.type_to_search'|trans }}" name="winner" autocomplete="off" required>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <label for="loser" class="form-label">{{ 'game.loser'|trans }}</label>
-                    <i class="bi bi-info-circle" data-toggle="tooltip" title="Al jugar con randoms pega el nombre de usuario en winner/loser aunque no salga en el selector"></i>
-                    <input class="form-control selector" list="loserOptions" id="loser" placeholder="Type to search..." name="loser" autocomplete="off" required>
+                    <i class="bi bi-info-circle" data-toggle="tooltip" title="{{ 'menu.user_select_tooltip'|trans }}"></i>
+                    <input class="form-control selector" list="loserOptions" id="loser" placeholder="{{ 'menu.type_to_search'|trans }}" name="loser" autocomplete="off" required>
                 </div>
             </div>
 
@@ -63,14 +63,14 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="winnerDeck" class="form-label">{{ 'game.winner_deck'|trans }}</label>
-                        <i class="bi bi-info-circle" data-toggle="tooltip" title="Al jugar con randoms pega el id de baraja aunque no salga en el selector, no hace falta importarla antes"></i>
-                        <input class="form-control" list="winnerDeckOptions" id="winnerDeck" placeholder="Type to search..." name="winnerDeck" autocomplete="off" required>
+                        <i class="bi bi-info-circle" data-toggle="tooltip" title="{{ 'menu.deck_select_tooltip'|trans }}"></i>
+                        <input class="form-control" list="winnerDeckOptions" id="winnerDeck" placeholder="{{ 'menu.type_to_search'|trans }}" name="winnerDeck" autocomplete="off" required>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <label for="loserDeck" class="form-label">{{ 'game.loser_deck'|trans }}</label>
-                    <i class="bi bi-info-circle" data-toggle="tooltip" title="Al jugar con randoms pega el id de baraja aunque no salga en el selector, no hace falta importarla antes"></i>
-                    <input class="form-control" list="loserDeckOptions" id="loserDeck" placeholder="Type to search..." name="loserDeck"  autocomplete="off" required>
+                    <i class="bi bi-info-circle" data-toggle="tooltip" title="{{ 'menu.deck_select_tooltip'|trans }}"></i>
+                    <input class="form-control" list="loserDeckOptions" id="loserDeck" placeholder="{{ 'menu.type_to_search'|trans }}" name="loserDeck"  autocomplete="off" required>
                 </div>
             </div>
 
@@ -120,7 +120,7 @@
                 <div class="col-md-6">
                     <label for="firstTurn" class="form-label">{{ 'game.first_turn'|trans }}</label>
                     <i class="bi bi-info-circle" data-toggle="tooltip" title="Si es un random pega el nombre aunque no salga en el selector"></i>
-                    <input class="form-control selector" list="firstTurnOptions" id="firstTurn" placeholder="Type to search..." name="firstTurn" autocomplete="off" required>
+                    <input class="form-control selector" list="firstTurnOptions" id="firstTurn" placeholder="{{ 'menu.type_to_search'|trans }}" name="firstTurn" autocomplete="off" required>
                 </div>
                 <div class="col-md-6">
                     <label for="date" class="form-label">{{ 'game.date'|trans }}</label> <br>

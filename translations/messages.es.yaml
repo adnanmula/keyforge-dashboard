@@ -1,69 +1,139 @@
-menu.players: Jugadores
-menu.wiki: Wiki
-menu.decks: Barajas
-menu.mydecks: 'Mis barajas'
-menu.addgame: 'Registrar partida'
-menu.tournaments: Torneos
-menu.import: Importar
-menu.register: Registro
-menu.login: Login
-menu.logout: Logout
-menu.profile: Perfil
-menu.settings: Opciones
-menu.locale: Idioma
-menu.save: Guardar
-menu.password: Contraseña
-menu.username: Usuario
-menu.change_password: Actualizar contraseña
-competition_detail.start: Empezar
-competition_detail.end: Terminar
-competition_detail.player: Jugador
-competition_detail.w: G
-competition_detail.l: P
-competition_detail.key_diff: '⚷ D'
-competition_detail.key_yours: '⚷ F'
-competition_detail.key_opponentes: '⚷ C'
-competition_detail.save: Guardar
-competition_detail.register_game: 'Registrar partida'
-competition_detail.winner: Ganador
-competition_detail.winner_deck: 'Baraja ganadora'
-competition_detail.loser_deck: 'Baraja perdedora'
-competition_detail.winner_score: 'Puntuación del ganador'
-competition_detail.loser_score: 'Puntuación del perdedor'
-competition_detail.first_turn: 'Primer turno'
-competition_detail.date: Fecha
-competition_detail.crown_winner: 'Coronar ganador'
-competition_detail.champion: 'Campeón %player% oleee!'
-error.something_wrong: 'Algo ha ido mal'
-error.error: Error
-error.denied: 'Access denied'
-locale.en: Inglés
-locale.es: Español
-data.wins: Victorias
-data.loses: Derrotas
-data.winrate: Win rate
-data.games_played: Partidas jugadas
-data.other_players: Otros jugadores
-data.other_players_tooltip: Gente de TCO o NKFL contra la que hemos jugado
-competition.elimination: Eliminación
+competition.best_of: 'Mejor de %count%'
+competition.competitions: 'Torneos'
+competition.create: 'Crear'
+competition.created: 'Creada'
+competition.description: 'Description'
+competition.elimination: 'Eliminación'
+competition.end: 'Terminar'
+competition.games_count: '%count% partida|%count% partidas'
+competition.id: 'Id'
+competition.name: 'Nombre'
+competition.new: 'Crear'
+competition.pairings: 'Emparejamientos'
+competition.players: 'Jugadores'
+competition.ref: 'Ref'
 competition.round_robin: 'Round robin (%count% ronda)|Round robin (%count% rondas)'
 competition.round_robin_elimination: 'Round robin (%count% ronda) y eliminación|Round robin (%count% rondas) y eliminación'
-keyforge.house_brobnar: Brobnar
-keyforge.house_mars: Marte
-keyforge.house_shadows: Sombras
-keyforge.house_dis: Dis
-keyforge.house_sanctum: Sanctum
-keyforge.house_saurian: Saurios
-keyforge.house_star_alliance: Alianza estelar
-keyforge.house_untamed: Indómita
-keyforge.house_unfathomable: Insondable
-keyforge.house_logos: Logos
-keyforge.house_ekwidon: Ekwidon
-keyforge.set_cota: CotA
-keyforge.set_aoa: Aoa
-keyforge.set_wc: WC
-keyforge.set_mm: MM
-keyforge.set_dt: DT
-keyforge.set_woe: WoE
-keyforge.set_u22: U22
-keyforge.set_vt23: VT23
+competition.save: 'Guardar'
+competition.start: 'Empezar'
+competition.type: 'Tipo'
+competition.winner: 'Ganador'
+competition_detail.champion: 'Campeón %player% oleee!'
+competition_detail.crown_winner: 'Coronar ganador'
+competition_detail.date: 'Fecha'
+competition_detail.end: 'Terminar'
+competition_detail.first_turn: 'Primer turno'
+competition_detail.key_diff: '⚷ D'
+competition_detail.key_opponentes: '⚷ C'
+competition_detail.key_yours: '⚷ F'
+competition_detail.l: 'P'
+competition_detail.loser_deck: 'Baraja perdedora'
+competition_detail.loser_score: 'Puntuación del perdedor'
+competition_detail.player: 'Jugador'
+competition_detail.register_game: 'Registrar partida'
+competition_detail.save: 'Guardar'
+competition_detail.start: 'Empezar'
+competition_detail.w: 'G'
+competition_detail.winner: 'Ganador'
+competition_detail.winner_deck: 'Baraja ganadora'
+competition_detail.winner_score: 'Puntuación del ganador'
+data.games_played: 'Partidas jugadas'
+data.loses: 'Derrotas'
+data.other_players: 'Otros jugadores'
+data.other_players_tooltip: 'Gente de TCO o NKFL contra la que hemos jugado'
+data.winrate: 'Win rate'
+data.wins: 'Victorias'
+deck.add_to_my_decks: 'Añadir a mis barajas'
+deck.go_to_deck: 'Ir a baraja'
+deck.houses: 'Casas'
+deck.import: 'Importar'
+deck.imported: 'Importada'
+deck.notes: 'Notas'
+deck.save: 'Guardar'
+deck.set: 'Set'
+error.denied: 'Access denied'
+error.error: 'Error'
+error.something_wrong: 'Algo ha ido mal'
+game.competition: 'Torneo'
+game.date: 'Fecha'
+game.first_turn: 'Primer turno'
+game.keys: 'LLaves'
+game.loser: 'Perdedor'
+game.loser_chains: 'Llaves del perdedor'
+game.loser_deck: 'Baraja perdedora'
+game.loser_score: 'Puntuación del perdedor'
+game.notes: 'Notas'
+game.register_game: 'Registrar partida'
+game.save: 'Guardar'
+game.tco_casual: 'TCO Casual'
+game.tco_competitive: 'TCO Competitivo'
+game.winner: 'Ganador'
+game.winner_chains: 'Llaves del ganador'
+game.winner_deck: 'Baraja ganadora'
+game.winner_score: 'Puntuación del ganador'
+game.with_friends: 'Con amigos'
+keyforge.house_brobnar: 'Brobnar'
+keyforge.house_dis: 'Dis'
+keyforge.house_ekwidon: 'Ekwidon'
+keyforge.house_logos: 'Logos'
+keyforge.house_mars: 'Marte'
+keyforge.house_sanctum: 'Sanctum'
+keyforge.house_saurian: 'Saurios'
+keyforge.house_shadows: 'Sombras'
+keyforge.house_star_alliance: 'Alianza estelar'
+keyforge.house_unfathomable: 'Insondable'
+keyforge.house_untamed: 'Indómita'
+keyforge.set_aoa: 'Aoa'
+keyforge.set_cota: 'CotA'
+keyforge.set_dt: 'DT'
+keyforge.set_mm: 'MM'
+keyforge.set_u22: 'U22'
+keyforge.set_vt23: 'VT23'
+keyforge.set_wc: 'WC'
+keyforge.set_woe: 'WoE'
+locale.en: 'Inglés'
+locale.es: 'Español'
+menu.addgame: 'Registrar partida'
+menu.all: 'Todas'
+menu.any: 'Cualquiera'
+menu.best_performance: 'Mejor rendimiento'
+menu.best_win_streak: 'Mejor racha de victorias'
+menu.change_password: 'Actualizar contraseña'
+menu.clear_filters: 'Limpiar filtros'
+menu.deck: 'Baraja'
+menu.decks: 'Barajas'
+menu.external_data: 'Partidas/Barajas externas'
+menu.favorite: 'Favorita'
+menu.games: 'Partidas'
+menu.houses: 'Casas'
+menu.import: 'Importar'
+menu.locale: 'Idioma'
+menu.login: 'Login'
+menu.logout: 'Logout'
+menu.max_sas: 'Max SAS'
+menu.min_sas: 'Min SAS'
+menu.mydecks: 'Mis barajas'
+menu.notes: 'Notas'
+menu.other_options: 'Otras opciones'
+menu.password: 'Contraseña'
+menu.played_times: 'Jugada %count% vez|Jugada %count% veces'
+menu.players: 'Jugadores'
+menu.profile: 'Perfil'
+menu.record_book: 'Palmarés'
+menu.register: 'Registro'
+menu.sas: 'SAS'
+menu.save: 'Guardar'
+menu.search: 'Buscar'
+menu.set: 'Set'
+menu.settings: 'Opciones'
+menu.tags: 'Tags'
+menu.tournaments: 'Torneos'
+menu.username: 'Usuario'
+menu.wiki: 'Wiki'
+menu.winrate: 'Win rate'
+menu.worst_performance: 'Peor rendimiento'
+menu.show_stats: 'Mostrar/Ocultar estadísticas'
+menu.link_deck: 'Id de baraja, link de dok o vault'
+menu.type_to_search: 'Escribe para buscar...'
+menu.deck_select_tooltip: 'Al jugar con randoms pega el id de baraja aunque no salga en el selector, no hace falta importarla antes'
+menu.user_select_tooltip: 'Al jugar con randoms pega el nombre de usuario en winner/loser aunque no salga en el selector'
