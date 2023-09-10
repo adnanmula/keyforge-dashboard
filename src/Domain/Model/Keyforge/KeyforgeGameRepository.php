@@ -2,7 +2,6 @@
 
 namespace AdnanMula\Cards\Domain\Model\Keyforge;
 
-use AdnanMula\Cards\Domain\Model\Shared\Pagination;
 use AdnanMula\Criteria\Criteria;
 
 interface KeyforgeGameRepository
@@ -11,7 +10,7 @@ interface KeyforgeGameRepository
     public function search(Criteria $criteria): array;
 
     /** @return array<KeyforgeGame> */
-    public function all(?Pagination $pagination): array;
+    public function all(?int $offset = null, ?int $limit = null): array;
 
     public function count(Criteria $criteria): int;
 

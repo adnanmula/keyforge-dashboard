@@ -97,7 +97,7 @@ final class GeneralStatsQueryHandler
             $indexedDecks[$deck->id()->value()] = $deck;
         }
 
-        $games = $this->gameRepository->all(null);
+        $games = $this->gameRepository->all();
 
         $gamesCount = 0;
 

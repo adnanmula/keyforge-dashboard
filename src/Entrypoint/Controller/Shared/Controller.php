@@ -38,7 +38,7 @@ class Controller extends AbstractController
 
     final protected function setLocaleToUser(): void
     {
-        /** @var User $user */
+        /** @var ?User $user */
         $user = $this->security->getUser();
 
         if (null === $user) {

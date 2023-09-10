@@ -7,7 +7,6 @@ use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGame;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGameRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeCompetition;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeGameScore;
-use AdnanMula\Cards\Domain\Model\Shared\Pagination;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Criteria\Criteria;
 use AdnanMula\Criteria\DbalCriteriaAdapter;
@@ -35,7 +34,7 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
         return \array_map(fn (array $game) => $this->map($game), $result);
     }
 
-    public function all(?Pagination $pagination): array
+    public function all(?int $offset = null, ?int $limit = null): array
     {
         $builder = $this->connection->createQueryBuilder();
 
@@ -44,8 +43,12 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
             ->orderBy('a.date', 'DESC')
             ->addOrderBy('a.created_at', 'DESC');
 
-        if (null !== $pagination) {
-            $query->setFirstResult($pagination->start())->setMaxResults($pagination->length());
+        if (null !== $offset) {
+            $query->setFirstResult($offset);
+        }
+
+        if (null !== $limit) {
+            $query->setMaxResults($limit);
         }
 
         $result = $query->execute()->fetchAllAssociative();
