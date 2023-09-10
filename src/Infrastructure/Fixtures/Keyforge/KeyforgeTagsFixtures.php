@@ -108,7 +108,7 @@ final class KeyforgeTagsFixtures extends DbalFixture implements Fixture
         );
 
         $stmt->bindValue(':id', $tag->id->value());
-        $stmt->bindValue(':name', $tag->name);
+        $stmt->bindValue(':name', Json::encode($tag->name));
         $stmt->bindValue(':visibility', $tag->visibility->name);
         $stmt->bindValue(':style', Json::encode($tag->style));
         $stmt->bindValue(':type', $tag->type->name);

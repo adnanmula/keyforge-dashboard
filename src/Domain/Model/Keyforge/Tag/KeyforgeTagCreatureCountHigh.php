@@ -3,7 +3,9 @@
 namespace AdnanMula\Cards\Domain\Model\Keyforge\Tag;
 
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\Base\KeyforgeTagNeutralTrait;
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Locale;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
+use AdnanMula\Cards\Shared\LocalizedString;
 
 final class KeyforgeTagCreatureCountHigh extends KeyforgeTagNeutralTrait
 {
@@ -11,7 +13,12 @@ final class KeyforgeTagCreatureCountHigh extends KeyforgeTagNeutralTrait
     {
         parent::__construct(
             Uuid::from('2b60df5d-ac78-491e-a3f7-fba2709601ee'),
-            'Muchas criaturas',
+            LocalizedString::fromArray(
+                [
+                    Locale::es_ES->value => 'Muchas criaturas',
+                    Locale::en_GB->value => 'High creature count',
+                ],
+            ),
         );
     }
 }

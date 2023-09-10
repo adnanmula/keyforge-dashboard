@@ -3,7 +3,9 @@
 namespace AdnanMula\Cards\Domain\Model\Keyforge\Tag;
 
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\Base\KeyforgeTagPositiveTrait;
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Locale;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
+use AdnanMula\Cards\Shared\LocalizedString;
 
 final class KeyforgeTagArtifactControlHigh extends KeyforgeTagPositiveTrait
 {
@@ -11,7 +13,12 @@ final class KeyforgeTagArtifactControlHigh extends KeyforgeTagPositiveTrait
     {
         parent::__construct(
             Uuid::from('280c1682-93aa-40c0-be2e-baa1ec07f010'),
-            'Control de artefactos alto',
+            LocalizedString::fromArray(
+                [
+                    Locale::es_ES->value => 'Control de artefactos alto',
+                    Locale::en_GB->value => 'High artifact control',
+                ],
+            ),
         );
     }
 }

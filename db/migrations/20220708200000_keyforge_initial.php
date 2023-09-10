@@ -36,7 +36,7 @@ final class KeyforgeInitial extends AbstractMigration
         $this->execute(
             'CREATE TABLE keyforge_tags (
                 id uuid NOT NULL,
-                name character varying(64) NOT NULL,
+                name jsonb NOT NULL,
                 visibility character varying(16) NOT NULL,
                 style jsonb NOT NULL,
                 type character varying(64) NOT NULL,

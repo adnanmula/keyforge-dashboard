@@ -3,7 +3,9 @@
 namespace AdnanMula\Cards\Domain\Model\Keyforge\Tag;
 
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\Base\KeyforgeTagNegativeTrait;
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Locale;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
+use AdnanMula\Cards\Shared\LocalizedString;
 
 final class KeyforgeTagEfficiencyLow extends KeyforgeTagNegativeTrait
 {
@@ -11,7 +13,12 @@ final class KeyforgeTagEfficiencyLow extends KeyforgeTagNegativeTrait
     {
         parent::__construct(
             Uuid::from('c1503b8e-7982-4c91-88c5-eac2040fd8fb'),
-            'Eficiencia baja',
+            LocalizedString::fromArray(
+                [
+                    Locale::es_ES->value => 'Eficiencia baja',
+                    Locale::en_GB->value => 'Low efficiency',
+                ],
+            ),
         );
     }
 }

@@ -137,6 +137,8 @@
                     {
                         render: function (data, type, row) {
                             let tagsJson = JSON.parse('{{ tags|json_encode|raw }}');
+                            const locale = '{{ app.locale }}';
+
                             let tags = [];
 
                             data.forEach(function (tagId) {
@@ -144,7 +146,7 @@
                                     if (tagId === item.id) {
                                         const tag = '<button type="button" class="btn btn-xs btn-outline-dark" data-type="'+item.type+'" data-value="' + item.name
                                             + '" style="background-color: ' + item.style.color_bg + '; color: ' + item.style.color_text + '; border-color: ' + item.style.color_outline + '">'
-                                            + item.name + '</button>';
+                                            + item.name[locale] + '</button>';
 
                                         tags.push(tag);
                                     }

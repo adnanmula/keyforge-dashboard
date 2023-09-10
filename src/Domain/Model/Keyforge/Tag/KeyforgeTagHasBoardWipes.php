@@ -3,7 +3,9 @@
 namespace AdnanMula\Cards\Domain\Model\Keyforge\Tag;
 
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\Base\KeyforgeTagPositiveTrait;
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Locale;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
+use AdnanMula\Cards\Shared\LocalizedString;
 
 final class KeyforgeTagHasBoardWipes extends KeyforgeTagPositiveTrait
 {
@@ -11,7 +13,12 @@ final class KeyforgeTagHasBoardWipes extends KeyforgeTagPositiveTrait
     {
         parent::__construct(
             Uuid::from('c56749d3-cf34-419a-9937-688a1a4ac3bc'),
-            'Tiene board wipes',
+            LocalizedString::fromArray(
+                [
+                    Locale::es_ES->value => 'Tiene board wipes',
+                    Locale::en_GB->value => 'Has board wipe',
+                ],
+            ),
         );
     }
 }

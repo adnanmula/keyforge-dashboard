@@ -3,7 +3,9 @@
 namespace AdnanMula\Cards\Domain\Model\Keyforge\Tag;
 
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\Base\KeyforgeTagPositiveTrait;
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Locale;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
+use AdnanMula\Cards\Shared\LocalizedString;
 
 final class KeyforgeTagRecursionHigh extends KeyforgeTagPositiveTrait
 {
@@ -11,7 +13,12 @@ final class KeyforgeTagRecursionHigh extends KeyforgeTagPositiveTrait
     {
         parent::__construct(
             Uuid::from('41534876-931c-4508-ae8b-aa7a08805ff5'),
-            'Recursion alta',
+            LocalizedString::fromArray(
+                [
+                    Locale::es_ES->value => 'Recursión alta',
+                    Locale::en_GB->value => 'High recursion',
+                ],
+            ),
         );
     }
 }

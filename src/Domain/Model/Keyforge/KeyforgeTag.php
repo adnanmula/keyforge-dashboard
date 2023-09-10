@@ -6,12 +6,13 @@ use AdnanMula\Cards\Domain\Model\Shared\ValueObject\TagStyle;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\TagType;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\TagVisibility;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
+use AdnanMula\Cards\Shared\LocalizedString;
 
 class KeyforgeTag implements \JsonSerializable
 {
     public function __construct(
         public Uuid $id,
-        public string $name,
+        public LocalizedString $name,
         public TagVisibility $visibility,
         public TagStyle $style,
         public TagType $type,
@@ -22,7 +23,7 @@ class KeyforgeTag implements \JsonSerializable
     {
         return [
             'id' => $this->id->value(),
-            'name' => $this->name,
+            'name' => $this->name->jsonSerialize(),
             'visibility' => $this->visibility->name,
             'style' => $this->style->jsonSerialize(),
             'type' => $this->type->name,

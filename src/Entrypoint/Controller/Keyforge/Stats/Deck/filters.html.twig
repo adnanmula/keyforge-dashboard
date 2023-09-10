@@ -113,7 +113,7 @@
                     <div class="form-group">
                         <select id="tag-selector" class="form-select">
                             {% for tag in tags %}
-                                <option value="{{ tag.id }}">{{ tag.name }}</option>
+                                <option value="{{ tag.id }}">{{ tag.name[app.locale] }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -121,7 +121,7 @@
                     <div class="form-group">
                         <select id="tag-selector-exclude" class="form-select">
                             {% for tag in tags %}
-                                <option value="{{ tag.id }}">{{ tag.name }}</option>
+                                <option value="{{ tag.id }}">{{ tag.name[app.locale] }}</option>
                             {% endfor %}
                         </select>
                     </div>

@@ -3,7 +3,9 @@
 namespace AdnanMula\Cards\Domain\Model\Keyforge\Tag;
 
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\Base\KeyforgeTagNeutralTrait;
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Locale;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
+use AdnanMula\Cards\Shared\LocalizedString;
 
 final class KeyforgeTagActionCountHigh extends KeyforgeTagNeutralTrait
 {
@@ -11,7 +13,12 @@ final class KeyforgeTagActionCountHigh extends KeyforgeTagNeutralTrait
     {
         parent::__construct(
             Uuid::from('f428f793-118c-499f-af21-2fe2805ef8a2'),
-            'Muchas acciones',
+            LocalizedString::fromArray(
+                [
+                    Locale::es_ES->value => 'Muchas acciones',
+                    Locale::en_GB->value => 'High action count',
+                ],
+            ),
         );
     }
 }

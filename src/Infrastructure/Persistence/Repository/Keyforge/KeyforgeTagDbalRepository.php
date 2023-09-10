@@ -9,6 +9,7 @@ use AdnanMula\Cards\Domain\Model\Shared\ValueObject\TagStyle;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\TagType;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\TagVisibility;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
+use AdnanMula\Cards\Shared\LocalizedString;
 use AdnanMula\Criteria\Criteria;
 use AdnanMula\Criteria\DbalCriteriaAdapter;
 use AdnanMula\Cards\Infrastructure\Persistence\Repository\DbalRepository;
@@ -26,7 +27,7 @@ final class KeyforgeTagDbalRepository extends DbalRepository implements Keyforge
 
         (new DbalCriteriaAdapter($builder))->execute($criteria);
 
-        $result = $query->execute()->fetchAllAssociative();
+        $result = $query->executeQuery()->fetchAllAssociative();
 
         return \array_map(fn (array $row) => $this->map($row), $result);
     }
@@ -51,20 +52,20 @@ final class KeyforgeTagDbalRepository extends DbalRepository implements Keyforge
         );
 
         $stmt->bindValue(':id', $tag->id->value());
-        $stmt->bindValue(':name', $tag->name);
+        $stmt->bindValue(':name', Json::encode($tag->name));
         $stmt->bindValue(':visibility', $tag->visibility->name);
         $stmt->bindValue(':style', Json::encode($tag->style));
         $stmt->bindValue(':type', $tag->type->name);
         $stmt->bindValue(':archived', $tag->archived, ParameterType::BOOLEAN);
 
-        $stmt->execute();
+        $stmt->executeStatement();
     }
 
     private function map(array $tag): KeyforgeTag
     {
         return new KeyforgeTag(
             Uuid::from($tag['id']),
-            $tag['name'],
+            LocalizedString::fromArray(Json::decode($tag['name'])),
             TagVisibility::from($tag['visibility']),
             TagStyle::from(Json::decode($tag['style'])),
             TagType::from($tag['type']),

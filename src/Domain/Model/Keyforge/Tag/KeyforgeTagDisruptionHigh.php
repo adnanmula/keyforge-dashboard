@@ -3,7 +3,9 @@
 namespace AdnanMula\Cards\Domain\Model\Keyforge\Tag;
 
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\Base\KeyforgeTagPositiveTrait;
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Locale;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
+use AdnanMula\Cards\Shared\LocalizedString;
 
 final class KeyforgeTagDisruptionHigh extends KeyforgeTagPositiveTrait
 {
@@ -11,7 +13,12 @@ final class KeyforgeTagDisruptionHigh extends KeyforgeTagPositiveTrait
     {
         parent::__construct(
             Uuid::from('0cf47bfc-df85-4459-b6f1-8fec291a614d'),
-            'Disrupcion alta',
+            LocalizedString::fromArray(
+                [
+                    Locale::es_ES->value => 'Disrupción alta',
+                    Locale::en_GB->value => 'High disruption',
+                ],
+            ),
         );
     }
 }

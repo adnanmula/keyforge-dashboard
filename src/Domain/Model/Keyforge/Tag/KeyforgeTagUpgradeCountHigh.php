@@ -3,7 +3,9 @@
 namespace AdnanMula\Cards\Domain\Model\Keyforge\Tag;
 
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\Base\KeyforgeTagNeutralTrait;
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Locale;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
+use AdnanMula\Cards\Shared\LocalizedString;
 
 final class KeyforgeTagUpgradeCountHigh extends KeyforgeTagNeutralTrait
 {
@@ -11,7 +13,12 @@ final class KeyforgeTagUpgradeCountHigh extends KeyforgeTagNeutralTrait
     {
         parent::__construct(
             Uuid::from('a6ba9571-16b2-40f7-be01-9a1b31d4c7b1'),
-            'Muchas mejoras',
+            LocalizedString::fromArray(
+                [
+                    Locale::es_ES->value => 'Muchas mejoras',
+                    Locale::en_GB->value => 'High upgrade count',
+                ],
+            ),
         );
     }
 }

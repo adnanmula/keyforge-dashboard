@@ -7,10 +7,11 @@ use AdnanMula\Cards\Domain\Model\Shared\ValueObject\TagStyle;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\TagType;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\TagVisibility;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
+use AdnanMula\Cards\Shared\LocalizedString;
 
 abstract class KeyforgeTagPositiveTrait extends KeyforgeTag
 {
-    public function __construct(Uuid $id, string $name)
+    public function __construct(Uuid $id, LocalizedString $name)
     {
         parent::__construct(
             $id,

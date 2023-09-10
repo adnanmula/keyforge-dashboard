@@ -3,7 +3,9 @@
 namespace AdnanMula\Cards\Domain\Model\Keyforge\Tag;
 
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\Base\KeyforgeTagHasCard;
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Locale;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
+use AdnanMula\Cards\Shared\LocalizedString;
 
 final class KeyforgeTagHasAnomaly extends KeyforgeTagHasCard
 {
@@ -11,7 +13,12 @@ final class KeyforgeTagHasAnomaly extends KeyforgeTagHasCard
     {
         parent::__construct(
             Uuid::from('61fb4a66-e417-48e6-a27e-41d61ddff03d'),
-            'Tiene anomalias',
+            LocalizedString::fromArray(
+                [
+                    Locale::es_ES->value => 'Tiene anomalía',
+                    Locale::en_GB->value => 'Has anomaly',
+                ],
+            ),
         );
     }
 }
