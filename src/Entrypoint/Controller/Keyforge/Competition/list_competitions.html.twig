@@ -1,6 +1,6 @@
 {% extends "Keyforge/Shared/keyforge_base.html.twig" %}
 
-{% block title %}Torneos{% endblock %}
+{% block title %}{{ 'competition.competitions'|trans }}{% endblock %}
 
 {% block body %}
     {% if result != false %}
@@ -10,15 +10,14 @@
     {% endif %}
 
     <div class="shadow-lg p-3 mb-5 bg-white rounded" style="display: flex; overflow-x: auto">
-
         <div class="row">
             <div class="d-flex flex-row">
                 <div class="col-6">
-                    <h3>Torneos</h3>
+                    <h3>{{ 'competition.competitions'|trans }}</h3>
                 </div>
                 {% if is_granted('ROLE_KEYFORGE') %}
                     <div class="d-flex flex-row-reverse col-6">
-                        <a class="btn btn-dark" href="{{ path('keyforge_competition_create') }}" role="button" aria-expanded="false">Nuevo</a>
+                        <a class="btn btn-dark" href="{{ path('keyforge_competition_create') }}" role="button" aria-expanded="false">{{ 'competition.new'|trans }}</a>
                     </div>
                 {% endif %}
             </div>
@@ -28,16 +27,16 @@
             <table id="competitionsList" class="table table-responsive-sm table-hover" style="width:100%;">
                 <thead>
                 <tr>
-                    <th scope="col">Id</th>
-                    <th scope="col">Ref</th>
-                    <th scope="col">Nombre</th>
-                    <th scope="col">Tipo</th>
-                    <th scope="col">Jugadores</th>
-                    <th scope="col">Descripción</th>
-                    <th scope="col">Creado</th>
-                    <th scope="col">Inicio</th>
-                    <th scope="col">Fin</th>
-                    <th scope="col">Ganador</th>
+                    <th scope="col">{{ 'competition.id'|trans }}</th>
+                    <th scope="col">{{ 'competition.ref'|trans }}</th>
+                    <th scope="col">{{ 'competition.name'|trans }}</th>
+                    <th scope="col">{{ 'competition.type'|trans }}</th>
+                    <th scope="col">{{ 'competition.players'|trans }}</th>
+                    <th scope="col">{{ 'competition.description'|trans }}</th>
+                    <th scope="col">{{ 'competition.created'|trans }}</th>
+                    <th scope="col">{{ 'competition.start'|trans }}</th>
+                    <th scope="col">{{ 'competition.end'|trans }}</th>
+                    <th scope="col">{{ 'competition.winner'|trans }}</th>
                 </tr>
                 </thead>
             </table>
@@ -84,6 +83,7 @@
                     },
                     {
                         render: function (data, type, row) {
+                            // TODO transtalions
                             if (data === 'ROUND_ROBIN_1') {
                                 return 'Liga (Solo ida)';
                             }

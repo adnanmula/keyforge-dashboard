@@ -1,19 +1,17 @@
 {% extends "Keyforge/Shared/keyforge_base.html.twig" %}
 
-{% block title %}Partidas{% endblock %}
+{% block title %}{{ 'menu.games'|trans }}{% endblock %}
 
 {% block body %}
     <div class="shadow-lg p-3 mb-5 bg-white rounded">
         <div class="divider py-2"></div>
 
         <div class="row">
-            <div class="col-10 d-flex justify-content-start">
-                <h2>{{ name }}</h2>
-            </div>
+            <div class="col-10 d-flex justify-content-start"><h2>{{ name }}</h2></div>
 
             {% if user_is_external == false %}
                 <div class="col-2 d-flex justify-content-end">
-                    <a class="btn btn-dark" data-bs-toggle="collapse" href="#userStats" role="button" aria-expanded="false" aria-controls="collapseExample">Mostrar/Ocultar estadísticas</a>
+                    <a class="btn btn-dark" data-bs-toggle="collapse" href="#userStats" role="button" aria-expanded="false" aria-controls="collapseExample">{{ 'menu_show_stats'|trans }}</a>
                 </div>
             {% endif %}
         </div>
@@ -59,7 +57,7 @@
         <div class="row m-2">
             {% if (null != best_deck) %}
                 <a href="/deck/{{ best_deck.id }}?userId={{ userId }}" class="btn btn-dark col-3 border col-12 col-sm-6 col-lg-3">
-                    <h5>Mejor rendimiento</h5>
+                    <h5>{{ 'menu.best_performance'|trans }}</h5>
                     <p>{{ best_deck.name }}</p>
                     <p>{{ best_deck.wins }}/{{ best_deck.losses }} (WR: {{ best_deck.win_rate }}%/PR: {{ best_deck.pick_rate }}%)</p>
                 </a>
@@ -67,7 +65,7 @@
 
             {% if (null != worse_deck) %}
                 <a href="/deck/{{ worse_deck.id }}?userId={{ userId }}" class="btn btn-dark border col-12 col-sm-6 col-lg-3">
-                    <h5>Peor rendimiento</h5>
+                    <h5>{{ 'menu.worst_performance'|trans }}</h5>
                     <p>{{ worse_deck.name }}</p>
                     <p>{{ worse_deck.wins }}/{{ worse_deck.losses }} (WR: {{ worse_deck.win_rate }}%/PR: {{ worse_deck.pick_rate }}%)</p>
                 </a>
@@ -75,15 +73,15 @@
 
             {% if (null != favorite_deck) %}
                 <a href="/deck/{{ favorite_deck.id }}?userId={{ userId }}" class="btn btn-dark border col-12 col-sm-6 col-lg-3">
-                    <h5>Favorita</h5>
+                    <h5>{{ 'menu.favorite'|trans }}</h5>
                     <p>{{ favorite_deck.name }}</p>
-                    <p>Jugada {{ favorite_deck.wins + favorite_deck.losses }} veces</p>
+                    <p>{{ 'menu.played_times'|trans({'%count%': favorite_deck.wins + favorite_deck.losses}) }}</p>
                 </a>
             {% endif %}
 
             {% if (null != win_streak) %}
                 <a class="btn btn-dark border col-12 col-sm-6 col-lg-3">
-                    <h5>Mejor racha de victorias</h5>
+                    <h5>{{ 'menu.best_win_streak'|trans }}</h5>
                     <p></p>
                     <p>{{ win_streak }}</p>
                 </a>
@@ -91,7 +89,7 @@
 
             {% if (null != competition_wins and competition_wins | length) %}
                 <div class="btn btn-dark border">
-                    <h5>Palmarés</h5>
+                    <h5>{{ 'menu.record_book'|trans }}</h5>
 
                     <div class="row">
                         {% for win in competition_wins %}
@@ -132,6 +130,7 @@
     </div>
 
     <script>
+        {# TODO translations #}
         {% if user_is_external == false %}
 
         let winRateVsUsers = JSON.parse('{{ win_rate_vs_users|json_encode|raw }}');

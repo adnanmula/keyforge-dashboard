@@ -12,6 +12,8 @@ menu.profile: Perfil
 menu.settings: Opciones
 menu.locale: Idioma
 menu.save: Guardar
+menu.password: Contraseña
+menu.username: Usuario
 menu.change_password: Actualizar contraseña
 competition_detail.start: Empezar
 competition_detail.end: Terminar
@@ -37,3 +39,31 @@ error.error: Error
 error.denied: 'Access denied'
 locale.en: Inglés
 locale.es: Español
+data.wins: Victorias
+data.loses: Derrotas
+data.winrate: Win rate
+data.games_played: Partidas jugadas
+data.other_players: Otros jugadores
+data.other_players_tooltip: Gente de TCO o NKFL contra la que hemos jugado
+competition.elimination: Eliminación
+competition.round_robin: 'Round robin (%count% ronda)|Round robin (%count% rondas)'
+competition.round_robin_elimination: 'Round robin (%count% ronda) y eliminación|Round robin (%count% rondas) y eliminación'
+keyforge.house_brobnar: Brobnar
+keyforge.house_mars: Marte
+keyforge.house_shadows: Sombras
+keyforge.house_dis: Dis
+keyforge.house_sanctum: Sanctum
+keyforge.house_saurian: Saurios
+keyforge.house_star_alliance: Alianza estelar
+keyforge.house_untamed: Indómita
+keyforge.house_unfathomable: Insondable
+keyforge.house_logos: Logos
+keyforge.house_ekwidon: Ekwidon
+keyforge.set_cota: CotA
+keyforge.set_aoa: Aoa
+keyforge.set_wc: WC
+keyforge.set_mm: MM
+keyforge.set_dt: DT
+keyforge.set_woe: WoE
+keyforge.set_u22: U22
+keyforge.set_vt23: VT23

@@ -1,12 +1,10 @@
 {% extends "Keyforge/Shared/keyforge_base.html.twig" %}
 
-{% block title %}Crear torneo{% endblock %}
+{% block title %}{{ 'competition.create'|trans }}{% endblock %}
 
 {% block body %}
     {% if result != false %}
-        <div class="alert alert-{% if success == true %}success{% else %}danger{% endif %}" role="alert">
-            {{ result }}
-        </div>
+        <div class="alert alert-{% if success == true %}success{% else %}danger{% endif %}" role="alert">{{ result }}</div>
     {% endif %}
 
     <div class="shadow-lg p-3 mb-5 bg-white rounded">
@@ -14,15 +12,15 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label for="type" class="form-label">Tipo</label>
+                        <label for="type" class="form-label">{{ 'competition.type'|trans }}</label>
                         <select class="form-select" name="type" id="type">
-                            <option value="ROUND_ROBIN_1" selected>Round robin (1 ronda)</option>
-                            <option value="ROUND_ROBIN_2">Round robin (2 rondas)</option>
-                            <option value="ROUND_ROBIN_3">Round robin (3 rondas)</option>
-                            <option value="ROUND_ROBIN_4">Round robin (4 rondas)</option>
-                            <option value="ELIMINATION" disabled>Eliminación</option>
-                            <option value="ROUND_ROBIN_1_ELIMINATION" disabled>Round robin (1 ronda) y eliminación</option>
-                            <option value="ROUND_ROBIN_2_ELIMINATION" disabled>Round robin (2 rondas) y eliminación</option>
+                            <option value="ROUND_ROBIN_1" selected>{{ 'competition.round_robin'|trans({'%count%': 1}) }}</option>
+                            <option value="ROUND_ROBIN_2">{{ 'competition.round_robin'|trans({'%count%': 2}) }}</option>
+                            <option value="ROUND_ROBIN_3">{{ 'competition.round_robin'|trans({'%count%': 3}) }}</option>
+                            <option value="ROUND_ROBIN_4">{{ 'competition.round_robin'|trans({'%count%': 4}) }}</option>
+                            <option value="ELIMINATION" disabled>{{ 'competition.elimination'|trans }}</option>
+                            <option value="ROUND_ROBIN_1_ELIMINATION" disabled>{{ 'competition.round_robin_elimination'|trans({'%count%': 1}) }}</option>
+                            <option value="ROUND_ROBIN_2_ELIMINATION" disabled>{{ 'competition.round_robin_elimination'|trans({'%count%': 2}) }}</option>
                         </select>
                     </div>
                 </div>
@@ -33,13 +31,13 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label for="type" class="form-label">Emparejamientos</label>
+                        <label for="type" class="form-label">{{ 'competition.pairings'|trans }}</label>
                         <select class="form-select" name="fixtures_type" id="fixtures_type">
-                            <option value="BEST_OF_1" selected>Mejor de 1</option>
-                            <option value="BEST_OF_3">Mejor de 3</option>
-                            <option value="BEST_OF_5">Mejor de 5</option>
-                            <option value="GAMES_3">3 partidas</option>
-                            <option value="GAMES_5">5 partidas</option>
+                            <option value="BEST_OF_1" selected>{{ 'competition.best_of'|trans({'%count%': 1}) }}</option>
+                            <option value="BEST_OF_3">{{ 'competition.best_of'|trans({'%count%': 3}) }}</option>
+                            <option value="BEST_OF_5">{{ 'competition.best_of'|trans({'%count%': 5}) }}</option>
+                            <option value="GAMES_3">{{ 'competition.games_count'|trans({'%count%': 3}) }}</option>
+                            <option value="GAMES_5">{{ 'competition.games_count'|trans({'%count%': 3}) }}</option>
                         </select>
                     </div>
                 </div>
@@ -50,7 +48,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label for="name" class="form-label">Nombre</label>
+                        <label for="name" class="form-label">{{ 'competition.name'|trans }}</label>
                         <input type="text" class="form-control" id="name" name="name">
                     </div>
                 </div>
@@ -61,7 +59,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="form-group">
-                        <label for="users" class="form-label">Jugadores</label>
+                        <label for="users" class="form-label">{{ 'competition.players'|trans }}</label>
                         <select id="users" name="users[]">
                             {% for user in users %}
                                 <option value="{{ user.id }}"> {{ user.name }} </option>
@@ -73,7 +71,7 @@
 
             <div class="row mt-3">
                 <div class="col-md-12">
-                    <label for="description" class="form-label">Descripción</label>
+                    <label for="description" class="form-label">{{ 'competition.description'|trans }}</label>
                     <textarea class="form-control" name="description" id="description" rows="5" maxlength="512"></textarea>
                 </div>
             </div>
@@ -82,7 +80,7 @@
 
             <div class="row mt-3">
                 <div class="col-md-12">
-                    <button type="submit" class="btn btn-block btn-dark w-100">Guardar</button>
+                    <button type="submit" class="btn btn-block btn-dark w-100">{{ 'competition.save'|trans }}</button>
                 </div>
             </div>
         </form>

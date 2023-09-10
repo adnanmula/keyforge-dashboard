@@ -12,6 +12,8 @@ menu.profile: Profile
 menu.settings: Settings
 menu.locale: Language
 menu.save: Save
+menu.password: Password
+menu.username: Username
 menu.change_password: Change password
 competition_detail.start: Start
 competition_detail.end: End
@@ -37,3 +39,31 @@ error.error: Error
 error.denied: 'Acceso denegado'
 locale.en: English
 locale.es: Spanish
+data.wins: Wins
+data.loses: Loses
+data.winrate: Win rate
+data.games_played: Games played
+data.other_players: Other players
+data.other_players_tooltip: Players from TCO or NKFL we have played against
+competition.round_robin: 'Round robin (%count% round)|Round robin (%count% rounds)'
+competition.elimination: Elimination
+competition.round_robin_elimination: 'Round robin (%count% round) and elimination|Round robin (%count% rounds) and elimination'
+keyforge.house_brobnar: Brobnar
+keyforge.house_mars: Mars
+keyforge.house_shadows: Shadows
+keyforge.house_dis: Dis
+keyforge.house_sanctum: Sanctum
+keyforge.house_saurian: Saurian
+keyforge.house_star_alliance: Star alliance
+keyforge.house_untamed: Untamed
+keyforge.house_unfathomable: Unfathomable
+keyforge.house_logos: Logos
+keyforge.house_ekwidon: Ekwidon
+keyforge.set_cota: CotA
+keyforge.set_aoa: Aoa
+keyforge.set_wc: WC
+keyforge.set_mm: MM
+keyforge.set_dt: DT
+keyforge.set_woe: WoE
+keyforge.set_u22: U22
+keyforge.set_vt23: VT23

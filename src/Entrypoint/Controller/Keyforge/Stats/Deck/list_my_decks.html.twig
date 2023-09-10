@@ -1,6 +1,6 @@
 {% extends "Keyforge/Shared/keyforge_base.html.twig" %}
 
-{% block title %}Mis Decks{% endblock %}
+{% block title %}{{ 'menu.mydecks'|trans }}{% endblock %}
 
 {% block header %}
     <style>
@@ -18,13 +18,13 @@
         <table id="deckList" class="table table-responsive-sm table-hover" style="width:100%;">
             <thead>
             <tr>
-                <th scope="col">Tags</th>
-                <th scope="col">Deck</th>
-                <th scope="col">Set</th>
-                <th scope="col">Casas</th>
-                <th scope="col">Win Rate</th>
-                <th scope="col">SAS</th>
-                <th scope="col">Notas</th>
+                <th scope="col">{{ 'menu.tags'|trans }}</th>
+                <th scope="col">{{ 'menu.deck'|trans }}</th>
+                <th scope="col">{{ 'menu.set'|trans }}</th>
+                <th scope="col">{{ 'menu.houses'|trans }}</th>
+                <th scope="col">{{ 'menu.winrate'|trans }}</th>
+                <th scope="col">{{ 'menu.sas'|trans }}</th>
+                <th scope="col">{{ 'menu.notes'|trans }}</th>
                 <th scope="col"></th>
             </tr>
             </thead>
@@ -35,7 +35,7 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modelaTitleLabel">Notas</h5>
+                    <h5 class="modal-title" id="modelaTitleLabel">{{ 'menu.notes'|trans }}</h5>
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -47,14 +47,13 @@
                                 <textarea class="form-control" name="notes" id="deckNotesInput" rows="8" maxlength="512"></textarea>
                             </div>
                         </div>
-
                         <div>
                             <input type="hidden" id="hiddenDeckId" value="">
                         </div>
 
                         <div class="divider py-1"></div>
 
-                        <button type="submit" id="updateNotesSubmit" class="btn btn-block btn-dark" style="width: 100%">Guardar</button>
+                        <button type="submit" id="updateNotesSubmit" class="btn btn-block btn-dark" style="width: 100%">{{ 'menu.save'|trans }}</button>
                     </form>
                 </div>
             </div>

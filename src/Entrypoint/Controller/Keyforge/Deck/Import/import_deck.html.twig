@@ -1,6 +1,6 @@
 {% extends "Keyforge/Shared/keyforge_base.html.twig" %}
 
-{% block title %}Importar{% endblock %}
+{% block title %}{{ 'deck.import'|trans }}{% endblock %}
 
 {% block body %}
     {% if result != false %}
@@ -9,7 +9,7 @@
             <div class="col-12 col-sm-12 col-lg-6">
                 {% if success == true %}
                     <div class="alert alert-success" role="alert">
-                        Baraja importada. <a href="{{ path('keyforge_deck_detail', {'deckId': deckId}) }}">Ir a baraja.</a>
+                        {{ 'deck.imported'|trans }}<a href="{{ path('keyforge_deck_detail', {'deckId': deckId}) }}">{{ 'deck.go_to_deck'|trans }}</a>
                     </div>
                 {% elseif success == false %}
                     <div class="alert alert-danger" role="alert">{{ result }}</div>
@@ -29,13 +29,12 @@
 
                     <div class="form-check mb-2">
                         <input class="form-check-input" type="checkbox" name="setUser" id="setUser">
-                        <label for="setUser">Añadir a mis decks</label>
+                        <label for="setUser">{{ 'deck.go_to_my_decks'|trans }}</label>
                     </div>
 
-                    <button type="submit" class="col-4 btn btn-block btn-dark w-100">Importar</button>
+                    <button type="submit" class="col-4 btn btn-block btn-dark w-100">{{ 'deck.import'|trans }}</button>
                 </div>
             </div>
         </div>
     </form>
-
 {% endblock %}

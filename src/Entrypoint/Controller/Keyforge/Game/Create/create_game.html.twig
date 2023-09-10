@@ -1,12 +1,10 @@
 {% extends "Keyforge/Shared/keyforge_base.html.twig" %}
 
-{% block title %}Registrar partida{% endblock %}
+{% block title %}{{ 'game.register_game'|trans }}{% endblock %}
 
 {% block body %}
     {% if result != false %}
-        <div class="alert alert-{% if success == true %}success{% else %}danger{% endif %}" role="alert">
-            {{ result }}
-        </div>
+        <div class="alert alert-{% if success == true %}success{% else %}danger{% endif %}" role="alert">{{ result }}</div>
     {% endif %}
 
     <script>
@@ -29,12 +27,12 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label for="competition" class="form-label">Competition</label>
+                        <label for="competition" class="form-label">{{ 'game.competition'|trans }}</label>
 
                         <select class="form-select" name="competition" id="competition">
-                            <option value="FRIENDS" selected>With friends</option>
-                            <option value="TCO_CASUAL">TCO Casual</option>
-                            <option value="TCO_COMPETITIVE">TCO Competitive</option>
+                            <option value="FRIENDS" selected>{{ 'game.with_friends'|trans }}</option>
+                            <option value="TCO_CASUAL">{{ 'game.tco_casual'|trans }}</option>
+                            <option value="TCO_COMPETITIVE">{{ 'game.tco_competitive'|trans }}</option>
                             <option value="NKFL_LEAGUE_SEASON_21">NKFL League Season 21</option>
                             <option value="NKFL_ARCHON_TOURNAMENT">NKFL Archon Tournament</option>
                         </select>
@@ -47,13 +45,13 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label for="winner" class="form-label">Winner</label>
+                        <label for="winner" class="form-label">{{ 'game.winner'|trans }}</label>
                         <i class="bi bi-info-circle" data-toggle="tooltip" title="Al jugar con randoms pega el nombre de usuario en winner/loser aunque no salga en el selector"></i>
                         <input class="form-control selector" list="winnerOptions" id="winner" placeholder="Type to search..." name="winner" autocomplete="off" required>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <label for="loser" class="form-label">Loser</label>
+                    <label for="loser" class="form-label">{{ 'game.loser'|trans }}</label>
                     <i class="bi bi-info-circle" data-toggle="tooltip" title="Al jugar con randoms pega el nombre de usuario en winner/loser aunque no salga en el selector"></i>
                     <input class="form-control selector" list="loserOptions" id="loser" placeholder="Type to search..." name="loser" autocomplete="off" required>
                 </div>
@@ -64,13 +62,13 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label for="winnerDeck" class="form-label">Winner deck</label>
+                        <label for="winnerDeck" class="form-label">{{ 'game.winner_deck'|trans }}</label>
                         <i class="bi bi-info-circle" data-toggle="tooltip" title="Al jugar con randoms pega el id de baraja aunque no salga en el selector, no hace falta importarla antes"></i>
                         <input class="form-control" list="winnerDeckOptions" id="winnerDeck" placeholder="Type to search..." name="winnerDeck" autocomplete="off" required>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <label for="loserDeck" class="form-label">Loser deck</label>
+                    <label for="loserDeck" class="form-label">{{ 'game.loser_deck'|trans }}</label>
                     <i class="bi bi-info-circle" data-toggle="tooltip" title="Al jugar con randoms pega el id de baraja aunque no salga en el selector, no hace falta importarla antes"></i>
                     <input class="form-control" list="loserDeckOptions" id="loserDeck" placeholder="Type to search..." name="loserDeck"  autocomplete="off" required>
                 </div>
@@ -80,11 +78,11 @@
 
             <div class="row">
                 <div class="col-md-6">
-                    <label for="winnerChains" class="form-label">Winner chains</label>
+                    <label for="winnerChains" class="form-label">{{ 'game.winner_chains'|trans }}</label>
                     <input type="number" class="form-control" id="winnerChains" value="0" name="winnerChains" max="20" min="0" autocomplete="off" required>
                 </div>
                 <div class="col-md-6">
-                    <label for="loserChains" class="form-label">Loser chains</label>
+                    <label for="loserChains" class="form-label">{{ 'game.loser_chains'|trans }}</label>
                     <input type="number" class="form-control" id="loserChains" value="0" name="loserChains" max="20" min="0" autocomplete="off" required>
                 </div>
             </div>
@@ -93,7 +91,7 @@
 
             <div class="row">
                 <div class="col-md-6">
-                    <label for="winnerScore" class="form-label">Winner score</label>
+                    <label for="winnerScore" class="form-label">{{ 'game.winner_score'|trans }}</label>
                     <br>
                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
                         <label class="btn btn-dark">
@@ -102,7 +100,7 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <label for="loserScore" class="form-label">Loser score</label>
+                    <label for="loserScore" class="form-label">{{ 'game.loser_score'|trans }}</label>
                     <br>
                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
                         <label class="btn btn-dark">
@@ -120,19 +118,19 @@
 
             <div class="row mt-3">
                 <div class="col-md-6">
-                    <label for="firstTurn" class="form-label">First turn</label>
+                    <label for="firstTurn" class="form-label">{{ 'game.first_turn'|trans }}</label>
                     <i class="bi bi-info-circle" data-toggle="tooltip" title="Si es un random pega el nombre aunque no salga en el selector"></i>
                     <input class="form-control selector" list="firstTurnOptions" id="firstTurn" placeholder="Type to search..." name="firstTurn" autocomplete="off" required>
                 </div>
                 <div class="col-md-6">
-                    <label for="date" class="form-label">Date</label> <br>
+                    <label for="date" class="form-label">{{ 'game.date'|trans }}</label> <br>
                     <input class="form-control" type="date" name="date" id="datepicker" min="2022-01-01" max="2030-12-31" required>
                 </div>
             </div>
 
             <div class="row mt-3">
                 <div class="col-md-12">
-                    <label for="notes" class="form-label">Notes</label>
+                    <label for="notes" class="form-label">{{ 'game.notes'|trans }}</label>
                     <textarea class="form-control" name="notes" id="notes" rows="5" maxlength="512"></textarea>
                 </div>
             </div>
@@ -141,7 +139,7 @@
 
             <div class="row mt-3">
                 <div class="col-md-12">
-                    <button type="submit" class="btn btn-block btn-dark w-100">Save</button>
+                    <button type="submit" class="btn btn-block btn-dark w-100">{{ 'game.save'|trans }}</button>
                 </div>
             </div>
 
@@ -224,6 +222,7 @@
         }
 
         $('#importGame').click(function(event) {
+            // TODO translations
             const data = window.prompt('Importar partida').split('|');
 
             if (data.length !== 7) {
@@ -231,8 +230,8 @@
             }
 
             const playerName = data[0];
-            const deckId = data[1];            
-            const opponentName = data[2];        
+            const deckId = data[1];
+            const opponentName = data[2];
             const opponentDeckId = data[3];
             const score = parseInt(data[4]);
             const opponentScore = parseInt(data[5]);
