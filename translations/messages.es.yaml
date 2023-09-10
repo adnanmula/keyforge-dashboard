@@ -8,6 +8,8 @@ menu.import: Importar
 menu.register: Registro
 menu.login: Login
 menu.logout: Logout
+menu.profile: Perfil
+menu.settings: Opciones
 competition_detail.start: Empezar
 competition_detail.end: Terminar
 competition_detail.player: Jugador

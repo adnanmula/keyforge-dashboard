@@ -83,11 +83,17 @@
                             </ul>
                         </div>
                         <div class="my-lg-0">
-                            <ul class="navbar-nav me-auto mb-lg-0">
-                                <li class="nav-item text-light">
-                                    <a href="/user/{{ app.user.id.value() }}" class="text-decoration-none link-light">{{ app.user.name() }} <span class="sr-only"></span></a>
-                                </li>
-                            </ul>
+                            <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
+                                <ul class="navbar-nav dropstart">
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{ app.user.name() }}</a>
+                                        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+                                            <li><a class="dropdown-item" href="/user/{{ app.user.id.value() }}" class="text-decoration-none link-light">{{ app.user.name() }} <span class="sr-only"></span></a></li>
+                                            <li><a class="dropdown-item" href="#">{{ 'menu.settings'|trans }}</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     {% else %}
                         <div class="my-lg-0">
