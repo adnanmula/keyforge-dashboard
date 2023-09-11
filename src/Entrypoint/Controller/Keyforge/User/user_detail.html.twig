@@ -130,7 +130,6 @@
     </div>
 
     <script>
-        {# TODO translations #}
         {% if user_is_external == false %}
 
         let winRateVsUsers = JSON.parse('{{ win_rate_vs_users|json_encode|raw }}');
@@ -168,7 +167,7 @@
                 labels: Object.keys(winRateVsUsers),
                 datasets: [
                     {
-                        label: 'WinRate%',
+                        label: '{{ 'menu.wr%'|trans }}',
                         data: Object.values(winRateVsUsers),
                         borderColor: 'rgb(37, 41, 33)',
                         backgroundColor: 'rgb(37, 41, 33)',
@@ -176,7 +175,7 @@
                         yAxisID: 'percentage',
                     },
                     {
-                        label: 'PickRate%',
+                        label: '{{ 'menu.pr%'|trans }}',
                         data: Object.values(pickRateVsUsers),
                         borderColor: 'rgb(115, 115, 115)',
                         backgroundColor: 'rgb(115, 115, 115)',
@@ -184,7 +183,7 @@
                         yAxisID: 'percentage',
                     },
                     {
-                        label: 'Wins',
+                        label: '{{ 'data.wins'|trans }}',
                         data: Object.values(winsByUser),
                         borderColor: 'rgb(70,113,26)',
                         backgroundColor: 'rgb(70,113,26)',
@@ -192,7 +191,7 @@
                         yAxisID: 'wins',
                     },
                     {
-                        label: 'Losses',
+                        label: '{{ 'data.losses'|trans }}',
                         data: Object.values(lossesByUser),
                         borderColor: 'rgb(148,22,68)',
                         backgroundColor: 'rgb(148,22,68)',
@@ -210,7 +209,7 @@
                     },
                     title: {
                         display: true,
-                        text: 'Win/Pick Rate'
+                        text: '{{ 'menu.wr/pr'|trans }}'
                     }
                 },
                 scale: {
@@ -271,7 +270,7 @@
                     },
                     title: {
                         display: true,
-                        text: 'Set wins'
+                        text: '{{ 'menu.set_wins'|trans }}'
                     }
                 }
             },
@@ -309,7 +308,7 @@
                     },
                     title: {
                         display: true,
-                        text: 'House wins'
+                        text: '{{ 'menu.house_wins'|trans }}'
                     }
                 }
             },
@@ -321,28 +320,28 @@
                 labels: Object.keys(winsByDeck),
                 datasets: [
                     {
-                        label: 'Win Rate',
+                        label: '{{ 'menu.winrate'|trans }}',
                         data: Object.values(winRateByDeck),
                         borderColor: 'rgb(37, 41, 33)',
                         backgroundColor: 'rgb(37, 41, 33)',
                         xAxisID: 'percentage',
                     },
                     {
-                        label: 'Pick Rate',
+                        label: '{{ 'menu.pr'|trans }}',
                         data: Object.values(pickRateByDeck),
                         borderColor: 'rgb(115, 115, 115)',
                         backgroundColor: 'rgb(115, 115, 115)',
                         xAxisID: 'percentage',
                     },
                     {
-                        label: 'Wins',
+                        label: '{{ 'data.wins'|trans }}',
                         data: Object.values(winsByDeck),
                         borderColor: 'rgb(70,113,26)',
                         backgroundColor: 'rgb(70,113,26)',
                         xAxisID: 'wins',
                     },
                     {
-                        label: 'Losses',
+                        label: '{{ 'data.losses'|trans }}',
                         data: Object.values(lossesByDeck),
                         borderColor: 'rgb(148,22,68)',
                         backgroundColor: 'rgb(148,22,68)',
@@ -360,7 +359,7 @@
                     },
                     title: {
                         display: false,
-                        text: 'Wins/Losses by deck'
+                        text: '{{ 'menu.deck_wl'|trans }}'
                     }
                 },
                 scale: {
@@ -399,13 +398,13 @@
                 labels: Object.keys(winsByDate),
                 datasets: [
                     {
-                        label: 'Wins',
+                        label: '{{ 'data.wins'|trans }}',
                         data: Object.values(winsByDate),
                         borderColor: 'rgb(70,113,26)',
                         backgroundColor: 'rgb(70,113,26)',
                     },
                     {
-                        label: 'Losses',
+                        label: '{{ 'data.losses'|trans }}',
                         data: Object.values(lossesByDate),
                         borderColor: 'rgb(148,22,68)',
                         backgroundColor: 'rgb(148,22,68)',
@@ -422,7 +421,7 @@
                     },
                     title: {
                         display: true,
-                        text: 'Wins/Losses along time',
+                        text: '{{ 'menu.time_wl'|trans }}',
                     }
                 },
                 scale: {

@@ -62,7 +62,6 @@
     </div>
 
     <script>
-        {# TODO translations #}
         let setPresence = JSON.parse('{{ data.set_presence|json_encode|raw }}');
         let housePresence = JSON.parse('{{ data.house_presence|json_encode|raw }}');
         let setWins = JSON.parse('{{ data.set_wins|json_encode|raw }}');
@@ -134,7 +133,7 @@
                     },
                     title: {
                         display: true,
-                        text: 'Casas'
+                        text: '{{ 'menu.houses'|trans }}'
                     }
                 }
             },
@@ -146,7 +145,7 @@
                 labels: Object.keys(setWins),
                 datasets: [
                     {
-                        label: 'Wins',
+                        label: '{{ 'data.wins'|trans }}',
                         data: Object.values(setWins),
                         borderColor: 'rgb(37, 41, 33)',
                         backgroundColor: 'rgb(37, 41, 33)',
@@ -162,7 +161,7 @@
                     },
                     title: {
                         display: true,
-                        text: 'Victorias por set'
+                        text: '{{ 'menu.house_wins'|trans }}'
                     }
                 }
             },
@@ -174,7 +173,7 @@
                 labels: Object.keys(houseWins),
                 datasets: [
                     {
-                        label: 'Wins',
+                        label: '{{ 'data.wins'|trans }}',
                         data: Object.values(houseWins),
                         borderColor: 'rgb(37, 41, 33)',
                         backgroundColor: 'rgb(37, 41, 33)',
@@ -190,7 +189,7 @@
                     },
                     title: {
                         display: true,
-                        text: 'Victorias por casa'
+                        text: '{{ 'menu.house_wins'|trans }}'
                     }
                 }
             },
@@ -218,7 +217,7 @@
                     },
                     title: {
                         display: true,
-                        text: 'Win rate por set'
+                        text: '{{ 'menu.set_wr'|trans }}'
                     }
                 }
             },
@@ -246,7 +245,7 @@
                     },
                     title: {
                         display: true,
-                        text: 'Win rate por casa'
+                        text: '{{ 'menu.house_wr'|trans }}'
                     }
                 }
             },
@@ -274,7 +273,7 @@
                     },
                     title: {
                         display: true,
-                        text: 'Pick rate por set'
+                        text: '{{ 'menu.set_pr'|trans }}'
                     }
                 }
             },
@@ -302,7 +301,7 @@
                     },
                     title: {
                         display: true,
-                        text: 'Pick rate por casa'
+                        text: '{{ 'menu.house_pr'|trans }}'
                     }
                 }
             },

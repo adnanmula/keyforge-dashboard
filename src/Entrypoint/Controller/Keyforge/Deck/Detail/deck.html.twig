@@ -306,8 +306,8 @@
         let notes = $('#deckNotesInput')[0].value;
 
         $.post({
-            url: "{{ path('keyforge_deck_update_notes') }}",
-            method: "POST",
+            url: '{{ path('keyforge_deck_update_notes') }}',
+            method: 'POST',
             data: {
                 'deckId': deckId,
                 'notes': notes,

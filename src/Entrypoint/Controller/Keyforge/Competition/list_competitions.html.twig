@@ -83,21 +83,20 @@
                     },
                     {
                         render: function (data, type, row) {
-                            // TODO transtalions
                             if (data === 'ROUND_ROBIN_1') {
-                                return 'Liga (Solo ida)';
+                                return '{{ 'competition.round_robin'|trans({'%count%': 1}) }}';
                             }
 
                             if (data === 'ROUND_ROBIN_2') {
-                                return 'Liga (Ida y vuelta)';
+                                return '{{ 'competition.round_robin'|trans({'%count%': 2}) }}';
                             }
 
                             if (data === 'ROUND_ROBIN_3') {
-                                return 'Liga (3 rondas)';
+                                return '{{ 'competition.round_robin'|trans({'%count%': 3}) }}';
                             }
 
                             if (data === 'ROUND_ROBIN_4') {
-                                return 'Liga (4 rondas)';
+                                return '{{ 'competition.round_robin'|trans({'%count%': 4}) }}';
                             }
 
                             return data;

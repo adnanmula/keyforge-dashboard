@@ -1,135 +1,137 @@
 competition.best_of: 'Best of %count%'
-competition.competitions: 'Competitions'
-competition.create: 'Create'
-competition.created: 'Created'
-competition.description: 'Description'
-competition.elimination: 'Elimination'
-competition.end: 'End'
+competition.competitions: Competitions
+competition.create: Create
+competition.created: Created
+competition.description: Description
+competition.elimination: Elimination
+competition.end: End
 competition.games_count: '%count% game|%count% games'
-competition.id: 'Id'
-competition.name: 'Name'
-competition.new: 'New'
-competition.pairings: 'Pairings'
-competition.players: 'Players'
-competition.ref: 'Ref'
+competition.id: Id
+competition.name: Name
+competition.new: New
+competition.pairings: Pairings
+competition.players: Players
+competition.ref: Ref
 competition.round_robin: 'Round robin (%count% round)|Round robin (%count% rounds)'
 competition.round_robin_elimination: 'Round robin (%count% round) and elimination|Round robin (%count% rounds) and elimination'
-competition.save: 'Save'
-competition.start: 'Start'
-competition.type: 'Type'
-competition.winner: 'Winner'
+competition.save: Save
+competition.start: Start
+competition.type: Type
+competition.winner: Winner
 competition_detail.champion: 'Champion %player% bravo!'
 competition_detail.crown_winner: 'Crown winner'
-competition_detail.date: 'Date'
-competition_detail.end: 'End'
+competition_detail.date: Date
+competition_detail.end: End
 competition_detail.first_turn: 'First turn'
 competition_detail.key_diff: '⚷ D'
 competition_detail.key_opponentes: '⚷ A'
 competition_detail.key_yours: '⚷ F'
-competition_detail.l: 'L'
+competition_detail.l: L
 competition_detail.loser_deck: 'Loser deck'
 competition_detail.loser_score: 'Loser score'
-competition_detail.player: 'Player'
+competition_detail.player: Player
 competition_detail.register_game: 'Register game'
-competition_detail.save: 'Save'
-competition_detail.start: 'Start'
-competition_detail.w: 'W'
-competition_detail.winner: 'Winner'
+competition_detail.save: Save
+competition_detail.start: Start
+competition_detail.w: W
+competition_detail.winner: Winner
 competition_detail.winner_deck: 'Winner deck'
 competition_detail.winner_score: 'Winner score'
 data.games_played: 'Games played'
-data.loses: 'Loses'
+data.losses: Losses
 data.other_players: 'Other players'
 data.other_players_tooltip: 'Players from TCO or NKFL we have played against'
 data.winrate: 'Win rate'
-data.wins: 'Wins'
+data.wins: Wins
 deck.add_to_my_decks: 'Add to my decks'
 deck.go_to_deck: 'Go to deck'
-deck.houses: 'Houses'
-deck.import: 'Import'
-deck.imported: 'Imported'
-deck.notes: 'Notes'
-deck.save: 'Save'
-deck.set: 'Set'
+deck.houses: Houses
+deck.import: Import
+deck.imported: Imported
+deck.notes: Notes
+deck.save: Save
+deck.set: Set
 error.denied: 'Acceso denegado'
-error.error: 'Error'
+error.error: Error
 error.something_wrong: 'Something went wrong'
-game.competition: 'Competition'
-game.date: 'Date'
+error.invalid_format: 'Invalid format'
+error.invalid_result: 'Invalid result'
+game.competition: Competition
+game.date: Date
 game.first_turn: 'First turn'
-game.keys: 'Keys'
-game.loser: 'Loser'
+game.keys: Keys
+game.loser: Loser
 game.loser_chains: 'Loser chains'
 game.loser_deck: 'Loser deck'
 game.loser_score: 'Loser score'
-game.notes: 'Notes'
+game.notes: Notes
 game.register_game: 'Register game'
-game.save: 'Save'
+game.save: Save
 game.tco_casual: 'TCO Casual'
 game.tco_competitive: 'TCO Competitive'
-game.winner: 'Winner'
+game.winner: Winner
 game.winner_chains: 'Winner chains'
 game.winner_deck: 'Winner deck'
 game.winner_score: 'Winner score'
 game.with_friends: 'With friends'
-keyforge.house_brobnar: 'Brobnar'
-keyforge.house_dis: 'Dis'
-keyforge.house_ekwidon: 'Ekwidon'
-keyforge.house_logos: 'Logos'
-keyforge.house_mars: 'Mars'
-keyforge.house_sanctum: 'Sanctum'
-keyforge.house_saurian: 'Saurian'
-keyforge.house_shadows: 'Shadows'
+keyforge.house_brobnar: Brobnar
+keyforge.house_dis: Dis
+keyforge.house_ekwidon: Ekwidon
+keyforge.house_logos: Logos
+keyforge.house_mars: Mars
+keyforge.house_sanctum: Sanctum
+keyforge.house_saurian: Saurian
+keyforge.house_shadows: Shadows
 keyforge.house_star_alliance: 'Star alliance'
-keyforge.house_unfathomable: 'Unfathomable'
-keyforge.house_untamed: 'Untamed'
-keyforge.set_aoa: 'Aoa'
-keyforge.set_cota: 'CotA'
-keyforge.set_dt: 'DT'
-keyforge.set_mm: 'MM'
-keyforge.set_u22: 'U22'
-keyforge.set_vt23: 'VT23'
-keyforge.set_wc: 'WC'
-keyforge.set_woe: 'WoE'
-locale.en: 'English'
-locale.es: 'Spanish'
+keyforge.house_unfathomable: Unfathomable
+keyforge.house_untamed: Untamed
+keyforge.set_aoa: Aoa
+keyforge.set_cota: CotA
+keyforge.set_dt: DT
+keyforge.set_mm: MM
+keyforge.set_u22: U22
+keyforge.set_vt23: VT23
+keyforge.set_wc: WC
+keyforge.set_woe: WoE
+locale.en: English
+locale.es: Spanish
 menu.addgame: 'Register game'
-menu.all: 'All'
-menu.any: 'Any'
+menu.all: All
+menu.any: Any
 menu.best_performance: 'Best performance'
 menu.best_win_streak: 'Best win streak'
 menu.change_password: 'Change password'
-menu.clear_filters: 'Clear'
-menu.deck: 'Deck'
-menu.decks: 'Decks'
+menu.clear_filters: Clear
+menu.deck: Deck
+menu.decks: Decks
 menu.external_data: 'External deck/users'
-menu.favorite: 'Favorite'
-menu.games: 'Games'
-menu.houses: 'Houses'
-menu.import: 'Import'
-menu.locale: 'Language'
-menu.login: 'Login'
-menu.logout: 'Logout'
+menu.favorite: Favorite
+menu.games: Games
+menu.houses: Houses
+menu.import: Import
+menu.locale: Language
+menu.login: Login
+menu.logout: Logout
 menu.max_sas: 'Max SAS'
 menu.min_sas: 'Min SAS'
 menu.mydecks: 'My decks'
-menu.notes: 'Notes'
+menu.notes: Notes
 menu.other_options: 'Other options'
-menu.password: 'Password'
+menu.password: Password
 menu.played_times: 'Played %count% time|Played %count% times'
-menu.players: 'Players'
-menu.profile: 'Profile'
+menu.players: Players
+menu.profile: Profile
 menu.record_book: 'Record book'
-menu.register: 'Register'
-menu.sas: 'SAS'
-menu.save: 'Save'
-menu.search: 'Search'
-menu.set: 'Set'
-menu.settings: 'Settings'
-menu.tags: 'Tags'
-menu.tournaments: 'Tournaments'
-menu.username: 'Username'
-menu.wiki: 'Wiki'
+menu.register: Register
+menu.sas: SAS
+menu.save: Save
+menu.search: Search
+menu.set: Set
+menu.settings: Settings
+menu.tags: Tags
+menu.tournaments: Tournaments
+menu.username: Username
+menu.wiki: Wiki
 menu.winrate: 'Win rate'
 menu.worst_performance: 'Worst performance'
 menu.show_stats: 'Show/Hide stats'
@@ -137,3 +139,19 @@ menu.link_deck: 'Id of deck, vault or dok link'
 menu.type_to_search: 'Type to search...'
 menu.deck_select_tooltip: 'When playing with random people paste their deck id event if it is not on the selector, you do not have to import it beforehand either'
 menu.user_select_tooltip: 'When playing with random people paste their username event if it is not on the selector'
+menu.import_game: 'Import game'
+menu.owner: Owner
+menu.include: Include
+menu.exclude: Exclude
+menu.set_wins: 'Set wins'
+menu.house_wins: 'House wins'
+menu.set_wr : 'Set win rate'
+menu.house_wr : 'House win rate'
+menu.house_pr : 'House pick rate'
+menu.wr% : 'WinRate%'
+menu.pr% : 'PickRate%'
+menu.wr/pr : 'Win/Pick Rate'
+menu.pr : 'Pick rate'
+menu.deck_wl : 'Wins/Losses by deck'
+menu.time_wl : 'Wins/Losses along time'
+menu.set_pr: 'Pick rate by set'

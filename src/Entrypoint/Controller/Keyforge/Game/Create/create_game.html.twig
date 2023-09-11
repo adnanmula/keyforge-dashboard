@@ -222,11 +222,10 @@
         }
 
         $('#importGame').click(function(event) {
-            // TODO translations
-            const data = window.prompt('Importar partida').split('|');
+            const data = window.prompt('{{ 'menu.import_game'|trans }}').split('|');
 
             if (data.length !== 7) {
-                alert('Formato inválido');
+                alert('{{ 'error.invalid_format'|trans }}');
             }
 
             const playerName = data[0];
@@ -238,11 +237,11 @@
             const firstPlayer = data[6];
 
             if (score > 3 || score < 0 || opponentScore > 3 || opponentScore < 0) {
-                alert('Resultado inválido');
+                alert('{{ 'error.invalid_result'|trans }}');
             }
 
             if (score !== 3 && opponentScore !== 3) {
-                alert('Resultado inválido');
+                alert({{ 'error.invalid_result'|trans }});
             }
 
             if (score === 3) {

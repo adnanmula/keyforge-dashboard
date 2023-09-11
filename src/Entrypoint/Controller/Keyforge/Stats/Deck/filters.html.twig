@@ -178,12 +178,11 @@
 </div>
 
 <script>
-    {# TODO translations #}
     $('#owner-selector').select2({
         multiple: true,
         closeOnSelect: false,
         allowClear: false,
-        placeholder: 'Propietario',
+        placeholder: '{{ 'menu.owner'|trans }}',
         theme: 'bootstrap-5'
     });
 
@@ -194,7 +193,7 @@
         multiple: true,
         closeOnSelect: false,
         allowClear: false,
-        placeholder: 'Incluir',
+        placeholder: '{{ 'menu.include'|trans }}',
         theme: 'bootstrap-5'
     });
 
@@ -205,7 +204,7 @@
         multiple: true,
         closeOnSelect: false,
         allowClear: false,
-        placeholder: 'Excluir',
+        placeholder: '{{ 'menu.exclude'|trans }}',
         theme: 'bootstrap-5'
     });
 
