@@ -110,7 +110,7 @@
                 lengthMenu: [10, 25, 50, 100],
                 iDisplayLength: 25,
                 ajax: {
-                    url: '/decks/json',
+                    url: '{{ path('keyforge_decks_json') }}',
                     data: function(d){
                         d.extraFilterOnlyOwned = onlyOwned();
                         d.extraFilterTagType = tagFilterType();
@@ -136,8 +136,8 @@
                 columnDefs: [
                     {
                         render: function (data, type, row) {
-                            let tagsJson = JSON.parse('{{ tags|json_encode|raw }}');
                             const locale = '{{ app.locale }}';
+                            let tagsJson = JSON.parse('{{ tags|json_encode|raw }}');
 
                             let tags = [];
 
