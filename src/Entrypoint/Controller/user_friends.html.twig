@@ -1,0 +1,49 @@
+{% extends "Keyforge/Shared/keyforge_base.html.twig" %}
+
+{% block title %}{{ 'menu.settings'|trans }}{% endblock %}
+
+{% block body %}
+    <div class="divider py-1"></div>
+
+    <div class="row">
+        <div class="col-1 col-sm-4 col-lg-3"></div>
+        <div class="col-12 col-sm-12 col-lg-6">
+
+            {% if error %}
+                <div class="divider py-1"></div>
+                <div class="alert alert-danger" role="alert">{{ error }}</div>
+            {% endif %}
+
+            <div class="shadow-lg p-3 mb-5 bg-white rounded">
+                <div class="row">
+                    <h3>{{ 'menu.friends'|trans }}</h3>
+                </div>
+
+                <ul class="list-group mt-3">
+                    {% for friend in friends %}
+                        <li class="list-group-item">
+                            <a href="{{ path('keyforge_user_detail', {'userId': friend.friend_id}) }}">{{ friend.name }}</a>
+                            <button type="button" class="btn btn-outline-danger removeFriend" data-friend="{{ friend.friend_id }}" style="float: right;"><i class="bi bi-trash"></i></button>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(".removeFriend").click(function(event) {
+            console.log($(event.target).data('friend'));
+            $.ajax({
+                type: 'DELETE',
+                url: '{{ path('user_friends') }}',
+                data: {
+                    'friendId': $(event.target).data('friend'),
+                },
+            }).done(function( ) {
+                location.reload();
+            }).fail(function() {
+                alert('Error');
+            });
+        });
+    </script>
+{% endblock %}

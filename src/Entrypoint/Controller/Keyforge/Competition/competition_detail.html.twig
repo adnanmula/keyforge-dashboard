@@ -360,9 +360,11 @@
             let fixtureRef = $('#registerGameFixtureRef')[0].value;
             let fixtureId = $('#registerGameFixtureId')[0].value;
 
+            let url = '{{ path('keyforge_competition_game_create', {'fixtureId': '-fixtureId-'}) }}';
+            url = url.replace('-fixtureId-', fixtureId);
+
             $.post({
-                url: "/competition/" + fixtureId + "/game/new",
-                method: "POST",
+                url: url,
                 dataType: 'json',
                 data: {
                     'winner': winnerId,

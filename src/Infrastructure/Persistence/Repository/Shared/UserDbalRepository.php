@@ -12,6 +12,7 @@ use AdnanMula\Cards\Infrastructure\Persistence\Repository\DbalRepository;
 final class UserDbalRepository extends DbalRepository implements UserRepository
 {
     private const TABLE = 'users';
+    private const TABLE_FRIENDS = 'user_friends';
 
     public function byId(Uuid $id): ?User
     {
@@ -28,7 +29,7 @@ final class UserDbalRepository extends DbalRepository implements UserRepository
             return null;
         }
 
-        return $this->map($result);
+        return $this->map($result, true);
     }
 
     public function byName(string $name): ?User
@@ -46,7 +47,7 @@ final class UserDbalRepository extends DbalRepository implements UserRepository
             return null;
         }
 
-        return $this->map($result);
+        return $this->map($result, true);
     }
 
     public function save(User $user): void
@@ -56,7 +57,7 @@ final class UserDbalRepository extends DbalRepository implements UserRepository
                 '
                     INSERT INTO %s (id, name, password, locale, roles)
                     VALUES (:id, :name, :password, :locale, :roles)
-                   ON CONFLICT (id) DO UPDATE SET
+                    ON CONFLICT (id) DO UPDATE SET
                         name = :name,
                         password = :password,
                         locale = :locale,
@@ -72,15 +73,43 @@ final class UserDbalRepository extends DbalRepository implements UserRepository
         $stmt->bindValue(':locale', $user->locale()->value);
         $stmt->bindValue(':roles', Json::encode($user->getRoles()));
 
-        $stmt->execute();
+        $stmt->executeStatement();
     }
 
-    private function map(array $result): User
+    public function friends(Uuid $id): array
+    {
+        $result = $this->connection->createQueryBuilder()
+            ->select('a.*, b.name')
+            ->from(self::TABLE_FRIENDS, 'a')
+            ->innerJoin('a', self::TABLE, 'b', 'a.friend_id = b.id')
+            ->where('a.id = :id')
+            ->setParameter('id', $id->value())
+            ->executeQuery()
+            ->fetchAllAssociative();
+
+        return $result;
+    }
+
+    public function removeFriend(Uuid $id, Uuid $friendId): void
+    {
+        $stmt = $this->connection->prepare(
+            \sprintf(
+                'DELETE FROM %s a WHERE a.id = :id and a.friend_id = :friend_id',
+                self::TABLE_FRIENDS,
+            ),
+        );
+
+        $stmt->bindValue(':id', $id->value());
+        $stmt->bindValue(':friend_id', $friendId->value());
+        $stmt->executeStatement();
+    }
+
+    private function map(array $result, bool $mapPassword): User
     {
         return new User(
             Uuid::from($result['id']),
             $result['name'],
-            $result['password'],
+            $mapPassword ? $result['password'] : '',
             Locale::from($result['locale']),
             Json::decode($result['roles']),
         );

@@ -12,6 +12,11 @@ logout:
   path: /logout
   methods: [ GET ]
 
+user_friends:
+  path: /user/friends
+  controller: AdnanMula\Cards\Entrypoint\Controller\UserFriendsController
+  methods: [ GET,POST,DELETE ]
+
 user_settings:
   path: /user/settings
   controller: AdnanMula\Cards\Entrypoint\Controller\UserSettingsController

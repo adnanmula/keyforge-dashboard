@@ -14,13 +14,26 @@ final class Initial extends AbstractMigration
                 password character varying(64) NOT NULL,
                 locale character varying(5) NOT NULL,
                 roles jsonb NOT NULL,
-                PRIMARY KEY(id)
+                PRIMARY KEY (id)
             )',
         );
+
+        $this->execute(
+            'CREATE TABLE user_friends (
+                id uuid NOT NULL,
+                friend_id uuid NOT NULL,
+                is_request bool NOT NULL,
+                PRIMARY KEY (id, friend_id)
+            )',
+        );
+
+        $this->execute('CREATE INDEX ON user_friends (id);');
+        $this->execute('CREATE INDEX ON user_friends (friend_id);');
     }
 
     public function down(): void
     {
         $this->execute('DROP TABLE IF EXISTS "users"');
+        $this->execute('DROP TABLE IF EXISTS "user_friends"');
     }
 }

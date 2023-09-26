@@ -76,20 +76,15 @@
 
                     {% if is_granted('ROLE_BASIC') %}
                         <div class="my-lg-0">
-                            <ul class="navbar-nav me-auto mb-lg-0">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ path('logout') }}">{{ 'menu.logout'|trans }}<span class="sr-only"></span></a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="my-lg-0">
-                            <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
+                            <div class="collapse navbar-collapse">
                                 <ul class="navbar-nav dropstart">
                                     <li class="nav-item dropdown">
                                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{ app.user.name() }}</a>
-                                        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+                                        <ul class="dropdown-menu dropdown-menu-dark">
                                             <li><a class="dropdown-item" href="{{ path('keyforge_user_detail', {'userId': app.user.id.value() }) }}" class="text-decoration-none link-light">{{ 'menu.profile'|trans }}<span class="sr-only"></span></a></li>
+                                            <li><a class="dropdown-item" href="{{ path('user_friends') }}">{{ 'menu.friends'|trans }}</a></li>
                                             <li><a class="dropdown-item" href="{{ path('user_settings') }}">{{ 'menu.settings'|trans }}</a></li>
+                                            <li><a class="dropdown-item" href="{{ path('logout') }}">{{ 'menu.logout'|trans }}<span class="sr-only"></span></a></li>
                                         </ul>
                                     </li>
                                 </ul>
