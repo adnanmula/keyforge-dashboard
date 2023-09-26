@@ -156,3 +156,7 @@ menu.deck_wl: 'Victorias/Derrotas por baraja'
 menu.time_wl: 'Victorias/Derrotas a lo largo del tiempo'
 menu.set_pr: 'Pick rate por set'
 menu.friends: Amigos
+menu.add: Añadir
+menu.add_friends: Añadir amigos
+menu.friend_name: Nombre del amigo
+exception.user_not_exists: Usuario no existe

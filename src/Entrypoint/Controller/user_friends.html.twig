@@ -23,16 +23,27 @@
                     {% for friend in friends %}
                         <li class="list-group-item">
                             <a href="{{ path('keyforge_user_detail', {'userId': friend.friend_id}) }}">{{ friend.name }}</a>
-                            <button type="button" class="btn btn-outline-danger removeFriend" data-friend="{{ friend.friend_id }}" style="float: right;"><i class="bi bi-trash"></i></button>
+                            <button type="button" class="btn btn-outline-danger removeFriend" data-friend="{{ friend.friend_id }}" style="float: right;"><i class="bi bi-trash" style="pointer-events: none;"></i></button>
                         </li>
                     {% endfor %}
                 </ul>
+            </div>
+
+            <div class="shadow-lg p-3 mb-5 bg-white rounded">
+                <div class="row">
+                    <h3>{{ 'menu.add_friends'|trans }}</h3>
+                </div>
+
+                <form action="{{ path('user_friends') }}" method="post">
+                    <input type="text" name="friendName" class="form-control" placeholder="{{ 'menu.friend_name'|trans }}">
+                    <button type="submit" class="btn btn-block btn-dark mt-2" style="width: 100%">{{ 'menu.add'|trans }}</button>
+                </form>
+
             </div>
         </div>
     </div>
     <script>
         $(".removeFriend").click(function(event) {
-            console.log($(event.target).data('friend'));
             $.ajax({
                 type: 'DELETE',
                 url: '{{ path('user_friends') }}',

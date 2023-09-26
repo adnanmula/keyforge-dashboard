@@ -8,6 +8,7 @@ use AdnanMula\Cards\Domain\Model\Shared\UserRepository;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Locale;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Infrastructure\Persistence\Repository\DbalRepository;
+use Doctrine\DBAL\ParameterType;
 
 final class UserDbalRepository extends DbalRepository implements UserRepository
 {
@@ -88,6 +89,26 @@ final class UserDbalRepository extends DbalRepository implements UserRepository
             ->fetchAllAssociative();
 
         return $result;
+    }
+
+    public function addFriend(Uuid $id, Uuid $friend): void
+    {
+        $stmt = $this->connection->prepare(
+            \sprintf(
+                '
+                    INSERT INTO %s (id, friend_id, is_request)
+                    VALUES (:id, :friend_id, :is_request)
+                    ON CONFLICT (id, friend_id) DO NOTHING
+                ',
+                self::TABLE_FRIENDS,
+            ),
+        );
+
+        $stmt->bindValue(':id', $id->value());
+        $stmt->bindValue(':friend_id', $friend->value());
+        $stmt->bindValue(':is_request', false, ParameterType::BOOLEAN);
+
+        $stmt->executeStatement();
     }
 
     public function removeFriend(Uuid $id, Uuid $friendId): void

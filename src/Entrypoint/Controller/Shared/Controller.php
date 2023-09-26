@@ -10,11 +10,16 @@ use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\HandledStamp;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Translation\LocaleSwitcher;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class Controller extends AbstractController
 {
-    public function __construct(protected MessageBusInterface $bus, protected Security $security, private LocaleSwitcher $localeSwitcher)
-    {
+    public function __construct(
+        protected MessageBusInterface $bus,
+        protected Security $security,
+        protected LocaleSwitcher $localeSwitcher,
+        protected TranslatorInterface $translator,
+    ) {
         $this->setLocaleToUser();
     }
 

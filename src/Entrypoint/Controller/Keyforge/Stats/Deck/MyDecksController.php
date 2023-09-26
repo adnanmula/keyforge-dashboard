@@ -11,16 +11,17 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Translation\LocaleSwitcher;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class MyDecksController extends Controller
 {
     private KeyforgeUserRepository $userRepository;
 
-    public function __construct(MessageBusInterface $bus, Security $security, LocaleSwitcher $localeSwitcher, KeyforgeUserRepository $userRepository)
+    public function __construct(MessageBusInterface $bus, Security $security, LocaleSwitcher $localeSwitcher, KeyforgeUserRepository $userRepository, TranslatorInterface $translator)
     {
         $this->userRepository = $userRepository;
 
-        parent::__construct($bus, $security, $localeSwitcher);
+        parent::__construct($bus, $security, $localeSwitcher, $translator);
     }
 
     public function __invoke(): Response
