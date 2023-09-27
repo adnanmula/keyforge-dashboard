@@ -35,6 +35,10 @@ final class GetDecksQueryHandler
         if (null !== $query->deckId()) {
             $deck = $this->repository->byId($query->deckId());
 
+            if (null === $deck) {
+                return ['decks' => [], 'total' => 0, 'totalFiltered' => 0, 'start' => $query->start(), 'length' => $query->length()];
+            }
+
             return [
                 'decks' => [$deck],
                 'total' => 1,

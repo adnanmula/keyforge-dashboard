@@ -4,9 +4,20 @@ namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\Deck\Detail;
 
 use AdnanMula\Cards\Application\Command\Keyforge\Deck\Analyze\AnalyzeDeckThreatsCommand;
 use AdnanMula\Cards\Application\Query\Keyforge\Deck\GetDecksQuery;
+use AdnanMula\Cards\Application\Query\Keyforge\Game\GetGamesQuery;
 use AdnanMula\Cards\Application\Query\Keyforge\User\GetUsersQuery;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Exception\DeckNotExistsException;
+use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeck;
 use AdnanMula\Cards\Domain\Model\Shared\User;
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
+use AdnanMula\Criteria\Criteria;
+use AdnanMula\Criteria\Filter\Filter;
+use AdnanMula\Criteria\Filter\Filters;
+use AdnanMula\Criteria\Filter\FilterType;
+use AdnanMula\Criteria\FilterField\FilterField;
+use AdnanMula\Criteria\FilterValue\FilterOperator;
+use AdnanMula\Criteria\FilterValue\StringFilterValue;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -14,57 +25,142 @@ final class DeckDetailController extends Controller
 {
     public function __invoke(Request $request, string $deckId): Response
     {
-        $userId = $request->get('userId');
+        /** @var User $user */
+        $user = $this->security->getUser();
+        $deck = $this->deck($user->id(), $deckId);
+        $analysis = $this->extractResult($this->bus->dispatch(new AnalyzeDeckThreatsCommand($deck->id()->value())));
 
+        return $this->render(
+            'Keyforge/Deck/Detail/deck_detail.html.twig',
+            [
+                'reference' => $deck->id()->value(),
+                'userId' => $user->id()->value(),
+                'deck_name' => $deck->name(),
+                'deck_owner' => $deck->owner()?->value(),
+                'deck_owner_name' => $this->ownerName($deck),
+                'deck' => $deck->jsonSerialize(),
+                'deck_notes' => $this->notes($user, $deck),
+                'analysis' => $analysis['detail'],
+                'stats' => $this->stats($deck),
+            ],
+        );
+    }
+
+    private function deck(?Uuid $userId, string $deckId): KeyforgeDeck
+    {
         $deck = $this->extractResult(
-            $this->bus->dispatch(new GetDecksQuery(0, 1, null, null, null, null, null, $deckId, $userId)),
+            $this->bus->dispatch(new GetDecksQuery(0, 1, null, null, null, null, null, $deckId, $userId?->value())),
         );
 
-        $deckName = null;
-        $deckOwner = null;
-        $deckOwnerName = null;
-        $deckSerialized = null;
-        $deckNotes = null;
-
-        if (\count($deck['decks']) > 0) {
-            $deckName = $deck['decks'][0]->name();
-            $deckOwner = $deck['decks'][0]->owner()?->value();
-            $deckSerialized = $deck['decks'][0]->jsonSerialize();
-
-            /** @var User $user */
-            $user = $this->security->getUser();
-
-            if (null !== $user && $user->id()->value() === $deck['decks'][0]->owner()?->value()) {
-                $deckNotes = $deck['decks'][0]->notes();
-            }
+        if (\count($deck['decks']) === 0) {
+            throw new DeckNotExistsException();
         }
 
-        if (null !== $deckOwner) {
+        return $deck['decks'][0];
+    }
+
+    private function ownerName(KeyforgeDeck $deck): ?string
+    {
+        if (null !== $deck->owner()) {
             $users = $this->extractResult(
                 $this->bus->dispatch(new GetUsersQuery(0, 1000, false, false)),
             );
 
             foreach ($users as $user) {
-                if ($user->id()->value() === $deckOwner) {
-                    $deckOwnerName = $user->name();
+                if ($user->id()->value() === $deck->owner()) {
+                    return $user->name();
                 }
             }
         }
 
-        $analysis = $this->extractResult($this->bus->dispatch(new AnalyzeDeckThreatsCommand($deckId)));
+        return null;
+    }
 
-        return $this->render(
-            'Keyforge/Deck/Detail/deck_detail.html.twig',
-            [
-                'reference' => $deckId,
-                'userId' => $userId,
-                'deck_name' => $deckName,
-                'deck_owner' => $deckOwner,
-                'deck_owner_name' => $deckOwnerName,
-                'deck' => $deckSerialized,
-                'deck_notes' => $deckNotes,
-                'analysis' => $analysis['detail'],
-            ],
+    private function notes(User $user, KeyforgeDeck $deck): ?string
+    {
+        if (null !== $user && $user->id()->value() === $deck->owner()?->value()) {
+            return $deck->notes();
+        }
+
+        return null;
+    }
+
+    private function stats(KeyforgeDeck $deck): array
+    {
+        $criteria = new Criteria(
+            null,
+            null,
+            null,
+            new Filters(
+                FilterType::AND,
+                FilterType::OR,
+                new Filter(new FilterField('winner_deck'), new StringFilterValue($deck->id()->value()), FilterOperator::EQUAL),
+                new Filter(new FilterField('loser_deck'), new StringFilterValue($deck->id()->value()), FilterOperator::EQUAL),
+            ),
         );
+
+        $games = $this->extractResult($this->bus->dispatch(new GetGamesQuery($criteria)));
+
+        $winRateVsDeck = [];
+
+        foreach ($games['games'] as $game) {
+            $isWin = $game['winner_deck'] === $deck->id()->value();
+
+            if ($isWin) {
+                if (\array_key_exists($game['loser_deck'], $winRateVsDeck)) {
+                    $winRateVsDeck[$game['loser_deck']] = [
+                        'wins' => $winRateVsDeck[$game['loser_deck']]['wins'] + 1,
+                        'losses' => $winRateVsDeck[$game['loser_deck']]['losses'],
+                    ];
+                } else {
+                    $winRateVsDeck[$game['loser_deck']] = [
+                        'wins' => 1,
+                        'losses' => 0,
+                    ];
+                }
+            } else {
+                if (\array_key_exists($game['winner_deck'], $winRateVsDeck)) {
+                    $winRateVsDeck[$game['winner_deck']] = [
+                        'wins' => $winRateVsDeck[$game['winner_deck']]['wins'],
+                        'losses' => $winRateVsDeck[$game['winner_deck']]['losses'] + 1,
+                    ];
+                } else {
+                    $winRateVsDeck[$game['winner_deck']] = [
+                        'wins' => 0,
+                        'losses' => 1,
+                    ];
+                }
+            }
+        }
+
+        $currentRival = null;
+        $currentNemesis = null;
+
+        foreach ($winRateVsDeck as $id => $stats) {
+            if (null === $currentRival || $currentRival['games'] < $stats['wins'] + $stats['losses']) {
+                $currentRival = ['id' => $id, 'games' => $stats['wins'] + $stats['losses']];
+            }
+
+            if (null === $currentNemesis || $currentNemesis['losses'] < $stats['losses']) {
+                if ($stats['losses'] > 0) {
+                    $currentNemesis = ['id' => $id, 'losses' => $stats['losses']];
+                }
+            }
+        }
+
+        if (null !== $currentNemesis) {
+            $currentNemesis['name'] = $this->deck(null, $currentNemesis['id'])->name();
+        }
+
+        if (null !== $currentRival) {
+            $currentRival['name'] = $this->deck(null, $currentRival['id'])->name();
+        }
+
+        return [
+            'wins' => $deck->wins(),
+            'losses' => $deck->losses(),
+            'rival' => $currentRival,
+            'nemesis' => $currentNemesis,
+        ];
     }
 }

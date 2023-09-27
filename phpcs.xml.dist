@@ -10,5 +10,6 @@
     <exclude name="Generic.Files.LineEndings.InvalidEOLChar" />
     <exclude name="SlevomatCodingStandard.Classes.TraitUseSpacing.IncorrectLinesCountBeforeFirstUse" />
     <exclude name="SlevomatCodingStandard.Arrays.AlphabeticallySortedByKeys.IncorrectKeyOrder" />
+    <exclude name="SlevomatCodingStandard.ControlStructures.RequireTernaryOperator.TernaryOperatorNotUsed" />
   </rule>
 </ruleset>

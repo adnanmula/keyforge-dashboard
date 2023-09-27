@@ -95,6 +95,7 @@ keyforge.set_wc: WC
 keyforge.set_woe: WoE
 locale.en: English
 locale.es: Spanish
+exception.user_not_exists: User not exists
 menu.addgame: 'Register game'
 menu.all: All
 menu.any: Any
@@ -163,4 +164,7 @@ menu.friend_name: Friend name
 menu.sent: Sent
 menu.received: Received
 menu.remove: Remove
-exception.user_not_exists: User not exists
+menu.rival: Rival
+menu.archenemy: Archenemy
+menu.nemesis: Nemesis
+menu.games_lost: Games lost
