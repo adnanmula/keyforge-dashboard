@@ -25,16 +25,16 @@ final class DeckDetailController extends Controller
 {
     public function __invoke(Request $request, string $deckId): Response
     {
-        /** @var User $user */
+        /** @var ?User $user */
         $user = $this->security->getUser();
-        $deck = $this->deck($user->id(), $deckId);
+        $deck = $this->deck($user?->id(), $deckId);
         $analysis = $this->extractResult($this->bus->dispatch(new AnalyzeDeckThreatsCommand($deck->id()->value())));
 
         return $this->render(
             'Keyforge/Deck/Detail/deck_detail.html.twig',
             [
                 'reference' => $deck->id()->value(),
-                'userId' => $user->id()->value(),
+                'userId' => $user?->id()?->value(),
                 'deck_name' => $deck->name(),
                 'deck_owner' => $deck->owner()?->value(),
                 'deck_owner_name' => $this->ownerName($deck),
@@ -76,7 +76,7 @@ final class DeckDetailController extends Controller
         return null;
     }
 
-    private function notes(User $user, KeyforgeDeck $deck): ?string
+    private function notes(?User $user, KeyforgeDeck $deck): ?string
     {
         if (null !== $user && $user->id()->value() === $deck->owner()?->value()) {
             return $deck->notes();
