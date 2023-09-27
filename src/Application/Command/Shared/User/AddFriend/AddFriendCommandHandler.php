@@ -25,7 +25,6 @@ final class AddFriendCommandHandler
             throw new UserNotExistsException();
         }
 
-        $this->repository->addFriend($user->id(), $friend->id());
-        $this->repository->addFriend($friend->id(), $user->id());
+        $this->repository->addFriend($user->id(), $friend->id(), true);
     }
 }

@@ -3,6 +3,15 @@
 {% block title %}{{ 'menu.settings'|trans }}{% endblock %}
 
 {% block body %}
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip({
+                'container': 'body',
+                'placement': 'top'
+            })
+        })
+    </script>
+
     <div class="divider py-1"></div>
 
     <div class="row">
@@ -14,16 +23,49 @@
                 <div class="alert alert-danger" role="alert">{{ error }}</div>
             {% endif %}
 
+            {% if friends|filter(friend => friend.is_request == true)|length > 0 %}
+            <div class="shadow-lg p-3 mb-5 bg-white rounded">
+                <div class="row">
+                    <h3>{{ 'menu.friend_requests'|trans }}</h3>
+                </div>
+
+                <div class="row mt-3">
+                    <h5>{{ 'menu.received'|trans }}</h5>
+                </div>
+
+                <ul class="list-group mt-1">
+                    {% for friend in requestsReceived %}
+                        <li class="list-group-item">
+                            <a class="align-middle" href="{{ path('keyforge_user_detail', {'userId': friend.friend_id}) }}">{{ friend.name }}</a>
+                            <button data-toggle="tooltip" title="{{ 'menu.add'|trans }}" type="button" class="btn btn-outline-dark acceptFriend" data-friend="{{ friend.id }}" style="float: right;"><i class="bi bi-plus" style="pointer-events: none;"></i></button>
+                        </li>
+                    {% endfor %}
+                </ul>
+
+                <div class="row mt-3">
+                    <h5>{{ 'menu.sent'|trans }}</h5>
+                </div>
+
+                <ul class="list-group mt-1">
+                    {% for friend in requestsSent %}
+                        <li class="list-group-item">
+                            <a href="{{ path('keyforge_user_detail', {'userId': friend.friend_id}) }}">{{ friend.name }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+
             <div class="shadow-lg p-3 mb-5 bg-white rounded">
                 <div class="row">
                     <h3>{{ 'menu.friends'|trans }}</h3>
                 </div>
 
-                <ul class="list-group mt-3">
-                    {% for friend in friends %}
+                <ul class="list-group mt-1">
+                    {% for friend in requestsAccepted %}
                         <li class="list-group-item">
-                            <a href="{{ path('keyforge_user_detail', {'userId': friend.friend_id}) }}">{{ friend.name }}</a>
-                            <button type="button" class="btn btn-outline-danger removeFriend" data-friend="{{ friend.friend_id }}" style="float: right;"><i class="bi bi-trash" style="pointer-events: none;"></i></button>
+                            <a class="align-middle" href="{{ path('keyforge_user_detail', {'userId': friend.friend_id}) }}">{{ friend.name }}</a>
+                            <button data-toggle="tooltip" title="{{ 'menu.remove'|trans }}" type="button" class="btn btn-outline-danger removeFriend" data-friend="{{ friend.friend_id }}" style="float: right;"><i class="bi bi-trash" style="pointer-events: none;"></i></button>
                         </li>
                     {% endfor %}
                 </ul>
@@ -43,6 +85,20 @@
         </div>
     </div>
     <script>
+        $(".acceptFriend").click(function(event) {
+            $.ajax({
+                type: 'PATCH',
+                url: '{{ path('user_friends') }}',
+                data: {
+                    'friendId': $(event.target).data('friend'),
+                },
+            }).done(function( ) {
+                location.reload();
+            }).fail(function() {
+                alert('Error');
+            });
+        });
+
         $(".removeFriend").click(function(event) {
             $.ajax({
                 type: 'DELETE',

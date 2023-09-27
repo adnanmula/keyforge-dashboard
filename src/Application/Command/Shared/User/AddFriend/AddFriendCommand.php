@@ -14,7 +14,7 @@ final readonly class AddFriendCommand
     {
         Assert::lazy()
             ->that($user, 'name')->uuid()
-            ->that($friendName, 'password')->string()->notBlank()
+            ->that($friendName, 'friendName')->string()->notBlank()
             ->verifyNow();
 
         $this->user = Uuid::from($user);

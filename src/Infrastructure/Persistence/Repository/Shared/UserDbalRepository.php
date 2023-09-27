@@ -84,6 +84,7 @@ final class UserDbalRepository extends DbalRepository implements UserRepository
             ->from(self::TABLE_FRIENDS, 'a')
             ->innerJoin('a', self::TABLE, 'b', 'a.friend_id = b.id')
             ->where('a.id = :id')
+            ->orWhere('a.friend_id = :id')
             ->setParameter('id', $id->value())
             ->executeQuery()
             ->fetchAllAssociative();
@@ -91,14 +92,35 @@ final class UserDbalRepository extends DbalRepository implements UserRepository
         return $result;
     }
 
-    public function addFriend(Uuid $id, Uuid $friend): void
+    public function friendRequest(Uuid $user, Uuid $friend): ?array
+    {
+        $result = $this->connection->createQueryBuilder()
+            ->select('a.*, b.name')
+            ->from(self::TABLE_FRIENDS, 'a')
+            ->innerJoin('a', self::TABLE, 'b', 'a.friend_id = b.id')
+            ->where('a.id = :user')
+            ->andWhere('a.friend_id = :friend_id')
+            ->andWhere('a.is_request is true')
+            ->setParameter('user', $user->value())
+            ->setParameter('friend_id', $friend->value())
+            ->executeQuery()
+            ->fetchAssociative();
+
+        if (false === $result) {
+            return null;
+        }
+
+        return $result;
+    }
+
+    public function addFriend(Uuid $id, Uuid $friend, bool $isRequest): void
     {
         $stmt = $this->connection->prepare(
             \sprintf(
                 '
                     INSERT INTO %s (id, friend_id, is_request)
                     VALUES (:id, :friend_id, :is_request)
-                    ON CONFLICT (id, friend_id) DO NOTHING
+                    ON CONFLICT (id, friend_id) DO UPDATE SET is_request = :is_request
                 ',
                 self::TABLE_FRIENDS,
             ),
@@ -106,7 +128,7 @@ final class UserDbalRepository extends DbalRepository implements UserRepository
 
         $stmt->bindValue(':id', $id->value());
         $stmt->bindValue(':friend_id', $friend->value());
-        $stmt->bindValue(':is_request', false, ParameterType::BOOLEAN);
+        $stmt->bindValue(':is_request', $isRequest, ParameterType::BOOLEAN);
 
         $stmt->executeStatement();
     }

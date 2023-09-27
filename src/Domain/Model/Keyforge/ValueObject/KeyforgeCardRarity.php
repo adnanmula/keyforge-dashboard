@@ -14,4 +14,5 @@ enum KeyforgeCardRarity: string implements \JsonSerializable
     case FIXED = 'FIXED';
     case SPECIAL = 'SPECIAL';
     case VARIANT = 'VARIANT';
+    case EVILTWIN = 'EVILTWIN';
 }

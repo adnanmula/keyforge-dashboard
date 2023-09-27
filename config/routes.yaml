@@ -15,7 +15,7 @@ logout:
 user_friends:
   path: /user/friends
   controller: AdnanMula\Cards\Entrypoint\Controller\UserFriendsController
-  methods: [ GET,POST,DELETE ]
+  methods: [ GET,POST,PATCH,DELETE ]
 
 user_settings:
   path: /user/settings

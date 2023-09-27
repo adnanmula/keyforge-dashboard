@@ -156,7 +156,11 @@ menu.deck_wl: 'Wins/Losses by deck'
 menu.time_wl: 'Wins/Losses along time'
 menu.set_pr: 'Pick rate by set'
 menu.friends: Friends
+menu.friend_requests: Friend requests
 menu.add: Add
 menu.add_friends: Add friends
 menu.friend_name: Friend name
+menu.sent: Sent
+menu.received: Received
+menu.remove: Remove
 exception.user_not_exists: User not exists
