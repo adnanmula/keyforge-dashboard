@@ -80,9 +80,10 @@ final class UserDbalRepository extends DbalRepository implements UserRepository
     public function friends(Uuid $id): array
     {
         $result = $this->connection->createQueryBuilder()
-            ->select('a.*, b.name')
+            ->select('a.*, b.name as receiver_name, c.name as sender_name')
             ->from(self::TABLE_FRIENDS, 'a')
             ->innerJoin('a', self::TABLE, 'b', 'a.friend_id = b.id')
+            ->innerJoin('b', self::TABLE, 'c', 'a.id = c.id')
             ->where('a.id = :id')
             ->orWhere('a.friend_id = :id')
             ->setParameter('id', $id->value())
