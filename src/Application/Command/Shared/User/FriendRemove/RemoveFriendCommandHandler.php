@@ -1,30 +1,26 @@
 <?php declare(strict_types=1);
 
-namespace AdnanMula\Cards\Application\Command\Shared\User\AddFriend;
+namespace AdnanMula\Cards\Application\Command\Shared\User\FriendRemove;
 
 use AdnanMula\Cards\Domain\Model\Shared\Exception\UserNotExistsException;
 use AdnanMula\Cards\Domain\Model\Shared\UserRepository;
 
-final class AddFriendCommandHandler
+final class RemoveFriendCommandHandler
 {
     public function __construct(
         private UserRepository $repository,
     ) {}
 
-    public function __invoke(AddFriendCommand $command): void
+    public function __invoke(RemoveFriendCommand $command): void
     {
         $user = $this->repository->byId($command->user);
-
-        if ($user->name() === $command->friendName) {
-            return;
-        }
-
-        $friend = $this->repository->byName($command->friendName);
+        $friend = $this->repository->byId($command->friendId);
 
         if (null === $user || null === $friend) {
             throw new UserNotExistsException();
         }
 
-        $this->repository->addFriend($user->id(), $friend->id(), true);
+        $this->repository->removeFriend($user->id(), $friend->id());
+        $this->repository->removeFriend($friend->id(), $user->id());
     }
 }

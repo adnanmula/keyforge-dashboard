@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace AdnanMula\Cards\Application\Command\Shared\User\AddFriend;
+namespace AdnanMula\Cards\Application\Command\Shared\User\FriendAdd;
 
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use Assert\Assert;

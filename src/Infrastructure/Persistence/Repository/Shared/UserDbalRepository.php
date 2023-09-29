@@ -79,7 +79,7 @@ final class UserDbalRepository extends DbalRepository implements UserRepository
 
     public function friends(Uuid $id): array
     {
-        $result = $this->connection->createQueryBuilder()
+        return $this->connection->createQueryBuilder()
             ->select('a.*, b.name as receiver_name, c.name as sender_name')
             ->from(self::TABLE_FRIENDS, 'a')
             ->innerJoin('a', self::TABLE, 'b', 'a.friend_id = b.id')
@@ -89,8 +89,6 @@ final class UserDbalRepository extends DbalRepository implements UserRepository
             ->setParameter('id', $id->value())
             ->executeQuery()
             ->fetchAllAssociative();
-
-        return $result;
     }
 
     public function friendRequest(Uuid $user, Uuid $friend): ?array

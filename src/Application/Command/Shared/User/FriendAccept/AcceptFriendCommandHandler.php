@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace AdnanMula\Cards\Application\Command\Shared\User\AcceptFriend;
+namespace AdnanMula\Cards\Application\Command\Shared\User\FriendAccept;
 
 use AdnanMula\Cards\Domain\Model\Shared\Exception\UserNotExistsException;
 use AdnanMula\Cards\Domain\Model\Shared\UserRepository;
