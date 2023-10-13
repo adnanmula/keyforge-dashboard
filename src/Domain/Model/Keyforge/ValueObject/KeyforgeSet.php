@@ -14,7 +14,9 @@ enum KeyforgeSet: string
     case MM = 'MM';
     case DT = 'DT';
     case WoE = 'WoE';
+    case GR = 'GR';
     case U22 = 'U22';
+    case VM23 = 'VM23';
 
     public function fullName(): string
     {
@@ -25,7 +27,9 @@ enum KeyforgeSet: string
             self::MM => 'Mass Mutation',
             self::DT => 'Dark Tidings',
             self::WoE => 'Winds of Exchange',
+            self::GR => 'Grim Remainders',
             self::U22 => 'Unchained',
+            self::VM23 => 'Vault Masters 2023',
         };
     }
 
@@ -55,8 +59,16 @@ enum KeyforgeSet: string
             return self::WoE;
         }
 
+        if ($set === 'GRIM_REMINDERS') {
+            return self::GR;
+        }
+
         if ($set === 'UNCHAINED_2022') {
             return self::U22;
+        }
+
+        if ($set === 'VAULT_MASTERS_2023') {
+            return self::VM23;
         }
 
         throw new \InvalidArgumentException($set);

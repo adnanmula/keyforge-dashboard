@@ -91,7 +91,7 @@ keyforge.set_cota: CotA
 keyforge.set_dt: DT
 keyforge.set_mm: MM
 keyforge.set_u22: U22
-keyforge.set_vt23: VT23
+keyforge.set_vm23: VM23
 keyforge.set_wc: WC
 keyforge.set_woe: WoE
 locale.en: Inglés

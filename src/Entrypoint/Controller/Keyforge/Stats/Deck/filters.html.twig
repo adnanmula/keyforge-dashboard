@@ -40,6 +40,10 @@
                             <input class="form-check-input set_selector" type="checkbox" value="U22" id="check_set_u22">
                             <label for="check_set_u22"><img width="33px" src="{{ asset('assets/keyforge/sets/U22.svg') }}" alt="U22"/>{{ 'keyforge.set_u22'|trans }}</label>
                         </div>
+                        <div class="form-check col-6 col-sm-4 col-md-4 col-lg-2 col-xl-2" style="display: flex; align-items: center;">
+                            <input class="form-check-input set_selector" type="checkbox" value="VM23" id="check_set_vm23">
+                            <label for="check_set_vm23"><img width="33px" src="{{ asset('assets/keyforge/sets/VM23.svg') }}" alt="VM23"/>{{ 'keyforge.set_vm23'|trans }}</label>
+                        </div>
                     </div>
                 </div>
                 <div class="divider py-1"></div>
@@ -134,9 +138,9 @@
                 <div class="row">
                     <div class="col-md-4 col-sm-12">
                         <label>{{ 'menu.min_sas'|trans }}</label>
-                        <input type="number" class="form-control" name="min-sas" id="filter_min_sas" min="30" max="108" value="30">
+                        <input type="number" class="form-control" name="min-sas" id="filter_min_sas" min="30" max="200" value="30">
                         <label>{{ 'menu.max_sas'|trans }}</label>
-                        <input type="number" class="form-control" name="max-sas" id="filter_max_sas" min="30" max="108" value="108">
+                        <input type="number" class="form-control" name="max-sas" id="filter_max_sas" min="30" max="200" value="200">
                     </div>
 
                     <div class="divider py-1"></div>
