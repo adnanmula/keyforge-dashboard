@@ -10,22 +10,23 @@ use Assert\Assert;
 
 final class GetDecksQuery
 {
-    private ?int $start;
-    private ?int $length;
-    private ?string $deck;
-    private ?array $sets;
-    private ?string $houseFilterType;
-    private ?array $houses;
-    private ?Sorting $sorting;
-    private ?Uuid $deckId;
-    private ?Uuid $owner;
-    private array $owners;
-    private bool $onlyOwned;
-    private ?string $tagFilterType;
-    private array $tags;
-    private array $tagsExcluded;
-    private int $maxSas;
-    private int $minSas;
+    public ?int $start;
+    public ?int $length;
+    public ?string $deck;
+    public ?array $sets;
+    public ?string $houseFilterType;
+    public ?array $houses;
+    public ?Sorting $sorting;
+    public ?Uuid $deckId;
+    public ?Uuid $owner;
+    public array $owners;
+    public bool $onlyOwned;
+    public ?string $tagFilterType;
+    public array $tags;
+    public array $tagsExcluded;
+    public int $maxSas;
+    public int $minSas;
+    public ?Uuid $onlyFriends;
 
     public function __construct(
         $start,
@@ -44,6 +45,7 @@ final class GetDecksQuery
         array $tagsExcluded = [],
         $maxSas = 150,
         $minSas = 0,
+        $onlyFriends = null,
     ) {
         Assert::lazy()
             ->that($start, 'start')->nullOr()->integerish()->greaterOrEqualThan(0)
@@ -61,6 +63,7 @@ final class GetDecksQuery
             ->that($tagsExcluded, 'tagsExcluded')->all()->uuid()
             ->that($maxSas, 'maxSas')->integerish()
             ->that($minSas, 'minSas')->integerish()
+            ->that($onlyFriends, 'onlyFriends')->nullOr()->uuid()
             ->verifyNow();
 
         $this->start = null === $start ? null : (int) $start;
@@ -79,85 +82,6 @@ final class GetDecksQuery
         $this->tagsExcluded = \array_map(static fn (string $id): Uuid => Uuid::from($id), $tagsExcluded);
         $this->maxSas = (int) $maxSas;
         $this->minSas = (int) $minSas;
-    }
-
-    public function start(): ?int
-    {
-        return $this->start;
-    }
-
-    public function length(): ?int
-    {
-        return $this->length;
-    }
-
-    public function deck(): ?string
-    {
-        return $this->deck;
-    }
-
-    public function sets(): ?array
-    {
-        return $this->sets;
-    }
-
-    public function houseFilterType(): ?string
-    {
-        return $this->houseFilterType;
-    }
-
-    public function houses(): ?array
-    {
-        return $this->houses;
-    }
-
-    public function sorting(): ?Sorting
-    {
-        return $this->sorting;
-    }
-
-    public function deckId(): ?Uuid
-    {
-        return $this->deckId;
-    }
-
-    public function owner(): ?Uuid
-    {
-        return $this->owner;
-    }
-
-    public function onlyOwned(): bool
-    {
-        return $this->onlyOwned;
-    }
-
-    public function owners(): array
-    {
-        return $this->owners;
-    }
-
-    public function tagFilterType(): ?string
-    {
-        return $this->tagFilterType;
-    }
-
-    public function tags(): array
-    {
-        return $this->tags;
-    }
-
-    public function tagsExcluded(): array
-    {
-        return $this->tagsExcluded;
-    }
-
-    public function maxSas(): int
-    {
-        return $this->maxSas;
-    }
-
-    public function minSas(): int
-    {
-        return $this->minSas;
+        $this->onlyFriends = null === $onlyFriends ? null : Uuid::from($onlyFriends);
     }
 }

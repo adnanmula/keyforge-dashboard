@@ -3,6 +3,7 @@
 namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\Stats\Deck;
 
 use AdnanMula\Cards\Application\Query\Keyforge\Deck\GetDecksQuery;
+use AdnanMula\Cards\Domain\Model\Shared\User;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
 use AdnanMula\Criteria\FilterField\FilterField;
 use AdnanMula\Criteria\Sorting\Order;
@@ -15,6 +16,9 @@ final class GetDecksController extends Controller
 {
     public function __invoke(Request $request): JsonResponse
     {
+        /** @var ?User $user */
+        $user = $this->getUser();
+
         $sorting = null;
         $queryOrder = $request->get('order');
 
@@ -63,12 +67,13 @@ final class GetDecksController extends Controller
                 $request->get('extraDeckId'),
                 $request->get('extraFilterOwner'),
                 $request->query->all()['extraFilterOwners'] ?? [],
-                $request->get('extraFilterOnlyOwned') === 'true',
+                false,
                 $request->get('extraFilterTagType'),
                 $request->query->all()['extraFilterTags'] ?? [],
                 $request->query->all()['extraFilterTagsExcluded'] ?? [],
                 $request->get('extraFilterMaxSas', 150),
                 $request->get('extraFilterMinSas', 0),
+                $request->get('extraFilterOnlyFriends') !== 'true' ? $user?->id()->value() : null,
             )),
         );
 

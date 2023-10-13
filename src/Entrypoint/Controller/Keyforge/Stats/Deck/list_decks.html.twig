@@ -31,8 +31,8 @@
     </div>
 
     <script>
-        function onlyOwned() {
-            return false === $('#with_external')[0].checked;
+        function onlyFriends() {
+            return false === $('#only_friends')[0].checked;
         }
 
         function tagFilterType() {
@@ -112,7 +112,8 @@
                 ajax: {
                     url: '{{ path('keyforge_decks_json') }}',
                     data: function(d){
-                        d.extraFilterOnlyOwned = onlyOwned();
+                        d.extraFilterOnlyOwned = false;
+                        d.extraFilterOnlyFriends = onlyFriends();
                         d.extraFilterTagType = tagFilterType();
                         d.extraFilterTags = tags();
                         d.extraFilterTagsExcluded = tagsExcluded();

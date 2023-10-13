@@ -106,7 +106,7 @@ menu.change_password: 'Change password'
 menu.clear_filters: Clear
 menu.deck: Deck
 menu.decks: Decks
-menu.external_data: 'External deck/users'
+menu.friend_decks_games: 'Only friend decks and games'
 menu.favorite: Favorite
 menu.games: Games
 menu.houses: Houses

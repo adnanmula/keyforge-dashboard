@@ -8,6 +8,7 @@ use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGame;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGameRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUser;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUserRepository;
+use AdnanMula\Cards\Domain\Model\Shared\UserRepository;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Criteria\Criteria;
 use AdnanMula\Criteria\Filter\Filter;
@@ -18,6 +19,7 @@ use AdnanMula\Criteria\FilterValue\ArrayElementFilterValue;
 use AdnanMula\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Criteria\FilterValue\IntFilterValue;
 use AdnanMula\Criteria\FilterValue\NullFilterValue;
+use AdnanMula\Criteria\FilterValue\StringArrayFilterValue;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
 use AdnanMula\Criteria\Sorting\Order;
 use AdnanMula\Criteria\Sorting\OrderType;
@@ -26,51 +28,62 @@ final class GetDecksQueryHandler
 {
     public function __construct(
         private KeyforgeDeckRepository $repository,
-        private KeyforgeUserRepository $userRepository,
+        private KeyforgeUserRepository $keyforgeUserRepository,
         private KeyforgeGameRepository $gameRepository,
+        private UserRepository $userRepository,
     ) {}
 
     public function __invoke(GetDecksQuery $query): array
     {
-        if (null !== $query->deckId()) {
-            $deck = $this->repository->byId($query->deckId());
+        if (null !== $query->deckId) {
+            $deck = $this->repository->byId($query->deckId);
 
             if (null === $deck) {
-                return ['decks' => [], 'total' => 0, 'totalFiltered' => 0, 'start' => $query->start(), 'length' => $query->length()];
+                return ['decks' => [], 'total' => 0, 'totalFiltered' => 0, 'start' => $query->start, 'length' => $query->length];
             }
 
             return [
                 'decks' => [$deck],
                 'total' => 1,
                 'totalFiltered' => 1,
-                'start' => $query->start(),
-                'length' => $query->length(),
+                'start' => $query->start,
+                'length' => $query->length,
             ];
         }
 
         $expressions = [];
 
-        if (null !== $query->owner()) {
-            $expressions[] = new Filter(new FilterField('owner'), new StringFilterValue($query->owner()->value()), FilterOperator::EQUAL);
+        if (null !== $query->owner) {
+            $expressions[] = new Filter(new FilterField('owner'), new StringFilterValue($query->owner->value()), FilterOperator::EQUAL);
         }
 
-        if (null !== $query->deck()) {
-            $expressions[] = new Filter(new FilterField('name'), new StringFilterValue($query->deck()), FilterOperator::CONTAINS_INSENSITIVE);
+        if (null !== $query->deck) {
+            $expressions[] = new Filter(new FilterField('name'), new StringFilterValue($query->deck), FilterOperator::CONTAINS_INSENSITIVE);
         }
 
-        if ($query->onlyOwned()) {
+        if ($query->onlyOwned) {
             $expressions[] = new Filter(new FilterField('owner'), new NullFilterValue(), FilterOperator::IS_NOT_NULL);
         }
 
-        $expressions[] = new Filter(new FilterField('sas'), new IntFilterValue($query->maxSas()), FilterOperator::LESS_OR_EQUAL);
-        $expressions[] = new Filter(new FilterField('sas'), new IntFilterValue($query->minSas()), FilterOperator::GREATER_OR_EQUAL);
+
+        if (null !== $query->onlyFriends) {
+            $friends = \array_map(
+                static fn (array $u) => $u['id'],
+                $this->userRepository->friends($query->onlyFriends),
+            );
+
+            $expressions[] = new Filter(new FilterField('owner'), new StringArrayFilterValue($query->onlyFriends->value(), ...$friends), FilterOperator::IN);
+        }
+
+        $expressions[] = new Filter(new FilterField('sas'), new IntFilterValue($query->maxSas), FilterOperator::LESS_OR_EQUAL);
+        $expressions[] = new Filter(new FilterField('sas'), new IntFilterValue($query->minSas), FilterOperator::GREATER_OR_EQUAL);
 
         $filters = [new Filters(FilterType::AND, FilterType::AND, ...$expressions)];
 
-        if (\count($query->owners()) > 0) {
+        if (\count($query->owners) > 0) {
             $ownerExpressions = [];
 
-            foreach ($query->owners() as $owner) {
+            foreach ($query->owners as $owner) {
                 $ownerExpressions[] = new Filter(new FilterField('owner'), new StringFilterValue($owner), FilterOperator::EQUAL);
             }
 
@@ -81,24 +94,24 @@ final class GetDecksQueryHandler
             );
         }
 
-        if (\count($query->tags()) > 0) {
+        if (\count($query->tags) > 0) {
             $tagsExpressions = [];
 
-            foreach ($query->tags() as $tag) {
+            foreach ($query->tags as $tag) {
                 $tagsExpressions[] = new Filter(new FilterField('tags'), new ArrayElementFilterValue($tag->value()), FilterOperator::IN_ARRAY);
             }
 
             $filters[] = new Filters(
                 FilterType::AND,
-                $query->tagFilterType() === 'any' ? FilterType::OR : FilterType::AND,
+                $query->tagFilterType === 'any' ? FilterType::OR : FilterType::AND,
                 ...$tagsExpressions,
             );
         }
 
-        if (\count($query->tagsExcluded()) > 0) {
+        if (\count($query->tagsExcluded) > 0) {
             $tagsExpressions = [];
 
-            foreach ($query->tagsExcluded() as $tag) {
+            foreach ($query->tagsExcluded as $tag) {
                 $tagsExpressions[] = new Filter(new FilterField('tags'), new ArrayElementFilterValue($tag->value()), FilterOperator::NOT_IN_ARRAY);
             }
 
@@ -109,10 +122,10 @@ final class GetDecksQueryHandler
             );
         }
 
-        if (null !== $query->sets()) {
+        if (null !== $query->sets) {
             $setFilterExpressions = [];
 
-            foreach ($query->sets() as $set) {
+            foreach ($query->sets as $set) {
                 $setFilterExpressions[] = new Filter(new FilterField('set'), new StringFilterValue($set), FilterOperator::EQUAL);
             }
 
@@ -123,24 +136,24 @@ final class GetDecksQueryHandler
             );
         }
 
-        if (null !== $query->houses()) {
+        if (null !== $query->houses) {
             $houseFilterExpressions = [];
 
-            foreach ($query->houses() as $house) {
+            foreach ($query->houses as $house) {
                 $houseFilterExpressions[] = new Filter(new FilterField('houses'), new ArrayElementFilterValue($house), FilterOperator::IN_ARRAY);
             }
 
             $filters[] = new Filters(
                 FilterType::AND,
-                $query->houseFilterType() === 'any' ? FilterType::OR : FilterType::AND,
+                $query->houseFilterType === 'any' ? FilterType::OR : FilterType::AND,
                 ...$houseFilterExpressions,
             );
         }
 
         $criteria = new Criteria(
-            $query->sorting(),
-            $query->start(),
-            $query->length(),
+            $query->sorting,
+            $query->start,
+            $query->length,
             ...$filters,
         );
 
@@ -148,19 +161,19 @@ final class GetDecksQueryHandler
 
 //      TODO ñapas
 
-        if (null !== $query->owner()) {
-            $decks = $this->recalculateWins($query->owner(), $query->deckId(), ...$decks);
+        if (null !== $query->owner) {
+            $decks = $this->recalculateWins($query->owner, $query->deckId, ...$decks);
 
-            if (null !== $query->sorting() && $query->sorting()->has('wins')) {
-                $decks = $this->reorderDecks($query->sorting()->get('wins'), ...$decks);
+            if (null !== $query->sorting && $query->sorting->has('wins')) {
+                $decks = $this->reorderDecks($query->sorting->get('wins'), ...$decks);
             }
         }
 
-        if ($query->onlyOwned()) {
-            $decks = $this->removeNotOwnedStats($query->owner(), ...$decks);
+        if ($query->onlyOwned) {
+            $decks = $this->removeNotOwnedStats($query->owner, ...$decks);
 
-            if (null !== $query->sorting() && $query->sorting()->has('wins')) {
-                $decks = $this->reorderDecks($query->sorting()->get('wins'), ...$decks);
+            if (null !== $query->sorting && $query->sorting->has('wins')) {
+                $decks = $this->reorderDecks($query->sorting->get('wins'), ...$decks);
             }
         }
 
@@ -180,8 +193,8 @@ final class GetDecksQueryHandler
             'decks' => $decks,
             'total' => $total,
             'totalFiltered' => $totalFiltered,
-            'start' => $query->start(),
-            'length' => $query->length(),
+            'start' => $query->start,
+            'length' => $query->length,
         ];
     }
 
@@ -236,7 +249,7 @@ final class GetDecksQueryHandler
     /** @return array<KeyforgeDeck> */
     private function removeNotOwnedStats(?Uuid $owner, KeyforgeDeck ...$decks): array
     {
-        $users = $this->userRepository->search(new Criteria(null, null, null));
+        $users = $this->keyforgeUserRepository->search(new Criteria(null, null, null));
         $nonExternalUsersIds = \array_map(static fn (KeyforgeUser $user) => $user->id()->value(), $users);
 
         foreach ($decks as $deck) {

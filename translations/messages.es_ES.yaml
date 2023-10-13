@@ -106,7 +106,7 @@ menu.change_password: 'Actualizar contraseña'
 menu.clear_filters: 'Limpiar filtros'
 menu.deck: Baraja
 menu.decks: Barajas
-menu.external_data: 'Partidas/Barajas externas'
+menu.friend_decks_games: 'Solo partidas y barajas de amigos'
 menu.favorite: Favorita
 menu.games: Partidas
 menu.houses: Casas
