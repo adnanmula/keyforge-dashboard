@@ -7,7 +7,6 @@ use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Domain\Service\Persistence\Fixture;
 use AdnanMula\Cards\Infrastructure\Fixtures\DbalFixture;
 use AdnanMula\Cards\Infrastructure\Fixtures\User\UserFixtures;
-use Doctrine\DBAL\ParameterType;
 
 final class KeyforgeUsersFixtures extends DbalFixture implements Fixture
 {
@@ -22,10 +21,10 @@ final class KeyforgeUsersFixtures extends DbalFixture implements Fixture
 
     public function load(): void
     {
-        $this->save(KeyforgeUser::create(Uuid::from(self::FIXTURE_KF_USER_1_ID), 'username', false));
-        $this->save(KeyforgeUser::create(Uuid::from(self::FIXTURE_KF_USER_2_ID), 'username2', false));
-        $this->save(KeyforgeUser::create(Uuid::from(self::FIXTURE_KF_USER_3_ID), 'user-without-login', true));
-        $this->save(KeyforgeUser::create(Uuid::from(self::FIXTURE_KF_USER_4_ID), 'user4', false));
+        $this->save(KeyforgeUser::create(Uuid::from(self::FIXTURE_KF_USER_1_ID), 'username'));
+        $this->save(KeyforgeUser::create(Uuid::from(self::FIXTURE_KF_USER_2_ID), 'username2'));
+        $this->save(KeyforgeUser::create(Uuid::from(self::FIXTURE_KF_USER_3_ID), 'user-without-login'));
+        $this->save(KeyforgeUser::create(Uuid::from(self::FIXTURE_KF_USER_4_ID), 'user4'));
 
         $this->loaded = true;
     }
@@ -45,12 +44,11 @@ final class KeyforgeUsersFixtures extends DbalFixture implements Fixture
         $stmt = $this->connection->prepare(
             \sprintf(
                 '
-                INSERT INTO %s (id, name, external)
-                VALUES (:id, :name, :external)
+                INSERT INTO %s (id, name)
+                VALUES (:id, :name)
                 ON CONFLICT (id) DO UPDATE SET
                     id = :id,
-                    name = :name,
-                    external = :external
+                    name = :name
                 ',
                 self::TABLE,
             ),
@@ -58,8 +56,7 @@ final class KeyforgeUsersFixtures extends DbalFixture implements Fixture
 
         $stmt->bindValue(':id', $user->id()->value());
         $stmt->bindValue(':name', $user->name());
-        $stmt->bindValue(':external', $user->external(), ParameterType::BOOLEAN);
 
-        $stmt->execute();
+        $stmt->executeStatement();
     }
 }

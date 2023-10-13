@@ -39,6 +39,7 @@ competition_detail.winner_deck: 'Winner deck'
 competition_detail.winner_score: 'Winner score'
 data.games_played: 'Games played'
 data.losses: Losses
+data.only_friends: 'Solo amigos'
 data.other_players: 'Other players'
 data.other_players_tooltip: 'Players from TCO or NKFL we have played against'
 data.winrate: 'Win rate'

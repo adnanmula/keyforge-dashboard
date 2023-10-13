@@ -9,12 +9,11 @@ final class KeyforgeUser implements \JsonSerializable
     private function __construct(
         private Uuid $id,
         private string $name,
-        private bool $external,
     ) {}
 
-    public static function create(Uuid $id, string $name, bool $external): self
+    public static function create(Uuid $id, string $name): self
     {
-        return new self($id, $name, $external);
+        return new self($id, $name);
     }
 
     public function id(): Uuid
@@ -27,17 +26,11 @@ final class KeyforgeUser implements \JsonSerializable
         return $this->name;
     }
 
-    public function external(): bool
-    {
-        return $this->external;
-    }
-
     public function jsonSerialize(): array
     {
         return [
             'id' => $this->id->value(),
             'name' => $this->name(),
-            'external' => $this->external(),
         ];
     }
 }

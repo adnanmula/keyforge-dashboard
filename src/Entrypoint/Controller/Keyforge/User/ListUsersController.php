@@ -3,6 +3,7 @@
 namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\User;
 
 use AdnanMula\Cards\Application\Query\Keyforge\User\GetUsersQuery;
+use AdnanMula\Cards\Domain\Model\Shared\User;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,13 +13,17 @@ final class ListUsersController extends Controller
     public function __invoke(Request $request): Response
     {
         $this->assertIsLogged();
+        /** @var User $user */
+        $user = $this->getUser();
 
         $users = $this->extractResult(
             $this->bus->dispatch(new GetUsersQuery(
-                0,
-                1000,
+                null,
+                null,
                 true,
-                $request->get('withExternal') !== null,
+                true,
+                $request->get('onlyFriends') !== null,
+                $user->id()->value(),
             )),
         );
 
@@ -26,7 +31,7 @@ final class ListUsersController extends Controller
             'Keyforge/User/list_users.html.twig',
             [
                 'users' => $users,
-                'withExternal' => $request->get('withExternal') !== null,
+                'onlyFriends' => $request->get('onlyFriends') !== null,
             ],
         );
     }

@@ -11,7 +11,6 @@ final class KeyforgeInitial extends AbstractMigration
                 id uuid NOT NULL,
                 name character varying(64) NOT NULL
                    CONSTRAINT keyforge_name_unique UNIQUE,
-                external bool NOT NULL,
                 PRIMARY KEY(id)
             )',
         );

@@ -23,7 +23,7 @@ final readonly class GetCompetitionDetailQueryHandler
 
     public function __invoke(GetCompetitionDetailQuery $query): array
     {
-        $users = $this->userRepository->all(true);
+        $users = $this->userRepository->search(new Criteria(null, null, null));
 
         $indexedUsers = [];
         foreach ($users as $user) {

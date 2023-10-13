@@ -7,6 +7,7 @@ use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeTag;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUserRepository;
 use AdnanMula\Cards\Domain\Model\Shared\User;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
+use AdnanMula\Criteria\Criteria;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -37,7 +38,7 @@ final class MyDecksController extends Controller
             null,
         )));
 
-        $users = $this->userRepository->all(false);
+        $users = $this->userRepository->search(new Criteria(null, null, null));
 
         return $this->render(
             'Keyforge/Stats/Deck/list_my_decks.html.twig',

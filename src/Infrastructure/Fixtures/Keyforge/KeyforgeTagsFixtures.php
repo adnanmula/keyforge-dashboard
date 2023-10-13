@@ -114,6 +114,6 @@ final class KeyforgeTagsFixtures extends DbalFixture implements Fixture
         $stmt->bindValue(':type', $tag->type->name);
         $stmt->bindValue(':archived', $tag->archived, ParameterType::BOOLEAN);
 
-        $stmt->execute();
+        $stmt->executeStatement();
     }
 }

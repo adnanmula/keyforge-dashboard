@@ -3,11 +3,12 @@
 namespace AdnanMula\Cards\Domain\Model\Keyforge;
 
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
+use AdnanMula\Criteria\Criteria;
 
 interface KeyforgeUserRepository
 {
     /** @return array<KeyforgeUser> */
-    public function all(bool $withExternal): array;
+    public function search(Criteria $criteria): array;
 
     public function byId(Uuid $id): ?KeyforgeUser;
 

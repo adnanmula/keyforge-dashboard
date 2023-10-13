@@ -135,7 +135,7 @@ final class CreateGameCommandHandler
         $user = $this->userRepository->byName($name);
 
         if (null === $user) {
-            $user = KeyforgeUser::create(Uuid::v4(), $name, true);
+            $user = KeyforgeUser::create(Uuid::v4(), $name);
             $this->userRepository->save($user);
         }
 

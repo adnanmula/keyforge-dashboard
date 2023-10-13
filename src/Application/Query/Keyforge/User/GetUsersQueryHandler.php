@@ -6,6 +6,7 @@ use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGame;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGameRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUser;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUserRepository;
+use AdnanMula\Cards\Domain\Model\Shared\UserRepository;
 use AdnanMula\Criteria\Criteria;
 use AdnanMula\Criteria\Filter\Filter;
 use AdnanMula\Criteria\Filter\Filters;
@@ -17,16 +18,24 @@ use AdnanMula\Criteria\FilterValue\StringFilterValue;
 final class GetUsersQueryHandler
 {
     public function __construct(
+        private UserRepository $userRepository,
         private KeyforgeUserRepository $repository,
         private KeyforgeGameRepository $gameRepository,
     ) {}
 
     public function __invoke(GetUsersQuery $query): array
     {
-        //TODO criteria
-        $users = $this->repository->all($query->withExternal());
+        $users = $this->repository->search(new Criteria(null, null, null));
 
-        if (false === $query->withGames()) {
+        if ($query->onlyFriends) {
+            $friends = $this->userRepository->friends($query->userId);
+            $friendsId = \array_map(static fn (array $f) => $f['id'], $friends);
+            $friendsId[] = $query->userId->value();
+
+            $users = \array_filter($users, static fn (KeyforgeUser $u) => \in_array($u->id()->value(), $friendsId, true));
+        }
+
+        if (false === $query->withGames) {
             return $users;
         }
 
@@ -46,8 +55,8 @@ final class GetUsersQueryHandler
             new Filters(FilterType::AND, FilterType::OR, ...$filters),
         ));
 
-        if (false === $query->withExternal()) {
-            $games = $this->excludeGamesWithExternalUsers($users, $games);
+        if ($query->onlyFriends) {
+            $games = $this->excludeGamesWithNotFriends($users, $games);
         }
 
         $result = [];
@@ -67,7 +76,7 @@ final class GetUsersQueryHandler
             $result[] = [
                 'id' => $user->id()->value(),
                 'name' => $user->name(),
-                'is_external' => $user->external(),
+                'is_external' => false,
                 'wins' => $wins,
                 'losses' => $losses,
                 'win_rate' => $winRate,
@@ -82,7 +91,7 @@ final class GetUsersQueryHandler
         return $result;
     }
 
-    private function excludeGamesWithExternalUsers(array $users, array $games): array
+    private function excludeGamesWithNotFriends(array $users, array $games): array
     {
         $userIds = \array_map(static fn (KeyforgeUser $user) => $user->id()->value(), $users);
 

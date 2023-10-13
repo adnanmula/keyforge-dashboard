@@ -25,7 +25,7 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
 
         (new DbalCriteriaAdapter($query))->execute($criteria);
 
-        $result = $query->execute()->fetchAllAssociative();
+        $result = $query->executeQuery()->fetchAllAssociative();
 
         if ([] === $result || false === $result) {
             return [];
@@ -51,7 +51,7 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
             $query->setMaxResults($limit);
         }
 
-        $result = $query->execute()->fetchAllAssociative();
+        $result = $query->executeQuery()->fetchAllAssociative();
 
         if ([] === $result || false === $result) {
             return [];
@@ -69,7 +69,7 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
 
         (new DbalCriteriaAdapter($query))->execute($criteria);
 
-        return $query->execute()->fetchOne();
+        return $query->executeQuery()->fetchOne();
     }
 
     public function save(KeyforgeGame $game): void
@@ -112,7 +112,7 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
         $stmt->bindValue(':competition', $game->competition()->name);
         $stmt->bindValue(':notes', $game->notes());
 
-        $stmt->execute();
+        $stmt->executeStatement();
     }
 
     private function map(array $game): KeyforgeGame

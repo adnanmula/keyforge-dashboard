@@ -64,9 +64,7 @@ final class UserStatsQueryHandler
 
         $users = $this->userRepository->byIds(...$userIds);
 
-        $nonExternalUsers = \array_values(\array_filter($users, static fn (KeyforgeUser $user) => $user->external() === false));
-
-        $nonExternalUsersIds = \array_map(static fn (KeyforgeUser $user) => $user->id()->value(), $nonExternalUsers);
+        $nonExternalUsersIds = \array_map(static fn (KeyforgeUser $user) => $user->id()->value(), $users);
 
 //        $games = \array_values(\array_filter($games, static function (KeyforgeGame $game) use ($nonExternalUsersIds) {
 //            return \in_array($game->winner()->value(), $nonExternalUsersIds, true)
@@ -322,12 +320,10 @@ final class UserStatsQueryHandler
         }
 
         $username = '';
-        $userIsExternal = false;
 
         foreach ($users as $user) {
             if ($query->userId()->equalTo($user->id())) {
                 $username = $user->name();
-                $userIsExternal = $user->external();
 
                 break;
             }
@@ -335,7 +331,7 @@ final class UserStatsQueryHandler
 
         return [
             'username' => $username,
-            'user_is_external' => $userIsExternal,
+            'user_is_external' => false,
             'win_rate_vs_users' => $resultWinRateByUser,
             'pick_rate_vs_users' => $resultPickRateByUser,
             'wins_by_date' => $resultWinsByDate,

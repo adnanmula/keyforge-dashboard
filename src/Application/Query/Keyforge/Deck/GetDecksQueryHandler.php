@@ -236,7 +236,7 @@ final class GetDecksQueryHandler
     /** @return array<KeyforgeDeck> */
     private function removeNotOwnedStats(?Uuid $owner, KeyforgeDeck ...$decks): array
     {
-        $users = $this->userRepository->all(false);
+        $users = $this->userRepository->search(new Criteria(null, null, null));
         $nonExternalUsersIds = \array_map(static fn (KeyforgeUser $user) => $user->id()->value(), $users);
 
         foreach ($decks as $deck) {

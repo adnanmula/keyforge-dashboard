@@ -27,7 +27,7 @@ final class KeyforgeCompetitionDbalRepository extends DbalRepository implements 
 
         (new DbalCriteriaAdapter($builder))->execute($criteria);
 
-        $result = $query->execute()->fetchAllAssociative();
+        $result = $query->executeQuery()->fetchAllAssociative();
 
         return \array_map(fn (array $row) => $this->map($row), $result);
     }
@@ -51,7 +51,7 @@ final class KeyforgeCompetitionDbalRepository extends DbalRepository implements 
             ->where('a.id = :id')
             ->setParameter('id', $id->value())
             ->setMaxResults(1)
-            ->execute()
+            ->executeQuery()
             ->fetchAssociative();
 
         if ([] === $result || false === $result) {
@@ -69,7 +69,7 @@ final class KeyforgeCompetitionDbalRepository extends DbalRepository implements 
             ->where('a.reference = :ref')
             ->setParameter('ref', $reference)
             ->setMaxResults(1)
-            ->execute()
+            ->executeQuery()
             ->fetchAssociative();
 
         if ([] === $result || false === $result) {
@@ -114,7 +114,7 @@ final class KeyforgeCompetitionDbalRepository extends DbalRepository implements 
         $stmt->bindValue(':finished_at', $competition->finishedAt()?->format(\DateTimeInterface::ATOM));
         $stmt->bindValue(':winner', $competition->winner()?->value());
 
-        $stmt->execute();
+        $stmt->executeStatement();
     }
 
     /** @return array<KeyforgeCompetitionFixture> */
@@ -125,7 +125,7 @@ final class KeyforgeCompetitionDbalRepository extends DbalRepository implements 
             ->from(self::TABLE_FIXTURES, 'a')
             ->where('a.competition_id = :id')
             ->setParameter('id', $competitionId->value())
-            ->execute()
+            ->executeQuery()
             ->fetchAllAssociative();
 
         if ([] === $result || false === $result) {
@@ -142,7 +142,7 @@ final class KeyforgeCompetitionDbalRepository extends DbalRepository implements 
             ->from(self::TABLE_FIXTURES, 'a')
             ->where('a.id = :id')
             ->setParameter('id', $id->value())
-            ->execute()
+            ->executeQuery()
             ->fetchAssociative();
 
         if ([] === $result || false === $result) {
@@ -185,7 +185,7 @@ final class KeyforgeCompetitionDbalRepository extends DbalRepository implements 
         $stmt->bindValue(':winner', $fixture->winner()?->value());
         $stmt->bindValue(':games', Json::encode($fixture->games()));
 
-        $stmt->execute();
+        $stmt->executeStatement();
     }
 
     private function map(array $row): KeyforgeCompetition

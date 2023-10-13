@@ -189,6 +189,6 @@ final class KeyforgeCompetitionFixtureFixtures extends DbalFixture implements Fi
         $stmt->bindValue(':winner', $fixture->winner()?->value());
         $stmt->bindValue(':games', Json::encode($fixture->games()));
 
-        $stmt->execute();
+        $stmt->executeStatement();
     }
 }

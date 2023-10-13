@@ -51,7 +51,7 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
             ->where('a.id = :id')
             ->setParameter('id', $id->value())
             ->setMaxResults(1)
-            ->execute()
+            ->executeQuery()
             ->fetchAssociative();
 
         if ([] === $result || false === $result) {
@@ -68,7 +68,7 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
             ->from(self::TABLE, 'a')
             ->where('a.id in (:ids)')
             ->setParameter('ids', \array_map(static fn (Uuid $id) => $id->value(), $ids), Connection::PARAM_STR_ARRAY)
-            ->execute()
+            ->executeQuery()
             ->fetchAllAssociative();
 
         if ([] === $result || false === $result) {
@@ -85,7 +85,7 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
             ->from(self::TABLE, 'a')
             ->where('a.name in (:decks)')
             ->setParameter('decks', $decks, Connection::PARAM_STR_ARRAY)
-            ->execute()
+            ->executeQuery()
             ->fetchAllAssociative();
 
         if ([] === $result || false === $result) {
@@ -131,7 +131,7 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
         $stmt->bindValue(':tags', Json::encode($deck->tags()));
         $stmt->bindValue(':notes', $deck->notes());
 
-        $stmt->execute();
+        $stmt->executeStatement();
     }
 
     private function map(array $deck): KeyforgeDeck

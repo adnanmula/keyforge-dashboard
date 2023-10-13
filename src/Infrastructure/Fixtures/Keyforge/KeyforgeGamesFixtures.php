@@ -379,6 +379,6 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
         $stmt->bindValue(':competition', $game->competition()->name);
         $stmt->bindValue(':notes', $game->notes());
 
-        $stmt->execute();
+        $stmt->executeStatement();
     }
 }

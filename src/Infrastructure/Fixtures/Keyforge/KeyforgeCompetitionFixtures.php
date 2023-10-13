@@ -110,6 +110,6 @@ final class KeyforgeCompetitionFixtures extends DbalFixture implements Fixture
         $stmt->bindValue(':finished_at', $competition->finishedAt()?->format(\DateTimeInterface::ATOM));
         $stmt->bindValue(':winner', $competition->winner()?->value());
 
-        $stmt->execute();
+        $stmt->executeStatement();
     }
 }

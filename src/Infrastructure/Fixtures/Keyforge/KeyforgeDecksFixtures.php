@@ -220,6 +220,6 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
         $stmt->bindValue(':owner', $deck->owner()?->value());
         $stmt->bindValue(':notes', $deck->notes());
 
-        $stmt->execute();
+        $stmt->executeStatement();
     }
 }
