@@ -16,10 +16,8 @@
         <div class="row">
             <div class="col-12">
                 <div class="form-check float-end">
-                    <input class="form-check-input" type="checkbox" value="" id="only_friends" {% if onlyFriends %} checked{% endif %}>
-                    <label class="form-check-label" for="only_friends">
-                        {{ 'data.only_friends'|trans }}
-                    </label>
+                    <input class="form-check-input" type="checkbox" value="" id="show_all" {% if showAll %} checked{% endif %}>
+                    <label class="form-check-label" for="show_all">{{ 'data.show_all'|trans }}</label>
                 </div>
             </div>
         </div>
@@ -40,7 +38,6 @@
                     <tr>
                         <td style="white-space: nowrap;">
                             <a href="{{ path('keyforge_user_detail', {'userId': user.id}) }}">{{ user.name }}</a>
-                            {% if user.is_external == false %}🥚{% endif %}
                         </td>
                         <td>{{ user.wins }}</td>
                         <td>{{ user.losses }}</td>
@@ -54,13 +51,13 @@
     </div>
 
     <script>
-        const checkbox = $('#only_friends');
+        const checkbox = $('#show_all');
 
         checkbox.change(function(event) {
             const checkbox = event.target;
 
             if (checkbox.checked) {
-                window.location.href += "?onlyFriends";
+                window.location.href += "?showAll";
             } else {
                 window.location.href = window.location.href.split('?')[0] ;
             }

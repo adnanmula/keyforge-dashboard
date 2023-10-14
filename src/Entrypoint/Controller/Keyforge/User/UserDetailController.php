@@ -20,7 +20,7 @@ final class UserDetailController extends Controller
                 'reference' => $userId,
                 'userId' => $userId,
                 'name' => $result['username'],
-                'user_is_external' => false,
+                'user_is_external' => $result['user_is_external'],
                 'win_rate_vs_users' => $result['win_rate_vs_users'],
                 'pick_rate_vs_users' => $result['pick_rate_vs_users'],
                 'wins_by_date' => $result['wins_by_date'],

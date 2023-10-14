@@ -22,7 +22,7 @@ final class ListUsersController extends Controller
                 null,
                 true,
                 true,
-                $request->get('onlyFriends') !== null,
+                $request->get('showAll') === null,
                 $user->id()->value(),
             )),
         );
@@ -31,7 +31,7 @@ final class ListUsersController extends Controller
             'Keyforge/User/list_users.html.twig',
             [
                 'users' => $users,
-                'onlyFriends' => $request->get('onlyFriends') !== null,
+                'showAll' => $request->get('showAll') !== null,
             ],
         );
     }

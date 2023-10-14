@@ -7,11 +7,11 @@ use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeCompetitionRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeck;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGameRepository;
-use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUser;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUserRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeDeckHouses;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeHouse;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeSet;
+use AdnanMula\Cards\Domain\Model\Shared\UserRepository;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Criteria\Criteria;
 use AdnanMula\Criteria\Filter\Filter;
@@ -19,6 +19,7 @@ use AdnanMula\Criteria\Filter\Filters;
 use AdnanMula\Criteria\Filter\FilterType;
 use AdnanMula\Criteria\FilterField\FilterField;
 use AdnanMula\Criteria\FilterValue\FilterOperator;
+use AdnanMula\Criteria\FilterValue\StringArrayFilterValue;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
 use AdnanMula\Criteria\Sorting\Order;
 use AdnanMula\Criteria\Sorting\OrderType;
@@ -27,14 +28,21 @@ use AdnanMula\Criteria\Sorting\Sorting;
 final class UserStatsQueryHandler
 {
     public function __construct(
+        private UserRepository $userRepository,
         private KeyforgeDeckRepository $deckRepository,
         private KeyforgeGameRepository $gameRepository,
-        private KeyforgeUserRepository $userRepository,
+        private KeyforgeUserRepository $keyforgeUserRepository,
         private KeyforgeCompetitionRepository $competitionRepository,
     ) {}
 
     public function __invoke(UserStatsQuery $query): array
     {
+        $appUser = $this->userRepository->byId($query->userId);
+        $kfUser = $this->keyforgeUserRepository->byId($query->userId);
+
+        $friends = $this->userRepository->friends($query->userId);
+        $friendsIds = \array_map(static fn (array $f) => $f['id'], $friends);
+
         $games = $this->gameRepository->search(new Criteria(
             new Sorting(
                 new Order(new FilterField('date'), OrderType::DESC),
@@ -45,8 +53,14 @@ final class UserStatsQueryHandler
             new Filters(
                 FilterType::AND,
                 FilterType::OR,
-                new Filter(new FilterField('winner'), new StringFilterValue($query->userId()->value()), FilterOperator::EQUAL),
-                new Filter(new FilterField('loser'), new StringFilterValue($query->userId()->value()), FilterOperator::EQUAL),
+                new Filter(new FilterField('winner'), new StringFilterValue($query->userId->value()), FilterOperator::EQUAL),
+                new Filter(new FilterField('loser'), new StringFilterValue($query->userId->value()), FilterOperator::EQUAL),
+            ),
+            new Filters(
+                FilterType::AND,
+                FilterType::OR,
+                new Filter(new FilterField('winner'), new StringArrayFilterValue(...$friendsIds), FilterOperator::IN),
+                new Filter(new FilterField('loser'), new StringArrayFilterValue(...$friendsIds), FilterOperator::IN),
             ),
         ));
 
@@ -62,14 +76,9 @@ final class UserStatsQueryHandler
 
         $decks = $this->deckRepository->byIds(...$decksIds);
 
-        $users = $this->userRepository->byIds(...$userIds);
+        $users = $this->keyforgeUserRepository->byIds(...$userIds);
 
-        $nonExternalUsersIds = \array_map(static fn (KeyforgeUser $user) => $user->id()->value(), $users);
-
-//        $games = \array_values(\array_filter($games, static function (KeyforgeGame $game) use ($nonExternalUsersIds) {
-//            return \in_array($game->winner()->value(), $nonExternalUsersIds, true)
-//                && \in_array($game->loser()->value(), $nonExternalUsersIds, true);
-//        }));
+        $nonExternalUsersIds = $friendsIds;
 
         $indexedDecks = [];
         $indexedDeckSets = [];
@@ -78,7 +87,7 @@ final class UserStatsQueryHandler
 
         /** @var KeyforgeDeck $deck */
         foreach ($decks as $deck) {
-            if (null !== $deck->owner() && $deck->owner()->equalTo($query->userId())) {
+            if (null !== $deck->owner() && $deck->owner()->equalTo($query->userId)) {
                 $indexedDecks[$deck->id()->value()] = $deck->name();
             }
 
@@ -125,7 +134,7 @@ final class UserStatsQueryHandler
         $longestWinStreak = 0;
 
         foreach ($games as $game) {
-            if ($game->winner()->equalTo($query->userId())) {
+            if ($game->winner()->equalTo($query->userId)) {
                 $currentWinStreak++;
 
                 if ($currentWinStreak > $longestWinStreak) {
@@ -148,7 +157,7 @@ final class UserStatsQueryHandler
                 ];
             }
 
-            if ($game->loser()->equalTo($query->userId())) {
+            if ($game->loser()->equalTo($query->userId)) {
                 $currentWinStreak = 0;
 
                 if (false === \array_key_exists($game->loserDeck()->value(), $bestAndWorseDecks)) {
@@ -171,7 +180,7 @@ final class UserStatsQueryHandler
         $winRateVsUser = [];
 
         foreach ($users as $user) {
-            if ($user->id()->equalTo($query->userId())) {
+            if ($user->id()->equalTo($query->userId)) {
                 continue;
             }
 
@@ -182,7 +191,7 @@ final class UserStatsQueryHandler
         $lossesByDate = [];
 
         foreach ($games as $game) {
-            $isWin = $game->winner()->equalTo($query->userId());
+            $isWin = $game->winner()->equalTo($query->userId);
 
             if ($isWin) {
                 $winRateVsUser[$game->loser()->value()] = [
@@ -320,19 +329,9 @@ final class UserStatsQueryHandler
             ];
         }
 
-        $username = '';
-
-        foreach ($users as $user) {
-            if ($query->userId()->equalTo($user->id())) {
-                $username = $user->name();
-
-                break;
-            }
-        }
-
         return [
-            'username' => $username,
-            'user_is_external' => false,
+            'username' => $kfUser->name(),
+            'user_is_external' => null === $appUser,
             'win_rate_vs_users' => $resultWinRateByUser,
             'pick_rate_vs_users' => $resultPickRateByUser,
             'wins_by_date' => $resultWinsByDate,
@@ -345,7 +344,7 @@ final class UserStatsQueryHandler
             'wins_by_set' => $winsBySet,
             'wins_by_house' => $winsByHouse,
             'win_streak' => $longestWinStreak,
-            'competition_wins' => $this->competitionWins($query->userId()),
+            'competition_wins' => $this->competitionWins($query->userId),
         ];
     }
 

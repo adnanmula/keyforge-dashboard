@@ -39,7 +39,7 @@ competition_detail.winner_deck: 'Baraja ganadora'
 competition_detail.winner_score: 'Puntuación del ganador'
 data.games_played: 'Partidas jugadas'
 data.losses: Derrotas
-data.only_friends: 'Only friends'
+data.show_all: 'Mostrar todos'
 data.other_players: 'Otros jugadores'
 data.other_players_tooltip: 'Gente de TCO o NKFL contra la que hemos jugado'
 data.winrate: 'Win rate'
