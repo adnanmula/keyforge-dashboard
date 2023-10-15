@@ -1,6 +1,6 @@
 {% extends "Keyforge/Shared/keyforge_base.html.twig" %}
 
-{% block title %}{{ 'menu.decks'|trans }}{% endblock %}
+{% block title %}{% if owner is null %}{{ 'menu.decks'|trans }}{% else %}{{ 'menu.mydecks'|trans }}{% endif %}{% endblock %}
 
 {% block header %}
     <style>
@@ -13,5 +13,5 @@
 
 {% block body %}
     {% include 'Keyforge/Stats/Deck/filters.html.twig' %}
-    {% include 'Keyforge/Stats/Deck/deck_list_table.html.twig' with {'owner': null} %}
+    {% include 'Keyforge/Stats/Deck/deck_list_table.html.twig' with {'owner': owner} %}
 {% endblock %}

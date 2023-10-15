@@ -38,7 +38,7 @@ final class ListDecksController extends Controller
         return $this->render(
             'Keyforge/Stats/Deck/list_decks.html.twig',
             [
-                'decks' => [],
+                'owner' => null,
                 'tags' => \array_map(static fn (KeyforgeTag $tag) => $tag->jsonSerialize(), $tags['tags']),
                 'users' => $users,
             ],

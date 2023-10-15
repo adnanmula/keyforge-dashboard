@@ -41,7 +41,7 @@ final class MyDecksController extends Controller
         $users = $this->userRepository->search(new Criteria(null, null, null));
 
         return $this->render(
-            'Keyforge/Stats/Deck/list_my_decks.html.twig',
+            'Keyforge/Stats/Deck/list_decks.html.twig',
             [
                 'owner' => $user->id()->value(),
                 'tags' => \array_map(static fn (KeyforgeTag $tag) => $tag->jsonSerialize(), $tags['tags']),
