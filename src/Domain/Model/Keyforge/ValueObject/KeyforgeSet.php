@@ -15,6 +15,7 @@ enum KeyforgeSet: string
     case DT = 'DT';
     case WoE = 'WoE';
     case GR = 'GR';
+    case AS = 'AS';
     case U22 = 'U22';
     case VM23 = 'VM23';
 
@@ -28,6 +29,7 @@ enum KeyforgeSet: string
             self::DT => 'Dark Tidings',
             self::WoE => 'Winds of Exchange',
             self::GR => 'Grim Remainders',
+            self::AS => 'Aember skies',
             self::U22 => 'Unchained',
             self::VM23 => 'Vault Masters 2023',
         };
@@ -61,6 +63,10 @@ enum KeyforgeSet: string
 
         if ($set === 'GRIM_REMINDERS') {
             return self::GR;
+        }
+
+        if ($set === 'AEMBER_SKIES') {
+            return self::AS;
         }
 
         if ($set === 'UNCHAINED_2022') {
