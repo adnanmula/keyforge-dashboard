@@ -145,6 +145,7 @@
 
                     <div class="divider py-1"></div>
 
+                    {% if is_granted('ROLE_KEYFORGE') %}
                     <div class="col-md-4 col-sm-12">
                         <label for="tags" class="form-label">{{ 'menu.other_options'|trans }}</label>
 
@@ -164,6 +165,7 @@
                             <label class="form-check-label" for="only_friends">{{ 'menu.friend_decks_games'|trans }}</label>
                         </div>
                     </div>
+                    {% endif %}
                 </div>
 
                 <div class="divider py-1"></div>
