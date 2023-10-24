@@ -7,7 +7,6 @@ use AdnanMula\Cards\Application\Query\Keyforge\Deck\GetDecksQuery;
 use AdnanMula\Cards\Application\Query\Keyforge\User\GetUsersQuery;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeck;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUser;
-use AdnanMula\Cards\Domain\Model\Shared\User;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
 use AdnanMula\Criteria\FilterField\FilterField;
 use AdnanMula\Criteria\Sorting\Order;
@@ -22,7 +21,6 @@ final class CreateGameController extends Controller
     {
         $this->assertIsLogged();
 
-        /** @var User $user */
         $user = $this->getUser();
 
         $users = $this->extractResult(

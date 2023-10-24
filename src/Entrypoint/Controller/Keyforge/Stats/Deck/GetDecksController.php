@@ -3,7 +3,6 @@
 namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\Stats\Deck;
 
 use AdnanMula\Cards\Application\Query\Keyforge\Deck\GetDecksQuery;
-use AdnanMula\Cards\Domain\Model\Shared\User;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
 use AdnanMula\Criteria\FilterField\FilterField;
 use AdnanMula\Criteria\Sorting\Order;
@@ -16,7 +15,6 @@ final class GetDecksController extends Controller
 {
     public function __invoke(Request $request): JsonResponse
     {
-        /** @var ?User $user */
         $user = $this->getUser();
 
         $sorting = null;

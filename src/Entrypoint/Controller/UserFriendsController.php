@@ -17,7 +17,6 @@ final class UserFriendsController extends Controller
     public function __invoke(Request $request): Response
     {
         $this->assertIsLogged();
-        /** @var User $user */
         $user = $this->getUser();
         $error = null;
 

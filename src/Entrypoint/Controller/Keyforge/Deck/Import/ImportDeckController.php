@@ -3,7 +3,6 @@
 namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\Deck\Import;
 
 use AdnanMula\Cards\Application\Command\Keyforge\Deck\Import\ImportDeckCommand;
-use AdnanMula\Cards\Domain\Model\Shared\User;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
 use Ramsey\Uuid\Exception\InvalidUuidStringException;
@@ -25,7 +24,6 @@ final class ImportDeckController extends Controller
                 $userId = null;
 
                 if (null !== $request->get('setUser')) {
-                    /** @var User $user */
                     $user = $this->getUser();
                     $userId = $user->id()->value();
                 }

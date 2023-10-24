@@ -23,6 +23,14 @@ class Controller extends AbstractController
         $this->setLocaleToUser();
     }
 
+    final protected function getUser(): ?User
+    {
+        /** @var ?User $user */
+        $user = parent::getUser();
+
+        return $user;
+    }
+
     final protected function assertIsLogged(): void
     {
         if (false === $this->security->isGranted('ROLE_KEYFORGE')) {
@@ -41,6 +49,11 @@ class Controller extends AbstractController
         return $stamp->getResult();
     }
 
+    final protected function setLocale(Locale $locale): void
+    {
+        $this->localeSwitcher->setLocale($locale->value);
+    }
+
     final protected function setLocaleToUser(): void
     {
         /** @var ?User $user */
@@ -51,10 +64,5 @@ class Controller extends AbstractController
         }
 
         $this->localeSwitcher->setLocale($user->locale()->value);
-    }
-
-    final protected function setLocale(Locale $locale): void
-    {
-        $this->localeSwitcher->setLocale($locale->value);
     }
 }
