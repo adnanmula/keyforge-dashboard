@@ -236,12 +236,9 @@
             const opponentScore = parseInt(data[5]);
             const firstPlayer = data[6];
 
-            if (score > 3 || score < 0 || opponentScore > 3 || opponentScore < 0) {
+            if (score > 3 || score < 0 || opponentScore > 3 || opponentScore < 0 || (score !== 3 && opponentScore !== 3)) {
                 alert('{{ 'error.invalid_result'|trans }}');
-            }
-
-            if (score !== 3 && opponentScore !== 3) {
-                alert('{{ 'error.invalid_result'|trans }}');
+                return;
             }
 
             if (score === 3) {
