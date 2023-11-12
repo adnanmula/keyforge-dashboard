@@ -58,6 +58,7 @@ error.something_wrong: 'Something went wrong'
 error.invalid_format: 'Invalid format'
 error.invalid_result: 'Invalid result'
 game.competition: Competition
+game.type: Type
 game.date: Date
 game.first_turn: 'First turn'
 game.keys: Keys
@@ -75,6 +76,7 @@ game.winner_chains: 'Winner chains'
 game.winner_deck: 'Winner deck'
 game.winner_score: 'Winner score'
 game.with_friends: 'With friends'
+game.solo: 'Solo play'
 keyforge.house_brobnar: Brobnar
 keyforge.house_dis: Dis
 keyforge.house_ekwidon: Ekwidon

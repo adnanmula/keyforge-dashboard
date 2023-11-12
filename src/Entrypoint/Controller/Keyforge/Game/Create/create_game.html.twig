@@ -27,13 +27,14 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label for="competition" class="form-label">{{ 'game.competition'|trans }}</label>
+                        <label for="competition" class="form-label">{{ 'game.type'|trans }}</label>
 
                         <select class="form-select" name="competition" id="competition">
+                            <option value="SOLO" disabled>{{ 'game.solo'|trans }}</option>
                             <option value="FRIENDS" selected>{{ 'game.with_friends'|trans }}</option>
                             <option value="TCO_CASUAL">{{ 'game.tco_casual'|trans }}</option>
                             <option value="TCO_COMPETITIVE">{{ 'game.tco_competitive'|trans }}</option>
-                            <option value="NKFL_LEAGUE_SEASON_21">NKFL League Season 21</option>
+                            <option value="NKFL_LEAGUE_SEASON_22">NKFL League Season 22</option>
                             <option value="NKFL_ARCHON_TOURNAMENT">NKFL Archon Tournament</option>
                         </select>
                     </div>
@@ -205,10 +206,12 @@
 
         $('#winner').change(function(e) {
             refreshFirstPlayerInput();
+            checkSoloPlay($('#winner')[0].value, $('#loser')[0].value);
         });
 
         $('#loser').change(function(e) {
             refreshFirstPlayerInput();
+            checkSoloPlay($('#winner')[0].value, $('#loser')[0].value);
         });
 
         function refreshFirstPlayerInput() {
@@ -219,6 +222,26 @@
 
             $('#firstTurnOptions')[0].innerHTML = '<option data-value="' + playerOneId + '" value="' + playerOneName + '"> ' + playerOneId + ' </option>'
                 + '<option data-value="' + playerTwoId + '" value="' + playerTwoName + '"> ' + playerTwoId + ' </option>';
+        }
+
+        function checkSoloPlay(winner, loser) {
+            if (winner !== loser) {
+                $('#competition > option').each(function (i, option) {
+                    option.disabled = false;
+                });
+
+                $('#competition')[0].value = 'FRIENDS';
+                $('#competition')[0].options[0].disabled = true;
+
+                return;
+            }
+
+            $('#competition > option').each(function (i, option) {
+                option.disabled = true;
+            });
+
+            $('#competition')[0].value = 'SOLO';
+            $('#competition')[0].options[0].disabled = false;
         }
 
         $('#importGame').click(function(event) {

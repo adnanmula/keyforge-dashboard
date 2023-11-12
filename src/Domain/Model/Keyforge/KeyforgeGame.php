@@ -89,6 +89,11 @@ final class KeyforgeGame implements \JsonSerializable
         return $this->notes;
     }
 
+    public function isSoloPlay(): bool
+    {
+        return $this->winner->equalTo($this->loser);
+    }
+
     public function jsonSerialize(): array
     {
         return [

@@ -8,6 +8,7 @@ enum KeyforgeCompetition: string
 {
     use EnumHelper;
 
+    case SOLO = 'Solo';
     case FRIENDS = 'With friends';
     case TCO_CASUAL = 'TCO Casual';
     case TCO_COMPETITIVE = 'TCO Competitive';
@@ -25,6 +26,7 @@ enum KeyforgeCompetition: string
     public static function fromName(string $name): self
     {
         return match ($name) {
+            self::SOLO->name => self::SOLO,
             self::FRIENDS->name => self::FRIENDS,
             self::TCO_CASUAL->name => self::TCO_CASUAL,
             self::TCO_COMPETITIVE->name => self::TCO_COMPETITIVE,

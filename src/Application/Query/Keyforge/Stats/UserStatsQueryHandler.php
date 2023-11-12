@@ -191,6 +191,10 @@ final class UserStatsQueryHandler
         $lossesByDate = [];
 
         foreach ($games as $game) {
+            if ($game->isSoloPlay()) {
+                continue;
+            }
+
             $isWin = $game->winner()->equalTo($query->userId);
 
             if ($isWin) {

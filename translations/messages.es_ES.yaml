@@ -58,6 +58,7 @@ error.something_wrong: 'Algo ha ido mal'
 error.invalid_format: 'Formato inválido'
 error.invalid_result: 'Resultado inválido'
 game.competition: Torneo
+game.type: Tipo
 game.date: Fecha
 game.first_turn: 'Primer turno'
 game.keys: LLaves
@@ -75,6 +76,7 @@ game.winner_chains: 'Llaves del ganador'
 game.winner_deck: 'Baraja ganadora'
 game.winner_score: 'Puntuación del ganador'
 game.with_friends: 'Con amigos'
+game.solo: 'Solitario'
 keyforge.house_brobnar: Brobnar
 keyforge.house_dis: Dis
 keyforge.house_ekwidon: Ekwidon
