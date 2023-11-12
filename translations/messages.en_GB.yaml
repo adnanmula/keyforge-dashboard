@@ -158,14 +158,54 @@ menu.deck_wl: 'Wins/Losses by deck'
 menu.time_wl: 'Wins/Losses along time'
 menu.set_pr: 'Pick rate by set'
 menu.friends: Friends
-menu.friend_requests: Friend requests
+menu.friend_requests: 'Friend requests'
 menu.add: Add
-menu.add_friends: Add friends
-menu.friend_name: Friend name
+menu.add_friends: 'Add friends'
+menu.friend_name: 'Friend name'
 menu.sent: Sent
 menu.received: Received
 menu.remove: Remove
 menu.rival: Rival
 menu.archenemy: Archenemy
 menu.nemesis: Nemesis
-menu.games_lost: Games lost
+menu.games_lost: 'Games lost'
+wiki.the_crucible_online: 'The crucible online'
+wiki.wiki_aa: 'Wiki (Archon Arcana)'
+wiki.erratum: Erratum
+wiki.revised_cards: 'Revised cards'
+wiki.rules_summary_en: 'Rules summary (EN)'
+wiki.rulebook_es: 'Rulebook ES (v1.6 March 2021)'
+wiki.rulebook_en: 'Rulebook EN (v17 April 2023)'
+wiki.timing_chart: 'Timing chart'
+wiki.tournament_rules: 'Tournament rules'
+wiki.adventures: Adventures
+wiki.nkfl_community: 'NKFL community'
+wiki.houses_per_set: 'Houses per set'
+wiki.tag_assignation_criteria: 'Tag assignation criteria'
+wiki.tag: Tag
+wiki.criteria: Criteria
+wiki.tag_expected_amber_high: 'High expected amber'
+wiki.tag_expected_amber_low: 'Low expected amber'
+wiki.tag_amber_pip_count_high: 'High pip count'
+wiki.tag_amber_pip_count_low: 'Low pip count'
+wiki.tag_effective_power_high: 'High effective power'
+wiki.tag_efficiency_high: 'High efficiency'
+wiki.tag_efficiency_low: 'Low efficiency'
+wiki.tag_artifact_count_high: 'High artifact count'
+wiki.tag_action_count_high: 'High action count'
+wiki.tag_creatures_count_high: 'High creature count'
+wiki.tag_upgrades_count_high: 'High upgrade count'
+wiki.tag_archives_high: 'Archives a lot'
+wiki.tag_amber_control_high: 'High amber control'
+wiki.tag_amber_control_low: 'Low amber control'
+wiki.tag_creature_control_high: 'Hight creature control'
+wiki.tag_creature_control_low: 'Low creature control'
+wiki.tag_artifact_control_high: 'Control de artefactos alto'
+wiki.tag_artifact_control_low: 'No artifact control'
+wiki.tag_creature_protection_high: 'Creature protection'
+wiki.recursion_high: 'High recursion'
+wiki.disruption_high: 'High disruption'
+wiki.tag_has_scaling_amber_control: 'Has scaling amber control'
+wiki.tag_has_board_wipes: 'Has board wipes'
+wiki.tag_synergistic: 'Synergistic'
+wiki.tag_antisynergistic: 'Antisynergistic'

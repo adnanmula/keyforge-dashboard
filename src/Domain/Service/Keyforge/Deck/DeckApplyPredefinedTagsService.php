@@ -361,6 +361,9 @@ final class DeckApplyPredefinedTagsService
             'Shatter Storm',
             'Doorstep to Heaven',
             'Deusillus',
+            'Rant and Rive',
+            'Closed-Door Negotiation',
+            'Martyr of the Vault',
         ];
 
         $count = 0;
@@ -414,6 +417,18 @@ final class DeckApplyPredefinedTagsService
             "Kiligog's Trench",
             'Mælstrom',
             'Æmberlution',
+            'Hebe the Huge',
+            'Market Crash',
+            'Mass Buyout',
+            'Extinction',
+            'Kaboom!',
+            'Tectonic Shift',
+            'General Order 24',
+            'Quintrino Warp',
+            'Election',
+            'Kiligog’s Trench',
+            'Catch and Release',
+            'Adult Swim',
         ];
 
         $count = 0;

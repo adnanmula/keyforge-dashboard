@@ -24,18 +24,19 @@
 
             <div class="divider py-1"></div>
 
-            <a href="https://thecrucible.online/" target="_blank" class="list-group-item list-group-item-action">The crucible online</a>
-            <a href="https://archonarcana.com/Main_Page" target="_blank" class="list-group-item list-group-item-action">Wiki (Archon Arcana)</a>
-            <a href="https://archonarcana.com/Errata" target="_blank" class="list-group-item list-group-item-action">Erratas</a>
-            <a href="https://archonarcana.com/Revised_Cards" target="_blank" class="list-group-item list-group-item-action">Cartas revisadas</a>
-            <a href="https://archonarcana.com/Rules" target="_blank" class="list-group-item list-group-item-action">Resumen de reglas (EN)</a>
-            <a href="{{ asset('assets/keyforge/doc/rules_es.pdf') }}" target="_blank" class="list-group-item list-group-item-action">Reglamento (v1.6) (ES)</a>
-            <a href="https://archonarcana.com/Timing_Chart" target="_blank" class="list-group-item list-group-item-action">Esquema de timings</a>
-            <a href="https://archonarcana.com/Tournament_Concepts" target="_blank" class="list-group-item list-group-item-action">Reglas de torneo</a>
-            <a href="https://sites.google.com/view/keyforgeadventures" target="_blank" class="list-group-item list-group-item-action">Aventuras</a>
-            <a href="https://nkfl.online/" target="_blank" class="list-group-item list-group-item-action">NKFL community</a>
+            <a href="https://thecrucible.online/" target="_blank" class="list-group-item list-group-item-action">{{ 'wiki.the_crucible_online'|trans }}</a>
+            <a href="https://archonarcana.com/Main_Page" target="_blank" class="list-group-item list-group-item-action">{{ 'wiki.wiki_aa'|trans }}</a>
+            <a href="https://archonarcana.com/Errata" target="_blank" class="list-group-item list-group-item-action">{{ 'wiki.erratum'|trans }}</a>
+            <a href="https://archonarcana.com/Revised_Cards" target="_blank" class="list-group-item list-group-item-action">{{ 'wiki.revised_cards'|trans }}</a>
+            <a href="https://archonarcana.com/Rules" target="_blank" class="list-group-item list-group-item-action">{{ 'wiki.rules_summary_en'|trans }}</a>
+            <a href="{{ asset('assets/keyforge/doc/rules_es.pdf') }}" target="_blank" class="list-group-item list-group-item-action">{{ 'wiki.rulebook_es'|trans }}</a>
+            <a href="https://keyforging.com/wp-content/uploads/2023/04/KeyForge_Rulebook_v17_18Apr2023.pdf" target="_blank" class="list-group-item list-group-item-action">{{ 'wiki.rulebook_en'|trans }}</a>
+            <a href="https://archonarcana.com/Timing_Chart" target="_blank" class="list-group-item list-group-item-action">{{ 'wiki.timing_chart'|trans }}</a>
+            <a href="https://archonarcana.com/Tournament_Concepts" target="_blank" class="list-group-item list-group-item-action">{{ 'wiki.tournament_rules'|trans }}</a>
+            <a href="https://sites.google.com/view/keyforgeadventures" target="_blank" class="list-group-item list-group-item-action">{{ 'wiki.adventures'|trans }}</a>
+            <a href="https://nkfl.online/" target="_blank" class="list-group-item list-group-item-action">{{ 'wiki.nkfl_community'|trans }}</a>
 
-            <a class="list-group-item list-group-item-action" data-bs-toggle="collapse" data-bs-target="#divTableHousesBySet">Casas en cada set</a>
+            <a class="list-group-item list-group-item-action" data-bs-toggle="collapse" data-bs-target="#divTableHousesBySet">{{ 'wiki.houses_per_set'|trans }}</a>
 
             <div class="collapse" id="divTableHousesBySet" style="overflow-x: auto">
                 <table class="table" id="tableHousesBySet">
@@ -139,7 +140,21 @@
                             <td><i class="bi bi-check"></i></td>
                         </tr>
                         <tr>
-                            <td style="text-align: right;">Unchained (2022)</td>
+                            <td style="text-align: right;">Unchained 2022</td>
+                            <td><i class="bi bi-check"></i></td>
+                            <td><i class="bi bi-check"></i></td>
+                            <td><i class="bi bi-check"></i></td>
+                            <td><i class="bi bi-check"></i></td>
+                            <td><i class="bi bi-check"></i></td>
+                            <td><i class="bi bi-check"></i></td>
+                            <td><i class="bi bi-check"></i></td>
+                            <td><i class="bi bi-check"></i></td>
+                            <td><i class="bi bi-check"></i></td>
+                            <td><i class="bi bi-check"></i></td>
+                            <td><i class="bi bi-check"></i></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: right;">Vault Masters 2023</td>
                             <td><i class="bi bi-check"></i></td>
                             <td><i class="bi bi-check"></i></td>
                             <td><i class="bi bi-check"></i></td>
@@ -156,138 +171,138 @@
                 </table>
             </div>
 
-            <a class="list-group-item list-group-item-action" data-bs-toggle="collapse" data-bs-target="#divTableTagCriteria">Criterio de asignación de tags</a>
+            <a class="list-group-item list-group-item-action" data-bs-toggle="collapse" data-bs-target="#divTableTagCriteria">{{ 'wiki.tag_assignation_criteria'|trans }}</a>
 
             <div class="collapse" id="divTableTagCriteria" style="overflow-x: auto">
                 <table class="table" id="tableTagCriteria">
                     <tr>
-                        <th>Tag</th>
-                        <th>Criterio</th>
+                        <th>{{ 'wiki.tag'|trans }}</th>
+                        <th>{{ 'wiki.criteria'|trans }}</th>
                         <th></th>
                     </tr>
                     <tbody>
                     <tr>
-                        <td style="white-space: nowrap;">Ámbar esperado alto</td>
+                        <td style="white-space: nowrap;">{{ 'wiki.tag_expected_amber_high'|trans }}</td>
                         <td>Puntuación de expectedAmber mayor o igual a 25</td>
                         <td>Cuanto ambar puedes esperar generar. No tiene en cuenta el cosechado de criaturas a no ser que tengan habilidades especiales como "Cosecha: Gana 1 Amber". El ambar base de algunas cartas dificiles de jugar se ha reducido, y se ha incrementado para otras cartas que permiten el uso inmediato de criaturas.</td>
                     </tr>
                     <tr>
-                        <td style="white-space: nowrap;">Ambar esperado bajo</td>
+                        <td style="white-space: nowrap;">{{ 'wiki.tag_expected_amber_low'|trans }}</td>
                         <td>Puntuación de expectedAmber menor o igual a 5</td>
                         <td></td>
                     </tr>
                     <tr>
-                        <td style="white-space: nowrap;">Muchos pimpollos de ambar</td>
+                        <td style="white-space: nowrap;">{{ 'wiki.tag_amber_pip_count_high'|trans }}</td>
                         <td>Tiene 15 o más iconos de ámbar impresos en sus cartas</td>
                         <td></td>
                     </tr>
                     <tr>
-                        <td style="white-space: nowrap;">Muchos pimpollos de ambar</td>
+                        <td style="white-space: nowrap;">{{ 'wiki.tag_amber_pip_count_low'|trans }}</td>
                         <td>Tiene 5 o menos pimpollos de ámbar impresos en sus cartas</td>
                         <td></td>
                     </tr>
                     <tr>
-                        <td style="white-space: nowrap;">Poder efectivo alto</td>
+                        <td style="white-space: nowrap;">{{ 'wiki.tag_effective_power_high'|trans }}</td>
                         <td style="white-space: nowrap;">Poder efectivo mayor o igual a 110</td>
                         <td>Poder real usable de las criaturas de la baraja. Para criaturas que muchas veces no pueden ser jugadas o usadas se reduce. El poder efectivo tambien tiene en cuenta armadura y otras habilidades que afectan a la supervivencia como elusivo, escaramuza, dañino, asalto y curaciones</td>
                     </tr>
                     <tr>
-                        <td style="white-space: nowrap;">Eficiencia alta</td>
+                        <td style="white-space: nowrap;">{{ 'wiki.tag_efficiency_high'|trans }}</td>
                         <td>Eficiencia mayor o igual a 15</td>
                         <td>Mide los efectos que te permiten jugar cartas extra. Se reduce por cartas que impiden jugar o robar cartas, como cartas que dan cadenas o Bad Penny</td>
                     </tr>
                     <tr>
-                        <td style="white-space: nowrap;">Eficiencia baja</td>
+                        <td style="white-space: nowrap;">{{ 'wiki.tag_efficiency_low'|trans }}</td>
                         <td>Eficiencia menor o igual a -1</td>
                         <td></td>
                     </tr>
                     <tr>
-                        <td style="white-space: nowrap;">Muchos artefactos</td>
+                        <td style="white-space: nowrap;">{{ 'wiki.tag_artifact_count_high'|trans }}</td>
                         <td>Tiene 6 o más artefactos</td>
                         <td></td>
                     </tr>
                     <tr>
-                        <td style="white-space: nowrap;">Muchas acciones</td>
+                        <td style="white-space: nowrap;">{{ 'wiki.tag_action_count_high'|trans }}</td>
                         <td>Tiene 18 o más acciones</td>
                         <td></td>
                     </tr>
                     <tr>
-                        <td style="white-space: nowrap;">Muchas criaturas</td>
+                        <td style="white-space: nowrap;">{{ 'wiki.tag_creatures_count_high'|trans }}</td>
                         <td>Tiene 22 o más criaturas</td>
                         <td></td>
                     </tr>
                     <tr>
-                        <td style="white-space: nowrap;">Muchas mejoras</td>
+                        <td style="white-space: nowrap;">{{ 'wiki.tag_upgrades_count_high'|trans }}</td>
                         <td>Tiene 9 o más mejoras</td>
                         <td></td>
                     </tr>
                     <tr>
-                        <td style="white-space: nowrap;">Archiva mucho</td>
+                        <td style="white-space: nowrap;">{{ 'wiki.tag_archives_high'|trans }}</td>
                         <td>Tiene 6 o más cartas que archivan</td>
                         <td></td>
                     </tr>
                     <tr>
-                        <td style="white-space: nowrap;">Control de ambar alto</td>
+                        <td style="white-space: nowrap;">{{ 'wiki.tag_amber_control_high'|trans }}</td>
                         <td>Puntuación de 15 o más</td>
                         <td>Representa la camtidad de ámbar que la baraja puede denegar a su oponente. El ámbar perdido o robado tiene mas valor que el capturado y los incrementos de coste de llave.</td>
                     </tr>
                     <tr>
-                        <td style="white-space: nowrap;">Control de ambar bajo</td>
+                        <td style="white-space: nowrap;">{{ 'wiki.tag_amber_control_low'|trans }}</td>
                         <td>Puntuación de 2 o menos</td>
                         <td></td>
                     </tr>
                     <tr>
-                        <td style="white-space: nowrap;">Control de criaturas alto</td>
+                        <td style="white-space: nowrap;">{{ 'wiki.tag_creature_control_high'|trans }}</td>
                         <td>Puntuacion de 15 o más</td>
                         <td>Representa cartas que hacen daño, destruyen o inhabilitan criaturas enemigas.</td>
                     </tr>
                     <tr>
-                        <td style="white-space: nowrap;">Control de criaturas bajo</td>
+                        <td style="white-space: nowrap;">{{ 'wiki.tag_creature_control_low'|trans }}</td>
                         <td>Puntuacion menor a 4</td>
                         <td></td>
                     </tr>
                     <tr>
-                        <td style="white-space: nowrap;">Control de artefactos alto</td>
+                        <td style="white-space: nowrap;">{{ 'wiki.tag_artifact_control_high'|trans }}</td>
                         <td>Puntuación de 2 o más</td>
                         <td>Representa la destrucción de artefactos enemigos o el poder denegar su uso</td>
                     </tr>
                     <tr>
-                        <td style="white-space: nowrap;">Sin control de artefactos</td>
+                        <td style="white-space: nowrap;">{{ 'wiki.tag_artifact_control_low'|trans }}</td>
                         <td>Puntuación de 0, no tiene forma de destruir o denegar el uso de artefactos</td>
                         <td></td>
                     </tr>
                     <tr>
-                        <td style="white-space: nowrap;">Proteccion de criaturas</td>
+                        <td style="white-space: nowrap;">{{ 'wiki.tag_creature_protection_high'|trans }}</td>
                         <td>Puntuacion de 6 o más</td>
                         <td>Incluye cualquier carta con efectos que incrementan poder, protegen de luchas, daño o eliminación.</td>
                     </tr>
                     <tr>
-                        <td style="white-space: nowrap;">Recursion alta</td>
+                        <td style="white-space: nowrap;">{{ 'wiki.recursion_high'|trans }}</td>
                         <td>Puntuacion de 6 o más</td>
                         <td>Efectos que permiten jugar cartas que ya han sido jugadas.</td>
                     </tr>
                     <tr>
-                        <td style="white-space: nowrap;">Disrupción alta</td>
+                        <td style="white-space: nowrap;">{{ 'wiki.disruption_high'|trans }}</td>
                         <td>Puntuacion de 9 o más</td>
                         <td>Efectos que reducen el numero de cartas que tu oponente puede jugar.</td>
                     </tr>
                     <tr>
-                        <td style="white-space: nowrap;">Tiene control de ambar escalado</td>
+                        <td style="white-space: nowrap;">{{ 'wiki.tag_has_scaling_amber_control'|trans }}</td>
                         <td>Tiene cartas permiten denegar más ámbar cuanto más tiene el rival</td>
-                        <td>Cartas consideradas: Burn the Stockpile, Effervescent Principle, Too Much to Protect, Interdimensional Graft, Shatter Storm, Doorstep to Heaven, Deusillus</td>
+                        <td>Cartas consideradas: Burn the Stockpile, Effervescent Principle, Too Much to Protect, Interdimensional Graft, Shatter Storm, Doorstep to Heaven, Deusillus, Rant and Rive, Closed-Door Negotiation, Martyr of the Vault</td>
                     </tr>
                     <tr>
-                        <td style="white-space: nowrap;">Tiene board wipes</td>
+                        <td style="white-space: nowrap;">{{ 'wiki.tag_has_board_wipes'|trans }}</td>
                         <td>Tiene cartas capacez de limpia el tablero de criaturas en mayor o menor medida</td>
-                        <td>Cartas consideradas: Æmberlution, Ammonia Clouds, Axiom of Grist, Ballcano, Champion’s Challenge, Coward’s End, Crushing Charge, Earthshaker, Gateway to Dis, General Sherman, Grand Alliance Council, Groundbreaking Discovery, Harbinger of Doom, Key to Dis, Kiligog's Trench, Krrrzzzaaap, Mind Bullets, Mælstrom, Numquid the Fair, Onyx Knight, Opal Knight, Ragnarok, Red Alert, Savage Clash, Skixuno, Spartasaur, Strange Gizmo, The Big One, The Spirit’s Way, Unlocked Gateway, Unnatural Selection</td>
+                        <td>Cartas consideradas: Æmberlution, Ammonia Clouds, Axiom of Grist, Ballcano, Champion’s Challenge, Coward’s End, Crushing Charge, Earthshaker, Gateway to Dis, General Sherman, Grand Alliance Council, Groundbreaking Discovery, Harbinger of Doom, Key to Dis, Kiligog's Trench, Krrrzzzaaap, Mind Bullets, Mælstrom, Numquid the Fair, Onyx Knight, Opal Knight, Ragnarok, Red Alert, Savage Clash, Skixuno, Spartasaur, Strange Gizmo, The Big One, The Spirit’s Way, Unlocked Gateway, Unnatural Selection, Hebe the Huge, Market Crash, Mass Buyout, Extinction, Kaboom!, Tectonic Shift, General Order 24, Quintrino Warp, Election, Kiligog’s Trench, Catch and Release, Adult Swim</td>
                     </tr>
                     <tr>
-                        <td style="white-space: nowrap;">Sinérgico</td>
+                        <td style="white-space: nowrap;">{{ 'wiki.tag_synergistic'|trans }}</td>
                         <td>Puntuacion de 15 o más</td>
                         <td>Aproximación de la calidad de una baraja, puede ayudar a detectar sinérgias y antisinérgias.</td>
                     </tr>
                     <tr>
-                        <td style="white-space: nowrap;">Antisinérgico</td>
+                        <td style="white-space: nowrap;">{{ 'wiki.tag_antisynergistic'|trans }}</td>
                         <td>Menor o igual a -2</td>
                         <td></td>
                     </tr>

@@ -158,14 +158,54 @@ menu.deck_wl: 'Victorias/Derrotas por baraja'
 menu.time_wl: 'Victorias/Derrotas a lo largo del tiempo'
 menu.set_pr: 'Pick rate por set'
 menu.friends: Amigos
-menu.friend_requests: Solicitudes de amistad
+menu.friend_requests: 'Solicitudes de amistad'
 menu.add: Añadir
-menu.add_friends: Añadir amigos
-menu.friend_name: Nombre del amigo
+menu.add_friends: 'Añadir amigos'
+menu.friend_name: 'Nombre del amigo'
 menu.sent: Enviadas
 menu.received: Recibidas
 menu.remove: Eliminar
 menu.rival: Rival
 menu.archenemy: Archenemy
 menu.nemesis: Némesis
-menu.games_lost: Partidas perdidas
+menu.games_lost: 'Partidas perdidas'
+wiki.the_crucible_online: 'The crucible online'
+wiki.wiki_aa: 'Wiki (Archon Arcana)'
+wiki.erratum: Erratas
+wiki.revised_cards: 'Cartas revisadas'
+wiki.rules_summary_en: 'Resumen de reglas (EN)'
+wiki.rulebook_es: 'Reglamento ES (v1.6 Marzo 2021)'
+wiki.rulebook_en: 'Reglamento EN (v17 Abril 2023)'
+wiki.timing_chart: 'Esquema de timings'
+wiki.tournament_rules: 'Reglas de torneo'
+wiki.adventures: Aventuras
+wiki.nkfl_community: 'NKFL community'
+wiki.houses_per_set: 'Casas en cada set'
+wiki.tag_assignation_criteria: 'Criterio de asignación de tags'
+wiki.tag: Tag
+wiki.criteria: Criterio
+wiki.tag_expected_amber_high: 'Ámbar esperado alto'
+wiki.tag_expected_amber_low: 'Ambar esperado bajo'
+wiki.tag_amber_pip_count_high: 'Muchos pimpollos de ambar'
+wiki.tag_amber_pip_count_low: 'Pocos pimpollos de ambar'
+wiki.tag_effective_power_high: 'Poder efectivo alto'
+wiki.tag_efficiency_high: 'Eficiencia alta'
+wiki.tag_efficiency_low: 'Eficiencia baja'
+wiki.tag_artifact_count_high: 'Muchos artefactos'
+wiki.tag_action_count_high: 'Muchas acciones'
+wiki.tag_creatures_count_high: 'Muchas criaturas'
+wiki.tag_upgrades_count_high: 'Muchas mejoras'
+wiki.tag_archives_high: 'Archiva mucho'
+wiki.tag_amber_control_high: 'Control de ambar alto'
+wiki.tag_amber_control_low: 'Control de ambar bajo'
+wiki.tag_creature_control_high: 'Control de criaturas alto'
+wiki.tag_creature_control_low: 'Control de criaturas bajo'
+wiki.tag_artifact_control_high: 'Control de artefactos alto'
+wiki.tag_artifact_control_low: 'Sin control de artefactos'
+wiki.tag_creature_protection_high: 'Proteccion de criaturas'
+wiki.recursion_high: 'Recursion alta'
+wiki.disruption_high: 'Disrupción alta'
+wiki.tag_has_scaling_amber_control: 'Tiene control de ambar escalado'
+wiki.tag_has_board_wipes: 'Tiene board wipes'
+wiki.tag_synergistic: 'Sinérgico'
+wiki.tag_antisynergistic: 'Antisinérgico'
