@@ -61,6 +61,12 @@ final class ImportDeckFromDokService implements ImportDeckService
             [],
         );
 
+        if ($savedDeck->sas() !== $newDeck->sas()) {
+            $newDeck->updateSas($savedDeck->sas());
+            $newDeck->updatePrevSas(null);
+            $newDeck->updateNewSas($deck['deck']['sasRating']);
+        }
+
         $this->repository->save($newDeck);
         $this->tagsService->execute($newDeck);
 

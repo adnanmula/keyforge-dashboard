@@ -100,8 +100,8 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
         $stmt = $this->connection->prepare(
             \sprintf(
                 '
-                    INSERT INTO %s (id, name, set, houses, sas, wins, losses, extra_data, owner, tags, notes)
-                    VALUES (:id, :name, :set, :houses, :sas, :wins, :losses, :extra_data, :owner, :tags, :notes)
+                    INSERT INTO %s (id, name, set, houses, sas, wins, losses, extra_data, owner, tags, notes, prev_sas, new_sas)
+                    VALUES (:id, :name, :set, :houses, :sas, :wins, :losses, :extra_data, :owner, :tags, :notes, :prev_sas, :new_sas)
                     ON CONFLICT (id) DO UPDATE SET
                         id = :id,
                         name = :name,
@@ -113,7 +113,9 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
                         extra_data = :extra_data,
                         owner = :owner,
                         tags = :tags,
-                        notes = :notes
+                        notes = :notes,
+                        prev_sas = :prev_sas,
+                        new_sas = :new_sas
                     ',
                 self::TABLE,
             ),
@@ -130,6 +132,8 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
         $stmt->bindValue(':owner', $deck->owner()?->value());
         $stmt->bindValue(':tags', Json::encode($deck->tags()));
         $stmt->bindValue(':notes', $deck->notes());
+        $stmt->bindValue(':prev_sas', $deck->prevSas());
+        $stmt->bindValue(':new_sas', $deck->newSas());
 
         $stmt->executeStatement();
     }
@@ -153,6 +157,8 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
             null === $deck['owner'] ? null : Uuid::from($deck['owner']),
             $deck['notes'],
             Json::decode($deck['tags']),
+            $deck['prev_sas'],
+            $deck['new_sas'],
         );
     }
 }

@@ -7,5 +7,5 @@ use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 
 interface ImportDeckService
 {
-    public function execute(Uuid $uuid, ?Uuid $owner = null): ?KeyforgeDeck;
+    public function execute(Uuid $uuid, ?Uuid $owner = null, bool $forceUpdate = false): ?KeyforgeDeck;
 }
