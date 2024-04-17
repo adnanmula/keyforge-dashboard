@@ -12,6 +12,6 @@
 {% endblock %}
 
 {% block body %}
-    {% include 'Keyforge/Stats/Deck/filters.html.twig' %}
+    {% include 'Keyforge/Stats/Deck/filters.html.twig' with {'sets': sets, 'houses': houses} %}
     {% include 'Keyforge/Stats/Deck/deck_list_table.html.twig' with {'owner': owner} %}
 {% endblock %}
