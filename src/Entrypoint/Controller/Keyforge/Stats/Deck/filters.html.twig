@@ -9,43 +9,35 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="form-group col-12">
-                    <label for="houses" class="form-label">{{ 'deck.set'|trans }}</label>
+                    <label for="sets" class="form-label">{{ 'deck.set_main'|trans }}</label>
 
                     <div class="row" style="padding-left: .8em;">
-                        <div class="form-check col-6 col-sm-4 col-md-4 col-lg-2 col-xl-2" style="display: flex; align-items: center;">
-                            <input class="form-check-input set_selector" type="checkbox" value="CotA" id="check_set_cota">
-                            <label for="check_set_cota"><img width="33px" src="{{ asset('assets/keyforge/sets/CotA.svg') }}" alt="CotA"/>{{ 'keyforge.set_cota'|trans }}</label>
-                        </div>
-                        <div class="form-check col-6 col-sm-4 col-md-4 col-lg-2 col-xl-2" style="display: flex; align-items: center;">
-                            <input class="form-check-input set_selector" type="checkbox" value="AoA" id="check_set_aoa">
-                            <label for="check_set_aoa"><img width="33px" src="{{ asset('assets/keyforge/sets/AoA.svg') }}" alt="AoA"/>{{ 'keyforge.set_aoa'|trans }}</label>
-                        </div>
-                        <div class="form-check col-6 col-sm-4 col-md-4 col-lg-2 col-xl-2" style="display: flex; align-items: center;">
-                            <input class="form-check-input set_selector" type="checkbox" value="WC" id="check_set_wc">
-                            <label for="check_set_wc"><img width="33px" src="{{ asset('assets/keyforge/sets/WC.svg') }}" alt="WC"/>{{ 'keyforge.set_wc'|trans }}</label>
-                        </div>
-                        <div class="form-check col-6 col-sm-4 col-md-4 col-lg-2 col-xl-2" style="display: flex; align-items: center;">
-                            <input class="form-check-input set_selector" type="checkbox" value="MM" id="check_set_mm">
-                            <label for="check_set_mm"><img width="33px" src="{{ asset('assets/keyforge/sets/MM.svg') }}" alt="MM"/>{{ 'keyforge.set_mm'|trans }}</label>
-                        </div>
-                        <div class="form-check col-6 col-sm-4 col-md-4 col-lg-2 col-xl-2" style="display: flex; align-items: center;">
-                            <input class="form-check-input set_selector" type="checkbox" value="DT" id="check_set_dt">
-                            <label for="check_set_dt"><img width="33px" src="{{ asset('assets/keyforge/sets/DT.svg') }}" alt="DT"/>{{ 'keyforge.set_dt'|trans }}</label>
-                        </div>
-                        <div class="form-check col-6 col-sm-4 col-md-4 col-lg-2 col-xl-2" style="display: flex; align-items: center;">
-                            <input class="form-check-input set_selector" type="checkbox" value="WoE" id="check_set_woe">
-                            <label for="check_set_woe"><img width="33px" src="{{ asset('assets/keyforge/sets/WoE.svg') }}" alt="WoE"/>{{ 'keyforge.set_woe'|trans }}</label>
-                        </div>
-                        <div class="form-check col-6 col-sm-4 col-md-4 col-lg-2 col-xl-2" style="display: flex; align-items: center;">
-                            <input class="form-check-input set_selector" type="checkbox" value="U22" id="check_set_u22">
-                            <label for="check_set_u22"><img width="33px" src="{{ asset('assets/keyforge/sets/U22.svg') }}" alt="U22"/>{{ 'keyforge.set_u22'|trans }}</label>
-                        </div>
-                        <div class="form-check col-6 col-sm-4 col-md-4 col-lg-2 col-xl-2" style="display: flex; align-items: center;">
-                            <input class="form-check-input set_selector" type="checkbox" value="VM23" id="check_set_vm23">
-                            <label for="check_set_vm23"><img width="33px" src="{{ asset('assets/keyforge/sets/VM23.svg') }}" alt="VM23"/>{{ 'keyforge.set_vm23'|trans }}</label>
-                        </div>
+                        {% for set in sets %}
+                            {% if set.isMain %}
+                                <div class="form-check col-6 col-sm-4 col-md-4 col-lg-2 col-xl-2" style="display: flex; align-items: center;">
+                                    <input class="form-check-input set_selector" type="checkbox" value="{{ set.name }}" id="check_set_{{ set.name }}">
+                                    <label for="check_set_{{ set.name }}"><img width="33px" src="{{ asset('assets/keyforge/sets/' ~ set.name ~ '.svg') }}" alt="CotA"/>{{ ('keyforge.set_' ~ set.name)|lower|trans }}</label>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
                     </div>
                 </div>
+
+                <div class="form-group col-12  mt-3">
+                    <label for="sets" class="form-label">{{ 'deck.set_other'|trans }}</label>
+
+                    <div class="row" style="padding-left: .8em;">
+                        {% for set in sets %}
+                            {% if false == set.isMain %}
+                                <div class="form-check col-6 col-sm-4 col-md-4 col-lg-2 col-xl-2" style="display: flex; align-items: center;">
+                                    <input class="form-check-input set_selector" type="checkbox" value="{{ set.name }}" id="check_set_{{ set.name }}">
+                                    <label for="check_set_{{ set.name }}"><img width="33px" src="{{ asset('assets/keyforge/sets/' ~ set.name ~ '.svg') }}" alt="CotA"/>{{ ('keyforge.set_' ~ set.name)|lower|trans }}</label>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+
                 <div class="divider py-1"></div>
                 <div class="divider py-1"></div>
                 <div class="form-group col-12">
@@ -56,50 +48,12 @@
                     <label class="form-check-label" for="houses_filter_type_2">{{ 'menu.any'|trans }}</label>
 
                     <div class="row" style="padding-left: .8em;">
-                        <div class="form-check col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2" style="display: flex; align-items: center;">
-                            <input class="form-check-input houses_selector" type="checkbox" value="BROBNAR" id="check_house_brobnar">
-                            <label for="check_house_brobnar"><img width="35px" src="{{ asset('assets/keyforge/houses/BROBNAR.png') }}" alt="BROBNAR"/>{{ 'keyforge.house_brobnar'|trans }}</label>
-                        </div>
-                        <div class="form-check col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2" style="display: flex; align-items: center;">
-                            <input class="form-check-input houses_selector" type="checkbox" value="DIS" id="check_house_dis">
-                            <label for="check_house_dis"><img width="35px" src="{{ asset('assets/keyforge/houses/DIS.png') }}" alt="DIS"/>{{ 'keyforge.house_dis'|trans }}</label>
-                        </div>
-                        <div class="form-check col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2" style="display: flex; align-items: center;">
-                            <input class="form-check-input houses_selector" type="checkbox" value="UNTAMED" id="check_house_untamed">
-                            <label for="check_house_untamed"><img width="35px" src="{{ asset('assets/keyforge/houses/UNTAMED.png') }}" alt="UNTAMED"/>{{ 'keyforge.house_untamed'|trans }}</label>
-                        </div>
-                        <div class="form-check col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2" style="display: flex; align-items: center;">
-                            <input class="form-check-input houses_selector" type="checkbox" value="MARS" id="check_house_mars">
-                            <label for="check_house_mars"><img width="35px" src="{{ asset('assets/keyforge/houses/MARS.png') }}" alt="MARS"/>{{ 'keyforge.house_mars'|trans }}</label>
-                        </div>
-                        <div class="form-check col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2" style="display: flex; align-items: center;">
-                            <input class="form-check-input houses_selector" type="checkbox" value="SHADOWS" id="check_house_shadows">
-                            <label for="check_house_shadows"><img width="35px" src="{{ asset('assets/keyforge/houses/SHADOWS.png') }}" alt="SHADOWS"/>{{ 'keyforge.house_shadows'|trans }}</label>
-                        </div>
-                        <div class="form-check col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2" style="display: flex; align-items: center;">
-                            <input class="form-check-input houses_selector" type="checkbox" value="SANCTUM" id="check_house_sanctum">
-                            <label for="check_house_sanctum"><label for="check_house_sanctum"><img width="35px" src="{{ asset('assets/keyforge/houses/SANCTUM.png') }}" alt="SANCTUM"/></label>{{ 'keyforge.house_sanctum'|trans }}</label>
-                        </div>
-                        <div class="form-check col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2" style="display: flex; align-items: center;">
-                            <input class="form-check-input houses_selector" type="checkbox" value="LOGOS" id="check_house_logos">
-                            <label for="check_house_logos"><img width="35px" src="{{ asset('assets/keyforge/houses/LOGOS.png') }}" alt="LOGOS"/>{{ 'keyforge.house_logos'|trans }}</label>
-                        </div>
-                        <div class="form-check col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2" style="display: flex; align-items: center;">
-                            <input class="form-check-input houses_selector" type="checkbox" value="SAURIAN" id="check_house_saurian">
-                            <label for="check_house_saurian"><img width="35px" src="{{ asset('assets/keyforge/houses/SAURIAN.png') }}" alt="SAURIAN"/>{{ 'keyforge.house_saurian'|trans }}</label>
-                        </div>
-                        <div class="form-check col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2" style="display: flex; align-items: center;">
-                            <input class="form-check-input houses_selector" type="checkbox" value="STAR_ALLIANCE" id="check_house_star_alliance">
-                            <label for="check_house_star_alliance"  class="text-nowrap"><img width="35px" src="{{ asset('assets/keyforge/houses/STAR_ALLIANCE.png') }}" alt="STAR_ALLIANCE"/>{{ 'keyforge.house_star_alliance'|trans }}</label>
-                        </div>
-                        <div class="form-check col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2" style="display: flex; align-items: center;">
-                            <input class="form-check-input houses_selector" type="checkbox" value="UNFATHOMABLE" id="check_house_unfathomable">
-                            <label for="check_house_unfathomable"><img width="35px" src="{{ asset('assets/keyforge/houses/UNFATHOMABLE.png') }}" alt="UNFATHOMABLE"/>{{ 'keyforge.house_unfathomable'|trans }}</label>
-                        </div>
-                        <div class="form-check col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2" style="display: flex; align-items: center;">
-                            <input class="form-check-input houses_selector" type="checkbox" value="EKWIDON" id="check_house_ekwidon">
-                            <label for="check_house_ekwidon"><img width="35px" src="{{ asset('assets/keyforge/houses/EKWIDON.png') }}" alt="EKWIDON"/>{{ 'keyforge.house_ekwidon'|trans }}</label>
-                        </div>
+                        {% for house in houses %}
+                            <div class="form-check col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2" style="display: flex; align-items: center;">
+                                <input class="form-check-input houses_selector" type="checkbox" value="{{ house.name|upper }}" id="check_house_{{ house.name|lower }}">
+                                <label for="check_house_{{ house.name|lower }}"><img width="35px" src="{{ asset('assets/keyforge/houses/' ~ house.name|upper ~ '.png') }}" alt="{{ house.name|upper }}"/>{{ ('keyforge.house_' ~ house.name|lower)|trans }}</label>
+                            </div>
+                        {% endfor %}
                     </div>
                 </div>
 

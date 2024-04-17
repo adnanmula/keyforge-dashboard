@@ -50,7 +50,7 @@ enum KeyforgeHouse: string implements \JsonSerializable
             self::SAURIAN => 'Saurian',
             self::STAR_ALLIANCE => 'Star Alliance',
             self::UNFATHOMABLE => 'Unfathomable',
-            self::EKWIDON => 'The Merchant Compacts of Ekwidon',
+            self::EKWIDON => 'Ekwidon',
             self::GESTOID => 'Gestoid',
             self::SKYBORN => 'Skyborn',
         };

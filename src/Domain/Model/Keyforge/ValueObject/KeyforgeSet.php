@@ -17,7 +17,9 @@ enum KeyforgeSet: string
     case GR = 'GR';
     case AS = 'AS';
     case U22 = 'U22';
+    case M24 = 'M24';
     case VM23 = 'VM23';
+    case VM24 = 'VM24';
 
     public function fullName(): string
     {
@@ -32,6 +34,8 @@ enum KeyforgeSet: string
             self::AS => 'Aember skies',
             self::U22 => 'Unchained',
             self::VM23 => 'Vault Masters 2023',
+            self::VM24 => 'Vault Masters 2024',
+            self::M24 => 'Menagerie',
         };
     }
 
@@ -77,6 +81,22 @@ enum KeyforgeSet: string
             return self::VM23;
         }
 
+        if ($set === 'VAULT_MASTERS_2024') {
+            return self::VM24;
+        }
+
+        if ($set === 'MENAGERIE_2024') {
+            return self::M24;
+        }
+
         throw new \InvalidArgumentException($set);
+    }
+
+    public function isMain(): bool
+    {
+        return match ($this) {
+            self::U22,self::VM23,self::VM24,self::M24 => false,
+            default => true,
+        };
     }
 }

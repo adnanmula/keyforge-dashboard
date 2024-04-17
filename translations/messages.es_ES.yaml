@@ -52,6 +52,8 @@ deck.imported: Importada
 deck.notes: Notas
 deck.save: Guardar
 deck.set: Set
+deck.set_main: 'Sets principales'
+deck.set_other: 'Otros sets'
 error.denied: 'Access denied'
 error.error: Error
 error.something_wrong: 'Algo ha ido mal'
@@ -88,14 +90,20 @@ keyforge.house_shadows: Sombras
 keyforge.house_star_alliance: 'Alianza estelar'
 keyforge.house_unfathomable: Insondable
 keyforge.house_untamed: Indómita
+keyforge.house_gestoid: Gestoid
+keyforge.house_skyborn: Skyborn
 keyforge.set_aoa: Aoa
 keyforge.set_cota: CotA
 keyforge.set_dt: DT
 keyforge.set_mm: MM
 keyforge.set_u22: U22
 keyforge.set_vm23: VM23
+keyforge.set_vm24: VM24
+keyforge.set_m24: M24
 keyforge.set_wc: WC
 keyforge.set_woe: WoE
+keyforge.set_gr: GR
+keyforge.set_as: AS
 locale.en: Inglés
 locale.es: Español
 exception.user_not_exists: Usuario no existe
