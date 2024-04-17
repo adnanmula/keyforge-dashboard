@@ -5,11 +5,15 @@
   <exclude-pattern>src/Kernel.php</exclude-pattern>
   <exclude-pattern>db</exclude-pattern>
   <exclude-pattern>/config/bundles.php</exclude-pattern>
+  <exclude-pattern>/bootstrap.php</exclude-pattern>
+  <exclude-pattern>/public/index.php</exclude-pattern>
+  <exclude-pattern>/phinx.php</exclude-pattern>
 
   <rule ref="vendor/adnanmula/coding-standard/src/ruleset.xml">
     <exclude name="Generic.Files.LineEndings.InvalidEOLChar" />
     <exclude name="SlevomatCodingStandard.Classes.TraitUseSpacing.IncorrectLinesCountBeforeFirstUse" />
     <exclude name="SlevomatCodingStandard.Arrays.AlphabeticallySortedByKeys.IncorrectKeyOrder" />
     <exclude name="SlevomatCodingStandard.ControlStructures.RequireTernaryOperator.TernaryOperatorNotUsed" />
+    <exclude name="PSR2.Methods.FunctionCallSignature.MultipleArguments" />
   </rule>
 </ruleset>

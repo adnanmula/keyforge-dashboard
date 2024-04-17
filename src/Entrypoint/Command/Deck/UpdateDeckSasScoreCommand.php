@@ -2,7 +2,6 @@
 
 namespace AdnanMula\Cards\Entrypoint\Command\Deck;
 
-use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeck;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Domain\Service\Keyforge\ImportDeckService;
@@ -77,7 +76,7 @@ final class UpdateDeckSasScoreCommand extends Command
                         new FilterField('new_sas'), new NullFilterValue(), FilterOperator::IS_NULL,
                     ),
                 ),
-                new Filters(FilterType::AND, FilterType::OR, ...$filters)
+                new Filters(FilterType::AND, FilterType::OR, ...$filters),
             ),
         );
     }
