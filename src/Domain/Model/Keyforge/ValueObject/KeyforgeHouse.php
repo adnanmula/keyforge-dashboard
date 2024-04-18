@@ -24,9 +24,7 @@ enum KeyforgeHouse: string implements \JsonSerializable
 
     public static function fromDokName(string $house): self
     {
-        $houses = \array_map(static fn (self $case) => $case->name, self::cases());
-
-        if (\in_array(\strtoupper($house), $houses, true)) {
+        if (\in_array(\strtoupper($house), self::values(), true)) {
             return self::from(\strtoupper($house));
         }
 
@@ -53,6 +51,14 @@ enum KeyforgeHouse: string implements \JsonSerializable
             self::EKWIDON => 'Ekwidon',
             self::GESTOID => 'Gestoid',
             self::SKYBORN => 'Skyborn',
+        };
+    }
+
+    public function isEnabled(): bool
+    {
+        return match ($this) {
+            self::SKYBORN => false,
+            default => true,
         };
     }
 }

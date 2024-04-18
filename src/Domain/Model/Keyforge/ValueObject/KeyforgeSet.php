@@ -33,9 +33,9 @@ enum KeyforgeSet: string
             self::GR => 'Grim Remainders',
             self::AS => 'Aember skies',
             self::U22 => 'Unchained',
+            self::M24 => 'Menagerie',
             self::VM23 => 'Vault Masters 2023',
             self::VM24 => 'Vault Masters 2024',
-            self::M24 => 'Menagerie',
         };
     }
 
@@ -96,6 +96,14 @@ enum KeyforgeSet: string
     {
         return match ($this) {
             self::U22,self::VM23,self::VM24,self::M24 => false,
+            default => true,
+        };
+    }
+
+    public function isEnabled(): bool
+    {
+        return match ($this) {
+            self::AS => false,
             default => true,
         };
     }

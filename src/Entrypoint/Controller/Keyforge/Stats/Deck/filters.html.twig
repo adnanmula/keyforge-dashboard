@@ -13,7 +13,7 @@
 
                     <div class="row" style="padding-left: .8em;">
                         {% for set in sets %}
-                            {% if set.isMain %}
+                            {% if set.isMain and set.isEnabled %}
                                 <div class="form-check col-6 col-sm-4 col-md-4 col-lg-2 col-xl-2" style="display: flex; align-items: center;">
                                     <input class="form-check-input set_selector" type="checkbox" value="{{ set.name }}" id="check_set_{{ set.name }}">
                                     <label for="check_set_{{ set.name }}"><img width="33px" src="{{ asset('assets/keyforge/sets/' ~ set.name ~ '.svg') }}" alt="CotA"/>{{ ('keyforge.set_' ~ set.name)|lower|trans }}</label>
@@ -28,7 +28,7 @@
 
                     <div class="row" style="padding-left: .8em;">
                         {% for set in sets %}
-                            {% if false == set.isMain %}
+                            {% if false == set.isMain and set.isEnabled %}
                                 <div class="form-check col-6 col-sm-4 col-md-4 col-lg-2 col-xl-2" style="display: flex; align-items: center;">
                                     <input class="form-check-input set_selector" type="checkbox" value="{{ set.name }}" id="check_set_{{ set.name }}">
                                     <label for="check_set_{{ set.name }}"><img width="33px" src="{{ asset('assets/keyforge/sets/' ~ set.name ~ '.svg') }}" alt="CotA"/>{{ ('keyforge.set_' ~ set.name)|lower|trans }}</label>
@@ -49,10 +49,12 @@
 
                     <div class="row" style="padding-left: .8em;">
                         {% for house in houses %}
-                            <div class="form-check col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2" style="display: flex; align-items: center;">
-                                <input class="form-check-input houses_selector" type="checkbox" value="{{ house.name|upper }}" id="check_house_{{ house.name|lower }}">
-                                <label for="check_house_{{ house.name|lower }}"><img width="35px" src="{{ asset('assets/keyforge/houses/' ~ house.name|upper ~ '.png') }}" alt="{{ house.name|upper }}"/>{{ ('keyforge.house_' ~ house.name|lower)|trans }}</label>
-                            </div>
+                            {% if house.isEnabled %}
+                                <div class="form-check col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2" style="display: flex; align-items: center;">
+                                    <input class="form-check-input houses_selector" type="checkbox" value="{{ house.name|upper }}" id="check_house_{{ house.name|lower }}">
+                                    <label for="check_house_{{ house.name|lower }}"><img width="35px" src="{{ asset('assets/keyforge/houses/' ~ house.name|upper ~ '.png') }}" alt="{{ house.name|upper }}"/>{{ ('keyforge.house_' ~ house.name|lower)|trans }}</label>
+                                </div>
+                            {% endif %}
                         {% endfor %}
                     </div>
                 </div>
