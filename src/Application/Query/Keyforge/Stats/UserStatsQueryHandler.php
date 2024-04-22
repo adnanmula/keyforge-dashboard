@@ -15,9 +15,9 @@ use AdnanMula\Cards\Domain\Model\Shared\UserRepository;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Criteria\Criteria;
 use AdnanMula\Criteria\Filter\Filter;
-use AdnanMula\Criteria\Filter\Filters;
 use AdnanMula\Criteria\Filter\FilterType;
 use AdnanMula\Criteria\FilterField\FilterField;
+use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
 use AdnanMula\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Criteria\FilterValue\StringArrayFilterValue;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
@@ -44,20 +44,18 @@ final class UserStatsQueryHandler
         $friendsIds = \array_map(static fn (array $f) => $f['id'], $friends);
 
         $games = $this->gameRepository->search(new Criteria(
+            null,
+            null,
             new Sorting(
                 new Order(new FilterField('date'), OrderType::DESC),
                 new Order(new FilterField('created_at'), OrderType::DESC),
             ),
-            null,
-            null,
-            new Filters(
-                FilterType::AND,
+            new AndFilterGroup(
                 FilterType::OR,
                 new Filter(new FilterField('winner'), new StringFilterValue($query->userId->value()), FilterOperator::EQUAL),
                 new Filter(new FilterField('loser'), new StringFilterValue($query->userId->value()), FilterOperator::EQUAL),
             ),
-            new Filters(
-                FilterType::AND,
+            new AndFilterGroup(
                 FilterType::OR,
                 new Filter(new FilterField('winner'), new StringArrayFilterValue(...$friendsIds), FilterOperator::IN),
                 new Filter(new FilterField('loser'), new StringArrayFilterValue(...$friendsIds), FilterOperator::IN),
@@ -375,16 +373,15 @@ final class UserStatsQueryHandler
     private function competitionWins(Uuid $id): array
     {
         $criteria = new Criteria(
+            null,
+            null,
             new Sorting(
                 new Order(
                     new FilterField('finished_at'),
                     OrderType::ASC,
                 ),
             ),
-            null,
-            null,
-            new Filters(
-                FilterType::AND,
+            new AndFilterGroup(
                 FilterType::AND,
                 new Filter(new FilterField('winner'), new StringFilterValue($id->value()), FilterOperator::EQUAL),
             ),

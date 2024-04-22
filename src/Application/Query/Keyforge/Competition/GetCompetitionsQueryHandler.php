@@ -18,14 +18,14 @@ final readonly class GetCompetitionsQueryHandler
     public function __invoke(GetCompetitionsQuery $query): array
     {
         $criteria = new Criteria(
+            $query->start(),
+            $query->length(),
             new Sorting(
                 new Order(
                     new FilterField('created_at'),
                     OrderType::DESC,
                 ),
             ),
-            $query->start(),
-            $query->length(),
         );
 
         $competitions = $this->repository->search($criteria);

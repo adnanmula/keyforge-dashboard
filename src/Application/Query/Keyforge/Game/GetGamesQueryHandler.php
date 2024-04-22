@@ -23,7 +23,7 @@ final class GetGamesQueryHandler
             null,
             null,
             null,
-            ...$query->criteria()->filters(),
+            ...$query->criteria()->filterGroups(),
         );
 
         $total = $this->gameRepository->count($criteriaWithoutOrder);

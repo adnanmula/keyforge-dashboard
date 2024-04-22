@@ -9,9 +9,9 @@ use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUserRepository;
 use AdnanMula\Cards\Domain\Model\Shared\UserRepository;
 use AdnanMula\Criteria\Criteria;
 use AdnanMula\Criteria\Filter\Filter;
-use AdnanMula\Criteria\Filter\Filters;
 use AdnanMula\Criteria\Filter\FilterType;
 use AdnanMula\Criteria\FilterField\FilterField;
+use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
 use AdnanMula\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
 
@@ -52,7 +52,7 @@ final class GetUsersQueryHandler
             null,
             null,
             null,
-            new Filters(FilterType::AND, FilterType::OR, ...$filters),
+            new AndFilterGroup(FilterType::OR, ...$filters),
         ));
 
         if ($query->onlyFriends) {

@@ -6,9 +6,10 @@ use AdnanMula\Cards\Application\Query\Keyforge\Game\GetGamesQuery;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
 use AdnanMula\Criteria\Criteria;
 use AdnanMula\Criteria\Filter\Filter;
-use AdnanMula\Criteria\Filter\Filters;
 use AdnanMula\Criteria\Filter\FilterType;
 use AdnanMula\Criteria\FilterField\FilterField;
+use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
+use AdnanMula\Criteria\FilterGroup\OrFilterGroup;
 use AdnanMula\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
 use AdnanMula\Criteria\Sorting\Order;
@@ -45,8 +46,7 @@ final class GetGamesController extends Controller
         $filters = [];
 
         if (null !== $deckId && null === $userId) {
-            $filters[] = new Filters(
-                FilterType::AND,
+            $filters[] = new AndFilterGroup(
                 FilterType::OR,
                 new Filter(new FilterField('winner_deck'), new StringFilterValue($deckId), FilterOperator::EQUAL),
                 new Filter(new FilterField('loser_deck'), new StringFilterValue($deckId), FilterOperator::EQUAL),
@@ -54,8 +54,7 @@ final class GetGamesController extends Controller
         }
 
         if (null !== $userId && null === $deckId) {
-            $filters[] = new Filters(
-                FilterType::AND,
+            $filters[] = new AndFilterGroup(
                 FilterType::OR,
                 new Filter(new FilterField('winner'), new StringFilterValue($userId), FilterOperator::EQUAL),
                 new Filter(new FilterField('loser'), new StringFilterValue($userId), FilterOperator::EQUAL),
@@ -63,15 +62,13 @@ final class GetGamesController extends Controller
         }
 
         if (null !== $userId && null !== $deckId) {
-            $filters[] = new Filters(
-                FilterType::OR,
+            $filters[] = new OrFilterGroup(
                 FilterType::AND,
                 new Filter(new FilterField('winner'), new StringFilterValue($userId), FilterOperator::EQUAL),
                 new Filter(new FilterField('winner_deck'), new StringFilterValue($deckId), FilterOperator::EQUAL),
             );
 
-            $filters[] = new Filters(
-                FilterType::OR,
+            $filters[] = new OrFilterGroup(
                 FilterType::AND,
                 new Filter(new FilterField('loser'), new StringFilterValue($userId), FilterOperator::EQUAL),
                 new Filter(new FilterField('loser_deck'), new StringFilterValue($deckId), FilterOperator::EQUAL),
@@ -90,9 +87,9 @@ final class GetGamesController extends Controller
         }
 
         return new Criteria(
-            $this->getOrder($request),
             $offset,
             $limit,
+            $this->getOrder($request),
             ...$filters,
         );
     }

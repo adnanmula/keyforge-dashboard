@@ -9,9 +9,9 @@ use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeHouse;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeSet;
 use AdnanMula\Criteria\Criteria;
 use AdnanMula\Criteria\Filter\Filter;
-use AdnanMula\Criteria\Filter\Filters;
 use AdnanMula\Criteria\Filter\FilterType;
 use AdnanMula\Criteria\FilterField\FilterField;
+use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
 use AdnanMula\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Criteria\FilterValue\NullFilterValue;
 
@@ -30,8 +30,7 @@ final class GeneralStatsQueryHandler
                 null,
                 null,
                 null,
-                new Filters(
-                    FilterType::AND,
+                new AndFilterGroup(
                     FilterType::AND,
                     new Filter(new FilterField('owner'), new NullFilterValue(), FilterOperator::IS_NOT_NULL),
                 ),

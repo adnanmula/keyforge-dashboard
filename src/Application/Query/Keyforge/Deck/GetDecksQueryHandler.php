@@ -12,9 +12,9 @@ use AdnanMula\Cards\Domain\Model\Shared\UserRepository;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Criteria\Criteria;
 use AdnanMula\Criteria\Filter\Filter;
-use AdnanMula\Criteria\Filter\Filters;
 use AdnanMula\Criteria\Filter\FilterType;
 use AdnanMula\Criteria\FilterField\FilterField;
+use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
 use AdnanMula\Criteria\FilterValue\ArrayElementFilterValue;
 use AdnanMula\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Criteria\FilterValue\IntFilterValue;
@@ -78,7 +78,7 @@ final class GetDecksQueryHandler
         $expressions[] = new Filter(new FilterField('sas'), new IntFilterValue($query->maxSas), FilterOperator::LESS_OR_EQUAL);
         $expressions[] = new Filter(new FilterField('sas'), new IntFilterValue($query->minSas), FilterOperator::GREATER_OR_EQUAL);
 
-        $filters = [new Filters(FilterType::AND, FilterType::AND, ...$expressions)];
+        $filters = [new AndFilterGroup(FilterType::AND, ...$expressions)];
 
         if (\count($query->owners) > 0) {
             $ownerExpressions = [];
@@ -87,8 +87,7 @@ final class GetDecksQueryHandler
                 $ownerExpressions[] = new Filter(new FilterField('owner'), new StringFilterValue($owner), FilterOperator::EQUAL);
             }
 
-            $filters[] = new Filters(
-                FilterType::AND,
+            $filters[] = new AndFilterGroup(
                 FilterType::OR,
                 ...$ownerExpressions,
             );
@@ -101,8 +100,7 @@ final class GetDecksQueryHandler
                 $tagsExpressions[] = new Filter(new FilterField('tags'), new ArrayElementFilterValue($tag->value()), FilterOperator::IN_ARRAY);
             }
 
-            $filters[] = new Filters(
-                FilterType::AND,
+            $filters[] = new AndFilterGroup(
                 $query->tagFilterType === 'any' ? FilterType::OR : FilterType::AND,
                 ...$tagsExpressions,
             );
@@ -115,8 +113,7 @@ final class GetDecksQueryHandler
                 $tagsExpressions[] = new Filter(new FilterField('tags'), new ArrayElementFilterValue($tag->value()), FilterOperator::NOT_IN_ARRAY);
             }
 
-            $filters[] = new Filters(
-                FilterType::AND,
+            $filters[] = new AndFilterGroup(
                 FilterType::AND,
                 ...$tagsExpressions,
             );
@@ -129,8 +126,7 @@ final class GetDecksQueryHandler
                 $setFilterExpressions[] = new Filter(new FilterField('set'), new StringFilterValue($set), FilterOperator::EQUAL);
             }
 
-            $filters[] = new Filters(
-                FilterType::AND,
+            $filters[] = new AndFilterGroup(
                 FilterType::OR,
                 ...$setFilterExpressions,
             );
@@ -143,17 +139,16 @@ final class GetDecksQueryHandler
                 $houseFilterExpressions[] = new Filter(new FilterField('houses'), new ArrayElementFilterValue($house), FilterOperator::IN_ARRAY);
             }
 
-            $filters[] = new Filters(
-                FilterType::AND,
+            $filters[] = new AndFilterGroup(
                 $query->houseFilterType === 'any' ? FilterType::OR : FilterType::AND,
                 ...$houseFilterExpressions,
             );
         }
 
         $criteria = new Criteria(
-            $query->sorting,
             $query->start,
             $query->length,
+            $query->sorting,
             ...$filters,
         );
 
@@ -183,7 +178,7 @@ final class GetDecksQueryHandler
             null,
             null,
             null,
-            ...$criteria->filters(),
+            ...$criteria->filterGroups(),
         );
 
         $total = $this->repository->count(new Criteria(null, null, null));
@@ -201,16 +196,14 @@ final class GetDecksQueryHandler
     /** @return array<KeyforgeDeck> */
     private function recalculateWins(Uuid $userId, ?Uuid $deckId, KeyforgeDeck ...$decks): array
     {
-        $filters = [new Filters(
-            FilterType::AND,
+        $filters = [new AndFilterGroup(
             FilterType::OR,
             new Filter(new FilterField('winner'), new StringFilterValue($userId->value()), FilterOperator::EQUAL),
             new Filter(new FilterField('loser'), new StringFilterValue($userId->value()), FilterOperator::EQUAL),
         )];
 
         if (null !== $deckId) {
-            $filters[] = new Filters(
-                FilterType::AND,
+            $filters[] = new AndFilterGroup(
                 FilterType::OR,
                 new Filter(new FilterField('winner_deck'), new StringFilterValue($deckId->value()), FilterOperator::EQUAL),
                 new Filter(new FilterField('loser_deck'), new StringFilterValue($deckId->value()), FilterOperator::EQUAL),

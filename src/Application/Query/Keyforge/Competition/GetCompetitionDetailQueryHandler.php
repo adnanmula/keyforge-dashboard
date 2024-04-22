@@ -7,9 +7,9 @@ use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGameRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUserRepository;
 use AdnanMula\Criteria\Criteria;
 use AdnanMula\Criteria\Filter\Filter;
-use AdnanMula\Criteria\Filter\Filters;
 use AdnanMula\Criteria\Filter\FilterType;
 use AdnanMula\Criteria\FilterField\FilterField;
+use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
 use AdnanMula\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Criteria\FilterValue\StringArrayFilterValue;
 
@@ -50,8 +50,7 @@ final readonly class GetCompetitionDetailQueryHandler
             null,
             null,
             null,
-            new Filters(
-                FilterType::AND,
+            new AndFilterGroup(
                 FilterType::AND,
                 new Filter(new FilterField('id'), new StringArrayFilterValue(...$gameIds), FilterOperator::IN),
             ),

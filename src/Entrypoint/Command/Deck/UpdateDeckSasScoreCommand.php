@@ -7,9 +7,9 @@ use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Domain\Service\Keyforge\ImportDeckService;
 use AdnanMula\Criteria\Criteria;
 use AdnanMula\Criteria\Filter\Filter;
-use AdnanMula\Criteria\Filter\Filters;
 use AdnanMula\Criteria\Filter\FilterType;
 use AdnanMula\Criteria\FilterField\FilterField;
+use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
 use AdnanMula\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Criteria\FilterValue\NullFilterValue;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
@@ -67,10 +67,9 @@ final class UpdateDeckSasScoreCommand extends Command
         return $this->deckRepository->search(
             new Criteria(
                 null,
-                null,
                 $batch,
-                new Filters(
-                    FilterType::AND,
+                null,
+                new AndFilterGroup(
                     FilterType::AND,
                     new Filter(
                         new FilterField('new_sas'),
@@ -78,7 +77,7 @@ final class UpdateDeckSasScoreCommand extends Command
                         FilterOperator::IS_NULL,
                     ),
                 ),
-                new Filters(FilterType::AND, FilterType::OR, ...$filters),
+                new AndFilterGroup(FilterType::OR, ...$filters),
             ),
         );
     }

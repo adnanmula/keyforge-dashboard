@@ -5,9 +5,9 @@ namespace AdnanMula\Cards\Application\Query\Keyforge\Tag;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeTagRepository;
 use AdnanMula\Criteria\Criteria;
 use AdnanMula\Criteria\Filter\Filter;
-use AdnanMula\Criteria\Filter\Filters;
 use AdnanMula\Criteria\Filter\FilterType;
 use AdnanMula\Criteria\FilterField\FilterField;
+use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
 use AdnanMula\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
 use AdnanMula\Criteria\Sorting\Order;
@@ -32,7 +32,7 @@ final readonly class GetTagsQueryHandler
             $expressions[] = new Filter(new FilterField('archived'), new StringFilterValue((string) $query->archived()), FilterOperator::EQUAL);
         }
 
-        $filters = [new Filters(FilterType::AND, FilterType::AND, ...$expressions)];
+        $filters = [new AndFilterGroup(FilterType::AND, ...$expressions)];
 
         if (null !== $query->ids()) {
             $idsExpressions = [];
@@ -40,18 +40,18 @@ final readonly class GetTagsQueryHandler
                 $idsExpressions[] = new Filter(new FilterField('id'), new StringFilterValue($id->value()), FilterOperator::EQUAL);
             }
 
-            $filters[] = new Filters(FilterType::AND, FilterType::OR, ...$idsExpressions);
+            $filters[] = new AndFilterGroup(FilterType::OR, ...$idsExpressions);
         }
 
         $criteria = new Criteria(
+            null,
+            null,
             new Sorting(
                 new Order(
                     new FilterField('type'),
                     OrderType::ASC,
                 ),
             ),
-            null,
-            null,
             ...$filters,
         );
 

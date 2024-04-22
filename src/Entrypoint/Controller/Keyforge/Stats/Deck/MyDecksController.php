@@ -12,9 +12,9 @@ use AdnanMula\Cards\Domain\Model\Shared\UserRepository;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
 use AdnanMula\Criteria\Criteria;
 use AdnanMula\Criteria\Filter\Filter;
-use AdnanMula\Criteria\Filter\Filters;
 use AdnanMula\Criteria\Filter\FilterType;
 use AdnanMula\Criteria\FilterField\FilterField;
+use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
 use AdnanMula\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Criteria\FilterValue\StringArrayFilterValue;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -76,8 +76,7 @@ final class MyDecksController extends Controller
                 null,
                 null,
                 null,
-                new Filters(
-                    FilterType::AND,
+                new AndFilterGroup(
                     FilterType::AND,
                     new Filter(
                         new FilterField('id'),
