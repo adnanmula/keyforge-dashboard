@@ -15,5 +15,6 @@
     <exclude name="SlevomatCodingStandard.Arrays.AlphabeticallySortedByKeys.IncorrectKeyOrder" />
     <exclude name="SlevomatCodingStandard.ControlStructures.RequireTernaryOperator.TernaryOperatorNotUsed" />
     <exclude name="PSR2.Methods.FunctionCallSignature.MultipleArguments" />
+    <exclude name="SlevomatCodingStandard.TypeHints.DeclareStrictTypes" />
   </rule>
 </ruleset>
