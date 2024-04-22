@@ -73,7 +73,9 @@ final class UpdateDeckSasScoreCommand extends Command
                     FilterType::AND,
                     FilterType::AND,
                     new Filter(
-                        new FilterField('new_sas'), new NullFilterValue(), FilterOperator::IS_NULL,
+                        new FilterField('new_sas'),
+                        new NullFilterValue(),
+                        FilterOperator::IS_NULL,
                     ),
                 ),
                 new Filters(FilterType::AND, FilterType::OR, ...$filters),

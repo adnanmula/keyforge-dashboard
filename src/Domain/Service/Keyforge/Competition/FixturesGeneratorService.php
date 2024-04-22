@@ -81,7 +81,8 @@ final class FixturesGeneratorService
         return $fixtures;
     }
 
-    private function rotate(array $users): array {
+    private function rotate(array $users): array
+    {
         $firstPlayer = $users[0];
         unset($users[0]);
 
