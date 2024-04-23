@@ -61,9 +61,8 @@ final class ImportDeckFromDokService implements ImportDeckService
             [],
         );
 
-        if (null !== $savedDeck && $savedDeck->sas() !== $newDeck->sas()) {
+        if (null !== $savedDeck) {
             $newDeck->updateSas($savedDeck->sas());
-            $newDeck->updatePrevSas(null);
             $newDeck->updateNewSas($deck['deck']['sasRating']);
         }
 

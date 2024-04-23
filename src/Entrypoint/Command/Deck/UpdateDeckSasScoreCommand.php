@@ -56,7 +56,7 @@ final class UpdateDeckSasScoreCommand extends Command
         return self::SUCCESS;
     }
 
-    public function params(InputInterface $input): array
+    private function params(InputInterface $input): array
     {
         $batch = (int)$input->getArgument('batch');
         $deckIds = $input->getOption('decks') ?? [];
