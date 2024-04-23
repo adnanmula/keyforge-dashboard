@@ -2,6 +2,7 @@
 
 namespace AdnanMula\Cards\Infrastructure\Service\Keyforge\DoK;
 
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Exception\DeckNotExistsException;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeck;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeDeckHouses;
@@ -38,7 +39,7 @@ final class ImportDeckFromDokService implements ImportDeckService
         $deck = $response->toArray();
 
         if ($deck['deck'] === []) {
-            throw new \Exception('Baraja no encontrada');
+            throw new DeckNotExistsException();
         }
 
         $houses = \array_map(static fn (array $data) => $data['house'], $deck['deck']['housesAndCards']);
