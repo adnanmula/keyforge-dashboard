@@ -48,7 +48,7 @@ final class UpdateDeckSasScoreCommand extends Command
             $this->service->execute($deck->id(), $deck->owner(), true);
             $output->writeln($deck->name());
 
-            if ($index > 0 && $index % 2 === 0) {
+            if ($index > 0 && ($index+1) % 25 === 0) {
                 $output->writeln('Reached request limit sleeping for 70 seconds');
                 \sleep(70);
             }
