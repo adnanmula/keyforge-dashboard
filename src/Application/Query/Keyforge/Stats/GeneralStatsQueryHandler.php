@@ -155,7 +155,7 @@ final class GeneralStatsQueryHandler
             KeyforgeHouse::UNFATHOMABLE->name => $this->winRate($houseWins[KeyforgeHouse::UNFATHOMABLE->name], $houseLosses[KeyforgeHouse::UNFATHOMABLE->name]),
             KeyforgeHouse::LOGOS->name => $this->winRate($houseWins[KeyforgeHouse::LOGOS->name], $houseLosses[KeyforgeHouse::LOGOS->name]),
             KeyforgeHouse::EKWIDON->name => $this->winRate($houseWins[KeyforgeHouse::EKWIDON->name], $houseLosses[KeyforgeHouse::EKWIDON->name]),
-            KeyforgeHouse::GESTOID->name => $this->winRate($houseWins[KeyforgeHouse::GESTOID->name], $houseLosses[KeyforgeHouse::GESTOID->name]),
+            KeyforgeHouse::GEISTOID->name => $this->winRate($houseWins[KeyforgeHouse::GEISTOID->name], $houseLosses[KeyforgeHouse::GEISTOID->name]),
             KeyforgeHouse::SKYBORN->name => $this->winRate($houseWins[KeyforgeHouse::SKYBORN->name], $houseLosses[KeyforgeHouse::SKYBORN->name]),
         ];
 
@@ -189,7 +189,7 @@ final class GeneralStatsQueryHandler
             KeyforgeHouse::UNFATHOMABLE->name => $this->pickRate($houseWins[KeyforgeHouse::UNFATHOMABLE->name] + $houseLosses[KeyforgeHouse::UNFATHOMABLE->name], $totalHousePicks),
             KeyforgeHouse::LOGOS->name => $this->pickRate($houseWins[KeyforgeHouse::LOGOS->name] + $houseLosses[KeyforgeHouse::LOGOS->name], $totalHousePicks),
             KeyforgeHouse::EKWIDON->name => $this->pickRate($houseWins[KeyforgeHouse::EKWIDON->name] + $houseLosses[KeyforgeHouse::EKWIDON->name], $totalHousePicks),
-            KeyforgeHouse::GESTOID->name => $this->pickRate($houseWins[KeyforgeHouse::GESTOID->name] + $houseLosses[KeyforgeHouse::GESTOID->name], $totalHousePicks),
+            KeyforgeHouse::GEISTOID->name => $this->pickRate($houseWins[KeyforgeHouse::GEISTOID->name] + $houseLosses[KeyforgeHouse::GEISTOID->name], $totalHousePicks),
             KeyforgeHouse::SKYBORN->name => $this->pickRate($houseWins[KeyforgeHouse::SKYBORN->name] + $houseLosses[KeyforgeHouse::SKYBORN->name], $totalHousePicks),
         ];
 
@@ -263,7 +263,7 @@ final class GeneralStatsQueryHandler
             KeyforgeHouse::UNFATHOMABLE->name => 0,
             KeyforgeHouse::LOGOS->name => 0,
             KeyforgeHouse::EKWIDON->name => 0,
-            KeyforgeHouse::GESTOID->name => 0,
+            KeyforgeHouse::GEISTOID->name => 0,
             KeyforgeHouse::SKYBORN->name => 0,
         ];
 

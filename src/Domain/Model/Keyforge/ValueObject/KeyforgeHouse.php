@@ -19,7 +19,7 @@ enum KeyforgeHouse: string implements \JsonSerializable
     case STAR_ALLIANCE = 'STAR_ALLIANCE';
     case UNFATHOMABLE = 'UNFATHOMABLE';
     case EKWIDON = 'EKWIDON';
-    case GESTOID = 'GESTOID';
+    case GEISTOID = 'GEISTOID';
     case SKYBORN = 'SKYBORN';
 
     public static function fromDokName(string $house): self
@@ -49,7 +49,7 @@ enum KeyforgeHouse: string implements \JsonSerializable
             self::STAR_ALLIANCE => 'Star Alliance',
             self::UNFATHOMABLE => 'Unfathomable',
             self::EKWIDON => 'Ekwidon',
-            self::GESTOID => 'Gestoid',
+            self::GEISTOID => 'Geistoid',
             self::SKYBORN => 'Skyborn',
         };
     }
