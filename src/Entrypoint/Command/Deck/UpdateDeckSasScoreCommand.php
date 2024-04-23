@@ -44,9 +44,14 @@ final class UpdateDeckSasScoreCommand extends Command
 
         $decks = $this->decks($batch, $deckIds);
 
-        foreach ($decks as $deck) {
+        foreach ($decks as $index => $deck) {
             $this->service->execute($deck->id(), $deck->owner(), true);
             $output->writeln($deck->name());
+
+            if ($index > 0 && $index % 2 === 0) {
+                $output->writeln('Reached request limit sleeping for 70 seconds');
+                \sleep(70);
+            }
         }
 
         if ($overwrite) {
