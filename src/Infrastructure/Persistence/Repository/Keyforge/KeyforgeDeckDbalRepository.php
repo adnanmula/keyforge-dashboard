@@ -138,6 +138,20 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
         $stmt->executeStatement();
     }
 
+    public function executeSasUpdate(): void
+    {
+        $stmt = $this->connection->prepare(
+            \sprintf(
+                'UPDATE %s
+                 SET sas = new_sas, prev_sas = sas, new_sas = null
+                 WHERE new_sas is not null;',
+                self::TABLE,
+            ),
+        );
+
+        $stmt->executeStatement();
+    }
+
     private function map(array $deck): KeyforgeDeck
     {
         return new KeyforgeDeck(

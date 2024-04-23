@@ -34,22 +34,39 @@ final class UpdateDeckSasScoreCommand extends Command
     {
         $this->setDescription('Update sas score')
             ->addArgument('batch', InputArgument::OPTIONAL, 'Amount of decks to process', 10)
-            ->addOption('decks', 'd', InputOption::VALUE_REQUIRED);
+            ->addOption('decks', 'd', InputOption::VALUE_REQUIRED)
+            ->addOption('overwrite', null, InputOption::VALUE_NONE);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $decks = $this->decks(
-            (int) $input->getArgument('batch'),
-            \explode(',', $input->getOption('decks')),
-        );
+        [$batch, $deckIds, $overwrite] = $this->params($input);
+
+        $decks = $this->decks($batch, $deckIds);
 
         foreach ($decks as $deck) {
             $this->service->execute($deck->id(), $deck->owner(), true);
             $output->writeln($deck->name());
         }
 
+        if ($overwrite) {
+            $this->deckRepository->executeSasUpdate();
+        }
+
         return self::SUCCESS;
+    }
+
+    public function params(InputInterface $input): array
+    {
+        $batch = (int)$input->getArgument('batch');
+        $deckIds = $input->getOption('decks') ?? [];
+        $overwrite = $input->getOption('overwrite');
+
+        if ([] !== $deckIds) {
+            $deckIds = \explode(',', $input->getOption('decks'));
+        }
+
+        return [$batch, $deckIds, $overwrite];
     }
 
     private function decks(int $batch, array $deckIds): array
