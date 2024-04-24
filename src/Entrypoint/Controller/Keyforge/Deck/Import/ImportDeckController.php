@@ -21,16 +21,16 @@ final class ImportDeckController extends Controller
 
         if ($request->getMethod() === Request::METHOD_POST) {
             try {
+                $deckId = $this->parseDeck($request->request->get('deck'));
+                $token = $request->request->get('token');
                 $userId = null;
 
-                if (null !== $request->get('setUser')) {
+                if (null !== $request->get('setUser') || null !== $token) {
                     $user = $this->getUser();
                     $userId = $user->id()->value();
                 }
 
-                $deckId = $this->parseDeck($request->request->get('deck'));
-
-                $this->bus->dispatch(new ImportDeckCommand($deckId, $userId));
+                $this->bus->dispatch(new ImportDeckCommand($deckId, $token, $userId));
 
                 return $this->render('Keyforge/Deck/Import/import_deck.html.twig', ['result' => 'Bien', 'success' => true, 'deckId' => $deckId]);
             } catch (InvalidUuidStringException) {
@@ -43,8 +43,12 @@ final class ImportDeckController extends Controller
         throw new \InvalidArgumentException('Error');
     }
 
-    private function parseDeck(string $idOrLink): string
+    private function parseDeck(?string $idOrLink): ?string
     {
+        if (null === $idOrLink) {
+            return null;
+        }
+
         if (Uuid::isValid($idOrLink)) {
             return $idOrLink;
         }

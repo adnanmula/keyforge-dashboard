@@ -7,17 +7,20 @@ use Assert\Assert;
 
 final readonly class ImportDeckCommand
 {
-    public Uuid $deckId;
+    public ?Uuid $deckId;
+    public ?string $token;
     public ?Uuid $userId;
 
-    public function __construct($deckId, $userId)
+    public function __construct($deckId, $token, $userId)
     {
         Assert::lazy()
-            ->that($deckId, 'deckId')->uuid()
+            ->that($deckId, 'deckId')->nullOr()->uuid()
+            ->that($userId, 'token')->nullOr()->string()->notBlank()
             ->that($userId, 'userId')->nullOr()->uuid()
             ->verifyNow();
 
-        $this->deckId = Uuid::from($deckId);
+        $this->deckId = null === $deckId ? null : Uuid::from($deckId);
+        $this->token = $token;
         $this->userId = null === $userId ? null : Uuid::from($userId);
     }
 }

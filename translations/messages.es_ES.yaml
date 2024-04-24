@@ -121,6 +121,7 @@ menu.favorite: Favorita
 menu.games: Partidas
 menu.houses: Casas
 menu.import: Importar
+menu.import_all: Importar todo
 menu.locale: Idioma
 menu.login: Login
 menu.logout: Logout
@@ -148,6 +149,7 @@ menu.winrate: 'Win rate'
 menu.worst_performance: 'Peor rendimiento'
 menu.show_stats: 'Mostrar/Ocultar estadísticas'
 menu.link_deck: 'Id de baraja, link de dok o vault'
+menu.import_token: 'Api token de DoK, para importar ''my decks'''
 menu.type_to_search: 'Escribe para buscar...'
 menu.deck_select_tooltip: 'Al jugar con randoms pega el id de baraja aunque no salga en el selector, no hace falta importarla antes'
 menu.user_select_tooltip: 'Al jugar con randoms pega el nombre de usuario en winner/loser aunque no salga en el selector'

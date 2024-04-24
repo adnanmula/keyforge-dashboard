@@ -48,6 +48,7 @@ deck.add_to_my_decks: 'Add to my decks'
 deck.go_to_deck: 'Go to deck'
 deck.houses: Houses
 deck.import: Import
+menu.import_all: Import all
 deck.imported: Imported
 deck.notes: Notes
 deck.save: Save
@@ -148,6 +149,7 @@ menu.winrate: 'Win rate'
 menu.worst_performance: 'Worst performance'
 menu.show_stats: 'Show/Hide stats'
 menu.link_deck: 'Id of deck, vault or dok link'
+menu.import_token: 'Api token from DoK, to import ''my decks'''
 menu.type_to_search: 'Type to search...'
 menu.deck_select_tooltip: 'When playing with random people paste their deck id event if it is not on the selector, you do not have to import it beforehand either'
 menu.user_select_tooltip: 'When playing with random people paste their username event if it is not on the selector'
