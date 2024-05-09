@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace AdnanMula\Cards\Entrypoint\Controller;
+namespace AdnanMula\Cards\Entrypoint\Controller\Shared\Login;
 
 use AdnanMula\Cards\Application\Command\Shared\User\Create\CreateUserCommand;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Locale;
@@ -27,12 +27,12 @@ final class RegisterController extends Controller
             }
 
             if (null !== $error) {
-                return $this->render('register.html.twig', ['error' => $error]);
+                return $this->render('Shared/Login/register.html.twig', ['error' => $error]);
             }
 
-            return $this->render('login.html.twig', ['error' => null, 'last_username' => $request->request->get('_username')]);
+            return $this->render('Shared/Login/login.html.twig', ['error' => null, 'last_username' => $request->request->get('_username')]);
         }
 
-        return $this->render('register.html.twig', ['error' => null]);
+        return $this->render('Shared/Login/register.html.twig', ['error' => null]);
     }
 }

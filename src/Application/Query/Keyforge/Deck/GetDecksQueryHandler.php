@@ -65,7 +65,6 @@ final class GetDecksQueryHandler
             $expressions[] = new Filter(new FilterField('owner'), new NullFilterValue(), FilterOperator::IS_NOT_NULL);
         }
 
-
         if (null !== $query->onlyFriends) {
             $friends = \array_map(
                 static fn (array $u) => $u['id'],

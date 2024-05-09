@@ -39,9 +39,9 @@ competition_detail.winner_deck: 'Baraja ganadora'
 competition_detail.winner_score: 'Puntuación del ganador'
 data.games_played: 'Partidas jugadas'
 data.losses: Derrotas
-data.show_all: 'Mostrar todos'
 data.other_players: 'Otros jugadores'
 data.other_players_tooltip: 'Gente de TCO o NKFL contra la que hemos jugado'
+data.show_all: 'Mostrar todos'
 data.winrate: 'Win rate'
 data.wins: Victorias
 deck.add_to_my_decks: 'Añadir a mis barajas'
@@ -56,11 +56,11 @@ deck.set_main: 'Sets principales'
 deck.set_other: 'Otros sets'
 error.denied: 'Access denied'
 error.error: Error
-error.something_wrong: 'Algo ha ido mal'
 error.invalid_format: 'Formato inválido'
 error.invalid_result: 'Resultado inválido'
+error.something_wrong: 'Algo ha ido mal'
+exception.user_not_exists: Usuario no existe
 game.competition: Torneo
-game.type: Tipo
 game.date: Fecha
 game.first_turn: 'Primer turno'
 game.keys: LLaves
@@ -71,158 +71,160 @@ game.loser_score: 'Puntuación del perdedor'
 game.notes: Notas
 game.register_game: 'Registrar partida'
 game.save: Guardar
+game.solo: 'Solitario'
 game.tco_casual: 'TCO Casual'
 game.tco_competitive: 'TCO Competitivo'
+game.type: Tipo
 game.winner: Ganador
 game.winner_chains: 'Llaves del ganador'
 game.winner_deck: 'Baraja ganadora'
 game.winner_score: 'Puntuación del ganador'
 game.with_friends: 'Con amigos'
-game.solo: 'Solitario'
 keyforge.house_brobnar: Brobnar
 keyforge.house_dis: Dis
 keyforge.house_ekwidon: Ekwidon
+keyforge.house_geistoid: Geistoid
 keyforge.house_logos: Logos
 keyforge.house_mars: Marte
 keyforge.house_sanctum: Sanctum
 keyforge.house_saurian: Saurios
 keyforge.house_shadows: Sombras
+keyforge.house_skyborn: Skyborn
 keyforge.house_star_alliance: 'Alianza estelar'
 keyforge.house_unfathomable: Insondable
 keyforge.house_untamed: Indómita
-keyforge.house_geistoid: Geistoid
-keyforge.house_skyborn: Skyborn
 keyforge.set_aoa: Aoa
+keyforge.set_as: AS
 keyforge.set_cota: CotA
 keyforge.set_dt: DT
+keyforge.set_gr: GR
+keyforge.set_m24: M24
 keyforge.set_mm: MM
 keyforge.set_u22: U22
 keyforge.set_vm23: VM23
 keyforge.set_vm24: VM24
-keyforge.set_m24: M24
 keyforge.set_wc: WC
 keyforge.set_woe: WoE
-keyforge.set_gr: GR
-keyforge.set_as: AS
 locale.en: Inglés
 locale.es: Español
-exception.user_not_exists: Usuario no existe
+menu.add: Añadir
+menu.add_friends: 'Añadir amigos'
 menu.addgame: 'Registrar partida'
+menu.admin: Admin
 menu.all: Todas
 menu.any: Cualquiera
+menu.archenemy: Archenemy
 menu.best_performance: 'Mejor rendimiento'
 menu.best_win_streak: 'Mejor racha de victorias'
 menu.change_password: 'Actualizar contraseña'
 menu.clear_filters: 'Limpiar filtros'
 menu.deck: Baraja
+menu.deck_select_tooltip: 'Al jugar con randoms pega el id de baraja aunque no salga en el selector, no hace falta importarla antes'
+menu.deck_wl: 'Victorias/Derrotas por baraja'
 menu.decks: Barajas
-menu.friend_decks_games: 'Solo partidas y barajas de amigos'
+menu.exclude: Excluir
 menu.favorite: Favorita
+menu.friend_decks_games: 'Solo partidas y barajas de amigos'
+menu.friend_name: 'Nombre del amigo'
+menu.friend_requests: 'Solicitudes de amistad'
+menu.new_accounts_pending: 'Cuentas nuevas'
+menu.friends: Amigos
 menu.games: Partidas
+menu.games_lost: 'Partidas perdidas'
+menu.house_pr: 'Pick rate por casa'
+menu.house_wins: 'Victorias por casa'
+menu.house_wr: 'Win rate por casa'
 menu.houses: Casas
 menu.import: Importar
 menu.import_all: Importar todo
+menu.import_game: 'Importar partida'
+menu.import_token: 'Api token de DoK, para importar ''my decks'''
+menu.include: Incluir
+menu.link_deck: 'Id de baraja, link de dok o vault'
 menu.locale: Idioma
 menu.login: Login
 menu.logout: Logout
 menu.max_sas: 'Max SAS'
 menu.min_sas: 'Min SAS'
 menu.mydecks: 'Mis barajas'
+menu.nemesis: Némesis
 menu.notes: Notas
 menu.other_options: 'Otras opciones'
+menu.owner: Propietario
 menu.password: Contraseña
 menu.played_times: 'Jugada %count% vez|Jugada %count% veces'
 menu.players: Jugadores
+menu.pr%: 'PickRate%'
+menu.pr: 'Pick rate'
 menu.profile: Perfil
+menu.received: Recibidas
 menu.record_book: Palmarés
 menu.register: Registro
+menu.remove: Eliminar
+menu.rival: Rival
 menu.sas: SAS
 menu.save: Guardar
 menu.search: Buscar
+menu.sent: Enviadas
 menu.set: Set
+menu.set_pr: 'Pick rate por set'
+menu.set_wins: 'Victorias por set'
+menu.set_wr: 'Win rate por set'
 menu.settings: Opciones
+menu.show_stats: 'Mostrar/Ocultar estadísticas'
 menu.tags: Etiquetas
+menu.time_wl: 'Victorias/Derrotas a lo largo del tiempo'
 menu.tournaments: Torneos
+menu.type_to_search: 'Escribe para buscar...'
+menu.user_select_tooltip: 'Al jugar con randoms pega el nombre de usuario en winner/loser aunque no salga en el selector'
 menu.username: Usuario
 menu.wiki: Wiki
 menu.winrate: 'Win rate'
 menu.worst_performance: 'Peor rendimiento'
-menu.show_stats: 'Mostrar/Ocultar estadísticas'
-menu.link_deck: 'Id de baraja, link de dok o vault'
-menu.import_token: 'Api token de DoK, para importar ''my decks'''
-menu.type_to_search: 'Escribe para buscar...'
-menu.deck_select_tooltip: 'Al jugar con randoms pega el id de baraja aunque no salga en el selector, no hace falta importarla antes'
-menu.user_select_tooltip: 'Al jugar con randoms pega el nombre de usuario en winner/loser aunque no salga en el selector'
-menu.import_game: 'Importar partida'
-menu.owner: Propietario
-menu.include: Incluir
-menu.exclude: Excluir
-menu.set_wins: 'Victorias por set'
-menu.house_wins: 'Victorias por casa'
-menu.set_wr: 'Win rate por set'
-menu.house_wr: 'Win rate por casa'
-menu.house_pr: 'Pick rate por casa'
 menu.wr%: 'WinRate%'
-menu.pr%: 'PickRate%'
 menu.wr/pr: 'Win/Pick Rate'
-menu.pr: 'Pick rate'
-menu.deck_wl: 'Victorias/Derrotas por baraja'
-menu.time_wl: 'Victorias/Derrotas a lo largo del tiempo'
-menu.set_pr: 'Pick rate por set'
-menu.friends: Amigos
-menu.friend_requests: 'Solicitudes de amistad'
-menu.add: Añadir
-menu.add_friends: 'Añadir amigos'
-menu.friend_name: 'Nombre del amigo'
-menu.sent: Enviadas
-menu.received: Recibidas
-menu.remove: Eliminar
-menu.rival: Rival
-menu.archenemy: Archenemy
-menu.nemesis: Némesis
-menu.games_lost: 'Partidas perdidas'
-wiki.the_crucible_online: 'The crucible online'
-wiki.wiki_aa: 'Wiki (Archon Arcana)'
-wiki.erratum: Erratas
-wiki.revised_cards: 'Cartas revisadas'
-wiki.rules_summary_en: 'Resumen de reglas (EN)'
-wiki.rulebook_es: 'Reglamento ES (v1.6 Marzo 2021)'
-wiki.rulebook_en: 'Reglamento EN (v17 Abril 2023)'
-wiki.timing_chart: 'Esquema de timings'
-wiki.tournament_rules: 'Reglas de torneo'
 wiki.adventures: Aventuras
-wiki.nkfl_community: 'NKFL community'
-wiki.houses_per_set: 'Casas en cada set'
-wiki.tag_assignation_criteria: 'Criterio de asignación de tags'
-wiki.tag: Tag
+wiki.count_greater_or_equal_than: 'Tiene %count% o más'
+wiki.count_lower_or_equal_than: 'Tiene %count% o menos'
 wiki.criteria: Criterio
-wiki.tag_expected_amber_high: 'Ámbar esperado alto'
-wiki.tag_expected_amber_low: 'Ambar esperado bajo'
+wiki.disruption_high: 'Disrupción alta'
+wiki.erratum: Erratas
+wiki.houses_per_set: 'Casas en cada set'
+wiki.nkfl_community: 'NKFL community'
+wiki.recursion_high: 'Recursion alta'
+wiki.revised_cards: 'Cartas revisadas'
+wiki.rulebook_en: 'Reglamento EN (v17 Abril 2023)'
+wiki.rulebook_es: 'Reglamento ES (v1.6 Marzo 2021)'
+wiki.rules_summary_en: 'Resumen de reglas (EN)'
+wiki.score_equal: 'Puntuación igual a %score%'
+wiki.score_greater_or_equal_than: 'Puntuación mayor o igual a %score%'
+wiki.score_lower_than: 'Puntuación menor a %score%'
+wiki.tag: Tag
+wiki.tag_action_count_high: 'Muchas acciones'
+wiki.tag_amber_control_high: 'Control de ambar alto'
+wiki.tag_amber_control_low: 'Control de ambar bajo'
 wiki.tag_amber_pip_count_high: 'Muchos pimpollos de ambar'
 wiki.tag_amber_pip_count_low: 'Pocos pimpollos de ambar'
+wiki.tag_antisynergistic: 'Antisinérgico'
+wiki.tag_archives_high: 'Archiva mucho'
+wiki.tag_artifact_control_high: 'Control de artefactos alto'
+wiki.tag_artifact_control_low: 'Sin control de artefactos'
+wiki.tag_artifact_count_high: 'Muchos artefactos'
+wiki.tag_assignation_criteria: 'Criterio de asignación de tags'
+wiki.tag_creature_control_high: 'Control de criaturas alto'
+wiki.tag_creature_control_low: 'Control de criaturas bajo'
+wiki.tag_creature_protection_high: 'Proteccion de criaturas'
+wiki.tag_creatures_count_high: 'Muchas criaturas'
 wiki.tag_effective_power_high: 'Poder efectivo alto'
 wiki.tag_efficiency_high: 'Eficiencia alta'
 wiki.tag_efficiency_low: 'Eficiencia baja'
-wiki.tag_artifact_count_high: 'Muchos artefactos'
-wiki.tag_action_count_high: 'Muchas acciones'
-wiki.tag_creatures_count_high: 'Muchas criaturas'
-wiki.tag_upgrades_count_high: 'Muchas mejoras'
-wiki.tag_archives_high: 'Archiva mucho'
-wiki.tag_amber_control_high: 'Control de ambar alto'
-wiki.tag_amber_control_low: 'Control de ambar bajo'
-wiki.tag_creature_control_high: 'Control de criaturas alto'
-wiki.tag_creature_control_low: 'Control de criaturas bajo'
-wiki.tag_artifact_control_high: 'Control de artefactos alto'
-wiki.tag_artifact_control_low: 'Sin control de artefactos'
-wiki.tag_creature_protection_high: 'Proteccion de criaturas'
-wiki.recursion_high: 'Recursion alta'
-wiki.disruption_high: 'Disrupción alta'
-wiki.tag_has_scaling_amber_control: 'Tiene control de ambar escalado'
+wiki.tag_expected_amber_high: 'Ámbar esperado alto'
+wiki.tag_expected_amber_low: 'Ambar esperado bajo'
 wiki.tag_has_board_wipes: 'Tiene board wipes'
+wiki.tag_has_scaling_amber_control: 'Tiene control de ambar escalado'
 wiki.tag_synergistic: 'Sinérgico'
-wiki.tag_antisynergistic: 'Antisinérgico'
-wiki.score_greater_or_equal_than: 'Puntuación mayor o igual a %score%'
-wiki.score_lower_than: 'Puntuación menor a %score%'
-wiki.count_greater_or_equal_than: 'Tiene %count% o más'
-wiki.count_lower_or_equal_than: 'Tiene %count% o menos'
-wiki.score_equal: 'Puntuación igual a %score%'
+wiki.tag_upgrades_count_high: 'Muchas mejoras'
+wiki.the_crucible_online: 'The crucible online'
+wiki.timing_chart: 'Esquema de timings'
+wiki.tournament_rules: 'Reglas de torneo'
+wiki.wiki_aa: 'Wiki (Archon Arcana)'

@@ -3,6 +3,7 @@
 namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\User;
 
 use AdnanMula\Cards\Application\Query\Keyforge\Stats\UserStatsQuery;
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\UserRole;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -10,7 +11,7 @@ final class UserDetailController extends Controller
 {
     public function __invoke(string $userId): Response
     {
-        $this->assertIsLogged();
+        $this->assertIsLogged(UserRole::ROLE_KEYFORGE);
 
         $result = $this->extractResult($this->bus->dispatch(new UserStatsQuery($userId)));
 

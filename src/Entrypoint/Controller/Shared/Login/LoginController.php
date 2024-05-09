@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace AdnanMula\Cards\Entrypoint\Controller;
+namespace AdnanMula\Cards\Entrypoint\Controller\Shared\Login;
 
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,7 +13,7 @@ final class LoginController extends Controller
         $error = $utils->getLastAuthenticationError();
         $lastUsername = $utils->getLastUsername();
 
-        return $this->render('login.html.twig', [
+        return $this->render('Shared/Login/login.html.twig', [
             'last_username' => $lastUsername,
             'error' => $error,
         ]);

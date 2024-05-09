@@ -6,6 +6,7 @@ use AdnanMula\Cards\Application\Service\Json;
 use AdnanMula\Cards\Domain\Model\Shared\User;
 use AdnanMula\Cards\Domain\Model\Shared\UserRepository;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Locale;
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\UserRole;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Infrastructure\Persistence\Repository\DbalRepository;
 use Doctrine\DBAL\ParameterType;
@@ -14,6 +15,32 @@ final class UserDbalRepository extends DbalRepository implements UserRepository
 {
     private const TABLE = 'users';
     private const TABLE_FRIENDS = 'user_friends';
+
+    public function save(User $user): void
+    {
+        $stmt = $this->connection->prepare(
+            \sprintf(
+                '
+                    INSERT INTO %s (id, name, password, locale, roles)
+                    VALUES (:id, :name, :password, :locale, :roles)
+                    ON CONFLICT (id) DO UPDATE SET
+                        name = :name,
+                        password = :password,
+                        locale = :locale,
+                        roles = :roles
+                ',
+                self::TABLE,
+            ),
+        );
+
+        $stmt->bindValue(':id', $user->id()->value());
+        $stmt->bindValue(':name', $user->name());
+        $stmt->bindValue(':password', $user->getPassword());
+        $stmt->bindValue(':locale', $user->locale()->value);
+        $stmt->bindValue(':roles', Json::encode($user->getRoles()));
+
+        $stmt->executeStatement();
+    }
 
     public function byId(Uuid $id): ?User
     {
@@ -51,30 +78,16 @@ final class UserDbalRepository extends DbalRepository implements UserRepository
         return $this->map($result, true);
     }
 
-    public function save(User $user): void
+    public function byRole(UserRole $role): array
     {
-        $stmt = $this->connection->prepare(
-            \sprintf(
-                '
-                    INSERT INTO %s (id, name, password, locale, roles)
-                    VALUES (:id, :name, :password, :locale, :roles)
-                    ON CONFLICT (id) DO UPDATE SET
-                        name = :name,
-                        password = :password,
-                        locale = :locale,
-                        roles = :roles
-                ',
-                self::TABLE,
-            ),
-        );
+        $result = $this->connection->createQueryBuilder()
+            ->select('a.id, a.name, a.password, a.locale, a.roles')
+            ->from(self::TABLE, 'a')
+            ->where('a.roles::jsonb @> \'["' . $role->value . '"]\'::jsonb')
+            ->executeQuery()
+            ->fetchAllAssociative();
 
-        $stmt->bindValue(':id', $user->id()->value());
-        $stmt->bindValue(':name', $user->name());
-        $stmt->bindValue(':password', $user->getPassword());
-        $stmt->bindValue(':locale', $user->locale()->value);
-        $stmt->bindValue(':roles', Json::encode($user->getRoles()));
-
-        $stmt->executeStatement();
+        return \array_map(fn (array $row) => $this->map($row, false), $result);
     }
 
     public function friends(Uuid $id): array

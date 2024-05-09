@@ -4,6 +4,7 @@ namespace AdnanMula\Cards\Entrypoint\Controller\Shared;
 
 use AdnanMula\Cards\Domain\Model\Shared\User;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Locale;
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\UserRole;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -31,9 +32,9 @@ class Controller extends AbstractController
         return $user;
     }
 
-    final protected function assertIsLogged(): void
+    final protected function assertIsLogged(UserRole $role = UserRole::ROLE_KEYFORGE): void
     {
-        if (false === $this->security->isGranted('ROLE_KEYFORGE')) {
+        if (false === $this->security->isGranted($role->value)) {
             throw new AccessDeniedException();
         }
     }

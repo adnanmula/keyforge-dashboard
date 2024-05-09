@@ -1,0 +1,67 @@
+{% extends "Keyforge/Shared/keyforge_base.html.twig" %}
+
+{% block title %}{{ 'menu.admin'|trans }}{% endblock %}
+
+{% block body %}
+    <div class="divider py-1"></div>
+
+    <div class="row">
+        <div class="col-1 col-sm-4 col-lg-3"></div>
+        <div class="col-12 col-sm-12 col-lg-6">
+            <div class="shadow-lg p-3 mb-5 bg-white rounded">
+                <div class="row">
+                    <h3>{{ 'menu.new_accounts_pending'|trans }}</h3>
+                </div>
+
+                <ul class="list-group mt-1">
+                    {% for account in accountsPending %}
+                        <li class="list-group-item">
+                            <a class="align-middle">{{ account.name }}</a>
+
+{#                            <button data-toggle="tooltip" title="{{ 'menu.add'|trans }}" type="button" class="btn btn-danger rejectAccount" data-account="{{ account.id }}" style="float: right;">#}
+{#                                <i class="bi bi-x" style="pointer-events: none;"></i>#}
+{#                            </button>#}
+
+{#                            <button data-toggle="tooltip" title="{{ 'menu.add'|trans }}" type="button" class="btn btn-info approveAccount" data-account="{{ account.id }}" style="float: right;">#}
+{#                                <i class="bi bi-check" style="pointer-events: none;"></i>#}
+{#                            </button>#}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(".approveAccount").click(function(event) {
+            console.log('accept');
+
+            console.log($(event.target).data('account'));
+
+            $.ajax({
+                type: 'PATCH',
+                url: '{{ path('user_friends') }}',
+                data: {
+                    'id': $(event.target).data('account'),
+                },
+            }).done(function( ) {
+                location.reload();
+            }).fail(function() {
+                alert('Error');
+            });
+        });
+
+        $(".rejectAccount").click(function(event) {
+            $.ajax({
+                type: 'DELETE',
+                url: '{{ path('user_friends') }}',
+                data: {
+                    'id': $(event.target).data('account'),
+                },
+            }).done(function( ) {
+                location.reload();
+            }).fail(function() {
+                alert('Error');
+            });
+        });
+    </script>
+{% endblock %}

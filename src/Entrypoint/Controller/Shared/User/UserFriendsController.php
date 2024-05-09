@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace AdnanMula\Cards\Entrypoint\Controller;
+namespace AdnanMula\Cards\Entrypoint\Controller\Shared\User;
 
 use AdnanMula\Cards\Application\Command\Shared\User\FriendAccept\AcceptFriendCommand;
 use AdnanMula\Cards\Application\Command\Shared\User\FriendAdd\AddFriendCommand;
@@ -8,6 +8,7 @@ use AdnanMula\Cards\Application\Command\Shared\User\FriendRemove\RemoveFriendCom
 use AdnanMula\Cards\Application\Query\User\Friend\GetUserFriendsQuery;
 use AdnanMula\Cards\Domain\Model\Shared\Exception\UserNotExistsException;
 use AdnanMula\Cards\Domain\Model\Shared\User;
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\UserRole;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,7 +17,7 @@ final class UserFriendsController extends Controller
 {
     public function __invoke(Request $request): Response
     {
-        $this->assertIsLogged();
+        $this->assertIsLogged(UserRole::ROLE_BASIC);
         $user = $this->getUser();
         $error = null;
 
@@ -36,7 +37,7 @@ final class UserFriendsController extends Controller
 
         $friends = $this->extractResult($this->bus->dispatch(new GetUserFriendsQuery($user->id()->value())));
 
-        return $this->render('user_friends.html.twig', [
+        return $this->render('Shared/User/user_friends.html.twig', [
             'error' => $error,
             'friends' => $friends['all'],
             'requestsReceived' => $friends['received'],

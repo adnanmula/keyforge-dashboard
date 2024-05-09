@@ -1,26 +1,36 @@
 register:
   path: /register
-  controller: AdnanMula\Cards\Entrypoint\Controller\RegisterController
-  methods: [ GET,POST ]
+  controller: AdnanMula\Cards\Entrypoint\Controller\Shared\Login\RegisterController
+  methods: [GET,POST]
 
 login:
   path: /login
-  controller: AdnanMula\Cards\Entrypoint\Controller\LoginController
-  methods: [ GET,POST ]
+  controller: AdnanMula\Cards\Entrypoint\Controller\Shared\Login\LoginController
+  methods: [GET,POST]
 
 logout:
   path: /logout
-  methods: [ GET ]
+  methods: [GET]
 
 user_friends:
   path: /user/friends
-  controller: AdnanMula\Cards\Entrypoint\Controller\UserFriendsController
-  methods: [ GET,POST,PATCH,DELETE ]
+  controller: AdnanMula\Cards\Entrypoint\Controller\Shared\User\UserFriendsController
+  methods: [GET,POST,PATCH,DELETE]
 
 user_settings:
   path: /user/settings
-  controller: AdnanMula\Cards\Entrypoint\Controller\UserSettingsController
-  methods: [ GET,POST ]
+  controller: AdnanMula\Cards\Entrypoint\Controller\Shared\User\UserSettingsController
+  methods: [GET,POST]
+
+admin:
+  path: /admin
+  controller: AdnanMula\Cards\Entrypoint\Controller\Shared\Admin\AdminController
+  methods: [GET,POST]
+
+admin_accounts:
+  path: /admin/accounts
+  controller: AdnanMula\Cards\Entrypoint\Controller\Shared\User\UserFriendsController
+  methods: [POST,DELETE]
 
 keyforge:
   resource: context/keyforge/routes.yaml

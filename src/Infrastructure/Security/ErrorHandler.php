@@ -10,6 +10,6 @@ final class ErrorHandler extends Controller
 {
     public function __invoke(Request $request): Response
     {
-        return $this->render('/error.html.twig', ['code' => 404], new Response(null, Response::HTTP_NOT_FOUND));
+        return $this->render('Shared/error.html.twig', ['code' => 404], new Response(null, Response::HTTP_NOT_FOUND));
     }
 }

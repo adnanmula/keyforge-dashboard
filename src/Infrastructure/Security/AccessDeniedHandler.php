@@ -12,6 +12,6 @@ final class AccessDeniedHandler extends Controller implements AccessDeniedHandle
 {
     public function handle(Request $request, AccessDeniedException $accessDeniedException): ?Response
     {
-        return $this->render('/access_denied.html.twig', [], new Response(null, Response::HTTP_FORBIDDEN));
+        return $this->render('Shared/access_denied.html.twig', [], new Response(null, Response::HTTP_FORBIDDEN));
     }
 }

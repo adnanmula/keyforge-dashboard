@@ -1,10 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace AdnanMula\Cards\Entrypoint\Controller;
+namespace AdnanMula\Cards\Entrypoint\Controller\Shared\User;
 
 use AdnanMula\Cards\Application\Command\Shared\User\Update\UpdateUserCommand;
 use AdnanMula\Cards\Domain\Model\Shared\User;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Locale;
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\UserRole;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,7 +14,7 @@ final class UserSettingsController extends Controller
 {
     public function __invoke(Request $request): Response
     {
-        $this->assertIsLogged();
+        $this->assertIsLogged(UserRole::ROLE_BASIC);
         $error = null;
 
         if ($request->getMethod() === Request::METHOD_POST) {
@@ -39,6 +40,6 @@ final class UserSettingsController extends Controller
             }
         }
 
-        return $this->render('user_settings.html.twig', ['error' => $error]);
+        return $this->render('Shared/User/user_settings.html.twig', ['error' => $error]);
     }
 }

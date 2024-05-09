@@ -71,7 +71,7 @@ final class GetDecksController extends Controller
                 $request->query->all()['extraFilterTagsExcluded'] ?? [],
                 $request->get('extraFilterMaxSas', 150),
                 $request->get('extraFilterMinSas', 0),
-                $request->get('extraFilterOnlyFriends') !== 'true' ? $user?->id()->value() : null,
+                $request->get('extraFilterOnlyFriends') === 'true' ? $user?->id()->value() : null,
             )),
         );
 
