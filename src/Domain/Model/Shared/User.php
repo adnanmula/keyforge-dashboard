@@ -3,6 +3,7 @@
 namespace AdnanMula\Cards\Domain\Model\Shared;
 
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Locale;
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\UserRole;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -42,6 +43,13 @@ final class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         return $this->roles;
+    }
+
+    public function setRole(UserRole $role): self
+    {
+        $this->roles = [$role->value];
+
+        return $this;
     }
 
     public function getUserIdentifier(): string

@@ -29,7 +29,7 @@ admin:
 
 admin_accounts:
   path: /admin/accounts
-  controller: AdnanMula\Cards\Entrypoint\Controller\Shared\User\UserFriendsController
+  controller: AdnanMula\Cards\Entrypoint\Controller\Shared\Admin\AdminAccountsController
   methods: [POST,DELETE]
 
 keyforge:

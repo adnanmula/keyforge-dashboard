@@ -13,7 +13,7 @@ final readonly class RemoveFriendCommand
     public function __construct($user, $friendId)
     {
         Assert::lazy()
-            ->that($user, 'name')->uuid()
+            ->that($user, 'user')->uuid()
             ->that($friendId, 'friendId')->uuid()
             ->verifyNow();
 

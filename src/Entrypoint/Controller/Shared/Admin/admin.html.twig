@@ -16,15 +16,15 @@
                 <ul class="list-group mt-1">
                     {% for account in accountsPending %}
                         <li class="list-group-item">
-                            <a class="align-middle">{{ account.name }}</a>
+                            <span class="align-middle">{{ account.name }}</span>
 
-{#                            <button data-toggle="tooltip" title="{{ 'menu.add'|trans }}" type="button" class="btn btn-danger rejectAccount" data-account="{{ account.id }}" style="float: right;">#}
+{#                            <button data-toggle="tooltip" title="{{ 'menu.reject'|trans }}" type="button" class="btn btn-danger rejectAccount" data-account="{{ account.id }}" style="float: right;">#}
 {#                                <i class="bi bi-x" style="pointer-events: none;"></i>#}
 {#                            </button>#}
 
-{#                            <button data-toggle="tooltip" title="{{ 'menu.add'|trans }}" type="button" class="btn btn-info approveAccount" data-account="{{ account.id }}" style="float: right;">#}
-{#                                <i class="bi bi-check" style="pointer-events: none;"></i>#}
-{#                            </button>#}
+                            <button data-toggle="tooltip" title="{{ 'menu.add'|trans }}" type="button" class="btn btn-dark approveAccount" data-account="{{ account.id }}" style="float: right;">
+                                <i class="bi bi-check" style="pointer-events: none;"></i>
+                            </button>
                         </li>
                     {% endfor %}
                 </ul>
@@ -38,8 +38,8 @@
             console.log($(event.target).data('account'));
 
             $.ajax({
-                type: 'PATCH',
-                url: '{{ path('user_friends') }}',
+                type: 'POST',
+                url: '{{ path('admin_accounts') }}',
                 data: {
                     'id': $(event.target).data('account'),
                 },
@@ -53,7 +53,7 @@
         $(".rejectAccount").click(function(event) {
             $.ajax({
                 type: 'DELETE',
-                url: '{{ path('user_friends') }}',
+                url: '{{ path('admin_accounts') }}',
                 data: {
                     'id': $(event.target).data('account'),
                 },

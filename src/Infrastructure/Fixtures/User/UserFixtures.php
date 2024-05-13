@@ -13,6 +13,7 @@ final class UserFixtures extends DbalFixture implements Fixture
 {
     public const FIXTURE_USER_1_ID = '426117e9-e016-4f53-be1f-4eb8711ce625';
     public const FIXTURE_USER_2_ID = '97a7e9fe-ff27-4d52-83c0-df4bc9309fb0';
+    public const FIXTURE_USER_3_ID = '048528d9-8545-48cd-b6c9-c50ec34c889e';
 
     private const TABLE = 'users';
 
@@ -34,6 +35,14 @@ final class UserFixtures extends DbalFixture implements Fixture
             '$2y$13$K8M5NdlCkAQUrOCh0cr.CuM.nX4DVeGxbeZBrUi.FTAY/gW/7NpJm',
             Locale::en_GB,
             ['ROLE_KEYFORGE'],
+        ));
+
+        $this->save(new User(
+            Uuid::from(self::FIXTURE_USER_3_ID),
+            'c',
+            '$2y$13$rWCZ1rvDCKLrjfTOGWkDMeL9uiAWt7T6ly6mIID38.fx780eNHV9S',
+            Locale::en_GB,
+            ['ROLE_BASIC'],
         ));
 
         $this->loaded = true;

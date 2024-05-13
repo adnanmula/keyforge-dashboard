@@ -13,7 +13,7 @@ final readonly class AddFriendCommand
     public function __construct($user, $friendName)
     {
         Assert::lazy()
-            ->that($user, 'name')->uuid()
+            ->that($user, 'user')->uuid()
             ->that($friendName, 'friendName')->string()->notBlank()
             ->verifyNow();
 

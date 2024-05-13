@@ -36,7 +36,7 @@ final class UserSettingsController extends Controller
             }
 
             if (null === $error && '' !== $newPassword && null !== $newPassword) {
-                return $this->render('login.html.twig', ['last_username' => $user->getUserIdentifier(), 'error' => null]);
+                return $this->render('Shared/Login/login.html.twig', ['last_username' => $user->getUserIdentifier(), 'error' => null]);
             }
         }
 
