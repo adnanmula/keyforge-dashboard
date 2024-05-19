@@ -4,29 +4,23 @@ namespace AdnanMula\Cards\Domain\Model\Keyforge;
 
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeDeckData;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeDeckHouses;
+use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeDeckStats;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeSet;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 
 final class KeyforgeDeck implements \JsonSerializable
 {
-    public readonly KeyforgeDeckData $data;
-
     public function __construct(
-        private Uuid $id,
-        private string $name,
-        private KeyforgeSet $set,
-        private KeyforgeDeckHouses $houses,
-        private int $sas,
+        private readonly Uuid $id,
+        private KeyforgeDeckData $data,
+        private ?Uuid $owner,
         private int $wins,
         private int $losses,
-        private array $extraData,
-        private ?Uuid $owner,
         private string $notes,
         private array $tags = [],
         private ?int $prevSas = null,
         private ?int $newSas = null,
     ) {
-        $this->data = KeyforgeDeckData::fromDokData($extraData);
     }
 
     public function id(): Uuid
@@ -34,24 +28,9 @@ final class KeyforgeDeck implements \JsonSerializable
         return $this->id;
     }
 
-    public function name(): string
+    public function data(): KeyforgeDeckData
     {
-        return $this->name;
-    }
-
-    public function set(): KeyforgeSet
-    {
-        return $this->set;
-    }
-
-    public function houses(): KeyforgeDeckHouses
-    {
-        return $this->houses;
-    }
-
-    public function sas(): int
-    {
-        return $this->sas;
+        return $this->data;
     }
 
     public function prevSas(): ?int
@@ -74,11 +53,6 @@ final class KeyforgeDeck implements \JsonSerializable
         return $this->losses;
     }
 
-    public function extraData(): array
-    {
-        return $this->extraData;
-    }
-
     public function owner(): ?Uuid
     {
         return $this->owner;
@@ -92,13 +66,6 @@ final class KeyforgeDeck implements \JsonSerializable
     public function tags(): array
     {
         return $this->tags;
-    }
-
-    public function updateSas(int $sas): self
-    {
-        $this->sas = $sas;
-
-        return $this;
     }
 
     public function updatePrevSas(?int $prevSas): self
@@ -154,16 +121,11 @@ final class KeyforgeDeck implements \JsonSerializable
     {
         return [
             'id' => $this->id()->value(),
-            'name' => $this->name(),
-            'set' => $this->set()->value,
-            'houses' => $this->houses()->jsonSerialize(),
-            'sas' => $this->sas(),
+            'data' => $this->data->jsonSerialize(),
             'prevSas' => $this->prevSas(),
             'newSas' => $this->newSas(),
             'wins' => $this->wins(),
             'losses' => $this->losses(),
-            'data' => $this->data->jsonSerialize(),
-            'extraData' => $this->extraData(),
             'owner' => $this->owner()?->value(),
             'tags' => $this->tags(),
             'notes' => $this->notes(),

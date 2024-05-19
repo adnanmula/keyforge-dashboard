@@ -18,6 +18,17 @@ final class KeyforgeDeckHouses implements \JsonSerializable
         return new self($houses);
     }
 
+    public static function fromDokData(array $data): self
+    {
+        $houses = \array_map(static fn (array $data) => $data['house'], $data['deck']['housesAndCards']);
+
+        return self::from(
+            KeyforgeHouse::fromDokName($houses[0]),
+            KeyforgeHouse::fromDokName($houses[1]),
+            KeyforgeHouse::fromDokName($houses[2]),
+        );
+    }
+
     /** @return array<KeyforgeHouse> */
     public function value(): array
     {

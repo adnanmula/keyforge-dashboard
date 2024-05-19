@@ -35,11 +35,11 @@ final class DeckAnalyzeRuleControl implements DeckAnalyzeRule
         $r[] = $this->ruleHasCards('Resuelve primero el Guardaalmas de forma que no se pierda', 'Reassembling Automaton', 'Soulkeeper');
         $r[] = $this->ruleHasCards('Inutiliza el campro rival un turno', "Rakuzel's Chant", 'Storm Surge');
 
-        $hasTheSting = $deck->data->cards->has('The Sting');
+        $hasTheSting = $deck->data()->cards->has('The Sting');
         $hasKeyCheat = ($deck->extraData()['deck']['keyCheatCount'] ?? 0) > 0;
 
         if ($hasTheSting && $hasKeyCheat) {
-            $card1 = $deck->data->cards->get('The Sting');
+            $card1 = $deck->data()->cards->get('The Sting');
 
             $r[] = [
                 'description' => 'Forja con el aguijón activo',

@@ -45,8 +45,7 @@ final class DeckApplyPredefinedTagsService
     {
         $newTags = [];
 
-        /** @var array $data */
-        $data = $deck->extraData()['deck'];
+        $data = $deck->data()->rawData['deck'];
 
         [$maverickCount, $legacyCount, $anomalyCount] = $this->specialCardsCount($data);
 

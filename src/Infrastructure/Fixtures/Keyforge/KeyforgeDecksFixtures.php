@@ -4,9 +4,7 @@ namespace AdnanMula\Cards\Infrastructure\Fixtures\Keyforge;
 
 use AdnanMula\Cards\Application\Service\Json;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeck;
-use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeDeckHouses;
-use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeHouse;
-use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeSet;
+use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeDeckData;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Domain\Service\Persistence\Fixture;
 use AdnanMula\Cards\Infrastructure\Fixtures\DbalFixture;
@@ -40,18 +38,10 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
         $this->save(
             new KeyforgeDeck(
                 Uuid::from(self::FIXTURE_KEYFORGE_DECK_1_ID),
-                'Parker la Sedienta',
-                KeyforgeSet::CotA,
-                KeyforgeDeckHouses::from(
-                    KeyforgeHouse::UNTAMED,
-                    KeyforgeHouse::SHADOWS,
-                    KeyforgeHouse::LOGOS,
-                ),
-                71,
+                KeyforgeDeckData::fromDokData(Json::decode($rawExtraData1)),
+                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_1_ID),
                 1,
                 2,
-                Json::decode($rawExtraData1),
-                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_1_ID),
                 '',
             ),
         );
@@ -59,18 +49,10 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
         $this->save(
             new KeyforgeDeck(
                 Uuid::from(self::FIXTURE_KEYFORGE_DECK_2_ID),
-                'Lydia la Inacabable de la Colmena',
-                KeyforgeSet::AoA,
-                KeyforgeDeckHouses::from(
-                    KeyforgeHouse::LOGOS,
-                    KeyforgeHouse::SHADOWS,
-                    KeyforgeHouse::SANCTUM,
-                ),
-                63,
+                KeyforgeDeckData::fromDokData(Json::decode($rawExtraData2)),
+                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID),
                 1,
                 3,
-                Json::decode($rawExtraData2),
-                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID),
                 '',
             ),
         );
@@ -78,18 +60,10 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
         $this->save(
             new KeyforgeDeck(
                 Uuid::from(self::FIXTURE_KEYFORGE_DECK_3_ID),
-                'Harrison “Sátiro”, Rebelde del Foro',
-                KeyforgeSet::MM,
-                KeyforgeDeckHouses::from(
-                    KeyforgeHouse::DIS,
-                    KeyforgeHouse::LOGOS,
-                    KeyforgeHouse::SANCTUM,
-                ),
-                72,
+                KeyforgeDeckData::fromDokData(Json::decode($rawExtraData3)),
+                null,
                 3,
                 0,
-                Json::decode($rawExtraData3),
-                null,
                 '',
             ),
         );
@@ -97,18 +71,10 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
         $this->save(
             new KeyforgeDeck(
                 Uuid::from(self::FIXTURE_KEYFORGE_DECK_4_ID),
-                'Cassiopeia la Artera',
-                KeyforgeSet::DT,
-                KeyforgeDeckHouses::from(
-                    KeyforgeHouse::SANCTUM,
-                    KeyforgeHouse::SAURIAN,
-                    KeyforgeHouse::STAR_ALLIANCE,
-                ),
-                61,
+                KeyforgeDeckData::fromDokData(Json::decode($rawExtraData4)),
+                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID),
                 3,
                 2,
-                Json::decode($rawExtraData4),
-                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID),
                 '',
             ),
         );
@@ -116,18 +82,10 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
         $this->save(
             new KeyforgeDeck(
                 Uuid::from(self::FIXTURE_KEYFORGE_DECK_5_ID),
-                '“Fantasma”, Rufián de Conton',
-                KeyforgeSet::CotA,
-                KeyforgeDeckHouses::from(
-                    KeyforgeHouse::DIS,
-                    KeyforgeHouse::MARS,
-                    KeyforgeHouse::SANCTUM,
-                ),
-                65,
-                1,
-                1,
-                Json::decode($rawExtraData5),
+                KeyforgeDeckData::fromDokData(Json::decode($rawExtraData5)),
                 null,
+                1,
+                1,
                 '',
             ),
         );
@@ -135,18 +93,10 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
         $this->save(
             new KeyforgeDeck(
                 Uuid::from(self::FIXTURE_KEYFORGE_DECK_6_ID),
-                'Directora ”Ratona” Davenport',
-                KeyforgeSet::CotA,
-                KeyforgeDeckHouses::from(
-                    KeyforgeHouse::BROBNAR,
-                    KeyforgeHouse::LOGOS,
-                    KeyforgeHouse::SHADOWS,
-                ),
-                62,
+                KeyforgeDeckData::fromDokData(Json::decode($rawExtraData6)),
+                null,
                 2,
                 0,
-                Json::decode($rawExtraData6),
-                null,
                 '',
             ),
         );
@@ -154,18 +104,10 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
         $this->save(
             new KeyforgeDeck(
                 Uuid::from(self::FIXTURE_KEYFORGE_DECK_7_ID),
-                'Isaiah el Lineal del Cráter',
-                KeyforgeSet::WC,
-                KeyforgeDeckHouses::from(
-                    KeyforgeHouse::SHADOWS,
-                    KeyforgeHouse::STAR_ALLIANCE,
-                    KeyforgeHouse::UNTAMED,
-                ),
-                72,
+                KeyforgeDeckData::fromDokData(Json::decode($rawExtraData7)),
+                null,
                 1,
                 3,
-                Json::decode($rawExtraData7),
-                null,
                 '',
             ),
         );
@@ -191,34 +133,24 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
         $stmt = $this->connection->prepare(
             \sprintf(
                 '
-                    INSERT INTO %s (id, name, set, houses, sas, wins, losses, extra_data, owner, notes)
-                    VALUES (:id, :name, :set, :houses, :sas, :wins, :losses, :extra_data, :owner, :notes)
+                    INSERT INTO %s (id, name, set, houses, sas, extra_data)
+                    VALUES (:id, :name, :set, :houses, :sas, :extra_data)
                     ON CONFLICT (id) DO UPDATE SET
                         id = :id,
                         name = :name,
-                        set = :set,
-                        houses = :houses,
                         sas = :sas,
-                        wins = :wins,
-                        losses = :losses,
-                        extra_data = :extra_data,
-                        owner = :owner,
-                        notes = :notes
+                        extra_data = :extra_data
                     ',
                 self::TABLE,
             ),
         );
 
         $stmt->bindValue(':id', $deck->id()->value());
-        $stmt->bindValue(':name', $deck->name());
-        $stmt->bindValue(':set', $deck->set()->name);
-        $stmt->bindValue(':houses', Json::encode($deck->houses()->value()));
-        $stmt->bindValue(':sas', $deck->sas());
-        $stmt->bindValue(':wins', $deck->wins());
-        $stmt->bindValue(':losses', $deck->losses());
-        $stmt->bindValue(':extra_data', Json::encode($deck->extraData()));
-        $stmt->bindValue(':owner', $deck->owner()?->value());
-        $stmt->bindValue(':notes', $deck->notes());
+        $stmt->bindValue(':name', $deck->data()->name);
+        $stmt->bindValue(':set', $deck->data()->set->name);
+        $stmt->bindValue(':houses', Json::encode($deck->data()->houses->value()));
+        $stmt->bindValue(':sas', $deck->data()->stats->sas);
+        $stmt->bindValue(':extra_data', Json::encode($deck->data()->rawData));
 
         $stmt->executeStatement();
     }

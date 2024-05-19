@@ -7,7 +7,7 @@ final class KeyforgeInitial extends AbstractMigration
     public function up(): void
     {
         $this->execute(
-        'CREATE TABLE keyforge_users (
+            'CREATE TABLE keyforge_users (
                 id uuid NOT NULL,
                 name character varying(64) NOT NULL
                    CONSTRAINT keyforge_name_unique UNIQUE,
@@ -16,20 +16,50 @@ final class KeyforgeInitial extends AbstractMigration
         );
 
         $this->execute(
-        'CREATE TABLE keyforge_decks (
+            'CREATE TABLE keyforge_decks (
                 id uuid NOT NULL,
                 name character varying(64) NOT NULL,
                 set character varying(16) NOT NULL,
                 houses jsonb NOT NULL,
                 sas integer NOT NULL,
+                extra_data jsonb NOT NULL,
+                PRIMARY KEY(id)
+            )',
+        );
+
+        $this->execute(
+            'CREATE TABLE keyforge_decks_user_data (
+                id uuid NOT NULL,
                 wins integer NOT NULL,
                 losses integer NOT NULL,
-                extra_data jsonb NOT NULL,
                 owner uuid,
                 tags jsonb NOT NULL DEFAULT \'[]\',
                 notes character varying(512) NOT NULL,
-                prev_sas integer NULL,
-                new_sas integer NULL,
+                PRIMARY KEY(id)
+            )',
+        );
+
+        $this->execute(
+            'CREATE TABLE keyforge_decks_past_sas (
+                id uuid NOT NULL,
+                dok_id integer NOT NULL,
+                stat_expected_amber numeric NOT NULL,
+                stat_amber_control numeric NOT NULL,
+                stat_creature_control numeric NOT NULL,
+                stat_artifact_control numeric NOT NULL,
+                stat_efficiency numeric NOT NULL,
+                stat_recursion numeric NOT NULL,
+                stat_creature_protection numeric NOT NULL,
+                stat_disruption numeric NOT NULL,
+                stat_other numeric NOT NULL,
+                stat_effective_power numeric NOT NULL,
+                stat_aerc_score numeric NOT NULL,
+                stat_sas_rating numeric NOT NULL,
+                stat_synergy_rating numeric NOT NULL,
+                stat_antisynergy_rating numeric NOT NULL,
+                stat_aerc_version numeric NOT NULL,
+                updated_at TIMESTAMP WITH TIME ZONE NULL,
+                dok_updated_at TIMESTAMP WITH TIME ZONE NULL,
                 PRIMARY KEY(id)
             )',
         );

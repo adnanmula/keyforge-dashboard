@@ -2,6 +2,7 @@
 
 namespace AdnanMula\Cards\Entrypoint\Command\Deck;
 
+use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeck;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Domain\Service\Keyforge\Deck\DeckApplyPredefinedTagsService;
@@ -40,12 +41,13 @@ final class SetDeckPredefinedTagsCommand extends Command
 
         foreach ($decks as $deck) {
             $this->service->execute($deck);
-            $output->writeln($deck->name());
+            $output->writeln($deck->data()->name);
         }
 
         return self::SUCCESS;
     }
 
+    /** @return array<KeyforgeDeck> */
     private function decks(?string $deckId): array
     {
         $filters = [];
