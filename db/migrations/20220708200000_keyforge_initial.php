@@ -78,26 +78,26 @@ final class KeyforgeInitial extends AbstractMigration
         );
 
         $this->execute(
-            'CREATE TABLE keyforge_decks_past_sas (
-                id uuid NOT NULL,
-                stat_expected_amber numeric NOT NULL,
-                stat_amber_control numeric NOT NULL,
-                stat_creature_control numeric NOT NULL,
-                stat_artifact_control numeric NOT NULL,
-                stat_efficiency numeric NOT NULL,
-                stat_recursion numeric NOT NULL,
-                stat_creature_protection numeric NOT NULL,
-                stat_disruption numeric NOT NULL,
-                stat_other numeric NOT NULL,
-                stat_effective_power numeric NOT NULL,
-                stat_aerc_score numeric NOT NULL,
-                stat_sas_rating numeric NOT NULL,
-                stat_synergy_rating numeric NOT NULL,
-                stat_antisynergy_rating numeric NOT NULL,
-                stat_aerc_version numeric NOT NULL,
+            'CREATE TABLE keyforge_decks_data_history (
+                dok_reference integer NOT NULL,
+                deck_id uuid NOT NULL,
+                dok_deck_id integer NOT NULL,
+                sas integer NOT NULL,
+                aerc_score integer NOT NULL,
+                aerc_version integer NOT NULL,
+                expected_amber numeric NOT NULL,
+                creature_control numeric NOT NULL,
+                artifact_control numeric NOT NULL,
+                efficiency numeric NOT NULL,
+                recursion numeric NOT NULL,
+                creature_protection numeric NOT NULL,
+                disruption numeric NOT NULL,
+                other numeric NOT NULL,
+                effective_power numeric NOT NULL,
+                synergy_rating integer NOT NULL,
+                antiynergy_rating integer NOT NULL,
                 updated_at TIMESTAMP WITH TIME ZONE NULL,
-                dok_updated_at TIMESTAMP WITH TIME ZONE NULL,
-                PRIMARY KEY(id)
+                PRIMARY KEY(dok_reference)
             )',
         );
 

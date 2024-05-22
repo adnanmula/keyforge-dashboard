@@ -3,6 +3,7 @@
 namespace AdnanMula\Cards\Domain\Model\Keyforge;
 
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeDeckData;
+use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeDeckStatHistory;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeDeckUserData;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Criteria\Criteria;
@@ -29,4 +30,6 @@ interface KeyforgeDeckRepository
     public function saveDeckUserData(KeyforgeDeckUserData $data): void;
 
     public function saveDeckWins(Uuid $id, int $wins, int $losses): void;
+
+    public function saveDeckDataHistory(KeyforgeDeckStatHistory $data): void;
 }
