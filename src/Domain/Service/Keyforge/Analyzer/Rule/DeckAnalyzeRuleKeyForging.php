@@ -29,11 +29,11 @@ final class DeckAnalyzeRuleKeyForging implements DeckAnalyzeRule
         $r[] = $this->ruleHasCards('Forja con Corazón activo', 'Heart of the Forest', 'Grasping Vines', 'Keyfrog');
         $r[] = $this->ruleHasCards('Trigger Keyfrog el mismo turno que lo juegas', 'Fangtooth Cavern', 'Keyfrog');
 
-        $hasTheSting = $deck->data->cards->has('The Sting');
-        $hasKeyCheat = ($deck->extraData()['deck']['keyCheatCount'] ?? 0) > 0;
+        $hasTheSting = $deck->data()->cards->has('The Sting');
+        $hasKeyCheat = ($deck->data()->rawData['deck']['keyCheatCount'] ?? 0) > 0;
 
         if ($hasTheSting && $hasKeyCheat) {
-            $card1 = $deck->data->cards->get('The Sting');
+            $card1 = $deck->data()->cards->get('The Sting');
 
             $r[] = [
                 'description' => 'Forja con el aguijón activo',

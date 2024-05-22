@@ -85,12 +85,12 @@ final class UserStatsQueryHandler
 
         /** @var KeyforgeDeck $deck */
         foreach ($decks as $deck) {
-            if (null !== $deck->owner() && $deck->owner()->equalTo($query->userId)) {
-                $indexedDecks[$deck->id()->value()] = $deck->name();
+            if (null !== $deck->userData()->owner && $deck->userData()->owner->equalTo($query->userId)) {
+                $indexedDecks[$deck->id()->value()] = $deck->data()->name;
             }
 
-            $indexedDeckSets[$deck->id()->value()] = $deck->set()->fullName();
-            $indexedDeckHouses[$deck->id()->value()] = $deck->houses();
+            $indexedDeckSets[$deck->id()->value()] = $deck->data()->set->fullName();
+            $indexedDeckHouses[$deck->id()->value()] = $deck->data()->houses;
         }
 
         $bestAndWorseDecks = [];

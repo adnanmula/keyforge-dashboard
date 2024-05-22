@@ -20,6 +20,11 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
     private const TABLE_USER_DATA = 'keyforge_decks_user_data';
     private const TABLE_PAST_SAS = 'keyforge_decks_past_sas';
 
+    private const FIELD_MAPPING = [
+        'id' => 'a.id',
+        'owner' => 'c.owner',
+    ];
+
     public function search(Criteria $criteria): array
     {
         $builder = $this->connection->createQueryBuilder();
@@ -27,10 +32,9 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
         $query = $builder->select('a.*, b.*, c.*')
             ->from(self::TABLE, 'a')
             ->innerJoin('a', self::TABLE_DATA, 'b', 'a.id = b.id')
-//            ->innerJoin('a', self::TABLE_PAST_SAS, 'd', 'a.id = d.id')
             ->innerJoin('a', self::TABLE_USER_DATA, 'c', 'a.id = c.id');
 
-        (new DbalCriteriaAdapter($builder))->execute($criteria);
+        (new DbalCriteriaAdapter($builder, self::FIELD_MAPPING))->execute($criteria);
 
         $result = $query->executeQuery()->fetchAllAssociative();
 
@@ -41,9 +45,11 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
     {
         $builder = $this->connection->createQueryBuilder();
         $query = $builder->select('COUNT(a.id)')
-            ->from(self::TABLE, 'a');
+            ->from(self::TABLE, 'a')
+            ->innerJoin('a', self::TABLE_DATA, 'b', 'a.id = b.id')
+            ->innerJoin('a', self::TABLE_USER_DATA, 'c', 'a.id = c.id');
 
-        (new DbalCriteriaAdapter($builder))->execute($criteria);
+        (new DbalCriteriaAdapter($builder, self::FIELD_MAPPING))->execute($criteria);
 
         return $query->executeQuery()->fetchOne();
     }
@@ -51,8 +57,10 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
     public function byId(Uuid $id): ?KeyforgeDeck
     {
         $result = $this->connection->createQueryBuilder()
-            ->select('a.*')
+            ->select('a.*, b.*, c.*')
             ->from(self::TABLE, 'a')
+            ->innerJoin('a', self::TABLE_DATA, 'b', 'a.id = b.id')
+            ->innerJoin('a', self::TABLE_USER_DATA, 'c', 'a.id = c.id')
             ->where('a.id = :id')
             ->setParameter('id', $id->value())
             ->setMaxResults(1)
@@ -69,8 +77,10 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
     public function byIds(Uuid ...$ids): array
     {
         $result = $this->connection->createQueryBuilder()
-            ->select('a.*')
+            ->select('a.*, b.*, c.*')
             ->from(self::TABLE, 'a')
+            ->innerJoin('a', self::TABLE_DATA, 'b', 'a.id = b.id')
+            ->innerJoin('a', self::TABLE_USER_DATA, 'c', 'a.id = c.id')
             ->where('a.id in (:ids)')
             ->setParameter('ids', \array_map(static fn (Uuid $id) => $id->value(), $ids), Connection::PARAM_STR_ARRAY)
             ->executeQuery()
@@ -86,8 +96,10 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
     public function byNames(string ...$decks): array
     {
         $result = $this->connection->createQueryBuilder()
-            ->select('a.*')
+            ->select('a.*, b.*, c.*')
             ->from(self::TABLE, 'a')
+            ->innerJoin('a', self::TABLE_DATA, 'b', 'a.id = b.id')
+            ->innerJoin('a', self::TABLE_USER_DATA, 'c', 'a.id = c.id')
             ->where('a.name in (:decks)')
             ->setParameter('decks', $decks, Connection::PARAM_STR_ARRAY)
             ->executeQuery()
@@ -100,7 +112,7 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
         return \array_map(fn (array $deck) => $this->map($deck), $result);
     }
 
-    public function save(KeyforgeDeck $deck): void
+    public function save(KeyforgeDeck $deck, bool $updateUserData = false): void
     {
         $stmt = $this->connection->prepare(
             \sprintf(
@@ -121,7 +133,10 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
         $stmt->executeStatement();
 
         $this->saveDeckData($deck->data());
-        $this->saveDeckUserData($deck->userData());
+
+        if ($updateUserData) {
+            $this->saveDeckUserData($deck->userData());
+        }
     }
 
     public function saveDeckData(KeyforgeDeckData $data): void

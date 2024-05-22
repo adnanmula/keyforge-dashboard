@@ -48,10 +48,10 @@ final class UpdateDeckSasScoreCommand extends Command
 
         foreach ($decks as $index => $deck) {
             try {
-                $this->service->execute($deck->id(), $deck->owner(), true);
-                $output->writeln($deck->name());
+                $this->service->execute($deck->id(), $deck->userData()->owner, true);
+                $output->writeln($deck->data()->name);
             } catch (DeckNotExistsException) {
-                $output->writeln('<error>NOT FOUND: '. $deck->name() .'</error>');
+                $output->writeln('<error>NOT FOUND: '. $deck->data()->name .'</error>');
             }
 
 

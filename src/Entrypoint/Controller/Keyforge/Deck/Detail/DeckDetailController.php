@@ -35,8 +35,8 @@ final class DeckDetailController extends Controller
             [
                 'reference' => $deck->id()->value(),
                 'userId' => $user?->id()?->value(),
-                'deck_name' => $deck->name(),
-                'deck_owner' => $deck->owner()?->value(),
+                'deck_name' => $deck->data()->name,
+                'deck_owner' => $deck->userData()->owner?->value(),
                 'deck_owner_name' => $this->ownerName($deck),
                 'deck' => $deck->jsonSerialize(),
                 'deck_notes' => $this->notes($user, $deck),
@@ -61,13 +61,13 @@ final class DeckDetailController extends Controller
 
     private function ownerName(KeyforgeDeck $deck): ?string
     {
-        if (null !== $deck->owner()) {
+        if (null !== $deck->userData()->owner) {
             $users = $this->extractResult(
                 $this->bus->dispatch(new GetUsersQuery(0, 1000, false, false)),
             );
 
             foreach ($users as $user) {
-                if ($user->id()->value() === $deck->owner()) {
+                if ($user->id()->value() === $deck->userData()->owner) {
                     return $user->name();
                 }
             }
@@ -78,8 +78,8 @@ final class DeckDetailController extends Controller
 
     private function notes(?User $user, KeyforgeDeck $deck): ?string
     {
-        if (null !== $user && $user->id()->value() === $deck->owner()?->value()) {
-            return $deck->notes();
+        if (null !== $user && $user->id()->value() === $deck->userData()->owner?->value()) {
+            return $deck->userData()->notes;
         }
 
         return null;
@@ -148,16 +148,16 @@ final class DeckDetailController extends Controller
         }
 
         if (null !== $currentNemesis) {
-            $currentNemesis['name'] = $this->deck(null, $currentNemesis['id'])->name();
+            $currentNemesis['name'] = $this->deck(null, $currentNemesis['id'])->data()->name;
         }
 
         if (null !== $currentRival) {
-            $currentRival['name'] = $this->deck(null, $currentRival['id'])->name();
+            $currentRival['name'] = $this->deck(null, $currentRival['id'])->data()->name;
         }
 
         return [
-            'wins' => $deck->wins(),
-            'losses' => $deck->losses(),
+            'wins' => $deck->userData()->wins,
+            'losses' => $deck->userData()->losses,
             'rival' => $currentRival,
             'nemesis' => $currentNemesis,
         ];

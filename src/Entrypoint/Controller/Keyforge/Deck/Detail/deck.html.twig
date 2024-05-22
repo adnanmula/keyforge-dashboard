@@ -60,11 +60,11 @@
 <div class="shadow-lg p-3 mb-3 bg-white rounded">
     <div class="row">
         <div class="col-12 col-md-11">
-            <h2>{{ deck.name }}</h2>
+            <h2>{{ deck.data.name }}</h2>
         </div>
         <div class="d-flex col-12 col-md-1 justify-content-end">
-            <h2 style="margin-top: 5px">{{ deck.sas }}</h2>
-            <img style="margin-bottom: 15px" width="40px" src="/assets/keyforge/sets/{{ deck.set }}.svg" alt="{{ deck.set }}"/>
+            <h2 style="margin-top: 5px">{{ deck.data.stats.sas }}</h2>
+            <img style="margin-bottom: 15px" width="40px" src="/assets/keyforge/sets/{{ deck.data.set }}.svg" alt="{{ deck.data.set }}"/>
         </div>
     </div>
 
@@ -72,7 +72,7 @@
         <div class="col-12">
             <div class="row">
                 <div class="col-12 col-lg-4" style="margin-top: 10px">
-                    <img width="33px" src="/assets/keyforge/houses/{{ deck.houses.0 }}.png" alt="{{ deck.houses.0 }}"/><span style="font-size: 1.5em; vertical-align: middle; margin-left: 4px">{{ deck.houses.0 }}</span>
+                    <img width="33px" src="/assets/keyforge/houses/{{ deck.data.houses.0 }}.png" alt="{{ deck.data.houses.0 }}"/><span style="font-size: 1.5em; vertical-align: middle; margin-left: 4px">{{ deck.data.houses.0 }}</span>
                     <div class="row">
                         {% for card in deck.data.cards.firstPodCards %}
                             <div class="col-6 col-lg-12">
@@ -84,7 +84,7 @@
                 </div>
 
                 <div class="col-12 col-lg-4" style="margin-top: 10px">
-                    <img width="33px" src="/assets/keyforge/houses/{{ deck.houses.1 }}.png" alt="{{ deck.houses.1 }}"/><span style="font-size: 1.5em; vertical-align: middle; margin-left: 4px">{{ deck.houses.1 }}</span>
+                    <img width="33px" src="/assets/keyforge/houses/{{ deck.data.houses.1 }}.png" alt="{{ deck.data.houses.1 }}"/><span style="font-size: 1.5em; vertical-align: middle; margin-left: 4px">{{ deck.data.houses.1 }}</span>
                     <div class="row">
                         {% for card in deck.data.cards.secondPodCards %}
                             <div class="col-6 col-lg-12" style="display: block">
@@ -96,7 +96,7 @@
                 </div>
 
                 <div class="col-12 col-lg-4" style="margin-top: 10px">
-                    <img width="33px" src="/assets/keyforge/houses/{{ deck.houses.2 }}.png" alt="{{ deck.houses.2 }}"/><span style="font-size: 1.5em; vertical-align: middle; margin-left: 4px">{{ deck.houses.2 }}</span>
+                    <img width="33px" src="/assets/keyforge/houses/{{ deck.data.houses.2 }}.png" alt="{{ deck.data.houses.2 }}"/><span style="font-size: 1.5em; vertical-align: middle; margin-left: 4px">{{ deck.data.houses.2 }}</span>
                     <div class="row">
                         {% for card in deck.data.cards.thirdPodCards %}
                             <div class="col-6 col-lg-12">
@@ -289,7 +289,7 @@
                 'extraDeckId': button.data('deck-id'),
             },
         }).done(function(response) {
-            $('#deckNotesInput')[0].value = response.data[0].notes;
+            $('#deckNotesInput')[0].value = response.data[0].user_data.notes;
         });
 
         $('#hiddenDeckId')[0].value = button.data('deck-id');

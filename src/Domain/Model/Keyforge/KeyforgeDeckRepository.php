@@ -22,7 +22,7 @@ interface KeyforgeDeckRepository
     /** @return array<KeyforgeDeck> */
     public function byNames(string ...$decks): array;
 
-    public function save(KeyforgeDeck $deck): void;
+    public function save(KeyforgeDeck $deck, bool $updateUserData = false): void;
 
     public function saveDeckData(KeyforgeDeckData $data): void;
 

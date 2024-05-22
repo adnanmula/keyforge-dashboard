@@ -10,11 +10,11 @@ final class KeyforgeDeckData implements \JsonSerializable
         public Uuid $id,
         public int $dokId,
         public string $name,
-        public array $rawData,
         public KeyforgeSet $set,
         public KeyforgeDeckHouses $houses,
         public KeyforgeDeckStats $stats,
         public KeyforgeCards $cards,
+        public array $rawData,
     ) {}
 
     public static function fromDokData(array $data): self
@@ -23,11 +23,11 @@ final class KeyforgeDeckData implements \JsonSerializable
             Uuid::from($data['deck']['keyforgeId']),
             $data['deck']['id'],
             $data['deck']['name'],
-            $data,
             KeyforgeSet::fromDokName($data['deck']['expansion']),
             KeyforgeDeckHouses::fromDokData($data),
             KeyforgeDeckStats::fromDokData($data),
             KeyforgeCards::fromDokData($data),
+            $data,
         );
     }
 
@@ -37,10 +37,11 @@ final class KeyforgeDeckData implements \JsonSerializable
             'id' => $this->id->value(),
             'dok_id' => $this->dokId,
             'name' => $this->name,
-            'raw_data' => $this->rawData,
+            'set' => $this->set->jsonSerialize(),
             'houses' => $this->houses->jsonSerialize(),
             'stats' => $this->stats->jsonSerialize(),
             'cards' => $this->cards->jsonSerialize(),
+            'raw_data' => $this->rawData,
         ];
     }
 }

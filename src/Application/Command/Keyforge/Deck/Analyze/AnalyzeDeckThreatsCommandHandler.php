@@ -25,8 +25,8 @@ final readonly class AnalyzeDeckThreatsCommandHandler
         return [
             'deck' => $deck->jsonSerialize(),
             'deck_id' => $deck->id()->value(),
-            'deck_name' => $deck->name(),
-            'deck_sas' => $deck->sas(),
+            'deck_name' => $deck->data()->name,
+            'deck_sas' => $deck->data()->stats->sas,
             'detail' => $results,
         ];
     }

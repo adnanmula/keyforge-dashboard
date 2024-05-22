@@ -36,7 +36,7 @@ final class DeckAnalyzeRuleControl implements DeckAnalyzeRule
         $r[] = $this->ruleHasCards('Inutiliza el campro rival un turno', "Rakuzel's Chant", 'Storm Surge');
 
         $hasTheSting = $deck->data()->cards->has('The Sting');
-        $hasKeyCheat = ($deck->extraData()['deck']['keyCheatCount'] ?? 0) > 0;
+        $hasKeyCheat = ($deck->data()->rawData['deck']['keyCheatCount'] ?? 0) > 0;
 
         if ($hasTheSting && $hasKeyCheat) {
             $card1 = $deck->data()->cards->get('The Sting');
