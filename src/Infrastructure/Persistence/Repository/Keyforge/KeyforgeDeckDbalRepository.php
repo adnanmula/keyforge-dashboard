@@ -18,7 +18,7 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
     private const TABLE = 'keyforge_decks';
     private const TABLE_DATA = 'keyforge_decks_data';
     private const TABLE_USER_DATA = 'keyforge_decks_user_data';
-    private const TABLE_PAST_SAS = 'keyforge_decks_past_sas';
+//    private const TABLE_PAST_SAS = 'keyforge_decks_past_sas';
 
     private const FIELD_MAPPING = [
         'id' => 'a.id',

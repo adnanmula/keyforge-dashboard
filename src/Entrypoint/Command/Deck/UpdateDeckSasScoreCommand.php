@@ -36,13 +36,12 @@ final class UpdateDeckSasScoreCommand extends Command
     {
         $this->setDescription('Update sas score')
             ->addArgument('batch', InputArgument::OPTIONAL, 'Amount of decks to process', 10)
-            ->addOption('decks', 'd', InputOption::VALUE_REQUIRED)
-            ->addOption('overwrite', null, InputOption::VALUE_NONE);
+            ->addOption('decks', 'd', InputOption::VALUE_REQUIRED);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        [$batch, $deckIds, $overwrite] = $this->params($input);
+        [$batch, $deckIds] = $this->params($input);
 
         $decks = $this->decks($batch, $deckIds);
 
@@ -54,15 +53,10 @@ final class UpdateDeckSasScoreCommand extends Command
                 $output->writeln('<error>NOT FOUND: '. $deck->data()->name .'</error>');
             }
 
-
             if ($index > 0 && ($index+1) % 25 === 0) {
                 $output->writeln('Reached request limit sleeping for 70 seconds');
                 \sleep(70);
             }
-        }
-
-        if ($overwrite) {
-            $this->deckRepository->executeSasUpdate();
         }
 
         return self::SUCCESS;
@@ -72,13 +66,12 @@ final class UpdateDeckSasScoreCommand extends Command
     {
         $batch = (int)$input->getArgument('batch');
         $deckIds = $input->getOption('decks') ?? [];
-        $overwrite = $input->getOption('overwrite');
 
         if ([] !== $deckIds) {
             $deckIds = \explode(',', $input->getOption('decks'));
         }
 
-        return [$batch, $deckIds, $overwrite];
+        return [$batch, $deckIds];
     }
 
     private function decks(int $batch, array $deckIds): array

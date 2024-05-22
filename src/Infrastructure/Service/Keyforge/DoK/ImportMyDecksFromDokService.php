@@ -57,7 +57,8 @@ final readonly class ImportMyDecksFromDokService
                 ),
             );
 
-            $this->repository->save($newDeck, true);
+            $this->repository->save($newDeck, null === $storedDeck);
+            $this->repository->saveDeckData($newDeck->data());
             $this->tagsService->execute($newDeck);
         }
     }
