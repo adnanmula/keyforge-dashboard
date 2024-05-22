@@ -2,6 +2,8 @@
 
 namespace AdnanMula\Cards\Domain\Model\Keyforge;
 
+use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeDeckData;
+use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeDeckUserData;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Criteria\Criteria;
 
@@ -22,5 +24,7 @@ interface KeyforgeDeckRepository
 
     public function save(KeyforgeDeck $deck): void;
 
-    public function executeSasUpdate(): void;
+    public function saveDeckData(KeyforgeDeckData $data): void;
+
+    public function saveDeckUserData(KeyforgeDeckUserData $data): void;
 }

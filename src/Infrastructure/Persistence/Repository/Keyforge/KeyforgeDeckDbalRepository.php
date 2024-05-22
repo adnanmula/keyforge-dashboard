@@ -6,9 +6,7 @@ use AdnanMula\Cards\Application\Service\Json;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeck;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeDeckData;
-use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeDeckHouses;
-use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeHouse;
-use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeSet;
+use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeDeckUserData;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Infrastructure\Persistence\Repository\DbalRepository;
 use AdnanMula\Criteria\Criteria;
@@ -18,13 +16,19 @@ use Doctrine\DBAL\Connection;
 final class KeyforgeDeckDbalRepository extends DbalRepository implements KeyforgeDeckRepository
 {
     private const TABLE = 'keyforge_decks';
+    private const TABLE_DATA = 'keyforge_decks_data';
+    private const TABLE_USER_DATA = 'keyforge_decks_user_data';
+    private const TABLE_PAST_SAS = 'keyforge_decks_past_sas';
 
     public function search(Criteria $criteria): array
     {
         $builder = $this->connection->createQueryBuilder();
 
-        $query = $builder->select('a.*')
-            ->from(self::TABLE, 'a');
+        $query = $builder->select('a.*, b.*, c.*')
+            ->from(self::TABLE, 'a')
+            ->innerJoin('a', self::TABLE_DATA, 'b', 'a.id = b.id')
+//            ->innerJoin('a', self::TABLE_PAST_SAS, 'd', 'a.id = d.id')
+            ->innerJoin('a', self::TABLE_USER_DATA, 'c', 'a.id = c.id');
 
         (new DbalCriteriaAdapter($builder))->execute($criteria);
 
@@ -101,14 +105,10 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
         $stmt = $this->connection->prepare(
             \sprintf(
                 '
-                    INSERT INTO %s (id, name, set, houses, sas, extra_data)
-                    VALUES (:id, :name, :set, :houses, :sas, :extra_data)
-                    ON CONFLICT (id) DO UPDATE SET
-                        id = :id,
-                        name = :name,
-                        sas = :sas,
-                        extra_data = :extra_data
-                    ',
+                    INSERT INTO %s (id, name, set, houses)
+                    VALUES (:id, :name, :set, :houses)
+                    ON CONFLICT (id) DO NOTHING
+                ',
                 self::TABLE,
             ),
         );
@@ -117,22 +117,188 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
         $stmt->bindValue(':name', $deck->data()->name);
         $stmt->bindValue(':set', $deck->data()->set->name);
         $stmt->bindValue(':houses', Json::encode($deck->data()->houses->value()));
-        $stmt->bindValue(':sas', $deck->data()->stats->sas);
-        $stmt->bindValue(':extra_data', Json::encode($deck->data()->rawData));
+
+        $stmt->executeStatement();
+
+        $this->saveDeckData($deck->data());
+        $this->saveDeckUserData($deck->userData());
+    }
+
+    public function saveDeckData(KeyforgeDeckData $data): void
+    {
+        $stmt = $this->connection->prepare(
+            \sprintf(
+                '
+                INSERT INTO %s (
+                    id,
+                    dok_id,
+                    sas,
+                    amber_control,
+                    artifact_control,
+                    expected_amber,
+                    creature_control,
+                    efficiency,
+                    recursion,
+                    disruption,
+                    effective_power,
+                    creature_protection,
+                    other,
+                    raw_amber,
+                    total_power,
+                    total_armor,
+                    efficiency_bonus,
+                    creature_count,
+                    action_count,
+                    artifact_count,
+                    upgrade_count,
+                    card_draw_count,
+                    card_archive_count,
+                    key_cheat_count,
+                    synergy_rating,
+                    anti_synergy_rating,
+                    aerc_score,
+                    aerc_version,
+                    sas_version,
+                    sas_percentile,
+                    previous_sas_rating,
+                    previous_major_sas_rating,
+                    extra_data,
+                    last_sas_update
+                ) VALUES (
+                    :id,	
+                    :dok_id,	
+                    :sas,	
+                    :amber_control,	
+                    :artifact_control,	
+                    :expected_amber,	
+                    :creature_control,	
+                    :efficiency,	
+                    :recursion,	
+                    :disruption,	
+                    :effective_power,	
+                    :creature_protection,	
+                    :other,	
+                    :raw_amber,	
+                    :total_power,	
+                    :total_armor,	
+                    :efficiency_bonus,	
+                    :creature_count,	
+                    :action_count,	
+                    :artifact_count,	
+                    :upgrade_count,	
+                    :card_draw_count,	
+                    :card_archive_count,	
+                    :key_cheat_count,	
+                    :synergy_rating,	
+                    :anti_synergy_rating,	
+                    :aerc_score,	
+                    :aerc_version,	
+                    :sas_version,	
+                    :sas_percentile,	
+                    :previous_sas_rating,	
+                    :previous_major_sas_rating,	
+                    :extra_data,	
+                    :last_sas_update
+                ) ON CONFLICT (id) DO UPDATE SET
+                    sas = :sas,
+                    amber_control = :amber_control,
+                    artifact_control = :artifact_control,
+                    expected_amber = :expected_amber,	
+                    creature_control = :creature_control,
+                    efficiency = :efficiency,
+                    recursion = :recursion,
+                    disruption = :disruption,
+                    effective_power = :effective_power,
+                    creature_protection = :creature_protection,
+                    other = :other,
+                    raw_amber = :raw_amber,
+                    total_power = :total_power,
+                    total_armor = :total_armor,
+                    efficiency_bonus = :efficiency_bonus,
+                    creature_count = :creature_count,	
+                    action_count = :action_count,
+                    artifact_count = :artifact_count,	
+                    upgrade_count = :upgrade_count,
+                    card_draw_count = :card_draw_count,
+                    card_archive_count = :card_archive_count,
+                    key_cheat_count = :key_cheat_count,
+                    synergy_rating = :synergy_rating,	
+                    anti_synergy_rating = :anti_synergy_rating,
+                    aerc_score = :aerc_score,
+                    aerc_version = :aerc_version,
+                    sas_version = :sas_version,
+                    sas_percentile = :sas_percentile,	
+                    previous_sas_rating = :previous_sas_rating,
+                    previous_major_sas_rating = :previous_major_sas_rating,
+                    extra_data = :extra_data,
+                    last_sas_update = :last_sas_update
+                ',
+                self::TABLE_DATA,
+            ),
+        );
+
+        $stmt->bindValue(':id', $data->id);
+        $stmt->bindValue(':dok_id', $data->dokId);
+        $stmt->bindValue(':amber_control', $data->stats->amberControl);
+        $stmt->bindValue(':artifact_control', $data->stats->artifactControl);
+        $stmt->bindValue(':expected_amber', $data->stats->expectedAmber);
+        $stmt->bindValue(':creature_control', $data->stats->creatureControl);
+        $stmt->bindValue(':efficiency', $data->stats->efficiency);
+        $stmt->bindValue(':recursion', $data->stats->recursion);
+        $stmt->bindValue(':disruption', $data->stats->disruption);
+        $stmt->bindValue(':effective_power', $data->stats->effectivePower);
+        $stmt->bindValue(':creature_protection', $data->stats->creatureProtection);
+        $stmt->bindValue(':other', $data->stats->other);
+        $stmt->bindValue(':raw_amber', $data->stats->rawAmber);
+        $stmt->bindValue(':total_power', $data->stats->totalPower);
+        $stmt->bindValue(':total_armor', $data->stats->totalArmor);
+        $stmt->bindValue(':efficiency_bonus', $data->stats->efficiencyBonus);
+        $stmt->bindValue(':creature_count', $data->stats->creatureCount);
+        $stmt->bindValue(':action_count', $data->stats->actionCount);
+        $stmt->bindValue(':artifact_count', $data->stats->artifactCount);
+        $stmt->bindValue(':upgrade_count', $data->stats->upgradeCount);
+        $stmt->bindValue(':card_draw_count', $data->stats->cardDrawCount);
+        $stmt->bindValue(':card_archive_count', $data->stats->cardArchiveCount);
+        $stmt->bindValue(':key_cheat_count', $data->stats->keyCheatCount);
+        $stmt->bindValue(':synergy_rating', $data->stats->synergyRating);
+        $stmt->bindValue(':anti_synergy_rating', $data->stats->antiSynergyRating);
+        $stmt->bindValue(':sas', $data->stats->sas);
+        $stmt->bindValue(':previous_sas_rating', $data->stats->previousSasRating);
+        $stmt->bindValue(':previous_major_sas_rating', $data->stats->previousMajorSasRating);
+        $stmt->bindValue(':sas_percentile', $data->stats->sasPercentile);
+        $stmt->bindValue(':aerc_score', $data->stats->aercScore);
+        $stmt->bindValue(':aerc_version', $data->stats->aercVersion);
+        $stmt->bindValue(':sas_version', $data->stats->sasVersion);
+        $stmt->bindValue(':extra_data', Json::encode($data->rawData));
+        $stmt->bindValue(':last_sas_update', $data->stats->lastSasUpdate->format(\DateTimeInterface::ATOM));
 
         $stmt->executeStatement();
     }
 
-    public function executeSasUpdate(): void
+    public function saveDeckUserData(KeyforgeDeckUserData $data): void
     {
         $stmt = $this->connection->prepare(
             \sprintf(
-                'UPDATE %s
-                 SET sas = new_sas, prev_sas = sas, new_sas = null
-                 WHERE new_sas is not null;',
-                self::TABLE,
+                '
+                INSERT INTO %s (id, wins, losses, owner, notes, tags)
+                VALUES (:id, :wins, :losses, :owner, :notes, :tags)
+                ON CONFLICT (id) DO UPDATE SET
+                    wins = :wins,
+                    losses = :losses,
+                    owner = :owner,
+                    notes = :notes,
+                    tags = :tags
+                ',
+                self::TABLE_USER_DATA,
             ),
         );
+
+        $stmt->bindValue(':id', $data->id->value());
+        $stmt->bindValue(':wins', $data->wins);
+        $stmt->bindValue(':losses', $data->losses);
+        $stmt->bindValue(':owner', $data->owner?->value());
+        $stmt->bindValue(':notes', $data->notes);
+        $stmt->bindValue(':tags', Json::encode($data->tags));
 
         $stmt->executeStatement();
     }
@@ -141,14 +307,15 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
     {
         $data = KeyforgeDeckData::fromDokData(Json::decode($deck['extra_data']));
 
-        return new KeyforgeDeck(
+        $userData = KeyforgeDeckUserData::from(
             Uuid::from($deck['id']),
-            $data,
-            null,
-            0,
-            0,
-            '',
-            [],
+            null === $deck['owner'] ? null : Uuid::from($deck['owner']),
+            $deck['wins'],
+            $deck['losses'],
+            $deck['notes'],
+            Json::decode($deck['tags']),
         );
+
+        return new KeyforgeDeck(Uuid::from($deck['id']), $data, $userData);
     }
 }

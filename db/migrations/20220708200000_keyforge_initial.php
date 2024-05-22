@@ -21,8 +21,46 @@ final class KeyforgeInitial extends AbstractMigration
                 name character varying(64) NOT NULL,
                 set character varying(16) NOT NULL,
                 houses jsonb NOT NULL,
+                PRIMARY KEY(id)
+            )',
+        );
+
+        $this->execute(
+            'CREATE TABLE keyforge_decks_data (
+                id uuid NOT NULL,
+                dok_id integer NOT NULL,
                 sas integer NOT NULL,
+                previous_sas_rating integer NOT NULL,
+                previous_major_sas_rating integer NOT NULL,
+                sas_percentile numeric NOT NULL,
+                sas_version integer NOT NULL,
+                aerc_score integer NOT NULL,
+                aerc_version integer NOT NULL,
+                amber_control numeric NOT NULL,
+                artifact_control numeric NOT NULL,
+                expected_amber numeric NOT NULL,
+                creature_control numeric NOT NULL,
+                efficiency numeric NOT NULL,
+                recursion numeric NOT NULL,
+                disruption numeric NOT NULL,
+                effective_power numeric NOT NULL,
+                creature_protection numeric NOT NULL,
+                other numeric NOT NULL,
+                raw_amber integer NOT NULL,
+                total_power integer NOT NULL,
+                total_Armor integer NOT NULL,
+                efficiency_bonus numeric NOT NULL,
+                creature_count integer NOT NULL,
+                action_count integer NOT NULL,
+                artifact_count integer NOT NULL,
+                upgrade_count integer NOT NULL,
+                card_draw_count integer NOT NULL,
+                card_archive_count integer NOT NULL,
+                key_cheat_count integer NOT NULL,
+                synergy_rating integer NOT NULL,
+                anti_synergy_rating integer NOT NULL,
                 extra_data jsonb NOT NULL,
+                last_sas_update TIMESTAMP WITH TIME ZONE NULL,
                 PRIMARY KEY(id)
             )',
         );
@@ -33,8 +71,8 @@ final class KeyforgeInitial extends AbstractMigration
                 wins integer NOT NULL,
                 losses integer NOT NULL,
                 owner uuid,
-                tags jsonb NOT NULL DEFAULT \'[]\',
                 notes character varying(512) NOT NULL,
+                tags jsonb NOT NULL DEFAULT \'[]\',
                 PRIMARY KEY(id)
             )',
         );
@@ -42,7 +80,6 @@ final class KeyforgeInitial extends AbstractMigration
         $this->execute(
             'CREATE TABLE keyforge_decks_past_sas (
                 id uuid NOT NULL,
-                dok_id integer NOT NULL,
                 stat_expected_amber numeric NOT NULL,
                 stat_amber_control numeric NOT NULL,
                 stat_creature_control numeric NOT NULL,

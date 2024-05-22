@@ -4,10 +4,13 @@ namespace AdnanMula\Cards\Infrastructure\Fixtures\Keyforge;
 
 use AdnanMula\Cards\Application\Service\Json;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeck;
+use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeDeckData;
+use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeDeckUserData;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Domain\Service\Persistence\Fixture;
 use AdnanMula\Cards\Infrastructure\Fixtures\DbalFixture;
+use Doctrine\DBAL\Connection;
 
 final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
 {
@@ -19,9 +22,12 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
     public const FIXTURE_KEYFORGE_DECK_6_ID = '3fbf3e50-0056-4281-9a3e-c8b4230bb051';
     public const FIXTURE_KEYFORGE_DECK_7_ID = '098a2c7e-02f2-4c53-b7cd-8714ea0bbe41';
 
-    private const TABLE = 'keyforge_decks';
-
     private bool $loaded = false;
+
+    public function __construct(Connection $connection, private KeyforgeDeckRepository $repository)
+    {
+        parent::__construct($connection);
+    }
 
     public function load(): void
     {
@@ -35,80 +41,59 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
         $rawExtraData7 = '{"deck": {"id": 16206847, "name": "Isaiah el Lineal del Cráter", "rawAmber": 11, "aercScore": 66, "dateAdded": "2021-06-18", "expansion": "WORLDS_COLLIDE", "recursion": 3.3375, "sasRating": 72, "disruption": 3.79, "efficiency": 7.57, "keyforgeId": "098a2c7e-02f2-4c53-b7cd-8714ea0bbe41", "metaScores": [], "totalArmor": 2, "totalPower": 65, "actionCount": 10, "aercVersion": 41, "amberControl": 6.4, "upgradeCount": 3, "artifactCount": 3, "creatureCount": 20, "expectedAmber": 20.422499999999996, "lastSasUpdate": "2021-07-02", "sasPercentile": 89.48404810142553, "synergyRating": 7, "effectivePower": 80, "housesAndCards": [{"cards": [{"legacy": false, "rarity": "Common", "anomaly": false, "enhanced": false, "maverick": false, "cardTitle": "Hock"}, {"legacy": false, "rarity": "Uncommon", "anomaly": false, "enhanced": false, "maverick": false, "cardTitle": "Oubliette"}, {"legacy": false, "rarity": "Common", "anomaly": false, "enhanced": false, "maverick": false, "cardTitle": "Pestering Blow"}, {"legacy": false, "rarity": "Common", "anomaly": false, "enhanced": false, "maverick": false, "cardTitle": "Pestering Blow"}, {"legacy": false, "rarity": "Rare", "anomaly": false, "enhanced": false, "maverick": false, "cardTitle": "Treasure Map"}, {"legacy": false, "rarity": "Uncommon", "anomaly": false, "enhanced": false, "maverick": false, "cardTitle": "Spike Trap"}, {"legacy": false, "rarity": "Common", "anomaly": false, "enhanced": false, "maverick": false, "cardTitle": "A. Vinda"}, {"legacy": false, "rarity": "Common", "anomaly": false, "enhanced": false, "maverick": false, "cardTitle": "A. Vinda"}, {"legacy": false, "rarity": "Common", "anomaly": false, "enhanced": false, "maverick": false, "cardTitle": "Breaker Hill"}, {"legacy": false, "rarity": "Common", "anomaly": false, "enhanced": false, "maverick": false, "cardTitle": "Ronnie Wristclocks"}, {"legacy": false, "rarity": "Uncommon", "anomaly": false, "enhanced": false, "maverick": false, "cardTitle": "Whisper"}, {"legacy": false, "rarity": "Common", "anomaly": false, "enhanced": false, "maverick": false, "cardTitle": "Yantzee Gang"}], "house": "Shadows"}, {"cards": [{"legacy": false, "rarity": "Common", "anomaly": false, "enhanced": false, "maverick": false, "cardTitle": "Red Alert"}, {"legacy": false, "rarity": "Common", "anomaly": false, "enhanced": false, "maverick": false, "cardTitle": "Stealth Mode"}, {"legacy": false, "rarity": "Rare", "anomaly": false, "enhanced": false, "maverick": false, "cardTitle": "Book of leQ"}, {"legacy": false, "rarity": "Uncommon", "anomaly": false, "enhanced": false, "maverick": false, "cardTitle": "CXO Taber"}, {"legacy": false, "rarity": "Common", "anomaly": false, "enhanced": false, "maverick": false, "cardTitle": "Chief Engineer Walls"}, {"legacy": false, "rarity": "Common", "anomaly": false, "enhanced": false, "maverick": false, "cardTitle": "Com. Officer Kirby"}, {"legacy": false, "rarity": "Common", "anomaly": false, "enhanced": false, "maverick": false, "cardTitle": "Commander Chan"}, {"legacy": false, "rarity": "Common", "anomaly": false, "enhanced": false, "maverick": false, "cardTitle": "Medic Ingram"}, {"legacy": false, "rarity": "Rare", "anomaly": false, "enhanced": false, "maverick": false, "cardTitle": "Operations Officer Yshi"}, {"legacy": false, "rarity": "Common", "anomaly": false, "enhanced": false, "maverick": false, "cardTitle": "Sci. Officer Qincan"}, {"legacy": false, "rarity": "Common", "anomaly": false, "enhanced": false, "maverick": false, "cardTitle": "Light of the Archons"}, {"legacy": false, "rarity": "Uncommon", "anomaly": false, "enhanced": false, "maverick": false, "cardTitle": "Quadracorder"}], "house": "StarAlliance"}, {"cards": [{"legacy": false, "rarity": "Common", "anomaly": false, "enhanced": false, "maverick": false, "cardTitle": "Regrowth"}, {"legacy": false, "rarity": "Common", "anomaly": false, "enhanced": false, "maverick": false, "cardTitle": "Regrowth"}, {"legacy": false, "rarity": "Common", "anomaly": false, "enhanced": false, "maverick": false, "cardTitle": "The Fittest"}, {"legacy": false, "rarity": "Uncommon", "anomaly": false, "enhanced": false, "maverick": false, "cardTitle": "Fangtooth Cavern"}, {"legacy": false, "rarity": "Common", "anomaly": false, "enhanced": false, "maverick": false, "cardTitle": "Deepwood Druid"}, {"legacy": false, "rarity": "Common", "anomaly": false, "enhanced": false, "maverick": false, "cardTitle": "Ghosthawk"}, {"legacy": false, "rarity": "Common", "anomaly": false, "enhanced": false, "maverick": false, "cardTitle": "Harmonia"}, {"legacy": false, "rarity": "Common", "anomaly": false, "enhanced": false, "maverick": false, "cardTitle": "Harmonia"}, {"legacy": false, "rarity": "Common", "anomaly": false, "enhanced": false, "maverick": false, "cardTitle": "Imprinted Murmook"}, {"legacy": false, "rarity": "Common", "anomaly": false, "enhanced": false, "maverick": false, "cardTitle": "Musthic Murmook"}, {"legacy": false, "rarity": "Common", "anomaly": false, "enhanced": false, "maverick": false, "cardTitle": "Tantadlin"}, {"legacy": false, "rarity": "Uncommon", "anomaly": false, "enhanced": false, "maverick": false, "cardTitle": "Instrument of Silence"}], "house": "Untamed"}], "artifactControl": 1.5, "creatureControl": 8.5125, "efficiencyBonus": 0, "antisynergyRating": 2, "previousSasRating": 0, "creatureProtection": 2.83, "previousMajorSasRating": 0}, "sasVersion": 42}';
         // @codingStandardsIgnoreEnd
 
-        $this->save(
+        $this->repository->save(
             new KeyforgeDeck(
                 Uuid::from(self::FIXTURE_KEYFORGE_DECK_1_ID),
                 KeyforgeDeckData::fromDokData(Json::decode($rawExtraData1)),
-                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_1_ID),
-                1,
-                2,
-                '',
+                KeyforgeDeckUserData::from(Uuid::from(self::FIXTURE_KEYFORGE_DECK_1_ID), Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_1_ID), 1, 2, ''),
             ),
         );
 
-        $this->save(
+        $this->repository->save(
             new KeyforgeDeck(
                 Uuid::from(self::FIXTURE_KEYFORGE_DECK_2_ID),
                 KeyforgeDeckData::fromDokData(Json::decode($rawExtraData2)),
-                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID),
-                1,
-                3,
-                '',
+                KeyforgeDeckUserData::from(Uuid::from(self::FIXTURE_KEYFORGE_DECK_2_ID), Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID), 1, 3, ''),
             ),
         );
 
-        $this->save(
+        $this->repository->save(
             new KeyforgeDeck(
                 Uuid::from(self::FIXTURE_KEYFORGE_DECK_3_ID),
                 KeyforgeDeckData::fromDokData(Json::decode($rawExtraData3)),
-                null,
-                3,
-                0,
-                '',
+                KeyforgeDeckUserData::from(Uuid::from(self::FIXTURE_KEYFORGE_DECK_3_ID), null, 3, 0, ''),
             ),
         );
 
-        $this->save(
+        $this->repository->save(
             new KeyforgeDeck(
                 Uuid::from(self::FIXTURE_KEYFORGE_DECK_4_ID),
                 KeyforgeDeckData::fromDokData(Json::decode($rawExtraData4)),
-                Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID),
-                3,
-                2,
-                '',
+                KeyforgeDeckUserData::from(Uuid::from(self::FIXTURE_KEYFORGE_DECK_4_ID), Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID), 2, 3, ''),
             ),
         );
 
-        $this->save(
+        $this->repository->save(
             new KeyforgeDeck(
                 Uuid::from(self::FIXTURE_KEYFORGE_DECK_5_ID),
                 KeyforgeDeckData::fromDokData(Json::decode($rawExtraData5)),
-                null,
-                1,
-                1,
-                '',
+                KeyforgeDeckUserData::from(Uuid::from(self::FIXTURE_KEYFORGE_DECK_5_ID), null, 1, 1, ''),
             ),
         );
 
-        $this->save(
+        $this->repository->save(
             new KeyforgeDeck(
                 Uuid::from(self::FIXTURE_KEYFORGE_DECK_6_ID),
                 KeyforgeDeckData::fromDokData(Json::decode($rawExtraData6)),
-                null,
-                2,
-                0,
-                '',
+                KeyforgeDeckUserData::from(Uuid::from(self::FIXTURE_KEYFORGE_DECK_6_ID), null, 2, 0, ''),
             ),
         );
 
-        $this->save(
+        $this->repository->save(
             new KeyforgeDeck(
                 Uuid::from(self::FIXTURE_KEYFORGE_DECK_7_ID),
                 KeyforgeDeckData::fromDokData(Json::decode($rawExtraData7)),
-                null,
-                1,
-                3,
-                '',
+                KeyforgeDeckUserData::from(Uuid::from(self::FIXTURE_KEYFORGE_DECK_7_ID), null, 1, 3, ''),
             ),
         );
 
@@ -126,32 +111,5 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
             KeyforgeUsersFixtures::class,
             KeyforgeTagsFixtures::class,
         ];
-    }
-
-    private function save(KeyforgeDeck $deck): void
-    {
-        $stmt = $this->connection->prepare(
-            \sprintf(
-                '
-                    INSERT INTO %s (id, name, set, houses, sas, extra_data)
-                    VALUES (:id, :name, :set, :houses, :sas, :extra_data)
-                    ON CONFLICT (id) DO UPDATE SET
-                        id = :id,
-                        name = :name,
-                        sas = :sas,
-                        extra_data = :extra_data
-                    ',
-                self::TABLE,
-            ),
-        );
-
-        $stmt->bindValue(':id', $deck->id()->value());
-        $stmt->bindValue(':name', $deck->data()->name);
-        $stmt->bindValue(':set', $deck->data()->set->name);
-        $stmt->bindValue(':houses', Json::encode($deck->data()->houses->value()));
-        $stmt->bindValue(':sas', $deck->data()->stats->sas);
-        $stmt->bindValue(':extra_data', Json::encode($deck->data()->rawData));
-
-        $stmt->executeStatement();
     }
 }

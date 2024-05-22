@@ -6,6 +6,12 @@ final readonly class KeyforgeDeckStats implements \JsonSerializable
 {
     private function __construct(
         public int $sas,
+        public int $previousSasRating,
+        public int $previousMajorSasRating,
+        public float $sasPercentile,
+        public int $sasVersion,
+        public int $aercScore,
+        public int $aercVersion,
         public float $amberControl,
         public float $artifactControl,
         public float $expectedAmber,
@@ -29,12 +35,6 @@ final readonly class KeyforgeDeckStats implements \JsonSerializable
         public int $keyCheatCount,
         public int $synergyRating,
         public int $antiSynergyRating,
-        public int $aercScore,
-        public int $aercVersion,
-        public int $sasVersion,
-        public float $sasPercentile,
-        public int $previousSasRating,
-        public int $previousMajorSasRating,
         public \DateTimeImmutable $lastSasUpdate,
     ) {}
 
@@ -44,6 +44,12 @@ final readonly class KeyforgeDeckStats implements \JsonSerializable
 
         return new self(
             sas: $deck['sasRating'] ?? 0,
+            previousSasRating: $deck['previousSasRating'] ?? 0,
+            previousMajorSasRating: $deck['previousMajorSasRating'] ?? 0,
+            sasPercentile: $deck['sasPercentile'] ?? 0,
+            sasVersion: $data['sasVersion'] ?? 0,
+            aercScore: $deck['aercScore'] ?? 0,
+            aercVersion: $deck['aercVersion'] ?? 0,
             amberControl: $deck['amberControl'] ?? 0,
             artifactControl: $deck['artifactControl'] ?? 0,
             expectedAmber: $deck['expectedAmber'] ?? 0,
@@ -67,12 +73,6 @@ final readonly class KeyforgeDeckStats implements \JsonSerializable
             keyCheatCount: $deck['keyCheatCount'] ?? 0,
             synergyRating: $deck['synergyRating'] ?? 0,
             antiSynergyRating: $deck['antisynergyRating'] ?? 0,
-            aercScore: $deck['aercScore'] ?? 0,
-            aercVersion: $deck['aercVersion'] ?? 0,
-            sasVersion: $data['sasVersion'] ?? 0,
-            sasPercentile: $deck['sasPercentile'] ?? 0,
-            previousSasRating: $deck['previousSasRating'] ?? 0,
-            previousMajorSasRating: $deck['previousMajorSasRating'] ?? 0,
             lastSasUpdate: new \DateTimeImmutable($deck['lastSasUpdate']),
         );
     }
@@ -81,6 +81,12 @@ final readonly class KeyforgeDeckStats implements \JsonSerializable
     {
         return [
             'sas' => $this->sas,
+            'previousSasRating' => $this->previousSasRating,
+            'previousMajorSasRating' => $this->previousMajorSasRating,
+            'sasPercentile' => \round($this->sasPercentile, 2),
+            'sasVersion' => $this->sasVersion,
+            'aercScore' => $this->aercScore,
+            'aercVersion' => $this->aercVersion,
             'amberControl' => \round($this->amberControl, 2),
             'artifactControl' => \round($this->artifactControl, 2),
             'expectedAmber' => \round($this->expectedAmber, 2),
@@ -104,12 +110,6 @@ final readonly class KeyforgeDeckStats implements \JsonSerializable
             'keyCheatCount' => $this->keyCheatCount,
             'synergyRating' => $this->synergyRating,
             'antiSynergyRating' => $this->antiSynergyRating,
-            'aercScore' => $this->aercScore,
-            'aercVersion' => $this->aercVersion,
-            'sasVersion' => $this->sasVersion,
-            'sasPercentile' => \round($this->sasPercentile, 2),
-            'previousSasRating' => $this->previousSasRating,
-            'previousMajorSasRating' => $this->previousMajorSasRating,
             'lastSasUpdate' => $this->lastSasUpdate->format('Y-m-d'),
         ];
     }
