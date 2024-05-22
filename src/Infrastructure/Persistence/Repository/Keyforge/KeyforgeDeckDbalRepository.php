@@ -318,6 +318,37 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
         $stmt->executeStatement();
     }
 
+    public function saveDeckWins(Uuid $id, int $wins, int $losses): void
+    {
+        $stmt = $this->connection->prepare(
+            \sprintf(
+                'UPDATE %s SET wins = :wins, losses = :losses WHERE id = :id',
+                self::TABLE_USER_DATA,
+            ),
+        );
+
+        $stmt->bindValue(':id', $id->value());
+        $stmt->bindValue(':wins', $wins);
+        $stmt->bindValue(':losses', $losses);
+
+        $stmt->executeStatement();
+    }
+
+    public function saveDeckOwner(Uuid $id, ?Uuid $owner): void
+    {
+        $stmt = $this->connection->prepare(
+            \sprintf(
+                'UPDATE %s SET owner = :owner WHERE id = :id',
+                self::TABLE_USER_DATA,
+            ),
+        );
+
+        $stmt->bindValue(':id', $id->value());
+        $stmt->bindValue(':owner', $owner);
+
+        $stmt->executeStatement();
+    }
+
     private function map(array $deck): KeyforgeDeck
     {
         $data = KeyforgeDeckData::fromDokData(Json::decode($deck['extra_data']));

@@ -131,11 +131,8 @@ final class CreateCompetitionGameCommandHandler
             }
         }
 
-        $winnerDeck->updateWins($deck1Wins)->updateLosses($deck1Losses);
-        $loserDeck->updateWins($deck2Wins)->updateLosses($deck2Losses);
-
-        $this->deckRepository->save($winnerDeck);
-        $this->deckRepository->save($loserDeck);
+        $this->deckRepository->saveDeckWins($winnerDeck->id(), $deck1Wins, $deck1Losses);
+        $this->deckRepository->saveDeckWins($loserDeck->id(), $deck2Wins, $deck2Losses);
     }
 
     private function fixtureWinner(KeyforgeCompetitionFixture $fixture, KeyforgeGame $game): ?Uuid

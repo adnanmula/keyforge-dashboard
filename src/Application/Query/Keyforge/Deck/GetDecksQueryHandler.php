@@ -239,6 +239,7 @@ final class GetDecksQueryHandler
                     $deckWins,
                     $deckLosses,
                     $deck->userData()->notes,
+                    $deck->userData()->tags,
                 ),
             );
         }
