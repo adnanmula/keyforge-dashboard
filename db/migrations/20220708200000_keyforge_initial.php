@@ -165,6 +165,14 @@ final class KeyforgeInitial extends AbstractMigration
                 PRIMARY KEY(id)
             )',
         );
+
+        $this->execute(
+            'CREATE TABLE keyforge_decks_stats_update (
+                id uuid NOT NULL,
+                at TIMESTAMP WITH TIME ZONE NULL,
+                PRIMARY KEY(id)
+            )',
+        );
     }
 
     public function down(): void

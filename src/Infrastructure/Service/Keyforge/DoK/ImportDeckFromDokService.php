@@ -19,9 +19,10 @@ final class ImportDeckFromDokService implements ImportDeckService
         private KeyforgeDeckRepository $repository,
         private HttpClientInterface $dokClient,
         private DeckApplyPredefinedTagsService $tagsService,
+        private ImportDeckStatHistoryFromDokService $statHistoryService,
     ) {}
 
-    public function execute(Uuid $uuid, ?Uuid $owner = null, bool $forceUpdate = false): ?KeyforgeDeck
+    public function execute(Uuid $uuid, ?Uuid $owner = null, bool $forceUpdate = false, bool $withHistory = true): ?KeyforgeDeck
     {
         $savedDeck = $this->repository->byId($uuid);
 
@@ -53,9 +54,13 @@ final class ImportDeckFromDokService implements ImportDeckService
             ),
         );
 
-        $this->repository->save($newDeck, false);
+        $this->repository->save($newDeck, null === $savedDeck);
         $this->repository->saveDeckData($newDeck->data());
         $this->tagsService->execute($newDeck);
+
+        if ($withHistory) {
+            $this->statHistoryService->execute($newDeck->id());
+        }
 
         return $newDeck;
     }

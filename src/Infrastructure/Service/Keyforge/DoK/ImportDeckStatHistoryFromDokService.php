@@ -8,7 +8,7 @@ use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-final class ImportPastDeckSasFromDokService
+final class ImportDeckStatHistoryFromDokService
 {
     public function __construct(
         private HttpClientInterface $dokClient,

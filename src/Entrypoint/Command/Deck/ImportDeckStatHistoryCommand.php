@@ -5,7 +5,7 @@ namespace AdnanMula\Cards\Entrypoint\Command\Deck;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Exception\DeckNotExistsException;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
-use AdnanMula\Cards\Infrastructure\Service\Keyforge\DoK\ImportPastDeckSasFromDokService;
+use AdnanMula\Cards\Infrastructure\Service\Keyforge\DoK\ImportDeckStatHistoryFromDokService;
 use AdnanMula\Criteria\Criteria;
 use AdnanMula\Criteria\Filter\Filter;
 use AdnanMula\Criteria\Filter\FilterType;
@@ -20,13 +20,13 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-final class ImportDeckPastSasCommand extends Command
+final class ImportDeckStatHistoryCommand extends Command
 {
     public const NAME = 'deck:sas:history';
 
     public function __construct(
         private readonly KeyforgeDeckRepository $deckRepository,
-        private readonly ImportPastDeckSasFromDokService $service,
+        private readonly ImportDeckStatHistoryFromDokService $service,
     ) {
         parent::__construct(self::NAME);
     }
