@@ -4,6 +4,7 @@ namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\Deck\Detail;
 
 use AdnanMula\Cards\Application\Command\Keyforge\Deck\Analyze\AnalyzeDeckThreatsCommand;
 use AdnanMula\Cards\Application\Query\Keyforge\Deck\GetDecksQuery;
+use AdnanMula\Cards\Application\Query\Keyforge\Deck\GetDecksStatHistoryQuery;
 use AdnanMula\Cards\Application\Query\Keyforge\Game\GetGamesQuery;
 use AdnanMula\Cards\Application\Query\Keyforge\User\GetUsersQuery;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Exception\DeckNotExistsException;
@@ -28,6 +29,7 @@ final class DeckDetailController extends Controller
         /** @var ?User $user */
         $user = $this->security->getUser();
         $deck = $this->deck($user?->id(), $deckId);
+
         $analysis = $this->extractResult($this->bus->dispatch(new AnalyzeDeckThreatsCommand($deck->id()->value())));
 
         return $this->render(
@@ -40,6 +42,7 @@ final class DeckDetailController extends Controller
                 'deck_owner_name' => $this->ownerName($deck),
                 'deck' => $deck->jsonSerialize(),
                 'deck_notes' => $this->notes($user, $deck),
+                'deck_history' => $this->deckHistory($deckId),
                 'analysis' => $analysis['detail'],
                 'stats' => $this->stats($deck),
             ],
@@ -57,6 +60,15 @@ final class DeckDetailController extends Controller
         }
 
         return $deck['decks'][0];
+    }
+
+    private function deckHistory(string $deckId): array
+    {
+        $stats = $this->extractResult(
+            $this->bus->dispatch(new GetDecksStatHistoryQuery($deckId)),
+        );
+
+        return $stats[$deckId];
     }
 
     private function ownerName(KeyforgeDeck $deck): ?string

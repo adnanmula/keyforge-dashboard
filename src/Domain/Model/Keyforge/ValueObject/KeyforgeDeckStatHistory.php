@@ -4,28 +4,53 @@ namespace AdnanMula\Cards\Domain\Model\Keyforge\ValueObject;
 
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 
-final readonly class KeyforgeDeckStatHistory implements \JsonSerializable
+final class KeyforgeDeckStatHistory implements \JsonSerializable
 {
     private function __construct(
-        public Uuid $deckId,
-        public int $dokDeckId,
-        public int $dokReference,
-        public int $sas,
-        public int $aercScore,
-        public int $aercVersion,
-        public float $expectedAmber,
-        public float $creatureControl,
-        public float $artifactControl,
-        public float $efficiency,
-        public float $recursion,
-        public float $creatureProtection,
-        public float $disruption,
-        public float $other,
-        public float $effectivePower,
-        public int $synergyRating,
-        public int $antiSynergyRating,
-        public \DateTimeImmutable $updatedAt,
+        public readonly Uuid $deckId,
+        public readonly int $dokDeckId,
+        public readonly int $dokReference,
+        public readonly int $sas,
+        public readonly int $aercScore,
+        public readonly int $aercVersion,
+        public readonly float $expectedAmber,
+        public readonly float $creatureControl,
+        public readonly float $artifactControl,
+        public readonly float $efficiency,
+        public readonly float $recursion,
+        public readonly float $creatureProtection,
+        public readonly float $disruption,
+        public readonly float $other,
+        public readonly float $effectivePower,
+        public readonly int $synergyRating,
+        public readonly int $antiSynergyRating,
+        public readonly \DateTimeImmutable $updatedAt,
+        public int $sasModified = 0,
     ) {}
+
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            deckId: Uuid::from($data['deck_id']),
+            dokDeckId: $data['dok_deck_id'],
+            dokReference: $data['dok_reference'],
+            sas: (int) $data['sas'],
+            aercScore: (int) $data['aerc_score'],
+            aercVersion: (int) $data['aerc_version'],
+            expectedAmber: (float) $data['expected_amber'],
+            creatureControl: (float) $data['creature_control'],
+            artifactControl: (float) $data['artifact_control'],
+            efficiency: (float) $data['efficiency'],
+            recursion: (float) $data['recursion'],
+            creatureProtection: (float) $data['creature_protection'],
+            disruption: (float) $data['disruption'],
+            other: (float) $data['other'],
+            effectivePower: (float) $data['effective_power'],
+            synergyRating: (int) $data['synergy_rating'],
+            antiSynergyRating: (int) $data['antisynergy_rating'],
+            updatedAt: new \DateTimeImmutable($data['updated_at']),
+        );
+    }
 
     public static function fromDokData(Uuid $deckId, array $data): self
     {
@@ -51,6 +76,13 @@ final readonly class KeyforgeDeckStatHistory implements \JsonSerializable
         );
     }
 
+    public function setSasModified(int $value): self
+    {
+        $this->sasModified = $value;
+
+        return $this;
+    }
+
     public function jsonSerialize(): array
     {
         return [
@@ -58,6 +90,7 @@ final readonly class KeyforgeDeckStatHistory implements \JsonSerializable
             'dokDeckId' => $this->dokDeckId,
             'dokReference' => $this->dokReference,
             'sas' => $this->sas,
+            'sasModified' => $this->sasModified,
             'aercScore' => $this->aercScore,
             'aercVersion' => $this->aercVersion,
             'expectedAmber' => $this->expectedAmber,

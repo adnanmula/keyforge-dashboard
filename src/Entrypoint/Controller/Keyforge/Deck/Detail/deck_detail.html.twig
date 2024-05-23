@@ -17,6 +17,7 @@
     {% include 'Keyforge/Deck/Detail/deck.html.twig' %}
 {#    {% include 'Keyforge/Deck/Detail/deck_analysis.html.twig' %}#}
     {% include 'Keyforge/Deck/Detail/deck_stats.html.twig' %}
+    {% include 'Keyforge/Deck/Detail/deck_history.html.twig' with {'deck_history': deck_history} %}
 
     {% if is_granted('ROLE_KEYFORGE') %}
         <div class="shadow-lg p-3 mb-5 bg-white rounded">

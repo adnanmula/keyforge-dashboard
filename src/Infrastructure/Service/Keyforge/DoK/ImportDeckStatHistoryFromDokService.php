@@ -3,6 +3,7 @@
 namespace AdnanMula\Cards\Infrastructure\Service\Keyforge\DoK;
 
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeckRepository;
+use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeckStatHistoryRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeDeckStatHistory;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,6 +14,7 @@ final class ImportDeckStatHistoryFromDokService
     public function __construct(
         private HttpClientInterface $dokClient,
         private KeyforgeDeckRepository $repository,
+        private KeyforgeDeckStatHistoryRepository $historyRepository,
     ) {}
 
     public function execute(Uuid $id): void
@@ -29,7 +31,7 @@ final class ImportDeckStatHistoryFromDokService
         }
 
         foreach ($response as $data) {
-            $this->repository->saveDeckDataHistory(KeyforgeDeckStatHistory::fromDokData($deck->id(), $data));
+            $this->historyRepository->save(KeyforgeDeckStatHistory::fromDokData($deck->id(), $data));
         }
     }
 }

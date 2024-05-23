@@ -6,7 +6,6 @@ use AdnanMula\Cards\Application\Service\Json;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeck;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeDeckData;
-use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeDeckStatHistory;
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeDeckUserData;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Infrastructure\Persistence\Repository\DbalRepository;
@@ -19,7 +18,6 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
     private const TABLE = 'keyforge_decks';
     private const TABLE_DATA = 'keyforge_decks_data';
     private const TABLE_USER_DATA = 'keyforge_decks_user_data';
-    private const TABLE_DATA_HISTORY = 'keyforge_decks_data_history';
 
     private const FIELD_MAPPING = [
         'id' => 'a.id',
@@ -333,92 +331,6 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
         $stmt->bindValue(':owner', $data->owner?->value());
         $stmt->bindValue(':notes', $data->notes);
         $stmt->bindValue(':tags', Json::encode($data->tags));
-
-        $stmt->executeStatement();
-    }
-
-    public function saveDeckDataHistory(KeyforgeDeckStatHistory $data): void
-    {
-        $stmt = $this->connection->prepare(
-            \sprintf(
-                '
-                INSERT INTO %s (
-                    dok_reference,
-                    deck_id,
-                    dok_deck_id,
-                    sas,
-                    aerc_score,
-                    aerc_version,
-                    expected_amber,
-                    creature_control,
-                    artifact_control,
-                    efficiency,
-                    recursion,
-                    creature_protection,
-                    disruption,
-                    other,
-                    effective_power,
-                    synergy_rating,
-                    antiynergy_rating,
-                    updated_at
-                ) VALUES (
-                    :dok_reference,
-                    :deck_id,
-                    :dok_deck_id,
-                    :sas,
-                    :aerc_score,
-                    :aerc_version,
-                    :expected_amber,
-                    :creature_control,
-                    :artifact_control,
-                    :efficiency,
-                    :recursion,
-                    :creature_protection,
-                    :disruption,
-                    :other,
-                    :effective_power,
-                    :synergy_rating,
-                    :antiynergy_rating,
-                    :updated_at
-                ) ON CONFLICT (dok_reference) DO UPDATE SET
-                    sas = :sas,
-                    aerc_score = :aerc_score,
-                    aerc_version = :aerc_version,
-                    expected_amber = :expected_amber,
-                    creature_control = :creature_control,
-                    artifact_control = :artifact_control,
-                    efficiency = :efficiency,
-                    recursion = :recursion,
-                    creature_protection = :creature_protection,
-                    disruption = :disruption,
-                    other = :other,
-                    effective_power = :effective_power,
-                    synergy_rating = :synergy_rating,
-                    antiynergy_rating = :antiynergy_rating,
-                    updated_at = :updated_at
-                ',
-                self::TABLE_DATA_HISTORY,
-            ),
-        );
-
-        $stmt->bindValue(':dok_reference', $data->dokReference);
-        $stmt->bindValue(':deck_id', $data->deckId);
-        $stmt->bindValue(':dok_deck_id', $data->dokDeckId);
-        $stmt->bindValue(':sas', $data->sas);
-        $stmt->bindValue(':aerc_score', $data->aercScore);
-        $stmt->bindValue(':aerc_version', $data->aercVersion);
-        $stmt->bindValue(':expected_amber', $data->expectedAmber);
-        $stmt->bindValue(':creature_control', $data->creatureControl);
-        $stmt->bindValue(':artifact_control', $data->artifactControl);
-        $stmt->bindValue(':efficiency', $data->efficiency);
-        $stmt->bindValue(':recursion', $data->recursion);
-        $stmt->bindValue(':creature_protection', $data->creatureProtection);
-        $stmt->bindValue(':disruption', $data->disruption);
-        $stmt->bindValue(':other', $data->other);
-        $stmt->bindValue(':effective_power', $data->effectivePower);
-        $stmt->bindValue(':synergy_rating', $data->synergyRating);
-        $stmt->bindValue(':antiynergy_rating', $data->antiSynergyRating);
-        $stmt->bindValue(':updated_at', $data->updatedAt->format(\DateTimeInterface::ATOM));
 
         $stmt->executeStatement();
     }

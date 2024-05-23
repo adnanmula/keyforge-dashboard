@@ -86,7 +86,7 @@ final class Decks extends AbstractMigration
                 other numeric NOT NULL,
                 effective_power numeric NOT NULL,
                 synergy_rating integer NOT NULL,
-                antiynergy_rating integer NOT NULL,
+                antisynergy_rating integer NOT NULL,
                 updated_at TIMESTAMP WITH TIME ZONE NULL,
                 PRIMARY KEY(dok_reference)
             )',
