@@ -48,7 +48,7 @@ final class ImportDeckStatsBulkCommand extends Command
                 $output->writeln('<error>NOT FOUND: '. $deck .'</error>');
             }
 
-//            $this->updateRepository->add(Uuid::from($deck));
+            $this->updateRepository->add(Uuid::from($deck));
 
             if ($index*2 > 0 && ($index*2+2) % 25 === 0) {
                 $output->writeln('Reached request limit sleeping for 65 seconds');
