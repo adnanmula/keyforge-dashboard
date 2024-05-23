@@ -17,6 +17,8 @@ interface KeyforgeDeckRepository
 
     public function byId(Uuid $id): ?KeyforgeDeck;
 
+    public function isImported(Uuid $id): bool;
+
     /** @return array<KeyforgeDeck> */
     public function byIds(Uuid ...$id): array;
 
@@ -29,7 +31,7 @@ interface KeyforgeDeckRepository
 
     public function saveDeckUserData(KeyforgeDeckUserData $data): void;
 
-    public function saveDeckWins(Uuid $id, int $wins, int $losses): void;
-
     public function saveDeckDataHistory(KeyforgeDeckStatHistory $data): void;
+
+    public function saveDeckWins(Uuid $id, int $wins, int $losses): void;
 }

@@ -3,18 +3,11 @@
 namespace AdnanMula\Cards\Entrypoint\Command\Deck;
 
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Exception\DeckNotExistsException;
-use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Domain\Service\Keyforge\ImportDeckService;
 use AdnanMula\Cards\Infrastructure\Persistence\Repository\Keyforge\KeyforgeDeckUpdateDbalRepository;
-use AdnanMula\Criteria\Criteria;
-use AdnanMula\Criteria\Filter\Filter;
-use AdnanMula\Criteria\Filter\FilterType;
-use AdnanMula\Criteria\FilterField\FilterField;
-use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
-use AdnanMula\Criteria\FilterValue\FilterOperator;
-use AdnanMula\Criteria\FilterValue\StringArrayFilterValue;
-use AdnanMula\Criteria\FilterValue\StringFilterValue;
+use Doctrine\DBAL\ArrayParameterType;
+use Doctrine\DBAL\Connection;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -26,7 +19,7 @@ final class ImportDeckStatsBulkCommand extends Command
     public const NAME = 'deck:stats:bulk';
 
     public function __construct(
-        private readonly KeyforgeDeckRepository $repository,
+        private Connection $connection,
         private readonly KeyforgeDeckUpdateDbalRepository $updateRepository,
         private readonly ImportDeckService $service,
     ) {
@@ -49,13 +42,13 @@ final class ImportDeckStatsBulkCommand extends Command
 
         foreach ($decks as $index => $deck) {
             try {
-                $this->service->execute($deck->id(), $deck->userData()->owner, true, true);
-                $output->writeln($deck->data()->name);
+                $this->service->execute(Uuid::from($deck), null, true, true, false);
+                $output->writeln($deck);
             } catch (DeckNotExistsException) {
-                $output->writeln('<error>NOT FOUND: '. $deck->data()->name .'</error>');
+                $output->writeln('<error>NOT FOUND: '. $deck .'</error>');
             }
 
-            $this->updateRepository->add($deck->id());
+//            $this->updateRepository->add(Uuid::from($deck));
 
             if ($index*2 > 0 && ($index*2+2) % 25 === 0) {
                 $output->writeln('Reached request limit sleeping for 65 seconds');
@@ -68,7 +61,7 @@ final class ImportDeckStatsBulkCommand extends Command
 
     private function params(InputInterface $input): array
     {
-        $batch = (int)$input->getArgument('batch');
+        $batch = (int) $input->getArgument('batch');
         $deckIds = $input->getOption('decks') ?? [];
 
         if ([] !== $deckIds) {
@@ -89,39 +82,17 @@ final class ImportDeckStatsBulkCommand extends Command
 
         $alreadyImported = \array_merge($alreadyImported, $draftDecks);
 
-        $filters = [];
+        $query = $this->connection->createQueryBuilder()
+            ->select('a.id')
+            ->from('keyforge_decks', 'a')
+            ->where('a.id not in (:already_imported)')
+            ->setParameter('already_imported', $alreadyImported, ArrayParameterType::STRING);
 
-        foreach ($deckIds as $deckId) {
-            if (false === Uuid::isValid($deckId)) {
-                throw new \InvalidArgumentException('Invalid deck id: ' . $deckId);
-            }
-
-            $filters[] = new Filter(new FilterField('id'), new StringFilterValue($deckId), FilterOperator::EQUAL);
+        if (\count($deckIds) > 0) {
+            $query->andWhere('a.id in (:decks)')
+                ->setParameter('decks', $deckIds, ArrayParameterType::STRING);
         }
 
-        foreach ($deckIds as $deckId) {
-            if (false === Uuid::isValid($deckId)) {
-                throw new \InvalidArgumentException('Invalid deck id: ' . $deckId);
-            }
-
-            $filters[] = new Filter(new FilterField('id'), new StringFilterValue($deckId), FilterOperator::EQUAL);
-        }
-
-        return $this->repository->search(
-            new Criteria(
-                null,
-                $batch,
-                null,
-                new AndFilterGroup(
-                    FilterType::AND,
-                    new Filter(
-                        new FilterField('id'),
-                        new StringArrayFilterValue(...$alreadyImported),
-                        FilterOperator::NOT_IN,
-                    ),
-                ),
-                new AndFilterGroup(FilterType::OR, ...$filters),
-            ),
-        );
+        return $query->setMaxResults($batch)->executeQuery()->fetchFirstColumn();
     }
 }

@@ -22,12 +22,12 @@ final class ImportDeckFromDokService implements ImportDeckService
         private ImportDeckStatHistoryFromDokService $statHistoryService,
     ) {}
 
-    public function execute(Uuid $uuid, ?Uuid $owner = null, bool $forceUpdate = false, bool $withHistory = true): ?KeyforgeDeck
+    public function execute(Uuid $uuid, ?Uuid $owner = null, bool $forceUpdate = false, bool $withHistory = true, bool $withTags = true): ?KeyforgeDeck
     {
-        $savedDeck = $this->repository->byId($uuid);
+        $isImported = $this->repository->isImported($uuid);
 
-        if (false === $forceUpdate && null !== $savedDeck) {
-            return $savedDeck;
+        if (false === $forceUpdate && $isImported) {
+            return $this->repository->byId($uuid);
         }
 
         try {
@@ -45,21 +45,22 @@ final class ImportDeckFromDokService implements ImportDeckService
         $newDeck = new KeyforgeDeck(
             Uuid::from($deck['deck']['keyforgeId']),
             KeyforgeDeckData::fromDokData($deck),
-            KeyforgeDeckUserData::from(
-                Uuid::from($deck['deck']['keyforgeId']),
-                $owner,
-                null === $savedDeck ? 0 : $savedDeck->userData()->wins,
-                null === $savedDeck ? 0 : $savedDeck->userData()->losses,
-                null === $savedDeck ? '' : $savedDeck->userData()->notes,
-            ),
+            KeyforgeDeckUserData::from(Uuid::from($deck['deck']['keyforgeId']), $owner, 0, 0, ''),
         );
 
-        $this->repository->save($newDeck, null === $savedDeck);
+        $this->repository->save($newDeck, false);
         $this->repository->saveDeckData($newDeck->data());
-        $this->tagsService->execute($newDeck);
+
+        if (false === $isImported) {
+            $this->repository->saveDeckUserData($newDeck->userData());
+        }
 
         if ($withHistory) {
             $this->statHistoryService->execute($newDeck->id());
+        }
+
+        if ($withTags) {
+            $this->tagsService->execute($newDeck);
         }
 
         return $newDeck;

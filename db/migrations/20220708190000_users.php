@@ -2,7 +2,7 @@
 
 use Phinx\Migration\AbstractMigration;
 
-final class Initial extends AbstractMigration
+final class Users extends AbstractMigration
 {
     public function up(): void
     {
@@ -29,11 +29,21 @@ final class Initial extends AbstractMigration
 
         $this->execute('CREATE INDEX ON user_friends (id);');
         $this->execute('CREATE INDEX ON user_friends (friend_id);');
+
+        $this->execute(
+            'CREATE TABLE keyforge_users (
+                id uuid NOT NULL,
+                name character varying(64) NOT NULL
+                   CONSTRAINT keyforge_name_unique UNIQUE,
+                PRIMARY KEY(id)
+            )',
+        );
     }
 
     public function down(): void
     {
         $this->execute('DROP TABLE IF EXISTS "users"');
         $this->execute('DROP TABLE IF EXISTS "user_friends"');
+        $this->execute('DROP TABLE IF EXISTS "keyforge_users"');
     }
 }

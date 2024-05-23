@@ -75,6 +75,24 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
         return $this->map($result);
     }
 
+    public function isImported(Uuid $id): bool
+    {
+        $result = $this->connection->createQueryBuilder()
+            ->select('a.id')
+            ->from(self::TABLE, 'a')
+            ->where('a.id = :id')
+            ->setParameter('id', $id->value())
+            ->setMaxResults(1)
+            ->executeQuery()
+            ->fetchAssociative();
+
+        if ([] === $result || false === $result) {
+            return false;
+        }
+
+        return true;
+    }
+
     public function byIds(Uuid ...$ids): array
     {
         $result = $this->connection->createQueryBuilder()
@@ -319,37 +337,6 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
         $stmt->executeStatement();
     }
 
-    public function saveDeckWins(Uuid $id, int $wins, int $losses): void
-    {
-        $stmt = $this->connection->prepare(
-            \sprintf(
-                'UPDATE %s SET wins = :wins, losses = :losses WHERE id = :id',
-                self::TABLE_USER_DATA,
-            ),
-        );
-
-        $stmt->bindValue(':id', $id->value());
-        $stmt->bindValue(':wins', $wins);
-        $stmt->bindValue(':losses', $losses);
-
-        $stmt->executeStatement();
-    }
-
-    public function saveDeckOwner(Uuid $id, ?Uuid $owner): void
-    {
-        $stmt = $this->connection->prepare(
-            \sprintf(
-                'UPDATE %s SET owner = :owner WHERE id = :id',
-                self::TABLE_USER_DATA,
-            ),
-        );
-
-        $stmt->bindValue(':id', $id->value());
-        $stmt->bindValue(':owner', $owner);
-
-        $stmt->executeStatement();
-    }
-
     public function saveDeckDataHistory(KeyforgeDeckStatHistory $data): void
     {
         $stmt = $this->connection->prepare(
@@ -432,6 +419,37 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
         $stmt->bindValue(':synergy_rating', $data->synergyRating);
         $stmt->bindValue(':antiynergy_rating', $data->antiSynergyRating);
         $stmt->bindValue(':updated_at', $data->updatedAt->format(\DateTimeInterface::ATOM));
+
+        $stmt->executeStatement();
+    }
+
+    public function saveDeckWins(Uuid $id, int $wins, int $losses): void
+    {
+        $stmt = $this->connection->prepare(
+            \sprintf(
+                'UPDATE %s SET wins = :wins, losses = :losses WHERE id = :id',
+                self::TABLE_USER_DATA,
+            ),
+        );
+
+        $stmt->bindValue(':id', $id->value());
+        $stmt->bindValue(':wins', $wins);
+        $stmt->bindValue(':losses', $losses);
+
+        $stmt->executeStatement();
+    }
+
+    public function saveDeckOwner(Uuid $id, ?Uuid $owner): void
+    {
+        $stmt = $this->connection->prepare(
+            \sprintf(
+                'UPDATE %s SET owner = :owner WHERE id = :id',
+                self::TABLE_USER_DATA,
+            ),
+        );
+
+        $stmt->bindValue(':id', $id->value());
+        $stmt->bindValue(':owner', $owner);
 
         $stmt->executeStatement();
     }
