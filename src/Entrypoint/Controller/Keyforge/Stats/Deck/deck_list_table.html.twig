@@ -117,13 +117,13 @@
                 }
             },
             columns: [
-                { data: "tags" },
-                { data: "name" },
-                { data: "set" },
-                { data: "houses" },
-                { data: "wins" },
-                { data: "sas" },
-                { data: "sas" },
+                { data: "user_data.tags" },
+                { data: "data.name" },
+                { data: "data.set" },
+                { data: "data.houses" },
+                { data: "user_data.wins" },
+                { data: "data.stats.sas" },
+                { data: "" },
             ],
             columnDefs: [
                 {
@@ -205,8 +205,8 @@
                 },
                 {
                     render: function (data, type, row) {
-                        let wins = row.wins;
-                        let losses = row.losses;
+                        let wins = row.user_data.wins;
+                        let losses = row.user_data.losses;
                         let win_rate = 0;
 
                         if (wins + losses > 0) {

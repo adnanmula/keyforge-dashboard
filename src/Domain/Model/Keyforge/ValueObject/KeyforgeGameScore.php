@@ -2,7 +2,7 @@
 
 namespace AdnanMula\Cards\Domain\Model\Keyforge\ValueObject;
 
-final class KeyforgeGameScore implements \JsonSerializable
+final readonly class KeyforgeGameScore implements \JsonSerializable
 {
     private function __construct(
         private int $winnerScore,

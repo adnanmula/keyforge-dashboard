@@ -44,7 +44,7 @@ final class GetGamesQueryHandler
         $indexedDecks = [];
 
         foreach ($decks as $deck) {
-            $indexedDecks[$deck->id()->value()] = $deck->name();
+            $indexedDecks[$deck->id()->value()] = $deck->data()->name;
         }
 
         $indexedUsers = [];

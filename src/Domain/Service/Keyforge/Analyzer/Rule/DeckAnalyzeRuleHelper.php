@@ -9,11 +9,11 @@ trait DeckAnalyzeRuleHelper
         $cards = [];
 
         foreach ($cardNames as $cardName) {
-            if (false === $this->deck->data->cards->has($cardName)) {
+            if (false === $this->deck->data()->cards->has($cardName)) {
                 return null;
             }
 
-            $card = $this->deck->data->cards->get($cardName);
+            $card = $this->deck->data()->cards->get($cardName);
             $cards[$card->name] = $card->serializedName;
         }
 

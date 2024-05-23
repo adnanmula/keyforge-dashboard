@@ -2,6 +2,9 @@
 
 namespace AdnanMula\Cards\Domain\Model\Keyforge;
 
+use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeDeckData;
+use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeDeckStatHistory;
+use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeDeckUserData;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Criteria\Criteria;
 
@@ -14,13 +17,21 @@ interface KeyforgeDeckRepository
 
     public function byId(Uuid $id): ?KeyforgeDeck;
 
+    public function isImported(Uuid $id): bool;
+
     /** @return array<KeyforgeDeck> */
     public function byIds(Uuid ...$id): array;
 
     /** @return array<KeyforgeDeck> */
     public function byNames(string ...$decks): array;
 
-    public function save(KeyforgeDeck $deck): void;
+    public function save(KeyforgeDeck $deck, bool $updateUserData = false): void;
 
-    public function executeSasUpdate(): void;
+    public function saveDeckData(KeyforgeDeckData $data): void;
+
+    public function saveDeckUserData(KeyforgeDeckUserData $data): void;
+
+    public function saveDeckDataHistory(KeyforgeDeckStatHistory $data): void;
+
+    public function saveDeckWins(Uuid $id, int $wins, int $losses): void;
 }

@@ -5,9 +5,8 @@ namespace AdnanMula\Cards\Infrastructure\Service\Keyforge\DoK;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Exception\DeckNotExistsException;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeck;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeckRepository;
-use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeDeckHouses;
-use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeHouse;
-use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeSet;
+use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeDeckData;
+use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeDeckUserData;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Domain\Service\Keyforge\Deck\DeckApplyPredefinedTagsService;
 use AdnanMula\Cards\Domain\Service\Keyforge\ImportDeckService;
@@ -20,14 +19,15 @@ final class ImportDeckFromDokService implements ImportDeckService
         private KeyforgeDeckRepository $repository,
         private HttpClientInterface $dokClient,
         private DeckApplyPredefinedTagsService $tagsService,
+        private ImportDeckStatHistoryFromDokService $statHistoryService,
     ) {}
 
-    public function execute(Uuid $uuid, ?Uuid $owner = null, bool $forceUpdate = false): ?KeyforgeDeck
+    public function execute(Uuid $uuid, ?Uuid $owner = null, bool $forceUpdate = false, bool $withHistory = true, bool $withTags = true): ?KeyforgeDeck
     {
-        $savedDeck = $this->repository->byId($uuid);
+        $isImported = $this->repository->isImported($uuid);
 
-        if (false === $forceUpdate && null !== $savedDeck) {
-            return $savedDeck;
+        if (false === $forceUpdate && $isImported) {
+            return $this->repository->byId($uuid);
         }
 
         try {
@@ -42,33 +42,26 @@ final class ImportDeckFromDokService implements ImportDeckService
             throw new DeckNotExistsException();
         }
 
-        $houses = \array_map(static fn (array $data) => $data['house'], $deck['deck']['housesAndCards']);
-
         $newDeck = new KeyforgeDeck(
-            $uuid,
-            $deck['deck']['name'],
-            KeyforgeSet::fromDokName($deck['deck']['expansion']),
-            KeyforgeDeckHouses::from(
-                KeyforgeHouse::fromDokName($houses[0]),
-                KeyforgeHouse::fromDokName($houses[1]),
-                KeyforgeHouse::fromDokName($houses[2]),
-            ),
-            $deck['deck']['sasRating'],
-            null === $savedDeck ? 0 : $savedDeck->wins(),
-            null === $savedDeck ? 0 : $savedDeck->losses(),
-            $deck,
-            $owner,
-            null === $savedDeck ? '' : $savedDeck->notes(),
-            [],
+            Uuid::from($deck['deck']['keyforgeId']),
+            KeyforgeDeckData::fromDokData($deck),
+            KeyforgeDeckUserData::from(Uuid::from($deck['deck']['keyforgeId']), $owner, 0, 0, ''),
         );
 
-        if (null !== $savedDeck) {
-            $newDeck->updateSas($savedDeck->sas());
-            $newDeck->updateNewSas($deck['deck']['sasRating']);
+        $this->repository->save($newDeck, false);
+        $this->repository->saveDeckData($newDeck->data());
+
+        if (false === $isImported) {
+            $this->repository->saveDeckUserData($newDeck->userData());
         }
 
-        $this->repository->save($newDeck);
-        $this->tagsService->execute($newDeck);
+        if ($withHistory) {
+            $this->statHistoryService->execute($newDeck->id());
+        }
+
+        if ($withTags) {
+            $this->tagsService->execute($newDeck);
+        }
 
         return $newDeck;
     }

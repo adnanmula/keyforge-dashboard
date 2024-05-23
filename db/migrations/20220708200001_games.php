@@ -2,50 +2,10 @@
 
 use Phinx\Migration\AbstractMigration;
 
-final class KeyforgeInitial extends AbstractMigration
+final class Games extends AbstractMigration
 {
     public function up(): void
     {
-        $this->execute(
-        'CREATE TABLE keyforge_users (
-                id uuid NOT NULL,
-                name character varying(64) NOT NULL
-                   CONSTRAINT keyforge_name_unique UNIQUE,
-                PRIMARY KEY(id)
-            )',
-        );
-
-        $this->execute(
-        'CREATE TABLE keyforge_decks (
-                id uuid NOT NULL,
-                name character varying(64) NOT NULL,
-                set character varying(16) NOT NULL,
-                houses jsonb NOT NULL,
-                sas integer NOT NULL,
-                wins integer NOT NULL,
-                losses integer NOT NULL,
-                extra_data jsonb NOT NULL,
-                owner uuid,
-                tags jsonb NOT NULL DEFAULT \'[]\',
-                notes character varying(512) NOT NULL,
-                prev_sas integer NULL,
-                new_sas integer NULL,
-                PRIMARY KEY(id)
-            )',
-        );
-
-        $this->execute(
-            'CREATE TABLE keyforge_tags (
-                id uuid NOT NULL,
-                name jsonb NOT NULL,
-                visibility character varying(16) NOT NULL,
-                style jsonb NOT NULL,
-                type character varying(64) NOT NULL,
-                archived boolean NOT NULL,
-                PRIMARY KEY(id)
-            )',
-        );
-
         $this->execute(
             'CREATE TABLE keyforge_games (
                 id uuid NOT NULL,
@@ -105,8 +65,6 @@ final class KeyforgeInitial extends AbstractMigration
         $this->execute('DROP TABLE IF EXISTS "keyforge_competition_fixtures"');
         $this->execute('DROP TABLE IF EXISTS "keyforge_competitions"');
         $this->execute('DROP TABLE IF EXISTS "keyforge_games"');
-        $this->execute('DROP TABLE IF EXISTS "keyforge_tags"');
-        $this->execute('DROP TABLE IF EXISTS "keyforge_decks"');
         $this->execute('DROP TABLE IF EXISTS "keyforge_users"');
     }
 }

@@ -4,15 +4,14 @@ namespace AdnanMula\Cards\Infrastructure\Service\Keyforge\DoK;
 
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeck;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeckRepository;
-use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeDeckHouses;
-use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeHouse;
-use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeSet;
+use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeDeckData;
+use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeDeckUserData;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Domain\Service\Keyforge\Deck\DeckApplyPredefinedTagsService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-final class ImportMyDecksFromDokService
+final readonly class ImportMyDecksFromDokService
 {
     public function __construct(
         private HttpClientInterface $dokClient,
@@ -46,27 +45,20 @@ final class ImportMyDecksFromDokService
                 continue;
             }
 
-            $houses = \array_map(static fn (array $data) => $data['house'], $responseDeck['deck']['housesAndCards']);
-
             $newDeck = new KeyforgeDeck(
                 Uuid::from($responseDeck['deck']['keyforgeId']),
-                $responseDeck['deck']['name'],
-                KeyforgeSet::fromDokName($responseDeck['deck']['expansion']),
-                KeyforgeDeckHouses::from(
-                    KeyforgeHouse::fromDokName($houses[0]),
-                    KeyforgeHouse::fromDokName($houses[1]),
-                    KeyforgeHouse::fromDokName($houses[2]),
+                KeyforgeDeckData::fromDokData($responseDeck),
+                KeyforgeDeckUserData::from(
+                    Uuid::from($responseDeck['deck']['keyforgeId']),
+                    $owner,
+                    null === $storedDeck ? 0 : $storedDeck->userData()->wins,
+                    null === $storedDeck ? 0 : $storedDeck->userData()->losses,
+                    null === $storedDeck ? '' : $storedDeck->userData()->notes,
                 ),
-                $responseDeck['deck']['sasRating'],
-                null === $storedDeck ? 0 : $storedDeck->wins(),
-                null === $storedDeck ? 0 : $storedDeck->losses(),
-                $responseDeck,
-                $owner,
-                null === $storedDeck ? '' : $storedDeck->notes(),
-                [],
             );
 
-            $this->repository->save($newDeck);
+            $this->repository->save($newDeck, null === $storedDeck);
+            $this->repository->saveDeckData($newDeck->data());
             $this->tagsService->execute($newDeck);
         }
     }

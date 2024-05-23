@@ -8,6 +8,7 @@ use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGame;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGameRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUser;
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUserRepository;
+use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeDeckUserData;
 use AdnanMula\Cards\Domain\Model\Shared\UserRepository;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Criteria\Criteria;
@@ -231,8 +232,16 @@ final class GetDecksQueryHandler
                 }
             }
 
-            $deck->updateWins($deckWins);
-            $deck->updateLosses($deckLosses);
+            $deck->setUserData(
+                KeyforgeDeckUserData::from(
+                    $deck->userData()->id,
+                    $deck->userData()->owner,
+                    $deckWins,
+                    $deckLosses,
+                    $deck->userData()->notes,
+                    $deck->userData()->tags,
+                ),
+            );
         }
 
         return $decks;
@@ -284,8 +293,15 @@ final class GetDecksQueryHandler
                 }
             }
 
-            $deck->updateWins($deckWins);
-            $deck->updateLosses($deckLosses);
+            $deck->setUserData(
+                KeyforgeDeckUserData::from(
+                    $deck->userData()->id,
+                    $deck->userData()->owner,
+                    $deckWins,
+                    $deckLosses,
+                    $deck->userData()->notes,
+                ),
+            );
         }
 
         return $decks;
@@ -296,21 +312,21 @@ final class GetDecksQueryHandler
     {
         if ($order->type() === OrderType::DESC) {
             \usort($decks, static function (KeyforgeDeck $a, KeyforgeDeck $b) {
-                if ($a->wins() === $b->wins()) {
-                    return $a->losses() <=> $b->losses();
+                if ($a->userData()->wins === $b->userData()->wins) {
+                    return $a->userData()->losses <=> $b->userData()->losses;
                 }
 
-                return $b->wins() <=> $a->wins();
+                return $b->userData()->wins <=> $a->userData()->wins;
             });
         }
 
         if ($order->type() === OrderType::ASC) {
             \usort($decks, static function (KeyforgeDeck $a, KeyforgeDeck $b) {
-                if ($b->wins() === $a->wins()) {
-                    return $b->losses() <=> $a->losses();
+                if ($b->userData()->wins === $a->userData()->wins) {
+                    return $b->userData()->losses <=> $a->userData()->losses;
                 }
 
-                return $a->wins() <=> $b->wins();
+                return $a->userData()->wins <=> $b->userData()->wins;
             });
         }
 

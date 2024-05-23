@@ -49,34 +49,34 @@ final class GeneralStatsQueryHandler
         $indexedDecks = [];
 
         foreach ($decks as $deck) {
-            $setPresence[$deck->set()->name]++;
+            $setPresence[$deck->data()->set->name]++;
 
-            foreach ($deck->houses()->value() as $house) {
+            foreach ($deck->data()->houses->value() as $house) {
                 $housePresence[$house->name]++;
             }
 
-            $winRate = $this->winRate($deck->wins(), $deck->losses());
+            $winRate = $this->winRate($deck->userData()->wins, $deck->userData()->losses);
 
-            if ($deck->sas() > $maxSas) {
-                $maxSas = $deck->sas();
+            if ($deck->data()->stats->sas > $maxSas) {
+                $maxSas = $deck->data()->stats->sas;
                 $maxSasResult = [
                     'id' => $deck->id()->value(),
-                    'name' => $deck->name(),
-                    'sas' => $deck->sas(),
-                    'wins' => $deck->wins(),
-                    'losses' => $deck->losses(),
-                    'win_rate' => $this->winRate($deck->wins(), $deck->losses()),
+                    'name' => $deck->data()->name,
+                    'sas' => $deck->data()->stats->sas,
+                    'wins' => $deck->userData()->wins,
+                    'losses' => $deck->userData()->losses,
+                    'win_rate' => $this->winRate($deck->userData()->wins, $deck->userData()->losses),
                 ];
             }
 
-            if ($deck->sas() < $minSas) {
-                $minSas = $deck->sas();
+            if ($deck->data()->stats->sas < $minSas) {
+                $minSas = $deck->data()->stats->sas;
                 $minSasResult = [
                     'id' => $deck->id()->value(),
-                    'name' => $deck->name(),
-                    'sas' => $deck->sas(),
-                    'wins' => $deck->wins(),
-                    'losses' => $deck->losses(),
+                    'name' => $deck->data()->name,
+                    'sas' => $deck->data()->stats->sas,
+                    'wins' => $deck->userData()->wins,
+                    'losses' => $deck->userData()->losses,
                     'win_rate' => $winRate,
                 ];
             }
@@ -85,11 +85,11 @@ final class GeneralStatsQueryHandler
                 $maxWinRate = $winRate;
                 $maxWinRateResult = [
                     'id' => $deck->id()->value(),
-                    'name' => $deck->name(),
-                    'sas' => $deck->sas(),
-                    'wins' => $deck->wins(),
-                    'losses' => $deck->losses(),
-                    'win_rate' => $this->winRate($deck->wins(), $deck->losses()),
+                    'name' => $deck->data()->name,
+                    'sas' => $deck->data()->stats->sas,
+                    'wins' => $deck->userData()->wins,
+                    'losses' => $deck->userData()->losses,
+                    'win_rate' => $this->winRate($deck->userData()->wins, $deck->userData()->losses),
                 ];
             }
 
@@ -111,17 +111,17 @@ final class GeneralStatsQueryHandler
 
             $winnerDeck = $indexedDecks[$game->winnerDeck()->value()];
 
-            $setWins[$winnerDeck->set()->name]++;
+            $setWins[$winnerDeck->data()->set->name]++;
 
-            foreach ($winnerDeck->houses()->value() as $house) {
+            foreach ($winnerDeck->data()->houses->value() as $house) {
                 $houseWins[$house->name]++;
             }
 
             $loserDeck = $indexedDecks[$game->loserDeck()->value()];
 
-            $setLosses[$loserDeck->set()->name]++;
+            $setLosses[$loserDeck->data()->set->name]++;
 
-            foreach ($loserDeck->houses()->value() as $house) {
+            foreach ($loserDeck->data()->houses->value() as $house) {
                 $houseLosses[$house->name]++;
             }
 

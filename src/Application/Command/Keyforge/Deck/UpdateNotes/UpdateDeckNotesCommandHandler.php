@@ -3,6 +3,7 @@
 namespace AdnanMula\Cards\Application\Command\Keyforge\Deck\UpdateNotes;
 
 use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeckRepository;
+use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeDeckUserData;
 
 final class UpdateDeckNotesCommandHandler
 {
@@ -18,12 +19,16 @@ final class UpdateDeckNotesCommandHandler
             throw new \Exception('Deck not found.');
         }
 
-        if (null === $deck->owner() || false === $deck->owner()->equalTo($command->userId)) {
+        if (null === $deck->userData()->owner || false === $deck->userData()->owner->equalTo($command->userId)) {
             throw new \Exception('You are not the owner of this deck.');
         }
 
-        $deck->updateNotes($command->notes);
-
-        $this->repository->save($deck);
+        $this->repository->saveDeckUserData(KeyforgeDeckUserData::from(
+            $deck->userData()->id,
+            $deck->userData()->owner,
+            $deck->userData()->wins,
+            $deck->userData()->losses,
+            $command->notes,
+        ));
     }
 }

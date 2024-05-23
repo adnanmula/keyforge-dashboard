@@ -3,30 +3,16 @@
 namespace AdnanMula\Cards\Domain\Model\Keyforge;
 
 use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeDeckData;
-use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeDeckHouses;
-use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeSet;
+use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeDeckUserData;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 
 final class KeyforgeDeck implements \JsonSerializable
 {
-    public readonly KeyforgeDeckData $data;
-
     public function __construct(
-        private Uuid $id,
-        private string $name,
-        private KeyforgeSet $set,
-        private KeyforgeDeckHouses $houses,
-        private int $sas,
-        private int $wins,
-        private int $losses,
-        private array $extraData,
-        private ?Uuid $owner,
-        private string $notes,
-        private array $tags = [],
-        private ?int $prevSas = null,
-        private ?int $newSas = null,
+        private readonly Uuid $id,
+        private KeyforgeDeckData $data,
+        private KeyforgeDeckUserData $userData,
     ) {
-        $this->data = KeyforgeDeckData::fromDokData($extraData);
     }
 
     public function id(): Uuid
@@ -34,139 +20,32 @@ final class KeyforgeDeck implements \JsonSerializable
         return $this->id;
     }
 
-    public function name(): string
+    public function data(): KeyforgeDeckData
     {
-        return $this->name;
+        return $this->data;
     }
 
-    public function set(): KeyforgeSet
+    public function setData(KeyforgeDeckData $data): void
     {
-        return $this->set;
+        $this->data = $data;
     }
 
-    public function houses(): KeyforgeDeckHouses
+    public function userData(): KeyforgeDeckUserData
     {
-        return $this->houses;
+        return $this->userData;
     }
 
-    public function sas(): int
+    public function setUserData(KeyforgeDeckUserData $userData): void
     {
-        return $this->sas;
-    }
-
-    public function prevSas(): ?int
-    {
-        return $this->prevSas;
-    }
-
-    public function newSas(): ?int
-    {
-        return $this->newSas;
-    }
-
-    public function wins(): int
-    {
-        return $this->wins;
-    }
-
-    public function losses(): int
-    {
-        return $this->losses;
-    }
-
-    public function extraData(): array
-    {
-        return $this->extraData;
-    }
-
-    public function owner(): ?Uuid
-    {
-        return $this->owner;
-    }
-
-    public function notes(): string
-    {
-        return $this->notes;
-    }
-
-    public function tags(): array
-    {
-        return $this->tags;
-    }
-
-    public function updateSas(int $sas): self
-    {
-        $this->sas = $sas;
-
-        return $this;
-    }
-
-    public function updatePrevSas(?int $prevSas): self
-    {
-        $this->prevSas = $prevSas;
-
-        return $this;
-    }
-
-    public function updateNewSas(?int $newSas): self
-    {
-        $this->newSas = $newSas;
-
-        return $this;
-    }
-
-    public function updateWins(int $wins): self
-    {
-        $this->wins = $wins;
-
-        return $this;
-    }
-
-    public function updateLosses(int $losses): self
-    {
-        $this->losses = $losses;
-
-        return $this;
-    }
-
-    public function updateOwner(?Uuid $owner): self
-    {
-        $this->owner = $owner;
-
-        return $this;
-    }
-
-    public function updateNotes(string $notes): self
-    {
-        $this->notes = $notes;
-
-        return $this;
-    }
-
-    public function updateTags(string ...$tags): self
-    {
-        $this->tags = $tags;
-
-        return $this;
+        $this->userData = $userData;
     }
 
     public function jsonSerialize(): array
     {
         return [
             'id' => $this->id()->value(),
-            'name' => $this->name(),
-            'set' => $this->set()->value,
-            'houses' => $this->houses()->jsonSerialize(),
-            'sas' => $this->sas(),
-            'prevSas' => $this->prevSas(),
-            'newSas' => $this->newSas(),
-            'wins' => $this->wins(),
-            'losses' => $this->losses(),
             'data' => $this->data->jsonSerialize(),
-            'extraData' => $this->extraData(),
-            'owner' => $this->owner()?->value(),
-            'tags' => $this->tags(),
-            'notes' => $this->notes(),
+            'user_data' => $this->userData()->jsonSerialize(),
         ];
     }
 }

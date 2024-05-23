@@ -34,6 +34,7 @@ use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasScalingAmberControl;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagRecursionHigh;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagSynergyHigh;
 use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagUpgradeCountHigh;
+use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeDeckUserData;
 
 final class DeckApplyPredefinedTagsService
 {
@@ -45,8 +46,7 @@ final class DeckApplyPredefinedTagsService
     {
         $newTags = [];
 
-        /** @var array $data */
-        $data = $deck->extraData()['deck'];
+        $data = $deck->data()->rawData['deck'];
 
         [$maverickCount, $legacyCount, $anomalyCount] = $this->specialCardsCount($data);
 
@@ -87,9 +87,16 @@ final class DeckApplyPredefinedTagsService
 
         $newTags = \array_filter($newTags);
 
-        $deck->updateTags(...$this->mergeTags($deck->tags(), $newTags));
-
-        $this->repository->save($deck);
+        $this->repository->saveDeckUserData(
+            KeyforgeDeckUserData::from(
+                $deck->id(),
+                $deck->userData()->owner,
+                $deck->userData()->wins,
+                $deck->userData()->losses,
+                $deck->userData()->notes,
+                $this->mergeTags($deck->userData()->tags, $newTags),
+            ),
+        );
     }
 
     private function mergeTags(array $currentTags, array $newTags): array
