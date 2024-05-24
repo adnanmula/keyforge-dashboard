@@ -7,20 +7,23 @@ final class Cards extends AbstractMigration
     public function up(): void
     {
         $this->execute(
-            'CREATE TABLE keyforge_games (
-                id uuid NOT NULL,
-                winner uuid NOT NULL,
-                loser uuid NOT NULL,            
-                winner_deck uuid NOT NULL,
-                loser_deck uuid NOT NULL,
-                first_turn uuid NULL,
-                score jsonb NOT NULL,
-                date TIMESTAMP WITH TIME ZONE NULL,
-                created_at TIMESTAMP WITH TIME ZONE NULL,
-                winner_chains integer NOT NULL,
-                loser_chains integer NOT NULL,
-                competition character varying(64) NOT NULL,
-                notes character varying(512) NOT NULL,
+            'CREATE TABLE keyforge_cards (
+                id int NOT NULL,
+                houses jsonb NOT NULL,
+                name jsonb NOT NULL,
+                name_url character varying(64) NOT NULL,
+                flavor_text jsonb NULL,
+                text jsonb NOT NULL,
+                type character varying(32) NOT NULL,
+                traits jsonb NOT NULL,
+                amber integer NOT NULL,
+                power integer NULL,
+                armor integer NULL,
+                is_big bool NOT NULL,
+                is_token bool NOT NULL,
+                sets jsonb NOT NULL,
+                tags jsonb NOT NULL,
+                raw_data jsonb NOT NULL,
                 PRIMARY KEY(id)
             )',
         );

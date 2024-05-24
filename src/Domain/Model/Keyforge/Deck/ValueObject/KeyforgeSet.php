@@ -20,6 +20,7 @@ enum KeyforgeSet: string
     case M24 = 'M24';
     case VM23 = 'VM23';
     case VM24 = 'VM24';
+    case ANOMALY_EXPANSION = 'ANOMALY_EXPANSION';
 
     public function fullName(): string
     {
@@ -36,6 +37,7 @@ enum KeyforgeSet: string
             self::M24 => 'Menagerie',
             self::VM23 => 'Vault Masters 2023',
             self::VM24 => 'Vault Masters 2024',
+            self::ANOMALY_EXPANSION => 'Anomaly',
         };
     }
 
@@ -87,6 +89,10 @@ enum KeyforgeSet: string
 
         if ($set === 'MENAGERIE_2024') {
             return self::M24;
+        }
+
+        if ($set === 'ANOMALY_EXPANSION') {
+            return self::ANOMALY_EXPANSION;
         }
 
         throw new \InvalidArgumentException($set);

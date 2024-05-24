@@ -21,6 +21,7 @@ enum KeyforgeHouse: string implements \JsonSerializable
     case EKWIDON = 'EKWIDON';
     case GEISTOID = 'GEISTOID';
     case SKYBORN = 'SKYBORN';
+    case KEYRAKEN = 'KEYRAKEN';
 
     public static function fromDokName(string $house): self
     {
@@ -51,6 +52,7 @@ enum KeyforgeHouse: string implements \JsonSerializable
             self::EKWIDON => 'Ekwidon',
             self::GEISTOID => 'Geistoid',
             self::SKYBORN => 'Skyborn',
+            self::KEYRAKEN => 'Keyraken',
         };
     }
 

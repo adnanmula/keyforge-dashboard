@@ -11,3 +11,5 @@ services:
     alias: AdnanMula\Cards\Infrastructure\Persistence\Repository\Keyforge\Game\KeyforgeCompetitionDbalRepository
   AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeTagRepository:
     alias: AdnanMula\Cards\Infrastructure\Persistence\Repository\Keyforge\Deck\KeyforgeTagDbalRepository
+  AdnanMula\Cards\Domain\Model\Keyforge\Card\KeyforgeCardRepository:
+    alias: AdnanMula\Cards\Infrastructure\Persistence\Repository\Keyforge\Card\KeyforgeCardDbalRepository
