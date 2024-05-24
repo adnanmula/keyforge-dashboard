@@ -7,38 +7,36 @@
             <tr>
                 <th>Sas</th>
                 <th>Aerc score</th>
-                <th>Aerc version</th>
+                <th>Synergy</th>
                 <th>Expected amber</th>
+                <th>Amber control</th>
                 <th>Creature control</th>
                 <th>Artifact control</th>
+                <th>Effective power</th>
+                <th>Creature protection</th>
                 <th>Efficiency</th>
                 <th>Recursion</th>
-                <th>Creature protection</th>
                 <th>Disruption</th>
                 <th>Other</th>
-                <th>Effective power</th>
-                <th>Synergy rating</th>
-                <th>Antisynergy rating</th>
-                <th>Updated at</th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
             {% for deck_history_stat in deck_history %}
                 <tr>
                     <td style="white-space: nowrap;">{{ deck_history_stat.sas }} ({% if deck_history_stat.sasModified >= 0 %}+{% endif %}{{ deck_history_stat.sasModified }})</td>
-                    <td>{{ deck_history_stat.aercScore }}</td>
-                    <td>{{ deck_history_stat.aercVersion }}</td>
+                    <td style="white-space: nowrap;">{{ deck_history_stat.aercScore }} (v{{ deck_history_stat.aercVersion }})</td>
+                    <td>+{{ deck_history_stat.synergyRating }} -{{ deck_history_stat.antiSynergyRating }}</td>
                     <td>{{ deck_history_stat.expectedAmber|round(2) }}</td>
+                    <td>{{ deck_history_stat.amberControl|round(2) }}</td>
                     <td>{{ deck_history_stat.creatureControl|round(2) }}</td>
                     <td>{{ deck_history_stat.artifactControl|round(2) }}</td>
+                    <td>{{ deck_history_stat.effectivePower|round(2) }}</td>
+                    <td>{{ deck_history_stat.creatureProtection|round(2) }}</td>
                     <td>{{ deck_history_stat.efficiency|round(2) }}</td>
                     <td>{{ deck_history_stat.recursion|round(2) }}</td>
-                    <td>{{ deck_history_stat.creatureProtection|round(2) }}</td>
                     <td>{{ deck_history_stat.disruption|round(2) }}</td>
                     <td>{{ deck_history_stat.other|round(2) }}</td>
-                    <td>{{ deck_history_stat.effectivePower|round(2) }}</td>
-                    <td>{{ deck_history_stat.synergyRating }}</td>
-                    <td>{{ deck_history_stat.antiSynergyRating }}</td>
                     <td style="white-space: nowrap;">{{ deck_history_stat.updatedAt|date('Y-m-d') }}</td>
                 </tr>
             {% endfor %}

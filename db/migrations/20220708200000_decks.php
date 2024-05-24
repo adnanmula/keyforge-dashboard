@@ -77,6 +77,7 @@ final class Decks extends AbstractMigration
                 aerc_score integer NOT NULL,
                 aerc_version integer NOT NULL,
                 expected_amber numeric NOT NULL,
+                amber_control numeric NOT NULL,
                 creature_control numeric NOT NULL,
                 artifact_control numeric NOT NULL,
                 efficiency numeric NOT NULL,

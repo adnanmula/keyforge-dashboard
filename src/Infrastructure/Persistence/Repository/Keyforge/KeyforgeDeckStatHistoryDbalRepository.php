@@ -25,6 +25,7 @@ final class KeyforgeDeckStatHistoryDbalRepository extends DbalRepository impleme
                     aerc_score,
                     aerc_version,
                     expected_amber,
+                    amber_control,
                     creature_control,
                     artifact_control,
                     efficiency,
@@ -44,6 +45,7 @@ final class KeyforgeDeckStatHistoryDbalRepository extends DbalRepository impleme
                     :aerc_score,
                     :aerc_version,
                     :expected_amber,
+                    :amber_control,
                     :creature_control,
                     :artifact_control,
                     :efficiency,
@@ -60,6 +62,7 @@ final class KeyforgeDeckStatHistoryDbalRepository extends DbalRepository impleme
                     aerc_score = :aerc_score,
                     aerc_version = :aerc_version,
                     expected_amber = :expected_amber,
+                    amber_control = :amber_control,
                     creature_control = :creature_control,
                     artifact_control = :artifact_control,
                     efficiency = :efficiency,
@@ -83,6 +86,7 @@ final class KeyforgeDeckStatHistoryDbalRepository extends DbalRepository impleme
         $stmt->bindValue(':aerc_score', $data->aercScore);
         $stmt->bindValue(':aerc_version', $data->aercVersion);
         $stmt->bindValue(':expected_amber', $data->expectedAmber);
+        $stmt->bindValue(':amber_control', $data->amberControl);
         $stmt->bindValue(':creature_control', $data->creatureControl);
         $stmt->bindValue(':artifact_control', $data->artifactControl);
         $stmt->bindValue(':efficiency', $data->efficiency);

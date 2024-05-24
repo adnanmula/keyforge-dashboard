@@ -1,28 +1,107 @@
-<div class="p-3 mb-2">
-    <div class="row">
-        <a class="btn btn-dark border col-12 col-sm-6 col-lg-3">
-            <h5>{{ 'data.wins'|trans }}</h5>
-            <p></p>
-            <p>{{ stats.wins }}</p>
-        </a>
-        <a class="btn btn-dark border col-12 col-sm-6 col-lg-3">
-            <h5>{{ 'data.losses'|trans }}</h5>
-            <p></p>
-            <p>{{ stats.losses }}</p>
-        </a>
-        {% if stats.rival != null %}
-        <a href="{{ path('keyforge_deck_detail', {'deckId': stats.rival.id}) }}" class="btn btn-dark border col-12 col-sm-6 col-lg-3">
-            <h5>{{ stats.rival.name }}</h5>
-            <p></p>
-            <p>{{ 'menu.rival'|trans }} ({{ stats.rival.games }} {{ 'menu.games'|trans }})</p>
-        </a>
-        {% endif %}
-        {% if stats.nemesis != null %}
-        <a href="{{ path('keyforge_deck_detail', {'deckId': stats.nemesis.id}) }}" class="btn btn-dark border col-12 col-sm-6 col-lg-3">
-            <h5>{{ stats.nemesis.name }}</h5>
-            <p></p>
-            <p>{{ 'menu.nemesis'|trans }} ({{ stats.nemesis.losses }} {{ 'menu.games_lost'|trans }})</p>
-        </a>
-        {% endif %}
+{% block header %}
+<style>
+    .stat_icon {
+        width: 40px;
+        height: 40px;
+    }
+</style>
+{% endblock %}
+
+<div class="shadow-lg p-3 mb-3 bg-white rounded col-2 h3 offset-10">
+    <span class="ms-3">Stats</span>
+    <div class="col ms-3 mt-2 mb-2">
+        <img src="{{ asset('assets/keyforge/logos/expected_amber.svg') }}" alt="{{ 'stat.expected_amber'|trans }}" class="stat_icon" data-toggle="tooltip" title="{{ 'stat.expected_amber'|trans }}"/>
+        &nbsp;
+        {{ deck.data.stats.expectedAmber }}
+    </div>
+    <div class="col ms-3 mb-2">
+        <img src="{{ asset('assets/keyforge/logos/amber_control.svg') }}" alt="{{ 'stat.amber_control'|trans }}" class="stat_icon" data-toggle="tooltip" title="{{ 'stat.amber_control'|trans }}"/>
+        &nbsp;
+        {{ deck.data.stats.amberControl }}
+    </div>
+
+    <div class="col ms-3 mb-2">
+        <img src="{{ asset('assets/keyforge/logos/creature_control.svg') }}" alt="Amber control" class="stat_icon"/>
+        &nbsp;
+        {{ deck.data.stats.creatureControl }}
+    </div>
+    <div class="col ms-3 mb-2">
+        <img src="{{ asset('assets/keyforge/logos/artifact_control.svg') }}" alt="Amber control" class="stat_icon"/>
+        &nbsp;
+        {{ deck.data.stats.artifactControl }}
+    </div>
+    <div class="col ms-3 mb-2">
+        <img src="{{ asset('assets/keyforge/logos/efficiency.svg') }}" alt="Amber control" class="stat_icon"/>
+        &nbsp;
+        <span style="white-space: nowrap">{{ deck.data.stats.efficiency }}</span>
+    </div>
+    <div class="col ms-3 mb-2">
+        <img src="{{ asset('assets/keyforge/logos/effective_power.svg') }}" alt="Amber control" class="stat_icon"/>
+        &nbsp;
+        {{ deck.data.stats.effectivePower }}
+    </div>
+    <div class="col ms-3 mb-2">
+        <img src="{{ asset('assets/keyforge/logos/recursion.svg') }}" alt="Amber control" class="stat_icon"/>
+        &nbsp;
+        {{ deck.data.stats.recursion }}
+    </div>
+    <div class="col ms-3 mb-2">
+        <img src="{{ asset('assets/keyforge/logos/creature_protection.svg') }}" alt="Amber control" class="stat_icon"/>
+        &nbsp;
+        {{ deck.data.stats.creatureProtection }}
+    </div>
+    <div class="col ms-3 mb-2">
+        <img src="{{ asset('assets/keyforge/logos/disruption.svg') }}" alt="Amber control" class="stat_icon"/>
+        &nbsp;
+        {{ deck.data.stats.recursion }}
+    </div>
+    <div class="col ms-3 mb-2">
+        <img src="{{ asset('assets/keyforge/logos/other.svg') }}" alt="Amber control" class="stat_icon"/>
+        &nbsp;
+        {{ deck.data.stats.creatureProtection }}
+    </div>
+
+    <div class="divider py-2"></div>
+
+    <span class="ms-3">Counts</span>
+    <div class="col ms-3 mt-2 mb-2">
+        <img src="{{ asset('assets/keyforge/logos/amber.svg') }}" alt="Amber control" class="stat_icon"/>
+        &nbsp;
+        {{ deck.data.stats.rawAmber }}
+    </div>
+    <div class="col ms-3 mb-2">
+        <img src="{{ asset('assets/keyforge/logos/archive.svg') }}" alt="Amber control" class="stat_icon"/>
+        &nbsp;
+        {{ deck.data.stats.cardArchiveCount }}
+    </div>
+    <div class="col ms-3 mb-2">
+        <img src="{{ asset('assets/keyforge/logos/creature.svg') }}" alt="Amber control" class="stat_icon"/>
+        &nbsp;
+        {{ deck.data.stats.creatureCount }}
+    </div>
+    <div class="col ms-3 mb-2">
+        <img src="{{ asset('assets/keyforge/logos/action.svg') }}" alt="Amber control" class="stat_icon"/>
+        &nbsp;
+        {{ deck.data.stats.actionCount }}
+    </div>
+    <div class="col ms-3 mb-2">
+        <img src="{{ asset('assets/keyforge/logos/artifact.svg') }}" alt="Amber control" class="stat_icon"/>
+        &nbsp;
+        {{ deck.data.stats.artifactCount }}
+    </div>
+    <div class="col ms-3 mb-2">
+        <img src="{{ asset('assets/keyforge/logos/key_cheat.svg') }}" alt="Amber control" class="stat_icon"/>
+        &nbsp;
+        {{ deck.data.stats.keyCheatCount }}
+    </div>
+    <div class="col ms-3 mb-2">
+        <img src="{{ asset('assets/keyforge/logos/board_wipe.svg') }}" alt="Amber control" class="stat_icon"/>
+        &nbsp;
+        ?
+    </div>
+    <div class="col ms-3 mb-2">
+        <img src="{{ asset('assets/keyforge/logos/scaling_amber_control.svg') }}" alt="Amber control" class="stat_icon"/>
+        &nbsp;
+        ?
     </div>
 </div>

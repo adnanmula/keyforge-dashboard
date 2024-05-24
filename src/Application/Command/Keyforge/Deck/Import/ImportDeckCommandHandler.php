@@ -15,11 +15,11 @@ final class ImportDeckCommandHandler
     public function __invoke(ImportDeckCommand $command): void
     {
         if (null !== $command->token) {
-            $this->myDecksService->execute($command->token, $command->userId, false);
+            $this->myDecksService->execute($command->token, $command->userId, true);
         }
 
         if (null !== $command->deckId) {
-            $this->service->execute($command->deckId, $command->userId);
+            $this->service->execute($command->deckId, $command->userId, true, true);
         }
     }
 }

@@ -68,7 +68,7 @@ final class DeckDetailController extends Controller
             $this->bus->dispatch(new GetDecksStatHistoryQuery($deckId)),
         );
 
-        return $stats[$deckId];
+        return $stats[$deckId] ?? [];
     }
 
     private function ownerName(KeyforgeDeck $deck): ?string
