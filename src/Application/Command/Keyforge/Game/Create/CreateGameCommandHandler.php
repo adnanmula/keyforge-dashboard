@@ -2,13 +2,13 @@
 
 namespace AdnanMula\Cards\Application\Command\Keyforge\Game\Create;
 
-use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeck;
-use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeckRepository;
-use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGame;
-use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGameRepository;
-use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUser;
-use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUserRepository;
-use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeGameScore;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeck;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckRepository;
+use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeGame;
+use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeGameRepository;
+use AdnanMula\Cards\Domain\Model\Keyforge\Game\ValueObject\KeyforgeGameScore;
+use AdnanMula\Cards\Domain\Model\Keyforge\User\KeyforgeUser;
+use AdnanMula\Cards\Domain\Model\Keyforge\User\KeyforgeUserRepository;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Domain\Service\Keyforge\ImportDeckService;
 use AdnanMula\Criteria\Criteria;

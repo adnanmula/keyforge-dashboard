@@ -2,11 +2,11 @@
 
 namespace AdnanMula\Cards\Application\Query\Keyforge\Stats;
 
-use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeCompetitionRepository;
-use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeckRepository;
-use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGameRepository;
-use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeHouse;
-use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeSet;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckRepository;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeHouse;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeSet;
+use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeCompetitionRepository;
+use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeGameRepository;
 use AdnanMula\Criteria\Criteria;
 use AdnanMula\Criteria\Filter\Filter;
 use AdnanMula\Criteria\Filter\FilterType;

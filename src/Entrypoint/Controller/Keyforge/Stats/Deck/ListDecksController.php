@@ -3,10 +3,10 @@
 namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\Stats\Deck;
 
 use AdnanMula\Cards\Application\Query\Keyforge\Tag\GetTagsQuery;
-use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeTag;
-use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUserRepository;
-use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeHouse;
-use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeSet;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckTag;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeHouse;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeSet;
+use AdnanMula\Cards\Domain\Model\Keyforge\User\KeyforgeUserRepository;
 use AdnanMula\Cards\Domain\Model\Shared\UserRepository;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\TagVisibility;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
@@ -54,7 +54,7 @@ final class ListDecksController extends Controller
             'Keyforge/Stats/Deck/list_decks.html.twig',
             [
                 'owner' => null,
-                'tags' => \array_map(static fn (KeyforgeTag $tag) => $tag->jsonSerialize(), $tags['tags']),
+                'tags' => \array_map(static fn (KeyforgeDeckTag $tag) => $tag->jsonSerialize(), $tags['tags']),
                 'users' => $this->users(),
                 'sets' => KeyforgeSet::cases(),
                 'houses' => KeyforgeHouse::cases(),

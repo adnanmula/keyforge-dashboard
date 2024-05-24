@@ -2,8 +2,8 @@
 
 namespace AdnanMula\Cards\Application\Command\Keyforge\Deck\UpdateNotes;
 
-use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeckRepository;
-use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeDeckUserData;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckRepository;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckUserData;
 
 final class UpdateDeckNotesCommandHandler
 {

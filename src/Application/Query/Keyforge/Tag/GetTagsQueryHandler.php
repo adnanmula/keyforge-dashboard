@@ -2,7 +2,7 @@
 
 namespace AdnanMula\Cards\Application\Query\Keyforge\Tag;
 
-use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeTagRepository;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeTagRepository;
 use AdnanMula\Criteria\Criteria;
 use AdnanMula\Criteria\Filter\Filter;
 use AdnanMula\Criteria\Filter\FilterType;

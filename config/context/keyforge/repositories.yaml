@@ -1,13 +1,13 @@
 services:
-  AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeckRepository:
-    alias: AdnanMula\Cards\Infrastructure\Persistence\Repository\Keyforge\KeyforgeDeckDbalRepository
-  AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeckStatHistoryRepository:
-    alias: AdnanMula\Cards\Infrastructure\Persistence\Repository\Keyforge\KeyforgeDeckStatHistoryDbalRepository
-  AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGameRepository:
-    alias: AdnanMula\Cards\Infrastructure\Persistence\Repository\Keyforge\KeyforgeGameDbalRepository
-  AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUserRepository:
-    alias: AdnanMula\Cards\Infrastructure\Persistence\Repository\Keyforge\KeyforgeUserDbalRepository
-  AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeCompetitionRepository:
-    alias: AdnanMula\Cards\Infrastructure\Persistence\Repository\Keyforge\KeyforgeCompetitionDbalRepository
-  AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeTagRepository:
-    alias: AdnanMula\Cards\Infrastructure\Persistence\Repository\Keyforge\KeyforgeTagDbalRepository
+  AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckRepository:
+    alias: AdnanMula\Cards\Infrastructure\Persistence\Repository\Keyforge\Deck\KeyforgeDeckDbalRepository
+  AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckStatHistoryRepository:
+    alias: AdnanMula\Cards\Infrastructure\Persistence\Repository\Keyforge\Deck\KeyforgeDeckStatHistoryDbalRepository
+  AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeGameRepository:
+    alias: AdnanMula\Cards\Infrastructure\Persistence\Repository\Keyforge\Game\KeyforgeGameDbalRepository
+  AdnanMula\Cards\Domain\Model\Keyforge\User\KeyforgeUserRepository:
+    alias: AdnanMula\Cards\Infrastructure\Persistence\Repository\Keyforge\User\KeyforgeUserDbalRepository
+  AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeCompetitionRepository:
+    alias: AdnanMula\Cards\Infrastructure\Persistence\Repository\Keyforge\Game\KeyforgeCompetitionDbalRepository
+  AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeTagRepository:
+    alias: AdnanMula\Cards\Infrastructure\Persistence\Repository\Keyforge\Deck\KeyforgeTagDbalRepository

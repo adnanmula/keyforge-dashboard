@@ -2,9 +2,9 @@
 
 namespace AdnanMula\Cards\Application\Query\Keyforge\Competition;
 
-use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeCompetitionRepository;
-use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGameRepository;
-use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUserRepository;
+use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeCompetitionRepository;
+use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeGameRepository;
+use AdnanMula\Cards\Domain\Model\Keyforge\User\KeyforgeUserRepository;
 use AdnanMula\Criteria\Criteria;
 use AdnanMula\Criteria\Filter\Filter;
 use AdnanMula\Criteria\Filter\FilterType;

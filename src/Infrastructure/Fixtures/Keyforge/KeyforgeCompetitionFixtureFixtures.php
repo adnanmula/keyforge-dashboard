@@ -3,7 +3,7 @@
 namespace AdnanMula\Cards\Infrastructure\Fixtures\Keyforge;
 
 use AdnanMula\Cards\Application\Service\Json;
-use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeCompetitionFixture;
+use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeCompetitionFixture;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\CompetitionFixtureType;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Domain\Service\Persistence\Fixture;

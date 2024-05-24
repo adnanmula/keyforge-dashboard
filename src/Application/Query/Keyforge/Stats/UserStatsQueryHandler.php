@@ -2,15 +2,15 @@
 
 namespace AdnanMula\Cards\Application\Query\Keyforge\Stats;
 
-use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeCompetition;
-use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeCompetitionRepository;
-use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeck;
-use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeckRepository;
-use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGameRepository;
-use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUserRepository;
-use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeDeckHouses;
-use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeHouse;
-use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeSet;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeck;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckRepository;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckHouses;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeHouse;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeSet;
+use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeCompetition;
+use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeCompetitionRepository;
+use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeGameRepository;
+use AdnanMula\Cards\Domain\Model\Keyforge\User\KeyforgeUserRepository;
 use AdnanMula\Cards\Domain\Model\Shared\UserRepository;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Criteria\Criteria;

@@ -2,8 +2,8 @@
 
 namespace AdnanMula\Cards\Application\Command\Keyforge\Competition\Create;
 
-use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeCompetition;
-use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeCompetitionRepository;
+use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeCompetition;
+use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeCompetitionRepository;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Domain\Service\Keyforge\Competition\FixturesGeneratorService;
 use AdnanMula\Criteria\Criteria;

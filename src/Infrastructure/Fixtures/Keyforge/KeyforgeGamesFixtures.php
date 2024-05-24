@@ -2,9 +2,9 @@
 
 namespace AdnanMula\Cards\Infrastructure\Fixtures\Keyforge;
 
-use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeGame;
-use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeCompetition;
-use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeGameScore;
+use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeGame;
+use AdnanMula\Cards\Domain\Model\Keyforge\Game\ValueObject\KeyforgeCompetition;
+use AdnanMula\Cards\Domain\Model\Keyforge\Game\ValueObject\KeyforgeGameScore;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Domain\Service\Persistence\Fixture;
 use AdnanMula\Cards\Infrastructure\Fixtures\DbalFixture;

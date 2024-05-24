@@ -2,7 +2,7 @@
 
 namespace AdnanMula\Cards\Application\Command\Keyforge\Game\Create;
 
-use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeCompetition;
+use AdnanMula\Cards\Domain\Model\Keyforge\Game\ValueObject\KeyforgeCompetition;
 use Assert\Assert;
 
 final class CreateGameCommand

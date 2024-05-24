@@ -5,7 +5,7 @@ namespace AdnanMula\Cards\Entrypoint\Command\Deck;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Exception\DeckNotExistsException;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Domain\Service\Keyforge\ImportDeckService;
-use AdnanMula\Cards\Infrastructure\Persistence\Repository\Keyforge\KeyforgeDeckUpdateDbalRepository;
+use AdnanMula\Cards\Infrastructure\Persistence\Repository\Keyforge\Deck\KeyforgeDeckUpdateDbalRepository;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\Console\Command\Command;
@@ -16,10 +16,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 final class ImportDeckStatsBulkCommand extends Command
 {
-    public const NAME = 'deck:stats:bulk';
+    public const NAME = 'import:deck';
 
     public function __construct(
-        private Connection $connection,
+        private readonly Connection $connection,
         private readonly KeyforgeDeckUpdateDbalRepository $updateRepository,
         private readonly ImportDeckService $service,
     ) {
@@ -28,7 +28,7 @@ final class ImportDeckStatsBulkCommand extends Command
 
     protected function configure(): void
     {
-        $this->setDescription('Import deck stats in bulk')
+        $this->setDescription('Import decks')
             ->addArgument('batch', InputArgument::OPTIONAL, 'Amount of decks to process', 10)
             ->addOption('decks', 'd', InputOption::VALUE_REQUIRED);
     }

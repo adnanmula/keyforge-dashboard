@@ -3,7 +3,7 @@
 namespace AdnanMula\Cards\Entrypoint\Command\Deck;
 
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Exception\DeckNotExistsException;
-use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeckRepository;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Infrastructure\Service\Keyforge\DoK\ImportDeckStatHistoryFromDokService;
 use AdnanMula\Criteria\Criteria;

@@ -2,7 +2,7 @@
 
 namespace AdnanMula\Cards\Domain\Service\Keyforge\Analyzer\Rule;
 
-use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeck;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeck;
 use AdnanMula\Cards\Domain\Service\Keyforge\Analyzer\DeckAnalyzeRule;
 
 final class DeckAnalyzeRuleRecursion implements DeckAnalyzeRule

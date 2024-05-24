@@ -3,36 +3,36 @@
 namespace AdnanMula\Cards\Infrastructure\Fixtures\Keyforge;
 
 use AdnanMula\Cards\Application\Service\Json;
-use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeTag;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagActionCountHigh;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagAmberBonusHigh;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagAmberBonusLow;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagAmberControlHigh;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagAmberControlLow;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagAmberExpectedHigh;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagAmberExpectedLow;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagAntiSynergyHigh;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagArchiveCardCountHigh;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagArtifactControlHigh;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagArtifactControlLow;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagArtifactCountHigh;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagCreatureControlHigh;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagCreatureControlLow;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagCreatureCountHigh;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagCreatureProtectionHigh;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagDisruptionHigh;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagEffectivePowerHigh;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagEfficiencyHigh;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagEfficiencyLow;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasAnomaly;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasBoardWipes;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasKeyCheats;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasLegacy;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasMaverick;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasScalingAmberControl;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagRecursionHigh;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagSynergyHigh;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagUpgradeCountHigh;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckTag;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagActionCountHigh;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagAmberBonusHigh;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagAmberBonusLow;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagAmberControlHigh;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagAmberControlLow;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagAmberExpectedHigh;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagAmberExpectedLow;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagAntiSynergyHigh;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagArchiveCardCountHigh;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagArtifactControlHigh;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagArtifactControlLow;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagArtifactCountHigh;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagCreatureControlHigh;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagCreatureControlLow;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagCreatureCountHigh;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagCreatureProtectionHigh;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagDisruptionHigh;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagEffectivePowerHigh;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagEfficiencyHigh;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagEfficiencyLow;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagHasAnomaly;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagHasBoardWipes;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagHasKeyCheats;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagHasLegacy;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagHasMaverick;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagHasScalingAmberControl;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagRecursionHigh;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagSynergyHigh;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagUpgradeCountHigh;
 use AdnanMula\Cards\Domain\Service\Persistence\Fixture;
 use AdnanMula\Cards\Infrastructure\Fixtures\DbalFixture;
 use Doctrine\DBAL\ParameterType;
@@ -88,7 +88,7 @@ final class KeyforgeTagsFixtures extends DbalFixture implements Fixture
         return [];
     }
 
-    private function save(KeyforgeTag $tag): void
+    private function save(KeyforgeDeckTag $tag): void
     {
         $stmt = $this->connection->prepare(
             \sprintf(

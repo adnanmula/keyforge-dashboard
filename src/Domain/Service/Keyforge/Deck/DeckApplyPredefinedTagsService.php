@@ -2,44 +2,44 @@
 
 namespace AdnanMula\Cards\Domain\Service\Keyforge\Deck;
 
-use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeck;
-use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeckRepository;
-use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeTag;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagActionCountHigh;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagAmberBonusHigh;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagAmberBonusLow;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagAmberControlHigh;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagAmberControlLow;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagAmberExpectedHigh;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagAmberExpectedLow;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagAntiSynergyHigh;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagArchiveCardCountHigh;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagArtifactControlHigh;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagArtifactControlLow;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagArtifactCountHigh;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagCreatureControlHigh;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagCreatureControlLow;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagCreatureCountHigh;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagCreatureProtectionHigh;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagDisruptionHigh;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagEffectivePowerHigh;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagEfficiencyHigh;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagEfficiencyLow;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasAnomaly;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasBoardWipes;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasKeyCheats;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasLegacy;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasMaverick;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagHasScalingAmberControl;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagRecursionHigh;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagSynergyHigh;
-use AdnanMula\Cards\Domain\Model\Keyforge\Tag\KeyforgeTagUpgradeCountHigh;
-use AdnanMula\Cards\Domain\Model\Keyforge\ValueObject\KeyforgeDeckUserData;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeck;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckRepository;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckTag;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagActionCountHigh;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagAmberBonusHigh;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagAmberBonusLow;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagAmberControlHigh;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagAmberControlLow;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagAmberExpectedHigh;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagAmberExpectedLow;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagAntiSynergyHigh;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagArchiveCardCountHigh;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagArtifactControlHigh;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagArtifactControlLow;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagArtifactCountHigh;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagCreatureControlHigh;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagCreatureControlLow;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagCreatureCountHigh;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagCreatureProtectionHigh;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagDisruptionHigh;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagEffectivePowerHigh;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagEfficiencyHigh;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagEfficiencyLow;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagHasAnomaly;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagHasBoardWipes;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagHasKeyCheats;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagHasLegacy;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagHasMaverick;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagHasScalingAmberControl;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagRecursionHigh;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagSynergyHigh;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagUpgradeCountHigh;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckUserData;
 
-final class DeckApplyPredefinedTagsService
+final readonly class DeckApplyPredefinedTagsService
 {
     public function __construct(
-        private readonly KeyforgeDeckRepository $repository,
+        private KeyforgeDeckRepository $repository,
     ) {}
 
     public function execute(KeyforgeDeck $deck): void
@@ -102,7 +102,7 @@ final class DeckApplyPredefinedTagsService
     private function mergeTags(array $currentTags, array $newTags): array
     {
         return \array_values(\array_unique(
-            \array_merge($currentTags, \array_map(static fn (KeyforgeTag $tag): string => $tag->id->value(), $newTags)),
+            \array_merge($currentTags, \array_map(static fn (KeyforgeDeckTag $tag): string => $tag->id->value(), $newTags)),
         ));
     }
 
@@ -131,7 +131,7 @@ final class DeckApplyPredefinedTagsService
         return [$maverickCount, $legacyCount, $anomalyCount];
     }
 
-    private function tagHasMaverick(int $maverick): ?KeyforgeTag
+    private function tagHasMaverick(int $maverick): ?KeyforgeDeckTag
     {
         if ($maverick > 0) {
             return new KeyforgeTagHasMaverick();
@@ -140,7 +140,7 @@ final class DeckApplyPredefinedTagsService
         return null;
     }
 
-    private function tagHasAnomaly(int $anomaly): ?KeyforgeTag
+    private function tagHasAnomaly(int $anomaly): ?KeyforgeDeckTag
     {
         if ($anomaly > 0) {
             return new KeyforgeTagHasAnomaly();
@@ -149,7 +149,7 @@ final class DeckApplyPredefinedTagsService
         return null;
     }
 
-    private function tagHasLegacy(int $legacy): ?KeyforgeTag
+    private function tagHasLegacy(int $legacy): ?KeyforgeDeckTag
     {
         if ($legacy > 0) {
             return new KeyforgeTagHasLegacy();
@@ -158,7 +158,7 @@ final class DeckApplyPredefinedTagsService
         return null;
     }
 
-    private function tagEfficiency(array $data): ?KeyforgeTag
+    private function tagEfficiency(array $data): ?KeyforgeDeckTag
     {
         $efficiency = $data['efficiency'] ?? 0;
 
@@ -173,7 +173,7 @@ final class DeckApplyPredefinedTagsService
         return null;
     }
 
-    private function tagArtifactCount(array $data): ?KeyforgeTag
+    private function tagArtifactCount(array $data): ?KeyforgeDeckTag
     {
         $artifacts = $data['artifactCount'] ?? 0;
 
@@ -184,7 +184,7 @@ final class DeckApplyPredefinedTagsService
         return null;
     }
 
-    private function tagHasKeyCheats(array $data): ?KeyforgeTag
+    private function tagHasKeyCheats(array $data): ?KeyforgeDeckTag
     {
         $keyCheats = $data['keyCheatCount'] ?? 0;
 
@@ -195,7 +195,7 @@ final class DeckApplyPredefinedTagsService
         return null;
     }
 
-    private function tagEffectivePower(array $data): ?KeyforgeTag
+    private function tagEffectivePower(array $data): ?KeyforgeDeckTag
     {
         $effectivePower = $data['effectivePower'] ?? 0;
 
@@ -206,7 +206,7 @@ final class DeckApplyPredefinedTagsService
         return null;
     }
 
-    private function tagBonusAmber(array $data): ?KeyforgeTag
+    private function tagBonusAmber(array $data): ?KeyforgeDeckTag
     {
         $bonusAmber = $data['rawAmber'] ?? 0;
 
@@ -221,7 +221,7 @@ final class DeckApplyPredefinedTagsService
         return null;
     }
 
-    private function tagExpectedAmber(array $data): ?KeyforgeTag
+    private function tagExpectedAmber(array $data): ?KeyforgeDeckTag
     {
         $expectedAmber = $data['expectedAmber'] ?? 0;
 
@@ -236,7 +236,7 @@ final class DeckApplyPredefinedTagsService
         return null;
     }
 
-    private function tagActionCount(array $data): ?KeyforgeTag
+    private function tagActionCount(array $data): ?KeyforgeDeckTag
     {
         $actions = $data['actionCount'] ?? 0;
 
@@ -247,7 +247,7 @@ final class DeckApplyPredefinedTagsService
         return null;
     }
 
-    private function tagCreatureCount(array $data): ?KeyforgeTag
+    private function tagCreatureCount(array $data): ?KeyforgeDeckTag
     {
         $creatures = $data['creatureCount'] ?? 0;
 
@@ -258,7 +258,7 @@ final class DeckApplyPredefinedTagsService
         return null;
     }
 
-    private function tagArchiveCardCount(array $data): ?KeyforgeTag
+    private function tagArchiveCardCount(array $data): ?KeyforgeDeckTag
     {
         $value = $data['cardArchiveCount'] ?? 0;
 
@@ -269,7 +269,7 @@ final class DeckApplyPredefinedTagsService
         return null;
     }
 
-    private function tagUpgradeCount(array $data): ?KeyforgeTag
+    private function tagUpgradeCount(array $data): ?KeyforgeDeckTag
     {
         $creatures = $data['upgradeCount'] ?? 0;
 
@@ -280,7 +280,7 @@ final class DeckApplyPredefinedTagsService
         return null;
     }
 
-    private function tagAmberControl(array $data): ?KeyforgeTag
+    private function tagAmberControl(array $data): ?KeyforgeDeckTag
     {
         $value = $data['amberControl'] ?? 0;
 
@@ -295,7 +295,7 @@ final class DeckApplyPredefinedTagsService
         return null;
     }
 
-    private function tagCreatureControl(array $data): ?KeyforgeTag
+    private function tagCreatureControl(array $data): ?KeyforgeDeckTag
     {
         $value = $data['creatureControl'] ?? 0;
 
@@ -310,7 +310,7 @@ final class DeckApplyPredefinedTagsService
         return null;
     }
 
-    private function tagArtifactControl(array $data): ?KeyforgeTag
+    private function tagArtifactControl(array $data): ?KeyforgeDeckTag
     {
         $value = $data['artifactControl'] ?? 0;
 
@@ -325,7 +325,7 @@ final class DeckApplyPredefinedTagsService
         return null;
     }
 
-    private function tagCreatureProtection(array $data): ?KeyforgeTag
+    private function tagCreatureProtection(array $data): ?KeyforgeDeckTag
     {
         $value = $data['creatureProtection'] ?? 0;
 
@@ -336,7 +336,7 @@ final class DeckApplyPredefinedTagsService
         return null;
     }
 
-    private function tagRecursion(array $data): ?KeyforgeTag
+    private function tagRecursion(array $data): ?KeyforgeDeckTag
     {
         $value = $data['recursion'] ?? 0;
 
@@ -347,7 +347,7 @@ final class DeckApplyPredefinedTagsService
         return null;
     }
 
-    private function tagDisruption(array $data): ?KeyforgeTag
+    private function tagDisruption(array $data): ?KeyforgeDeckTag
     {
         $value = $data['disruption'] ?? 0;
 
@@ -358,7 +358,7 @@ final class DeckApplyPredefinedTagsService
         return null;
     }
 
-    private function tagHasScalingAmberControl(array $data): ?KeyforgeTag
+    private function tagHasScalingAmberControl(array $data): ?KeyforgeDeckTag
     {
         $cards = [
             'Burn the Stockpile',
@@ -390,7 +390,7 @@ final class DeckApplyPredefinedTagsService
         return null;
     }
 
-    private function tagHasBoardWipes(array $data): ?KeyforgeTag
+    private function tagHasBoardWipes(array $data): ?KeyforgeDeckTag
     {
         $cards = [
             'Ballcano',
@@ -455,7 +455,7 @@ final class DeckApplyPredefinedTagsService
         return null;
     }
 
-    private function tagSynergy(array $data): ?KeyforgeTag
+    private function tagSynergy(array $data): ?KeyforgeDeckTag
     {
         $value = $data['synergyRating'] ?? 0;
 
@@ -466,7 +466,7 @@ final class DeckApplyPredefinedTagsService
         return null;
     }
 
-    private function tagAntiSynergy(array $data): ?KeyforgeTag
+    private function tagAntiSynergy(array $data): ?KeyforgeDeckTag
     {
         $value = $data['antisynergyRating'] ?? 0;
 

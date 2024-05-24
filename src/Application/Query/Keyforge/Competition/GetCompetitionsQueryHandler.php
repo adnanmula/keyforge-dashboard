@@ -2,7 +2,7 @@
 
 namespace AdnanMula\Cards\Application\Query\Keyforge\Competition;
 
-use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeCompetitionRepository;
+use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeCompetitionRepository;
 use AdnanMula\Criteria\Criteria;
 use AdnanMula\Criteria\FilterField\FilterField;
 use AdnanMula\Criteria\Sorting\Order;

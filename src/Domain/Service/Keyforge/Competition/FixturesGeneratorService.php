@@ -2,8 +2,8 @@
 
 namespace AdnanMula\Cards\Domain\Service\Keyforge\Competition;
 
-use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeCompetition;
-use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeCompetitionFixture;
+use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeCompetition;
+use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeCompetitionFixture;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\CompetitionFixtureType;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\CompetitionType;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;

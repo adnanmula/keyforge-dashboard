@@ -2,8 +2,8 @@
 
 namespace AdnanMula\Cards\Application\Command\Keyforge\Competition\Start;
 
-use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeCompetition;
-use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeCompetitionRepository;
+use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeCompetition;
+use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeCompetitionRepository;
 
 final class StartCompetitionCommandHandler
 {

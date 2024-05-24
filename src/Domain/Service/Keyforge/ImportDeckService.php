@@ -2,7 +2,7 @@
 
 namespace AdnanMula\Cards\Domain\Service\Keyforge;
 
-use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeck;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeck;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 
 interface ImportDeckService

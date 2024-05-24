@@ -4,7 +4,7 @@ namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\Competition;
 
 use AdnanMula\Cards\Application\Command\Keyforge\Competition\Create\CreateCompetitionCommand;
 use AdnanMula\Cards\Application\Query\Keyforge\User\GetUsersQuery;
-use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUser;
+use AdnanMula\Cards\Domain\Model\Keyforge\User\KeyforgeUser;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

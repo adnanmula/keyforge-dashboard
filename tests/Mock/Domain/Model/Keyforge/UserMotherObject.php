@@ -2,7 +2,7 @@
 
 namespace AdnanMula\Cards\Tests\Mock\Domain\Model\Keyforge;
 
-use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeUser;
+use AdnanMula\Cards\Domain\Model\Keyforge\User\KeyforgeUser;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 
 final class UserMotherObject

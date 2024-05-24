@@ -2,7 +2,7 @@
 
 namespace AdnanMula\Cards\Domain\Service\Keyforge\Analyzer;
 
-use AdnanMula\Cards\Domain\Model\Keyforge\KeyforgeDeck;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeck;
 use AdnanMula\Cards\Domain\Service\Keyforge\Analyzer\Rule\DeckAnalyzeRuleAmberControl;
 use AdnanMula\Cards\Domain\Service\Keyforge\Analyzer\Rule\DeckAnalyzeRuleAmberGeneration;
 use AdnanMula\Cards\Domain\Service\Keyforge\Analyzer\Rule\DeckAnalyzeRuleAreaCreaturePosition;
