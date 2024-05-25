@@ -3,6 +3,7 @@
 namespace AdnanMula\Cards\Application\Command\Keyforge\Deck\Import;
 
 use AdnanMula\Cards\Application\Command\Keyforge\Stat\General\GenerateGeneralStatsCommand;
+use AdnanMula\Cards\Application\Command\Keyforge\Stat\User\GenerateUserStatsCommand;
 use AdnanMula\Cards\Domain\Service\Keyforge\ImportDeckService;
 use AdnanMula\Cards\Infrastructure\Service\Keyforge\DoK\ImportMyDecksFromDokService;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -26,5 +27,9 @@ final class ImportDeckCommandHandler
         }
 
         $this->bus->dispatch(new GenerateGeneralStatsCommand());
+
+        if (null !== $command->userId) {
+            $this->bus->dispatch(new GenerateUserStatsCommand($command->userId->value()));
+        }
     }
 }

@@ -9,4 +9,6 @@ enum KeyforgeStatCategory: string
     use EnumHelper;
 
     case HOME_GENERAL_DATA = 'HOME_GENERAL_DATA';
+    case USER_PROFILE = 'USER_PROFILE';
+    case DECK_DETAIL = 'DECK_DETAIL';
 }
