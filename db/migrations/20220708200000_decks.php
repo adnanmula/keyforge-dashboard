@@ -48,6 +48,8 @@ final class Decks extends AbstractMigration
                 card_draw_count integer NOT NULL,
                 card_archive_count integer NOT NULL,
                 key_cheat_count integer NOT NULL,
+                board_clear_count integer NOT NULL,
+                scaling_amber_control_count integer NOT NULL,
                 synergy_rating integer NOT NULL,
                 anti_synergy_rating integer NOT NULL,
                 extra_data jsonb NOT NULL,

@@ -33,6 +33,8 @@ final readonly class KeyforgeDeckStats implements \JsonSerializable
         public int $cardDrawCount,
         public int $cardArchiveCount,
         public int $keyCheatCount,
+        public int $boardClearCount,
+        public int $scalingAmberControlCount,
         public int $synergyRating,
         public int $antiSynergyRating,
         public \DateTimeImmutable $lastSasUpdate,
@@ -41,6 +43,26 @@ final readonly class KeyforgeDeckStats implements \JsonSerializable
     public static function fromDokData(array $data): self
     {
         $deck = $data['deck'];
+
+        // @codingStandardsIgnoreStart
+        $boardClears = ['tectonic-shift', 'phloxem-spike', 'opal-knight', 'general-sherman', 'final-refrain', 'krrrzzzaaap', 'guilty-hearts', 'onyx-knight', 'standardized-testing', 'three-fates', 'strange-gizmo', 'general-order-24', 'earthshaker', 'axiom-of-grisk', 'groundbreaking-discovery', 'selective-preservation', 'kiligogs-trench', 'adult-swim', 'longfused-mines', 'market-crash', 'carpet-phloxem', 'crushing-charge', 'champions-challenge', 'bouncing-deathquark', 'neutron-shark', 'the-spirits-way', 'mlstrom', 'echoing-deathknell', 'election', 'mass-buyout', 'concussive-transfer', 'unlocked-gateway', 'return-to-rubble', 'ammonia-clouds', 'spartasaur', 'poison-wave', 'mind-over-matter', 'grand-alliance-council', 'hebe-the-huge', 'gateway-to-dis', 'mind-bullets', 'hysteria', 'ballcano', 'cowards-end', 'phoenix-heart', 'infighting', 'dark-wave', 'tendrils-of-pain', 'piranha-monkeys', 'harbinger-of-doom', 'skixuno', 'numquid-the-fair', 'key-to-dis', 'final-analysis', 'plan-10', 'plummet', 'midyear-festivities', 'kaboom', 'unnatural-selection', 'plague-wind', 'mberlution', 'savage-clash', 'winds-of-death', 'deescalation', 'war-of-the-worlds', 'ragnarok', 'catch-and-release', 'soul-bomb', 'into-the-warp', 'the-big-one', 'harvest-time', 'extinction', 'dance-of-doom', 'tertiate', 'quintrino-warp', 'gleeful-mayhem', 'quintrino-flux'];
+        $scaling = ['interdimensional-graft', 'doorstep-to-heaven', 'bring-low', 'deusillus', 'ronnie-wristclocks', 'shatter-storm', 'the-first-scroll', 'rant-and-rive', 'submersive-principle', 'martyr-of-the-vault', 'effervescent-principle', 'ant110ny', 'gatekeeper', 'trawler', 'cutthroat-research', 'too-much-to-protect', 'burn-the-stockpile', 'drumble', 'forgemaster-og', 'memorialize-the-fallen', 'closeddoor-negotiation'];
+        // @codingStandardsIgnoreEnd
+
+        $boardClearCount = 0;
+        $scalingAmberControlCount = 0;
+
+        foreach ($data['deck']['housesAndCards'] as $houseCards) {
+            foreach ($houseCards['cards'] as $card) {
+                if (\in_array($card['cardTitleUrl'], $boardClears, true)) {
+                    $boardClearCount++;
+                }
+
+                if (\in_array($card['cardTitleUrl'], $scaling, true)) {
+                    $scalingAmberControlCount++;
+                }
+            }
+        }
 
         return new self(
             sas: $deck['sasRating'] ?? 0,
@@ -71,6 +93,8 @@ final readonly class KeyforgeDeckStats implements \JsonSerializable
             cardDrawCount: $deck['cardDrawCount'] ?? 0,
             cardArchiveCount: $deck['cardArchiveCount'] ?? 0,
             keyCheatCount: $deck['keyCheatCount'] ?? 0,
+            boardClearCount: $boardClearCount,
+            scalingAmberControlCount: $scalingAmberControlCount,
             synergyRating: $deck['synergyRating'] ?? 0,
             antiSynergyRating: $deck['antisynergyRating'] ?? 0,
             lastSasUpdate: new \DateTimeImmutable($deck['lastSasUpdate']),
@@ -108,6 +132,8 @@ final readonly class KeyforgeDeckStats implements \JsonSerializable
             'cardDrawCount' => $this->cardDrawCount,
             'cardArchiveCount' => $this->cardArchiveCount,
             'keyCheatCount' => $this->keyCheatCount,
+            'boardClearCount' => $this->boardClearCount,
+            'scalingAmberControlCount' => $this->scalingAmberControlCount,
             'synergyRating' => $this->synergyRating,
             'antiSynergyRating' => $this->antiSynergyRating,
             'lastSasUpdate' => $this->lastSasUpdate->format('Y-m-d'),

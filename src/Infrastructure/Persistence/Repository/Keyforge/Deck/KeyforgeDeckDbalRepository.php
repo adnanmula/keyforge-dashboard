@@ -186,6 +186,8 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
                     card_draw_count,
                     card_archive_count,
                     key_cheat_count,
+                    board_clear_count,
+                    scaling_amber_control_count,
                     synergy_rating,
                     anti_synergy_rating,
                     aerc_score,
@@ -220,7 +222,9 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
                     :upgrade_count,	
                     :card_draw_count,	
                     :card_archive_count,	
-                    :key_cheat_count,	
+                    :key_cheat_count,
+                    :board_clear_count,
+                    :scaling_amber_control_count,
                     :synergy_rating,	
                     :anti_synergy_rating,	
                     :aerc_score,	
@@ -254,6 +258,8 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
                     card_draw_count = :card_draw_count,
                     card_archive_count = :card_archive_count,
                     key_cheat_count = :key_cheat_count,
+                    board_clear_count = :board_clear_count,
+                    scaling_amber_control_count = :scaling_amber_control_count,
                     synergy_rating = :synergy_rating,	
                     anti_synergy_rating = :anti_synergy_rating,
                     aerc_score = :aerc_score,
@@ -292,6 +298,8 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
         $stmt->bindValue(':card_draw_count', $data->stats->cardDrawCount);
         $stmt->bindValue(':card_archive_count', $data->stats->cardArchiveCount);
         $stmt->bindValue(':key_cheat_count', $data->stats->keyCheatCount);
+        $stmt->bindValue(':board_clear_count', $data->stats->boardClearCount);
+        $stmt->bindValue(':scaling_amber_control_count', $data->stats->scalingAmberControlCount);
         $stmt->bindValue(':synergy_rating', $data->stats->synergyRating);
         $stmt->bindValue(':anti_synergy_rating', $data->stats->antiSynergyRating);
         $stmt->bindValue(':sas', $data->stats->sas);
