@@ -9,7 +9,7 @@
         <div class="row">
             <div class="col-10 d-flex justify-content-start"><h2>{{ username }}</h2></div>
 
-            {% if user_is_external == false %}
+            {% if stats is not null and stats.user_is_external == false %}
                 <div class="col-2 d-flex justify-content-end">
                     <a class="btn btn-dark" data-bs-toggle="collapse" href="#userStats" role="button" aria-expanded="false" aria-controls="collapseExample">{{ 'menu.show_stats'|trans }}</a>
                 </div>
@@ -18,7 +18,7 @@
 
         <div class="divider py-2"></div>
 
-        {% if user_is_external == false %}
+        {% if stats is not null and stats.user_is_external == false %}
             <div class="collapse" id="userStats">
             <div class="row mt-3">
                 <div class="col-12 col-sm-12 col-md-4 col-lg-4">
@@ -55,44 +55,44 @@
         <div class="divider py-2"></div>
 
         <div class="row m-2">
-            {% if (null != best_deck) %}
-                <a href="/deck/{{ best_deck.id }}?userId={{ userId }}" class="btn btn-dark col-3 border col-12 col-sm-6 col-lg-3">
+            {% if (null != stats.best_deck) %}
+                <a href="/deck/{{ stats.best_deck.id }}?userId={{ userId }}" class="btn btn-dark col-3 border col-12 col-sm-6 col-lg-3">
                     <h5>{{ 'menu.best_performance'|trans }}</h5>
-                    <p>{{ best_deck.name }}</p>
-                    <p>{{ best_deck.wins }}/{{ best_deck.losses }} (WR: {{ best_deck.win_rate }}%/PR: {{ best_deck.pick_rate }}%)</p>
+                    <p>{{ stats.best_deck.name }}</p>
+                    <p>{{ stats.best_deck.wins }}/{{ stats.best_deck.losses }} (WR: {{ stats.best_deck.win_rate }}%/PR: {{ stats.best_deck.pick_rate }}%)</p>
                 </a>
             {% endif %}
 
-            {% if (null != worse_deck) %}
-                <a href="/deck/{{ worse_deck.id }}?userId={{ userId }}" class="btn btn-dark border col-12 col-sm-6 col-lg-3">
+            {% if (null != stats.worse_deck) %}
+                <a href="/deck/{{ stats.worse_deck.id }}?userId={{ userId }}" class="btn btn-dark border col-12 col-sm-6 col-lg-3">
                     <h5>{{ 'menu.worst_performance'|trans }}</h5>
-                    <p>{{ worse_deck.name }}</p>
-                    <p>{{ worse_deck.wins }}/{{ worse_deck.losses }} (WR: {{ worse_deck.win_rate }}%/PR: {{ worse_deck.pick_rate }}%)</p>
+                    <p>{{ stats.worse_deck.name }}</p>
+                    <p>{{ stats.worse_deck.wins }}/{{ stats.worse_deck.losses }} (WR: {{ stats.worse_deck.win_rate }}%/PR: {{ stats.worse_deck.pick_rate }}%)</p>
                 </a>
             {% endif %}
 
-            {% if (null != favorite_deck) %}
-                <a href="/deck/{{ favorite_deck.id }}?userId={{ userId }}" class="btn btn-dark border col-12 col-sm-6 col-lg-3">
+            {% if (null != stats.favorite_deck) %}
+                <a href="/deck/{{ stats.favorite_deck.id }}?userId={{ userId }}" class="btn btn-dark border col-12 col-sm-6 col-lg-3">
                     <h5>{{ 'menu.favorite'|trans }}</h5>
-                    <p>{{ favorite_deck.name }}</p>
-                    <p>{{ 'menu.played_times'|trans({'%count%': favorite_deck.wins + favorite_deck.losses}) }}</p>
+                    <p>{{ stats.favorite_deck.name }}</p>
+                    <p>{{ 'menu.played_times'|trans({'%count%': stats.favorite_deck.wins + stats.favorite_deck.losses}) }}</p>
                 </a>
             {% endif %}
 
-            {% if (null != win_streak) %}
+            {% if (null != stats.win_streak) %}
                 <a class="btn btn-dark border col-12 col-sm-6 col-lg-3">
                     <h5>{{ 'menu.best_win_streak'|trans }}</h5>
                     <p></p>
-                    <p>{{ win_streak }}</p>
+                    <p>{{ stats.win_streak }}</p>
                 </a>
             {% endif %}
 
-            {% if (null != competition_wins and competition_wins | length) %}
+            {% if (null != stats.competition_wins and stats.competition_wins | length) %}
                 <div class="btn btn-dark border">
                     <h5>{{ 'menu.record_book'|trans }}</h5>
 
                     <div class="row">
-                        {% for win in competition_wins %}
+                        {% for win in stats.competition_wins %}
                             <div class="col-12 col-sm-4 col-md-3 col-xl-2">
                                 <a class="text-decoration-none" href="/competitions/{{ win.reference }}" style="color: white">
                                     <div class="row">
@@ -130,16 +130,16 @@
     </div>
 
     <script>
-        {% if user_is_external == false %}
+        {% if stats is not null and stats.user_is_external == false %}
 
-        let winRateVsUsers = JSON.parse('{{ win_rate_vs_users|json_encode|raw }}');
-        let pickRateVsUsers = JSON.parse('{{ pick_rate_vs_users|json_encode|raw }}');
-        let winsByDate = JSON.parse('{{ wins_by_date|json_encode|raw }}');
-        let lossesByDate = JSON.parse('{{ losses_by_date|json_encode|raw }}');
-        let winsByUsers = JSON.parse('{{ wins_vs_users|json_encode|raw }}');
-        let decksStats = JSON.parse('{{ decks_stats|json_encode|raw }}');
-        let winsBySet = JSON.parse('{{ wins_by_set|json_encode|raw }}');
-        let winsByHouse = JSON.parse('{{ wins_by_house|json_encode|raw }}');
+        let winRateVsUsers = JSON.parse('{{ stats.win_rate_vs_users|json_encode|raw }}');
+        let pickRateVsUsers = JSON.parse('{{ stats.pick_rate_vs_users|json_encode|raw }}');
+        let winsByDate = JSON.parse('{{ stats.wins_by_date|json_encode|raw }}');
+        let lossesByDate = JSON.parse('{{ stats.losses_by_date|json_encode|raw }}');
+        let winsByUsers = JSON.parse('{{ stats.wins_vs_users|json_encode|raw }}');
+        let decksStats = JSON.parse('{{ stats.decks_stats|json_encode|raw }}');
+        let winsBySet = JSON.parse('{{ stats.wins_by_set|json_encode|raw }}');
+        let winsByHouse = JSON.parse('{{ stats.wins_by_house|json_encode|raw }}');
 
         let winsByUser = [];
         let lossesByUser = [];

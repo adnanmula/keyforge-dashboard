@@ -16,6 +16,6 @@ final class GeneralStatsController extends Controller
             $this->bus->dispatch(new GeneralStatsQuery()),
         );
 
-        return $this->render('Keyforge/Stats/general_stats.html.twig', ['data' => $data->data]);
+        return $this->render('Keyforge/Stats/general_stats.html.twig', ['data' => $data?->data]);
     }
 }
