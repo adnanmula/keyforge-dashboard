@@ -10,20 +10,17 @@
 <div class="shadow-lg p-3 mb-3 bg-white rounded col-2 h3 offset-10">
     <span class="ms-3">Stats</span>
     <div class="col ms-3 mt-2 mb-2">
-        <img src="{{ asset('assets/keyforge/logos/expected_amber.svg') }}" alt="{{ 'stat.expected_amber'|trans }}" class="stat_icon" data-toggle="tooltip" title="{{ 'stat.expected_amber'|trans }}"/>
-        &nbsp;
-        {{ deck.data.stats.expectedAmber }}
+        <img src="{{ asset('assets/keyforge/logos/expected_amber.svg') }}" alt="{{ 'deck.expected_amber'|trans }}" class="stat_icon" data-toggle="tooltip" title="{{ 'deck.expected_amber'|trans }}"/>
+        &nbsp;{{ deck.data.stats.expectedAmber }}
     </div>
     <div class="col ms-3 mb-2">
-        <img src="{{ asset('assets/keyforge/logos/amber_control.svg') }}" alt="{{ 'stat.amber_control'|trans }}" class="stat_icon" data-toggle="tooltip" title="{{ 'stat.amber_control'|trans }}"/>
-        &nbsp;
-        {{ deck.data.stats.amberControl }}
+        <img src="{{ asset('assets/keyforge/logos/amber_control.svg') }}" alt="{{ 'deck.amber_control'|trans }}" class="stat_icon" data-toggle="tooltip" title="{{ 'deck.amber_control'|trans }}"/>
+        &nbsp;{{ deck.data.stats.amberControl }}
     </div>
 
     <div class="col ms-3 mb-2">
-        <img src="{{ asset('assets/keyforge/logos/creature_control.svg') }}" alt="Amber control" class="stat_icon"/>
-        &nbsp;
-        {{ deck.data.stats.creatureControl }}
+        <img src="{{ asset('assets/keyforge/logos/creature_control.svg') }}" alt="{{ 'deck.creature_control'|trans }}" class="stat_icon" data-toggle="tooltip" title="{{ 'deck.creature_control'|trans }}"/>
+        &nbsp;{{ deck.data.stats.creatureControl }}
     </div>
     <div class="col ms-3 mb-2">
         <img src="{{ asset('assets/keyforge/logos/artifact_control.svg') }}" alt="Amber control" class="stat_icon"/>
@@ -88,6 +85,11 @@
         <img src="{{ asset('assets/keyforge/logos/artifact.svg') }}" alt="Amber control" class="stat_icon"/>
         &nbsp;
         {{ deck.data.stats.artifactCount }}
+    </div>
+    <div class="col ms-3 mb-2">
+        <img src="{{ asset('assets/keyforge/logos/upgrade.svg') }}" alt="Amber control" class="stat_icon"/>
+        &nbsp;
+        {{ deck.data.stats.upgradeCount }}
     </div>
     <div class="col ms-3 mb-2">
         <img src="{{ asset('assets/keyforge/logos/key_cheat.svg') }}" alt="Amber control" class="stat_icon"/>
