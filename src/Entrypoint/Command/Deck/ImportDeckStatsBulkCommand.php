@@ -30,19 +30,20 @@ final class ImportDeckStatsBulkCommand extends Command
     {
         $this->setDescription('Import decks')
             ->addArgument('batch', InputArgument::OPTIONAL, 'Amount of decks to process', 10)
+            ->addOption('with-history', 'sh', InputOption::VALUE_NONE, 'Import stats history')
             ->addOption('decks', 'd', InputOption::VALUE_REQUIRED);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        [$batch, $deckIds] = $this->params($input);
+        [$batch, $withHistory, $deckIds] = $this->params($input);
 
         $alreadyImported = $this->updateRepository->all();
         $decks = $this->decks($batch, $deckIds, $alreadyImported);
 
         foreach ($decks as $index => $deck) {
             try {
-                $this->service->execute(Uuid::from($deck), null, true, true, false);
+                $this->service->execute(Uuid::from($deck), null, true, $withHistory, false);
                 $output->writeln($deck);
             } catch (DeckNotExistsException) {
                 $output->writeln('<error>NOT FOUND: '. $deck .'</error>');
@@ -62,13 +63,14 @@ final class ImportDeckStatsBulkCommand extends Command
     private function params(InputInterface $input): array
     {
         $batch = (int) $input->getArgument('batch');
+        $withHistory = $input->getOption('with-history') ?? false;
         $deckIds = $input->getOption('decks') ?? [];
 
         if ([] !== $deckIds) {
             $deckIds = \explode(',', $input->getOption('decks'));
         }
 
-        return [$batch, $deckIds];
+        return [$batch, $withHistory, $deckIds];
     }
 
     private function decks(int $batch, array $deckIds, array $alreadyImported): array

@@ -2,6 +2,7 @@
 
 namespace AdnanMula\Cards\Application\Command\Keyforge\Game\Create;
 
+use AdnanMula\Cards\Application\Command\Keyforge\Stat\General\GenerateGeneralStatsCommand;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeck;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeGame;
@@ -18,6 +19,7 @@ use AdnanMula\Criteria\FilterField\FilterField;
 use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
 use AdnanMula\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 final class CreateGameCommandHandler
 {
@@ -26,6 +28,7 @@ final class CreateGameCommandHandler
         private KeyforgeGameRepository $gameRepository,
         private KeyforgeDeckRepository $deckRepository,
         private ImportDeckService $importDeckService,
+        private MessageBusInterface $bus,
     ) {}
 
     public function __invoke(CreateGameCommand $command): void
@@ -52,6 +55,8 @@ final class CreateGameCommandHandler
         $this->gameRepository->save($game);
 
         $this->updateDeckWinRate($winnerDeck, $loserDeck);
+
+        $this->bus->dispatch(new GenerateGeneralStatsCommand());
     }
 
     private function updateDeckWinRate(KeyforgeDeck $winnerDeck, KeyforgeDeck $loserDeck): void
