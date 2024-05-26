@@ -46,6 +46,7 @@ final class GenerateUserStatsCommandHandler
 
         $friends = $this->userRepository->friends($command->userId);
         $friendsIds = \array_map(static fn (array $f) => $f['id'], $friends);
+        $friendsIdsWithoutUser = array_filter($friendsIds, static fn (string $id) => $id !== $kfUser->id()->value());
 
         $games = $this->gameRepository->search(new Criteria(
             null,
@@ -357,6 +358,18 @@ final class GenerateUserStatsCommandHandler
                 'wins_by_house' => $winsByHouse,
                 'win_streak' => $longestWinStreak,
                 'competition_wins' => $this->competitionWins($command->userId),
+                'deck_tops' => [
+                    'amounts' => [
+                        'user' => $this->deckStatsByUsers($kfUser->id()->value()),
+                        'friends' => $this->deckStatsByUsers(...$friendsIdsWithoutUser),
+                        'all' => $this->deckStatsByUsers(),
+                    ],
+                    'by_stats' => [
+                        'user' => $this->deckStats2ByUsers($kfUser->id()->value()),
+                        'friends' => $this->deckStats2ByUsers(...$friendsIdsWithoutUser),
+                        'all' => $this->deckStats2ByUsers(),
+                    ],
+                ],
             ],
         ));
     }
@@ -406,5 +419,95 @@ final class GenerateUserStatsCommandHandler
             ],
             $this->competitionRepository->search($criteria),
         );
+    }
+
+    private function deckStatsByUsers(string ...$ids): array
+    {
+        $filters = [];
+
+        if (\count($ids) > 0) {
+            $filters[] = new AndFilterGroup(
+                FilterType::AND,
+                new Filter(new FilterField('owner'), new StringArrayFilterValue(...$ids), FilterOperator::IN),
+            );
+        }
+
+        $decks = $this->deckRepository->search(new Criteria(null, null, null, ...$filters));
+
+        $decksBy = [
+            'sets' => [],
+            'houses' => [],
+            'sas' => [],
+        ];
+
+        foreach ($decks as $deck) {
+            $decksBy['sets'][$deck->data()->set->value] = ($decksBy['sets'][$deck->data()->set->value] ?? 0) + 1;
+            $decksBy['sas'][$deck->data()->stats->sas] = ($decksBy['sas'][$deck->data()->stats->sas] ?? 0) + 1;
+            $decksBy['houses'][$deck->data()->houses->value()[0]->value] = ($decksBy['houses'][$deck->data()->houses->value()[0]->value] ?? 0) + 1;
+            $decksBy['houses'][$deck->data()->houses->value()[1]->value] = ($decksBy['houses'][$deck->data()->houses->value()[0]->value] ?? 0) + 1;
+            $decksBy['houses'][$deck->data()->houses->value()[2]->value] = ($decksBy['houses'][$deck->data()->houses->value()[0]->value] ?? 0) + 1;
+        }
+
+        return $decksBy;
+    }
+
+    private function deckStats2ByUsers(string ...$ids): array
+    {
+        $filters = [];
+
+        if (\count($ids) > 0) {
+            $filters[] = new AndFilterGroup(
+                FilterType::AND,
+                new Filter(new FilterField('owner'), new StringArrayFilterValue(...$ids), FilterOperator::IN),
+            );
+        }
+
+        $decks = $this->deckRepository->search(new Criteria(null, null, null, ...$filters));
+
+        $result = [];
+
+        \usort($decks, static function (KeyforgeDeck $a, KeyforgeDeck $b) {
+            return $b->data()->stats->sas <=> $a->data()->stats->sas;
+        });
+
+        $result['sas'] = \array_slice($decks, 0, 3);
+
+        \usort($decks, static function (KeyforgeDeck $a, KeyforgeDeck $b) {
+            return $b->data()->stats->expectedAmber <=> $a->data()->stats->expectedAmber;
+        });
+
+        $result['expected_amber'] = \array_slice($decks, 0, 3);
+
+        \usort($decks, static function (KeyforgeDeck $a, KeyforgeDeck $b) {
+            return $b->data()->stats->amberControl <=> $a->data()->stats->amberControl;
+        });
+
+        $result['amber_control'] = \array_slice($decks, 0, 3);
+
+        \usort($decks, static function (KeyforgeDeck $a, KeyforgeDeck $b) {
+            return $b->data()->stats->creatureControl <=> $a->data()->stats->creatureControl;
+        });
+
+        $result['creature_control'] = \array_slice($decks, 0, 3);
+
+        \usort($decks, static function (KeyforgeDeck $a, KeyforgeDeck $b) {
+            return $b->data()->stats->artifactControl <=> $a->data()->stats->artifactControl;
+        });
+
+        $result['artifact_control'] = \array_slice($decks, 0, 3);
+
+        \usort($decks, static function (KeyforgeDeck $a, KeyforgeDeck $b) {
+            return $b->data()->stats->creatureCount <=> $a->data()->stats->creatureCount;
+        });
+
+        $result['creature_count'] = \array_slice($decks, 0, 3);
+
+        \usort($decks, static function (KeyforgeDeck $a, KeyforgeDeck $b) {
+            return $b->data()->stats->artifactCount <=> $a->data()->stats->artifactCount;
+        });
+
+        $result['artifact_count'] = \array_slice($decks, 0, 3);
+
+        return $result;
     }
 }

@@ -3,6 +3,58 @@
 {% block title %}Keyforge{% endblock %}
 
 {% block body %}
+    {% if userData is not null %}
+        <div class="shadow-lg p-3 mb-5 bg-white rounded">
+            <div class="row">
+                <div class="col-4">
+                    <span>Your best decks by sas</span><br>
+
+                    {% for deck in userData.deck_tops.by_stats.user.sas %}
+                        {{ deck.data.name }}: {{ deck.data.stats.sas }}<br>
+                    {% endfor %}
+                </div>
+
+                <div class="col-4">
+                    <span>Your friends best decks by sas</span><br>
+                    {% for deck in userData.deck_tops.by_stats.friends.sas %}
+                        {{ deck.data.name }}: {{ deck.data.stats.sas }}<br>
+                    {% endfor %}
+                </div>
+
+                <div class="col-4">
+                    <span>Best decks by sas</span><br>
+                    {% for deck in userData.deck_tops.by_stats.all.sas %}
+                        {{ deck.data.name }}: {{ deck.data.stats.sas }}<br>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="divider py-3"></div>
+            <div class="row">
+                <div class="col-4">
+                    <span>Your best decks by expected amber</span><br>
+
+                    {% for deck in userData.deck_tops.by_stats.user.expected_amber %}
+                        {{ deck.data.name }}: {{ deck.data.stats.expectedAmber }}<br>
+                    {% endfor %}
+                </div>
+
+                <div class="col-4">
+                    <span>Your friends best decks by sas</span><br>
+                    {% for deck in userData.deck_tops.by_stats.friends.expected_amber %}
+                        {{ deck.data.name }}: {{ deck.data.stats.expectedAmber }}<br>
+                    {% endfor %}
+                </div>
+
+                <div class="col-4">
+                    <span>Best decks by sas</span><br>
+                    {% for deck in userData.deck_tops.by_stats.all.expected_amber %}
+                        {{ deck.data.name }}: {{ deck.data.stats.expectedAmber }}<br>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
     {% if data is not null %}
         <div class="shadow-lg p-3 mb-5 bg-white rounded">
 
