@@ -438,6 +438,12 @@ final class GenerateUserStatsCommandHandler
             'sets' => [],
             'houses' => [],
             'sas' => [],
+            'expectedAmber' => [],
+            'amberControl' => [],
+            'creatureControl' => [],
+            'artifactControl' => [],
+            'creatureCount' => [],
+            'artifactCount' => [],
         ];
 
         foreach ($decks as $deck) {
@@ -446,6 +452,12 @@ final class GenerateUserStatsCommandHandler
             $decksBy['houses'][$deck->data()->houses->value()[0]->value] = ($decksBy['houses'][$deck->data()->houses->value()[0]->value] ?? 0) + 1;
             $decksBy['houses'][$deck->data()->houses->value()[1]->value] = ($decksBy['houses'][$deck->data()->houses->value()[0]->value] ?? 0) + 1;
             $decksBy['houses'][$deck->data()->houses->value()[2]->value] = ($decksBy['houses'][$deck->data()->houses->value()[0]->value] ?? 0) + 1;
+            $decksBy['expectedAmber'][\round($deck->data()->stats->expectedAmber, 0)] = ($decksBy['expectedAmber'][\round($deck->data()->stats->expectedAmber, 0)] ?? 0) + 1;
+            $decksBy['amberControl'][\round($deck->data()->stats->amberControl, 0)] = ($decksBy['amberControl'][\round($deck->data()->stats->amberControl, 0)] ?? 0) + 1;
+            $decksBy['creatureControl'][\round($deck->data()->stats->creatureControl, 0)] = ($decksBy['creatureControl'][\round($deck->data()->stats->creatureControl, 0)] ?? 0) + 1;
+            $decksBy['artifactControl'][\round($deck->data()->stats->artifactControl, 0)] = ($decksBy['artifactControl'][\round($deck->data()->stats->artifactControl, 0)] ?? 0) + 1;
+            $decksBy['creatureCount'][$deck->data()->stats->creatureCount] = ($decksBy['creatureCount'][$deck->data()->stats->creatureCount] ?? 0) + 1;
+            $decksBy['artifactCount'][$deck->data()->stats->artifactCount] = ($decksBy['artifactCount'][$deck->data()->stats->artifactCount] ?? 0) + 1;
         }
 
         return $decksBy;
@@ -464,49 +476,50 @@ final class GenerateUserStatsCommandHandler
 
         $decks = $this->deckRepository->search(new Criteria(null, null, null, ...$filters));
 
+        $amountToSave = 10;
         $result = [];
 
         \usort($decks, static function (KeyforgeDeck $a, KeyforgeDeck $b) {
             return $b->data()->stats->sas <=> $a->data()->stats->sas;
         });
 
-        $result['sas'] = \array_slice($decks, 0, 3);
+        $result['sas'] = \array_slice($decks, 0, $amountToSave);
 
         \usort($decks, static function (KeyforgeDeck $a, KeyforgeDeck $b) {
             return $b->data()->stats->expectedAmber <=> $a->data()->stats->expectedAmber;
         });
 
-        $result['expected_amber'] = \array_slice($decks, 0, 3);
+        $result['expectedAmber'] = \array_slice($decks, 0, $amountToSave);
 
         \usort($decks, static function (KeyforgeDeck $a, KeyforgeDeck $b) {
             return $b->data()->stats->amberControl <=> $a->data()->stats->amberControl;
         });
 
-        $result['amber_control'] = \array_slice($decks, 0, 3);
+        $result['amberControl'] = \array_slice($decks, 0, $amountToSave);
 
         \usort($decks, static function (KeyforgeDeck $a, KeyforgeDeck $b) {
             return $b->data()->stats->creatureControl <=> $a->data()->stats->creatureControl;
         });
 
-        $result['creature_control'] = \array_slice($decks, 0, 3);
+        $result['creatureControl'] = \array_slice($decks, 0, $amountToSave);
 
         \usort($decks, static function (KeyforgeDeck $a, KeyforgeDeck $b) {
             return $b->data()->stats->artifactControl <=> $a->data()->stats->artifactControl;
         });
 
-        $result['artifact_control'] = \array_slice($decks, 0, 3);
+        $result['artifactControl'] = \array_slice($decks, 0, $amountToSave);
 
         \usort($decks, static function (KeyforgeDeck $a, KeyforgeDeck $b) {
             return $b->data()->stats->creatureCount <=> $a->data()->stats->creatureCount;
         });
 
-        $result['creature_count'] = \array_slice($decks, 0, 3);
+        $result['creatureCount'] = \array_slice($decks, 0, $amountToSave);
 
         \usort($decks, static function (KeyforgeDeck $a, KeyforgeDeck $b) {
             return $b->data()->stats->artifactCount <=> $a->data()->stats->artifactCount;
         });
 
-        $result['artifact_count'] = \array_slice($decks, 0, 3);
+        $result['artifactCount'] = \array_slice($decks, 0, $amountToSave);
 
         return $result;
     }

@@ -33,10 +33,6 @@
     </div>
     <script>
         $(".approveAccount").click(function(event) {
-            console.log('accept');
-
-            console.log($(event.target).data('account'));
-
             $.ajax({
                 type: 'POST',
                 url: '{{ path('admin_accounts') }}',
