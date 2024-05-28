@@ -251,3 +251,19 @@ deck.aerc: Aerc
 deck.synergy: Sinergy
 deck.antisynergy: Antisinergy
 deck.sas: Sas
+menu.you: You
+deck_comparison.sas: Sas
+deck_comparison.expectedAmber: Expected amber
+deck_comparison.amberControl: Amber control
+deck_comparison.creatureControl: Creature control
+deck_comparison.artifactControl: Artifact control
+deck_comparison.creatureCount: Creatures
+deck_comparison.artifactCount: Artifacts
+deck_comparison.efficiency: Efficiency
+deck_comparison.disruption: Disruption
+deck_comparison.recursion: Recursion
+deck_comparison.other: Other
+deck_comparison.effectivePower: Effective power
+deck_comparison.aerc: Aerc
+deck_comparison.synergy: Synergy
+deck_comparison.bonusAmber: Bonus amber

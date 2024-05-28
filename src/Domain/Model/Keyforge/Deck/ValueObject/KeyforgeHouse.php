@@ -59,7 +59,7 @@ enum KeyforgeHouse: string implements \JsonSerializable
     public function isEnabled(): bool
     {
         return match ($this) {
-            self::SKYBORN => false,
+            self::SKYBORN, self::KEYRAKEN => false,
             default => true,
         };
     }

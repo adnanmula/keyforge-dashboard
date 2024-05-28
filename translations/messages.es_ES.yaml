@@ -251,3 +251,19 @@ deck.aerc: Aerc
 deck.synergy: Sinergia
 deck.antisynergy: Antisinergia
 deck.sas: Sas
+menu.you: Tu
+deck_comparison.sas: Sas
+deck_comparison.expectedAmber: Ámbar esperado
+deck_comparison.amberControl: Control de ámbar
+deck_comparison.creatureControl: Control de criaturas
+deck_comparison.artifactControl: Control de artefactos
+deck_comparison.creatureCount: Criaturas
+deck_comparison.artifactCount: Artefactos
+deck_comparison.efficiency: Eficiencia
+deck_comparison.disruption: Disrupción
+deck_comparison.recursion: Recursión
+deck_comparison.other: Otros
+deck_comparison.effectivePower: Poder efectivo
+deck_comparison.aerc: Aerc
+deck_comparison.synergy: Sinergia
+deck_comparison.bonusAmber: Iconos de ámbar

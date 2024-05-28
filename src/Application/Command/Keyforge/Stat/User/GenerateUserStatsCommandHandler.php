@@ -444,6 +444,14 @@ final class GenerateUserStatsCommandHandler
             'artifactControl' => [],
             'creatureCount' => [],
             'artifactCount' => [],
+            'efficiency' => [],
+            'disruption' => [],
+            'recursion' => [],
+            'other' => [],
+            'effectivePower' => [],
+            'bonusAmber' => [],
+            'synergy' => [],
+            'aerc' => [],
         ];
 
         foreach ($decks as $deck) {
@@ -458,6 +466,15 @@ final class GenerateUserStatsCommandHandler
             $decksBy['artifactControl'][\round($deck->data()->stats->artifactControl, 0)] = ($decksBy['artifactControl'][\round($deck->data()->stats->artifactControl, 0)] ?? 0) + 1;
             $decksBy['creatureCount'][$deck->data()->stats->creatureCount] = ($decksBy['creatureCount'][$deck->data()->stats->creatureCount] ?? 0) + 1;
             $decksBy['artifactCount'][$deck->data()->stats->artifactCount] = ($decksBy['artifactCount'][$deck->data()->stats->artifactCount] ?? 0) + 1;
+            $decksBy['efficiency'][$deck->data()->stats->efficiency] = ($decksBy['efficiency'][$deck->data()->stats->efficiency] ?? 0) + 1;
+            $decksBy['disruption'][$deck->data()->stats->disruption] = ($decksBy['disruption'][$deck->data()->stats->disruption] ?? 0) + 1;
+            $decksBy['recursion'][$deck->data()->stats->recursion] = ($decksBy['recursion'][$deck->data()->stats->recursion] ?? 0) + 1;
+            $decksBy['other'][$deck->data()->stats->other] = ($decksBy['other'][$deck->data()->stats->other] ?? 0) + 1;
+            $decksBy['effectivePower'][$deck->data()->stats->effectivePower] = ($decksBy['effectivePower'][$deck->data()->stats->effectivePower] ?? 0) + 1;
+            $decksBy['bonusAmber'][$deck->data()->stats->rawAmber] = ($decksBy['bonusAmber'][$deck->data()->stats->rawAmber] ?? 0) + 1;
+            $decksBy['synergy'][$deck->data()->stats->synergyRating - $deck->data()->stats->antiSynergyRating]
+                = ($decksBy['synergy'][$deck->data()->stats->synergyRating - $deck->data()->stats->antiSynergyRating] ?? 0) + 1;
+            $decksBy['aerc'][$deck->data()->stats->aercScore] = ($decksBy['aerc'][$deck->data()->stats->aercScore] ?? 0) + 1;
         }
 
         return $decksBy;
@@ -475,51 +492,43 @@ final class GenerateUserStatsCommandHandler
         }
 
         $decks = $this->deckRepository->search(new Criteria(null, null, null, ...$filters));
+        $decks = \array_map(static function (KeyforgeDeck $d) {
+            return [
+                'id' => $d->id()->value(),
+                'name' => $d->data()->name,
+                'stats' => [
+                    'sas' => $d->data()->stats->sas,
+                    'expectedAmber' => $d->data()->stats->expectedAmber,
+                    'amberControl' => $d->data()->stats->amberControl,
+                    'creatureControl' => $d->data()->stats->creatureControl,
+                    'artifactControl' => $d->data()->stats->artifactControl,
+                    'creatureCount' => $d->data()->stats->creatureCount,
+                    'artifactCount' => $d->data()->stats->artifactCount,
+                    'efficiency' => $d->data()->stats->efficiency,
+                    'disruption' => $d->data()->stats->disruption,
+                    'recursion' => $d->data()->stats->recursion,
+                    'other' => $d->data()->stats->other,
+                    'effectivePower' => $d->data()->stats->effectivePower,
+                    'bonusAmber' => $d->data()->stats->rawAmber,
+                    'synergy' => $d->data()->stats->synergyRating - $d->data()->stats->antiSynergyRating,
+                    'aerc' => $d->data()->stats->aercScore,
+                ],
+            ];
+        }, $decks);
 
         $amountToSave = 10;
         $result = [];
 
-        \usort($decks, static function (KeyforgeDeck $a, KeyforgeDeck $b) {
-            return $b->data()->stats->sas <=> $a->data()->stats->sas;
-        });
+        $statsNames = ['sas', 'expectedAmber', 'amberControl', 'creatureControl', 'artifactControl', 'creatureCount', 'artifactCount',
+            'efficiency', 'disruption', 'recursion', 'other', 'effectivePower', 'bonusAmber', 'synergy', 'aerc'];
 
-        $result['sas'] = \array_slice($decks, 0, $amountToSave);
+        foreach ($statsNames as $statsName) {
+            \usort($decks, static function (array $a, array $b) use ($statsName) {
+                return $b['stats'][$statsName] <=> $a['stats'][$statsName];
+            });
 
-        \usort($decks, static function (KeyforgeDeck $a, KeyforgeDeck $b) {
-            return $b->data()->stats->expectedAmber <=> $a->data()->stats->expectedAmber;
-        });
-
-        $result['expectedAmber'] = \array_slice($decks, 0, $amountToSave);
-
-        \usort($decks, static function (KeyforgeDeck $a, KeyforgeDeck $b) {
-            return $b->data()->stats->amberControl <=> $a->data()->stats->amberControl;
-        });
-
-        $result['amberControl'] = \array_slice($decks, 0, $amountToSave);
-
-        \usort($decks, static function (KeyforgeDeck $a, KeyforgeDeck $b) {
-            return $b->data()->stats->creatureControl <=> $a->data()->stats->creatureControl;
-        });
-
-        $result['creatureControl'] = \array_slice($decks, 0, $amountToSave);
-
-        \usort($decks, static function (KeyforgeDeck $a, KeyforgeDeck $b) {
-            return $b->data()->stats->artifactControl <=> $a->data()->stats->artifactControl;
-        });
-
-        $result['artifactControl'] = \array_slice($decks, 0, $amountToSave);
-
-        \usort($decks, static function (KeyforgeDeck $a, KeyforgeDeck $b) {
-            return $b->data()->stats->creatureCount <=> $a->data()->stats->creatureCount;
-        });
-
-        $result['creatureCount'] = \array_slice($decks, 0, $amountToSave);
-
-        \usort($decks, static function (KeyforgeDeck $a, KeyforgeDeck $b) {
-            return $b->data()->stats->artifactCount <=> $a->data()->stats->artifactCount;
-        });
-
-        $result['artifactCount'] = \array_slice($decks, 0, $amountToSave);
+            $result[$statsName] = \array_slice($decks, 0, $amountToSave);
+        }
 
         return $result;
     }

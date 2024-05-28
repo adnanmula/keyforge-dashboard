@@ -8,9 +8,9 @@
             <div class="row">
                 <div class="col-3">
                     <select class="form-control deck_stat_comparison_select" name="deckComparisonVs1" id="deckComparisonVs1" disabled>
-                        <option value="user" selected>You</option>
-                        <option value="friends">Your friends</option>
-                        <option value="all">All</option>
+                        <option value="user" selected>{{ 'menu.you'|trans }}</option>
+                        <option value="friends" disabled>{{ 'menu.friends'|trans }}</option>
+                        <option value="all" disabled>{{ 'menu.all'|trans }}</option>
                     </select>
                 </div>
                 <div class="col-3">
@@ -18,24 +18,32 @@
                 </div>
                 <div class="col-3">
                     <select class="form-control deck_stat_comparison_select" name="deckComparisonVs2" id="deckComparisonVs2">
-                        <option value="user" disabled>You</option>
-                        <option value="friends">Your friends</option>
-                        <option value="all" selected>All</option>
+                        <option value="user" disabled>{{ 'menu.you'|trans }}</option>
+                        <option value="friends">{{ 'menu.friends'|trans }}</option>
+                        <option value="all" selected>{{ 'menu.all'|trans }}</option>
                     </select>
                 </div>
                 <div class="col-3">
                     <select class="form-control deck_stat_comparison_select" name="deckComparisonStat" id="deckComparisonStat">
-                        <option value="sas" selected>Sas</option>
-                        <option value="expectedAmber">expectedAmber</option>
-                        <option value="amberControl">amberControl</option>
-                        <option value="creatureControl">creatureControl</option>
-                        <option value="artifactControl">artifactControl</option>
-                        <option value="creatureCount">creatureCount</option>
-                        <option value="artifactCount">artifactCount</option>
+                        <option value="sas" selected>{{ 'deck_comparison.sas'|trans }}</option>
+                        <option value="expectedAmber">{{ 'deck_comparison.expectedAmber'|trans }}</option>
+                        <option value="amberControl">{{ 'deck_comparison.amberControl'|trans }}</option>
+                        <option value="creatureControl">{{ 'deck_comparison.creatureControl'|trans }}</option>
+                        <option value="artifactControl">{{ 'deck_comparison.artifactControl'|trans }}</option>
+                        <option value="effectivePower">{{ 'deck_comparison.effectivePower'|trans }}</option>
+                        <option value="efficiency">{{ 'deck_comparison.efficiency'|trans }}</option>
+                        <option value="disruption">{{ 'deck_comparison.disruption'|trans }}</option>
+                        <option value="recursion">{{ 'deck_comparison.recursion'|trans }}</option>
+                        <option value="other">{{ 'deck_comparison.other'|trans }}</option>
+                        <option value="aerc">{{ 'deck_comparison.aerc'|trans }}</option>
+                        <option value="synergy">{{ 'deck_comparison.synergy'|trans }}</option>
+                        <option value="bonusAmber">{{ 'deck_comparison.bonusAmber'|trans }}</option>
+                        <option value="creatureCount">{{ 'deck_comparison.creatureCount'|trans }}</option>
+                        <option value="artifactCount">{{ 'deck_comparison.artifactCount'|trans }}</option>
                     </select>
                 </div>
             </div>
-
+            <div class="divider py-3"></div>
             <div class="row">
                 {% for userScope,byUser in userData.deck_tops.by_stats %}
                 {% for statScope,byStat in byUser %}
@@ -44,14 +52,14 @@
                         <table class="table table-hover">
                             <tr>
                                 <td>Deck</td>
-                                <td>{{ statScope }}</td>
+                                <td class="text-end">{{ ('deck_comparison.'~statScope)|trans }}</td>
                             </tr>
                             {% for deck in byStat|slice(0,10) %}
                             <tr>
                                 <td>
-                                    <a href="{{ path('keyforge_deck_detail', {'deckId': deck.id}) }}" target="_blank">{{ deck.data.name }}</a>
+                                    <a href="{{ path('keyforge_deck_detail', {'deckId': deck.id}) }}" target="_blank">{{ deck.name }}</a>
                                 </td>
-                                <td>{{ deck.data.stats[statScope] }}</td>
+                                <td class="text-end">{{ deck.stats[statScope]|round(2) }}</td>
                             </tr>
                             {% endfor %}
                         </table>
@@ -361,7 +369,7 @@
 
         const chart_{{ userScope }}_{{ statScope }} = barChart(
             'deck_stats_{{ userScope }}_{{ statScope }}',
-            '{{ 'label.pending.'~userScope~'_'~statScope|trans }}',
+            '{{ ('deck_comparison.'~statScope)|trans }}',
             userData.amounts.{{ userScope }}.{{ statScope }},
         );
 
@@ -393,7 +401,7 @@
                         },
                         title: {
                             display: true,
-                            text: '{{ 'label.pending'|trans }}'
+                            text: label
                         }
                     }
                 },

@@ -109,7 +109,7 @@ enum KeyforgeSet: string
     public function isEnabled(): bool
     {
         return match ($this) {
-            self::AS => false,
+            self::AS, self::ANOMALY_EXPANSION => false,
             default => true,
         };
     }
