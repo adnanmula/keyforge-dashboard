@@ -460,10 +460,10 @@ final class GenerateUserStatsCommandHandler
 
         foreach ($decks as $deck) {
 // @codingStandardsIgnoreStart
-//            $decksBy[$deck->data()->set->value]['sets'][$deck->data()->set->value] = ($decksBy['sets'][$deck->data()->set->value] ?? 0) + 1;
+            $decksBy[$deck->data()->set->value]['sets'][$deck->data()->set->value] = ($decksBy[$deck->data()->set->value]['sets'][$deck->data()->set->value] ?? 0) + 1;
             $decksBy[$deck->data()->set->value]['houses'][$deck->data()->houses->value()[0]->value] = ($decksBy[$deck->data()->set->value]['houses'][$deck->data()->houses->value()[0]->value] ?? 0) + 1;
-            $decksBy[$deck->data()->set->value]['houses'][$deck->data()->houses->value()[1]->value] = ($decksBy[$deck->data()->set->value]['houses'][$deck->data()->houses->value()[0]->value] ?? 0) + 1;
-            $decksBy[$deck->data()->set->value]['houses'][$deck->data()->houses->value()[2]->value] = ($decksBy[$deck->data()->set->value]['houses'][$deck->data()->houses->value()[0]->value] ?? 0) + 1;
+            $decksBy[$deck->data()->set->value]['houses'][$deck->data()->houses->value()[1]->value] = ($decksBy[$deck->data()->set->value]['houses'][$deck->data()->houses->value()[1]->value] ?? 0) + 1;
+            $decksBy[$deck->data()->set->value]['houses'][$deck->data()->houses->value()[2]->value] = ($decksBy[$deck->data()->set->value]['houses'][$deck->data()->houses->value()[2]->value] ?? 0) + 1;
             $decksBy[$deck->data()->set->value]['sas'][$deck->data()->stats->sas] = ($decksBy[$deck->data()->set->value]['sas'][$deck->data()->stats->sas] ?? 0) + 1;
             $decksBy[$deck->data()->set->value]['expectedAmber'][\round($deck->data()->stats->expectedAmber, 0)] = ($decksBy[$deck->data()->set->value]['expectedAmber'][\round($deck->data()->stats->expectedAmber, 0)] ?? 0) + 1;
             $decksBy[$deck->data()->set->value]['amberControl'][\round($deck->data()->stats->amberControl, 0)] = ($decksBy[$deck->data()->set->value]['amberControl'][\round($deck->data()->stats->amberControl, 0)] ?? 0) + 1;
@@ -480,9 +480,10 @@ final class GenerateUserStatsCommandHandler
             $decksBy[$deck->data()->set->value]['synergy'][$deck->data()->stats->synergyRating - $deck->data()->stats->antiSynergyRating] = ($decksBy[$deck->data()->set->value]['synergy'][$deck->data()->stats->synergyRating - $deck->data()->stats->antiSynergyRating] ?? 0) + 1;
             $decksBy[$deck->data()->set->value]['aerc'][$deck->data()->stats->aercScore] = ($decksBy[$deck->data()->set->value]['aerc'][$deck->data()->stats->aercScore] ?? 0) + 1;
 
+            $decksBy['all']['sets'][$deck->data()->set->value] = ($decksBy['all']['sets'][$deck->data()->set->value] ?? 0) + 1;
             $decksBy['all']['houses'][$deck->data()->houses->value()[0]->value] = ($decksBy['all']['houses'][$deck->data()->houses->value()[0]->value] ?? 0) + 1;
-            $decksBy['all']['houses'][$deck->data()->houses->value()[1]->value] = ($decksBy['all']['houses'][$deck->data()->houses->value()[0]->value] ?? 0) + 1;
-            $decksBy['all']['houses'][$deck->data()->houses->value()[2]->value] = ($decksBy['all']['houses'][$deck->data()->houses->value()[0]->value] ?? 0) + 1;
+            $decksBy['all']['houses'][$deck->data()->houses->value()[1]->value] = ($decksBy['all']['houses'][$deck->data()->houses->value()[1]->value] ?? 0) + 1;
+            $decksBy['all']['houses'][$deck->data()->houses->value()[2]->value] = ($decksBy['all']['houses'][$deck->data()->houses->value()[2]->value] ?? 0) + 1;
             $decksBy['all']['sas'][$deck->data()->stats->sas] = ($decksBy['all']['sas'][$deck->data()->stats->sas] ?? 0) + 1;
             $decksBy['all']['expectedAmber'][\round($deck->data()->stats->expectedAmber, 0)] = ($decksBy['all']['expectedAmber'][\round($deck->data()->stats->expectedAmber, 0)] ?? 0) + 1;
             $decksBy['all']['amberControl'][\round($deck->data()->stats->amberControl, 0)] = ($decksBy['all']['amberControl'][\round($deck->data()->stats->amberControl, 0)] ?? 0) + 1;

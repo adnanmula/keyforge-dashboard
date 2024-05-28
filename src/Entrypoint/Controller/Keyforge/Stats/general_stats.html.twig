@@ -5,6 +5,24 @@
 {% block body %}
     {% if userData is not null %}
         <div class="shadow-lg p-3 mb-5 bg-white rounded">
+            <h3>{{ 'menu.your_stats'|trans }}</h3>
+            <div class="divider py-1"></div>
+            <div class="row">
+                <div class="col-12 col-sm-6 col-lg-6">
+                    <canvas id="userCollectionSas" width="300" height="150"></canvas>
+                </div>
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <canvas id="userSetPresence" width="400" height="400"></canvas>
+                </div>
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <canvas id="userHousePresence" width="400" height="400"></canvas>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if userData is not null %}
+        <div class="shadow-lg p-3 mb-5 bg-white rounded">
             <div class="row">
                 <div class="col-3">
                     <div class="form-floating">
@@ -109,6 +127,8 @@
 
     {% if data is not null %}
         <div class="shadow-lg p-3 mb-5 bg-white rounded">
+            <h3>{{ 'menu.general_stats'|trans }}</h3>
+            <div class="divider py-1"></div>
             <div class="row">
                 <div class="col-12 col-sm-6 col-lg-3">
                     <canvas id="setWins" width="400" height="400"></canvas>
@@ -397,9 +417,90 @@
         {% endif %}
 
         {% if userData is not null %}
+        let userSetPresence = JSON.parse('{{ userData.deck_tops.amounts.user.all.sets|json_encode|raw }}');
+        let userHousePresence = JSON.parse('{{ userData.deck_tops.amounts.user.all.houses|json_encode|raw }}');
+
+        const userSetPresenceChart = new Chart(document.getElementById('userSetPresence').getContext('2d'), {
+            type: 'doughnut',
+            data: {
+                datasets: [{
+                    data: Object.values(userSetPresence),
+                    backgroundColor: [
+                        'rgb('+Math.floor(Math.random() * 255)+', '+Math.floor(Math.random() * 255)+', '+Math.floor(Math.random() * 255)+')',
+                        'rgb('+Math.floor(Math.random() * 255)+', '+Math.floor(Math.random() * 255)+', '+Math.floor(Math.random() * 255)+')',
+                        'rgb('+Math.floor(Math.random() * 255)+', '+Math.floor(Math.random() * 255)+', '+Math.floor(Math.random() * 255)+')',
+                        'rgb('+Math.floor(Math.random() * 255)+', '+Math.floor(Math.random() * 255)+', '+Math.floor(Math.random() * 255)+')',
+                        'rgb('+Math.floor(Math.random() * 255)+', '+Math.floor(Math.random() * 255)+', '+Math.floor(Math.random() * 255)+')',
+                        'rgb('+Math.floor(Math.random() * 255)+', '+Math.floor(Math.random() * 255)+', '+Math.floor(Math.random() * 255)+')',
+                        'rgb('+Math.floor(Math.random() * 255)+', '+Math.floor(Math.random() * 255)+', '+Math.floor(Math.random() * 255)+')',
+                        'rgb('+Math.floor(Math.random() * 255)+', '+Math.floor(Math.random() * 255)+', '+Math.floor(Math.random() * 255)+')',
+                        'rgb('+Math.floor(Math.random() * 255)+', '+Math.floor(Math.random() * 255)+', '+Math.floor(Math.random() * 255)+')',
+                        'rgb('+Math.floor(Math.random() * 255)+', '+Math.floor(Math.random() * 255)+', '+Math.floor(Math.random() * 255)+')',
+                        'rgb('+Math.floor(Math.random() * 255)+', '+Math.floor(Math.random() * 255)+', '+Math.floor(Math.random() * 255)+')',
+                        'rgb('+Math.floor(Math.random() * 255)+', '+Math.floor(Math.random() * 255)+', '+Math.floor(Math.random() * 255)+')',
+                        'rgb('+Math.floor(Math.random() * 255)+', '+Math.floor(Math.random() * 255)+', '+Math.floor(Math.random() * 255)+')',
+                    ],
+                }],
+                labels: Object.keys(userSetPresence),
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false,
+                        position: 'bottom',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Sets'
+                    }
+                }
+            },
+        });
+
+        const userHousePresenceChart = new Chart(document.getElementById('userHousePresence').getContext('2d'), {
+            type: 'doughnut',
+            data: {
+                datasets: [{
+                    data: Object.values(userHousePresence),
+                    backgroundColor: [
+                        'rgb('+Math.floor(Math.random() * 255)+', '+Math.floor(Math.random() * 255)+', '+Math.floor(Math.random() * 255)+')',
+                        'rgb('+Math.floor(Math.random() * 255)+', '+Math.floor(Math.random() * 255)+', '+Math.floor(Math.random() * 255)+')',
+                        'rgb('+Math.floor(Math.random() * 255)+', '+Math.floor(Math.random() * 255)+', '+Math.floor(Math.random() * 255)+')',
+                        'rgb('+Math.floor(Math.random() * 255)+', '+Math.floor(Math.random() * 255)+', '+Math.floor(Math.random() * 255)+')',
+                        'rgb('+Math.floor(Math.random() * 255)+', '+Math.floor(Math.random() * 255)+', '+Math.floor(Math.random() * 255)+')',
+                        'rgb('+Math.floor(Math.random() * 255)+', '+Math.floor(Math.random() * 255)+', '+Math.floor(Math.random() * 255)+')',
+                        'rgb('+Math.floor(Math.random() * 255)+', '+Math.floor(Math.random() * 255)+', '+Math.floor(Math.random() * 255)+')',
+                        'rgb('+Math.floor(Math.random() * 255)+', '+Math.floor(Math.random() * 255)+', '+Math.floor(Math.random() * 255)+')',
+                        'rgb('+Math.floor(Math.random() * 255)+', '+Math.floor(Math.random() * 255)+', '+Math.floor(Math.random() * 255)+')',
+                        'rgb('+Math.floor(Math.random() * 255)+', '+Math.floor(Math.random() * 255)+', '+Math.floor(Math.random() * 255)+')',
+                        'rgb('+Math.floor(Math.random() * 255)+', '+Math.floor(Math.random() * 255)+', '+Math.floor(Math.random() * 255)+')',
+                        'rgb('+Math.floor(Math.random() * 255)+', '+Math.floor(Math.random() * 255)+', '+Math.floor(Math.random() * 255)+')',
+                        'rgb('+Math.floor(Math.random() * 255)+', '+Math.floor(Math.random() * 255)+', '+Math.floor(Math.random() * 255)+')',
+                    ],
+                }],
+                labels: Object.keys(userHousePresence),
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false,
+                        position: 'bottom',
+                    },
+                    title: {
+                        display: true,
+                        text: '{{ 'menu.houses'|trans }}'
+                    }
+                }
+            },
+        });
+        {% endif %}
+
+        {% if userData is not null %}
         let userData = JSON.parse('{{ userData.deck_tops|json_encode|raw|e('js') }}');
 
-        let chartData;
+        const chart_user_collection_sas = barChart('userCollectionSas', 'Sas', userData.amounts.user.all.sas);
 
         {% for userScope,byUser in userData.deck_tops.by_stats %}
         {% for setScope,bySet in byUser %}
@@ -407,7 +508,7 @@
 
         const chart_{{ userScope }}_{{ statScope }}_{{ setScope }} = barChart(
             'deck_stats_{{ userScope }}_{{ statScope }}_{{ setScope }}',
-            '{{ ('deck_comparison.'~statScope)|trans }}' + '- {{ 'deck_comparison.'~setScope }}',
+            '{{ ('deck_comparison.'~statScope)|trans }}' + ' - {{ ('deck_comparison.'~setScope)|trans }}',
             userData.amounts.{{ userScope }}.{{ setScope }}.{{ statScope }},
         );
 

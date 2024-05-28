@@ -282,3 +282,5 @@ deck_comparison.VM23: VM23
 deck_comparison.VM24: VM24
 menu.decks_of: Decks of
 menu.stat: Stat
+menu.your_stats: Your stats
+menu.general_stats: General stats
