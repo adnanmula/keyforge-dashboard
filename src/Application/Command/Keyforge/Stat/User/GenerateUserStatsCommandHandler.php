@@ -434,47 +434,71 @@ final class GenerateUserStatsCommandHandler
 
         $decks = $this->deckRepository->search(new Criteria(null, null, null, ...$filters));
 
-        $decksBy = [
-            'sets' => [],
-            'houses' => [],
-            'sas' => [],
-            'expectedAmber' => [],
-            'amberControl' => [],
-            'creatureControl' => [],
-            'artifactControl' => [],
-            'creatureCount' => [],
-            'artifactCount' => [],
-            'efficiency' => [],
-            'disruption' => [],
-            'recursion' => [],
-            'other' => [],
-            'effectivePower' => [],
-            'bonusAmber' => [],
-            'synergy' => [],
-            'aerc' => [],
-        ];
+        $sets = ['CotA', 'AoA', 'WC', 'MM', 'DT', 'WoE', 'GR', 'AS', 'U22', 'M24', 'VM23', 'VM24', 'all'];
+        $decksBy = [];
+
+        foreach ($sets as $set) {
+            $decksBy[$set] = [
+                'houses' => [],
+                'sas' => [],
+                'expectedAmber' => [],
+                'amberControl' => [],
+                'creatureControl' => [],
+                'artifactControl' => [],
+                'creatureCount' => [],
+                'artifactCount' => [],
+                'efficiency' => [],
+                'disruption' => [],
+                'recursion' => [],
+                'other' => [],
+                'effectivePower' => [],
+                'bonusAmber' => [],
+                'synergy' => [],
+                'aerc' => [],
+            ];
+        }
 
         foreach ($decks as $deck) {
-            $decksBy['sets'][$deck->data()->set->value] = ($decksBy['sets'][$deck->data()->set->value] ?? 0) + 1;
-            $decksBy['sas'][$deck->data()->stats->sas] = ($decksBy['sas'][$deck->data()->stats->sas] ?? 0) + 1;
-            $decksBy['houses'][$deck->data()->houses->value()[0]->value] = ($decksBy['houses'][$deck->data()->houses->value()[0]->value] ?? 0) + 1;
-            $decksBy['houses'][$deck->data()->houses->value()[1]->value] = ($decksBy['houses'][$deck->data()->houses->value()[0]->value] ?? 0) + 1;
-            $decksBy['houses'][$deck->data()->houses->value()[2]->value] = ($decksBy['houses'][$deck->data()->houses->value()[0]->value] ?? 0) + 1;
-            $decksBy['expectedAmber'][\round($deck->data()->stats->expectedAmber, 0)] = ($decksBy['expectedAmber'][\round($deck->data()->stats->expectedAmber, 0)] ?? 0) + 1;
-            $decksBy['amberControl'][\round($deck->data()->stats->amberControl, 0)] = ($decksBy['amberControl'][\round($deck->data()->stats->amberControl, 0)] ?? 0) + 1;
-            $decksBy['creatureControl'][\round($deck->data()->stats->creatureControl, 0)] = ($decksBy['creatureControl'][\round($deck->data()->stats->creatureControl, 0)] ?? 0) + 1;
-            $decksBy['artifactControl'][\round($deck->data()->stats->artifactControl, 0)] = ($decksBy['artifactControl'][\round($deck->data()->stats->artifactControl, 0)] ?? 0) + 1;
-            $decksBy['creatureCount'][$deck->data()->stats->creatureCount] = ($decksBy['creatureCount'][$deck->data()->stats->creatureCount] ?? 0) + 1;
-            $decksBy['artifactCount'][$deck->data()->stats->artifactCount] = ($decksBy['artifactCount'][$deck->data()->stats->artifactCount] ?? 0) + 1;
-            $decksBy['efficiency'][$deck->data()->stats->efficiency] = ($decksBy['efficiency'][$deck->data()->stats->efficiency] ?? 0) + 1;
-            $decksBy['disruption'][$deck->data()->stats->disruption] = ($decksBy['disruption'][$deck->data()->stats->disruption] ?? 0) + 1;
-            $decksBy['recursion'][$deck->data()->stats->recursion] = ($decksBy['recursion'][$deck->data()->stats->recursion] ?? 0) + 1;
-            $decksBy['other'][$deck->data()->stats->other] = ($decksBy['other'][$deck->data()->stats->other] ?? 0) + 1;
-            $decksBy['effectivePower'][$deck->data()->stats->effectivePower] = ($decksBy['effectivePower'][$deck->data()->stats->effectivePower] ?? 0) + 1;
-            $decksBy['bonusAmber'][$deck->data()->stats->rawAmber] = ($decksBy['bonusAmber'][$deck->data()->stats->rawAmber] ?? 0) + 1;
-            $decksBy['synergy'][$deck->data()->stats->synergyRating - $deck->data()->stats->antiSynergyRating]
-                = ($decksBy['synergy'][$deck->data()->stats->synergyRating - $deck->data()->stats->antiSynergyRating] ?? 0) + 1;
-            $decksBy['aerc'][$deck->data()->stats->aercScore] = ($decksBy['aerc'][$deck->data()->stats->aercScore] ?? 0) + 1;
+// @codingStandardsIgnoreStart
+//            $decksBy[$deck->data()->set->value]['sets'][$deck->data()->set->value] = ($decksBy['sets'][$deck->data()->set->value] ?? 0) + 1;
+            $decksBy[$deck->data()->set->value]['houses'][$deck->data()->houses->value()[0]->value] = ($decksBy[$deck->data()->set->value]['houses'][$deck->data()->houses->value()[0]->value] ?? 0) + 1;
+            $decksBy[$deck->data()->set->value]['houses'][$deck->data()->houses->value()[1]->value] = ($decksBy[$deck->data()->set->value]['houses'][$deck->data()->houses->value()[0]->value] ?? 0) + 1;
+            $decksBy[$deck->data()->set->value]['houses'][$deck->data()->houses->value()[2]->value] = ($decksBy[$deck->data()->set->value]['houses'][$deck->data()->houses->value()[0]->value] ?? 0) + 1;
+            $decksBy[$deck->data()->set->value]['sas'][$deck->data()->stats->sas] = ($decksBy[$deck->data()->set->value]['sas'][$deck->data()->stats->sas] ?? 0) + 1;
+            $decksBy[$deck->data()->set->value]['expectedAmber'][\round($deck->data()->stats->expectedAmber, 0)] = ($decksBy[$deck->data()->set->value]['expectedAmber'][\round($deck->data()->stats->expectedAmber, 0)] ?? 0) + 1;
+            $decksBy[$deck->data()->set->value]['amberControl'][\round($deck->data()->stats->amberControl, 0)] = ($decksBy[$deck->data()->set->value]['amberControl'][\round($deck->data()->stats->amberControl, 0)] ?? 0) + 1;
+            $decksBy[$deck->data()->set->value]['creatureControl'][\round($deck->data()->stats->creatureControl, 0)] = ($decksBy[$deck->data()->set->value]['creatureControl'][\round($deck->data()->stats->creatureControl, 0)] ?? 0) + 1;
+            $decksBy[$deck->data()->set->value]['artifactControl'][\round($deck->data()->stats->artifactControl, 0)] = ($decksBy[$deck->data()->set->value]['artifactControl'][\round($deck->data()->stats->artifactControl, 0)] ?? 0) + 1;
+            $decksBy[$deck->data()->set->value]['creatureCount'][$deck->data()->stats->creatureCount] = ($decksBy[$deck->data()->set->value]['creatureCount'][$deck->data()->stats->creatureCount] ?? 0) + 1;
+            $decksBy[$deck->data()->set->value]['artifactCount'][$deck->data()->stats->artifactCount] = ($decksBy[$deck->data()->set->value]['artifactCount'][$deck->data()->stats->artifactCount] ?? 0) + 1;
+            $decksBy[$deck->data()->set->value]['efficiency'][$deck->data()->stats->efficiency] = ($decksBy[$deck->data()->set->value]['efficiency'][$deck->data()->stats->efficiency] ?? 0) + 1;
+            $decksBy[$deck->data()->set->value]['disruption'][$deck->data()->stats->disruption] = ($decksBy[$deck->data()->set->value]['disruption'][$deck->data()->stats->disruption] ?? 0) + 1;
+            $decksBy[$deck->data()->set->value]['recursion'][$deck->data()->stats->recursion] = ($decksBy[$deck->data()->set->value]['recursion'][$deck->data()->stats->recursion] ?? 0) + 1;
+            $decksBy[$deck->data()->set->value]['other'][$deck->data()->stats->other] = ($decksBy[$deck->data()->set->value]['other'][$deck->data()->stats->other] ?? 0) + 1;
+            $decksBy[$deck->data()->set->value]['effectivePower'][$deck->data()->stats->effectivePower] = ($decksBy[$deck->data()->set->value]['effectivePower'][$deck->data()->stats->effectivePower] ?? 0) + 1;
+            $decksBy[$deck->data()->set->value]['bonusAmber'][$deck->data()->stats->rawAmber] = ($decksBy[$deck->data()->set->value]['bonusAmber'][$deck->data()->stats->rawAmber] ?? 0) + 1;
+            $decksBy[$deck->data()->set->value]['synergy'][$deck->data()->stats->synergyRating - $deck->data()->stats->antiSynergyRating] = ($decksBy[$deck->data()->set->value]['synergy'][$deck->data()->stats->synergyRating - $deck->data()->stats->antiSynergyRating] ?? 0) + 1;
+            $decksBy[$deck->data()->set->value]['aerc'][$deck->data()->stats->aercScore] = ($decksBy[$deck->data()->set->value]['aerc'][$deck->data()->stats->aercScore] ?? 0) + 1;
+
+            $decksBy['all']['houses'][$deck->data()->houses->value()[0]->value] = ($decksBy['all']['houses'][$deck->data()->houses->value()[0]->value] ?? 0) + 1;
+            $decksBy['all']['houses'][$deck->data()->houses->value()[1]->value] = ($decksBy['all']['houses'][$deck->data()->houses->value()[0]->value] ?? 0) + 1;
+            $decksBy['all']['houses'][$deck->data()->houses->value()[2]->value] = ($decksBy['all']['houses'][$deck->data()->houses->value()[0]->value] ?? 0) + 1;
+            $decksBy['all']['sas'][$deck->data()->stats->sas] = ($decksBy['all']['sas'][$deck->data()->stats->sas] ?? 0) + 1;
+            $decksBy['all']['expectedAmber'][\round($deck->data()->stats->expectedAmber, 0)] = ($decksBy['all']['expectedAmber'][\round($deck->data()->stats->expectedAmber, 0)] ?? 0) + 1;
+            $decksBy['all']['amberControl'][\round($deck->data()->stats->amberControl, 0)] = ($decksBy['all']['amberControl'][\round($deck->data()->stats->amberControl, 0)] ?? 0) + 1;
+            $decksBy['all']['creatureControl'][\round($deck->data()->stats->creatureControl, 0)] = ($decksBy['all']['creatureControl'][\round($deck->data()->stats->creatureControl, 0)] ?? 0) + 1;
+            $decksBy['all']['artifactControl'][\round($deck->data()->stats->artifactControl, 0)] = ($decksBy['all']['artifactControl'][\round($deck->data()->stats->artifactControl, 0)] ?? 0) + 1;
+            $decksBy['all']['creatureCount'][$deck->data()->stats->creatureCount] = ($decksBy['all']['creatureCount'][$deck->data()->stats->creatureCount] ?? 0) + 1;
+            $decksBy['all']['artifactCount'][$deck->data()->stats->artifactCount] = ($decksBy['all']['artifactCount'][$deck->data()->stats->artifactCount] ?? 0) + 1;
+            $decksBy['all']['efficiency'][$deck->data()->stats->efficiency] = ($decksBy['all']['efficiency'][$deck->data()->stats->efficiency] ?? 0) + 1;
+            $decksBy['all']['disruption'][$deck->data()->stats->disruption] = ($decksBy['all']['disruption'][$deck->data()->stats->disruption] ?? 0) + 1;
+            $decksBy['all']['recursion'][$deck->data()->stats->recursion] = ($decksBy['all']['recursion'][$deck->data()->stats->recursion] ?? 0) + 1;
+            $decksBy['all']['other'][$deck->data()->stats->other] = ($decksBy['all']['other'][$deck->data()->stats->other] ?? 0) + 1;
+            $decksBy['all']['effectivePower'][$deck->data()->stats->effectivePower] = ($decksBy['all']['effectivePower'][$deck->data()->stats->effectivePower] ?? 0) + 1;
+            $decksBy['all']['bonusAmber'][$deck->data()->stats->rawAmber] = ($decksBy['all']['bonusAmber'][$deck->data()->stats->rawAmber] ?? 0) + 1;
+            $decksBy['all']['synergy'][$deck->data()->stats->synergyRating - $deck->data()->stats->antiSynergyRating] = ($decksBy['all']['synergy'][$deck->data()->stats->synergyRating - $deck->data()->stats->antiSynergyRating] ?? 0) + 1;
+            $decksBy['all']['aerc'][$deck->data()->stats->aercScore] = ($decksBy['all']['aerc'][$deck->data()->stats->aercScore] ?? 0) + 1;
+// @codingStandardsIgnoreEnd
         }
 
         return $decksBy;
@@ -496,6 +520,7 @@ final class GenerateUserStatsCommandHandler
             return [
                 'id' => $d->id()->value(),
                 'name' => $d->data()->name,
+                'set' => $d->data()->set->value,
                 'stats' => [
                     'sas' => $d->data()->stats->sas,
                     'expectedAmber' => $d->data()->stats->expectedAmber,
@@ -517,17 +542,28 @@ final class GenerateUserStatsCommandHandler
         }, $decks);
 
         $amountToSave = 10;
+
+        $sets = ['CotA', 'AoA', 'WC', 'MM', 'DT', 'WoE', 'GR', 'AS', 'U22', 'M24', 'VM23', 'VM24', 'all'];
+
         $result = [];
 
         $statsNames = ['sas', 'expectedAmber', 'amberControl', 'creatureControl', 'artifactControl', 'creatureCount', 'artifactCount',
             'efficiency', 'disruption', 'recursion', 'other', 'effectivePower', 'bonusAmber', 'synergy', 'aerc'];
 
-        foreach ($statsNames as $statsName) {
-            \usort($decks, static function (array $a, array $b) use ($statsName) {
-                return $b['stats'][$statsName] <=> $a['stats'][$statsName];
-            });
+        foreach ($sets as $set) {
+            $setDecks = 'all' === $set
+                ? $decks
+                : \array_values(\array_filter($decks, static fn (array $d) => $d['set'] === $set));
 
-            $result[$statsName] = \array_slice($decks, 0, $amountToSave);
+            $result[$set] = [];
+
+            foreach ($statsNames as $statsName) {
+                \usort($setDecks, static function (array $a, array $b) use ($statsName) {
+                    return $b['stats'][$statsName] <=> $a['stats'][$statsName];
+                });
+
+                $result[$set][$statsName] = \array_slice($setDecks, 0, $amountToSave);
+            }
         }
 
         return $result;

@@ -7,51 +7,84 @@
         <div class="shadow-lg p-3 mb-5 bg-white rounded">
             <div class="row">
                 <div class="col-3">
-                    <select class="form-control deck_stat_comparison_select" name="deckComparisonVs1" id="deckComparisonVs1" disabled>
-                        <option value="user" selected>{{ 'menu.you'|trans }}</option>
-                        <option value="friends" disabled>{{ 'menu.friends'|trans }}</option>
-                        <option value="all" disabled>{{ 'menu.all'|trans }}</option>
-                    </select>
+                    <div class="form-floating">
+                        <select class="form-select deck_stat_comparison_select" name="deckComparisonVs1" id="deckComparisonVs1" disabled>
+                            <option value="user" selected>{{ 'menu.you'|trans }}</option>
+                            <option value="friends" disabled>{{ 'menu.friends'|trans }}</option>
+                            <option value="all" disabled>{{ 'menu.all'|trans }}</option>
+                        </select>
+                        <label for="deckComparisonVs1">{{ 'menu.decks_of'|trans }}</label>
+                    </div>
                 </div>
+
                 <div class="col-3">
-                vs
+                    <div class="form-floating">
+                        <select class="form-control deck_stat_comparison_select" name="deckComparisonVs2" id="deckComparisonVs2">
+                            <option value="user" disabled>{{ 'menu.you'|trans }}</option>
+                            <option value="friends">{{ 'menu.friends'|trans }}</option>
+                            <option value="all" selected>{{ 'menu.all'|trans }}</option>
+                        </select>
+                        <label for="deckComparisonVs2">{{ 'menu.decks_of'|trans }}</label>
+                    </div>
                 </div>
+
                 <div class="col-3">
-                    <select class="form-control deck_stat_comparison_select" name="deckComparisonVs2" id="deckComparisonVs2">
-                        <option value="user" disabled>{{ 'menu.you'|trans }}</option>
-                        <option value="friends">{{ 'menu.friends'|trans }}</option>
-                        <option value="all" selected>{{ 'menu.all'|trans }}</option>
-                    </select>
+                    <div class="form-floating">
+                        <select class="form-control deck_stat_comparison_select" name="deckComparisonStat" id="deckComparisonStat">
+                            <option value="sas" selected>{{ 'deck_comparison.sas'|trans }}</option>
+                            <option value="expectedAmber">{{ 'deck_comparison.expectedAmber'|trans }}</option>
+                            <option value="amberControl">{{ 'deck_comparison.amberControl'|trans }}</option>
+                            <option value="creatureControl">{{ 'deck_comparison.creatureControl'|trans }}</option>
+                            <option value="artifactControl">{{ 'deck_comparison.artifactControl'|trans }}</option>
+                            <option value="effectivePower">{{ 'deck_comparison.effectivePower'|trans }}</option>
+                            <option value="efficiency">{{ 'deck_comparison.efficiency'|trans }}</option>
+                            <option value="disruption">{{ 'deck_comparison.disruption'|trans }}</option>
+                            <option value="recursion">{{ 'deck_comparison.recursion'|trans }}</option>
+                            <option value="other">{{ 'deck_comparison.other'|trans }}</option>
+                            <option value="aerc">{{ 'deck_comparison.aerc'|trans }}</option>
+                            <option value="synergy">{{ 'deck_comparison.synergy'|trans }}</option>
+                            <option value="bonusAmber">{{ 'deck_comparison.bonusAmber'|trans }}</option>
+                            <option value="creatureCount">{{ 'deck_comparison.creatureCount'|trans }}</option>
+                            <option value="artifactCount">{{ 'deck_comparison.artifactCount'|trans }}</option>
+                        </select>
+                        <label for="deckComparisonStat">{{ 'menu.stat'|trans }}</label>
+                    </div>
                 </div>
+
                 <div class="col-3">
-                    <select class="form-control deck_stat_comparison_select" name="deckComparisonStat" id="deckComparisonStat">
-                        <option value="sas" selected>{{ 'deck_comparison.sas'|trans }}</option>
-                        <option value="expectedAmber">{{ 'deck_comparison.expectedAmber'|trans }}</option>
-                        <option value="amberControl">{{ 'deck_comparison.amberControl'|trans }}</option>
-                        <option value="creatureControl">{{ 'deck_comparison.creatureControl'|trans }}</option>
-                        <option value="artifactControl">{{ 'deck_comparison.artifactControl'|trans }}</option>
-                        <option value="effectivePower">{{ 'deck_comparison.effectivePower'|trans }}</option>
-                        <option value="efficiency">{{ 'deck_comparison.efficiency'|trans }}</option>
-                        <option value="disruption">{{ 'deck_comparison.disruption'|trans }}</option>
-                        <option value="recursion">{{ 'deck_comparison.recursion'|trans }}</option>
-                        <option value="other">{{ 'deck_comparison.other'|trans }}</option>
-                        <option value="aerc">{{ 'deck_comparison.aerc'|trans }}</option>
-                        <option value="synergy">{{ 'deck_comparison.synergy'|trans }}</option>
-                        <option value="bonusAmber">{{ 'deck_comparison.bonusAmber'|trans }}</option>
-                        <option value="creatureCount">{{ 'deck_comparison.creatureCount'|trans }}</option>
-                        <option value="artifactCount">{{ 'deck_comparison.artifactCount'|trans }}</option>
-                    </select>
+                    <div class="form-floating">
+                        <select class="form-control deck_stat_comparison_select" name="deckComparisonSet" id="deckComparisonSet">
+                            <option value="all" selected>{{ 'deck_comparison.all'|trans }}</option>
+                            <option value="CotA">{{ 'deck_comparison.CotA'|trans }}</option>
+                            <option value="AoA">{{ 'deck_comparison.AoA'|trans }}</option>
+                            <option value="WC">{{ 'deck_comparison.WC'|trans }}</option>
+                            <option value="MM">{{ 'deck_comparison.MM'|trans }}</option>
+                            <option value="DT">{{ 'deck_comparison.DT'|trans }}</option>
+                            <option value="WoE">{{ 'deck_comparison.WoE'|trans }}</option>
+                            <option value="GR">{{ 'deck_comparison.GR'|trans }}</option>
+                            <option value="AS">{{ 'deck_comparison.AS'|trans }}</option>
+                            <option value="U22">{{ 'deck_comparison.U22'|trans }}</option>
+                            <option value="M24">{{ 'deck_comparison.M24'|trans }}</option>
+                            <option value="VM23">{{ 'deck_comparison.VM23'|trans }}</option>
+                            <option value="VM24">{{ 'deck_comparison.VM24'|trans }}</option>
+                        </select>
+                        <label for="deckComparisonSet">{{ 'menu.set'|trans }}</label>
+                    </div>
                 </div>
             </div>
             <div class="divider py-3"></div>
             <div class="row">
                 {% for userScope,byUser in userData.deck_tops.by_stats %}
-                {% for statScope,byStat in byUser %}
-                    <div class=" col-12 col-lg-6 deck_stats_{{ userScope }}_{{ statScope }}_container deck_comparison_chart" style="display: none">
-                        <canvas id="deck_stats_{{ userScope }}_{{ statScope }}" width="300" height="100"></canvas>
+                {% for setScope,bySet in byUser %}
+                {% for statScope,byStat in bySet %}
+                    <div class=" col-12 col-lg-6 deck_stats_{{ userScope }}_{{ statScope }}_{{ setScope }}_container deck_comparison_chart" style="display: none">
+                        <canvas id="deck_stats_{{ userScope }}_{{ statScope }}_{{ setScope }}" width="300" height="100"></canvas>
                         <table class="table table-hover">
                             <tr>
                                 <td>Deck</td>
+                                {% if (statScope != 'sas') %}
+                                    <td>Sas</td>
+                                {% endif %}
                                 <td class="text-end">{{ ('deck_comparison.'~statScope)|trans }}</td>
                             </tr>
                             {% for deck in byStat|slice(0,10) %}
@@ -59,11 +92,15 @@
                                 <td>
                                     <a href="{{ path('keyforge_deck_detail', {'deckId': deck.id}) }}" target="_blank">{{ deck.name }}</a>
                                 </td>
+                                {% if (statScope != 'sas') %}
+                                    <td>{{ deck.stats.sas }}</td>
+                                {% endif %}
                                 <td class="text-end">{{ deck.stats[statScope]|round(2) }}</td>
                             </tr>
                             {% endfor %}
                         </table>
                     </div>
+                {% endfor %}
                 {% endfor %}
                 {% endfor %}
             </div>
@@ -365,14 +402,16 @@
         let chartData;
 
         {% for userScope,byUser in userData.deck_tops.by_stats %}
-        {% for statScope,byStat in byUser %}
+        {% for setScope,bySet in byUser %}
+        {% for statScope,byStat in bySet %}
 
-        const chart_{{ userScope }}_{{ statScope }} = barChart(
-            'deck_stats_{{ userScope }}_{{ statScope }}',
-            '{{ ('deck_comparison.'~statScope)|trans }}',
-            userData.amounts.{{ userScope }}.{{ statScope }},
+        const chart_{{ userScope }}_{{ statScope }}_{{ setScope }} = barChart(
+            'deck_stats_{{ userScope }}_{{ statScope }}_{{ setScope }}',
+            '{{ ('deck_comparison.'~statScope)|trans }}' + '- {{ 'deck_comparison.'~setScope }}',
+            userData.amounts.{{ userScope }}.{{ setScope }}.{{ statScope }},
         );
 
+        {% endfor %}
         {% endfor %}
         {% endfor %}
 
@@ -393,6 +432,9 @@
                     ]
                 },
                 options: {
+                    animation: {
+                        duration: 0
+                    },
                     responsive: true,
                     plugins: {
                         legend: {
@@ -416,11 +458,12 @@
             const vs1 = $('#deckComparisonVs1')[0].value;
             const vs2 = $('#deckComparisonVs2')[0].value;
             const stat = $('#deckComparisonStat')[0].value;
+            const set = $('#deckComparisonSet')[0].value;
 
             $('.deck_comparison_chart').hide();
 
-            $('.deck_stats_' + vs1 + '_' + stat + '_container').show();
-            $('.deck_stats_' + vs2 + '_' + stat + '_container').show();
+            $('.deck_stats_' + vs1 + '_' + stat + '_' + set + '_container').show();
+            $('.deck_stats_' + vs2 + '_' + stat + '_' + set + '_container').show();
         }
         {% endif %}
     </script>
