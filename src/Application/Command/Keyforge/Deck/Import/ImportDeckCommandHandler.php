@@ -27,9 +27,6 @@ final class ImportDeckCommandHandler
         }
 
         $this->bus->dispatch(new GenerateGeneralStatsCommand());
-
-        if (null !== $command->userId) {
-            $this->bus->dispatch(new GenerateUserStatsCommand($command->userId->value()));
-        }
+        $this->bus->dispatch(new GenerateUserStatsCommand($command->userId->value()));
     }
 }

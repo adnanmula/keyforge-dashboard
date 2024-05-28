@@ -13,16 +13,13 @@ final class UserDetailController extends Controller
     {
         $this->assertIsLogged(UserRole::ROLE_KEYFORGE);
 
-        $user = $this->getUser();
-
         $stats = $this->extractResult($this->bus->dispatch(new UserStatsQuery($userId)))?->data;
 
         return $this->render(
             'Keyforge/User/user_detail.html.twig',
             [
-                'reference' => $user?->id()->value(),
-                'userId' => $user?->id()->value(),
-                'username' => $user?->name(),
+                'reference' => $userId,
+                'userId' => $userId,
                 'stats' => $stats,
             ],
         );

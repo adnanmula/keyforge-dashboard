@@ -91,7 +91,7 @@
                 </div>
             </div>
             <div class="divider py-3"></div>
-            <div class="row">
+            <div class="row" id="stats_by_scopes_container">
                 {% for userScope,byUser in userData.deck_tops.by_stats %}
                 {% for setScope,bySet in byUser %}
                 {% for statScope,byStat in bySet %}
@@ -562,8 +562,8 @@
 
             $('.deck_comparison_chart').hide();
 
-            $('.deck_stats_' + vs1 + '_' + stat + '_' + set + '_container').show();
-            $('.deck_stats_' + vs2 + '_' + stat + '_' + set + '_container').show();
+            $('.deck_stats_' + vs2 + '_' + stat + '_' + set + '_container').show().prependTo('#stats_by_scopes_container');
+            $('.deck_stats_' + vs1 + '_' + stat + '_' + set + '_container').show().prependTo('#stats_by_scopes_container');
         }
         {% endif %}
     </script>

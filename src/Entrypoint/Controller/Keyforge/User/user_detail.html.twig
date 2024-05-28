@@ -7,9 +7,10 @@
         <div class="divider py-2"></div>
 
         <div class="row">
-            <div class="col-10 d-flex justify-content-start"><h2>{{ username }}</h2></div>
 
             {% if stats is not null and stats.user_is_external == false %}
+                <div class="col-10 d-flex justify-content-start"><h2>{{ stats.username }}</h2></div>
+
                 <div class="col-2 d-flex justify-content-end">
                     <a class="btn btn-dark" data-bs-toggle="collapse" href="#userStats" role="button" aria-expanded="false" aria-controls="collapseExample">{{ 'menu.show_stats'|trans }}</a>
                 </div>
@@ -116,12 +117,6 @@
     </div>
 
     <div class="shadow-lg p-3 mb-5 bg-white rounded">
-        {% if userId != null %}
-            {% set endpoint = '/games/json?deckId=' ~ reference ~ '&userId=' ~ userId %}
-        {% else %}
-            {% set endpoint = '/games/json?deckId=' ~ reference %}
-        {% endif %}
-
         {% include 'Keyforge/Game/List/game_list.html.twig' with {
             'endpoint': '/games/json?userId=' ~ reference,
             'reference': reference,
