@@ -15,7 +15,6 @@ use AdnanMula\Cards\Domain\Model\Keyforge\Stat\KeyforgeStatRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\Stat\ValueObject\KeyforgeStatCategory;
 use AdnanMula\Cards\Domain\Model\Keyforge\User\KeyforgeUserRepository;
 use AdnanMula\Cards\Domain\Model\Shared\UserRepository;
-use AdnanMula\Cards\Domain\Model\Shared\ValueObject\UserRole;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Criteria\Criteria;
 use AdnanMula\Criteria\Filter\Filter;
@@ -42,11 +41,13 @@ final class GenerateUserStatsCommandHandler
 
     public function __invoke(GenerateUserStatsCommand $command): void
     {
-        $users = $this->userRepository->byRole(UserRole::ROLE_KEYFORGE);
+        $this->generateForUser($command->userId);
 
-        foreach ($users as $user) {
-            $this->generateForUser($user->id());
-        }
+//        $users = $this->userRepository->byRole(UserRole::ROLE_KEYFORGE);
+//
+//        foreach ($users as $user) {
+//            $this->generateForUser($user->id());
+//        }
     }
 
     private function winRate(int $wins, int $losses): float
