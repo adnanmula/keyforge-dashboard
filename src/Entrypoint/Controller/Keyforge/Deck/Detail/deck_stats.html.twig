@@ -14,48 +14,46 @@
     <div class="row text-nowrap">
         <div class="col-1 ms-3 mb-1 h4">
             <img src="{{ asset('assets/keyforge/logos/expected_amber.svg') }}" alt="{{ 'deck.expected_amber'|trans }}" class="stat_icon" data-toggle="tooltip" title="{{ 'deck.expected_amber'|trans }}"/>
-             &nbsp;{{ deck.data.stats.expectedAmber|round }}
+             &nbsp;{{ deck.data.stats.expectedAmber|round(1) }}
         </div>
         <div class="col-1 ms-3 mb-1 h4">
             <img src="{{ asset('assets/keyforge/logos/amber_control.svg') }}" alt="{{ 'deck.amber_control'|trans }}" class="stat_icon" data-toggle="tooltip" title="{{ 'deck.amber_control'|trans }}"/>
-             &nbsp;{{ deck.data.stats.amberControl|round }}
+             &nbsp;{{ deck.data.stats.amberControl|round(1) }}
         </div>
         <div class="col-1 ms-3 mb-1 h4">
             <img src="{{ asset('assets/keyforge/logos/creature_control.svg') }}" alt="{{ 'deck.creature_control'|trans }}" class="stat_icon" data-toggle="tooltip" title="{{ 'deck.creature_control'|trans }}"/>
-             &nbsp;{{ deck.data.stats.creatureControl|round }}
+             &nbsp;{{ deck.data.stats.creatureControl|round(1) }}
         </div>
         <div class="col-1 ms-3 mb-1 h4">
             <img src="{{ asset('assets/keyforge/logos/artifact_control.svg') }}" alt="{{ 'deck.artifact_control'|trans }}" class="stat_icon" data-toggle="tooltip" title="{{ 'deck.artifact_control'|trans }}"/>
-             &nbsp;{{ deck.data.stats.artifactControl|round }}
+             &nbsp;{{ deck.data.stats.artifactControl|round(1) }}
         </div>
         <div class="col-1 ms-3 mb-1 h4">
             <img src="{{ asset('assets/keyforge/logos/efficiency.svg') }}" alt="{{ 'deck.efficiency'|trans }}" class="stat_icon" data-toggle="tooltip" title="{{ 'deck.efficiency'|trans }}"/>
-             &nbsp;<span style="white-space: nowrap">{{ deck.data.stats.efficiency|round }}</span>
+             &nbsp;<span style="white-space: nowrap">{{ deck.data.stats.efficiency|round(1) }}</span>
         </div>
         <div class="col-1 ms-3 mb-1 h4">
             <img src="{{ asset('assets/keyforge/logos/effective_power.svg') }}" alt="{{ 'deck.effective_power'|trans }}" class="stat_icon" data-toggle="tooltip" title="{{ 'deck.effective_power'|trans }}"/>
-             &nbsp;{{ deck.data.stats.effectivePower|round }}
+             &nbsp;{{ deck.data.stats.effectivePower|round(1) }}
         </div>
         <div class="col-1 ms-3 mb-1 h4">
             <img src="{{ asset('assets/keyforge/logos/recursion.svg') }}" alt="{{ 'deck.recursion'|trans }}" class="stat_icon" data-toggle="tooltip" title="{{ 'deck.recursion'|trans }}"/>
-             &nbsp;{{ deck.data.stats.recursion|round }}
+             &nbsp;{{ deck.data.stats.recursion|round(1) }}
         </div>
         <div class="col-1 ms-3 mb-1 h4">
             <img src="{{ asset('assets/keyforge/logos/creature_protection.svg') }}" alt="{{ 'deck.creature_protection'|trans }}" class="stat_icon" data-toggle="tooltip" title="{{ 'deck.creature_protection'|trans }}"/>
-             &nbsp;{{ deck.data.stats.creatureProtection|round }}
+             &nbsp;{{ deck.data.stats.creatureProtection|round(1) }}
         </div>
         <div class="col-1 ms-3 mb-1 h4">
             <img src="{{ asset('assets/keyforge/logos/disruption.svg') }}" alt="{{ 'deck.disruption'|trans }}" class="stat_icon" data-toggle="tooltip" title="{{ 'deck.disruption'|trans }}"/>
-             &nbsp;{{ deck.data.stats.disruption|round }}
+             &nbsp;{{ deck.data.stats.disruption|round(1) }}
         </div>
         <div class="col-1 ms-3 mb-1 h4">
             <img src="{{ asset('assets/keyforge/logos/other.svg') }}" alt="{{ 'deck.other'|trans }}" class="stat_icon" data-toggle="tooltip" title="{{ 'deck.other'|trans }}"/>
-             &nbsp;{{ deck.data.stats.other|round }}
+             &nbsp;{{ deck.data.stats.other|round(1) }}
         </div>
     </div>
     <div class="divider py-2"></div>
-
-
     <div class="row">
         <div class="col-1 ms-3 mb-1 h4">
             <img src="{{ asset('assets/keyforge/logos/amber.svg') }}" alt="{{ 'deck.bonus_amber'|trans }}" class="stat_icon" data-toggle="tooltip" title="{{ 'deck.bonus_amber'|trans }}"/>
