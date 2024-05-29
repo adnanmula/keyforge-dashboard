@@ -2,18 +2,17 @@
 
 namespace AdnanMula\Cards\Application\Command\Keyforge\Deck\Import;
 
-use AdnanMula\Cards\Application\Command\Keyforge\Stat\General\GenerateGeneralStatsCommand;
-use AdnanMula\Cards\Application\Command\Keyforge\Stat\User\GenerateUserStatsCommand;
+use AdnanMula\Cards\Domain\Model\Keyforge\Stat\KeyforgeStatRepository;
+use AdnanMula\Cards\Domain\Model\Keyforge\Stat\ValueObject\KeyforgeStatCategory;
 use AdnanMula\Cards\Domain\Service\Keyforge\ImportDeckService;
 use AdnanMula\Cards\Infrastructure\Service\Keyforge\DoK\ImportMyDecksFromDokService;
-use Symfony\Component\Messenger\MessageBusInterface;
 
 final class ImportDeckCommandHandler
 {
     public function __construct(
         private ImportDeckService $service,
         private ImportMyDecksFromDokService $myDecksService,
-        private MessageBusInterface $bus,
+        private KeyforgeStatRepository $statRepository,
     ) {}
 
     public function __invoke(ImportDeckCommand $command): void
@@ -26,7 +25,7 @@ final class ImportDeckCommandHandler
             $this->service->execute($command->deckId, $command->userId, true, true);
         }
 
-        $this->bus->dispatch(new GenerateGeneralStatsCommand());
-        $this->bus->dispatch(new GenerateUserStatsCommand($command->userId->value()));
+        $this->statRepository->queueProjection(KeyforgeStatCategory::HOME_GENERAL_DATA, null);
+        $this->statRepository->queueProjection(KeyforgeStatCategory::USER_PROFILE, $command->userId);
     }
 }

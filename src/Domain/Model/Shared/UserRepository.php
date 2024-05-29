@@ -10,7 +10,7 @@ interface UserRepository
     public function save(User $user): void;
     public function byId(Uuid $id): ?User;
     public function byName(string $name): ?User;
-    public function byRole(UserRole $role): array;
+    public function byRoles(UserRole ...$roles): array;
     public function friends(Uuid $id): array;
     public function friendRequest(Uuid $user, Uuid $friend): ?array;
     public function addFriend(Uuid $id, Uuid $friend, bool $isRequest): void;

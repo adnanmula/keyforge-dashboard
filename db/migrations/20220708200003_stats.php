@@ -15,10 +15,20 @@ final class Stats extends AbstractMigration
                 PRIMARY KEY(id)
             )',
         );
+
+        $this->execute(
+            'CREATE TABLE keyforge_stats_projection_pending (
+                id uuid NOT NULL,
+                category character varying(64) NOT NULL,
+                reference uuid NULL,
+                PRIMARY KEY(id)
+            )',
+        );
     }
 
     public function down(): void
     {
         $this->execute('DROP TABLE IF EXISTS "keyforge_stats"');
+        $this->execute('DROP TABLE IF EXISTS "keyforge_stats_projection_pending"');
     }
 }

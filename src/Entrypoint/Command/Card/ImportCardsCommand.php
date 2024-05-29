@@ -24,7 +24,7 @@ final class ImportCardsCommand extends Command
 
     protected function configure(): void
     {
-        $this->setDescription('Import decks');
+        $this->setDescription('Import cards');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

@@ -12,6 +12,7 @@ use AdnanMula\Cards\Infrastructure\Persistence\Repository\DbalRepository;
 final class KeyforgeStatDbalRepository extends DbalRepository implements KeyforgeStatRepository
 {
     private const TABLE = 'keyforge_stats';
+    private const TABLE_PENDING = 'keyforge_stats_projection_pending';
 
     public function by(KeyforgeStatCategory $category, ?Uuid $reference): ?KeyforgeStat
     {
@@ -78,6 +79,48 @@ final class KeyforgeStatDbalRepository extends DbalRepository implements Keyforg
         }
 
         $query->executeStatement();
+    }
+
+    public function queuedProjections(): array
+    {
+        return $this->connection->createQueryBuilder()
+            ->select('a.category, count(a.reference)')
+            ->from(self::TABLE_PENDING, 'a')
+            ->groupBy('a.category')
+            ->executeQuery()
+            ->fetchAllAssociative();
+    }
+
+    public function queueProjection(KeyforgeStatCategory $category, ?Uuid $reference): void
+    {
+        $stmt = $this->connection->prepare(
+            \sprintf(
+                '
+                INSERT INTO %s (id, category,reference)
+                VALUES (:id, :category, :reference)
+                ON CONFLICT (id) DO UPDATE SET
+                    id = :id,
+                    category = :category,
+                    reference = :reference
+                ',
+                self::TABLE_PENDING,
+            ),
+        );
+
+        $stmt->bindValue(':id', Uuid::v4()->value());
+        $stmt->bindValue(':category', $category->value);
+        $stmt->bindValue(':reference', $reference?->value());
+
+        $stmt->executeStatement();
+    }
+
+    public function removeQueuedProjection(KeyforgeStatCategory $category): void
+    {
+        $this->connection->createQueryBuilder()
+            ->delete(self::TABLE_PENDING, 'a')
+            ->where('a.category = :category')
+            ->setParameter('category', $category->value)
+            ->executeStatement();
     }
 
     private function map(array $row): KeyforgeStat

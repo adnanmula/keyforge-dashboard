@@ -10,4 +10,7 @@ interface KeyforgeStatRepository
     public function by(KeyforgeStatCategory $category, ?Uuid $reference): ?KeyforgeStat;
     public function save(KeyforgeStat $stat): void;
     public function remove(KeyforgeStatCategory $category, ?Uuid $reference): void;
+    public function queuedProjections(): array;
+    public function queueProjection(KeyforgeStatCategory $category, ?Uuid $reference): void;
+    public function removeQueuedProjection(KeyforgeStatCategory $category): void;
 }

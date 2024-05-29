@@ -2,12 +2,13 @@
 
 namespace AdnanMula\Cards\Application\Command\Keyforge\Game\Create;
 
-use AdnanMula\Cards\Application\Command\Keyforge\Stat\General\GenerateGeneralStatsCommand;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeck;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeGame;
 use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeGameRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\Game\ValueObject\KeyforgeGameScore;
+use AdnanMula\Cards\Domain\Model\Keyforge\Stat\KeyforgeStatRepository;
+use AdnanMula\Cards\Domain\Model\Keyforge\Stat\ValueObject\KeyforgeStatCategory;
 use AdnanMula\Cards\Domain\Model\Keyforge\User\KeyforgeUser;
 use AdnanMula\Cards\Domain\Model\Keyforge\User\KeyforgeUserRepository;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
@@ -19,7 +20,6 @@ use AdnanMula\Criteria\FilterField\FilterField;
 use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
 use AdnanMula\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
-use Symfony\Component\Messenger\MessageBusInterface;
 
 final class CreateGameCommandHandler
 {
@@ -28,7 +28,7 @@ final class CreateGameCommandHandler
         private KeyforgeGameRepository $gameRepository,
         private KeyforgeDeckRepository $deckRepository,
         private ImportDeckService $importDeckService,
-        private MessageBusInterface $bus,
+        private KeyforgeStatRepository $statRepository,
     ) {}
 
     public function __invoke(CreateGameCommand $command): void
@@ -56,7 +56,7 @@ final class CreateGameCommandHandler
 
         $this->updateDeckWinRate($winnerDeck, $loserDeck);
 
-        $this->bus->dispatch(new GenerateGeneralStatsCommand());
+        $this->statRepository->queueProjection(KeyforgeStatCategory::HOME_GENERAL_DATA, null);
     }
 
     private function updateDeckWinRate(KeyforgeDeck $winnerDeck, KeyforgeDeck $loserDeck): void

@@ -78,14 +78,18 @@ final class UserDbalRepository extends DbalRepository implements UserRepository
         return $this->map($result, true);
     }
 
-    public function byRole(UserRole $role): array
+    public function byRoles(UserRole ...$roles): array
     {
-        $result = $this->connection->createQueryBuilder()
+        $query = $this->connection->createQueryBuilder()
             ->select('a.id, a.name, a.password, a.locale, a.roles')
-            ->from(self::TABLE, 'a')
-            ->where('a.roles::jsonb @> \'["' . $role->value . '"]\'::jsonb')
-            ->executeQuery()
-            ->fetchAllAssociative();
+            ->from(self::TABLE, 'a');
+
+        foreach ($roles as $role) {
+            $query->orWhere('a.roles::jsonb @> \'["' . $role->value . '"]\'::jsonb');
+
+        }
+
+        $result = $query->executeQuery()->fetchAllAssociative();
 
         return \array_map(fn (array $row) => $this->map($row, false), $result);
     }
