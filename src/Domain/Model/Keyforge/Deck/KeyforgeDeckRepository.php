@@ -31,4 +31,6 @@ interface KeyforgeDeckRepository
     public function saveDeckUserData(KeyforgeDeckUserData $data): void;
 
     public function saveDeckWins(Uuid $id, int $wins, int $losses): void;
+
+    public function saveDeckTags(Uuid $id, array $tags): void;
 }

@@ -359,6 +359,21 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
         $stmt->executeStatement();
     }
 
+    public function saveDeckTags(Uuid $id, array $tags): void
+    {
+        $stmt = $this->connection->prepare(
+            \sprintf(
+                'UPDATE %s SET tags = :tags WHERE id = :id',
+                self::TABLE_USER_DATA,
+            ),
+        );
+
+        $stmt->bindValue(':id', $id->value());
+        $stmt->bindValue(':tags', Json::encode($tags));
+
+        $stmt->executeStatement();
+    }
+
     public function saveDeckOwner(Uuid $id, ?Uuid $owner): void
     {
         $stmt = $this->connection->prepare(

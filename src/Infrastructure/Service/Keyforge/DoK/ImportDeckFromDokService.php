@@ -60,7 +60,7 @@ final class ImportDeckFromDokService implements ImportDeckService
         }
 
         if ($withTags) {
-            $this->tagsService->execute($newDeck);
+            $this->tagsService->execute($newDeck->id());
         }
 
         return $newDeck;

@@ -2,7 +2,6 @@
 
 namespace AdnanMula\Cards\Domain\Service\Keyforge\Deck;
 
-use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeck;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckTag;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagActionCountHigh;
@@ -34,7 +33,7 @@ use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagHasScalingAmberCon
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagRecursionHigh;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagSynergyHigh;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagUpgradeCountHigh;
-use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckUserData;
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 
 final readonly class DeckApplyPredefinedTagsService
 {
@@ -42,8 +41,10 @@ final readonly class DeckApplyPredefinedTagsService
         private KeyforgeDeckRepository $repository,
     ) {}
 
-    public function execute(KeyforgeDeck $deck): void
+    public function execute(Uuid $id): void
     {
+        $deck = $this->repository->byId($id);
+
         $newTags = [];
 
         $data = $deck->data()->rawData['deck'];
@@ -85,18 +86,7 @@ final readonly class DeckApplyPredefinedTagsService
             $newTags = [];
         }
 
-        $newTags = \array_filter($newTags);
-
-        $this->repository->saveDeckUserData(
-            KeyforgeDeckUserData::from(
-                $deck->id(),
-                $deck->userData()->owner,
-                $deck->userData()->wins,
-                $deck->userData()->losses,
-                $deck->userData()->notes,
-                $this->mergeTags($deck->userData()->tags, $newTags),
-            ),
-        );
+        $this->repository->saveDeckTags($deck->id(), $this->mergeTags($deck->userData()->tags, \array_filter($newTags)));
     }
 
     private function mergeTags(array $currentTags, array $newTags): array
