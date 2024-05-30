@@ -32,6 +32,13 @@ final class GetDecksController extends Controller
                 2 => 'set',
                 4 => 'win_rate',
                 5 => 'sas',
+                6 => 'amber_control',
+                7 => 'expected_amber',
+                8 => 'artifact_control',
+                9 => 'creature_control',
+                10 => 'efficiency',
+                11 => 'recursion',
+                12 => 'disruption',
             ];
 
             $orderField = $orderColumns[(int) $queryOrder[0]['column']] ?? null;

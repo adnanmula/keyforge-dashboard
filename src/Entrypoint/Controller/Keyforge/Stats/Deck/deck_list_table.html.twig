@@ -8,6 +8,13 @@
             <th scope="col">{{ 'menu.houses'|trans }}</th>
             <th scope="col">{{ 'menu.winrate'|trans }}</th>
             <th scope="col">{{ 'menu.sas'|trans }}</th>
+            <th scope="col">A</th>
+            <th scope="col">E</th>
+            <th scope="col">R</th>
+            <th scope="col">C</th>
+            <th scope="col">F</th>
+            <th scope="col">U</th>
+            <th scope="col">D</th>
             <th scope="col"></th>
         </tr>
         </thead>
@@ -123,6 +130,13 @@
                 { data: "data.houses" },
                 { data: "user_data.wins" },
                 { data: "data.stats.sas" },
+                { data: "data.stats.amberControl" },
+                { data: "data.stats.expectedAmber" },
+                { data: "data.stats.artifactControl" },
+                { data: "data.stats.creatureControl" },
+                { data: "data.stats.efficiency" },
+                { data: "data.stats.recursion" },
+                { data: "data.stats.disruption" },
                 { data: "" },
             ],
             columnDefs: [
@@ -241,26 +255,26 @@
                             '<a href="' + wikiLink + '" target="_blank">' +
                             '<img class="img-thumbnail" width="50px" style="min-width: 40px" src="' + wikiLogo + '" alt="Wiki"/></a>';
                     },
-                    targets: 6, //Buttons
+                    targets: 13, //Buttons
                 },
                 {
-                    targets: [0, 1, 2, 3, 4, 5, 6],
+                    targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ],
                     searchable: false,
                     visible: true,
                 },
                 {
-                    targets: [0, 2, 3, 6],
+                    targets: [0, 2, 3, 13],
                     orderable: false
                 },
                 {
-                    targets: [1, 4, 5],
+                    targets: [1, 4, 5, 6, 7, 8, 9, 10, 11, 12],
                     orderable: true
                 },
                 { width: 250, targets: 0 },
                 { width: 350, targets: 1 },
                 { width: 50, targets: 2 },
-                { width: 150, targets: 3 },
-                { width: 150, targets: 6 },
+                { width: 200, targets: 3 },
+                { width: 150, targets: 13 },
             ],
         });
     });
