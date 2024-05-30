@@ -2,6 +2,8 @@
 
 namespace AdnanMula\Cards\Application\Command\Shared\User\ApproveAccount;
 
+use AdnanMula\Cards\Domain\Model\Keyforge\User\KeyforgeUser;
+use AdnanMula\Cards\Domain\Model\Keyforge\User\KeyforgeUserRepository;
 use AdnanMula\Cards\Domain\Model\Shared\Exception\UserNotExistsException;
 use AdnanMula\Cards\Domain\Model\Shared\UserRepository;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\UserRole;
@@ -11,6 +13,7 @@ final readonly class ApproveAccountCommandHandler
 {
     public function __construct(
         private UserRepository $repository,
+        private KeyforgeUserRepository $kfUserRepository,
     ) {}
 
     public function __invoke(ApproveAccountCommand $command): void
@@ -28,5 +31,6 @@ final readonly class ApproveAccountCommandHandler
         $user->setRole(UserRole::ROLE_KEYFORGE);
 
         $this->repository->save($user);
+        $this->kfUserRepository->save(KeyforgeUser::create($user->id(), $user->name()));
     }
 }

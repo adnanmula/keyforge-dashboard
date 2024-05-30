@@ -13,6 +13,6 @@ final readonly class GetPendingAccountsQueryHandler
 
     public function __invoke(GetPendingAccountsQuery $query): array
     {
-        return $this->repository->byRole(UserRole::ROLE_BASIC);
+        return $this->repository->byRoles(UserRole::ROLE_BASIC);
     }
 }

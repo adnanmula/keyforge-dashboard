@@ -59,7 +59,6 @@ final class SetDeckWinsCommand extends Command
         return self::SUCCESS;
     }
 
-
     public function games(Uuid $deckId): array
     {
         $games = $this->gamesRepository->search(

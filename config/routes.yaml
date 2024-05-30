@@ -24,8 +24,13 @@ user_settings:
 
 admin:
   path: /admin
-  controller: AdnanMula\Cards\Entrypoint\Controller\Shared\Admin\AdminController
-  methods: [GET,POST]
+  controller: AdnanMula\Cards\Entrypoint\Controller\Shared\Admin\AdminController::form
+  methods: [GET]
+
+admin_generate_projection:
+  path: /admin
+  controller: AdnanMula\Cards\Entrypoint\Controller\Shared\Admin\AdminController::regenerateProjection
+  methods: [POST]
 
 admin_accounts:
   path: /admin/accounts

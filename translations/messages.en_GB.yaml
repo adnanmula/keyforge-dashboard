@@ -284,3 +284,7 @@ menu.decks_of: Decks of
 menu.stat: Stat
 menu.your_stats: Your stats
 menu.general_stats: General stats
+menu.admin_actions: Admin actions
+menu.admin_action_generate_user_projection: Regenerate user projection
+menu.admin_action_generate_home_projection: Regenerate home projection
+menu.admin_no_new_accounts: No pending accounts

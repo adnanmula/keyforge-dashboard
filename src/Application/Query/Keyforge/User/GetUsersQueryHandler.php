@@ -13,6 +13,7 @@ use AdnanMula\Criteria\Filter\FilterType;
 use AdnanMula\Criteria\FilterField\FilterField;
 use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
 use AdnanMula\Criteria\FilterValue\FilterOperator;
+use AdnanMula\Criteria\FilterValue\NullFilterValue;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
 
 final class GetUsersQueryHandler
@@ -25,7 +26,16 @@ final class GetUsersQueryHandler
 
     public function __invoke(GetUsersQuery $query): array
     {
-        $users = $this->repository->search(new Criteria(null, null, null));
+        $filters = [];
+
+        if (false === $query->withExternal) {
+            $filters[] = new AndFilterGroup(
+                FilterType::AND,
+                new Filter(new FilterField('is_external'), new NullFilterValue(), FilterOperator::IS_NOT_NULL),
+            );
+        }
+
+        $users = $this->repository->search(new Criteria(null, null, null, ...$filters));
 
         if ($query->onlyFriends) {
             $friends = $this->userRepository->friends($query->userId);

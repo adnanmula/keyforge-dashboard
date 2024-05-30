@@ -284,3 +284,7 @@ menu.decks_of: Barajas de
 menu.stat: Estadística
 menu.your_stats: Tus estadísticas
 menu.general_stats: Estadísticas generales
+menu.admin_actions: Acciones de admin
+menu.admin_action_generate_user_projection: Regenerar proyección de usuario
+menu.admin_action_generate_home_projection: Regenerar proyección de página principal
+menu.admin_no_new_accounts: Ninguna cuenta pendiente

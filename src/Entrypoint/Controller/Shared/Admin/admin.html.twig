@@ -14,20 +14,44 @@
                 </div>
 
                 <ul class="list-group mt-1">
+                    {% if accountsPending|length == 0 %}
+                        {{ 'menu.admin_no_new_accounts'|trans }}
+                    {% endif %}
+
                     {% for account in accountsPending %}
                         <li class="list-group-item">
                             <span class="align-middle">{{ account.name }}</span>
-
-{#                            <button data-toggle="tooltip" title="{{ 'menu.reject'|trans }}" type="button" class="btn btn-danger rejectAccount" data-account="{{ account.id }}" style="float: right;">#}
-{#                                <i class="bi bi-x" style="pointer-events: none;"></i>#}
-{#                            </button>#}
-
                             <button data-toggle="tooltip" title="{{ 'menu.add'|trans }}" type="button" class="btn btn-dark approveAccount" data-account="{{ account.id }}" style="float: right;">
                                 <i class="bi bi-check" style="pointer-events: none;"></i>
                             </button>
                         </li>
                     {% endfor %}
                 </ul>
+            </div>
+
+            <div class="shadow-lg p-3 mb-5 bg-white rounded">
+                <div class="row">
+                    <h3>{{ 'menu.admin_actions'|trans }}</h3>
+                </div>
+
+                <div class="divider py-2"></div>
+
+                <button class="btn btn-dark w-100 mt-1" id="homeProjection">
+                    {{ 'menu.admin_action_generate_home_projection'|trans }}
+                </button>
+
+                <div class="divider py-3"></div>
+
+                <select class="form-control" id="userProjectionSelect">
+                    {% for user in users %}
+                        <option value="{{ user.id }}">{{ user.name }}</option>
+                    {% endfor %}
+                </select>
+                <button class="btn btn-dark w-100 mt-1" id="userProjection">
+                    {{ 'menu.admin_action_generate_user_projection'|trans }}
+                </button>
+
+
             </div>
         </div>
     </div>
@@ -46,15 +70,31 @@
             });
         });
 
-        $(".rejectAccount").click(function(event) {
+        $("#homeProjection").click(function(event) {
             $.ajax({
-                type: 'DELETE',
-                url: '{{ path('admin_accounts') }}',
+                type: 'POST',
+                url: '{{ path('admin') }}',
                 data: {
-                    'id': $(event.target).data('account'),
+                    'projection': 'HOME_GENERAL_DATA',
+                    'reference': null,
                 },
             }).done(function( ) {
-                location.reload();
+                alert('Done');
+            }).fail(function() {
+                alert('Error');
+            });
+        });
+
+        $("#userProjection").click(function(event) {
+            $.ajax({
+                type: 'POST',
+                url: '{{ path('admin') }}',
+                data: {
+                    'projection': 'USER_PROFILE',
+                    'reference': $('#userProjectionSelect')[0].value,
+                },
+            }).done(function( ) {
+                alert('Done');
             }).fail(function() {
                 alert('Error');
             });

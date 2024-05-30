@@ -65,6 +65,5 @@ final class Games extends AbstractMigration
         $this->execute('DROP TABLE IF EXISTS "keyforge_competition_fixtures"');
         $this->execute('DROP TABLE IF EXISTS "keyforge_competitions"');
         $this->execute('DROP TABLE IF EXISTS "keyforge_games"');
-        $this->execute('DROP TABLE IF EXISTS "keyforge_users"');
     }
 }

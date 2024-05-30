@@ -13,15 +13,21 @@ use Doctrine\DBAL\ArrayParameterType;
 final class KeyforgeUserDbalRepository extends DbalRepository implements KeyforgeUserRepository
 {
     private const TABLE = 'keyforge_users';
+    private const TABLE_USERS = 'users';
+
+    private const FIELD_MAPPING = [
+        'is_external' => 'b.id'
+    ];
 
     public function search(Criteria $criteria): array
     {
         $builder = $this->connection->createQueryBuilder();
 
-        $query = $builder->select('a.*')
-            ->from(self::TABLE, 'a');
+        $query = $builder->select('a.*, b.id as id2')
+            ->from(self::TABLE, 'a')
+            ->leftJoin('a', self::TABLE_USERS, 'b', 'a.id = b.id');
 
-        (new DbalCriteriaAdapter($builder))->execute($criteria);
+        (new DbalCriteriaAdapter($builder, self::FIELD_MAPPING))->execute($criteria);
 
         $result = $query->executeQuery()->fetchAllAssociative();
 
@@ -105,6 +111,7 @@ final class KeyforgeUserDbalRepository extends DbalRepository implements Keyforg
         return KeyforgeUser::create(
             Uuid::from($user['id']),
             $user['name'],
+            null === ($user['id2'] ?? null),
         );
     }
 }
