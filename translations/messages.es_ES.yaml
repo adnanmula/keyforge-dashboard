@@ -74,6 +74,9 @@ game.save: Guardar
 game.solo: 'Solitario'
 game.tco_casual: 'TCO Casual'
 game.tco_competitive: 'TCO Competitivo'
+game.lgs: 'LGS'
+game.nkfl: 'NKFL'
+game.vt: 'Vault Tour'
 game.type: Tipo
 game.winner: Ganador
 game.winner_chains: 'Llaves del ganador'
