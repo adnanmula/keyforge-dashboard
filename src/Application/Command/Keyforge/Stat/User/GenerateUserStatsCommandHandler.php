@@ -42,7 +42,13 @@ final class GenerateUserStatsCommandHandler
 
     public function __invoke(GenerateUserStatsCommand $command): void
     {
-        $users = $this->userRepository->byRoles(UserRole::ROLE_ADMIN, UserRole::ROLE_KEYFORGE);
+        if (null === $command->userId) {
+            $users = $this->userRepository->byRoles(UserRole::ROLE_ADMIN, UserRole::ROLE_KEYFORGE);
+        }
+
+        if (null !== $command->userId) {
+            $users = [$this->userRepository->byId($command->userId)];
+        }
 
         foreach ($users as $user) {
             $this->generateForUser($user->id());

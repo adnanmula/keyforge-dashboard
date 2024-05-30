@@ -16,7 +16,8 @@ final class KeyforgeUserDbalRepository extends DbalRepository implements Keyforg
     private const TABLE_USERS = 'users';
 
     private const FIELD_MAPPING = [
-        'is_external' => 'b.id'
+        'id' => 'a.id',
+        'is_external' => 'b.id',
     ];
 
     public function search(Criteria $criteria): array

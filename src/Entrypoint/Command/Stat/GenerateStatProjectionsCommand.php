@@ -6,7 +6,6 @@ use AdnanMula\Cards\Application\Command\Keyforge\Stat\General\GenerateGeneralSta
 use AdnanMula\Cards\Application\Command\Keyforge\Stat\User\GenerateUserStatsCommand;
 use AdnanMula\Cards\Domain\Model\Keyforge\Stat\KeyforgeStatRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\Stat\ValueObject\KeyforgeStatCategory;
-use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -45,10 +44,13 @@ final class GenerateStatProjectionsCommand extends Command
                 }
 
                 if ($projection['category'] === KeyforgeStatCategory::USER_PROFILE->value) {
-                    $this->bus->dispatch(new GenerateUserStatsCommand(Uuid::v4()->value()));
+                    $this->bus->dispatch(new GenerateUserStatsCommand(null));
                     $this->repository->removeQueuedProjection(KeyforgeStatCategory::USER_PROFILE);
                 }
             }
+        } else {
+            $this->bus->dispatch(new GenerateGeneralStatsCommand());
+            $this->bus->dispatch(new GenerateUserStatsCommand(null));
         }
 
         return self::SUCCESS;

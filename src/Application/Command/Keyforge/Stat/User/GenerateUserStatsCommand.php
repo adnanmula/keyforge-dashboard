@@ -7,12 +7,12 @@ use Assert\Assert;
 
 final readonly class GenerateUserStatsCommand
 {
-    public Uuid $userId;
+    public ?Uuid $userId;
 
     public function __construct($userId)
     {
-        Assert::lazy()->that($userId, 'user_id')->uuid()->verifyNow();
+        Assert::lazy()->that($userId, 'user_id')->nullOr()->uuid()->verifyNow();
 
-        $this->userId = Uuid::from($userId);
+        $this->userId = null === $userId ? null : Uuid::from($userId);
     }
 }
