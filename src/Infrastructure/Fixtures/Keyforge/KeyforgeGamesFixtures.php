@@ -246,7 +246,7 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                 KeyforgeGameScore::from(3, 1),
                 new \DateTimeImmutable('2022-07-23 00:00:00'),
                 new \DateTimeImmutable('2022-07-23 16:01:00'),
-                KeyforgeCompetition::NKFL_LEAGUE_SEASON_19,
+                KeyforgeCompetition::NKFL,
                 '',
             ),
         );
@@ -264,7 +264,7 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                 KeyforgeGameScore::from(3, 1),
                 new \DateTimeImmutable('2022-07-23 00:00:00'),
                 new \DateTimeImmutable('2022-07-23 16:41:00'),
-                KeyforgeCompetition::NKFL_LEAGUE_SEASON_19,
+                KeyforgeCompetition::NKFL,
                 '',
             ),
         );

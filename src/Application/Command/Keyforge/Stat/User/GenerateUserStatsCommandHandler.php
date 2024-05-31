@@ -393,9 +393,15 @@ final class GenerateUserStatsCommandHandler
 
         $currentWinStreak = 0;
         $longestWinStreak = 0;
+        $winRateByCompetition = [];
 
         foreach ($games as $game) {
             if ($game->winner()->equalTo($userIdToGenerate)) {
+                if (false === $game->isSoloPlay()) {
+                    $winRateByCompetition['All']['wins'] = ($winRateByCompetition['All']['wins'] ?? 0) + 1;
+                    $winRateByCompetition[$game->competition()->name]['wins'] = ($winRateByCompetition[$game->competition()->name]['wins'] ?? 0) + 1;
+                }
+
                 $currentWinStreak++;
 
                 if ($currentWinStreak > $longestWinStreak) {
@@ -419,6 +425,11 @@ final class GenerateUserStatsCommandHandler
             }
 
             if ($game->loser()->equalTo($userIdToGenerate)) {
+                if (false === $game->isSoloPlay()) {
+                    $winRateByCompetition['All']['losses'] = ($winRateByCompetition['All']['losses'] ?? 0) + 1;
+                    $winRateByCompetition[$game->competition()->name]['losses'] = ($winRateByCompetition[$game->competition()->name]['losses'] ?? 0) + 1;
+                }
+
                 $currentWinStreak = 0;
 
                 if (false === \array_key_exists($game->loserDeck()->value(), $bestAndWorseDecks)) {
@@ -616,6 +627,7 @@ final class GenerateUserStatsCommandHandler
                 'wins_by_house' => $winsByHouse,
                 'win_streak' => $longestWinStreak,
                 'competition_wins' => $this->competitionWins($userIdToGenerate),
+                'wins_by_competition' => $winRateByCompetition,
                 'deck_tops' => [
                     'amounts' => [
                         'user' => $this->deckStatsByUsers($kfUser->id()->value()),

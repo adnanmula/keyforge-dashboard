@@ -18,6 +18,24 @@
                     <canvas id="userHousePresence" width="400" height="400"></canvas>
                 </div>
             </div>
+
+            <div class="divider py-2"></div>
+
+            <h3>Winrate</h3>
+
+            <div class="row">
+                <div class="col-12 col-xsm-6 col-sm-3 col-lg-2">
+                <canvas id="user_chart_winrate_All" width="300" height="300"></canvas>
+            </div>
+
+            {% for gameType,data in userData.wins_by_competition %}
+                {% if gameType != 'All' %}
+                    <div class="col-12 col-xsm-6 col-sm-3 col-lg-2">
+                        <canvas id="user_chart_winrate_{{ gameType }}" width="300" height="300"></canvas>
+                    </div>
+                {% endif %}
+            {% endfor %}
+            </div>
         </div>
     {% endif %}
 
@@ -416,7 +434,7 @@
         });
         {% endif %}
 
-        {% if userData is not null %}
+        {% if userData is not null and userData.deck_tops.amounts.user.all.sets is defined and userData.deck_tops.amounts.user.all.houses is defined %}
         let userSetPresence = JSON.parse('{{ userData.deck_tops.amounts.user.all.sets|json_encode|raw }}');
         let userHousePresence = JSON.parse('{{ userData.deck_tops.amounts.user.all.houses|json_encode|raw }}');
 
@@ -499,6 +517,7 @@
 
         {% if userData is not null %}
         let userData = JSON.parse('{{ userData.deck_tops|json_encode|raw|e('js') }}');
+        let userDataWinRate = JSON.parse('{{ userData.wins_by_competition|json_encode|raw|e('js') }}');
 
         const chart_user_collection_sas = barChart('userCollectionSas', 'Sas', userData.amounts.user.all.sas);
 
@@ -510,17 +529,29 @@
             'deck_stats_{{ userScope }}_{{ statScope }}_{{ setScope }}',
             '{{ ('deck_comparison.'~statScope)|trans }}' + ' - {{ ('deck_comparison.'~setScope)|trans }}',
             userData.amounts.{{ userScope }}.{{ setScope }}.{{ statScope }},
+            'bar',
         );
 
         {% endfor %}
         {% endfor %}
         {% endfor %}
 
+        {% for gameType,data in userData.wins_by_competition %}
+
+        const chart_user_winrate{{ gameType }} = doughnutChart(
+            'user_chart_winrate_{{ gameType }}',
+            '{{ gameType }}',
+            userDataWinRate.{{ gameType }},
+            'doughnut',
+        );
+
+        {% endfor %}
+
         reloadStatComparison();
 
-        function barChart(id, label, data) {
+        function barChart(id, label, data, type = 'bar') {
             return new Chart(document.getElementById(id).getContext('2d'), {
-                type: 'bar',
+                type: type,
                 data: {
                     labels: Object.keys(data),
                     datasets: [
@@ -528,6 +559,41 @@
                             data: Object.values(data),
                             borderColor: 'rgb(37, 41, 33)',
                             backgroundColor: 'rgb(37, 41, 33)',
+                        },
+                    ]
+                },
+                options: {
+                    animation: {
+                        duration: 0
+                    },
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false,
+                            position: 'bottom',
+                        },
+                        title: {
+                            display: true,
+                            text: label
+                        }
+                    }
+                },
+            });
+        }
+
+        function doughnutChart(id, label, data, type = 'doughnut') {
+            return new Chart(document.getElementById(id).getContext('2d'), {
+                type: type,
+                data: {
+                    labels: Object.keys(data),
+                    datasets: [
+                        {
+                            data: Object.values(data),
+                            // borderColor: 'rgb(109,175,41)',
+                            backgroundColor: [
+                                'rgb(109,175,41)',
+                                'rgb(161,29,44)',
+                            ],
                         },
                     ]
                 },
