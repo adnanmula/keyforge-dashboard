@@ -5,33 +5,47 @@ namespace AdnanMula\Cards\Infrastructure\Persistence\Repository\Keyforge\Deck;
 use AdnanMula\Cards\Application\Service\Json;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeck;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckRepository;
-use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckData;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeCards;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckHouses;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckStats;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckUserData;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeHouse;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeSet;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Infrastructure\Persistence\Repository\DbalRepository;
 use AdnanMula\Criteria\Criteria;
 use AdnanMula\Criteria\DbalCriteriaAdapter;
-use Doctrine\DBAL\Connection;
 
 final class KeyforgeDeckDbalRepository extends DbalRepository implements KeyforgeDeckRepository
 {
     private const TABLE = 'keyforge_decks';
-    private const TABLE_DATA = 'keyforge_decks_data';
     private const TABLE_USER_DATA = 'keyforge_decks_user_data';
 
     private const FIELD_MAPPING = [
-        'id' => 'a.id',
-        'owner' => 'c.owner',
+        'id' => 'a.id'
     ];
 
     public function search(Criteria $criteria): array
     {
         $builder = $this->connection->createQueryBuilder();
 
-        $query = $builder->select('a.*, b.*, c.*')
+        $query = $builder->select('a.*')->from(self::TABLE, 'a');
+
+        (new DbalCriteriaAdapter($builder))->execute($criteria);
+
+        $result = $query->executeQuery()->fetchAllAssociative();
+
+        return \array_map(fn (array $row) => $this->map($row), $result);
+    }
+
+    public function searchWithOwnerUserData(Criteria $criteria, Uuid $owner): array
+    {
+        $builder = $this->connection->createQueryBuilder();
+
+        $query = $builder->select('a.*, b.*')
             ->from(self::TABLE, 'a')
-            ->innerJoin('a', self::TABLE_DATA, 'b', 'a.id = b.id')
-            ->innerJoin('a', self::TABLE_USER_DATA, 'c', 'a.id = c.id');
+            ->innerJoin('a', self::TABLE_USER_DATA, 'b', 'a.id = b.deck_id and b.owner = :owner')
+            ->setParameter('owner', $owner->value());
 
         (new DbalCriteriaAdapter($builder, self::FIELD_MAPPING))->execute($criteria);
 
@@ -43,90 +57,11 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
     public function count(Criteria $criteria): int
     {
         $builder = $this->connection->createQueryBuilder();
-        $query = $builder->select('COUNT(a.id)')
-            ->from(self::TABLE, 'a')
-            ->innerJoin('a', self::TABLE_DATA, 'b', 'a.id = b.id')
-            ->innerJoin('a', self::TABLE_USER_DATA, 'c', 'a.id = c.id');
+        $query = $builder->select('COUNT(a.id)')->from(self::TABLE, 'a');
 
-        (new DbalCriteriaAdapter($builder, self::FIELD_MAPPING))->execute($criteria);
+        (new DbalCriteriaAdapter($builder))->execute($criteria);
 
         return $query->executeQuery()->fetchOne();
-    }
-
-    public function byId(Uuid $id): ?KeyforgeDeck
-    {
-        $result = $this->connection->createQueryBuilder()
-            ->select('a.*, b.*, c.*')
-            ->from(self::TABLE, 'a')
-            ->innerJoin('a', self::TABLE_DATA, 'b', 'a.id = b.id')
-            ->innerJoin('a', self::TABLE_USER_DATA, 'c', 'a.id = c.id')
-            ->where('a.id = :id')
-            ->setParameter('id', $id->value())
-            ->setMaxResults(1)
-            ->executeQuery()
-            ->fetchAssociative();
-
-        if ([] === $result || false === $result) {
-            return null;
-        }
-
-        return $this->map($result);
-    }
-
-    public function isImported(Uuid $id): bool
-    {
-        $result = $this->connection->createQueryBuilder()
-            ->select('a.id')
-            ->from(self::TABLE, 'a')
-            ->where('a.id = :id')
-            ->setParameter('id', $id->value())
-            ->setMaxResults(1)
-            ->executeQuery()
-            ->fetchAssociative();
-
-        if ([] === $result || false === $result) {
-            return false;
-        }
-
-        return true;
-    }
-
-    public function byIds(Uuid ...$ids): array
-    {
-        $result = $this->connection->createQueryBuilder()
-            ->select('a.*, b.*, c.*')
-            ->from(self::TABLE, 'a')
-            ->innerJoin('a', self::TABLE_DATA, 'b', 'a.id = b.id')
-            ->innerJoin('a', self::TABLE_USER_DATA, 'c', 'a.id = c.id')
-            ->where('a.id in (:ids)')
-            ->setParameter('ids', \array_map(static fn (Uuid $id) => $id->value(), $ids), Connection::PARAM_STR_ARRAY)
-            ->executeQuery()
-            ->fetchAllAssociative();
-
-        if ([] === $result || false === $result) {
-            return [];
-        }
-
-        return \array_map(fn (array $deck) => $this->map($deck), $result);
-    }
-
-    public function byNames(string ...$decks): array
-    {
-        $result = $this->connection->createQueryBuilder()
-            ->select('a.*, b.*, c.*')
-            ->from(self::TABLE, 'a')
-            ->innerJoin('a', self::TABLE_DATA, 'b', 'a.id = b.id')
-            ->innerJoin('a', self::TABLE_USER_DATA, 'c', 'a.id = c.id')
-            ->where('a.name in (:decks)')
-            ->setParameter('decks', $decks, Connection::PARAM_STR_ARRAY)
-            ->executeQuery()
-            ->fetchAllAssociative();
-
-        if ([] === $result || false === $result) {
-            return [];
-        }
-
-        return \array_map(fn (array $deck) => $this->map($deck), $result);
     }
 
     public function save(KeyforgeDeck $deck, bool $updateUserData = false): void
@@ -134,35 +69,11 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
         $stmt = $this->connection->prepare(
             \sprintf(
                 '
-                    INSERT INTO %s (id, name, set, houses)
-                    VALUES (:id, :name, :set, :houses)
-                    ON CONFLICT (id) DO NOTHING
-                ',
-                self::TABLE,
-            ),
-        );
-
-        $stmt->bindValue(':id', $deck->id()->value());
-        $stmt->bindValue(':name', $deck->data()->name);
-        $stmt->bindValue(':set', $deck->data()->set->name);
-        $stmt->bindValue(':houses', Json::encode($deck->data()->houses->value()));
-
-        $stmt->executeStatement();
-
-        $this->saveDeckData($deck->data());
-
-        if ($updateUserData) {
-            $this->saveDeckUserData($deck->userData());
-        }
-    }
-
-    public function saveDeckData(KeyforgeDeckData $data): void
-    {
-        $stmt = $this->connection->prepare(
-            \sprintf(
-                '
                 INSERT INTO %s (
                     id,
+                    name,
+                    set,
+                    houses,
                     dok_id,
                     sas,
                     amber_control,
@@ -187,7 +98,9 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
                     card_archive_count,
                     key_cheat_count,
                     board_clear_count,
+                    board_clear_cards,
                     scaling_amber_control_count,
+                    scaling_amber_control_cards,
                     synergy_rating,
                     anti_synergy_rating,
                     aerc_score,
@@ -196,50 +109,55 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
                     sas_percentile,
                     previous_sas_rating,
                     previous_major_sas_rating,
-                    extra_data,
-                    last_sas_update
+                    last_sas_update,
+                    cards
                 ) VALUES (
-                    :id,	
-                    :dok_id,	
-                    :sas,	
-                    :amber_control,	
-                    :artifact_control,	
-                    :expected_amber,	
-                    :creature_control,	
-                    :efficiency,	
-                    :recursion,	
-                    :disruption,	
-                    :effective_power,	
-                    :creature_protection,	
-                    :other,	
-                    :raw_amber,	
-                    :total_power,	
-                    :total_armor,	
-                    :efficiency_bonus,	
-                    :creature_count,	
-                    :action_count,	
-                    :artifact_count,	
-                    :upgrade_count,	
-                    :card_draw_count,	
-                    :card_archive_count,	
+                    :id,
+                    :name,
+                    :set,
+                    :houses,
+                    :dok_id,
+                    :sas,
+                    :amber_control,
+                    :artifact_control,
+                    :expected_amber,
+                    :creature_control,
+                    :efficiency,
+                    :recursion,
+                    :disruption,
+                    :effective_power,
+                    :creature_protection,
+                    :other,
+                    :raw_amber,
+                    :total_power,
+                    :total_armor,
+                    :efficiency_bonus,
+                    :creature_count,
+                    :action_count,
+                    :artifact_count,
+                    :upgrade_count,
+                    :card_draw_count,
+                    :card_archive_count,
                     :key_cheat_count,
                     :board_clear_count,
+                    :board_clear_cards,
                     :scaling_amber_control_count,
-                    :synergy_rating,	
-                    :anti_synergy_rating,	
-                    :aerc_score,	
-                    :aerc_version,	
-                    :sas_version,	
-                    :sas_percentile,	
-                    :previous_sas_rating,	
-                    :previous_major_sas_rating,	
-                    :extra_data,	
-                    :last_sas_update
+                    :scaling_amber_control_cards,
+                    :synergy_rating,
+                    :anti_synergy_rating,
+                    :aerc_score,
+                    :aerc_version,
+                    :sas_version,
+                    :sas_percentile,
+                    :previous_sas_rating,
+                    :previous_major_sas_rating,
+                    :last_sas_update,
+                    :cards
                 ) ON CONFLICT (id) DO UPDATE SET
                     sas = :sas,
                     amber_control = :amber_control,
                     artifact_control = :artifact_control,
-                    expected_amber = :expected_amber,	
+                    expected_amber = :expected_amber,
                     creature_control = :creature_control,
                     efficiency = :efficiency,
                     recursion = :recursion,
@@ -251,157 +169,109 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
                     total_power = :total_power,
                     total_armor = :total_armor,
                     efficiency_bonus = :efficiency_bonus,
-                    creature_count = :creature_count,	
+                    creature_count = :creature_count,
                     action_count = :action_count,
-                    artifact_count = :artifact_count,	
+                    artifact_count = :artifact_count,
                     upgrade_count = :upgrade_count,
                     card_draw_count = :card_draw_count,
                     card_archive_count = :card_archive_count,
                     key_cheat_count = :key_cheat_count,
                     board_clear_count = :board_clear_count,
+                    board_clear_cards = :board_clear_cards,
                     scaling_amber_control_count = :scaling_amber_control_count,
-                    synergy_rating = :synergy_rating,	
+                    scaling_amber_control_cards = :scaling_amber_control_cards,
+                    synergy_rating = :synergy_rating,
                     anti_synergy_rating = :anti_synergy_rating,
                     aerc_score = :aerc_score,
                     aerc_version = :aerc_version,
                     sas_version = :sas_version,
-                    sas_percentile = :sas_percentile,	
+                    sas_percentile = :sas_percentile,
                     previous_sas_rating = :previous_sas_rating,
                     previous_major_sas_rating = :previous_major_sas_rating,
-                    extra_data = :extra_data,
-                    last_sas_update = :last_sas_update
+                    last_sas_update = :last_sas_update,
+                    cards = :cards
                 ',
-                self::TABLE_DATA,
+                self::TABLE,
             ),
         );
 
-        $stmt->bindValue(':id', $data->id);
-        $stmt->bindValue(':dok_id', $data->dokId);
-        $stmt->bindValue(':amber_control', $data->stats->amberControl);
-        $stmt->bindValue(':artifact_control', $data->stats->artifactControl);
-        $stmt->bindValue(':expected_amber', $data->stats->expectedAmber);
-        $stmt->bindValue(':creature_control', $data->stats->creatureControl);
-        $stmt->bindValue(':efficiency', $data->stats->efficiency);
-        $stmt->bindValue(':recursion', $data->stats->recursion);
-        $stmt->bindValue(':disruption', $data->stats->disruption);
-        $stmt->bindValue(':effective_power', $data->stats->effectivePower);
-        $stmt->bindValue(':creature_protection', $data->stats->creatureProtection);
-        $stmt->bindValue(':other', $data->stats->other);
-        $stmt->bindValue(':raw_amber', $data->stats->rawAmber);
-        $stmt->bindValue(':total_power', $data->stats->totalPower);
-        $stmt->bindValue(':total_armor', $data->stats->totalArmor);
-        $stmt->bindValue(':efficiency_bonus', $data->stats->efficiencyBonus);
-        $stmt->bindValue(':creature_count', $data->stats->creatureCount);
-        $stmt->bindValue(':action_count', $data->stats->actionCount);
-        $stmt->bindValue(':artifact_count', $data->stats->artifactCount);
-        $stmt->bindValue(':upgrade_count', $data->stats->upgradeCount);
-        $stmt->bindValue(':card_draw_count', $data->stats->cardDrawCount);
-        $stmt->bindValue(':card_archive_count', $data->stats->cardArchiveCount);
-        $stmt->bindValue(':key_cheat_count', $data->stats->keyCheatCount);
-        $stmt->bindValue(':board_clear_count', $data->stats->boardClearCount);
-        $stmt->bindValue(':scaling_amber_control_count', $data->stats->scalingAmberControlCount);
-        $stmt->bindValue(':synergy_rating', $data->stats->synergyRating);
-        $stmt->bindValue(':anti_synergy_rating', $data->stats->antiSynergyRating);
-        $stmt->bindValue(':sas', $data->stats->sas);
-        $stmt->bindValue(':previous_sas_rating', $data->stats->previousSasRating);
-        $stmt->bindValue(':previous_major_sas_rating', $data->stats->previousMajorSasRating);
-        $stmt->bindValue(':sas_percentile', $data->stats->sasPercentile);
-        $stmt->bindValue(':aerc_score', $data->stats->aercScore);
-        $stmt->bindValue(':aerc_version', $data->stats->aercVersion);
-        $stmt->bindValue(':sas_version', $data->stats->sasVersion);
-        $stmt->bindValue(':extra_data', Json::encode($data->rawData));
-        $stmt->bindValue(':last_sas_update', $data->stats->lastSasUpdate->format(\DateTimeInterface::ATOM));
-
-        $stmt->executeStatement();
-    }
-
-    public function saveDeckUserData(KeyforgeDeckUserData $data): void
-    {
-        $stmt = $this->connection->prepare(
-            \sprintf(
-                '
-                INSERT INTO %s (id, wins, losses, owner, notes, tags)
-                VALUES (:id, :wins, :losses, :owner, :notes, :tags)
-                ON CONFLICT (id) DO UPDATE SET
-                    wins = :wins,
-                    losses = :losses,
-                    owner = :owner,
-                    notes = :notes,
-                    tags = :tags
-                ',
-                self::TABLE_USER_DATA,
-            ),
-        );
-
-        $stmt->bindValue(':id', $data->id->value());
-        $stmt->bindValue(':wins', $data->wins);
-        $stmt->bindValue(':losses', $data->losses);
-        $stmt->bindValue(':owner', $data->owner?->value());
-        $stmt->bindValue(':notes', $data->notes);
-        $stmt->bindValue(':tags', Json::encode($data->tags));
-
-        $stmt->executeStatement();
-    }
-
-    public function saveDeckWins(Uuid $id, int $wins, int $losses): void
-    {
-        $stmt = $this->connection->prepare(
-            \sprintf(
-                'UPDATE %s SET wins = :wins, losses = :losses WHERE id = :id',
-                self::TABLE_USER_DATA,
-            ),
-        );
-
-        $stmt->bindValue(':id', $id->value());
-        $stmt->bindValue(':wins', $wins);
-        $stmt->bindValue(':losses', $losses);
-
-        $stmt->executeStatement();
-    }
-
-    public function saveDeckTags(Uuid $id, array $tags): void
-    {
-        $stmt = $this->connection->prepare(
-            \sprintf(
-                'UPDATE %s SET tags = :tags WHERE id = :id',
-                self::TABLE_USER_DATA,
-            ),
-        );
-
-        $stmt->bindValue(':id', $id->value());
-        $stmt->bindValue(':tags', Json::encode($tags));
-
-        $stmt->executeStatement();
-    }
-
-    public function saveDeckOwner(Uuid $id, ?Uuid $owner): void
-    {
-        $stmt = $this->connection->prepare(
-            \sprintf(
-                'UPDATE %s SET owner = :owner WHERE id = :id',
-                self::TABLE_USER_DATA,
-            ),
-        );
-
-        $stmt->bindValue(':id', $id->value());
-        $stmt->bindValue(':owner', $owner);
+        $stmt->bindValue(':id', $deck->id()->value());
+        $stmt->bindValue(':name', $deck->name());
+        $stmt->bindValue(':set', $deck->set()->name);
+        $stmt->bindValue(':houses', Json::encode($deck->houses()->value()));
+        $stmt->bindValue(':dok_id', $deck->dokId());
+        $stmt->bindValue(':amber_control', $deck->stats()->amberControl);
+        $stmt->bindValue(':artifact_control', $deck->stats()->artifactControl);
+        $stmt->bindValue(':expected_amber', $deck->stats()->expectedAmber);
+        $stmt->bindValue(':creature_control', $deck->stats()->creatureControl);
+        $stmt->bindValue(':efficiency', $deck->stats()->efficiency);
+        $stmt->bindValue(':recursion', $deck->stats()->recursion);
+        $stmt->bindValue(':disruption', $deck->stats()->disruption);
+        $stmt->bindValue(':effective_power', $deck->stats()->effectivePower);
+        $stmt->bindValue(':creature_protection', $deck->stats()->creatureProtection);
+        $stmt->bindValue(':other', $deck->stats()->other);
+        $stmt->bindValue(':raw_amber', $deck->stats()->rawAmber);
+        $stmt->bindValue(':total_power', $deck->stats()->totalPower);
+        $stmt->bindValue(':total_armor', $deck->stats()->totalArmor);
+        $stmt->bindValue(':efficiency_bonus', $deck->stats()->efficiencyBonus);
+        $stmt->bindValue(':creature_count', $deck->stats()->creatureCount);
+        $stmt->bindValue(':action_count', $deck->stats()->actionCount);
+        $stmt->bindValue(':artifact_count', $deck->stats()->artifactCount);
+        $stmt->bindValue(':upgrade_count', $deck->stats()->upgradeCount);
+        $stmt->bindValue(':card_draw_count', $deck->stats()->cardDrawCount);
+        $stmt->bindValue(':card_archive_count', $deck->stats()->cardArchiveCount);
+        $stmt->bindValue(':key_cheat_count', $deck->stats()->keyCheatCount);
+        $stmt->bindValue(':board_clear_count', $deck->stats()->boardClearCount);
+        $stmt->bindValue(':board_clear_cards', Json::encode($deck->stats()->boardClearCards));
+        $stmt->bindValue(':scaling_amber_control_count', $deck->stats()->scalingAmberControlCount);
+        $stmt->bindValue(':scaling_amber_control_cards', Json::encode($deck->stats()->scalingAmberControlCards));
+        $stmt->bindValue(':synergy_rating', $deck->stats()->synergyRating);
+        $stmt->bindValue(':anti_synergy_rating', $deck->stats()->antiSynergyRating);
+        $stmt->bindValue(':sas', $deck->stats()->sas);
+        $stmt->bindValue(':previous_sas_rating', $deck->stats()->previousSasRating);
+        $stmt->bindValue(':previous_major_sas_rating', $deck->stats()->previousMajorSasRating);
+        $stmt->bindValue(':sas_percentile', $deck->stats()->sasPercentile);
+        $stmt->bindValue(':aerc_score', $deck->stats()->aercScore);
+        $stmt->bindValue(':aerc_version', $deck->stats()->aercVersion);
+        $stmt->bindValue(':sas_version', $deck->stats()->sasVersion);
+        $stmt->bindValue(':last_sas_update', $deck->stats()->lastSasUpdate->format(\DateTimeInterface::ATOM));
+        $stmt->bindValue(':cards', Json::encode($deck->cards()->jsonSerialize()));
 
         $stmt->executeStatement();
     }
 
     private function map(array $deck): KeyforgeDeck
     {
-        $data = KeyforgeDeckData::fromDokData(Json::decode($deck['extra_data']));
+        $userData = null;
 
-        $userData = KeyforgeDeckUserData::from(
+        if (\array_key_exists('owner', $deck)) {
+            $userData = KeyforgeDeckUserData::from(
+                Uuid::from($deck['id']),
+                Uuid::from($deck['owner']),
+                $deck['wins'],
+                $deck['losses'],
+                $deck['wins_vs_friends'],
+                $deck['losses_vs_friends'],
+                $deck['wins_vs_users'],
+                $deck['losses_vs_users'],
+                $deck['notes'],
+                Json::decode($deck['tags']),
+            );
+        }
+
+        return new KeyforgeDeck(
             Uuid::from($deck['id']),
-            null === $deck['owner'] ? null : Uuid::from($deck['owner']),
-            $deck['wins'],
-            $deck['losses'],
-            $deck['notes'],
-            Json::decode($deck['tags']),
+            $deck['dok_id'],
+            $deck['name'],
+            KeyforgeSet::from($deck['set']),
+            KeyforgeDeckHouses::from(
+                KeyforgeHouse::from(Json::decode($deck['houses'])[0]),
+                KeyforgeHouse::from(Json::decode($deck['houses'])[1]),
+                KeyforgeHouse::from(Json::decode($deck['houses'])[2]),
+            ),
+            KeyforgeCards::fromArray(Json::decode($deck['cards'])),
+            KeyforgeDeckStats::fromArray($deck),
+            $userData,
         );
-
-        return new KeyforgeDeck(Uuid::from($deck['id']), $data, $userData);
     }
 }

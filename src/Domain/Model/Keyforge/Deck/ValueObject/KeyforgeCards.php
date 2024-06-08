@@ -23,6 +23,18 @@ final readonly class KeyforgeCards implements \JsonSerializable
         public array $thirdPodCards,
     ) {}
 
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            KeyforgeHouse::fromDokName($data['firstPodHouse']),
+            \array_map(static fn (array $card): KeyforgeCard => KeyforgeCard::fromArray($card), $data['firstPodCards']),
+            KeyforgeHouse::fromDokName($data['secondPodHouse']),
+            \array_map(static fn (array $card): KeyforgeCard => KeyforgeCard::fromArray($card), $data['secondPodCards']),
+            KeyforgeHouse::fromDokName($data['thirdPodHouse']),
+            \array_map(static fn (array $card): KeyforgeCard => KeyforgeCard::fromArray($card), $data['thirdPodCards']),
+        );
+    }
+
     public static function fromDokData(array $data): self
     {
         $data = $data['deck']['housesAndCards'];

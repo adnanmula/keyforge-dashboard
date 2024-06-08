@@ -25,7 +25,6 @@ final class UpdateDeckNotesCommandHandler
 
         $this->repository->saveDeckUserData(KeyforgeDeckUserData::from(
             $deck->userData()->id,
-            $deck->userData()->owner,
             $deck->userData()->wins,
             $deck->userData()->losses,
             $command->notes,

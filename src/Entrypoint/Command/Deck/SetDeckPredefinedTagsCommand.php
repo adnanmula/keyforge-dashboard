@@ -41,7 +41,7 @@ final class SetDeckPredefinedTagsCommand extends Command
 
         foreach ($decks as $deck) {
             $this->service->execute($deck->id());
-            $output->writeln($deck->data()->name);
+            $output->writeln($deck->name());
         }
 
         return self::SUCCESS;

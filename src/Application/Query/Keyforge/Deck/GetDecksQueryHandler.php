@@ -55,7 +55,7 @@ final class GetDecksQueryHandler
         $expressions = [];
 
         if (null !== $query->owner) {
-            $expressions[] = new Filter(new FilterField('owner'), new StringFilterValue($query->owner->value()), FilterOperator::EQUAL);
+//            $expressions[] = new Filter(new FilterField('owner'), new StringFilterValue($query->owner->value()), FilterOperator::EQUAL);
         }
 
         if (null !== $query->deck) {
@@ -66,32 +66,19 @@ final class GetDecksQueryHandler
             $expressions[] = new Filter(new FilterField('owner'), new NullFilterValue(), FilterOperator::IS_NOT_NULL);
         }
 
-        if (null !== $query->onlyFriends) {
-            $friends = \array_map(
-                static fn (array $u) => $u['id'],
-                $this->userRepository->friends($query->onlyFriends),
-            );
-
-            $expressions[] = new Filter(new FilterField('owner'), new StringArrayFilterValue($query->onlyFriends->value(), ...$friends), FilterOperator::IN);
-        }
+//        if (null !== $query->onlyFriends) {
+//            $friends = \array_map(
+//                static fn (array $u) => $u['id'],
+//                $this->userRepository->friends($query->onlyFriends),
+//            );
+//
+//            $expressions[] = new Filter(new FilterField('owner'), new StringArrayFilterValue($query->onlyFriends->value(), ...$friends), FilterOperator::IN);
+//        }
 
         $expressions[] = new Filter(new FilterField('sas'), new IntFilterValue($query->maxSas), FilterOperator::LESS_OR_EQUAL);
         $expressions[] = new Filter(new FilterField('sas'), new IntFilterValue($query->minSas), FilterOperator::GREATER_OR_EQUAL);
 
         $filters = [new AndFilterGroup(FilterType::AND, ...$expressions)];
-
-        if (\count($query->owners) > 0) {
-            $ownerExpressions = [];
-
-            foreach ($query->owners as $owner) {
-                $ownerExpressions[] = new Filter(new FilterField('owner'), new StringFilterValue($owner), FilterOperator::EQUAL);
-            }
-
-            $filters[] = new AndFilterGroup(
-                FilterType::OR,
-                ...$ownerExpressions,
-            );
-        }
 
         if (\count($query->tags) > 0) {
             $tagsExpressions = [];
@@ -152,27 +139,11 @@ final class GetDecksQueryHandler
             ...$filters,
         );
 
-        $decks = $this->repository->search($criteria);
-
-//      TODO ñapas
-
         if (null !== $query->owner) {
-            $decks = $this->recalculateWins($query->owner, $query->deckId, ...$decks);
-
-            if (null !== $query->sorting && $query->sorting->has('wins')) {
-                $decks = $this->reorderDecks($query->sorting->get('wins'), ...$decks);
-            }
+            $decks = $this->repository->searchWithOwnerUserData($criteria, $query->owner);
+        } else {
+            $decks = $this->repository->search($criteria);
         }
-
-        if ($query->onlyOwned) {
-            $decks = $this->removeNotOwnedStats($query->owner, ...$decks);
-
-            if (null !== $query->sorting && $query->sorting->has('wins')) {
-                $decks = $this->reorderDecks($query->sorting->get('wins'), ...$decks);
-            }
-        }
-
-//      end ñapas
 
         $countCriteria = new Criteria(
             null,
@@ -191,145 +162,5 @@ final class GetDecksQueryHandler
             'start' => $query->start,
             'length' => $query->length,
         ];
-    }
-
-    /** @return array<KeyforgeDeck> */
-    private function recalculateWins(Uuid $userId, ?Uuid $deckId, KeyforgeDeck ...$decks): array
-    {
-        $filters = [new AndFilterGroup(
-            FilterType::OR,
-            new Filter(new FilterField('winner'), new StringFilterValue($userId->value()), FilterOperator::EQUAL),
-            new Filter(new FilterField('loser'), new StringFilterValue($userId->value()), FilterOperator::EQUAL),
-        )];
-
-        if (null !== $deckId) {
-            $filters[] = new AndFilterGroup(
-                FilterType::OR,
-                new Filter(new FilterField('winner_deck'), new StringFilterValue($deckId->value()), FilterOperator::EQUAL),
-                new Filter(new FilterField('loser_deck'), new StringFilterValue($deckId->value()), FilterOperator::EQUAL),
-            );
-        }
-
-        foreach ($decks as $deck) {
-            $games = $this->gameRepository->search(new Criteria(null, null, null, ...$filters));
-
-            $deckWins = 0;
-            $deckLosses = 0;
-
-            /** @var KeyforgeGame $game */
-            foreach ($games as $game) {
-                if (false === $game->winnerDeck()->equalTo($deck->id())
-                    && false === $game->loserDeck()->equalTo($deck->id())) {
-                    continue;
-                }
-
-                if ($game->winner()->equalTo($userId) && $game->winnerDeck()->equalTo($deck->id())) {
-                    $deckWins++;
-                }
-
-                if ($game->loser()->equalTo($userId) && $game->loserDeck()->equalTo($deck->id())) {
-                    $deckLosses++;
-                }
-            }
-
-            $deck->setUserData(
-                KeyforgeDeckUserData::from(
-                    $deck->userData()->id,
-                    $deck->userData()->owner,
-                    $deckWins,
-                    $deckLosses,
-                    $deck->userData()->notes,
-                    $deck->userData()->tags,
-                ),
-            );
-        }
-
-        return $decks;
-    }
-
-    /** @return array<KeyforgeDeck> */
-    private function removeNotOwnedStats(?Uuid $owner, KeyforgeDeck ...$decks): array
-    {
-        $users = $this->keyforgeUserRepository->search(new Criteria(null, null, null));
-        $nonExternalUsersIds = \array_map(static fn (KeyforgeUser $user) => $user->id()->value(), $users);
-
-        foreach ($decks as $deck) {
-            $games = $this->gameRepository->search(new Criteria(null, null, null));
-
-            $games = \array_values(\array_filter($games, static function (KeyforgeGame $game) use ($nonExternalUsersIds) {
-                return \in_array($game->winner()->value(), $nonExternalUsersIds, true)
-                    && \in_array($game->loser()->value(), $nonExternalUsersIds, true);
-            }));
-
-            $deckWins = 0;
-            $deckLosses = 0;
-
-            /** @var KeyforgeGame $game */
-            foreach ($games as $game) {
-                if (null !== $owner) {
-                    $okWinner = $game->winnerDeck()->equalTo($deck->id()) && $game->winner()->equalTo($owner);
-                    $okLoser = $game->loserDeck()->equalTo($deck->id()) && $game->loser()->equalTo($owner);
-
-                    if (false === $okWinner && false === $okLoser) {
-                        continue;
-                    }
-
-                    if (false === $game->winner()->equalTo($owner) && false === $game->loser()->equalTo($owner)) {
-                        continue;
-                    }
-                }
-
-                if (false === $game->winnerDeck()->equalTo($deck->id())
-                    && false === $game->loserDeck()->equalTo($deck->id())) {
-                    continue;
-                }
-
-                if ($game->winnerDeck()->equalTo($deck->id())) {
-                    $deckWins++;
-                }
-
-                if ($game->loserDeck()->equalTo($deck->id())) {
-                    $deckLosses++;
-                }
-            }
-
-            $deck->setUserData(
-                KeyforgeDeckUserData::from(
-                    $deck->userData()->id,
-                    $deck->userData()->owner,
-                    $deckWins,
-                    $deckLosses,
-                    $deck->userData()->notes,
-                ),
-            );
-        }
-
-        return $decks;
-    }
-
-    /** @return array<KeyforgeDeck> */
-    private function reorderDecks(Order $order, KeyforgeDeck ...$decks): array
-    {
-        if ($order->type() === OrderType::DESC) {
-            \usort($decks, static function (KeyforgeDeck $a, KeyforgeDeck $b) {
-                if ($a->userData()->wins === $b->userData()->wins) {
-                    return $a->userData()->losses <=> $b->userData()->losses;
-                }
-
-                return $b->userData()->wins <=> $a->userData()->wins;
-            });
-        }
-
-        if ($order->type() === OrderType::ASC) {
-            \usort($decks, static function (KeyforgeDeck $a, KeyforgeDeck $b) {
-                if ($b->userData()->wins === $a->userData()->wins) {
-                    return $b->userData()->losses <=> $a->userData()->losses;
-                }
-
-                return $a->userData()->wins <=> $b->userData()->wins;
-            });
-        }
-
-        return $decks;
     }
 }

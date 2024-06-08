@@ -4,29 +4,42 @@ namespace AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject;
 
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 
-final readonly class KeyforgeDeckUserData implements \JsonSerializable
+final class KeyforgeDeckUserData implements \JsonSerializable
 {
     private function __construct(
-        public Uuid $id,
-        public ?Uuid $owner,
-        public int $wins,
-        public int $losses,
-        public string $notes,
+        public readonly Uuid $deckId,
+        public readonly Uuid $owner,
+        public readonly int $wins,
+        public readonly int $losses,
+        public readonly int $winsVsFriends,
+        public readonly int $lossesVsFriends,
+        public readonly int $winsVsUsers,
+        public readonly int $lossesVsUsers,
+        public readonly string $notes,
         public array $tags = [],
     ) {}
 
-    public static function from(Uuid $id, ?Uuid $owner, int $wins, int $losses, string $notes, array $tags = []): self
+    public static function from(Uuid $deckId, Uuid $owner, int $wins, int $losses, int $winsVsFriends, int $lossesVsFriends, int $winsVsUsers, int $lossesVsUsers, string $notes, array $tags = []): self
     {
-        return new self($id, $owner, $wins, $losses, $notes, $tags);
+        return new self($deckId, $owner, $wins, $losses, $winsVsFriends, $lossesVsFriends, $winsVsUsers, $lossesVsUsers, $notes, $tags);
+    }
+
+    public function setTags(string ...$tags): void
+    {
+        $this->tags = $tags;
     }
 
     public function jsonSerialize(): array
     {
         return [
-            'id' => $this->id->value(),
-            'owner' => $this->owner?->value(),
+            'deckId' => $this->deckId->value(),
+            'owner' => $this->owner->value(),
             'wins' => $this->wins,
             'losses' => $this->losses,
+            'wins_vs_friends' => $this->wins,
+            'losses_vs_friends' => $this->losses,
+            'wins_vs_users' => $this->wins,
+            'losses_vs_users' => $this->losses,
             'notes' => $this->notes,
             'tags' => $this->tags,
         ];

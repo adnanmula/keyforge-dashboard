@@ -23,7 +23,6 @@ final class Cards extends AbstractMigration
                 is_token bool NOT NULL,
                 sets jsonb NOT NULL,
                 tags jsonb NOT NULL,
-                raw_data jsonb NOT NULL,
                 PRIMARY KEY(id)
             )',
         );

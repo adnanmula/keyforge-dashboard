@@ -2,8 +2,10 @@
 
 namespace AdnanMula\Cards\Domain\Service\Keyforge\Deck;
 
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeck;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckTag;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckUserDataRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagActionCountHigh;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagAmberBonusHigh;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagAmberBonusLow;
@@ -33,47 +35,72 @@ use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagHasScalingAmberCon
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagRecursionHigh;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagSynergyHigh;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagUpgradeCountHigh;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeCards;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
+use AdnanMula\Criteria\Criteria;
+use AdnanMula\Criteria\Filter\Filter;
+use AdnanMula\Criteria\Filter\FilterType;
+use AdnanMula\Criteria\FilterField\FilterField;
+use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
+use AdnanMula\Criteria\FilterValue\FilterOperator;
+use AdnanMula\Criteria\FilterValue\StringFilterValue;
 
 final readonly class DeckApplyPredefinedTagsService
 {
     public function __construct(
         private KeyforgeDeckRepository $repository,
+        private KeyforgeDeckUserDataRepository $userDataRepository,
     ) {}
 
     public function execute(Uuid $id): void
     {
-        $deck = $this->repository->byId($id);
+        $deck = $this->repository->search(
+            new Criteria(
+                null,
+                null,
+                null,
+                new AndFilterGroup(
+                    FilterType::AND,
+                    new Filter(
+                        new FilterField('id'),
+                        new StringFilterValue($id->value()),
+                        FilterOperator::EQUAL,
+                    ),
+                ),
+            ),
+        )[0] ?? null;
+
+        if (null === $deck) {
+            return;
+        }
 
         $newTags = [];
 
-        $data = $deck->data()->rawData['deck'];
+        [$maverickCount, $legacyCount, $anomalyCount] = $this->specialCardsCount($deck->cards());
 
-        [$maverickCount, $legacyCount, $anomalyCount] = $this->specialCardsCount($data);
-
-        $newTags[] = $this->tagActionCount($data);
-        $newTags[] = $this->tagAmberControl($data);
-        $newTags[] = $this->tagAntiSynergy($data);
-        $newTags[] = $this->tagArchiveCardCount($data);
-        $newTags[] = $this->tagArtifactControl($data);
-        $newTags[] = $this->tagArtifactCount($data);
-        $newTags[] = $this->tagBonusAmber($data);
-        $newTags[] = $this->tagCreatureControl($data);
-        $newTags[] = $this->tagCreatureCount($data);
-        $newTags[] = $this->tagCreatureProtection($data);
-        $newTags[] = $this->tagDisruption($data);
-        $newTags[] = $this->tagEffectivePower($data);
-        $newTags[] = $this->tagEfficiency($data);
-        $newTags[] = $this->tagExpectedAmber($data);
+        $newTags[] = $this->tagActionCount($deck);
+        $newTags[] = $this->tagAmberControl($deck);
+        $newTags[] = $this->tagAntiSynergy($deck);
+        $newTags[] = $this->tagArchiveCardCount($deck);
+        $newTags[] = $this->tagArtifactControl($deck);
+        $newTags[] = $this->tagArtifactCount($deck);
+        $newTags[] = $this->tagBonusAmber($deck);
+        $newTags[] = $this->tagCreatureControl($deck);
+        $newTags[] = $this->tagCreatureCount($deck);
+        $newTags[] = $this->tagCreatureProtection($deck);
+        $newTags[] = $this->tagDisruption($deck);
+        $newTags[] = $this->tagEffectivePower($deck);
+        $newTags[] = $this->tagEfficiency($deck);
+        $newTags[] = $this->tagExpectedAmber($deck);
         $newTags[] = $this->tagHasAnomaly($anomalyCount);
-        $newTags[] = $this->tagHasBoardWipes($data);
-        $newTags[] = $this->tagHasKeyCheats($data);
+        $newTags[] = $this->tagHasBoardWipes($deck);
+        $newTags[] = $this->tagHasKeyCheats($deck);
         $newTags[] = $this->tagHasLegacy($legacyCount);
         $newTags[] = $this->tagHasMaverick($maverickCount);
-        $newTags[] = $this->tagHasScalingAmberControl($data);
-        $newTags[] = $this->tagRecursion($data);
-        $newTags[] = $this->tagSynergy($data);
-        $newTags[] = $this->tagUpgradeCount($data);
+        $newTags[] = $this->tagHasScalingAmberControl($deck);
+        $newTags[] = $this->tagRecursion($deck);
+        $newTags[] = $this->tagSynergy($deck);
+        $newTags[] = $this->tagUpgradeCount($deck);
 
         $draftDecks = [
             '19ee9a3b-cbe5-4fe5-b4a5-388a1cc3c37a',
@@ -86,7 +113,26 @@ final readonly class DeckApplyPredefinedTagsService
             $newTags = [];
         }
 
-        $this->repository->saveDeckTags($deck->id(), $this->mergeTags($deck->userData()->tags, \array_filter($newTags)));
+        $userData = $this->userDataRepository->search(
+            new Criteria(
+                null,
+                null,
+                null,
+                new AndFilterGroup(
+                    FilterType::AND,
+                    new Filter(
+                        new FilterField('deck_id'),
+                        new StringFilterValue($id->value()),
+                        FilterOperator::EQUAL,
+                    ),
+                ),
+            ),
+        );
+
+        foreach ($userData as $userDatum) {
+            $userDatum->setTags(...$this->mergeTags($userDatum->tags, \array_filter($newTags)));
+            $this->userDataRepository->save($userDatum);
+        }
     }
 
     private function mergeTags(array $currentTags, array $newTags): array
@@ -96,25 +142,29 @@ final readonly class DeckApplyPredefinedTagsService
         ));
     }
 
-    private function specialCardsCount(array $data): array
+    private function specialCardsCount(KeyforgeCards $cards): array
     {
         $maverickCount = 0;
         $legacyCount = 0;
         $anomalyCount = 0;
 
-        foreach ($data['housesAndCards'] as $house) {
-            foreach ($house['cards'] as $card) {
-                if ($card['legacy']) {
-                    $legacyCount++;
-                }
+        $cards = array_merge(
+            $cards->firstPodCards,
+            $cards->secondPodCards,
+            $cards->thirdPodCards,
+        );
 
-                if ($card['maverick']) {
-                    $maverickCount++;
-                }
+        foreach ($cards as $card) {
+            if ($card->isLegacy) {
+                $legacyCount++;
+            }
 
-                if ($card['anomaly']) {
-                    $anomalyCount++;
-                }
+            if ($card->isMaverick) {
+                $maverickCount++;
+            }
+
+            if ($card->isAnomaly) {
+                $anomalyCount++;
             }
         }
 
@@ -148,9 +198,9 @@ final readonly class DeckApplyPredefinedTagsService
         return null;
     }
 
-    private function tagEfficiency(array $data): ?KeyforgeDeckTag
+    private function tagEfficiency(KeyforgeDeck $deck): ?KeyforgeDeckTag
     {
-        $efficiency = $data['efficiency'] ?? 0;
+        $efficiency = $deck->stats()->efficiency;
 
         if ($efficiency >= 15) {
             return new KeyforgeTagEfficiencyHigh();
@@ -163,9 +213,9 @@ final readonly class DeckApplyPredefinedTagsService
         return null;
     }
 
-    private function tagArtifactCount(array $data): ?KeyforgeDeckTag
+    private function tagArtifactCount(KeyforgeDeck $deck): ?KeyforgeDeckTag
     {
-        $artifacts = $data['artifactCount'] ?? 0;
+        $artifacts = $deck->stats()->artifactCount;
 
         if ($artifacts >= 6) {
             return new KeyforgeTagArtifactCountHigh();
@@ -174,9 +224,9 @@ final readonly class DeckApplyPredefinedTagsService
         return null;
     }
 
-    private function tagHasKeyCheats(array $data): ?KeyforgeDeckTag
+    private function tagHasKeyCheats(KeyforgeDeck $deck): ?KeyforgeDeckTag
     {
-        $keyCheats = $data['keyCheatCount'] ?? 0;
+        $keyCheats = $deck->stats()->keyCheatCount;
 
         if ($keyCheats > 0) {
             return new KeyforgeTagHasKeyCheats();
@@ -185,9 +235,9 @@ final readonly class DeckApplyPredefinedTagsService
         return null;
     }
 
-    private function tagEffectivePower(array $data): ?KeyforgeDeckTag
+    private function tagEffectivePower(KeyforgeDeck $deck): ?KeyforgeDeckTag
     {
-        $effectivePower = $data['effectivePower'] ?? 0;
+        $effectivePower = $deck->stats()->effectivePower;
 
         if ($effectivePower > 110) {
             return new KeyforgeTagEffectivePowerHigh();
@@ -196,9 +246,9 @@ final readonly class DeckApplyPredefinedTagsService
         return null;
     }
 
-    private function tagBonusAmber(array $data): ?KeyforgeDeckTag
+    private function tagBonusAmber(KeyforgeDeck $deck): ?KeyforgeDeckTag
     {
-        $bonusAmber = $data['rawAmber'] ?? 0;
+        $bonusAmber = $deck->stats()->rawAmber;
 
         if ($bonusAmber >= 15) {
             return new KeyforgeTagAmberBonusHigh();
@@ -211,9 +261,9 @@ final readonly class DeckApplyPredefinedTagsService
         return null;
     }
 
-    private function tagExpectedAmber(array $data): ?KeyforgeDeckTag
+    private function tagExpectedAmber(KeyforgeDeck $deck): ?KeyforgeDeckTag
     {
-        $expectedAmber = $data['expectedAmber'] ?? 0;
+        $expectedAmber = $deck->stats()->expectedAmber;
 
         if ($expectedAmber >= 25) {
             return new KeyforgeTagAmberExpectedHigh();
@@ -226,20 +276,18 @@ final readonly class DeckApplyPredefinedTagsService
         return null;
     }
 
-    private function tagActionCount(array $data): ?KeyforgeDeckTag
+    private function tagActionCount(KeyforgeDeck $deck): ?KeyforgeDeckTag
     {
-        $actions = $data['actionCount'] ?? 0;
-
-        if ($actions >= 18) {
+        if ($deck->stats()->actionCount >= 18) {
             return new KeyforgeTagActionCountHigh();
         }
 
         return null;
     }
 
-    private function tagCreatureCount(array $data): ?KeyforgeDeckTag
+    private function tagCreatureCount(KeyforgeDeck $deck): ?KeyforgeDeckTag
     {
-        $creatures = $data['creatureCount'] ?? 0;
+        $creatures = $deck->stats()->creatureCount;
 
         if ($creatures >= 22) {
             return new KeyforgeTagCreatureCountHigh();
@@ -248,9 +296,9 @@ final readonly class DeckApplyPredefinedTagsService
         return null;
     }
 
-    private function tagArchiveCardCount(array $data): ?KeyforgeDeckTag
+    private function tagArchiveCardCount(KeyforgeDeck $deck): ?KeyforgeDeckTag
     {
-        $value = $data['cardArchiveCount'] ?? 0;
+        $value = $deck->stats()->cardArchiveCount;
 
         if ($value >= 6) {
             return new KeyforgeTagArchiveCardCountHigh();
@@ -259,9 +307,9 @@ final readonly class DeckApplyPredefinedTagsService
         return null;
     }
 
-    private function tagUpgradeCount(array $data): ?KeyforgeDeckTag
+    private function tagUpgradeCount(KeyforgeDeck $deck): ?KeyforgeDeckTag
     {
-        $creatures = $data['upgradeCount'] ?? 0;
+        $creatures = $deck->stats()->upgradeCount;
 
         if ($creatures >= 9) {
             return new KeyforgeTagUpgradeCountHigh();
@@ -270,9 +318,9 @@ final readonly class DeckApplyPredefinedTagsService
         return null;
     }
 
-    private function tagAmberControl(array $data): ?KeyforgeDeckTag
+    private function tagAmberControl(KeyforgeDeck $deck): ?KeyforgeDeckTag
     {
-        $value = $data['amberControl'] ?? 0;
+        $value = $deck->stats()->amberControl;
 
         if ($value >= 15) {
             return new KeyforgeTagAmberControlHigh();
@@ -285,9 +333,9 @@ final readonly class DeckApplyPredefinedTagsService
         return null;
     }
 
-    private function tagCreatureControl(array $data): ?KeyforgeDeckTag
+    private function tagCreatureControl(KeyforgeDeck $deck): ?KeyforgeDeckTag
     {
-        $value = $data['creatureControl'] ?? 0;
+        $value = $deck->stats()->creatureControl;
 
         if ($value >= 15) {
             return new KeyforgeTagCreatureControlHigh();
@@ -300,24 +348,24 @@ final readonly class DeckApplyPredefinedTagsService
         return null;
     }
 
-    private function tagArtifactControl(array $data): ?KeyforgeDeckTag
+    private function tagArtifactControl(KeyforgeDeck $deck): ?KeyforgeDeckTag
     {
-        $value = $data['artifactControl'] ?? 0;
+        $value = $deck->stats()->artifactControl;
 
         if ($value >= 2) {
             return new KeyforgeTagArtifactControlHigh();
         }
 
-        if ($value === 0) {
+        if ($value <= 0) {
             return new KeyforgeTagArtifactControlLow();
         }
 
         return null;
     }
 
-    private function tagCreatureProtection(array $data): ?KeyforgeDeckTag
+    private function tagCreatureProtection(KeyforgeDeck $deck): ?KeyforgeDeckTag
     {
-        $value = $data['creatureProtection'] ?? 0;
+        $value = $deck->stats()->creatureProtection;
 
         if ($value >= 6) {
             return new KeyforgeTagCreatureProtectionHigh();
@@ -326,9 +374,9 @@ final readonly class DeckApplyPredefinedTagsService
         return null;
     }
 
-    private function tagRecursion(array $data): ?KeyforgeDeckTag
+    private function tagRecursion(KeyforgeDeck $deck): ?KeyforgeDeckTag
     {
-        $value = $data['recursion'] ?? 0;
+        $value = $deck->stats()->recursion;
 
         if ($value >= 6) {
             return new KeyforgeTagRecursionHigh();
@@ -337,9 +385,9 @@ final readonly class DeckApplyPredefinedTagsService
         return null;
     }
 
-    private function tagDisruption(array $data): ?KeyforgeDeckTag
+    private function tagDisruption(KeyforgeDeck $deck): ?KeyforgeDeckTag
     {
-        $value = $data['disruption'] ?? 0;
+        $value = $deck->stats()->disruption;
 
         if ($value >= 9) {
             return new KeyforgeTagDisruptionHigh();
@@ -348,151 +396,43 @@ final readonly class DeckApplyPredefinedTagsService
         return null;
     }
 
-    private function tagHasScalingAmberControl(array $data): ?KeyforgeDeckTag
+    private function tagHasScalingAmberControl(KeyforgeDeck $deck): ?KeyforgeDeckTag
     {
-        $cards = [
-            'Interdimensional Graft',
-            'Doorstep to Heaven',
-            'Bring Low',
-            'Deusillus',
-            'Ronnie Wristclocks',
-            'Shatter Storm',
-            'The First Scroll',
-            'Rant and Rive',
-            'Submersive Principle',
-            'Martyr of the Vault',
-            'Effervescent Principle',
-            'ANT1-10NY',
-            'Gatekeeper',
-            'Trawler',
-            'Cutthroat Research',
-            'Too Much to Protect',
-            'Burn the Stockpile',
-            'Drumble',
-            'Forgemaster Og',
-            'Memorialize the Fallen',
-            'Closed-Door Negotiation',
-        ];
+        $cards = \array_merge(
+            $deck->cards()->firstPodCards,
+            $deck->cards()->secondPodCards,
+            $deck->cards()->thirdPodCards,
+        );
 
-        $count = 0;
-
-        foreach ($data['housesAndCards'] as $house) {
-            foreach ($house['cards'] as $card) {
-                if (\in_array($card['cardTitle'], $cards, true)) {
-                    $count++;
-                }
+        foreach ($cards as $card) {
+            if (\in_array($card->serializedName, KeyforgeCards::SCALING_AMBER_CONTROL)) {
+                return new KeyforgeTagHasScalingAmberControl();
             }
-        }
-
-        if ($count > 0) {
-            return new KeyforgeTagHasScalingAmberControl();
         }
 
         return null;
     }
 
-    private function tagHasBoardWipes(array $data): ?KeyforgeDeckTag
+    private function tagHasBoardWipes(KeyforgeDeck $deck): ?KeyforgeDeckTag
     {
-        $cards = [
-            'Tectonic Shift',
-            'Phloxem Spike',
-            'Opal Knight',
-            'General Sherman',
-            'Final Refrain',
-            'Krrrzzzaaap!!!',
-            'Guilty Hearts',
-            'Onyx Knight',
-            'Standardized Testing',
-            'Three Fates',
-            'Strange Gizmo',
-            'General Order 24',
-            'Earthshaker',
-            'Axiom of Grisk',
-            'Groundbreaking Discovery',
-            'Selective Preservation',
-            'Kiligog’s Trench',
-            'Adult Swim',
-            'Longfused Mines',
-            'Market Crash',
-            'Carpet Phloxem',
-            'Crushing Charge',
-            'Champion’s Challenge',
-            'Bouncing Deathquark',
-            'Neutron Shark',
-            'The Spirit’s Way',
-            'Mælstrom',
-            'Echoing Deathknell',
-            'Election',
-            'Mass Buyout',
-            'Concussive Transfer',
-            'Unlocked Gateway',
-            'Return to Rubble',
-            'Ammonia Clouds',
-            'Spartasaur',
-            'Poison Wave',
-            'Mind Over Matter',
-            'Grand Alliance Council',
-            'Hebe the Huge',
-            'Gateway to Dis',
-            'Mind Bullets',
-            'Hysteria',
-            'Ballcano',
-            'Coward’s End',
-            'Phoenix Heart',
-            'Infighting',
-            'Dark Wave',
-            'Tendrils of Pain',
-            'Piranha Monkeys',
-            'Harbinger of Doom',
-            'Skixuno',
-            'Numquid the Fair',
-            'Key to Dis',
-            'Final Analysis',
-            'Plan 10',
-            'Plummet',
-            'Midyear Festivities',
-            'Kaboom!',
-            'Unnatural Selection',
-            'Plague Wind',
-            'Æmberlution',
-            'Savage Clash',
-            'Winds of Death',
-            'De-escalation',
-            'War of the Worlds',
-            'Ragnarok',
-            'Catch and Release',
-            'Soul Bomb',
-            'Into the Warp',
-            'The Big One',
-            'Harvest Time',
-            'Extinction',
-            'Dance of Doom',
-            'Tertiate',
-            'Quintrino Warp',
-            'Gleeful Mayhem',
-            'Quintrino Flux',
-        ];
+        $cards = \array_merge(
+            $deck->cards()->firstPodCards,
+            $deck->cards()->secondPodCards,
+            $deck->cards()->thirdPodCards,
+        );
 
-        $count = 0;
-
-        foreach ($data['housesAndCards'] as $house) {
-            foreach ($house['cards'] as $card) {
-                if (\in_array($card['cardTitle'], $cards, true)) {
-                    $count++;
-                }
+        foreach ($cards as $card) {
+            if (\in_array($card->serializedName, KeyforgeCards::BOARD_CLEARS)) {
+                return new KeyforgeTagHasBoardWipes();
             }
-        }
-
-        if ($count > 0) {
-            return new KeyforgeTagHasBoardWipes();
         }
 
         return null;
     }
 
-    private function tagSynergy(array $data): ?KeyforgeDeckTag
+    private function tagSynergy(KeyforgeDeck $deck): ?KeyforgeDeckTag
     {
-        $value = $data['synergyRating'] ?? 0;
+        $value = $deck->stats()->synergyRating;
 
         if ($value >= 15) {
             return new KeyforgeTagSynergyHigh();
@@ -501,9 +441,9 @@ final readonly class DeckApplyPredefinedTagsService
         return null;
     }
 
-    private function tagAntiSynergy(array $data): ?KeyforgeDeckTag
+    private function tagAntiSynergy(KeyforgeDeck $deck): ?KeyforgeDeckTag
     {
-        $value = $data['antisynergyRating'] ?? 0;
+        $value = $deck->stats()->antiSynergyRating;
 
         if ($value >= 2) {
             return new KeyforgeTagAntiSynergyHigh();
