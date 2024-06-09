@@ -5,7 +5,6 @@ namespace AdnanMula\Cards\Domain\Service\Keyforge\Deck;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeck;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckTag;
-use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckUserDataRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagActionCountHigh;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagAmberBonusHigh;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagAmberBonusLow;
@@ -47,10 +46,8 @@ use AdnanMula\Criteria\FilterValue\StringFilterValue;
 
 final readonly class DeckApplyPredefinedTagsService
 {
-    public function __construct(
-        private KeyforgeDeckRepository $repository,
-        private KeyforgeDeckUserDataRepository $userDataRepository,
-    ) {}
+    public function __construct(private KeyforgeDeckRepository $repository)
+    {}
 
     public function execute(Uuid $id): void
     {
@@ -113,26 +110,9 @@ final readonly class DeckApplyPredefinedTagsService
             $newTags = [];
         }
 
-        $userData = $this->userDataRepository->search(
-            new Criteria(
-                null,
-                null,
-                null,
-                new AndFilterGroup(
-                    FilterType::AND,
-                    new Filter(
-                        new FilterField('deck_id'),
-                        new StringFilterValue($id->value()),
-                        FilterOperator::EQUAL,
-                    ),
-                ),
-            ),
-        );
+        $deck->setTags(...$this->mergeTags($deck->tags(), \array_filter($newTags)));
 
-        foreach ($userData as $userDatum) {
-            $userDatum->setTags(...$this->mergeTags($userDatum->tags, \array_filter($newTags)));
-            $this->userDataRepository->save($userDatum);
-        }
+        $this->repository->save($deck);
     }
 
     private function mergeTags(array $currentTags, array $newTags): array

@@ -54,6 +54,26 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
         return \array_map(fn (array $row) => $this->map($row), $result);
     }
 
+    public function searchWithAggregatedOwnerUserData(Criteria $criteria): array
+    {
+        $builder = $this->connection->createQueryBuilder();
+
+        $query = $builder->select('a.*')
+            ->addSelect("string_agg(b.owner::varchar, ',') as owners")
+            ->addSelect('SUM(b.wins) as wins, SUM(b.losses) as losses')
+            ->addSelect('SUM(b.wins_vs_friends) as wins_vs_friends, SUM(b.losses_vs_friends) as losses_vs_friends')
+            ->addSelect('SUM(b.wins_vs_users) as wins_vs_users, SUM(b.losses_vs_users) as losses_vs_users')
+            ->from(self::TABLE, 'a')
+            ->innerJoin('a', self::TABLE_USER_DATA, 'b', 'a.id = b.deck_id')
+            ->groupBy('a.id');
+
+        (new DbalCriteriaAdapter($builder, self::FIELD_MAPPING))->execute($criteria);
+
+        $result = $query->executeQuery()->fetchAllAssociative();
+
+        return \array_map(fn (array $row) => $this->map($row), $result);
+    }
+
     public function count(Criteria $criteria): int
     {
         $builder = $this->connection->createQueryBuilder();
@@ -110,7 +130,8 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
                     previous_sas_rating,
                     previous_major_sas_rating,
                     last_sas_update,
-                    cards
+                    cards,
+                    tags
                 ) VALUES (
                     :id,
                     :name,
@@ -152,7 +173,8 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
                     :previous_sas_rating,
                     :previous_major_sas_rating,
                     :last_sas_update,
-                    :cards
+                    :cards,
+                    :tags
                 ) ON CONFLICT (id) DO UPDATE SET
                     sas = :sas,
                     amber_control = :amber_control,
@@ -189,7 +211,8 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
                     previous_sas_rating = :previous_sas_rating,
                     previous_major_sas_rating = :previous_major_sas_rating,
                     last_sas_update = :last_sas_update,
-                    cards = :cards
+                    cards = :cards,
+                    tags = :tags
                 ',
                 self::TABLE,
             ),
@@ -236,6 +259,7 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
         $stmt->bindValue(':sas_version', $deck->stats()->sasVersion);
         $stmt->bindValue(':last_sas_update', $deck->stats()->lastSasUpdate->format(\DateTimeInterface::ATOM));
         $stmt->bindValue(':cards', Json::encode($deck->cards()->jsonSerialize()));
+        $stmt->bindValue(':tags', Json::encode($deck->tags()));
 
         $stmt->executeStatement();
     }
@@ -255,7 +279,22 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
                 $deck['wins_vs_users'],
                 $deck['losses_vs_users'],
                 $deck['notes'],
-                Json::decode($deck['tags']),
+                Json::decode($deck['user_tags']),
+            );
+        }
+
+        if (\array_key_exists('owners', $deck)) {
+            $userData = KeyforgeDeckUserData::from(
+                Uuid::from($deck['id']),
+                \array_map(static fn (string $s) => Uuid::from($s), \explode(',', $deck['owners'])),
+                $deck['wins'],
+                $deck['losses'],
+                $deck['wins_vs_friends'],
+                $deck['losses_vs_friends'],
+                $deck['wins_vs_users'],
+                $deck['losses_vs_users'],
+                '',
+                [],
             );
         }
 
@@ -271,6 +310,7 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
             ),
             KeyforgeCards::fromArray(Json::decode($deck['cards'])),
             KeyforgeDeckStats::fromArray($deck),
+            Json::decode($deck['tags']),
             $userData,
         );
     }

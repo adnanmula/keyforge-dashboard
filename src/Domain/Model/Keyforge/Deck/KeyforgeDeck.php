@@ -19,6 +19,7 @@ final class KeyforgeDeck implements \JsonSerializable
         private readonly KeyforgeDeckHouses $houses,
         private readonly KeyforgeCards $cards,
         private KeyforgeDeckStats $stats,
+        private array $tags = [],
         private ?KeyforgeDeckUserData $userData = null,
     ) {}
 
@@ -62,6 +63,16 @@ final class KeyforgeDeck implements \JsonSerializable
         $this->stats = $stats;
     }
 
+    public function tags(): array
+    {
+        return $this->tags;
+    }
+
+    public function setTags(string ...$tags): void
+    {
+        $this->tags = $tags;
+    }
+
     public function userData(): ?KeyforgeDeckUserData
     {
         return $this->userData;
@@ -77,7 +88,8 @@ final class KeyforgeDeck implements \JsonSerializable
             'houses' => $this->houses->jsonSerialize(),
             'cards' => $this->cards->jsonSerialize(),
             'stats' => $this->stats->jsonSerialize(),
-            'userData' => $this?->userData->jsonSerialize(),
+            'tags' => $this->tags,
+            'userData' => $this->userData?->jsonSerialize(),
         ];
     }
 }

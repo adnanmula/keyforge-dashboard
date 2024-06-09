@@ -42,8 +42,8 @@ final class KeyforgeDeckUserDataDbalRepository extends DbalRepository implements
         $stmt = $this->connection->prepare(
             \sprintf(
                 '
-                INSERT INTO %s (deck_id, owner, wins, losses, wins_vs_friends, losses_vs_friends, wins_vs_users, losses_vs_users, notes, tags)
-                VALUES (:deck_id, :owner, :wins, :losses, :wins_vs_friends, :losses_vs_friends, :wins_vs_users, :losses_vs_users, :notes, :tags)
+                INSERT INTO %s (deck_id, owner, wins, losses, wins_vs_friends, losses_vs_friends, wins_vs_users, losses_vs_users, notes, user_tags)
+                VALUES (:deck_id, :owner, :wins, :losses, :wins_vs_friends, :losses_vs_friends, :wins_vs_users, :losses_vs_users, :notes, :user_tags)
                 ON CONFLICT (deck_id, owner) DO UPDATE SET
                     wins = :wins,
                     losses = :losses,
@@ -52,7 +52,7 @@ final class KeyforgeDeckUserDataDbalRepository extends DbalRepository implements
                     wins_vs_users = :wins_vs_users,
                     losses_vs_users = :losses_vs_users,
                     notes = :notes,
-                    tags = :tags
+                    user_tags = :user_tags
                 ',
                 self::TABLE,
             ),
@@ -67,7 +67,7 @@ final class KeyforgeDeckUserDataDbalRepository extends DbalRepository implements
         $stmt->bindValue(':wins_vs_users', $data->winsVsFriends);
         $stmt->bindValue(':losses_vs_users', $data->lossesVsFriends);
         $stmt->bindValue(':notes', $data->notes);
-        $stmt->bindValue(':tags', Json::encode($data->tags));
+        $stmt->bindValue(':user_tags', Json::encode($data->tags));
 
         $stmt->executeStatement();
     }

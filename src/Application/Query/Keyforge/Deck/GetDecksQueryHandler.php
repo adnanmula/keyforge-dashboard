@@ -142,7 +142,7 @@ final class GetDecksQueryHandler
         if (null !== $query->owner) {
             $decks = $this->repository->searchWithOwnerUserData($criteria, $query->owner);
         } else {
-            $decks = $this->repository->search($criteria);
+            $decks = $this->repository->searchWithAggregatedOwnerUserData($criteria);
         }
 
         $countCriteria = new Criteria(

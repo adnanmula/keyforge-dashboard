@@ -8,7 +8,7 @@ final class KeyforgeDeckUserData implements \JsonSerializable
 {
     private function __construct(
         public readonly Uuid $deckId,
-        public readonly Uuid $owner,
+        public readonly array $owners,
         public readonly int $wins,
         public readonly int $losses,
         public readonly int $winsVsFriends,
@@ -19,9 +19,9 @@ final class KeyforgeDeckUserData implements \JsonSerializable
         public array $tags = [],
     ) {}
 
-    public static function from(Uuid $deckId, Uuid $owner, int $wins, int $losses, int $winsVsFriends, int $lossesVsFriends, int $winsVsUsers, int $lossesVsUsers, string $notes, array $tags = []): self
+    public static function from(Uuid $deckId, array $owners, int $wins, int $losses, int $winsVsFriends, int $lossesVsFriends, int $winsVsUsers, int $lossesVsUsers, string $notes, array $tags = []): self
     {
-        return new self($deckId, $owner, $wins, $losses, $winsVsFriends, $lossesVsFriends, $winsVsUsers, $lossesVsUsers, $notes, $tags);
+        return new self($deckId, $owners, $wins, $losses, $winsVsFriends, $lossesVsFriends, $winsVsUsers, $lossesVsUsers, $notes, $tags);
     }
 
     public function setTags(string ...$tags): void
@@ -33,7 +33,7 @@ final class KeyforgeDeckUserData implements \JsonSerializable
     {
         return [
             'deckId' => $this->deckId->value(),
-            'owner' => $this->owner->value(),
+            'owners' => \array_map(static fn (Uuid $u) => $u->value(), $this->owners),
             'wins' => $this->wins,
             'losses' => $this->losses,
             'wins_vs_friends' => $this->wins,

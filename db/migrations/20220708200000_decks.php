@@ -49,6 +49,7 @@ final class Decks extends AbstractMigration
                 anti_synergy_rating integer NOT NULL,
                 last_sas_update TIMESTAMP WITH TIME ZONE NULL,
                 cards jsonb NOT NULL,
+                tags jsonb NOT NULL DEFAULT \'[]\',
                 PRIMARY KEY(id)
             )',
         );
@@ -64,7 +65,7 @@ final class Decks extends AbstractMigration
                 wins_vs_users integer NOT NULL,
                 losses_vs_users integer NOT NULL,
                 notes character varying(512) NOT NULL,
-                tags jsonb NOT NULL DEFAULT \'[]\',
+                user_tags jsonb NOT NULL DEFAULT \'[]\',
                 PRIMARY KEY(deck_id, owner)
             )',
         );
