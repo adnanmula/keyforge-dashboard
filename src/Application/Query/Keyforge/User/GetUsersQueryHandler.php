@@ -31,7 +31,7 @@ final class GetUsersQueryHandler
         if (false === $query->withExternal) {
             $filters[] = new AndFilterGroup(
                 FilterType::AND,
-                new Filter(new FilterField('is_external'), new NullFilterValue(), FilterOperator::IS_NOT_NULL),
+                new Filter(new FilterField('owner'), new NullFilterValue(), FilterOperator::IS_NULL),
             );
         }
 

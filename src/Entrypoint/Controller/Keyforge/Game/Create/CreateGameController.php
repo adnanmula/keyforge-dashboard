@@ -32,7 +32,7 @@ final class CreateGameController extends Controller
         );
 
         $users = \array_map(static fn (KeyforgeUser $user) => ['id' => $user->id()->value(), 'name' => $user->name()], $users);
-        $decks = \array_map(static fn (KeyforgeDeck $deck) => ['id' => $deck->id()->value(), 'name' => $deck->data()->name], $decks['decks']);
+        $decks = \array_map(static fn (KeyforgeDeck $deck) => ['id' => $deck->id()->value(), 'name' => $deck->name()], $decks['decks']);
 
         if ($request->getMethod() === Request::METHOD_GET) {
             return $this->render(

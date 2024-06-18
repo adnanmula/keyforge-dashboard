@@ -21,10 +21,10 @@ final class KeyforgeUsersFixtures extends DbalFixture implements Fixture
 
     public function load(): void
     {
-        $this->save(KeyforgeUser::create(Uuid::from(self::FIXTURE_KF_USER_1_ID), 'username'));
-        $this->save(KeyforgeUser::create(Uuid::from(self::FIXTURE_KF_USER_2_ID), 'username2'));
-        $this->save(KeyforgeUser::create(Uuid::from(self::FIXTURE_KF_USER_3_ID), 'user-without-login'));
-        $this->save(KeyforgeUser::create(Uuid::from(self::FIXTURE_KF_USER_4_ID), 'user4'));
+        $this->save(KeyforgeUser::create(Uuid::from(self::FIXTURE_KF_USER_1_ID), 'username', null));
+        $this->save(KeyforgeUser::create(Uuid::from(self::FIXTURE_KF_USER_2_ID), 'username2', null));
+        $this->save(KeyforgeUser::create(Uuid::from(self::FIXTURE_KF_USER_3_ID), 'user-without-login', null));
+        $this->save(KeyforgeUser::create(Uuid::from(self::FIXTURE_KF_USER_4_ID), 'user4', null));
 
         $this->loaded = true;
     }

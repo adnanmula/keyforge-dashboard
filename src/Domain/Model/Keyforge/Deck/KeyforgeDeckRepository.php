@@ -15,6 +15,8 @@ interface KeyforgeDeckRepository
     public function searchWithAggregatedOwnerUserData(Criteria $criteria): array;
 
     public function count(Criteria $criteria): int;
+    public function countWithOwnerUserData(Criteria $criteria, Uuid $owner): int;
+    public function countWithAggregatedOwnerUserData(Criteria $criteria): int;
 
     public function save(KeyforgeDeck $deck): void;
 }

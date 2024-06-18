@@ -64,6 +64,7 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
             KeyforgeDeckUserData::from(
                 Uuid::from(self::FIXTURE_KEYFORGE_DECK_1_ID),
                 Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_1_ID),
+                null,
                 1,
                 0,
                 1,
@@ -87,6 +88,8 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
             ),
         );
 
+        $this->saveNullUserData(self::FIXTURE_KEYFORGE_DECK_2_ID);
+
         $this->repository->save(
             new KeyforgeDeck(
                 Uuid::from(self::FIXTURE_KEYFORGE_DECK_3_ID),
@@ -98,6 +101,8 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
                 KeyforgeDeckStats::fromDokData($rawExtraData3),
             ),
         );
+
+        $this->saveNullUserData(self::FIXTURE_KEYFORGE_DECK_3_ID);
 
         $this->repository->save(
             new KeyforgeDeck(
@@ -111,6 +116,8 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
             ),
         );
 
+        $this->saveNullUserData(self::FIXTURE_KEYFORGE_DECK_4_ID);
+
         $this->repository->save(
             new KeyforgeDeck(
                 Uuid::from(self::FIXTURE_KEYFORGE_DECK_5_ID),
@@ -122,6 +129,8 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
                 KeyforgeDeckStats::fromDokData($rawExtraData5),
             ),
         );
+
+        $this->saveNullUserData(self::FIXTURE_KEYFORGE_DECK_5_ID);
 
         $this->repository->save(
             new KeyforgeDeck(
@@ -135,6 +144,8 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
             ),
         );
 
+        $this->saveNullUserData(self::FIXTURE_KEYFORGE_DECK_6_ID);
+
         $this->repository->save(
             new KeyforgeDeck(
                 Uuid::from(self::FIXTURE_KEYFORGE_DECK_7_ID),
@@ -146,6 +157,8 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
                 KeyforgeDeckStats::fromDokData($rawExtraData7),
             ),
         );
+
+        $this->saveNullUserData(self::FIXTURE_KEYFORGE_DECK_7_ID);
 
         $this->loaded = true;
     }
@@ -161,5 +174,24 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
             KeyforgeUsersFixtures::class,
             KeyforgeTagsFixtures::class,
         ];
+    }
+
+    private function saveNullUserData(string $id): void
+    {
+        $this->userDataRepository->save(
+            KeyforgeDeckUserData::from(
+                Uuid::from($id),
+                Uuid::from('00000000-0000-0000-0000-000000000000'),
+                null,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                '',
+                [],
+            ),
+        );
     }
 }

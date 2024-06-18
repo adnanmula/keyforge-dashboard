@@ -22,7 +22,8 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
     private const TABLE_USER_DATA = 'keyforge_decks_user_data';
 
     private const FIELD_MAPPING = [
-        'id' => 'a.id'
+        'id' => 'a.id',
+        'owner' => 'b.owner',
     ];
 
     public function search(Criteria $criteria): array
@@ -78,6 +79,29 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
     {
         $builder = $this->connection->createQueryBuilder();
         $query = $builder->select('COUNT(a.id)')->from(self::TABLE, 'a');
+
+        (new DbalCriteriaAdapter($builder))->execute($criteria);
+
+        return $query->executeQuery()->fetchOne();
+    }
+
+    public function countWithOwnerUserData(Criteria $criteria, Uuid $owner): int
+    {
+        $builder = $this->connection->createQueryBuilder();
+        $query = $builder->select('COUNT(a.id)')->from(self::TABLE, 'a')
+            ->innerJoin('a', self::TABLE_USER_DATA, 'b', 'a.id = b.deck_id and b.owner = :owner')
+            ->setParameter('owner', $owner->value());
+
+        (new DbalCriteriaAdapter($builder))->execute($criteria);
+
+        return $query->executeQuery()->fetchOne();
+    }
+    public function countWithAggregatedOwnerUserData(Criteria $criteria): int
+    {
+        $builder = $this->connection->createQueryBuilder();
+        $query = $builder->select('COUNT(a.id)')
+            ->from(self::TABLE, 'a')
+            ->innerJoin('a', self::TABLE_USER_DATA, 'b', 'a.id = b.deck_id');
 
         (new DbalCriteriaAdapter($builder))->execute($criteria);
 
@@ -272,6 +296,7 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
             $userData = KeyforgeDeckUserData::from(
                 Uuid::from($deck['id']),
                 Uuid::from($deck['owner']),
+                null,
                 $deck['wins'],
                 $deck['losses'],
                 $deck['wins_vs_friends'],
@@ -286,6 +311,7 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
         if (\array_key_exists('owners', $deck)) {
             $userData = KeyforgeDeckUserData::from(
                 Uuid::from($deck['id']),
+                null,
                 \array_map(static fn (string $s) => Uuid::from($s), \explode(',', $deck['owners'])),
                 $deck['wins'],
                 $deck['losses'],

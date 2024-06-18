@@ -77,6 +77,7 @@ final class KeyforgeDeckUserDataDbalRepository extends DbalRepository implements
         return KeyforgeDeckUserData::from(
             Uuid::from($deck['deck_id']),
             Uuid::from($deck['owner']),
+            null,
             $deck['wins'],
             $deck['losses'],
             $deck['wins_vs_friends'],
@@ -84,7 +85,7 @@ final class KeyforgeDeckUserDataDbalRepository extends DbalRepository implements
             $deck['wins_vs_users'],
             $deck['losses_vs_users'],
             $deck['notes'],
-            Json::decode($deck['tags']),
+            Json::decode($deck['user_tags']),
         );
     }
 }

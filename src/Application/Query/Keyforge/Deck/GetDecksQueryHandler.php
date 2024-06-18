@@ -2,15 +2,8 @@
 
 namespace AdnanMula\Cards\Application\Query\Keyforge\Deck;
 
-use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeck;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckRepository;
-use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckUserData;
-use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeGame;
-use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeGameRepository;
-use AdnanMula\Cards\Domain\Model\Keyforge\User\KeyforgeUser;
-use AdnanMula\Cards\Domain\Model\Keyforge\User\KeyforgeUserRepository;
 use AdnanMula\Cards\Domain\Model\Shared\UserRepository;
-use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Criteria\Criteria;
 use AdnanMula\Criteria\Filter\Filter;
 use AdnanMula\Criteria\Filter\FilterType;
@@ -22,22 +15,28 @@ use AdnanMula\Criteria\FilterValue\IntFilterValue;
 use AdnanMula\Criteria\FilterValue\NullFilterValue;
 use AdnanMula\Criteria\FilterValue\StringArrayFilterValue;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
-use AdnanMula\Criteria\Sorting\Order;
-use AdnanMula\Criteria\Sorting\OrderType;
 
 final class GetDecksQueryHandler
 {
     public function __construct(
         private KeyforgeDeckRepository $repository,
-        private KeyforgeUserRepository $keyforgeUserRepository,
-        private KeyforgeGameRepository $gameRepository,
         private UserRepository $userRepository,
     ) {}
 
     public function __invoke(GetDecksQuery $query): array
     {
         if (null !== $query->deckId) {
-            $deck = $this->repository->byId($query->deckId);
+            $deck = $this->repository->search(
+                new Criteria(
+                    null,
+                    null,
+                    null,
+                    new AndFilterGroup(
+                        FilterType::AND,
+                        new Filter(new FilterField('id'), new StringFilterValue($query->deckId->value()), FilterOperator::EQUAL),
+                    ),
+                ),
+            )[0] ?? null;
 
             if (null === $deck) {
                 return ['decks' => [], 'total' => 0, 'totalFiltered' => 0, 'start' => $query->start, 'length' => $query->length];
@@ -55,7 +54,7 @@ final class GetDecksQueryHandler
         $expressions = [];
 
         if (null !== $query->owner) {
-//            $expressions[] = new Filter(new FilterField('owner'), new StringFilterValue($query->owner->value()), FilterOperator::EQUAL);
+            $expressions[] = new Filter(new FilterField('owner'), new StringFilterValue($query->owner->value()), FilterOperator::EQUAL);
         }
 
         if (null !== $query->deck) {
@@ -66,14 +65,14 @@ final class GetDecksQueryHandler
             $expressions[] = new Filter(new FilterField('owner'), new NullFilterValue(), FilterOperator::IS_NOT_NULL);
         }
 
-//        if (null !== $query->onlyFriends) {
-//            $friends = \array_map(
-//                static fn (array $u) => $u['id'],
-//                $this->userRepository->friends($query->onlyFriends),
-//            );
-//
-//            $expressions[] = new Filter(new FilterField('owner'), new StringArrayFilterValue($query->onlyFriends->value(), ...$friends), FilterOperator::IN);
-//        }
+        if (null !== $query->onlyFriends) {
+            $friends = \array_map(
+                static fn (array $u) => $u['id'],
+                $this->userRepository->friends($query->onlyFriends),
+            );
+
+            $expressions[] = new Filter(new FilterField('owner'), new StringArrayFilterValue($query->onlyFriends->value(), ...$friends), FilterOperator::IN);
+        }
 
         $expressions[] = new Filter(new FilterField('sas'), new IntFilterValue($query->maxSas), FilterOperator::LESS_OR_EQUAL);
         $expressions[] = new Filter(new FilterField('sas'), new IntFilterValue($query->minSas), FilterOperator::GREATER_OR_EQUAL);
@@ -139,12 +138,6 @@ final class GetDecksQueryHandler
             ...$filters,
         );
 
-        if (null !== $query->owner) {
-            $decks = $this->repository->searchWithOwnerUserData($criteria, $query->owner);
-        } else {
-            $decks = $this->repository->searchWithAggregatedOwnerUserData($criteria);
-        }
-
         $countCriteria = new Criteria(
             null,
             null,
@@ -152,8 +145,15 @@ final class GetDecksQueryHandler
             ...$criteria->filterGroups(),
         );
 
+        if (null !== $query->owner) {
+            $decks = $this->repository->searchWithOwnerUserData($criteria, $query->owner);
+            $totalFiltered = $this->repository->countWithOwnerUserData($countCriteria, $query->owner);
+        } else {
+            $decks = $this->repository->searchWithAggregatedOwnerUserData($criteria);
+            $totalFiltered = $this->repository->countWithAggregatedOwnerUserData($countCriteria);
+        }
+
         $total = $this->repository->count(new Criteria(null, null, null));
-        $totalFiltered = $this->repository->count($countCriteria);
 
         return [
             'decks' => $decks,

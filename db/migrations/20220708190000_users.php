@@ -33,8 +33,8 @@ final class Users extends AbstractMigration
         $this->execute(
             'CREATE TABLE keyforge_users (
                 id uuid NOT NULL,
-                name character varying(64) NOT NULL
-                   CONSTRAINT keyforge_name_unique UNIQUE,
+                name character varying(64) NOT NULL,
+                owner uuid NULL,
                 PRIMARY KEY(id)
             )',
         );
