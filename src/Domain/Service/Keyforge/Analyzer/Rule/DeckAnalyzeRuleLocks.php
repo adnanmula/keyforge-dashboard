@@ -14,8 +14,8 @@ final class DeckAnalyzeRuleLocks implements DeckAnalyzeRule
     {
         $r = [];
 
-        if ($deck->data()->cards->has('Tezmal', 3)) {
-            $card1 = $deck->data()->cards->get('Tezmal');
+        if ($deck->cards()->has('Tezmal', 3)) {
+            $card1 = $deck->cards()->get('Tezmal');
 
             $r[] = [
                 'description' => 'Triple cosecha con tezmal no te permite seleccionar ninguna casa, game over',
@@ -25,9 +25,9 @@ final class DeckAnalyzeRuleLocks implements DeckAnalyzeRule
             ];
         }
 
-        if ($deck->data()->cards->has('Tezmal', 2) && $deck->data()->cards->has('Rocket Boots')) {
-            $card1 = $deck->data()->cards->get('Tezmal');
-            $card2 = $deck->data()->cards->get('Rocket Boots');
+        if ($deck->cards()->has('Tezmal', 2) && $deck->cards()->has('Rocket Boots')) {
+            $card1 = $deck->cards()->get('Tezmal');
+            $card2 = $deck->cards()->get('Rocket Boots');
 
             $r[] = [
                 'description' => 'Triple cosecha con tezmal no te permite seleccionar ninguna casa, game over',

@@ -29,7 +29,7 @@ final class CompetitionDetailController extends Controller
             $this->bus->dispatch(new GetDecksQuery(null, null, null, null, null, null, new Sorting(new Order(new FilterField('name'), OrderType::ASC)))),
         );
 
-        $decks = \array_map(static fn (KeyforgeDeck $deck) => ['id' => $deck->id()->value(), 'name' => $deck->data()->name], $decks['decks']);
+        $decks = \array_map(static fn (KeyforgeDeck $deck) => ['id' => $deck->id()->value(), 'name' => $deck->name()], $decks['decks']);
 
         $indexedDecks = [];
         foreach ($decks as $deck) {

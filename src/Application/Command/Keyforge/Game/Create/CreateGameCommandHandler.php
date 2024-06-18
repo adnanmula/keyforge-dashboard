@@ -65,8 +65,8 @@ final class CreateGameCommandHandler
 
         $this->gameRepository->save($game);
 
-        $this->updateDeckWinRateService->execute($winnerDeck->id(), $winner);
-        $this->updateDeckWinRateService->execute($loserDeck->id(), $loser);
+        $this->updateDeckWinRateService->execute($winnerDeck->id());
+        $this->updateDeckWinRateService->execute($loserDeck->id());
     }
 
     private function getUsers(User $user, string $winner, string $loser, string $firstTurn, KeyforgeCompetition $competition): array

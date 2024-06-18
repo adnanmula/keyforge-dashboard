@@ -6,6 +6,7 @@ use AdnanMula\Cards\Application\Service\Json;
 use AdnanMula\Cards\Domain\Model\Keyforge\Card\KeyforgeCard;
 use AdnanMula\Cards\Domain\Model\Keyforge\Card\KeyforgeCardRepository;
 use AdnanMula\Cards\Infrastructure\Persistence\Repository\DbalRepository;
+use AdnanMula\Cards\Shared\LocalizedString;
 use AdnanMula\Criteria\Criteria;
 use AdnanMula\Criteria\DbalCriteriaAdapter;
 use Doctrine\DBAL\ParameterType;
@@ -78,5 +79,26 @@ final class KeyforgeCardDbalRepository extends DbalRepository implements Keyforg
         $stmt->bindValue(':tags', Json::encode($card->tags));
 
         $stmt->executeStatement();
+    }
+
+    private function map(array $row): KeyforgeCard
+    {
+        return new KeyforgeCard(
+            $row['id'],
+            $row['houses'],
+            LocalizedString::fromArray($row['name']),
+            $row['name_url'],
+            $row['flavor_text'],
+            $row['text'],
+            $row['type'],
+            Json::decode($row['traits']),
+            $row['amber'],
+            $row['power'],
+            $row['armor'],
+            $row['is_big'],
+            $row['is_token'],
+            $row['sets'],
+            Json::decode($row['tags']),
+        );
     }
 }

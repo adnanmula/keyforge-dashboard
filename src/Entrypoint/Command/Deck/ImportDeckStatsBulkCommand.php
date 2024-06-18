@@ -43,7 +43,7 @@ final class ImportDeckStatsBulkCommand extends Command
 
         foreach ($decks as $index => $deck) {
             try {
-                $this->service->execute(Uuid::from($deck), null, true, $withHistory, false);
+                $this->service->execute(Uuid::from($deck), null, true, $withHistory);
                 $output->writeln($deck);
             } catch (DeckNotExistsException) {
                 $output->writeln('<error>NOT FOUND: '. $deck .'</error>');

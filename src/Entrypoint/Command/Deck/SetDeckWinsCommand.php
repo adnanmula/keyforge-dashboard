@@ -2,9 +2,8 @@
 
 namespace AdnanMula\Cards\Entrypoint\Command\Deck;
 
+use AdnanMula\Cards\Application\Service\Deck\UpdateDeckWinRateService;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckRepository;
-use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeGameRepository;
-use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Criteria\Criteria;
 use AdnanMula\Criteria\Filter\Filter;
 use AdnanMula\Criteria\Filter\FilterType;
@@ -23,7 +22,7 @@ final class SetDeckWinsCommand extends Command
 
     public function __construct(
         private readonly KeyforgeDeckRepository $deckRepository,
-        private readonly KeyforgeGameRepository $gamesRepository,
+        private readonly UpdateDeckWinRateService $updateDeckWinRateService,
     ) {
         parent::__construct(self::NAME);
     }
@@ -50,43 +49,10 @@ final class SetDeckWinsCommand extends Command
         $decks = $this->deckRepository->search(new Criteria(null, null, null, new AndFilterGroup(FilterType::AND, ...$filters)));
 
         foreach ($decks as $deck) {
-            [$wins, $losses] = $this->games($deck->id());
-            $output->writeln($wins . '/' . $losses . ' - ' . $deck->data()->name);
-
-            $this->deckRepository->saveDeckWins($deck->id(), $wins, $losses);
+            $this->updateDeckWinRateService->execute($deck->id());
+            $output->writeln($deck->name());
         }
 
         return self::SUCCESS;
-    }
-
-    public function games(Uuid $deckId): array
-    {
-        $games = $this->gamesRepository->search(
-            new Criteria(
-                null,
-                null,
-                null,
-                new AndFilterGroup(
-                    FilterType::OR,
-                    new Filter(new FilterField('winner_deck'), new StringFilterValue($deckId->value()), FilterOperator::EQUAL),
-                    new Filter(new FilterField('loser_deck'), new StringFilterValue($deckId->value()), FilterOperator::EQUAL),
-                ),
-            ),
-        );
-
-        $wins = 0;
-        $losses = 0;
-
-        foreach ($games as $game) {
-            if ($game->winnerDeck()->equalTo($deckId)) {
-                $wins++;
-            }
-
-            if ($game->loserDeck()->equalTo($deckId)) {
-                $losses++;
-            }
-        }
-
-        return [$wins, $losses];
     }
 }

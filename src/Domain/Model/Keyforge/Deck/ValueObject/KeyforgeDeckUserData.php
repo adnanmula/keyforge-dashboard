@@ -108,6 +108,11 @@ final class KeyforgeDeckUserData implements \JsonSerializable
         $this->lossesVsUsers = $lossesVsUsers;
     }
 
+    public function setNotes(string $notes): void
+    {
+        $this->notes = $notes;
+    }
+
     public function setTags(string ...$tags): void
     {
         $this->tags = $tags;

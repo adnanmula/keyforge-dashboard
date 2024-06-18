@@ -385,7 +385,7 @@ final readonly class DeckApplyPredefinedTagsService
         );
 
         foreach ($cards as $card) {
-            if (\in_array($card->serializedName, KeyforgeCards::SCALING_AMBER_CONTROL)) {
+            if (\in_array($card->serializedName, KeyforgeCards::SCALING_AMBER_CONTROL, true)) {
                 return new KeyforgeTagHasScalingAmberControl();
             }
         }
@@ -402,7 +402,7 @@ final readonly class DeckApplyPredefinedTagsService
         );
 
         foreach ($cards as $card) {
-            if (\in_array($card->serializedName, KeyforgeCards::BOARD_CLEARS)) {
+            if (\in_array($card->serializedName, KeyforgeCards::BOARD_CLEARS, true)) {
                 return new KeyforgeTagHasBoardWipes();
             }
         }

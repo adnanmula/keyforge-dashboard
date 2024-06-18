@@ -2,6 +2,7 @@
 
 namespace AdnanMula\Cards\Application\Service\Deck;
 
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeck;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckUserDataRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckUserData;
@@ -30,12 +31,8 @@ final readonly class UpdateDeckWinRateService
         private KeyforgeUserRepository $keyforgeUserRepository,
     ) {}
 
-    public function execute(Uuid $deckId, ?Uuid $owner): void
+    public function execute(Uuid $deckId): void
     {
-        if (null === $owner) {
-            $owner = Uuid::null();
-        }
-
         [$deck, $userData, $games, $players, $friends] = $this->data($deckId);
 
         /** @var KeyforgeDeckUserData $userDatum */
@@ -53,16 +50,16 @@ final readonly class UpdateDeckWinRateService
                     continue;
                 }
 
-                if ($game->winnerDeck()->equalTo($deckId)) {
+                if ($game->winnerDeck()->equalTo($deck->id())) {
                     $hisFriends = $friends[$userDatum->owner()->value()] ?? [];
 
                     $wins++;
 
-                    if (\in_array($game->loser()->value(), $players)) {
+                    if (\in_array($game->loser()->value(), $players, true)) {
                         $winsVsUser++;
                     }
 
-                    if (\in_array($game->loser()->value(), $hisFriends)) {
+                    if (\in_array($game->loser()->value(), $hisFriends, true)) {
                         $winsVsFriends++;
                     }
                 }
@@ -72,11 +69,11 @@ final readonly class UpdateDeckWinRateService
 
                     $losses++;
 
-                    if (\in_array($game->winner()->value(), $players)) {
+                    if (\in_array($game->winner()->value(), $players, true)) {
                         $lossesVsUser++;
                     }
 
-                    if (\in_array($game->winnerDeck()->value(), $hisFriends)) {
+                    if (\in_array($game->winnerDeck()->value(), $hisFriends, true)) {
                         $lossesVsFriends++;
                     }
                 }
@@ -95,7 +92,8 @@ final readonly class UpdateDeckWinRateService
         }
     }
 
-    public function data(Uuid $deckId): array
+    /** @return array{KeyforgeDeck, array<KeyforgeDeckUserData>, array<KeyforgeGame>, array<string>, array<string>} */
+    private function data(Uuid $deckId): array
     {
         $deck = $this->deckRepository->searchOne(
             new Criteria(
@@ -157,6 +155,7 @@ final readonly class UpdateDeckWinRateService
         foreach ($userData as $userDatum) {
             if (null === $userDatum->owner() || $userDatum->owner()->isNull()) {
                 $friends[Uuid::NULL_UUID] = [];
+
                 continue;
             }
 

@@ -10,6 +10,8 @@ interface KeyforgeDeckUserDataRepository
     /** @return array<KeyforgeDeckUserData> */
     public function search(Criteria $criteria): array;
 
+    public function searchOne(Criteria $criteria): ?KeyforgeDeckUserData;
+
     public function count(Criteria $criteria): int;
 
     public function save(KeyforgeDeckUserData $data): void;

@@ -28,6 +28,20 @@ final class KeyforgeDeckUserDataDbalRepository extends DbalRepository implements
         return \array_map(fn (array $row) => $this->map($row), $result);
     }
 
+    public function searchOne(Criteria $criteria): ?KeyforgeDeckUserData
+    {
+        $criteria = new Criteria(
+            $criteria->offset(),
+            1,
+            $criteria->sorting(),
+            ...$criteria->filterGroups(),
+        );
+
+        $result = $this->search($criteria);
+
+        return $result[0] ?? null;
+    }
+
     public function count(Criteria $criteria): int
     {
         $builder = $this->connection->createQueryBuilder();
