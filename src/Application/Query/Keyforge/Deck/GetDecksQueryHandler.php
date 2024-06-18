@@ -26,7 +26,7 @@ final class GetDecksQueryHandler
     public function __invoke(GetDecksQuery $query): array
     {
         if (null !== $query->deckId) {
-            $deck = $this->repository->search(
+            $deck = $this->repository->searchOne(
                 new Criteria(
                     null,
                     null,
@@ -36,7 +36,7 @@ final class GetDecksQueryHandler
                         new Filter(new FilterField('id'), new StringFilterValue($query->deckId->value()), FilterOperator::EQUAL),
                     ),
                 ),
-            )[0] ?? null;
+            );
 
             if (null === $deck) {
                 return ['decks' => [], 'total' => 0, 'totalFiltered' => 0, 'start' => $query->start, 'length' => $query->length];

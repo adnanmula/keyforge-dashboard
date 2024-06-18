@@ -33,7 +33,7 @@ final class ImportDeckFromDokService implements ImportDeckService
 
     public function execute(Uuid $uuid, ?Uuid $owner = null, bool $forceUpdate = false, bool $withHistory = true): ?KeyforgeDeck
     {
-        $deck = $this->repository->search(new Criteria(
+        $deck = $this->repository->searchOne(new Criteria(
             null,
             null,
             null,
@@ -41,7 +41,7 @@ final class ImportDeckFromDokService implements ImportDeckService
                 FilterType::AND,
                 new Filter(new FilterField('id'), new StringFilterValue($uuid->value()), FilterOperator::EQUAL),
             ),
-        ))[0] ?? null;
+        ));
 
         if (false === $forceUpdate && null !== $deck) {
             return $deck;

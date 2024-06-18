@@ -21,6 +21,7 @@ final class Games extends AbstractMigration
                 loser_chains integer NOT NULL,
                 competition character varying(64) NOT NULL,
                 notes character varying(512) NOT NULL,
+                approved bool NOT NULL,
                 PRIMARY KEY(id)
             )',
         );

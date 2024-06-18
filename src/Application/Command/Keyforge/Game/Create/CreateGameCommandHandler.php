@@ -60,6 +60,7 @@ final class CreateGameCommandHandler
             new \DateTimeImmutable(),
             $command->competition(),
             $command->notes(),
+            false,
         );
 
         $this->gameRepository->save($game);
@@ -157,7 +158,7 @@ final class CreateGameCommandHandler
 
     private function getDeckByName(string $name): ?KeyforgeDeck
     {
-        return $this->deckRepository->search(
+        return $this->deckRepository->searchOne(
             new Criteria(
                 null,
                 null,
@@ -167,6 +168,6 @@ final class CreateGameCommandHandler
                     new Filter(new FilterField('name'), new StringFilterValue($name), FilterOperator::EQUAL),
                 ),
             ),
-        )[0] ?? null;
+        );
     }
 }

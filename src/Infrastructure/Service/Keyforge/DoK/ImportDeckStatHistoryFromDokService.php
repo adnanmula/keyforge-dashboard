@@ -26,7 +26,7 @@ final class ImportDeckStatHistoryFromDokService
 
     public function execute(Uuid $id): void
     {
-        $deck = $this->repository->search(new Criteria(
+        $deck = $this->repository->searchOne(new Criteria(
             null,
             null,
             null,
@@ -34,7 +34,7 @@ final class ImportDeckStatHistoryFromDokService
                 FilterType::AND,
                 new Filter(new FilterField('id'), new StringFilterValue($id->value()), FilterOperator::EQUAL),
             ),
-        ))[0] ?? null;
+        ));
 
         if (null === $deck) {
             return;

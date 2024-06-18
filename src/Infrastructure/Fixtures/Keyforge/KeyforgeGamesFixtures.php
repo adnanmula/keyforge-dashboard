@@ -49,6 +49,7 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                 new \DateTimeImmutable('2022-05-24 16:00:00'),
                 KeyforgeCompetition::FRIENDS,
                 '',
+                true,
             ),
         );
 
@@ -67,6 +68,7 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                 new \DateTimeImmutable('2022-06-14 10:00:00'),
                 KeyforgeCompetition::FRIENDS,
                 '',
+                true,
             ),
         );
 
@@ -85,6 +87,7 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                 new \DateTimeImmutable('2022-07-01 08:44:00'),
                 KeyforgeCompetition::FRIENDS,
                 '',
+                true,
             ),
         );
 
@@ -103,6 +106,7 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                 new \DateTimeImmutable('2022-07-02 08:44:00'),
                 KeyforgeCompetition::FRIENDS,
                 '',
+                true,
             ),
         );
 
@@ -121,6 +125,7 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                 new \DateTimeImmutable('2022-07-03 08:15:00'),
                 KeyforgeCompetition::FRIENDS,
                 '',
+                true,
             ),
         );
 
@@ -139,6 +144,7 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                 new \DateTimeImmutable('2022-07-11 02:00:00'),
                 KeyforgeCompetition::FRIENDS,
                 '',
+                true,
             ),
         );
 
@@ -157,6 +163,7 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                 new \DateTimeImmutable('2022-07-12 08:00:00'),
                 KeyforgeCompetition::FRIENDS,
                 '',
+                true,
             ),
         );
 
@@ -176,6 +183,7 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                 new \DateTimeImmutable('2022-07-03 08:45:00'),
                 KeyforgeCompetition::FRIENDS,
                 '',
+                true,
             ),
         );
 
@@ -194,6 +202,7 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                 new \DateTimeImmutable('2022-07-03 08:45:00'),
                 KeyforgeCompetition::FRIENDS,
                 '',
+                true,
             ),
         );
 
@@ -212,6 +221,7 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                 new \DateTimeImmutable('2022-07-03 08:45:00'),
                 KeyforgeCompetition::FRIENDS,
                 '',
+                true,
             ),
         );
 
@@ -230,6 +240,7 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                 new \DateTimeImmutable('2022-07-23 16:01:00'),
                 KeyforgeCompetition::FRIENDS,
                 '',
+                true,
             ),
         );
 
@@ -248,6 +259,7 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                 new \DateTimeImmutable('2022-07-23 16:01:00'),
                 KeyforgeCompetition::NKFL,
                 '',
+                true,
             ),
         );
 
@@ -266,6 +278,7 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                 new \DateTimeImmutable('2022-07-23 16:41:00'),
                 KeyforgeCompetition::NKFL,
                 '',
+                true,
             ),
         );
 
@@ -284,6 +297,7 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                 new \DateTimeImmutable('2022-07-23 16:41:00'),
                 KeyforgeCompetition::LOCAL_LEAGUE,
                 'Torneo 1 | Jornada 1',
+                true,
             ),
         );
 
@@ -302,6 +316,7 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                 new \DateTimeImmutable('2022-07-23 16:41:00'),
                 KeyforgeCompetition::LOCAL_LEAGUE,
                 'Torneo 1 | Jornada 2',
+                true,
             ),
         );
 
@@ -320,6 +335,7 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                 new \DateTimeImmutable('2022-07-23 16:41:00'),
                 KeyforgeCompetition::LOCAL_LEAGUE,
                 'Torneo 1 | Jornada 3',
+                true,
             ),
         );
 
@@ -344,8 +360,8 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
         $stmt = $this->connection->prepare(
             \sprintf(
                 '
-                    INSERT INTO %s (id, winner, loser, winner_deck, loser_deck, first_turn, score, date, created_at, winner_chains, loser_chains, competition, notes)
-                    VALUES (:id, :winner, :loser, :winner_deck, :loser_deck, :first_turn, :score, :date, :created_at, :winner_chains, :loser_chains, :competition, :notes)
+                    INSERT INTO %s (id, winner, loser, winner_deck, loser_deck, first_turn, score, date, created_at, winner_chains, loser_chains, competition, notes, approved)
+                    VALUES (:id, :winner, :loser, :winner_deck, :loser_deck, :first_turn, :score, :date, :created_at, :winner_chains, :loser_chains, :competition, :notes, :approved)
                     ON CONFLICT (id) DO UPDATE SET
                         id = :id,
                         winner = :winner,
@@ -359,7 +375,8 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                         winner_chains = :winner_chains,
                         loser_chains = :loser_chains,
                         competition = :competition,
-                        notes = :notes
+                        notes = :notes,
+                        approved = :approved
                     ',
                 self::TABLE,
             ),
@@ -378,6 +395,7 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
         $stmt->bindValue(':created_at', $game->createdAt()->format(\DateTimeInterface::ATOM));
         $stmt->bindValue(':competition', $game->competition()->name);
         $stmt->bindValue(':notes', $game->notes());
+        $stmt->bindValue(':approved', $game->approved());
 
         $stmt->executeStatement();
     }

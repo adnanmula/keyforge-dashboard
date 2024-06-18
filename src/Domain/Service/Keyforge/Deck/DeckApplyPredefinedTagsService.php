@@ -51,7 +51,7 @@ final readonly class DeckApplyPredefinedTagsService
 
     public function execute(Uuid $id): void
     {
-        $deck = $this->repository->search(
+        $deck = $this->repository->searchOne(
             new Criteria(
                 null,
                 null,
@@ -65,7 +65,7 @@ final readonly class DeckApplyPredefinedTagsService
                     ),
                 ),
             ),
-        )[0] ?? null;
+        );
 
         if (null === $deck) {
             return;

@@ -22,6 +22,7 @@ final class KeyforgeGame implements \JsonSerializable
         private \DateTimeImmutable $createdAt,
         private KeyforgeCompetition $competition,
         private string $notes,
+        private bool $approved,
     ) {}
 
     public function id(): Uuid
@@ -89,9 +90,19 @@ final class KeyforgeGame implements \JsonSerializable
         return $this->notes;
     }
 
+    public function approved(): bool
+    {
+        return $this->approved;
+    }
+
     public function isSoloPlay(): bool
     {
         return $this->winner->equalTo($this->loser);
+    }
+
+    public function isMirror(): bool
+    {
+        return $this->winnerDeck->equalTo($this->loserDeck);
     }
 
     public function jsonSerialize(): array
@@ -110,6 +121,7 @@ final class KeyforgeGame implements \JsonSerializable
             'createdAt' => $this->createdAt()->format('Y-m-d'),
             'competition' => $this->competition()->name,
             'notes' => $this->notes(),
+            'approved' => $this->approved(),
         ];
     }
 }

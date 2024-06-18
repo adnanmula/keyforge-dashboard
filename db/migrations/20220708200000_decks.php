@@ -66,6 +66,7 @@ final class Decks extends AbstractMigration
                 losses_vs_users integer NOT NULL,
                 notes character varying(512) NOT NULL,
                 user_tags jsonb NOT NULL DEFAULT \'[]\',
+                active bool not null default true,
                 PRIMARY KEY(deck_id, owner)
             )',
         );

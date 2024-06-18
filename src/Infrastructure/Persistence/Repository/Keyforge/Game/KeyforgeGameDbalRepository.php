@@ -11,6 +11,7 @@ use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Infrastructure\Persistence\Repository\DbalRepository;
 use AdnanMula\Criteria\Criteria;
 use AdnanMula\Criteria\DbalCriteriaAdapter;
+use Doctrine\DBAL\ParameterType;
 
 final class KeyforgeGameDbalRepository extends DbalRepository implements KeyforgeGameRepository
 {
@@ -77,8 +78,8 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
         $stmt = $this->connection->prepare(
             \sprintf(
                 '
-                    INSERT INTO %s (id, winner, loser, winner_deck, loser_deck, first_turn, score, date, created_at, winner_chains, loser_chains, competition, notes)
-                    VALUES (:id, :winner, :loser, :winner_deck, :loser_deck, :first_turn, :score, :date, :created_at, :winner_chains, :loser_chains, :competition, :notes)
+                    INSERT INTO %s (id, winner, loser, winner_deck, loser_deck, first_turn, score, date, created_at, winner_chains, loser_chains, competition, notes, approved)
+                    VALUES (:id, :winner, :loser, :winner_deck, :loser_deck, :first_turn, :score, :date, :created_at, :winner_chains, :loser_chains, :competition, :notes, :approved)
                     ON CONFLICT (id) DO UPDATE SET
                         id = :id,
                         winner = :winner,
@@ -92,7 +93,8 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
                         winner_chains = :winner_chains,
                         loser_chains = :loser_chains,
                         competition = :competition,
-                        notes = :notes
+                        notes = :notes,
+                        approved = :approved
                     ',
                 self::TABLE,
             ),
@@ -111,6 +113,7 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
         $stmt->bindValue(':created_at', $game->createdAt()->format(\DateTimeInterface::ATOM));
         $stmt->bindValue(':competition', $game->competition()->name);
         $stmt->bindValue(':notes', $game->notes());
+        $stmt->bindValue(':approved', $game->approved(), ParameterType::BOOLEAN);
 
         $stmt->executeStatement();
     }
@@ -133,6 +136,7 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
             new \DateTimeImmutable($game['created_at']),
             KeyforgeCompetition::fromName($game['competition']),
             $game['notes'],
+            $game['approved'],
         );
     }
 }

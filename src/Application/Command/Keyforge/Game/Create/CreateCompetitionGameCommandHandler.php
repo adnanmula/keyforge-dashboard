@@ -45,6 +45,7 @@ final class CreateCompetitionGameCommandHandler
             new \DateTimeImmutable(),
             $command->competition,
             $command->notes,
+            true,
         );
 
         $this->gameRepository->save($game);

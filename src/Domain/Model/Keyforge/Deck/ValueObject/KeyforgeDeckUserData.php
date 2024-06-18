@@ -7,17 +7,18 @@ use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 final class KeyforgeDeckUserData implements \JsonSerializable
 {
     private function __construct(
-        public readonly Uuid $deckId,
-        public readonly ?Uuid $owner,
-        public readonly ?array $owners,
-        public readonly int $wins,
-        public readonly int $losses,
-        public readonly int $winsVsFriends,
-        public readonly int $lossesVsFriends,
-        public readonly int $winsVsUsers,
-        public readonly int $lossesVsUsers,
-        public readonly string $notes,
-        public array $tags = [],
+        private readonly Uuid $deckId,
+        private readonly ?Uuid $owner,
+        private readonly ?array $owners,
+        private int $wins,
+        private int $losses,
+        private int $winsVsFriends,
+        private int $lossesVsFriends,
+        private int $winsVsUsers,
+        private int $lossesVsUsers,
+        private string $notes,
+        private array $tags = [],
+        private bool $active = true,
     ) {}
 
     public static function from(
@@ -32,8 +33,79 @@ final class KeyforgeDeckUserData implements \JsonSerializable
         int $lossesVsUsers,
         string $notes,
         array $tags = [],
+        bool $active = true,
     ): self {
-        return new self($deckId, $owner, $owners, $wins, $losses, $winsVsFriends, $lossesVsFriends, $winsVsUsers, $lossesVsUsers, $notes, $tags);
+        return new self($deckId, $owner, $owners, $wins, $losses, $winsVsFriends, $lossesVsFriends, $winsVsUsers, $lossesVsUsers, $notes, $tags, $active);
+    }
+
+    public function deckId(): Uuid
+    {
+        return $this->deckId;
+    }
+
+    public function owner(): ?Uuid
+    {
+        return $this->owner;
+    }
+
+    public function owners(): ?array
+    {
+        return $this->owners;
+    }
+
+    public function wins(): int
+    {
+        return $this->wins;
+    }
+
+    public function losses(): int
+    {
+        return $this->losses;
+    }
+
+    public function winsVsFriends(): int
+    {
+        return $this->winsVsFriends;
+    }
+
+    public function lossesVsFriends(): int
+    {
+        return $this->lossesVsFriends;
+    }
+
+    public function winsVsUsers(): int
+    {
+        return $this->winsVsUsers;
+    }
+
+    public function lossesVsUsers(): int
+    {
+        return $this->lossesVsUsers;
+    }
+
+    public function notes(): string
+    {
+        return $this->notes;
+    }
+
+    public function tags(): array
+    {
+        return $this->tags;
+    }
+
+    public function active(): bool
+    {
+        return $this->active;
+    }
+
+    public function setWins(int $wins, int $losses, int $winsVsFriends, int $lossesVsFriends, int $winsVsUsers, int $lossesVsUsers): void
+    {
+        $this->wins = $wins;
+        $this->losses = $losses;
+        $this->winsVsFriends = $winsVsFriends;
+        $this->lossesVsFriends = $lossesVsFriends;
+        $this->winsVsUsers = $winsVsUsers;
+        $this->lossesVsUsers = $lossesVsUsers;
     }
 
     public function setTags(string ...$tags): void
@@ -57,6 +129,7 @@ final class KeyforgeDeckUserData implements \JsonSerializable
             'losses_vs_users' => $this->losses,
             'notes' => $this->notes,
             'tags' => $this->tags,
+            'active' => $this->active,
         ];
     }
 }

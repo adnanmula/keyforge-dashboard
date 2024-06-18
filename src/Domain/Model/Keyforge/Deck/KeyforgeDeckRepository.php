@@ -9,6 +9,7 @@ interface KeyforgeDeckRepository
 {
     /** @return array<KeyforgeDeck> */
     public function search(Criteria $criteria): array;
+    public function searchOne(Criteria $criteria): ?KeyforgeDeck;
 
     public function searchWithOwnerUserData(Criteria $criteria, Uuid $owner): array;
 
