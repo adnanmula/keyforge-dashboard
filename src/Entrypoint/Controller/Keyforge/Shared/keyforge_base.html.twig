@@ -82,7 +82,7 @@
                                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                             <button type="button" class="btn btn-secondary position-relative">
                                                 {{ app.user.name() }}
-                                                <span id="notifications_pill" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"></span>
+                                                <span id="notifications_total_pill" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"></span>
                                             </button>
                                         </a>
 
@@ -93,7 +93,17 @@
                                             {% if is_granted('ROLE_KEYFORGE') %}
                                                 <li><a class="dropdown-item" href="{{ path('keyforge_user_detail', {'userId': app.user.id.value() }) }}" class="text-decoration-none link-light">{{ 'menu.profile'|trans }}<span class="sr-only"></span></a></li>
                                             {% endif %}
-                                            <li><a class="dropdown-item" href="{{ path('user_friends') }}">{{ 'menu.friends'|trans }}</a></li>
+
+                                            <li class="position-relative">
+                                                <a class="dropdown-item" href="{{ path('user_pending_games') }}">{{ 'menu.pending_games'|trans }}</a>
+                                                <span id="notifications_games_pill" class="position-absolute top-50 start-0 translate-middle badge rounded-pill bg-danger"></span>
+                                            </li>
+
+                                            <li class="position-relative">
+                                                <a class="dropdown-item" href="{{ path('user_friends') }}">{{ 'menu.friends'|trans }}</a>
+                                                <span id="notifications_friends_pill" class="position-absolute top-50 start-0 translate-middle badge rounded-pill bg-danger"></span>
+                                            </li>
+
                                             <li><a class="dropdown-item" href="{{ path('user_settings') }}">{{ 'menu.settings'|trans }}</a></li>
                                             <li><a class="dropdown-item" href="{{ path('logout') }}">{{ 'menu.logout'|trans }}<span class="sr-only"></span></a></li>
                                         </ul>
@@ -137,9 +147,23 @@
                     url: '{{ path('notification_count') }}',
                 }).done(function(response) {
                     if (response.total === 0) {
-                        $('#notifications_pill')[0].innerText = '';
+                        $('#notifications_total_pill')[0].innerText = '';
                     } else {
-                        $('#notifications_pill')[0].innerText = response.total;
+                        $('#notifications_total_pill')[0].innerText = response.total;
+
+                        notifications_friends_pill
+                    }
+
+                    if (response.friend_requests === 0) {
+                        $('#notifications_friends_pill')[0].innerText = '';
+                    } else {
+                        $('#notifications_friends_pill')[0].innerText = response.friend_requests;
+                    }
+
+                    if (response.games_pending === 0) {
+                        $('#notifications_games_pill')[0].innerText = '';
+                    } else {
+                        $('#notifications_games_pill')[0].innerText = response.games_pending;
                     }
                 }).fail(function() {
                     console.log('Failed to fetch notification count');

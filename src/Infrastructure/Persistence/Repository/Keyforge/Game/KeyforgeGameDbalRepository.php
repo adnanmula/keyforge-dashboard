@@ -35,6 +35,20 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
         return \array_map(fn (array $game) => $this->map($game), $result);
     }
 
+    public function searchOne(Criteria $criteria): ?KeyforgeGame
+    {
+        $criteria = new Criteria(
+            $criteria->offset(),
+            1,
+            $criteria->sorting(),
+            ...$criteria->filterGroups(),
+        );
+
+        $result = $this->search($criteria);
+
+        return $result[0] ?? null;
+    }
+
     public function all(?int $offset = null, ?int $limit = null): array
     {
         $builder = $this->connection->createQueryBuilder();
@@ -118,6 +132,15 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
         $stmt->bindValue(':created_by', $game->createdBy()?->value(), ParameterType::BOOLEAN);
 
         $stmt->executeStatement();
+    }
+
+    public function remove(Uuid $id): void
+    {
+        $this->connection->createQueryBuilder()
+            ->delete(self::TABLE, 'a')
+            ->where('a.id = :id')
+            ->setParameter('id', $id->value())
+            ->executeStatement();
     }
 
     private function map(array $game): KeyforgeGame

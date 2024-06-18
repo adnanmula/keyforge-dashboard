@@ -96,6 +96,11 @@ final class KeyforgeGame implements \JsonSerializable
         return $this->approved;
     }
 
+    public function approve(): void
+    {
+        $this->approved = true;
+    }
+
     public function createdBy(): ?Uuid
     {
         return $this->createdBy;

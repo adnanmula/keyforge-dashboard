@@ -9,6 +9,7 @@ use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Locale;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\UserRole;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Infrastructure\Persistence\Repository\DbalRepository;
+use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\ParameterType;
 
 final class UserDbalRepository extends DbalRepository implements UserRepository
@@ -58,6 +59,24 @@ final class UserDbalRepository extends DbalRepository implements UserRepository
         }
 
         return $this->map($result, true);
+    }
+
+    public function byIds(Uuid ...$ids): array
+    {
+        $result = $this->connection->createQueryBuilder()
+            ->select('a.id, a.name, a.password, a.locale, a.roles')
+            ->from(self::TABLE, 'a')
+            ->where('a.id in (:ids)')
+            ->setParameter('ids', \array_map(static fn (Uuid $id): string => $id->value(), $ids), ArrayParameterType::STRING)
+            ->setMaxResults(1)
+            ->executeQuery()
+            ->fetchAllAssociative();
+
+        if (false === $result) {
+            return [];
+        }
+
+        return \array_map(fn (array $r) => $this->map($r, false), $result);
     }
 
     public function byName(string $name): ?User

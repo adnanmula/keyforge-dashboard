@@ -1,0 +1,72 @@
+{% extends "Keyforge/Shared/keyforge_base.html.twig" %}
+
+{% block title %}{{ 'menu.pending_games'|trans }}{% endblock %}
+
+{% block body %}
+    <div class="divider py-1"></div>
+
+    <div class="row">
+        <div class="m-auto col-12 col-lg-8">
+            {% if error %}
+                <div class="divider py-1"></div>
+                <div class="alert alert-danger" role="alert">{{ error }}</div>
+            {% endif %}
+
+            <div class="shadow-lg p-3 mb-5 bg-white rounded">
+                <div class="row mt-3">
+                    <h5>{{ 'menu.pending_games'|trans }}</h5>
+                </div>
+                <table class="table">
+                    <tr>
+                        <td>{{ 'game.winner'|trans }}</td>
+                        <td>{{ 'game.loser'|trans }}</td>
+                        <td class="text-nowrap">{{ 'game.winner_deck'|trans }}</td>
+                        <td class="text-nowrap">{{ 'game.loser_deck'|trans }}</td>
+                        <td></td>
+                    </tr>
+                {% for game in pendingGames %}
+                    <tr>
+                        <td><a href="{{ path('keyforge_user_detail', {'userId': game.winner_id}) }}"  target="_blank">{{ game.winner_name }}</a></td>
+                        <td><a href="{{ path('keyforge_user_detail', {'userId': game.loser_id}) }}"  target="_blank">{{ game.loser_name }}</a></td>
+                        <td><a href="{{ path('keyforge_deck_detail', {'deckId': game.winner_deck_id}) }}"  target="_blank">{{ game.winner_deck_name }}</a></td>
+                        <td><a href="{{ path('keyforge_deck_detail', {'deckId': game.loser_deck_id}) }}"  target="_blank">{{ game.loser_deck_name }}</a></td>
+                        <td>
+                            <button data-toggle="tooltip" title="{{ 'menu.reject'|trans }}" type="button" class="btn btn-outline-dark rejectGame" data-game="{{ game.id }}" style="float: right;">{{ 'menu.reject'|trans }}</button>
+                            <button data-toggle="tooltip" title="{{ 'menu.accept'|trans }}" type="button" class="btn btn-outline-dark acceptGame" data-game="{{ game.id }}" style="float: right;">{{ 'menu.accept'|trans }}</button>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(".acceptGame").click(function(event) {
+            $.ajax({
+                type: 'POST',
+                url: '{{ path('user_accept_game') }}',
+                data: {
+                    'game': $(event.target).data('game'),
+                },
+            }).done(function( ) {
+                location.reload();
+            }).fail(function() {
+                alert('Error');
+            });
+        });
+
+        $(".rejectGame").click(function(event) {
+            $.ajax({
+                type: 'POST',
+                url: '{{ path('user_reject_game') }}',
+                data: {
+                    'game': $(event.target).data('game'),
+                },
+            }).done(function( ) {
+                location.reload();
+            }).fail(function() {
+                alert('Error');
+            });
+        });
+    </script>
+{% endblock %}

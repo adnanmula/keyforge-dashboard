@@ -110,6 +110,8 @@ keyforge.set_wc: WC
 keyforge.set_woe: WoE
 locale.en: English
 locale.es: Spanish
+menu.accept: Accept
+menu.reject: Reject
 menu.add: Add
 menu.add_friends: 'Add friends'
 menu.addgame: 'Register game'
@@ -160,6 +162,7 @@ menu.players: Players
 menu.pr%: 'PickRate%'
 menu.pr: 'Pick rate'
 menu.profile: Profile
+menu.pending_games: 'Pending games'
 menu.received: Received
 menu.record_book: 'Record book'
 menu.register: Register

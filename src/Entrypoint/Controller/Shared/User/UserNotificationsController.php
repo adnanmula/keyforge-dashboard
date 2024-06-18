@@ -2,9 +2,13 @@
 
 namespace AdnanMula\Cards\Entrypoint\Controller\Shared\User;
 
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckRepository;
+use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeGame;
 use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeGameRepository;
+use AdnanMula\Cards\Domain\Model\Keyforge\User\KeyforgeUserRepository;
 use AdnanMula\Cards\Domain\Model\Shared\UserRepository;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\UserRole;
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
 use AdnanMula\Criteria\Criteria;
 use AdnanMula\Criteria\Filter\Filter;
@@ -13,6 +17,7 @@ use AdnanMula\Criteria\FilterField\FilterField;
 use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
 use AdnanMula\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Criteria\FilterValue\IntFilterValue;
+use AdnanMula\Criteria\FilterValue\StringArrayFilterValue;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -31,6 +36,8 @@ final class UserNotificationsController extends Controller
         LocaleSwitcher $localeSwitcher,
         TranslatorInterface $translator,
         private readonly UserRepository $userRepository,
+        private readonly KeyforgeUserRepository $keyforgeUserRepository,
+        private readonly KeyforgeDeckRepository $deckRepository,
         private readonly KeyforgeGameRepository $gameRepository,
     ) {
         parent::__construct($bus, $security, $localeSwitcher, $translator);
@@ -74,5 +81,184 @@ final class UserNotificationsController extends Controller
             'friend_requests' => $friendRequests,
             'games_pending' => $gamesPending,
         ], Response::HTTP_OK);
+    }
+
+    public function games(Request $request): Response
+    {
+        $this->assertIsLogged(UserRole::ROLE_KEYFORGE);
+        $user = $this->getUser();
+        $error = null;
+
+        try {
+            $gamesPending = $this->gameRepository->search(
+                new Criteria(
+                    null,
+                    null,
+                    null,
+                    new AndFilterGroup(
+                        FilterType::AND,
+                        new Filter(new FilterField('approved'), new IntFilterValue(0), FilterOperator::EQUAL),
+                        new Filter(new FilterField('created_by'), new StringFilterValue($user->id()->value()), FilterOperator::NOT_EQUAL),
+                    ),
+                    new AndFilterGroup(
+                        FilterType::OR,
+                        new Filter(new FilterField('winner'), new StringFilterValue($user->id()->value()), FilterOperator::EQUAL),
+                        new Filter(new FilterField('loser'), new StringFilterValue($user->id()->value()), FilterOperator::EQUAL),
+                    ),
+                ),
+            );
+
+            $deckIds = \array_values(\array_unique(\array_merge(
+                \array_map(static fn (KeyforgeGame $g) => $g->winnerDeck()->value(), $gamesPending),
+                \array_map(static fn (KeyforgeGame $g) => $g->loserDeck()->value(), $gamesPending),
+            )));
+
+            $decks = $this->deckRepository->search(
+                new Criteria(
+                    null,
+                    null,
+                    null,
+                    new AndFilterGroup(
+                        FilterType::AND,
+                        new Filter(new FilterField('id'), new StringArrayFilterValue(...$deckIds), FilterOperator::IN),
+                    ),
+                ),
+            );
+
+            $indexedDecks = [];
+
+            foreach ($decks as $deck) {
+                $indexedDecks[$deck->id()->value()] = $deck->name();
+            }
+
+            $userIds = \array_values(\array_unique(\array_merge(
+                \array_map(static fn (KeyforgeGame $g) => $g->winner()->value(), $gamesPending),
+                \array_map(static fn (KeyforgeGame $g) => $g->loser()->value(), $gamesPending),
+            )));
+
+            $users = $this->keyforgeUserRepository->search(
+                new Criteria(
+                    null,
+                    null,
+                    null,
+                    new AndFilterGroup(
+                        FilterType::AND,
+                        new Filter(new FilterField('id'), new StringArrayFilterValue(...$userIds), FilterOperator::IN),
+                    ),
+                ),
+            );
+
+            $indexedUser = [];
+
+            foreach ($users as $user) {
+                $indexedUser[$user->id()->value()] = $user->name();
+            }
+
+            $response = [];
+
+            foreach ($gamesPending as $game) {
+                $response[] = [
+                    'id' => $game->id()->value(),
+                    'winner_id' => $game->winner()->value(),
+                    'loser_id' => $game->loser()->value(),
+                    'winner_name' => $indexedUser[$game->winner()->value()] ?? '',
+                    'loser_name' => $indexedUser[$game->loser()->value()] ?? '',
+                    'winner_deck_id' => $game->winnerDeck()->value(),
+                    'loser_deck_id' => $game->loserDeck()->value(),
+                    'winner_deck_name' => $indexedDecks[$game->winnerDeck()->value()] ?? '',
+                    'loser_deck_name' => $indexedDecks[$game->loserDeck()->value()] ?? '',
+                ];
+            }
+        } catch (\Throwable $e) {
+            $response = [];
+            $error = $e->getMessage();
+        }
+
+        return $this->render('Shared/User/user_pending_games.html.twig', [
+            'error' => $error,
+            'pendingGames' => $response,
+        ]);
+    }
+
+    public function acceptGame(Request $request): Response
+    {
+        $this->assertIsLogged(UserRole::ROLE_KEYFORGE);
+        $user = $this->getUser();
+
+        $gameId = $request->get('game');
+
+        if (false === Uuid::isValid($gameId)) {
+            throw new \Exception('Invalid');
+        }
+
+        $game = $this->gameRepository->searchOne(
+            new Criteria(
+                null,
+                null,
+                null,
+                new AndFilterGroup(
+                    FilterType::AND,
+                    new Filter(new FilterField('id'), new StringFilterValue($gameId), FilterOperator::EQUAL),
+                ),
+            ),
+        );
+
+        if (null === $game) {
+            throw new \Exception('Game not found');
+        }
+
+        if ($game->createdBy()->equalTo($user->id()) || $game->approved()) {
+            throw new \Exception('Error');
+        }
+
+        if (false === $game->winner()->equalTo($user->id()) && false === $game->loser()->equalTo($user->id())) {
+            throw new \Exception('Error');
+        }
+
+        $game->approve();
+
+        $this->gameRepository->save($game);
+
+        return new Response('', Response::HTTP_OK);
+    }
+
+    public function rejectGame(Request $request): Response
+    {
+        $this->assertIsLogged(UserRole::ROLE_KEYFORGE);
+        $user = $this->getUser();
+
+        $gameId = $request->get('game');
+
+        if (false === Uuid::isValid($gameId)) {
+            throw new \Exception('Invalid');
+        }
+
+        $game = $this->gameRepository->searchOne(
+            new Criteria(
+                null,
+                null,
+                null,
+                new AndFilterGroup(
+                    FilterType::AND,
+                    new Filter(new FilterField('id'), new StringFilterValue($gameId), FilterOperator::EQUAL),
+                ),
+            ),
+        );
+
+        if (null === $game) {
+            throw new \Exception('Game not found');
+        }
+
+        if ($game->createdBy()->equalTo($user->id()) || $game->approved()) {
+            throw new \Exception('Error');
+        }
+
+        if (false === $game->winner()->equalTo($user->id()) && false === $game->loser()->equalTo($user->id())) {
+            throw new \Exception('Error');
+        }
+
+        $this->gameRepository->remove($game->id());
+
+        return new Response('', Response::HTTP_OK);
     }
 }
