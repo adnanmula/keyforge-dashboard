@@ -61,6 +61,7 @@ final class CreateGameCommandHandler
             $command->competition(),
             $command->notes(),
             false,
+            $user->id(),
         );
 
         $this->gameRepository->save($game);

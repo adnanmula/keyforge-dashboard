@@ -79,7 +79,13 @@
                             <div class="navbar-nav me-auto mb-lg-0">
                                 <ul class="navbar-nav dropstart">
                                     <li class="nav-item dropdown">
-                                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{ app.user.name() }}</a>
+                                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <button type="button" class="btn btn-secondary position-relative">
+                                                {{ app.user.name() }}
+                                                <span id="notifications_pill" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"></span>
+                                            </button>
+                                        </a>
+
                                         <ul class="dropdown-menu dropdown-menu-dark">
                                             {% if is_granted('ROLE_ADMIN') %}
                                                 <li><a class="dropdown-item" href="{{ path('admin') }}">{{ 'menu.admin'|trans }}</a></li>
@@ -124,6 +130,21 @@
             if (window.history.replaceState) {
                 window.history.replaceState(null, null, window.location.href);
             }
+
+            {% if is_granted('ROLE_KEYFORGE') %}
+                $.ajax({
+                    type: 'GET',
+                    url: '{{ path('notification_count') }}',
+                }).done(function(response) {
+                    if (response.total === 0) {
+                        $('#notifications_pill')[0].innerText = '';
+                    } else {
+                        $('#notifications_pill')[0].innerText = response.total;
+                    }
+                }).fail(function() {
+                    console.log('Failed to fetch notification count');
+                });
+            {% endif %}
         </script>
 
         <div class="container">

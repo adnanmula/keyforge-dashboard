@@ -78,8 +78,8 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
         $stmt = $this->connection->prepare(
             \sprintf(
                 '
-                    INSERT INTO %s (id, winner, loser, winner_deck, loser_deck, first_turn, score, date, created_at, winner_chains, loser_chains, competition, notes, approved)
-                    VALUES (:id, :winner, :loser, :winner_deck, :loser_deck, :first_turn, :score, :date, :created_at, :winner_chains, :loser_chains, :competition, :notes, :approved)
+                    INSERT INTO %s (id, winner, loser, winner_deck, loser_deck, first_turn, score, date, created_at, winner_chains, loser_chains, competition, notes, approved, created_by)
+                    VALUES (:id, :winner, :loser, :winner_deck, :loser_deck, :first_turn, :score, :date, :created_at, :winner_chains, :loser_chains, :competition, :notes, :approved, :created_by)
                     ON CONFLICT (id) DO UPDATE SET
                         id = :id,
                         winner = :winner,
@@ -94,7 +94,8 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
                         loser_chains = :loser_chains,
                         competition = :competition,
                         notes = :notes,
-                        approved = :approved
+                        approved = :approved,
+                        created_by = :created_by
                     ',
                 self::TABLE,
             ),
@@ -114,6 +115,7 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
         $stmt->bindValue(':competition', $game->competition()->name);
         $stmt->bindValue(':notes', $game->notes());
         $stmt->bindValue(':approved', $game->approved(), ParameterType::BOOLEAN);
+        $stmt->bindValue(':created_by', $game->createdBy()?->value(), ParameterType::BOOLEAN);
 
         $stmt->executeStatement();
     }
@@ -130,13 +132,14 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
             Uuid::from($game['loser_deck']),
             $game['winner_chains'],
             $game['loser_chains'],
-            null === $game['first_turn'] ? null : Uuid::from($game['first_turn']),
+            Uuid::fromNullable($game['first_turn']),
             KeyforgeGameScore::from($score['winner_score'], $score['loser_score']),
             new \DateTimeImmutable($game['date']),
             new \DateTimeImmutable($game['created_at']),
             KeyforgeCompetition::fromName($game['competition']),
             $game['notes'],
             $game['approved'],
+            Uuid::fromNullable($game['created_by']),
         );
     }
 }

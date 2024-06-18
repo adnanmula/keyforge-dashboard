@@ -22,6 +22,11 @@ user_settings:
   controller: AdnanMula\Cards\Entrypoint\Controller\Shared\User\UserSettingsController
   methods: [GET,POST]
 
+notification_count:
+  path: /user/notifications
+  controller: AdnanMula\Cards\Entrypoint\Controller\Shared\User\UserNotificationsController::count
+  methods: [GET]
+
 admin:
   path: /admin
   controller: AdnanMula\Cards\Entrypoint\Controller\Shared\Admin\AdminController::form
