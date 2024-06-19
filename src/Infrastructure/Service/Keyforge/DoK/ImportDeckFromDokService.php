@@ -5,9 +5,11 @@ namespace AdnanMula\Cards\Infrastructure\Service\Keyforge\DoK;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Exception\DeckNotExistsException;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeck;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckRepository;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckUserDataRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeCards;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckHouses;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckStats;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckUserData;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeSet;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Domain\Service\Keyforge\Deck\DeckApplyPredefinedTagsService;
@@ -26,6 +28,7 @@ final class ImportDeckFromDokService implements ImportDeckService
 {
     public function __construct(
         private KeyforgeDeckRepository $repository,
+        private KeyforgeDeckUserDataRepository $userDataRepository,
         private HttpClientInterface $dokClient,
         private DeckApplyPredefinedTagsService $tagsService,
         private ImportDeckStatHistoryFromDokService $statHistoryService,
@@ -70,6 +73,12 @@ final class ImportDeckFromDokService implements ImportDeckService
         );
 
         $this->repository->save($newDeck);
+
+        if (null === $deck) {
+            $this->userDataRepository->save(
+                KeyforgeDeckUserData::from($newDeck->id(), $owner ?? Uuid::null(), [], 0, 0, 0, 0, 0, 0, ''),
+            );
+        }
 
         if ($withHistory) {
             $this->statHistoryService->execute($newDeck->id());

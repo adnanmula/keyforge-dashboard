@@ -2,7 +2,6 @@
 
 namespace AdnanMula\Cards\Application\Service\Deck;
 
-use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeck;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckUserDataRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckUserData;
@@ -92,7 +91,6 @@ final readonly class UpdateDeckWinRateService
         }
     }
 
-    /** @return array{KeyforgeDeck, array<KeyforgeDeckUserData>, array<KeyforgeGame>, array<string>, array<string>} */
     private function data(Uuid $deckId): array
     {
         $deck = $this->deckRepository->searchOne(

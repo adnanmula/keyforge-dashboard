@@ -72,10 +72,6 @@ final class UserDbalRepository extends DbalRepository implements UserRepository
             ->executeQuery()
             ->fetchAllAssociative();
 
-        if (false === $result) {
-            return [];
-        }
-
         return \array_map(fn (array $r) => $this->map($r, false), $result);
     }
 
