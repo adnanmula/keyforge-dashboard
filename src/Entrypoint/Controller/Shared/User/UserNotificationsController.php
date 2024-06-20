@@ -2,6 +2,7 @@
 
 namespace AdnanMula\Cards\Entrypoint\Controller\Shared\User;
 
+use AdnanMula\Cards\Application\Service\Deck\UpdateDeckWinRateService;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeGame;
 use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeGameRepository;
@@ -39,6 +40,7 @@ final class UserNotificationsController extends Controller
         private readonly KeyforgeUserRepository $keyforgeUserRepository,
         private readonly KeyforgeDeckRepository $deckRepository,
         private readonly KeyforgeGameRepository $gameRepository,
+        private readonly UpdateDeckWinRateService $updateDeckWinRateService,
     ) {
         parent::__construct($bus, $security, $localeSwitcher, $translator);
     }
@@ -218,6 +220,9 @@ final class UserNotificationsController extends Controller
         $game->approve();
 
         $this->gameRepository->save($game);
+
+        $this->updateDeckWinRateService->execute($game->winnerDeck());
+        $this->updateDeckWinRateService->execute($game->loserDeck());
 
         return new Response('', Response::HTTP_OK);
     }

@@ -19,6 +19,7 @@ use AdnanMula\Criteria\FilterField\FilterField;
 use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
 use AdnanMula\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Criteria\FilterValue\StringArrayFilterValue;
+use AdnanMula\Criteria\FilterValue\StringFilterValue;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -57,6 +58,21 @@ final readonly class ImportMyDecksFromDokService
             ),
         );
 
+        $userData = $this->userDataRepository->search(
+            new Criteria(
+                null,
+                null,
+                null,
+                new AndFilterGroup(
+                    FilterType::AND,
+                    new Filter(new FilterField('deck_id'), new StringArrayFilterValue(...$deckIds), FilterOperator::IN),
+                    new Filter(new FilterField('owner'), new StringFilterValue(Uuid::NULL_UUID), FilterOperator::NOT_EQUAL),
+                ),
+            ),
+        );
+
+        $userDataAlreadyCreated = \array_map(static fn (KeyforgeDeckUserData $d) => $d->deckId()->value(), $userData);
+
         foreach ($response as $responseDeck) {
             /** @var ?KeyforgeDeck $storedDeck */
             $storedDeck = \array_values(\array_filter(
@@ -81,6 +97,12 @@ final readonly class ImportMyDecksFromDokService
             $this->repository->save($newDeck);
 
             if (null === $storedDeck) {
+                $this->userDataRepository->save(
+                    KeyforgeDeckUserData::from($newDeck->id(), Uuid::null(), [Uuid::null()], 0, 0, 0, 0, 0, 0, ''),
+                );
+            }
+
+            if (false === \in_array($newDeck->id()->value(), $userDataAlreadyCreated, true)) {
                 $this->userDataRepository->save(
                     KeyforgeDeckUserData::from($newDeck->id(), $owner, [$owner], 0, 0, 0, 0, 0, 0, ''),
                 );

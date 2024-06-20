@@ -75,9 +75,17 @@ final class ImportDeckFromDokService implements ImportDeckService
         $this->repository->save($newDeck);
 
         if (null === $deck) {
+            $ownerId = $owner ?? Uuid::null();
+
             $this->userDataRepository->save(
-                KeyforgeDeckUserData::from($newDeck->id(), $owner ?? Uuid::null(), [], 0, 0, 0, 0, 0, 0, ''),
+                KeyforgeDeckUserData::from($newDeck->id(), Uuid::null(), [], 0, 0, 0, 0, 0, 0, ''),
             );
+
+            if (false === $ownerId->isNull()) {
+                $this->userDataRepository->save(
+                    KeyforgeDeckUserData::from($newDeck->id(), $owner ?? Uuid::null(), [], 0, 0, 0, 0, 0, 0, ''),
+                );
+            }
         }
 
         if ($withHistory) {

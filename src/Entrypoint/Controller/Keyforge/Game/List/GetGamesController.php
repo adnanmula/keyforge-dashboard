@@ -11,6 +11,7 @@ use AdnanMula\Criteria\FilterField\FilterField;
 use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
 use AdnanMula\Criteria\FilterGroup\OrFilterGroup;
 use AdnanMula\Criteria\FilterValue\FilterOperator;
+use AdnanMula\Criteria\FilterValue\IntFilterValue;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
 use AdnanMula\Criteria\Sorting\Order;
 use AdnanMula\Criteria\Sorting\OrderType;
@@ -85,6 +86,11 @@ final class GetGamesController extends Controller
             $offset = (int) $request->get('start');
             $limit = (int) $request->get('length');
         }
+
+        $filters[] = new AndFilterGroup(
+            FilterType::AND,
+            new Filter(new FilterField('approved'), new IntFilterValue(1), FilterOperator::EQUAL),
+        );
 
         return new Criteria(
             $offset,
