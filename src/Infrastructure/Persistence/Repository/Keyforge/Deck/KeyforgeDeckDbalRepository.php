@@ -69,7 +69,7 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
         return \array_map(fn (array $row) => $this->map($row), $result);
     }
 
-    public function searchWithAggregatedOwnerUserData(Criteria $criteria): array
+    public function searchWithAggregatedOwnerUserData(Criteria $criteria, Uuid ...$owners): array
     {
         $builder = $this->connection->createQueryBuilder();
 

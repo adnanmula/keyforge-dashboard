@@ -116,10 +116,12 @@
                         <div class="divider py-1"></div>
                         <div class="divider py-1"></div>
 
+                        {% if owner is null %}
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" value="" id="only_friends" checked>
                             <label class="form-check-label" for="only_friends">{{ 'menu.friend_decks_games'|trans }}</label>
                         </div>
+                        {% endif %}
                     </div>
                     {% endif %}
                 </div>

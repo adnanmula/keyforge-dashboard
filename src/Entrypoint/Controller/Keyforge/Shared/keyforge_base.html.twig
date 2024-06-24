@@ -88,8 +88,12 @@
 
                                         <ul class="dropdown-menu dropdown-menu-dark">
                                             {% if is_granted('ROLE_ADMIN') %}
-                                                <li><a class="dropdown-item" href="{{ path('admin') }}">{{ 'menu.admin'|trans }}</a></li>
+                                                <li class="position-relative">
+                                                    <a class="dropdown-item" href="{{ path('admin') }}">{{ 'menu.admin'|trans }}</a>
+                                                    <span id="notifications_admin_pill" class="position-absolute top-50 start-0 translate-middle badge rounded-pill bg-danger">A</span>
+                                                </li>
                                             {% endif %}
+
                                             {% if is_granted('ROLE_KEYFORGE') %}
                                                 <li><a class="dropdown-item" href="{{ path('keyforge_user_detail', {'userId': app.user.id.value() }) }}" class="text-decoration-none link-light">{{ 'menu.profile'|trans }}<span class="sr-only"></span></a></li>
                                             {% endif %}
@@ -165,6 +169,14 @@
                     } else {
                         $('#notifications_games_pill')[0].innerText = response.games_pending;
                     }
+
+                    {% if is_granted('ROLE_ADMIN') %}
+                    if (response.new_users_pending === 0) {
+                        $('#notifications_admin_pill')[0].innerText = '';
+                    } else {
+                        $('#notifications_admin_pill')[0].innerText = response.new_users_pending;
+                    }
+                    {% endif %}
                 }).fail(function() {
                     console.log('Failed to fetch notification count');
                 });

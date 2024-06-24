@@ -68,7 +68,6 @@ final class UserNotificationsController extends Controller
                 new AndFilterGroup(
                     FilterType::AND,
                     new Filter(new FilterField('approved'), new IntFilterValue(0), FilterOperator::EQUAL),
-                    new Filter(new FilterField('created_by'), new StringFilterValue($user->id()->value()), FilterOperator::NOT_EQUAL),
                 ),
                 new AndFilterGroup(
                     FilterType::OR,
@@ -78,11 +77,20 @@ final class UserNotificationsController extends Controller
             ),
         );
 
-        return new JsonResponse([
+        $response = [
             'total' => $friendRequests + $gamesPending,
             'friend_requests' => $friendRequests,
             'games_pending' => $gamesPending,
-        ], Response::HTTP_OK);
+        ];
+
+        if ($user->getRoles()[0] === UserRole::ROLE_ADMIN->value) {
+            $pendingUsers = \count($this->userRepository->byRoles(UserRole::ROLE_BASIC));
+
+            $response['new_users_pending'] = $pendingUsers;
+            $response['total'] += $pendingUsers;
+        }
+
+        return new JsonResponse($response, Response::HTTP_OK);
     }
 
     public function games(Request $request): Response
@@ -100,7 +108,6 @@ final class UserNotificationsController extends Controller
                     new AndFilterGroup(
                         FilterType::AND,
                         new Filter(new FilterField('approved'), new IntFilterValue(0), FilterOperator::EQUAL),
-                        new Filter(new FilterField('created_by'), new StringFilterValue($user->id()->value()), FilterOperator::NOT_EQUAL),
                     ),
                     new AndFilterGroup(
                         FilterType::OR,
@@ -133,10 +140,11 @@ final class UserNotificationsController extends Controller
                 $indexedDecks[$deck->id()->value()] = $deck->name();
             }
 
-            $userIds = \array_values(\array_unique(\array_merge(
+            $userIds = \array_values(\array_unique(\array_filter(\array_merge(
                 \array_map(static fn (KeyforgeGame $g) => $g->winner()->value(), $gamesPending),
                 \array_map(static fn (KeyforgeGame $g) => $g->loser()->value(), $gamesPending),
-            )));
+                \array_map(static fn (KeyforgeGame $g) => $g->createdBy()?->value(), $gamesPending),
+            ))));
 
             $users = $this->keyforgeUserRepository->search(
                 new Criteria(
@@ -159,6 +167,10 @@ final class UserNotificationsController extends Controller
             $response = [];
 
             foreach ($gamesPending as $game) {
+                $approvalPendingBy = $game->winner()->value() === $game->createdBy()->value()
+                    ? $game->loser()->value()
+                    : $game->winner()->value();
+
                 $response[] = [
                     'id' => $game->id()->value(),
                     'winner_id' => $game->winner()->value(),
@@ -169,6 +181,10 @@ final class UserNotificationsController extends Controller
                     'loser_deck_id' => $game->loserDeck()->value(),
                     'winner_deck_name' => $indexedDecks[$game->winnerDeck()->value()] ?? '',
                     'loser_deck_name' => $indexedDecks[$game->loserDeck()->value()] ?? '',
+                    'created_by' => $game->createdBy()?->value(),
+                    'created_by_name' => $indexedUser[$game->createdBy()?->value()] ?? '',
+                    'approval_pending_by' => $approvalPendingBy,
+                    'approval_pending_by_name' => $indexedUser[$approvalPendingBy] ?? '',
                 ];
             }
         } catch (\Throwable $e) {

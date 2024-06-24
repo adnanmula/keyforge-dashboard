@@ -19,21 +19,26 @@
                 <table class="table">
                     <tr>
                         <td>{{ 'game.winner'|trans }}</td>
-                        <td>{{ 'game.loser'|trans }}</td>
                         <td class="text-nowrap">{{ 'game.winner_deck'|trans }}</td>
                         <td class="text-nowrap">{{ 'game.loser_deck'|trans }}</td>
+                        <td class="text-nowrap">{{ 'menu.created_by'|trans }}</td>
                         <td></td>
                     </tr>
                 {% for game in pendingGames %}
-                    <tr>
-                        <td><a href="{{ path('keyforge_user_detail', {'userId': game.winner_id}) }}"  target="_blank">{{ game.winner_name }}</a></td>
-                        <td><a href="{{ path('keyforge_user_detail', {'userId': game.loser_id}) }}"  target="_blank">{{ game.loser_name }}</a></td>
+                    <tr class="{% if game.winner_id == app.user.id %}table-success{% else %}table-danger{% endif %}">
+                        <td><a href="{{ path('keyforge_user_detail', {'userId': game.winner_id}) }}"  target="_blank">{% if game.winner_id == app.user.id %}{{ 'menu.you'|trans }}{% else %}{{ game.winner_name }}{% endif %}</a></td>
                         <td><a href="{{ path('keyforge_deck_detail', {'deckId': game.winner_deck_id}) }}"  target="_blank">{{ game.winner_deck_name }}</a></td>
                         <td><a href="{{ path('keyforge_deck_detail', {'deckId': game.loser_deck_id}) }}"  target="_blank">{{ game.loser_deck_name }}</a></td>
-                        <td>
-                            <button data-toggle="tooltip" title="{{ 'menu.reject'|trans }}" type="button" class="btn btn-outline-dark rejectGame" data-game="{{ game.id }}" style="float: right;">{{ 'menu.reject'|trans }}</button>
-                            <button data-toggle="tooltip" title="{{ 'menu.accept'|trans }}" type="button" class="btn btn-outline-dark acceptGame" data-game="{{ game.id }}" style="float: right;">{{ 'menu.accept'|trans }}</button>
-                        </td>
+                        <td><a href="{{ path('keyforge_deck_detail', {'deckId': game.loser_deck_id}) }}"  target="_blank">{{ game.loser_deck_name }}</a></td>
+
+                        {% if game.approval_pending_by == app.user.id %}
+                            <td>
+                                <button data-toggle="tooltip" title="{{ 'menu.reject'|trans }}" type="button" class="btn btn-outline-dark rejectGame" data-game="{{ game.id }}" style="float: right;">{{ 'menu.reject'|trans }}</button>
+                                <button data-toggle="tooltip" title="{{ 'menu.accept'|trans }}" type="button" class="btn btn-outline-dark acceptGame" data-game="{{ game.id }}" style="float: right;">{{ 'menu.accept'|trans }}</button>
+                            </td>
+                        {% else %}
+                            <td>{{ 'menu.approval_pending_by'|trans }} {{ game.approval_pending_by_name }}</td>
+                        {% endif %}
                     </tr>
                 {% endfor %}
                 </table>

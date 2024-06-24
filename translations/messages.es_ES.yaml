@@ -110,6 +110,7 @@ keyforge.set_wc: WC
 keyforge.set_woe: WoE
 locale.en: Inglés
 locale.es: Español
+menu.approval_pending_by: 'Pendiente de aceptar por:'
 menu.accept: Aceptar
 menu.reject: Rechazar
 menu.add: Añadir
@@ -123,6 +124,7 @@ menu.best_performance: 'Mejor rendimiento'
 menu.best_win_streak: 'Mejor racha de victorias'
 menu.change_password: 'Actualizar contraseña'
 menu.clear_filters: 'Limpiar filtros'
+menu.created_by: 'Creado por'
 menu.deck: Baraja
 menu.deck_select_tooltip: 'Al jugar con randoms pega el id de baraja aunque no salga en el selector, no hace falta importarla antes'
 menu.deck_wl: 'Victorias/Derrotas por baraja'
