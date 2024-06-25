@@ -73,10 +73,10 @@ final class KeyforgeDeckUserDataDbalRepository extends DbalRepository implements
         $stmt->bindValue(':user_id', $data->userId()->value());
         $stmt->bindValue(':wins', $data->wins());
         $stmt->bindValue(':losses', $data->losses());
-        $stmt->bindValue(':wins_vs_friends', $data->winsVsUsers());
-        $stmt->bindValue(':losses_vs_friends', $data->lossesVsUsers());
-        $stmt->bindValue(':wins_vs_users', $data->winsVsFriends());
-        $stmt->bindValue(':losses_vs_users', $data->lossesVsFriends());
+        $stmt->bindValue(':wins_vs_friends', $data->winsVsFriends());
+        $stmt->bindValue(':losses_vs_friends', $data->lossesVsFriends());
+        $stmt->bindValue(':wins_vs_users', $data->winsVsUsers());
+        $stmt->bindValue(':losses_vs_users', $data->lossesVsUsers());
 
         $stmt->executeStatement();
     }

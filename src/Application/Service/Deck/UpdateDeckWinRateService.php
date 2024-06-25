@@ -34,57 +34,64 @@ final readonly class UpdateDeckWinRateService
     {
         [$deck, $userData, $games, $players, $friends] = $this->data($deckId);
 
-        /** @var KeyforgeDeckUserData $userDatum */
-        foreach ($userData as $userDatum) {
-            $wins = 0;
-            $losses = 0;
-            $winsVsFriends = 0;
-            $lossesVsFriends = 0;
-            $winsVsUser = 0;
-            $lossesVsUser = 0;
+        $winStats = [];
 
-            /** @var KeyforgeGame $game */
+        /** @var KeyforgeGame $game */
+        foreach ($games as $game) {
+            $winStats[$game->winner()->value()] = ['wins' => 0, 'losses' => 0, 'winsVsFriends' => 0, 'lossesVsFriends' => 0, 'winsVsUser' => 0, 'lossesVsUser' => 0];
+            $winStats[$game->loser()->value()] = ['wins' => 0, 'losses' => 0, 'winsVsFriends' => 0, 'lossesVsFriends' => 0, 'winsVsUser' => 0, 'lossesVsUser' => 0];
+        }
+
+        foreach (\array_keys($winStats) as $userId) {
             foreach ($games as $game) {
                 if (false === $game->approved() || $game->isSoloPlay()|| $game->isMirror()) {
                     continue;
                 }
 
-                if ($game->winnerDeck()->equalTo($deck->id())) {
-                    $hisFriends = $friends[$userDatum->userId()->value()] ?? [];
+                if ($game->winner()->value() === $userId && $game->winnerDeck()->value() === $deck->id()->value()) {
+                    $hisFriends = $friends[$userId] ?? [];
 
-                    $wins++;
+                    $winStats[$userId]['wins']++;
 
                     if (\in_array($game->loser()->value(), $players, true)) {
-                        $winsVsUser++;
+                        $winStats[$userId]['winsVsUser']++;
                     }
 
                     if (\in_array($game->loser()->value(), $hisFriends, true)) {
-                        $winsVsFriends++;
+                        $winStats[$userId]['winsVsFriends']++;
                     }
                 }
 
-                if ($game->loserDeck()->equalTo($deckId)) {
-                    $hisFriends = $friends[$userDatum->userId()->value()] ?? [];
+                if ($game->loser()->value() === $userId && $game->loserDeck()->value() === $deck->id()->value()) {
+                    $hisFriends = $friends[$userId] ?? [];
 
-                    $losses++;
+                    $winStats[$userId]['losses']++;
 
-                    if (\in_array($game->winner()->value(), $players, true)) {
-                        $lossesVsUser++;
+                    if (\in_array($game->loser()->value(), $players, true)) {
+                        $winStats[$userId]['lossesVsUser']++;
                     }
 
-                    if (\in_array($game->winnerDeck()->value(), $hisFriends, true)) {
-                        $lossesVsFriends++;
+                    if (\in_array($game->loser()->value(), $hisFriends, true)) {
+                        $winStats[$userId]['lossesVsFriends']++;
                     }
                 }
             }
+        }
+
+        foreach ($winStats as $userId => $winStat) {
+            $userDatum = $userData[$userId] ?? null;
+
+            if (null === $userDatum) {
+                $userDatum = KeyforgeDeckUserData::from($deck->id(), Uuid::from($userId), 0, 0, 0, 0, 0, 0);
+            }
 
             $userDatum->setWins(
-                $wins,
-                $losses,
-                $winsVsFriends,
-                $lossesVsFriends,
-                $winsVsUser,
-                $lossesVsUser,
+                $winStat['wins'],
+                $winStat['losses'],
+                $winStat['winsVsFriends'],
+                $winStat['lossesVsFriends'],
+                $winStat['winsVsUser'],
+                $winStat['lossesVsUser'],
             );
 
             $this->deckUserDataRepository->save($userDatum);
@@ -148,14 +155,11 @@ final readonly class UpdateDeckWinRateService
 
         $players = \array_map(static fn (KeyforgeUser $u) => $u->id()->value(), $players);
 
+        $userDataIndexed = [];
         $friends = [];
 
         foreach ($userData as $userDatum) {
-            if (null === $userDatum->userId() || $userDatum->userId()->isNull()) {
-                $friends[Uuid::NULL_UUID] = [];
-
-                continue;
-            }
+            $userDataIndexed[$userDatum->userId()->value()] = $userDatum;
 
             $friends[$userDatum->userId()->value()] = \array_map(
                 static fn (array $f) => $f['friend_id'],
@@ -163,6 +167,6 @@ final readonly class UpdateDeckWinRateService
             );
         }
 
-        return [$deck, $userData, $games, $players, $friends];
+        return [$deck, $userDataIndexed, $games, $players, $friends];
     }
 }

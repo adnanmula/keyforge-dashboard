@@ -139,7 +139,7 @@
                 <form id="updateDeckNotesForm">
                     <div class="row mt-3">
                         <div class="col-md-12">
-                            <textarea class="form-control" name="notes" id="deckNotesInput" rows="8" maxlength="512"></textarea>
+                            <textarea class="form-control" name="notes" id="deckNotesInput" rows="8" maxlength="512">{{ deck_notes }}</textarea>
                         </div>
                     </div>
 
@@ -165,18 +165,6 @@
 
     modal.on('show.bs.modal', function (event) {
         const button = $(event.relatedTarget);
-
-        $.get({
-            url: "/decks/json",
-            method: "GET",
-            dataType: "json",
-            data: {
-                'extraDeckId': button.data('deck-id'),
-            },
-        }).done(function(response) {
-            $('#deckNotesInput')[0].value = response.data[0].user_data.notes;
-        });
-
         $('#hiddenDeckId')[0].value = button.data('deck-id');
     });
 
@@ -198,6 +186,7 @@
                 'notes': notes,
             },
         }).done(function() {
+            $('#deckNotesInput')[0].innerHTML = notes;
             $('#deckNotesInputDisabled')[0].innerHTML = notes;
             modal.modal('hide');
         });

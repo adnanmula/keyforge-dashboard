@@ -288,6 +288,43 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
         $stmt->executeStatement();
     }
 
+    /** @return array<array{deck_id: string, user_id: string, notes: string}> */
+    public function ownersOf(Uuid $deckId): array
+    {
+        return $this->connection->createQueryBuilder()
+            ->select('a.*')
+            ->from(self::TABLE_OWNERSHIP, 'a')
+            ->where('a.deck_id = :deck_id')
+            ->setParameter('deck_id', $deckId->value())
+            ->executeQuery()
+            ->fetchAllAssociative();
+    }
+
+    /** @return array<array{deck_id: string, user_id: string, notes: string}> */
+    public function ownedBy(Uuid $userId): array
+    {
+        return $this->connection->createQueryBuilder()
+            ->select('a.*')
+            ->from(self::TABLE_OWNERSHIP, 'a')
+            ->where('a.user_id = :user_id')
+            ->setParameter('user_id', $userId->value())
+            ->executeQuery()
+            ->fetchAllAssociative();
+    }
+
+    public function updateNotes(Uuid $userId, Uuid $deckId, string $notes): void
+    {
+        $this->connection->createQueryBuilder()
+            ->update(self::TABLE_OWNERSHIP)
+            ->set('notes', ':notes')
+            ->where('deck_id = :deck_id')
+            ->andWhere('user_id = :user_id')
+            ->setParameter('deck_id', $deckId->value())
+            ->setParameter('user_id', $userId->value())
+            ->setParameter('notes', $notes)
+            ->executeStatement();
+    }
+
     private function map(array $deck): KeyforgeDeck
     {
         $owners = [];

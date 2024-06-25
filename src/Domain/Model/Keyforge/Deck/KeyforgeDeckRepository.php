@@ -13,5 +13,10 @@ interface KeyforgeDeckRepository
     public function count(Criteria $criteria): int;
     public function addOwner(Uuid $deckId, Uuid $userId): void;
     public function removeOwner(Uuid $deckId, Uuid $userId): void;
+    /** @return array<array{deck_id: string, user_id: string, notes: string}> */
+    public function ownersOf(Uuid $deckId): array;
+    /** @return array<array{deck_id: string, user_id: string, notes: string}> */
+    public function ownedBy(Uuid $userId): array;
+    public function updateNotes(Uuid $userId, Uuid $deckId, string $notes): void;
     public function save(KeyforgeDeck $deck): void;
 }

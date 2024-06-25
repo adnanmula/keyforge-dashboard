@@ -54,6 +54,7 @@ final class DeckDetailController extends Controller
                 'userId' => $user?->id()?->value(),
                 'deck_name' => $deck->name(),
                 'deck_owner' => $deck->userData()?->userId()?->value(),
+                'deck_owners' => \array_map(static fn (Uuid $id): string => $id->value(), $deck->owners()),
                 'deck_owner_name' => $this->ownerName($deck),
                 'deck' => $deck->jsonSerialize(),
                 'deck_notes' => $this->notes($user, $deck),
@@ -74,7 +75,7 @@ final class DeckDetailController extends Controller
             throw new DeckNotExistsException();
         }
 
-        $deck = $this->deckRepository->searchWithAggregatedOwnerUserData(
+        $deck = $this->deckRepository->searchOne(
             new Criteria(
                 null,
                 null,
@@ -84,7 +85,7 @@ final class DeckDetailController extends Controller
                     new Filter(new FilterField('id'), new StringFilterValue($deckId), FilterOperator::EQUAL),
                 ),
             ),
-        )[0] ?? null;
+        );
 
         if (null === $deck) {
             throw new DeckNotExistsException();
@@ -121,8 +122,16 @@ final class DeckDetailController extends Controller
 
     private function notes(?User $user, KeyforgeDeck $deck): ?string
     {
-        if (null !== $user && $user->id()->value() === $deck->userData()?->userId()?->value()) {
-            return $deck->userData()->notes();
+        if (null === $user) {
+            return null;
+        }
+
+        $decksOwnership = $this->deckRepository->ownersOf($deck->id());
+
+        foreach ($decksOwnership as $deckOwnership) {
+            if ($deckOwnership['user_id'] === $user->id()->value()) {
+                return $deckOwnership['notes'];
+            }
         }
 
         return null;
