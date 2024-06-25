@@ -2,14 +2,12 @@
 
 namespace AdnanMula\Cards\Infrastructure\Persistence\Repository\Keyforge\Deck;
 
-use AdnanMula\Cards\Application\Service\Json;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckUserDataRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckUserData;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Infrastructure\Persistence\Repository\DbalRepository;
 use AdnanMula\Criteria\Criteria;
 use AdnanMula\Criteria\DbalCriteriaAdapter;
-use Doctrine\DBAL\ParameterType;
 
 final class KeyforgeDeckUserDataDbalRepository extends DbalRepository implements KeyforgeDeckUserDataRepository
 {
@@ -57,34 +55,28 @@ final class KeyforgeDeckUserDataDbalRepository extends DbalRepository implements
         $stmt = $this->connection->prepare(
             \sprintf(
                 '
-                INSERT INTO %s (deck_id, owner, wins, losses, wins_vs_friends, losses_vs_friends, wins_vs_users, losses_vs_users, notes, user_tags, active)
-                VALUES (:deck_id, :owner, :wins, :losses, :wins_vs_friends, :losses_vs_friends, :wins_vs_users, :losses_vs_users, :notes, :user_tags, :active)
-                ON CONFLICT (deck_id, owner) DO UPDATE SET
+                INSERT INTO %s (deck_id, user_id, wins, losses, wins_vs_friends, losses_vs_friends, wins_vs_users, losses_vs_users)
+                VALUES (:deck_id, :user_id, :wins, :losses, :wins_vs_friends, :losses_vs_friends, :wins_vs_users, :losses_vs_users)
+                ON CONFLICT (deck_id, user_id) DO UPDATE SET
                     wins = :wins,
                     losses = :losses,
                     wins_vs_friends = :wins_vs_friends,
                     losses_vs_friends = :losses_vs_friends,
                     wins_vs_users = :wins_vs_users,
-                    losses_vs_users = :losses_vs_users,
-                    notes = :notes,
-                    user_tags = :user_tags,
-                    active = :active
+                    losses_vs_users = :losses_vs_users
                 ',
                 self::TABLE,
             ),
         );
 
         $stmt->bindValue(':deck_id', $data->deckId()->value());
-        $stmt->bindValue(':owner', $data->owner()->value());
+        $stmt->bindValue(':user_id', $data->userId()->value());
         $stmt->bindValue(':wins', $data->wins());
         $stmt->bindValue(':losses', $data->losses());
         $stmt->bindValue(':wins_vs_friends', $data->winsVsUsers());
         $stmt->bindValue(':losses_vs_friends', $data->lossesVsUsers());
         $stmt->bindValue(':wins_vs_users', $data->winsVsFriends());
         $stmt->bindValue(':losses_vs_users', $data->lossesVsFriends());
-        $stmt->bindValue(':notes', $data->notes());
-        $stmt->bindValue(':user_tags', Json::encode($data->tags()));
-        $stmt->bindValue(':active', $data->active(), ParameterType::BOOLEAN);
 
         $stmt->executeStatement();
     }
@@ -93,16 +85,13 @@ final class KeyforgeDeckUserDataDbalRepository extends DbalRepository implements
     {
         return KeyforgeDeckUserData::from(
             Uuid::from($deck['deck_id']),
-            Uuid::from($deck['owner']),
-            null,
+            Uuid::from($deck['user_id']),
             $deck['wins'],
             $deck['losses'],
             $deck['wins_vs_friends'],
             $deck['losses_vs_friends'],
             $deck['wins_vs_users'],
             $deck['losses_vs_users'],
-            $deck['notes'],
-            Json::decode($deck['user_tags']),
         );
     }
 }

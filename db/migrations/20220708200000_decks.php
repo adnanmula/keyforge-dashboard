@@ -57,17 +57,24 @@ final class Decks extends AbstractMigration
         $this->execute(
             'CREATE TABLE keyforge_decks_user_data (
                 deck_id uuid NOT NULL,
-                owner uuid NOT NULL,
+                user_id uuid NOT NULL,
                 wins integer NOT NULL,
                 losses integer NOT NULL,
                 wins_vs_friends integer NOT NULL,
                 losses_vs_friends integer NOT NULL,
                 wins_vs_users integer NOT NULL,
                 losses_vs_users integer NOT NULL,
+                PRIMARY KEY(deck_id, user_id)
+            )',
+        );
+
+        $this->execute(
+            'CREATE TABLE keyforge_decks_ownership (
+                deck_id uuid NOT NULL,
+                user_id uuid NOT NULL,
                 notes character varying(512) NOT NULL,
                 user_tags jsonb NOT NULL DEFAULT \'[]\',
-                active bool not null default true,
-                PRIMARY KEY(deck_id, owner)
+                PRIMARY KEY(deck_id, user_id)
             )',
         );
 

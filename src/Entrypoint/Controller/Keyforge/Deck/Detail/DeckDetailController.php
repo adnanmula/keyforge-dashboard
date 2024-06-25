@@ -53,7 +53,7 @@ final class DeckDetailController extends Controller
                 'reference' => $deck->id()->value(),
                 'userId' => $user?->id()?->value(),
                 'deck_name' => $deck->name(),
-                'deck_owner' => $deck->userData()?->owner()?->value(),
+                'deck_owner' => $deck->userData()?->userId()?->value(),
                 'deck_owner_name' => $this->ownerName($deck),
                 'deck' => $deck->jsonSerialize(),
                 'deck_notes' => $this->notes($user, $deck),
@@ -104,13 +104,13 @@ final class DeckDetailController extends Controller
 
     private function ownerName(KeyforgeDeck $deck): ?string
     {
-        if (null !== $deck->userData()?->owner()) {
+        if (null !== $deck->userData()?->userId()) {
             $users = $this->extractResult(
                 $this->bus->dispatch(new GetUsersQuery(0, 1000, false, false)),
             );
 
             foreach ($users as $user) {
-                if ($user->id()->value() === $deck->userData()->owner()) {
+                if ($user->id()->value() === $deck->userData()->userId()) {
                     return $user->name();
                 }
             }
@@ -121,7 +121,7 @@ final class DeckDetailController extends Controller
 
     private function notes(?User $user, KeyforgeDeck $deck): ?string
     {
-        if (null !== $user && $user->id()->value() === $deck->userData()?->owner()?->value()) {
+        if (null !== $user && $user->id()->value() === $deck->userData()?->userId()?->value()) {
             return $deck->userData()->notes();
         }
 

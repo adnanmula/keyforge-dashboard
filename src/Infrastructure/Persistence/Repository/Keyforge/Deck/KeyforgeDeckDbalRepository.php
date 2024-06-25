@@ -19,67 +19,29 @@ use AdnanMula\Criteria\DbalCriteriaAdapter;
 final class KeyforgeDeckDbalRepository extends DbalRepository implements KeyforgeDeckRepository
 {
     private const TABLE = 'keyforge_decks';
+    private const TABLE_OWNERSHIP = 'keyforge_decks_ownership';
     private const TABLE_USER_DATA = 'keyforge_decks_user_data';
 
     private const FIELD_MAPPING = [
         'id' => 'a.id',
-        'owner' => 'b.owner',
+        'owner' => 'b.user_id',
+        'wins' => 'wins',
+        'losses' => 'losses',
     ];
 
     public function search(Criteria $criteria): array
     {
         $builder = $this->connection->createQueryBuilder();
 
-        $query = $builder->select('a.*')->from(self::TABLE, 'a');
-
-        (new DbalCriteriaAdapter($builder))->execute($criteria);
-
-        $result = $query->executeQuery()->fetchAllAssociative();
-
-        return \array_map(fn (array $row) => $this->map($row), $result);
-    }
-
-    public function searchOne(Criteria $criteria): ?KeyforgeDeck
-    {
-        $criteria = new Criteria(
-            $criteria->offset(),
-            1,
-            $criteria->sorting(),
-            ...$criteria->filterGroups(),
-        );
-
-        $result = $this->search($criteria);
-
-        return $result[0] ?? null;
-    }
-
-    public function searchWithOwnerUserData(Criteria $criteria, Uuid $owner): array
-    {
-        $builder = $this->connection->createQueryBuilder();
-
-        $query = $builder->select('a.*, b.*')
-            ->from(self::TABLE, 'a')
-            ->innerJoin('a', self::TABLE_USER_DATA, 'b', 'a.id = b.deck_id and b.owner = :owner')
-            ->setParameter('owner', $owner->value());
-
-        (new DbalCriteriaAdapter($builder, self::FIELD_MAPPING))->execute($criteria);
-
-        $result = $query->executeQuery()->fetchAllAssociative();
-
-        return \array_map(fn (array $row) => $this->map($row), $result);
-    }
-
-    public function searchWithAggregatedOwnerUserData(Criteria $criteria, Uuid ...$owners): array
-    {
-        $builder = $this->connection->createQueryBuilder();
-
         $query = $builder->select('a.*')
-            ->addSelect("string_agg(b.owner::varchar, ',') as owners")
-            ->addSelect('SUM(b.wins) as wins, SUM(b.losses) as losses')
-            ->addSelect('SUM(b.wins_vs_friends) as wins_vs_friends, SUM(b.losses_vs_friends) as losses_vs_friends')
-            ->addSelect('SUM(b.wins_vs_users) as wins_vs_users, SUM(b.losses_vs_users) as losses_vs_users')
+            ->addSelect("string_agg(b.user_id::varchar, ',') as owners")
+            ->addSelect("string_agg(c.user_id::varchar, ',') as stats_from_users")
+            ->addSelect('COALESCE(SUM(c.wins), 0) as wins, COALESCE(SUM(c.losses), 0) as losses')
+            ->addSelect('COALESCE(SUM(c.wins_vs_friends), 0) as wins_vs_friends, COALESCE(SUM(c.losses_vs_friends), 0) as losses_vs_friends')
+            ->addSelect('COALESCE(SUM(c.wins_vs_users), 0) as wins_vs_users, COALESCE(SUM(c.losses_vs_users), 0) as losses_vs_users')
             ->from(self::TABLE, 'a')
-            ->innerJoin('a', self::TABLE_USER_DATA, 'b', 'a.id = b.deck_id')
+            ->leftJoin('a', self::TABLE_OWNERSHIP, 'b', 'a.id = b.deck_id')
+            ->leftJoin('a', self::TABLE_USER_DATA, 'c', 'a.id = c.deck_id')
             ->groupBy('a.id');
 
         (new DbalCriteriaAdapter($builder, self::FIELD_MAPPING))->execute($criteria);
@@ -89,33 +51,23 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
         return \array_map(fn (array $row) => $this->map($row), $result);
     }
 
+    public function searchOne(Criteria $criteria): ?KeyforgeDeck
+    {
+        $result = $this->search(
+            new Criteria($criteria->offset(), 1, $criteria->sorting(), ...$criteria->filterGroups())
+        );
+
+        return $result[0] ?? null;
+    }
+
     public function count(Criteria $criteria): int
-    {
-        $builder = $this->connection->createQueryBuilder();
-        $query = $builder->select('COUNT(a.id)')->from(self::TABLE, 'a');
-
-        (new DbalCriteriaAdapter($builder))->execute($criteria);
-
-        return $query->executeQuery()->fetchOne();
-    }
-
-    public function countWithOwnerUserData(Criteria $criteria, Uuid $owner): int
-    {
-        $builder = $this->connection->createQueryBuilder();
-        $query = $builder->select('COUNT(a.id)')->from(self::TABLE, 'a')
-            ->innerJoin('a', self::TABLE_USER_DATA, 'b', 'a.id = b.deck_id and b.owner = :owner')
-            ->setParameter('owner', $owner->value());
-
-        (new DbalCriteriaAdapter($builder))->execute($criteria);
-
-        return $query->executeQuery()->fetchOne();
-    }
-    public function countWithAggregatedOwnerUserData(Criteria $criteria): int
     {
         $builder = $this->connection->createQueryBuilder();
         $query = $builder->select('COUNT(a.id)')
             ->from(self::TABLE, 'a')
-            ->innerJoin('a', self::TABLE_USER_DATA, 'b', 'a.id = b.deck_id');
+            ->leftJoin('a', self::TABLE_OWNERSHIP, 'b', 'a.id = b.deck_id')
+            ->leftJoin('a', self::TABLE_USER_DATA, 'c', 'a.id = c.deck_id')
+            ->groupBy('a.id');
 
         (new DbalCriteriaAdapter($builder))->execute($criteria);
 
@@ -302,39 +254,58 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
         $stmt->executeStatement();
     }
 
+    public function addOwner(Uuid $deckId, Uuid $userId): void
+    {
+        $stmt = $this->connection->prepare(
+            \sprintf('
+                INSERT INTO %s (deck_id, user_id, notes, user_tags)
+                VALUES (:deck_id, :user_id, :notes, :user_tags)
+                ON CONFLICT (deck_id, user_id) DO NOTHING
+                ',
+                self::TABLE_OWNERSHIP,
+            ),
+        );
+
+        $stmt->bindValue(':deck_id', $deckId->value());
+        $stmt->bindValue(':user_id', $userId->value());
+        $stmt->bindValue(':notes', '');
+        $stmt->bindValue(':user_tags', Json::encode([]));
+
+        $stmt->executeStatement();
+    }
+
+    public function removeOwner(Uuid $deckId, Uuid $userId): void
+    {
+        $stmt = $this->connection->prepare(
+            \sprintf(
+                'DELETE FROM %s a WHERE a.deck_id = :deck_id and a.user_id = :user_id',
+                self::TABLE_OWNERSHIP,
+            ),
+        );
+
+        $stmt->bindValue(':deck_id', $deckId->value());
+        $stmt->bindValue(':user_id', $userId->value());
+        $stmt->executeStatement();
+    }
+
     private function map(array $deck): KeyforgeDeck
     {
-        $userData = null;
-
-        if (\array_key_exists('owner', $deck)) {
-            $userData = KeyforgeDeckUserData::from(
-                Uuid::from($deck['id']),
-                Uuid::from($deck['owner']),
-                null,
-                $deck['wins'],
-                $deck['losses'],
-                $deck['wins_vs_friends'],
-                $deck['losses_vs_friends'],
-                $deck['wins_vs_users'],
-                $deck['losses_vs_users'],
-                $deck['notes'],
-                Json::decode($deck['user_tags']),
-            );
+        $owners = [];
+        if (null !== $deck['owners']) {
+            $owners = array_map(static fn (string $id): Uuid => Uuid::from($id), \explode(',', $deck['owners']));
         }
 
-        if (\array_key_exists('owners', $deck)) {
+        $userData = null;
+        if (\array_key_exists('stats_from_users', $deck)) {
             $userData = KeyforgeDeckUserData::from(
                 Uuid::from($deck['id']),
                 null,
-                \array_map(static fn (string $s) => Uuid::from($s), \explode(',', $deck['owners'])),
                 $deck['wins'],
                 $deck['losses'],
                 $deck['wins_vs_friends'],
                 $deck['losses_vs_friends'],
                 $deck['wins_vs_users'],
                 $deck['losses_vs_users'],
-                '',
-                [],
             );
         }
 
@@ -351,6 +322,7 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
             KeyforgeCards::fromArray(Json::decode($deck['cards'])),
             KeyforgeDeckStats::fromArray($deck),
             Json::decode($deck['tags']),
+            $owners,
             $userData,
         );
     }

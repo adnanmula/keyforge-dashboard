@@ -8,34 +8,26 @@ final class KeyforgeDeckUserData implements \JsonSerializable
 {
     private function __construct(
         private readonly Uuid $deckId,
-        private readonly ?Uuid $owner,
-        private readonly ?array $owners,
+        private readonly ?Uuid $userId,
         private int $wins,
         private int $losses,
         private int $winsVsFriends,
         private int $lossesVsFriends,
         private int $winsVsUsers,
         private int $lossesVsUsers,
-        private string $notes,
-        private array $tags = [],
-        private bool $active = true,
     ) {}
 
     public static function from(
         Uuid $deckId,
-        ?Uuid $owner,
-        ?array $owners,
+        ?Uuid $userId,
         int $wins,
         int $losses,
         int $winsVsFriends,
         int $lossesVsFriends,
         int $winsVsUsers,
         int $lossesVsUsers,
-        string $notes,
-        array $tags = [],
-        bool $active = true,
     ): self {
-        return new self($deckId, $owner, $owners, $wins, $losses, $winsVsFriends, $lossesVsFriends, $winsVsUsers, $lossesVsUsers, $notes, $tags, $active);
+        return new self($deckId, $userId, $wins, $losses, $winsVsFriends, $lossesVsFriends, $winsVsUsers, $lossesVsUsers);
     }
 
     public function deckId(): Uuid
@@ -43,14 +35,9 @@ final class KeyforgeDeckUserData implements \JsonSerializable
         return $this->deckId;
     }
 
-    public function owner(): ?Uuid
+    public function userId(): ?Uuid
     {
-        return $this->owner;
-    }
-
-    public function owners(): ?array
-    {
-        return $this->owners;
+        return $this->userId;
     }
 
     public function wins(): int
@@ -83,21 +70,6 @@ final class KeyforgeDeckUserData implements \JsonSerializable
         return $this->lossesVsUsers;
     }
 
-    public function notes(): string
-    {
-        return $this->notes;
-    }
-
-    public function tags(): array
-    {
-        return $this->tags;
-    }
-
-    public function active(): bool
-    {
-        return $this->active;
-    }
-
     public function setWins(int $wins, int $losses, int $winsVsFriends, int $lossesVsFriends, int $winsVsUsers, int $lossesVsUsers): void
     {
         $this->wins = $wins;
@@ -108,33 +80,17 @@ final class KeyforgeDeckUserData implements \JsonSerializable
         $this->lossesVsUsers = $lossesVsUsers;
     }
 
-    public function setNotes(string $notes): void
-    {
-        $this->notes = $notes;
-    }
-
-    public function setTags(string ...$tags): void
-    {
-        $this->tags = $tags;
-    }
-
     public function jsonSerialize(): array
     {
         return [
             'deckId' => $this->deckId->value(),
-            'owner' => $this->owner?->value(),
-            'owners' => null === $this->owners
-                ? null
-                : \array_map(static fn (Uuid $u) => $u->value(), $this->owners),
+            'userId' => $this->userId?->value(),
             'wins' => $this->wins,
             'losses' => $this->losses,
             'wins_vs_friends' => $this->winsVsFriends,
             'losses_vs_friends' => $this->lossesVsFriends,
             'wins_vs_users' => $this->winsVsUsers,
             'losses_vs_users' => $this->lossesVsUsers,
-            'notes' => $this->notes,
-            'tags' => $this->tags,
-            'active' => $this->active,
         ];
     }
 }

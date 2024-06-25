@@ -10,14 +10,8 @@ interface KeyforgeDeckRepository
     /** @return array<KeyforgeDeck> */
     public function search(Criteria $criteria): array;
     public function searchOne(Criteria $criteria): ?KeyforgeDeck;
-
-    public function searchWithOwnerUserData(Criteria $criteria, Uuid $owner): array;
-
-    public function searchWithAggregatedOwnerUserData(Criteria $criteria): array;
-
     public function count(Criteria $criteria): int;
-    public function countWithOwnerUserData(Criteria $criteria, Uuid $owner): int;
-    public function countWithAggregatedOwnerUserData(Criteria $criteria): int;
-
+    public function addOwner(Uuid $deckId, Uuid $userId): void;
+    public function removeOwner(Uuid $deckId, Uuid $userId): void;
     public function save(KeyforgeDeck $deck): void;
 }

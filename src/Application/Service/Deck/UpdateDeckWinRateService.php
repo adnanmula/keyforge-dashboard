@@ -50,7 +50,7 @@ final readonly class UpdateDeckWinRateService
                 }
 
                 if ($game->winnerDeck()->equalTo($deck->id())) {
-                    $hisFriends = $friends[$userDatum->owner()->value()] ?? [];
+                    $hisFriends = $friends[$userDatum->userId()->value()] ?? [];
 
                     $wins++;
 
@@ -64,7 +64,7 @@ final readonly class UpdateDeckWinRateService
                 }
 
                 if ($game->loserDeck()->equalTo($deckId)) {
-                    $hisFriends = $friends[$userDatum->owner()->value()] ?? [];
+                    $hisFriends = $friends[$userDatum->userId()->value()] ?? [];
 
                     $losses++;
 
@@ -151,15 +151,15 @@ final readonly class UpdateDeckWinRateService
         $friends = [];
 
         foreach ($userData as $userDatum) {
-            if (null === $userDatum->owner() || $userDatum->owner()->isNull()) {
+            if (null === $userDatum->userId() || $userDatum->userId()->isNull()) {
                 $friends[Uuid::NULL_UUID] = [];
 
                 continue;
             }
 
-            $friends[$userDatum->owner()->value()] = \array_map(
+            $friends[$userDatum->userId()->value()] = \array_map(
                 static fn (array $f) => $f['friend_id'],
-                $this->userRepository->friends($userDatum->owner(), false),
+                $this->userRepository->friends($userDatum->userId(), false),
             );
         }
 

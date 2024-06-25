@@ -145,14 +145,8 @@ final class GetDecksQueryHandler
             ...$criteria->filterGroups(),
         );
 
-        if (null !== $query->owner) {
-            $decks = $this->repository->searchWithOwnerUserData($criteria, $query->owner);
-            $totalFiltered = $this->repository->countWithOwnerUserData($countCriteria, $query->owner);
-        } else {
-            $decks = $this->repository->searchWithAggregatedOwnerUserData($criteria);
-            $totalFiltered = $this->repository->countWithAggregatedOwnerUserData($countCriteria);
-        }
-
+        $decks = $this->repository->search($criteria);
+        $totalFiltered = $this->repository->count($countCriteria);
         $total = $this->repository->count(new Criteria(null, null, null));
 
         return [
