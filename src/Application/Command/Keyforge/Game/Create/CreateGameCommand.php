@@ -34,10 +34,10 @@ final class CreateGameCommand
     ) {
         Assert::lazy()
             ->that($winner, 'winner')->string()
-            ->that($winnerDeck, 'winnerDeck')->string()->notBlank()->notEq($loserDeck)
+            ->that($winnerDeck, 'winnerDeck')->string()->notBlank()
             ->that($winnerChains, 'winnerChains')->integerish()->min(0)
             ->that($loser, 'loser')->string()
-            ->that($loserDeck, 'loserDeck')->string()->notBlank()->notEq($winnerDeck)
+            ->that($loserDeck, 'loserDeck')->string()->notBlank()
             ->that($loserChains, 'loserChains')->integerish()->min(0)
             ->that($loserScore, 'loserScore')->integerish()->min(0)->max(2)
             ->that($firstTurn, 'firstTurn')->nullOr()->string()

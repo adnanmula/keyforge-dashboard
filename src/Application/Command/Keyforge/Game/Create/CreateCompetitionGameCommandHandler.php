@@ -10,6 +10,7 @@ use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeCompetitionRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeGame;
 use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeGameRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\Game\ValueObject\KeyforgeGameScore;
+use AdnanMula\Cards\Domain\Model\Shared\User;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\CompetitionFixtureType;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Criteria\Criteria;
@@ -19,6 +20,7 @@ use AdnanMula\Criteria\FilterField\FilterField;
 use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
 use AdnanMula\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
+use Symfony\Bundle\SecurityBundle\Security;
 
 final class CreateCompetitionGameCommandHandler
 {
@@ -27,10 +29,18 @@ final class CreateCompetitionGameCommandHandler
         private KeyforgeDeckRepository $deckRepository,
         private KeyforgeCompetitionRepository $competitionRepository,
         private UpdateDeckWinRateService $updateDeckWinRateService,
+        private Security $security,
     ) {}
 
     public function __invoke(CreateCompetitionGameCommand $command): void
     {
+        /** @var ?User $user */
+        $user = $this->security->getUser();
+
+        if (null === $user) {
+            throw new \Exception();
+        }
+
         [$winnerDeck, $loserDeck] = $this->getDecks($command->winnerDeck, $command->loserDeck);
 
         $game = new KeyforgeGame(
@@ -47,8 +57,8 @@ final class CreateCompetitionGameCommandHandler
             new \DateTimeImmutable(),
             $command->competition,
             $command->notes,
-            true,
-            null,
+            false,
+            $user->id(),
         );
 
         $this->gameRepository->save($game);

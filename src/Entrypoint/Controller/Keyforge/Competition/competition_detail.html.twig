@@ -347,6 +347,8 @@
         })
 
         $('#registerGameForm').submit(function (e) {
+            $('#registerGameSubmit')[0].disabled = true
+
             e.preventDefault();
 
             let winnerId = $('input[name=registerGameWinner]:checked')[0].value;
