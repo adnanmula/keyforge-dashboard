@@ -29,30 +29,24 @@
                 </ul>
             </div>
 
-            <div class="shadow-lg p-3 mb-5 bg-white rounded">
-                <div class="row">
-                    <h3>{{ 'menu.admin_actions'|trans }}</h3>
-                </div>
-
-                <div class="divider py-2"></div>
-
-                <button class="btn btn-dark w-100 mt-1" id="homeProjection">
-                    {{ 'menu.admin_action_generate_home_projection'|trans }}
-                </button>
-
-                <div class="divider py-3"></div>
-
-                <select class="form-control" id="userProjectionSelect">
-                    {% for user in users %}
-                        <option value="{{ user.id }}">{{ user.name }}</option>
-                    {% endfor %}
-                </select>
-                <button class="btn btn-dark w-100 mt-1" id="userProjection">
-                    {{ 'menu.admin_action_generate_user_projection'|trans }}
-                </button>
-
-
-            </div>
+{#            <div class="shadow-lg p-3 mb-5 bg-white rounded">#}
+{#                <div class="row">#}
+{#                    <h3>{{ 'menu.admin_actions'|trans }}</h3>#}
+{#                </div>#}
+{#                <div class="divider py-2"></div>#}
+{#                <button class="btn btn-dark w-100 mt-1" id="homeProjection">#}
+{#                    {{ 'menu.admin_action_generate_home_projection'|trans }}#}
+{#                </button>#}
+{#                <div class="divider py-3"></div>#}
+{#                <select class="form-control" id="userProjectionSelect">#}
+{#                    {% for user in users %}#}
+{#                        <option value="{{ user.id }}">{{ user.name }}</option>#}
+{#                    {% endfor %}#}
+{#                </select>#}
+{#                <button class="btn btn-dark w-100 mt-1" id="userProjection">#}
+{#                    {{ 'menu.admin_action_generate_user_projection'|trans }}#}
+{#                </button>#}
+{#            </div>#}
         </div>
     </div>
     <script>

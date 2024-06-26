@@ -5,11 +5,20 @@ namespace AdnanMula\Cards\Infrastructure\Service\Keyforge\DoK;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Exception\DeckNotExistsException;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeck;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckRepository;
-use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckData;
-use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckUserData;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeCards;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckHouses;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckStats;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeSet;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Domain\Service\Keyforge\Deck\DeckApplyPredefinedTagsService;
 use AdnanMula\Cards\Domain\Service\Keyforge\ImportDeckService;
+use AdnanMula\Criteria\Criteria;
+use AdnanMula\Criteria\Filter\Filter;
+use AdnanMula\Criteria\Filter\FilterType;
+use AdnanMula\Criteria\FilterField\FilterField;
+use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
+use AdnanMula\Criteria\FilterValue\FilterOperator;
+use AdnanMula\Criteria\FilterValue\StringFilterValue;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -22,46 +31,55 @@ final class ImportDeckFromDokService implements ImportDeckService
         private ImportDeckStatHistoryFromDokService $statHistoryService,
     ) {}
 
-    public function execute(Uuid $uuid, ?Uuid $owner = null, bool $forceUpdate = false, bool $withHistory = true, bool $withTags = true): ?KeyforgeDeck
+    public function execute(Uuid $uuid, ?Uuid $owner = null, bool $forceUpdate = false, bool $withHistory = true): ?KeyforgeDeck
     {
-        $isImported = $this->repository->isImported($uuid);
+        $deck = $this->repository->searchOne(new Criteria(
+            null,
+            null,
+            null,
+            new AndFilterGroup(
+                FilterType::AND,
+                new Filter(new FilterField('id'), new StringFilterValue($uuid->value()), FilterOperator::EQUAL),
+            ),
+        ));
 
-        if (false === $forceUpdate && $isImported) {
-            return $this->repository->byId($uuid);
+        if (false === $forceUpdate && null !== $deck) {
+            return $deck;
         }
 
         try {
-            $response = $this->dokClient->request(Request::METHOD_GET, '/public-api/v3/decks/' . $uuid);
+            $response = $this->dokClient->request(Request::METHOD_GET, '/public-api/v3/decks/' . $uuid->value());
         } catch (\Throwable) {
             throw new \Exception('Error desconocido');
         }
 
-        $deck = $response->toArray();
+        $deckResponse = $response->toArray();
 
-        if ($deck['deck'] === []) {
+        if ($deckResponse['deck'] === []) {
             throw new DeckNotExistsException();
         }
 
         $newDeck = new KeyforgeDeck(
-            Uuid::from($deck['deck']['keyforgeId']),
-            KeyforgeDeckData::fromDokData($deck),
-            KeyforgeDeckUserData::from(Uuid::from($deck['deck']['keyforgeId']), $owner, 0, 0, ''),
+            Uuid::from($deckResponse['deck']['keyforgeId']),
+            $deckResponse['deck']['id'],
+            $deckResponse['deck']['name'],
+            KeyforgeSet::fromDokName($deckResponse['deck']['expansion']),
+            KeyforgeDeckHouses::fromDokData($deckResponse),
+            KeyforgeCards::fromDokData($deckResponse),
+            KeyforgeDeckStats::fromDokData($deckResponse),
         );
 
-        $this->repository->save($newDeck, false);
-        $this->repository->saveDeckData($newDeck->data());
+        $this->repository->save($newDeck);
 
-        if (false === $isImported) {
-            $this->repository->saveDeckUserData($newDeck->userData());
+        if (null !== $owner) {
+            $this->repository->addOwner($newDeck->id(), $owner);
         }
 
         if ($withHistory) {
             $this->statHistoryService->execute($newDeck->id());
         }
 
-        if ($withTags) {
-            $this->tagsService->execute($newDeck->id());
-        }
+        $this->tagsService->execute($newDeck->id());
 
         return $newDeck;
     }

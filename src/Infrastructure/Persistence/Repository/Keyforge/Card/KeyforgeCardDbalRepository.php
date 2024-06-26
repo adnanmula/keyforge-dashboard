@@ -6,7 +6,9 @@ use AdnanMula\Cards\Application\Service\Json;
 use AdnanMula\Cards\Domain\Model\Keyforge\Card\KeyforgeCard;
 use AdnanMula\Cards\Domain\Model\Keyforge\Card\KeyforgeCardRepository;
 use AdnanMula\Cards\Infrastructure\Persistence\Repository\DbalRepository;
+use AdnanMula\Cards\Shared\LocalizedString;
 use AdnanMula\Criteria\Criteria;
+use AdnanMula\Criteria\DbalCriteriaAdapter;
 use Doctrine\DBAL\ParameterType;
 
 final class KeyforgeCardDbalRepository extends DbalRepository implements KeyforgeCardRepository
@@ -16,7 +18,15 @@ final class KeyforgeCardDbalRepository extends DbalRepository implements Keyforg
     /** @return array<KeyforgeCard> */
     public function search(Criteria $criteria): array
     {
-        return [];
+        $builder = $this->connection->createQueryBuilder();
+
+        $query = $builder->select('a.*')->from(self::TABLE, 'a');
+
+        (new DbalCriteriaAdapter($builder))->execute($criteria);
+
+        $result = $query->executeQuery()->fetchAllAssociative();
+
+        return \array_map(fn (array $row) => $this->map($row), $result);
     }
 
     public function count(Criteria $criteria): int
@@ -29,41 +39,9 @@ final class KeyforgeCardDbalRepository extends DbalRepository implements Keyforg
         $stmt = $this->connection->prepare(
             \sprintf(
                 '
-                INSERT INTO %s (
-                    id,
-                    houses,
-                    name,
-                    name_url,
-                    flavor_text,
-                    text,
-                    type,
-                    traits,
-                    amber,
-                    power,
-                    armor,
-                    is_big,
-                    is_token,
-                    sets,
-                    tags,
-                    raw_data
-                ) VALUES (
-                    :id,
-                    :houses,
-                    :name,
-                    :name_url,
-                    :flavor_text,
-                    :text,
-                    :type,
-                    :traits,
-                    :amber,
-                    :power,
-                    :armor,
-                    :is_big,
-                    :is_token,
-                    :sets,
-                    :tags,
-                    :raw_data
-                ) ON CONFLICT (id) DO UPDATE SET
+                INSERT INTO %s (id, houses, name, name_url, flavor_text, text, type, traits, amber, power, armor, is_big, is_token, sets, tags)
+                VALUES (:id, :houses, :name, :name_url, :flavor_text, :text, :type, :traits, :amber, :power, :armor, :is_big, :is_token, :sets, :tags)
+                ON CONFLICT (id) DO UPDATE SET
                     id = :id,
                     houses = :houses,
                     name = :name,
@@ -78,8 +56,7 @@ final class KeyforgeCardDbalRepository extends DbalRepository implements Keyforg
                     is_big = :is_big,
                     is_token = :is_token,
                     sets = :sets,
-                    tags = :tags,
-                    raw_data = :raw_data
+                    tags = :tags
                 ',
                 self::TABLE,
             ),
@@ -100,8 +77,28 @@ final class KeyforgeCardDbalRepository extends DbalRepository implements Keyforg
         $stmt->bindValue(':is_token', $card->isToken, ParameterType::BOOLEAN);
         $stmt->bindValue(':sets', Json::encode($card->sets));
         $stmt->bindValue(':tags', Json::encode($card->tags));
-        $stmt->bindValue(':raw_data', Json::encode($card->rawData));
 
         $stmt->executeStatement();
+    }
+
+    private function map(array $row): KeyforgeCard
+    {
+        return new KeyforgeCard(
+            $row['id'],
+            $row['houses'],
+            LocalizedString::fromArray($row['name']),
+            $row['name_url'],
+            $row['flavor_text'],
+            $row['text'],
+            $row['type'],
+            Json::decode($row['traits']),
+            $row['amber'],
+            $row['power'],
+            $row['armor'],
+            $row['is_big'],
+            $row['is_token'],
+            $row['sets'],
+            Json::decode($row['tags']),
+        );
     }
 }

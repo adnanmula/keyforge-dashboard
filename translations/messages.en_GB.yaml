@@ -110,6 +110,9 @@ keyforge.set_wc: WC
 keyforge.set_woe: WoE
 locale.en: English
 locale.es: Spanish
+menu.approval_pending_by: 'Approval pending by:'
+menu.accept: Accept
+menu.reject: Reject
 menu.add: Add
 menu.add_friends: 'Add friends'
 menu.addgame: 'Register game'
@@ -121,13 +124,14 @@ menu.best_performance: 'Best performance'
 menu.best_win_streak: 'Best win streak'
 menu.change_password: 'Change password'
 menu.clear_filters: Clear
+menu.created_by: Created by
 menu.deck: Deck
 menu.deck_select_tooltip: 'When playing with random people paste their deck id event if it is not on the selector, you do not have to import it beforehand either'
 menu.deck_wl: 'Wins/Losses by deck'
 menu.decks: Decks
 menu.exclude: Exclude
 menu.favorite: Favorite
-menu.friend_decks_games: 'Only friend decks and games'
+menu.friend_decks_games: 'Only friend decks'
 menu.friend_name: 'Friend name'
 menu.friend_requests: 'Friend requests'
 menu.new_accounts_pending: 'New accounts'
@@ -160,6 +164,7 @@ menu.players: Players
 menu.pr%: 'PickRate%'
 menu.pr: 'Pick rate'
 menu.profile: Profile
+menu.pending_games: 'Pending games'
 menu.received: Received
 menu.record_book: 'Record book'
 menu.register: Register

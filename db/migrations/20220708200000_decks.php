@@ -12,13 +12,6 @@ final class Decks extends AbstractMigration
                 name character varying(64) NOT NULL,
                 set character varying(16) NOT NULL,
                 houses jsonb NOT NULL,
-                PRIMARY KEY(id)
-            )',
-        );
-
-        $this->execute(
-            'CREATE TABLE keyforge_decks_data (
-                id uuid NOT NULL,
                 dok_id integer NOT NULL,
                 sas integer NOT NULL,
                 previous_sas_rating integer NOT NULL,
@@ -49,24 +42,39 @@ final class Decks extends AbstractMigration
                 card_archive_count integer NOT NULL,
                 key_cheat_count integer NOT NULL,
                 board_clear_count integer NOT NULL,
+                board_clear_cards jsonb NOT NULL,
                 scaling_amber_control_count integer NOT NULL,
+                scaling_amber_control_cards jsonb NOT NULL,
                 synergy_rating integer NOT NULL,
                 anti_synergy_rating integer NOT NULL,
-                extra_data jsonb NOT NULL,
                 last_sas_update TIMESTAMP WITH TIME ZONE NULL,
+                cards jsonb NOT NULL,
+                tags jsonb NOT NULL DEFAULT \'[]\',
                 PRIMARY KEY(id)
             )',
         );
 
         $this->execute(
             'CREATE TABLE keyforge_decks_user_data (
-                id uuid NOT NULL,
+                deck_id uuid NOT NULL,
+                user_id uuid NOT NULL,
                 wins integer NOT NULL,
                 losses integer NOT NULL,
-                owner uuid,
+                wins_vs_friends integer NOT NULL,
+                losses_vs_friends integer NOT NULL,
+                wins_vs_users integer NOT NULL,
+                losses_vs_users integer NOT NULL,
+                PRIMARY KEY(deck_id, user_id)
+            )',
+        );
+
+        $this->execute(
+            'CREATE TABLE keyforge_decks_ownership (
+                deck_id uuid NOT NULL,
+                user_id uuid NOT NULL,
                 notes character varying(512) NOT NULL,
-                tags jsonb NOT NULL DEFAULT \'[]\',
-                PRIMARY KEY(id)
+                user_tags jsonb NOT NULL DEFAULT \'[]\',
+                PRIMARY KEY(deck_id, user_id)
             )',
         );
 
@@ -98,6 +106,7 @@ final class Decks extends AbstractMigration
         $this->execute(
             'CREATE TABLE keyforge_tags (
                 id uuid NOT NULL,
+                user_id uuid NULL,
                 name jsonb NOT NULL,
                 visibility character varying(16) NOT NULL,
                 style jsonb NOT NULL,
@@ -106,23 +115,13 @@ final class Decks extends AbstractMigration
                 PRIMARY KEY(id)
             )',
         );
-
-        $this->execute(
-            'CREATE TABLE keyforge_decks_stats_update (
-                id uuid NOT NULL,
-                at TIMESTAMP WITH TIME ZONE NULL,
-                PRIMARY KEY(id)
-            )',
-        );
     }
 
     public function down(): void
     {
-        $this->execute('DROP TABLE IF EXISTS "keyforge_decks_stats_update"');
         $this->execute('DROP TABLE IF EXISTS "keyforge_tags"');
         $this->execute('DROP TABLE IF EXISTS "keyforge_decks_data_history"');
         $this->execute('DROP TABLE IF EXISTS "keyforge_decks_user_data"');
-        $this->execute('DROP TABLE IF EXISTS "keyforge_decks_data"');
         $this->execute('DROP TABLE IF EXISTS "keyforge_decks"');
     }
 }

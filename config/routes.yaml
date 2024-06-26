@@ -17,10 +17,30 @@ user_friends:
   controller: AdnanMula\Cards\Entrypoint\Controller\Shared\User\UserFriendsController
   methods: [GET,POST,PATCH,DELETE]
 
+user_pending_games:
+  path: /user/pending-games
+  controller: AdnanMula\Cards\Entrypoint\Controller\Shared\User\UserNotificationsController::games
+  methods: [GET,POST,PATCH,DELETE]
+
+user_accept_game:
+  path: /user/accept-games
+  controller: AdnanMula\Cards\Entrypoint\Controller\Shared\User\UserNotificationsController::acceptGame
+  methods: [ POST ]
+
+user_reject_game:
+  path: /user/reject-games
+  controller: AdnanMula\Cards\Entrypoint\Controller\Shared\User\UserNotificationsController::rejectGame
+  methods: [ POST ]
+
 user_settings:
   path: /user/settings
   controller: AdnanMula\Cards\Entrypoint\Controller\Shared\User\UserSettingsController
   methods: [GET,POST]
+
+notification_count:
+  path: /user/notifications
+  controller: AdnanMula\Cards\Entrypoint\Controller\Shared\User\UserNotificationsController::count
+  methods: [GET]
 
 admin:
   path: /admin

@@ -5,7 +5,14 @@ namespace AdnanMula\Cards\Application\Query\Keyforge\Game;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeGameRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\User\KeyforgeUserRepository;
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Criteria\Criteria;
+use AdnanMula\Criteria\Filter\Filter;
+use AdnanMula\Criteria\Filter\FilterType;
+use AdnanMula\Criteria\FilterField\FilterField;
+use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
+use AdnanMula\Criteria\FilterValue\FilterOperator;
+use AdnanMula\Criteria\FilterValue\StringArrayFilterValue;
 
 final class GetGamesQueryHandler
 {
@@ -34,17 +41,37 @@ final class GetGamesQueryHandler
         foreach ($games as $game) {
             $userIds[] = $game->winner();
             $userIds[] = $game->loser();
+            $userIds[] = $game->firstTurn();
             $decksIds[] = $game->winnerDeck();
             $decksIds[] = $game->loserDeck();
         }
 
-        $decks = $this->deckRepository->byIds(...$decksIds);
-        $users = $this->userRepository->byIds(...$userIds);
+        $userIds = \array_values(\array_unique(\array_filter($userIds)));
+
+        $decks = $this->deckRepository->search(new Criteria(
+            null,
+            null,
+            null,
+            new AndFilterGroup(
+                FilterType::AND,
+                new Filter(new FilterField('id'), new StringArrayFilterValue(...\array_map(static fn (Uuid $id): string => $id->value(), $decksIds)), FilterOperator::IN),
+            ),
+        ));
+
+        $users = $this->userRepository->search(new Criteria(
+            null,
+            null,
+            null,
+            new AndFilterGroup(
+                FilterType::AND,
+                new Filter(new FilterField('id'), new StringArrayFilterValue(...\array_map(static fn (Uuid $id): string => $id->value(), $userIds)), FilterOperator::IN),
+            ),
+        ));
 
         $indexedDecks = [];
 
         foreach ($decks as $deck) {
-            $indexedDecks[$deck->id()->value()] = $deck->data()->name;
+            $indexedDecks[$deck->id()->value()] = $deck->name();
         }
 
         $indexedUsers = [];

@@ -43,7 +43,7 @@ final class ImportDeckStatsBulkCommand extends Command
 
         foreach ($decks as $index => $deck) {
             try {
-                $this->service->execute(Uuid::from($deck), null, true, $withHistory, false);
+                $this->service->execute(Uuid::from($deck), null, true, $withHistory);
                 $output->writeln($deck);
             } catch (DeckNotExistsException) {
                 $output->writeln('<error>NOT FOUND: '. $deck .'</error>');
@@ -52,7 +52,7 @@ final class ImportDeckStatsBulkCommand extends Command
             $this->updateRepository->add(Uuid::from($deck));
 
             if ($index*2 > 0 && ($index*2+2) % 25 === 0) {
-                $output->writeln('Reached request limit sleeping for 65 seconds');
+                $output->writeln('Reached request limit sleeping for 70 seconds');
                 \sleep(70);
             }
         }

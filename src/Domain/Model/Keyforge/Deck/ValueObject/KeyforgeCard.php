@@ -12,23 +12,46 @@ final readonly class KeyforgeCard implements \JsonSerializable
         public bool $isMaverick,
         public bool $isLegacy,
         public bool $isAnomaly,
+        public int $bonusAember,
+        public int $bonusCapture,
+        public int $bonusDamage,
+        public int $bonusDraw,
+        public int $bonusDiscard,
     ) {}
+
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            $data['name'],
+            $data['serializedName'],
+            KeyforgeCardRarity::from(\strtoupper($data['rarity'])),
+            $data['isEnhanced'],
+            $data['isMaverick'],
+            $data['isLegacy'],
+            $data['isAnomaly'],
+            $data['bonusAember'],
+            $data['bonusCapture'],
+            $data['bonusDamage'],
+            $data['bonusDraw'],
+            $data['bonusDiscard'],
+        );
+    }
 
     public static function fromDokData(array $data): self
     {
-        $serializedName = \strtolower($data['cardTitle']);
-        $serializedName = \str_replace('-', '', $serializedName);
-        $serializedName = \str_replace(' ', '-', $serializedName);
-        $serializedName = \preg_replace('/[^A-Za-z0-9\-]/', '', $serializedName);
-
         return new self(
             $data['cardTitle'],
-            $serializedName,
+            $data['cardTitleUrl'],
             KeyforgeCardRarity::from(\strtoupper($data['rarity'])),
             $data['enhanced'] ?? false,
             $data['maverick'] ?? false,
             $data['legacy'] ?? false,
             $data['anomaly'] ?? false,
+            $data['bonusAember'] ?? 0,
+            $data['bonusCapture'] ?? 0,
+            $data['bonusDamage'] ?? 0,
+            $data['bonusDraw'] ?? 0,
+            $data['bonusDiscard'] ?? 0,
         );
     }
 
@@ -42,6 +65,11 @@ final readonly class KeyforgeCard implements \JsonSerializable
             'isMaverick' => $this->isMaverick,
             'isLegacy' => $this->isLegacy,
             'isAnomaly' => $this->isAnomaly,
+            'bonusAember' => $this->bonusAember,
+            'bonusCapture' => $this->bonusCapture,
+            'bonusDamage' => $this->bonusDamage,
+            'bonusDraw' => $this->bonusDraw,
+            'bonusDiscard' => $this->bonusDiscard,
         ];
     }
 }

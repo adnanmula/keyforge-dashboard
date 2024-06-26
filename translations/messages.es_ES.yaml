@@ -110,6 +110,9 @@ keyforge.set_wc: WC
 keyforge.set_woe: WoE
 locale.en: Inglés
 locale.es: Español
+menu.approval_pending_by: 'Pendiente de aceptar por:'
+menu.accept: Aceptar
+menu.reject: Rechazar
 menu.add: Añadir
 menu.add_friends: 'Añadir amigos'
 menu.addgame: 'Registrar partida'
@@ -121,13 +124,14 @@ menu.best_performance: 'Mejor rendimiento'
 menu.best_win_streak: 'Mejor racha de victorias'
 menu.change_password: 'Actualizar contraseña'
 menu.clear_filters: 'Limpiar filtros'
+menu.created_by: 'Creado por'
 menu.deck: Baraja
 menu.deck_select_tooltip: 'Al jugar con randoms pega el id de baraja aunque no salga en el selector, no hace falta importarla antes'
 menu.deck_wl: 'Victorias/Derrotas por baraja'
 menu.decks: Barajas
 menu.exclude: Excluir
 menu.favorite: Favorita
-menu.friend_decks_games: 'Solo partidas y barajas de amigos'
+menu.friend_decks_games: 'Solo barajas de amigos'
 menu.friend_name: 'Nombre del amigo'
 menu.friend_requests: 'Solicitudes de amistad'
 menu.new_accounts_pending: 'Cuentas nuevas'
@@ -160,6 +164,7 @@ menu.players: Jugadores
 menu.pr%: 'PickRate%'
 menu.pr: 'Pick rate'
 menu.profile: Perfil
+menu.pending_games: 'Partidas pendientes'
 menu.received: Recibidas
 menu.record_book: Palmarés
 menu.register: Registro

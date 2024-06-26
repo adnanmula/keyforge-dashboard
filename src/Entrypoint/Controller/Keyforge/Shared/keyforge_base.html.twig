@@ -79,15 +79,35 @@
                             <div class="navbar-nav me-auto mb-lg-0">
                                 <ul class="navbar-nav dropstart">
                                     <li class="nav-item dropdown">
-                                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{ app.user.name() }}</a>
+                                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <button type="button" class="btn btn-secondary position-relative">
+                                                {{ app.user.name() }}
+                                                <span id="notifications_total_pill" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"></span>
+                                            </button>
+                                        </a>
+
                                         <ul class="dropdown-menu dropdown-menu-dark">
                                             {% if is_granted('ROLE_ADMIN') %}
-                                                <li><a class="dropdown-item" href="{{ path('admin') }}">{{ 'menu.admin'|trans }}</a></li>
+                                                <li class="position-relative">
+                                                    <a class="dropdown-item" href="{{ path('admin') }}">{{ 'menu.admin'|trans }}</a>
+                                                    <span id="notifications_admin_pill" class="position-absolute top-50 start-0 translate-middle badge rounded-pill bg-danger">A</span>
+                                                </li>
                                             {% endif %}
+
                                             {% if is_granted('ROLE_KEYFORGE') %}
                                                 <li><a class="dropdown-item" href="{{ path('keyforge_user_detail', {'userId': app.user.id.value() }) }}" class="text-decoration-none link-light">{{ 'menu.profile'|trans }}<span class="sr-only"></span></a></li>
                                             {% endif %}
-                                            <li><a class="dropdown-item" href="{{ path('user_friends') }}">{{ 'menu.friends'|trans }}</a></li>
+
+                                            <li class="position-relative">
+                                                <a class="dropdown-item" href="{{ path('user_pending_games') }}">{{ 'menu.pending_games'|trans }}</a>
+                                                <span id="notifications_games_pill" class="position-absolute top-50 start-0 translate-middle badge rounded-pill bg-danger"></span>
+                                            </li>
+
+                                            <li class="position-relative">
+                                                <a class="dropdown-item" href="{{ path('user_friends') }}">{{ 'menu.friends'|trans }}</a>
+                                                <span id="notifications_friends_pill" class="position-absolute top-50 start-0 translate-middle badge rounded-pill bg-danger"></span>
+                                            </li>
+
                                             <li><a class="dropdown-item" href="{{ path('user_settings') }}">{{ 'menu.settings'|trans }}</a></li>
                                             <li><a class="dropdown-item" href="{{ path('logout') }}">{{ 'menu.logout'|trans }}<span class="sr-only"></span></a></li>
                                         </ul>
@@ -124,6 +144,43 @@
             if (window.history.replaceState) {
                 window.history.replaceState(null, null, window.location.href);
             }
+
+            {% if is_granted('ROLE_KEYFORGE') %}
+                $.ajax({
+                    type: 'GET',
+                    url: '{{ path('notification_count') }}',
+                }).done(function(response) {
+                    if (response.total === 0) {
+                        $('#notifications_total_pill')[0].innerText = '';
+                    } else {
+                        $('#notifications_total_pill')[0].innerText = response.total;
+
+                        notifications_friends_pill
+                    }
+
+                    if (response.friend_requests === 0) {
+                        $('#notifications_friends_pill')[0].innerText = '';
+                    } else {
+                        $('#notifications_friends_pill')[0].innerText = response.friend_requests;
+                    }
+
+                    if (response.games_pending === 0) {
+                        $('#notifications_games_pill')[0].innerText = '';
+                    } else {
+                        $('#notifications_games_pill')[0].innerText = response.games_pending;
+                    }
+
+                    {% if is_granted('ROLE_ADMIN') %}
+                    if (response.new_users_pending === 0) {
+                        $('#notifications_admin_pill')[0].innerText = '';
+                    } else {
+                        $('#notifications_admin_pill')[0].innerText = response.new_users_pending;
+                    }
+                    {% endif %}
+                }).fail(function() {
+                    console.log('Failed to fetch notification count');
+                });
+            {% endif %}
         </script>
 
         <div class="container">

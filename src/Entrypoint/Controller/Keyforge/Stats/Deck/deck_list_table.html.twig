@@ -124,19 +124,19 @@
                 }
             },
             columns: [
-                { data: "user_data.tags" },
-                { data: "data.name" },
-                { data: "data.set" },
-                { data: "data.houses" },
-                { data: "user_data.wins" },
-                { data: "data.stats.sas" },
-                { data: "data.stats.amberControl" },
-                { data: "data.stats.expectedAmber" },
-                { data: "data.stats.artifactControl" },
-                { data: "data.stats.creatureControl" },
-                { data: "data.stats.efficiency" },
-                { data: "data.stats.recursion" },
-                { data: "data.stats.disruption" },
+                { data: "tags" },
+                { data: "name" },
+                { data: "set" },
+                { data: "houses" },
+                { data: "wins" },
+                { data: "stats.sas" },
+                { data: "stats.amberControl" },
+                { data: "stats.expectedAmber" },
+                { data: "stats.artifactControl" },
+                { data: "stats.creatureControl" },
+                { data: "stats.efficiency" },
+                { data: "stats.recursion" },
+                { data: "stats.disruption" },
                 { data: "" },
             ],
             columnDefs: [
@@ -219,8 +219,17 @@
                 },
                 {
                     render: function (data, type, row) {
-                        let wins = row.user_data.wins;
-                        let losses = row.user_data.losses;
+                        let wins = 0;
+                        let losses = 0;
+
+                        {% if owner is null %}
+                        wins = row.userData.wins_vs_users;
+                        losses = row.userData.losses_vs_users;
+                        {% else %}
+                        wins = row.userData.wins;
+                        losses = row.userData.losses;
+                        {% endif %}
+
                         let win_rate = 0;
 
                         if (wins + losses > 0) {

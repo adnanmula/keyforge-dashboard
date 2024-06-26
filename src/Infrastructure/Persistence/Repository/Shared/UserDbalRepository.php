@@ -9,6 +9,7 @@ use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Locale;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\UserRole;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Infrastructure\Persistence\Repository\DbalRepository;
+use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\ParameterType;
 
 final class UserDbalRepository extends DbalRepository implements UserRepository
@@ -60,6 +61,20 @@ final class UserDbalRepository extends DbalRepository implements UserRepository
         return $this->map($result, true);
     }
 
+    public function byIds(Uuid ...$ids): array
+    {
+        $result = $this->connection->createQueryBuilder()
+            ->select('a.id, a.name, a.password, a.locale, a.roles')
+            ->from(self::TABLE, 'a')
+            ->where('a.id in (:ids)')
+            ->setParameter('ids', \array_map(static fn (Uuid $id): string => $id->value(), $ids), ArrayParameterType::STRING)
+            ->setMaxResults(1)
+            ->executeQuery()
+            ->fetchAllAssociative();
+
+        return \array_map(fn (array $r) => $this->map($r, false), $result);
+    }
+
     public function byName(string $name): ?User
     {
         $result = $this->connection->createQueryBuilder()
@@ -94,18 +109,23 @@ final class UserDbalRepository extends DbalRepository implements UserRepository
         return \array_map(fn (array $row) => $this->map($row, false), $result);
     }
 
-    public function friends(Uuid $id): array
+    public function friends(Uuid $id, ?bool $isRequest = null): array
     {
-        return $this->connection->createQueryBuilder()
-            ->select('a.*, b.name as receiver_name, c.name as sender_name')
+        $qb = $this->connection->createQueryBuilder();
+
+        $query = $qb->select('a.*, b.name as receiver_name, c.name as sender_name')
             ->from(self::TABLE_FRIENDS, 'a')
             ->innerJoin('a', self::TABLE, 'b', 'a.friend_id = b.id')
             ->innerJoin('b', self::TABLE, 'c', 'a.id = c.id')
-            ->where('a.id = :id')
-            ->orWhere('a.friend_id = :id')
-            ->setParameter('id', $id->value())
-            ->executeQuery()
-            ->fetchAllAssociative();
+            ->where($qb->expr()->or('a.id = :id', 'a.friend_id = :id'))
+            ->setParameter('id', $id->value());
+
+        if (null !== $isRequest) {
+            $query->andWhere('a.is_request = :is_request')
+                ->setParameter('is_request', $isRequest, ParameterType::BOOLEAN);
+        }
+
+        return $query->executeQuery()->fetchAllAssociative();
     }
 
     public function friendRequest(Uuid $user, Uuid $friend): ?array

@@ -2,15 +2,16 @@
 
 namespace AdnanMula\Cards\Application\Command\Keyforge\Game\Create;
 
+use AdnanMula\Cards\Application\Service\Deck\UpdateDeckWinRateService;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeck;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeGame;
 use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeGameRepository;
+use AdnanMula\Cards\Domain\Model\Keyforge\Game\ValueObject\KeyforgeCompetition;
 use AdnanMula\Cards\Domain\Model\Keyforge\Game\ValueObject\KeyforgeGameScore;
-use AdnanMula\Cards\Domain\Model\Keyforge\Stat\KeyforgeStatRepository;
-use AdnanMula\Cards\Domain\Model\Keyforge\Stat\ValueObject\KeyforgeStatCategory;
 use AdnanMula\Cards\Domain\Model\Keyforge\User\KeyforgeUser;
 use AdnanMula\Cards\Domain\Model\Keyforge\User\KeyforgeUserRepository;
+use AdnanMula\Cards\Domain\Model\Shared\User;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Domain\Service\Keyforge\ImportDeckService;
 use AdnanMula\Criteria\Criteria;
@@ -20,145 +21,161 @@ use AdnanMula\Criteria\FilterField\FilterField;
 use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
 use AdnanMula\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
+use Symfony\Bundle\SecurityBundle\Security;
 
 final class CreateGameCommandHandler
 {
+    private const COMPETITIONS_VS_RANDOMS = [
+        KeyforgeCompetition::VT,
+        KeyforgeCompetition::TCO_CASUAL,
+        KeyforgeCompetition::TCO_COMPETITIVE,
+    ];
+
     public function __construct(
         private KeyforgeUserRepository $userRepository,
         private KeyforgeGameRepository $gameRepository,
         private KeyforgeDeckRepository $deckRepository,
         private ImportDeckService $importDeckService,
-        private KeyforgeStatRepository $statRepository,
+        private UpdateDeckWinRateService $updateDeckWinRateService,
+        private Security $security,
     ) {}
 
     public function __invoke(CreateGameCommand $command): void
     {
-        [$winner, $loser, $firstTurn] = $this->getUsers($command->winner(), $command->loser(), $command->firstTurn());
+        /** @var ?User $user */
+        $user = $this->security->getUser();
+
+        if (null === $user) {
+            throw new \Exception('Not authorized');
+        }
+
+        [$winner, $loser, $firstTurn] = $this->getUsers($user, $command->winner(), $command->loser(), $command->firstTurn(), $command->competition());
         [$winnerDeck, $loserDeck] = $this->getDecks($command->winnerDeck(), $command->loserDeck());
+
+        $approved = false;
+
+        if (\in_array($command->competition(), self::COMPETITIONS_VS_RANDOMS, true)
+            || ($command->winner() === $command->loser() && $command->competition() === KeyforgeCompetition::SOLO)) {
+            $approved = true;
+        }
 
         $game = new KeyforgeGame(
             Uuid::v4(),
-            Uuid::from($winner),
-            Uuid::from($loser),
+            $winner,
+            $loser,
             $winnerDeck->id(),
             $loserDeck->id(),
             $command->winnerChains(),
             $command->loserChains(),
-            Uuid::from($firstTurn),
+            $firstTurn,
             KeyforgeGameScore::from(3, $command->loserScore()),
             $command->date(),
             new \DateTimeImmutable(),
             $command->competition(),
             $command->notes(),
+            $approved,
+            $user->id(),
         );
 
         $this->gameRepository->save($game);
 
-        $this->updateDeckWinRate($winnerDeck, $loserDeck);
-
-        $this->statRepository->queueProjection(KeyforgeStatCategory::HOME_GENERAL_DATA, null);
+        $this->updateDeckWinRateService->execute($winnerDeck->id());
+        $this->updateDeckWinRateService->execute($loserDeck->id());
     }
 
-    private function updateDeckWinRate(KeyforgeDeck $winnerDeck, KeyforgeDeck $loserDeck): void
+    private function getUsers(User $user, string $winner, string $loser, string $firstTurn, KeyforgeCompetition $competition): array
     {
-        $games1 = $this->gameRepository->search(new Criteria(
-            null,
-            null,
-            null,
-            new AndFilterGroup(
-                FilterType::OR,
-                new Filter(new FilterField('winner_deck'), new StringFilterValue($winnerDeck->id()->value()), FilterOperator::EQUAL),
-                new Filter(new FilterField('loser_deck'), new StringFilterValue($winnerDeck->id()->value()), FilterOperator::EQUAL),
+        if (\in_array($competition, self::COMPETITIONS_VS_RANDOMS, true)) {
+            if (false === Uuid::isValid($winner)) {
+                $winner = $this->fetchUserOrCreate($winner, $user, true)->id()->value();
+            }
+
+            if (false === Uuid::isValid($loser)) {
+                $loser = $this->fetchUserOrCreate($loser, $user, true)->id()->value();
+            }
+
+            if (false === Uuid::isValid($firstTurn)) {
+                $firstTurn = $this->fetchUserOrCreate($firstTurn, $user, true)->id()->value();
+            }
+        } else {
+            if (false === Uuid::isValid($winner)) {
+                $winner = $this->fetchUserOrCreate($winner, $user, false)->id()->value();
+            }
+
+            if (false === Uuid::isValid($loser)) {
+                $loser = $this->fetchUserOrCreate($loser, $user, false)->id()->value();
+            }
+
+            if (false === Uuid::isValid($firstTurn)) {
+                $firstTurn = $this->fetchUserOrCreate($firstTurn, $user, false)->id()->value();
+            }
+        }
+
+        if (false === Uuid::isValid($winner)
+            || false === Uuid::isValid($loser)
+            || false === Uuid::isValid($firstTurn)) {
+            throw new \Exception('Invalid user');
+        }
+
+        return [Uuid::from($winner), Uuid::from($loser), Uuid::from($firstTurn)];
+    }
+
+    private function fetchUserOrCreate(string $name, User $user, bool $create): KeyforgeUser
+    {
+        $userToCreate = $this->userRepository->search(
+            new Criteria(
+                null,
+                null,
+                null,
+                new AndFilterGroup(
+                    FilterType::AND,
+                    new Filter(new FilterField('name'), new StringFilterValue($name), FilterOperator::EQUAL),
+                    new Filter(new FilterField('owner'), new StringFilterValue($user->id()->value()), FilterOperator::EQUAL),
+                ),
             ),
-        ));
+        )[0] ?? null;
 
-        $games2 = $this->gameRepository->search(new Criteria(
-            null,
-            null,
-            null,
-            new AndFilterGroup(
-                FilterType::OR,
-                new Filter(new FilterField('winner_deck'), new StringFilterValue($loserDeck->id()->value()), FilterOperator::EQUAL),
-                new Filter(new FilterField('loser_deck'), new StringFilterValue($loserDeck->id()->value()), FilterOperator::EQUAL),
-            ),
-        ));
-
-        $deck1Wins = 0;
-        $deck1Losses = 0;
-
-        foreach ($games1 as $game) {
-            if ($game->winnerDeck()->equalTo($winnerDeck->id())) {
-                $deck1Wins++;
-            }
-
-            if ($game->loserDeck()->equalTo($winnerDeck->id())) {
-                $deck1Losses++;
-            }
+        if (null === $userToCreate && true === $create) {
+            $userToCreate = KeyforgeUser::create(Uuid::v4(), $name, $user->id());
+            $this->userRepository->save($userToCreate);
         }
 
-        $deck2Wins = 0;
-        $deck2Losses = 0;
-
-        foreach ($games2 as $game) {
-            if ($game->winnerDeck()->equalTo($loserDeck->id())) {
-                $deck2Wins++;
-            }
-
-            if ($game->loserDeck()->equalTo($loserDeck->id())) {
-                $deck2Losses++;
-            }
+        if (null === $userToCreate) {
+            throw new \Exception('User not found');
         }
 
-        $this->deckRepository->save($winnerDeck);
-        $this->deckRepository->save($loserDeck);
-
-        $this->deckRepository->saveDeckWins($winnerDeck->id(), $deck1Wins, $deck1Losses);
-        $this->deckRepository->saveDeckWins($loserDeck->id(), $deck2Wins, $deck2Losses);
-    }
-
-    private function getUsers(string $winner, string $loser, string $firstTurn): array
-    {
-        if (false === Uuid::isValid($winner)) {
-            $winner = $this->fetchUserOrCreate($winner)->id()->value();
-        }
-
-        if (false === Uuid::isValid($loser)) {
-            $loser = $this->fetchUserOrCreate($loser)->id()->value();
-        }
-
-        if (false === Uuid::isValid($firstTurn)) {
-            $firstTurn = $this->fetchUserOrCreate($firstTurn)->id()->value();
-        }
-
-        return [$winner, $loser, $firstTurn];
-    }
-
-    private function fetchUserOrCreate(string $name): KeyforgeUser
-    {
-        $user = $this->userRepository->byName($name);
-
-        if (null === $user) {
-            $user = KeyforgeUser::create(Uuid::v4(), $name);
-            $this->userRepository->save($user);
-        }
-
-        return $user;
+        return $userToCreate;
     }
 
     private function getDecks(string $winnerDeck, string $loserDeck): array
     {
         $winnerDeck = Uuid::isValid($winnerDeck)
             ? $this->importDeckService->execute(Uuid::from($winnerDeck), null)
-            : $this->deckRepository->byNames($winnerDeck)[0] ?? null;
+            : $this->getDeckByName($winnerDeck);
 
         $loserDeck = Uuid::isValid($loserDeck)
             ? $this->importDeckService->execute(Uuid::from($loserDeck), null)
-            : $this->deckRepository->byNames($loserDeck)[0] ?? null;
+            : $this->getDeckByName($loserDeck);
 
         if (null === $winnerDeck || null === $loserDeck) {
             throw new \Exception('Deck not found');
         }
 
         return [$winnerDeck, $loserDeck];
+    }
+
+    private function getDeckByName(string $name): ?KeyforgeDeck
+    {
+        return $this->deckRepository->searchOne(
+            new Criteria(
+                null,
+                null,
+                null,
+                new AndFilterGroup(
+                    FilterType::AND,
+                    new Filter(new FilterField('name'), new StringFilterValue($name), FilterOperator::EQUAL),
+                ),
+            ),
+        );
     }
 }

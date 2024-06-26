@@ -2,6 +2,8 @@
 
 namespace AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject;
 
+use AdnanMula\Cards\Application\Service\Json;
+
 final readonly class KeyforgeDeckStats implements \JsonSerializable
 {
     private function __construct(
@@ -19,7 +21,7 @@ final readonly class KeyforgeDeckStats implements \JsonSerializable
         public float $efficiency,
         public float $recursion,
         public float $disruption,
-        public float $effectivePower,
+        public int $effectivePower,
         public float $creatureProtection,
         public float $other,
         public int $rawAmber,
@@ -41,6 +43,48 @@ final readonly class KeyforgeDeckStats implements \JsonSerializable
         public int $antiSynergyRating,
         public \DateTimeImmutable $lastSasUpdate,
     ) {}
+
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            sas: $data['sas'],
+            previousSasRating: $data['previous_sas_rating'],
+            previousMajorSasRating: $data['previous_major_sas_rating'],
+            sasPercentile: (float) $data['sas_percentile'],
+            sasVersion: $data['sas_version'],
+            aercScore: $data['aerc_score'],
+            aercVersion: $data['aerc_version'],
+            amberControl: (float) $data['amber_control'],
+            artifactControl: (float) $data['artifact_control'],
+            expectedAmber: (float) $data['expected_amber'],
+            creatureControl: (float) $data['creature_control'],
+            efficiency: (float) $data['efficiency'],
+            recursion: (float) $data['recursion'],
+            disruption: (float) $data['disruption'],
+            effectivePower: (int) $data['effective_power'],
+            creatureProtection: (float) $data['creature_protection'],
+            other: (float) $data['other'],
+            rawAmber: (int) $data['raw_amber'],
+            totalPower: $data['total_power'],
+            totalArmor: $data['total_armor'],
+            efficiencyBonus: (float) $data['efficiency_bonus'],
+            creatureCount: $data['creature_count'],
+            actionCount: $data['action_count'],
+            artifactCount: $data['artifact_count'],
+            upgradeCount: $data['upgrade_count'],
+            cardDrawCount: $data['card_draw_count'],
+            cardArchiveCount: $data['card_archive_count'],
+            keyCheatCount: $data['key_cheat_count'],
+            boardClearCount: $data['board_clear_count'],
+            boardClearCards: Json::decode($data['board_clear_cards']),
+            scalingAmberControlCount: $data['scaling_amber_control_count'],
+            scalingAmberControlCards: Json::decode($data['scaling_amber_control_cards']),
+            synergyRating: $data['synergy_rating'],
+            antiSynergyRating: $data['anti_synergy_rating'],
+            lastSasUpdate: new \DateTimeImmutable($data['last_sas_update']),
+        );
+    }
+
 
     public static function fromDokData(array $data): self
     {

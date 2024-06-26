@@ -231,7 +231,10 @@
                     option.disabled = false;
                 });
 
-                $('#competition')[0].value = 'FRIENDS';
+                if ($('#competition')[0].value === 'SOLO') {
+                    $('#competition')[0].value = 'FRIENDS';
+                }
+
                 $('#competition')[0].options[0].disabled = true;
 
                 return;

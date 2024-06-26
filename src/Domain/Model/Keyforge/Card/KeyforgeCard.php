@@ -26,7 +26,6 @@ final readonly class KeyforgeCard implements \JsonSerializable
         public bool $isToken,
         public array $sets,
         public array $tags,
-        public array $rawData,
     ) {
     }
 
@@ -52,7 +51,6 @@ final readonly class KeyforgeCard implements \JsonSerializable
             isToken: $data['token'],
             sets: \array_map(static fn (array $e) => KeyforgeSet::fromDokName($e['expansion']), $data['expansions']),
             tags: \array_map(static fn (array $t) => $t['trait'], $data['extraCardInfo']['traits']),
-            rawData: $data['extraCardInfo'],
         );
     }
 
@@ -74,7 +72,6 @@ final readonly class KeyforgeCard implements \JsonSerializable
             'isToken' => $this->isToken,
             'sets' => $this->sets,
             'tags' => $this->tags,
-            'rawData' => $this->rawData,
         ];
     }
 }

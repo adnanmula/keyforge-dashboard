@@ -9,6 +9,7 @@ use AdnanMula\Cards\Application\Query\Keyforge\Game\GetGamesQuery;
 use AdnanMula\Cards\Application\Query\Keyforge\User\GetUsersQuery;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Exception\DeckNotExistsException;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeck;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Shared\User;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
@@ -19,11 +20,25 @@ use AdnanMula\Criteria\FilterField\FilterField;
 use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
 use AdnanMula\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Translation\LocaleSwitcher;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class DeckDetailController extends Controller
 {
+    public function __construct(
+        MessageBusInterface $bus,
+        Security $security,
+        LocaleSwitcher $localeSwitcher,
+        TranslatorInterface $translator,
+        private KeyforgeDeckRepository $deckRepository,
+    ) {
+        parent::__construct($bus, $security, $localeSwitcher, $translator);
+    }
+
     public function __invoke(Request $request, string $deckId): Response
     {
         /** @var ?User $user */
@@ -37,8 +52,9 @@ final class DeckDetailController extends Controller
             [
                 'reference' => $deck->id()->value(),
                 'userId' => $user?->id()?->value(),
-                'deck_name' => $deck->data()->name,
-                'deck_owner' => $deck->userData()->owner?->value(),
+                'deck_name' => $deck->name(),
+                'deck_owner' => $deck->userData()?->userId()?->value(),
+                'deck_owners' => \array_map(static fn (Uuid $id): string => $id->value(), $deck->owners()),
                 'deck_owner_name' => $this->ownerName($deck),
                 'deck' => $deck->jsonSerialize(),
                 'deck_notes' => $this->notes($user, $deck),
@@ -59,7 +75,23 @@ final class DeckDetailController extends Controller
             throw new DeckNotExistsException();
         }
 
-        return $deck['decks'][0];
+        $deck = $this->deckRepository->searchOne(
+            new Criteria(
+                null,
+                null,
+                null,
+                new AndFilterGroup(
+                    FilterType::AND,
+                    new Filter(new FilterField('id'), new StringFilterValue($deckId), FilterOperator::EQUAL),
+                ),
+            ),
+        );
+
+        if (null === $deck) {
+            throw new DeckNotExistsException();
+        }
+
+        return $deck;
     }
 
     private function deckHistory(string $deckId): array
@@ -73,13 +105,13 @@ final class DeckDetailController extends Controller
 
     private function ownerName(KeyforgeDeck $deck): ?string
     {
-        if (null !== $deck->userData()->owner) {
+        if (null !== $deck->userData()?->userId()) {
             $users = $this->extractResult(
                 $this->bus->dispatch(new GetUsersQuery(0, 1000, false, false)),
             );
 
             foreach ($users as $user) {
-                if ($user->id()->value() === $deck->userData()->owner) {
+                if ($user->id()->value() === $deck->userData()->userId()) {
                     return $user->name();
                 }
             }
@@ -90,8 +122,16 @@ final class DeckDetailController extends Controller
 
     private function notes(?User $user, KeyforgeDeck $deck): ?string
     {
-        if (null !== $user && $user->id()->value() === $deck->userData()->owner?->value()) {
-            return $deck->userData()->notes;
+        if (null === $user) {
+            return null;
+        }
+
+        $decksOwnership = $this->deckRepository->ownersOf($deck->id());
+
+        foreach ($decksOwnership as $deckOwnership) {
+            if ($deckOwnership['user_id'] === $user->id()->value()) {
+                return $deckOwnership['notes'];
+            }
         }
 
         return null;
@@ -160,16 +200,16 @@ final class DeckDetailController extends Controller
         }
 
         if (null !== $currentNemesis) {
-            $currentNemesis['name'] = $this->deck(null, $currentNemesis['id'])->data()->name;
+            $currentNemesis['name'] = $this->deck(null, $currentNemesis['id'])->name();
         }
 
         if (null !== $currentRival) {
-            $currentRival['name'] = $this->deck(null, $currentRival['id'])->data()->name;
+            $currentRival['name'] = $this->deck(null, $currentRival['id'])->name();
         }
 
         return [
-            'wins' => $deck->userData()->wins,
-            'losses' => $deck->userData()->losses,
+            'wins' => $deck->userData()?->wins(),
+            'losses' => $deck->userData()?->losses(),
             'rival' => $currentRival,
             'nemesis' => $currentNemesis,
         ];

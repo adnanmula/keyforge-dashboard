@@ -2,13 +2,24 @@
 
 namespace AdnanMula\Cards\Application\Command\Shared\User\FriendAccept;
 
+use AdnanMula\Cards\Application\Service\Deck\UpdateDeckWinRateService;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Shared\Exception\UserNotExistsException;
 use AdnanMula\Cards\Domain\Model\Shared\UserRepository;
+use AdnanMula\Criteria\Criteria;
+use AdnanMula\Criteria\Filter\Filter;
+use AdnanMula\Criteria\Filter\FilterType;
+use AdnanMula\Criteria\FilterField\FilterField;
+use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
+use AdnanMula\Criteria\FilterValue\FilterOperator;
+use AdnanMula\Criteria\FilterValue\StringFilterValue;
 
 final class AcceptFriendCommandHandler
 {
     public function __construct(
         private UserRepository $repository,
+        private KeyforgeDeckRepository $deckRepository,
+        private UpdateDeckWinRateService $updateDeckWinRateService,
     ) {}
 
     public function __invoke(AcceptFriendCommand $command): void
@@ -28,5 +39,22 @@ final class AcceptFriendCommandHandler
 
         $this->repository->addFriend($user->id(), $friend->id(), false);
         $this->repository->addFriend($friend->id(), $user->id(), false);
+
+        $decks = $this->deckRepository->search(
+            new Criteria(
+                null,
+                null,
+                null,
+                new AndFilterGroup(
+                    FilterType::OR,
+                    new Filter(new FilterField('owner'), new StringFilterValue($user->id()->value()), FilterOperator::EQUAL),
+                    new Filter(new FilterField('owner'), new StringFilterValue($friend->id()->value()), FilterOperator::EQUAL),
+                ),
+            ),
+        );
+
+        foreach ($decks as $deck) {
+            $this->updateDeckWinRateService->execute($deck->id());
+        }
     }
 }

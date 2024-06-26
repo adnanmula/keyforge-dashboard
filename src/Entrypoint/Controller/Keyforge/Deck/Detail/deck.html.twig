@@ -55,20 +55,20 @@
 <div class="shadow-lg p-3 mb-3 bg-white rounded">
     <div class="row">
         <div class="col-12 col-md-11">
-            <h2>{{ deck.data.name }}</h2>
+            <h2>{{ deck.name }}</h2>
         </div>
         <div class="d-flex col-12 col-md-1 justify-content-end">
-            <h2 style="margin-top: 5px; white-space: nowrap;" data-toggle="tooltip" title="{{ deck.data.stats.aercScore }}+{{ deck.data.stats.synergyRating }}-{{ deck.data.stats.antiSynergyRating }}">{{ deck.data.stats.sas }}</h2>
-            <img style="margin-bottom: 15px" width="40px" src="/assets/keyforge/sets/{{ deck.data.set }}.svg" alt="{{ deck.data.set }}"/>
+            <h2 style="margin-top: 5px; white-space: nowrap;" data-toggle="tooltip" title="{{ deck.stats.aercScore }}+{{ deck.stats.synergyRating }}-{{ deck.stats.antiSynergyRating }}">{{ deck.stats.sas }}</h2>
+            <img style="margin-bottom: 15px" width="40px" src="/assets/keyforge/sets/{{ deck.set }}.svg" alt="{{ deck.set }}"/>
         </div>
     </div>
     <div class="row">
         <div class="col-12">
             <div class="row">
                 <div class="col-12 col-lg-4" style="margin-top: 10px">
-                    <img width="33px" src="/assets/keyforge/houses/{{ deck.data.houses.0 }}.png" alt="{{ deck.data.houses.0 }}"/><span style="font-size: 1.5em; vertical-align: middle; margin-left: 4px">{{ deck.data.houses.0 }}</span>
+                    <img width="33px" src="/assets/keyforge/houses/{{ deck.houses.0 }}.png" alt="{{ deck.houses.0 }}"/><span style="font-size: 1.5em; vertical-align: middle; margin-left: 4px">{{ deck.houses.0 }}</span>
                     <div class="row">
-                        {% for card in deck.data.cards.firstPodCards %}
+                        {% for card in deck.cards.firstPodCards %}
                             <div class="col-6 col-lg-12">
                                 <img width="18px" src="/assets/keyforge/rarities/{{ card.rarity }}.svg" alt="{{ card.rarity }}" class="img-fluid"/>
                                 <span class="card_name" data-bs-toggle="modal" data-bs-target="#card_image" data-card="{{ card.name }}" data-card-serialized="{{ card.serializedName }}">{{ card.name }}</span>
@@ -78,9 +78,9 @@
                 </div>
 
                 <div class="col-12 col-lg-4" style="margin-top: 10px">
-                    <img width="33px" src="/assets/keyforge/houses/{{ deck.data.houses.1 }}.png" alt="{{ deck.data.houses.1 }}"/><span style="font-size: 1.5em; vertical-align: middle; margin-left: 4px">{{ deck.data.houses.1 }}</span>
+                    <img width="33px" src="/assets/keyforge/houses/{{ deck.houses.1 }}.png" alt="{{ deck.houses.1 }}"/><span style="font-size: 1.5em; vertical-align: middle; margin-left: 4px">{{ deck.houses.1 }}</span>
                     <div class="row">
-                        {% for card in deck.data.cards.secondPodCards %}
+                        {% for card in deck.cards.secondPodCards %}
                             <div class="col-6 col-lg-12" style="display: block">
                                 <img width="18px" src="/assets/keyforge/rarities/{{ card.rarity }}.svg" alt="{{ card.rarity }}" class="img-fluid"/>
                                 <span class="card_name" data-bs-toggle="modal" data-bs-target="#card_image" data-card="{{ card.name }}" data-card-serialized="{{ card.serializedName }}">{{ card.name }}</span>
@@ -90,9 +90,9 @@
                 </div>
 
                 <div class="col-12 col-lg-4" style="margin-top: 10px">
-                    <img width="33px" src="/assets/keyforge/houses/{{ deck.data.houses.2 }}.png" alt="{{ deck.data.houses.2 }}"/><span style="font-size: 1.5em; vertical-align: middle; margin-left: 4px">{{ deck.data.houses.2 }}</span>
+                    <img width="33px" src="/assets/keyforge/houses/{{ deck.houses.2 }}.png" alt="{{ deck.houses.2 }}"/><span style="font-size: 1.5em; vertical-align: middle; margin-left: 4px">{{ deck.houses.2 }}</span>
                     <div class="row">
-                        {% for card in deck.data.cards.thirdPodCards %}
+                        {% for card in deck.cards.thirdPodCards %}
                             <div class="col-6 col-lg-12">
                                 <img width="18px" src="/assets/keyforge/rarities/{{ card.rarity }}.svg" alt="{{ card.rarity }}" class="img-fluid"/>
                                 <span class="card_name" data-bs-toggle="modal" data-bs-target="#card_image" data-card="{{ card.name }}" data-card-serialized="{{ card.serializedName }}">{{ card.name }}</span>
@@ -139,7 +139,7 @@
                 <form id="updateDeckNotesForm">
                     <div class="row mt-3">
                         <div class="col-md-12">
-                            <textarea class="form-control" name="notes" id="deckNotesInput" rows="8" maxlength="512"></textarea>
+                            <textarea class="form-control" name="notes" id="deckNotesInput" rows="8" maxlength="512">{{ deck_notes }}</textarea>
                         </div>
                     </div>
 
@@ -165,18 +165,6 @@
 
     modal.on('show.bs.modal', function (event) {
         const button = $(event.relatedTarget);
-
-        $.get({
-            url: "/decks/json",
-            method: "GET",
-            dataType: "json",
-            data: {
-                'extraDeckId': button.data('deck-id'),
-            },
-        }).done(function(response) {
-            $('#deckNotesInput')[0].value = response.data[0].user_data.notes;
-        });
-
         $('#hiddenDeckId')[0].value = button.data('deck-id');
     });
 
@@ -198,6 +186,7 @@
                 'notes': notes,
             },
         }).done(function() {
+            $('#deckNotesInput')[0].innerHTML = notes;
             $('#deckNotesInputDisabled')[0].innerHTML = notes;
             modal.modal('hide');
         });

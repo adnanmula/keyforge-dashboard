@@ -31,6 +31,6 @@ final readonly class ApproveAccountCommandHandler
         $user->setRole(UserRole::ROLE_KEYFORGE);
 
         $this->repository->save($user);
-        $this->kfUserRepository->save(KeyforgeUser::create($user->id(), $user->name()));
+        $this->kfUserRepository->save(KeyforgeUser::create($user->id(), $user->name(), null));
     }
 }
