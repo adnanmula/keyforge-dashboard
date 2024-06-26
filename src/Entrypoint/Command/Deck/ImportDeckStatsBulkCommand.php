@@ -52,7 +52,7 @@ final class ImportDeckStatsBulkCommand extends Command
             $this->updateRepository->add(Uuid::from($deck));
 
             if ($index*2 > 0 && ($index*2+2) % 25 === 0) {
-                $output->writeln('Reached request limit sleeping for 65 seconds');
+                $output->writeln('Reached request limit sleeping for 70 seconds');
                 \sleep(70);
             }
         }

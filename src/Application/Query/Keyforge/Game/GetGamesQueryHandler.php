@@ -41,6 +41,7 @@ final class GetGamesQueryHandler
         foreach ($games as $game) {
             $userIds[] = $game->winner();
             $userIds[] = $game->loser();
+            $userIds[] = $game->firstTurn();
             $decksIds[] = $game->winnerDeck();
             $decksIds[] = $game->loserDeck();
         }
