@@ -67,11 +67,11 @@ final readonly class UpdateDeckWinRateService
 
                     $winStats[$userId]['losses']++;
 
-                    if (\in_array($game->loser()->value(), $players, true)) {
+                    if (\in_array($game->winner()->value(), $players, true)) {
                         $winStats[$userId]['lossesVsUser']++;
                     }
 
-                    if (\in_array($game->loser()->value(), $hisFriends, true)) {
+                    if (\in_array($game->winner()->value(), $hisFriends, true)) {
                         $winStats[$userId]['lossesVsFriends']++;
                     }
                 }
@@ -85,6 +85,10 @@ final readonly class UpdateDeckWinRateService
 
             if (null === $userDatum) {
                 $userDatum = KeyforgeDeckUserData::from($deck->id(), Uuid::from($userId), 0, 0, 0, 0, 0, 0);
+            }
+
+            if (\array_reduce($winStat, static fn ($c, $i): int => $c + $i) === 0) {
+                continue;
             }
 
             $userDatum->setWins(

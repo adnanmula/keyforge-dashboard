@@ -57,6 +57,12 @@ final class GetDecksQueryHandler
             $expressions[] = new Filter(new FilterField('owner'), new StringFilterValue($query->owner->value()), FilterOperator::EQUAL);
         }
 
+        if (\count($query->owners) > 0) {
+            foreach ($query->owners as $owner) {
+                $expressions[] = new Filter(new FilterField('owner'), new StringFilterValue($owner), FilterOperator::EQUAL);
+            }
+        }
+
         if (null !== $query->deck) {
             $expressions[] = new Filter(new FilterField('name'), new StringFilterValue($query->deck), FilterOperator::CONTAINS_INSENSITIVE);
         }

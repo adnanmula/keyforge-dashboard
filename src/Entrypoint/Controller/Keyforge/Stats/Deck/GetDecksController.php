@@ -46,11 +46,19 @@ final class GetDecksController extends Controller
 
             if (null !== $orderField && null !== $orderType) {
                 if ($orderField === 'win_rate') {
-                    $sorting = new Sorting(
-                        new Order(new FilterField('wins'), OrderType::from($orderType)),
-                        new Order(new FilterField('losses'), OrderType::from($orderType) === OrderType::ASC ? OrderType::DESC : OrderType::ASC),
-                        new Order(new FilterField('id'), OrderType::ASC),
-                    );
+                    if (null === $request->get('extraFilterOwner')) {
+                        $sorting = new Sorting(
+                            new Order(new FilterField('wins_vs_users'), OrderType::from($orderType)),
+                            new Order(new FilterField('losses_vs_users'), OrderType::from($orderType) === OrderType::ASC ? OrderType::DESC : OrderType::ASC),
+                            new Order(new FilterField('id'), OrderType::ASC),
+                        );
+                    } else {
+                        $sorting = new Sorting(
+                            new Order(new FilterField('wins'), OrderType::from($orderType)),
+                            new Order(new FilterField('losses'), OrderType::from($orderType) === OrderType::ASC ? OrderType::DESC : OrderType::ASC),
+                            new Order(new FilterField('id'), OrderType::ASC),
+                        );
+                    }
                 } else {
                     $sorting = new Sorting(
                         new Order(new FilterField($orderField), OrderType::from($orderType)),

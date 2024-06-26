@@ -131,7 +131,7 @@ menu.deck_wl: 'Victorias/Derrotas por baraja'
 menu.decks: Barajas
 menu.exclude: Excluir
 menu.favorite: Favorita
-menu.friend_decks_games: 'Solo partidas y barajas de amigos'
+menu.friend_decks_games: 'Solo barajas de amigos'
 menu.friend_name: 'Nombre del amigo'
 menu.friend_requests: 'Solicitudes de amistad'
 menu.new_accounts_pending: 'Cuentas nuevas'

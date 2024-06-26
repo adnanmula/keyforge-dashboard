@@ -46,6 +46,8 @@ final class GetGamesQueryHandler
             $decksIds[] = $game->loserDeck();
         }
 
+        $userIds = \array_values(\array_unique(\array_filter($userIds)));
+
         $decks = $this->deckRepository->search(new Criteria(
             null,
             null,

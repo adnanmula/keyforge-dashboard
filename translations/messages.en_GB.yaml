@@ -131,7 +131,7 @@ menu.deck_wl: 'Wins/Losses by deck'
 menu.decks: Decks
 menu.exclude: Exclude
 menu.favorite: Favorite
-menu.friend_decks_games: 'Only friend decks and games'
+menu.friend_decks_games: 'Only friend decks'
 menu.friend_name: 'Friend name'
 menu.friend_requests: 'Friend requests'
 menu.new_accounts_pending: 'New accounts'

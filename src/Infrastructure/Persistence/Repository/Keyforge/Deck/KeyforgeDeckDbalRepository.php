@@ -71,7 +71,13 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
 
         (new DbalCriteriaAdapter($builder))->execute($criteria);
 
-        return $query->executeQuery()->fetchOne();
+        $result = $query->executeQuery()->fetchOne();
+
+        if (false === $result) {
+            return 0;
+        }
+
+        return  $result;
     }
 
     public function save(KeyforgeDeck $deck, bool $updateUserData = false): void
@@ -329,7 +335,7 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
     {
         $owners = [];
         if (null !== $deck['owners']) {
-            $owners = array_map(static fn (string $id): Uuid => Uuid::from($id), \explode(',', $deck['owners']));
+            $owners = \array_unique(\array_map(static fn (string $id): Uuid => Uuid::from($id), \explode(',', $deck['owners'])));
         }
 
         $userData = null;
