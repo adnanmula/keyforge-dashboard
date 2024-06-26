@@ -25,6 +25,12 @@ use Symfony\Bundle\SecurityBundle\Security;
 
 final class CreateGameCommandHandler
 {
+    private const COMPETITIONS_VS_RANDOMS = [
+        KeyforgeCompetition::VT,
+        KeyforgeCompetition::TCO_CASUAL,
+        KeyforgeCompetition::TCO_COMPETITIVE,
+    ];
+
     public function __construct(
         private KeyforgeUserRepository $userRepository,
         private KeyforgeGameRepository $gameRepository,
@@ -46,6 +52,13 @@ final class CreateGameCommandHandler
         [$winner, $loser, $firstTurn] = $this->getUsers($user, $command->winner(), $command->loser(), $command->firstTurn(), $command->competition());
         [$winnerDeck, $loserDeck] = $this->getDecks($command->winnerDeck(), $command->loserDeck());
 
+        $approved = false;
+
+        if (\in_array($command->competition(), self::COMPETITIONS_VS_RANDOMS, true)
+            || ($command->winner() === $command->loser() && $command->competition() === KeyforgeCompetition::SOLO)) {
+            $approved = true;
+        }
+
         $game = new KeyforgeGame(
             Uuid::v4(),
             $winner,
@@ -60,7 +73,7 @@ final class CreateGameCommandHandler
             new \DateTimeImmutable(),
             $command->competition(),
             $command->notes(),
-            false,
+            $approved,
             $user->id(),
         );
 
@@ -72,13 +85,7 @@ final class CreateGameCommandHandler
 
     private function getUsers(User $user, string $winner, string $loser, string $firstTurn, KeyforgeCompetition $competition): array
     {
-        $competitionsVsRandoms = [
-            KeyforgeCompetition::VT->value,
-            KeyforgeCompetition::TCO_CASUAL->value,
-            KeyforgeCompetition::TCO_COMPETITIVE->value,
-        ];
-
-        if (\in_array($competition->value, $competitionsVsRandoms, true)) {
+        if (\in_array($competition, self::COMPETITIONS_VS_RANDOMS, true)) {
             if (false === Uuid::isValid($winner)) {
                 $winner = $this->fetchUserOrCreate($winner, $user, true)->id()->value();
             }
