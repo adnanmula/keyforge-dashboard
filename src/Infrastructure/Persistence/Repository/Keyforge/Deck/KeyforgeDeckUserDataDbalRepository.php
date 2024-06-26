@@ -81,6 +81,20 @@ final class KeyforgeDeckUserDataDbalRepository extends DbalRepository implements
         $stmt->executeStatement();
     }
 
+    public function remove(Uuid $deckId): void
+    {
+        $stmt = $this->connection->prepare(
+            \sprintf(
+                'DELETE FROM %s a WHERE a.deck_id = :deck_id',
+                self::TABLE,
+            ),
+        );
+
+        $stmt->bindValue(':deck_id', $deckId->value());
+        $stmt->executeStatement();
+    }
+
+
     private function map(array $deck): KeyforgeDeckUserData
     {
         return KeyforgeDeckUserData::from(

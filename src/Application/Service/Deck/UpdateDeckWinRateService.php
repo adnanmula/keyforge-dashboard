@@ -78,6 +78,8 @@ final readonly class UpdateDeckWinRateService
             }
         }
 
+        $this->deckUserDataRepository->remove($deckId);
+
         foreach ($winStats as $userId => $winStat) {
             $userDatum = $userData[$userId] ?? null;
 

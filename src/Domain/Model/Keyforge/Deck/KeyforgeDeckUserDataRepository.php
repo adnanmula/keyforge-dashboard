@@ -3,6 +3,7 @@
 namespace AdnanMula\Cards\Domain\Model\Keyforge\Deck;
 
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckUserData;
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Criteria\Criteria;
 
 interface KeyforgeDeckUserDataRepository
@@ -15,4 +16,6 @@ interface KeyforgeDeckUserDataRepository
     public function count(Criteria $criteria): int;
 
     public function save(KeyforgeDeckUserData $data): void;
+
+    public function remove(Uuid $deckId): void;
 }
