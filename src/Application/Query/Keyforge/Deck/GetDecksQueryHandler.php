@@ -57,12 +57,6 @@ final class GetDecksQueryHandler
             $expressions[] = new Filter(new FilterField('owner'), new StringFilterValue($query->owner->value()), FilterOperator::EQUAL);
         }
 
-        if (\count($query->owners) > 0) {
-            foreach ($query->owners as $owner) {
-                $expressions[] = new Filter(new FilterField('owner'), new StringFilterValue($owner), FilterOperator::EQUAL);
-            }
-        }
-
         if (null !== $query->deck) {
             $expressions[] = new Filter(new FilterField('name'), new StringFilterValue($query->deck), FilterOperator::CONTAINS_INSENSITIVE);
         }
@@ -125,15 +119,22 @@ final class GetDecksQueryHandler
         }
 
         if (null !== $query->houses) {
-            $houseFilterExpressions = [];
-
-            foreach ($query->houses as $house) {
-                $houseFilterExpressions[] = new Filter(new FilterField('houses'), new ArrayElementFilterValue($house), FilterOperator::IN_ARRAY);
-            }
-
             $filters[] = new AndFilterGroup(
                 $query->houseFilterType === 'any' ? FilterType::OR : FilterType::AND,
-                ...$houseFilterExpressions,
+                ...\array_map(
+                    static fn (string $house): Filter => new Filter(new FilterField('houses'), new ArrayElementFilterValue($house), FilterOperator::IN_ARRAY),
+                    $query->houses,
+                ),
+            );
+        }
+
+        if (\count($query->owners) > 0) {
+            $filters[] = new AndFilterGroup(
+                FilterType::OR,
+                ...\array_map(
+                    static fn (string $owner): Filter => new Filter(new FilterField('owner'), new StringFilterValue($owner), FilterOperator::EQUAL),
+                    $query->owners,
+                ),
             );
         }
 

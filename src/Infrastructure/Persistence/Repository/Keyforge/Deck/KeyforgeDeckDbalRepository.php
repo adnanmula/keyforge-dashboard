@@ -65,9 +65,7 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
         $builder = $this->connection->createQueryBuilder();
         $query = $builder->select('COUNT(a.id)')
             ->from(self::TABLE, 'a')
-            ->leftJoin('a', self::TABLE_OWNERSHIP, 'b', 'a.id = b.deck_id')
-            ->leftJoin('a', self::TABLE_USER_DATA, 'c', 'a.id = c.deck_id')
-            ->groupBy('a.id');
+            ->leftJoin('a', self::TABLE_OWNERSHIP, 'b', 'a.id = b.deck_id');
 
         (new DbalCriteriaAdapter($builder))->execute($criteria);
 
