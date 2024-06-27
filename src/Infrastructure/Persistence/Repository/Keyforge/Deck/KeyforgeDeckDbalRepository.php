@@ -25,6 +25,7 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
     private const FIELD_MAPPING = [
         'id' => 'a.id',
         'owner' => 'b.user_id',
+        'user_stat' => 'c.user_id',
         'wins' => 'wins',
         'losses' => 'losses',
     ];

@@ -138,18 +138,28 @@ final class GetDecksQueryHandler
             );
         }
 
+        $userDataFilters = [];
+
+        if (null !== $query->owner) {
+            $userDataFilters[] = new AndFilterGroup(
+                FilterType::AND,
+                new Filter(new FilterField('user_stat'), new StringFilterValue($query->owner->value()), FilterOperator::EQUAL),
+            );
+        }
+
         $criteria = new Criteria(
             $query->start,
             $query->length,
             $query->sorting,
             ...$filters,
+            ...$userDataFilters,
         );
 
         $countCriteria = new Criteria(
             null,
             null,
             null,
-            ...$criteria->filterGroups(),
+            ...$filters,
         );
 
         $decks = $this->repository->search($criteria);
