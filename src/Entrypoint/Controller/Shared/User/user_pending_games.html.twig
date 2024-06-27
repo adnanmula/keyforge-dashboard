@@ -33,7 +33,7 @@
                             <td><a href="{{ path('keyforge_deck_detail', {'deckId': game.loser_deck_id}) }}"  target="_blank">{{ game.loser_deck_name }}</a></td>
                             <td>{{ game.created_by_name }}</td>
 
-                            {% if game.approval_pending_by == app.user.id %}
+                            {% if is_granted('ROLE_ADMIN') or game.approval_pending_by == app.user.id %}
                                 <td class="text-nowrap">
                                     <button data-toggle="tooltip" title="{{ 'menu.accept'|trans }}" type="button" class="btn btn-dark acceptGame m-auto" data-game="{{ game.id }}">{{ 'menu.accept'|trans }}</button>
                                     <button data-toggle="tooltip" title="{{ 'menu.reject'|trans }}" type="button" class="btn btn-dark rejectGame m-auto" data-game="{{ game.id }}">{{ 'menu.reject'|trans }}</button>

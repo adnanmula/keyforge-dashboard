@@ -95,13 +95,18 @@
                     <div class="col-md-4 col-sm-12">
                         <label>{{ 'menu.min_sas'|trans }}</label>
                         <input type="number" class="form-control" name="min-sas" id="filter_min_sas" min="30" max="200" value="30">
+                        <div class="divider py-1"></div>
                         <label>{{ 'menu.max_sas'|trans }}</label>
                         <input type="number" class="form-control" name="max-sas" id="filter_max_sas" min="30" max="200" value="200">
                     </div>
 
+                    {% if owner is null %}
+                    {% if is_granted('ROLE_KEYFORGE') %}
+
+                    <div class="divider py-1"></div>
+                    <div class="divider py-1"></div>
                     <div class="divider py-1"></div>
 
-                    {% if is_granted('ROLE_KEYFORGE') %}
                     <div class="col-md-4 col-sm-12">
                         <label for="tags" class="form-label">{{ 'menu.other_options'|trans }}</label>
 
@@ -116,13 +121,12 @@
                         <div class="divider py-1"></div>
                         <div class="divider py-1"></div>
 
-                        {% if owner is null %}
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" value="" id="only_friends" checked>
                             <label class="form-check-label" for="only_friends">{{ 'menu.friend_decks_games'|trans }}</label>
                         </div>
-                        {% endif %}
                     </div>
+                    {% endif %}
                     {% endif %}
                 </div>
 

@@ -8,13 +8,13 @@
             <th scope="col">{{ 'menu.houses'|trans }}</th>
             <th scope="col">{{ 'menu.winrate'|trans }}</th>
             <th scope="col">{{ 'menu.sas'|trans }}</th>
-            <th scope="col">A</th>
-            <th scope="col">E</th>
-            <th scope="col">R</th>
-            <th scope="col">C</th>
-            <th scope="col">F</th>
-            <th scope="col">U</th>
-            <th scope="col">D</th>
+            <th scope="col" data-toggle="tooltip" title="{{ 'deck.amber_control'|trans }}">A</th>
+            <th scope="col" data-toggle="tooltip" title="{{ 'deck.expected_amber'|trans }}">E</th>
+            <th scope="col" data-toggle="tooltip" title="{{ 'deck.artifact_control'|trans }}">R</th>
+            <th scope="col" data-toggle="tooltip" title="{{ 'deck.creature_control'|trans }}">C</th>
+            <th scope="col" data-toggle="tooltip" title="{{ 'deck.efficiency'|trans }}">F</th>
+            <th scope="col" data-toggle="tooltip" title="{{ 'deck.recursion'|trans }}">U</th>
+            <th scope="col" data-toggle="tooltip" title="{{ 'deck.disruption'|trans }}">D</th>
             <th scope="col"></th>
         </tr>
         </thead>
@@ -22,6 +22,13 @@
 </div>
 
 <script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip({
+            'container': 'body',
+            'placement': 'top'
+        })
+    })
+
     function onlyFriends() {
         const input = document.getElementById('only_friends');
 

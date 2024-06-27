@@ -42,7 +42,7 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
             ->addSelect('COALESCE(SUM(c.wins_vs_users), 0) as wins_vs_users, COALESCE(SUM(c.losses_vs_users), 0) as losses_vs_users')
             ->from(self::TABLE, 'a')
             ->leftJoin('a', self::TABLE_OWNERSHIP, 'b', 'a.id = b.deck_id')
-            ->leftJoin('a', self::TABLE_USER_DATA, 'c', 'a.id = c.deck_id')
+            ->leftJoin('a', self::TABLE_USER_DATA, 'c', 'a.id = c.deck_id and b.user_id = c.user_id')
             ->groupBy('a.id');
 
         (new DbalCriteriaAdapter($builder, self::FIELD_MAPPING))->execute($criteria);

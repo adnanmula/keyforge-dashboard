@@ -50,6 +50,10 @@ final class CreateCompetitionGameCommand
             ->that($fixtureId, 'competitionId')->uuid()
             ->verifyNow();
 
+        if (null !== $firstTurn && $firstTurn !== $winner && $firstTurn !== $loser) {
+            throw new \InvalidArgumentException('First player is not in game');
+        }
+
         $this->winner = Uuid::from($winner);
         $this->winnerDeck = $winnerDeck;
         $this->winnerChains = (int) $winnerChains;

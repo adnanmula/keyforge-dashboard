@@ -102,9 +102,7 @@
                 },
                 {
                     render: function (data, type, row) {
-                        if ('' === row.notes) {
-                            return '-';
-                        }
+                        let cell = '';
 
                         $(function () {
                             $('[data-toggle="tooltip"]').tooltip({
@@ -113,7 +111,19 @@
                             })
                         })
 
-                        return '<i class="bi bi-info-circle" data-toggle="tooltip" title="' + row.notes + '"></i>';
+                        if (row.loser_deck === row.winner_deck) {
+                            cell += '<span data-toggle="tooltip" title="{{ 'game.mirror'|trans }}"> M </span>'
+                        }
+
+                        if (row.loser === row.winner) {
+                            cell += '<span data-toggle="tooltip" title="{{ 'game.solo'|trans }}"> S </span>'
+                        }
+
+                        if ('' !== row.notes) {
+                            cell += '<i class="bi bi-journal-text" data-toggle="tooltip" title="' + row.notes + '"></i>'
+                        }
+
+                        return cell;
                     },
                     targets: 8, //Notes
                 },

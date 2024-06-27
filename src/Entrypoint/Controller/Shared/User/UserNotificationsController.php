@@ -100,22 +100,22 @@ final class UserNotificationsController extends Controller
         $error = null;
 
         try {
-            $gamesPending = $this->gameRepository->search(
-                new Criteria(
-                    null,
-                    null,
-                    null,
-                    new AndFilterGroup(
-                        FilterType::AND,
-                        new Filter(new FilterField('approved'), new IntFilterValue(0), FilterOperator::EQUAL),
-                    ),
-                    new AndFilterGroup(
-                        FilterType::OR,
-                        new Filter(new FilterField('winner'), new StringFilterValue($user->id()->value()), FilterOperator::EQUAL),
-                        new Filter(new FilterField('loser'), new StringFilterValue($user->id()->value()), FilterOperator::EQUAL),
-                    ),
-                ),
+            $filters = [];
+
+            $filters[] = new AndFilterGroup(
+                FilterType::AND,
+                new Filter(new FilterField('approved'), new IntFilterValue(0), FilterOperator::EQUAL),
             );
+
+            if (false === $this->isGranted(UserRole::ROLE_ADMIN->value)) {
+                $filters[] = new AndFilterGroup(
+                    FilterType::OR,
+                    new Filter(new FilterField('winner'), new StringFilterValue($user->id()->value()), FilterOperator::EQUAL),
+                    new Filter(new FilterField('loser'), new StringFilterValue($user->id()->value()), FilterOperator::EQUAL),
+                );
+            }
+
+            $gamesPending = $this->gameRepository->search(new Criteria(null, null, null, ...$filters));
 
             $deckIds = \array_values(\array_unique(\array_merge(
                 \array_map(static fn (KeyforgeGame $g) => $g->winnerDeck()->value(), $gamesPending),
@@ -225,12 +225,18 @@ final class UserNotificationsController extends Controller
             throw new \Exception('Game not found');
         }
 
-        if ($game->createdBy()->equalTo($user->id()) || $game->approved()) {
-            throw new \Exception('Error');
+        if ($game->approved()) {
+            return new Response('', Response::HTTP_OK);
         }
 
-        if (false === $game->winner()->equalTo($user->id()) && false === $game->loser()->equalTo($user->id())) {
-            throw new \Exception('Error');
+        if (false === $this->isGranted(UserRole::ROLE_ADMIN->value)) {
+            if ($game->createdBy()->equalTo($user->id())) {
+                throw new \Exception('Error');
+            }
+
+            if (false === $game->winner()->equalTo($user->id()) && false === $game->loser()->equalTo($user->id())) {
+                throw new \Exception('Error');
+            }
         }
 
         $game->approve();
@@ -270,12 +276,18 @@ final class UserNotificationsController extends Controller
             throw new \Exception('Game not found');
         }
 
-        if ($game->createdBy()->equalTo($user->id()) || $game->approved()) {
-            throw new \Exception('Error');
+        if ($game->approved()) {
+            throw new \Exception('Game is approved');
         }
 
-        if (false === $game->winner()->equalTo($user->id()) && false === $game->loser()->equalTo($user->id())) {
-            throw new \Exception('Error');
+        if (false === $this->isGranted(UserRole::ROLE_ADMIN->value)) {
+            if ($game->createdBy()->equalTo($user->id())) {
+                throw new \Exception('Error');
+            }
+
+            if (false === $game->winner()->equalTo($user->id()) && false === $game->loser()->equalTo($user->id())) {
+                throw new \Exception('Error');
+            }
         }
 
         $this->gameRepository->remove($game->id());

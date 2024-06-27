@@ -46,6 +46,10 @@ final class CreateGameCommand
             ->that($notes, 'notes')->string()->maxLength(512)
             ->verifyNow();
 
+        if (null !== $firstTurn && $firstTurn !== $winner && $firstTurn !== $loser) {
+            throw new \InvalidArgumentException('First player is not in game');
+        }
+
         $this->winner = $winner;
         $this->winnerDeck = $winnerDeck;
         $this->winnerChains = (int) $winnerChains;

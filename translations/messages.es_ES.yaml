@@ -63,7 +63,7 @@ exception.user_not_exists: Usuario no existe
 game.competition: Torneo
 game.date: Fecha
 game.first_turn: 'Primer turno'
-game.keys: LLaves
+game.keys: Llaves
 game.loser: Perdedor
 game.loser_chains: 'Llaves del perdedor'
 game.loser_deck: 'Baraja perdedora'
@@ -72,6 +72,7 @@ game.notes: Notas
 game.register_game: 'Registrar partida'
 game.save: Guardar
 game.solo: 'Solitario'
+game.mirror: 'Mirror'
 game.tco_casual: 'TCO Casual'
 game.tco_competitive: 'TCO Competitivo'
 game.lgs: 'LGS'
