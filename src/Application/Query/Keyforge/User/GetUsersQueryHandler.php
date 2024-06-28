@@ -2,9 +2,8 @@
 
 namespace AdnanMula\Cards\Application\Query\Keyforge\User;
 
-use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeGame;
-use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeGameRepository;
-use AdnanMula\Cards\Domain\Model\Keyforge\User\KeyforgeUser;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckUserDataRepository;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckUserData;
 use AdnanMula\Cards\Domain\Model\Keyforge\User\KeyforgeUserRepository;
 use AdnanMula\Cards\Domain\Model\Shared\UserRepository;
 use AdnanMula\Criteria\Criteria;
@@ -14,6 +13,7 @@ use AdnanMula\Criteria\FilterField\FilterField;
 use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
 use AdnanMula\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Criteria\FilterValue\NullFilterValue;
+use AdnanMula\Criteria\FilterValue\StringArrayFilterValue;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
 
 final class GetUsersQueryHandler
@@ -21,7 +21,7 @@ final class GetUsersQueryHandler
     public function __construct(
         private UserRepository $userRepository,
         private KeyforgeUserRepository $repository,
-        private KeyforgeGameRepository $gameRepository,
+        private KeyforgeDeckUserDataRepository $userDataRepository,
     ) {}
 
     public function __invoke(GetUsersQuery $query): array
@@ -35,21 +35,36 @@ final class GetUsersQueryHandler
             );
         }
 
-        $users = $this->repository->search(new Criteria(null, null, null, ...$filters));
-
         if ($query->onlyFriends) {
-            $friends = $this->userRepository->friends($query->userId);
-            $friendsId = \array_map(static fn (array $f) => $f['id'], $friends);
-            $friendsId[] = $query->userId->value();
+            $friends = $this->userRepository->friends($query->userId, false);
+            $friendIds = [];
 
-            $users = \array_filter($users, static fn (KeyforgeUser $u) => \in_array($u->id()->value(), $friendsId, true));
+            foreach ($friends as $friend) {
+                $friendIds[] = $friend['id'];
+                $friendIds[] = $friend['friend_id'];
+            }
+
+            $friendIds = array_unique($friendIds);
+
+            $filters[] = new AndFilterGroup(
+                FilterType::AND,
+                new Filter(new FilterField('id'), new StringArrayFilterValue(...$friendIds), FilterOperator::IN),
+            );
         }
+
+        $users = $this->repository->search(new Criteria(null, null, null, ...$filters));
 
         if (false === $query->withGames) {
             return $users;
         }
 
-        $userIds = \array_map(static fn (KeyforgeUser $user) => $user->id()->value(), $users);
+        $indexedUsers = [];
+        $userIds = [];
+
+        foreach ($users as $user) {
+            $indexedUsers[$user->id()->value()] = $user;
+            $userIds[] = $user->id()->value();
+        }
 
         $filters = [];
 
@@ -58,22 +73,33 @@ final class GetUsersQueryHandler
             $filters[] = new Filter(new FilterField('loser'), new StringFilterValue($userId), FilterOperator::EQUAL);
         }
 
-        $games = $this->gameRepository->search(new Criteria(
-            null,
-            null,
-            null,
-            new AndFilterGroup(FilterType::OR, ...$filters),
-        ));
+        $userData = $this->userDataRepository->search(
+            new Criteria(
+                null,
+                null,
+                null,
+                new AndFilterGroup(
+                    FilterType::AND,
+                    new Filter(new FilterField('user_id'), new StringArrayFilterValue(...$userIds), FilterOperator::IN),
+                ),
+            ),
+        );
 
-        if ($query->onlyFriends) {
-            $games = $this->excludeGamesWithNotFriends($users, $games);
+        $indexedUserData = [];
+
+        foreach ($userData as $userDatum) {
+            $indexedUserData[$userDatum->userId()->value()][] = $userDatum;
         }
-
         $result = [];
 
-        foreach ($users as $user) {
-            $wins = \count(\array_filter($games, static fn (KeyforgeGame $game) => $game->winner()->equalTo($user->id())));
-            $losses = \count(\array_filter($games, static fn (KeyforgeGame $game) => $game->loser()->equalTo($user->id())));
+        foreach ($indexedUserData as $userId => $userData) {
+            if ($query->onlyFriends) {
+                $wins = \array_reduce($userData, static fn ($c, KeyforgeDeckUserData $i): int => $c + $i->winsVsFriends());
+                $losses = \array_reduce($userData, static fn ($c, KeyforgeDeckUserData $i): int => $c + $i->lossesVsFriends());
+            } else {
+                $wins = \array_reduce($userData, static fn ($c, KeyforgeDeckUserData $i): int => $c + $i->winsVsUsers());
+                $losses = \array_reduce($userData, static fn ($c, KeyforgeDeckUserData $i): int => $c + $i->lossesVsUsers());
+            }
 
             $totalGames = $wins + $losses;
 
@@ -84,8 +110,8 @@ final class GetUsersQueryHandler
             }
 
             $result[] = [
-                'id' => $user->id()->value(),
-                'name' => $user->name(),
+                'id' => $userId,
+                'name' => $indexedUsers[$userId]->name(),
                 'is_external' => false,
                 'wins' => $wins,
                 'losses' => $losses,
@@ -99,15 +125,5 @@ final class GetUsersQueryHandler
         });
 
         return $result;
-    }
-
-    private function excludeGamesWithNotFriends(array $users, array $games): array
-    {
-        $userIds = \array_map(static fn (KeyforgeUser $user) => $user->id()->value(), $users);
-
-        return \array_values(\array_filter($games, static function (KeyforgeGame $game) use ($userIds) {
-            return \in_array($game->winner()->value(), $userIds, true)
-                && \in_array($game->loser()->value(), $userIds, true);
-        }));
     }
 }

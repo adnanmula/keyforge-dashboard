@@ -48,9 +48,9 @@ final readonly class UpdateDeckWinRateService
                     continue;
                 }
 
-                if ($game->winner()->value() === $userId && $game->winnerDeck()->value() === $deck->id()->value()) {
-                    $hisFriends = $friends[$userId] ?? [];
+                $hisFriends = $friends[$userId] ?? [];
 
+                if ($game->winner()->value() === $userId && $game->winnerDeck()->value() === $deck->id()->value()) {
                     $winStats[$userId]['wins']++;
 
                     if (\in_array($game->loser()->value(), $players, true)) {
@@ -63,8 +63,6 @@ final readonly class UpdateDeckWinRateService
                 }
 
                 if ($game->loser()->value() === $userId && $game->loserDeck()->value() === $deck->id()->value()) {
-                    $hisFriends = $friends[$userId] ?? [];
-
                     $winStats[$userId]['losses']++;
 
                     if (\in_array($game->winner()->value(), $players, true)) {

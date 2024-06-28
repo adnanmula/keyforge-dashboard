@@ -19,7 +19,7 @@ final class ListUsersController extends Controller
                 null,
                 null,
                 true,
-                true,
+                false,
                 $request->get('showAll') === null,
                 $user->id()->value(),
             )),
