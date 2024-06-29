@@ -1,6 +1,6 @@
 <div class="form-group">
    <div class="row">
-       <div class="col-3">
+       <div class="col-12 col-sm-6 col-md-3">
            <label>{{ 'game.winner'|trans }}</label>
            <select id="winner-selector" class="form-select game_list_filter">
                {% for id,friend in friends %}
@@ -8,7 +8,7 @@
                {% endfor %}
            </select>
        </div>
-       <div class="col-3">
+       <div class="col-12 col-sm-6 col-md-3">
            <label>{{ 'game.loser'|trans }}</label>
            <select id="loser-selector" class="form-select game_list_filter">
                {% for id,friend in friends %}
@@ -16,7 +16,7 @@
                {% endfor %}
            </select>
        </div>
-       <div class="col-3">
+       <div class="col-12 col-sm-6 col-md-3">
            <label>{{ 'game.keys'|trans }}</label>
            <select id="score-selector" class="form-select game_list_filter">
                <option value="2">3/2</option>
@@ -24,7 +24,7 @@
                <option value="0">3/0</option>
            </select>
        </div>
-       <div class="col-3">
+       <div class="col-12 col-sm-6 col-md-3">
            <label>{{ 'game.competition'|trans }}</label>
            <select id="competition-selector" class="form-select game_list_filter">
                <option value="SOLO">{{ 'game.solo'|trans }}</option>
