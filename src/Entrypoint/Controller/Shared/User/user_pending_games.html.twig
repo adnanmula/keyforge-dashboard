@@ -23,6 +23,7 @@
                             <td>{{ 'game.winner'|trans }}</td>
                             <td class="text-nowrap">{{ 'game.winner_deck'|trans }}</td>
                             <td class="text-nowrap">{{ 'game.loser_deck'|trans }}</td>
+                            <td class="text-nowrap">{{ 'game.keys'|trans }}</td>
                             <td class="text-nowrap">{{ 'menu.created_by'|trans }}</td>
                             <td></td>
                         </tr>
@@ -31,6 +32,7 @@
                             <td><a href="{{ path('keyforge_user_detail', {'userId': game.winner_id}) }}"  target="_blank">{% if game.winner_id == app.user.id %}{{ 'menu.you'|trans }}{% else %}{{ game.winner_name }}{% endif %}</a></td>
                             <td><a href="{{ path('keyforge_deck_detail', {'deckId': game.winner_deck_id}) }}"  target="_blank">{{ game.winner_deck_name }}</a></td>
                             <td><a href="{{ path('keyforge_deck_detail', {'deckId': game.loser_deck_id}) }}"  target="_blank">{{ game.loser_deck_name }}</a></td>
+                            <td>{{ game.score }}</td>
                             <td>{{ game.created_by_name }}</td>
 
                             {% if is_granted('ROLE_ADMIN') or game.approval_pending_by == app.user.id %}

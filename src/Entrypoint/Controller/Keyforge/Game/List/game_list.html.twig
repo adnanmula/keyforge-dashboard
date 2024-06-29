@@ -1,3 +1,45 @@
+<div class="form-group">
+   <div class="row">
+       <div class="col-3">
+           <label>{{ 'game.winner'|trans }}</label>
+           <select id="winner-selector" class="form-select game_list_filter">
+               {% for id,friend in friends %}
+                   <option value="{{ id }}">{{ friend }}</option>
+               {% endfor %}
+           </select>
+       </div>
+       <div class="col-3">
+           <label>{{ 'game.loser'|trans }}</label>
+           <select id="loser-selector" class="form-select game_list_filter">
+               {% for id,friend in friends %}
+                   <option value="{{ id }}">{{ friend }}</option>
+               {% endfor %}
+           </select>
+       </div>
+       <div class="col-3">
+           <label>{{ 'game.keys'|trans }}</label>
+           <select id="score-selector" class="form-select game_list_filter">
+               <option value="2">3/2</option>
+               <option value="1">3/1</option>
+               <option value="0">3/0</option>
+           </select>
+       </div>
+       <div class="col-3">
+           <label>{{ 'game.competition'|trans }}</label>
+           <select id="competition-selector" class="form-select game_list_filter">
+               <option value="SOLO">{{ 'game.solo'|trans }}</option>
+               <option value="FRIENDS" selected>{{ 'game.with_friends'|trans }}</option>
+               <option value="TCO_CASUAL">{{ 'game.tco_casual'|trans }}</option>
+               <option value="TCO_COMPETITIVE">{{ 'game.tco_competitive'|trans }}</option>
+               <option value="LGS">{{ 'game.lgs'|trans }}</option>
+               <option value="VT">{{ 'game.vt'|trans }}</option>
+               <option value="NKFL">{{ 'game.nkfl'|trans }}</option>
+               <option value="LOCAL_LEAGUE">{{ 'game.local_league'|trans }}</option>
+           </select>
+       </div>
+   </div>
+</div>
+<div class="divider py-2"></div>
 <div class="" style="display: flex; overflow-x: auto">
     <table id="gamesList" class="table table-responsive-sm table-hover" style="width:100%;">
         <thead>
@@ -17,7 +59,45 @@
 </div>
 
 <script>
+    function prepareSelectors(id) {
+        $('#' + id).select2({
+            multiple: true,
+            closeOnSelect: true,
+            allowClear: false,
+            placeholder: '',
+            theme: 'bootstrap-5',
+        });
+
+        $('#' + id).val("")
+        $('#' + id).trigger("change");
+    }
+
+    function winnerFilter() {
+        return $('#winner-selector').val();
+    }
+
+    function loserFilter() {
+        return $('#loser-selector').val();
+    }
+
+    function scoreFilter() {
+        return $('#score-selector').val();
+    }
+
+    function competitionFilter() {
+        return $('#competition-selector').val();
+    }
+
     $(document).ready(function () {
+        prepareSelectors('winner-selector');
+        prepareSelectors('loser-selector');
+        prepareSelectors('score-selector');
+        prepareSelectors('competition-selector');
+
+        $('.game_list_filter').change(function (e) {
+            $('#gamesList').DataTable().ajax.reload();
+        });
+
         $(window).on('resize', function() {
             $('#gamesList.dataTable').resize;
         });
@@ -32,11 +112,24 @@
             order: [[6, 'desc']],
             lengthMenu: [10, 25, 50, 100],
             iDisplayLength: 25,
-            ajax: '{{ endpoint }}',
+            ajax: {
+                {% if deck_reference is null %}
+                    url: '{{ path('keyforge_games_json', {'userId': user_reference}) }}',
+                {% else %}
+                    url: '{{ path('keyforge_games_json', {'deckId': deck_reference}) }}',
+                {% endif %}
+                data: function(d){
+                    d.extraFilterWinner = winnerFilter();
+                    d.extraFilterLoser = loserFilter();
+                    d.extraFilterScore = scoreFilter();
+                    d.extraFilterCompetition = competitionFilter();
+                }
+            },
             createdRow: function(row, data, dataIndex) {
-                let deck = '{{ reference }}';
+                let deck = '{{ deck_reference }}';
+                let user = '{{ user_reference }}';
 
-                if (deck === data.{{ reference_type }}) {
+                if (deck === data.{{ reference_type }} || user === data.{{ reference_type }}) {
                     $(row).addClass('table-success');
                 } else {
                     $(row).addClass('table-danger');
@@ -62,7 +155,7 @@
                 },
                 {
                     render: function (data, type, row) {
-                        let reference = '{{ reference }}';
+                        let reference = '{{ deck_reference }}';
 
                         let firstIcon = '';
                         if (row.first_turn === row.winner_name) {
@@ -85,7 +178,7 @@
                 },
                 {
                     render: function (data, type, row) {
-                        let reference = '{{ reference }}';
+                        let reference = '{{ deck_reference }}';
 
                         let firstIcon = '';
                         if (row.first_turn === row.loser_name) {

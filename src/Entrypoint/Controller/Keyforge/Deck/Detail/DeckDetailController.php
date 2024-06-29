@@ -11,6 +11,7 @@ use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Exception\DeckNotExistsException;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeck;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Shared\User;
+use AdnanMula\Cards\Domain\Model\Shared\UserRepository;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
 use AdnanMula\Criteria\Criteria;
@@ -35,6 +36,7 @@ final class DeckDetailController extends Controller
         LocaleSwitcher $localeSwitcher,
         TranslatorInterface $translator,
         private KeyforgeDeckRepository $deckRepository,
+        private UserRepository $userRepository,
     ) {
         parent::__construct($bus, $security, $localeSwitcher, $translator);
     }
@@ -44,6 +46,17 @@ final class DeckDetailController extends Controller
         /** @var ?User $user */
         $user = $this->security->getUser();
         $deck = $this->deck($user?->id(), $deckId);
+
+        $indexedFriends = [];
+
+        if (null !== $user) {
+            $friends = $this->userRepository->friends($user->id(), false);
+
+            foreach ($friends as $friend) {
+                $indexedFriends[$friend['id']] = $friend['sender_name'];
+                $indexedFriends[$friend['friend_id']] = $friend['receiver_name'];
+            }
+        }
 
         $analysis = $this->extractResult($this->bus->dispatch(new AnalyzeDeckThreatsCommand($deck->id()->value())));
 
@@ -61,6 +74,7 @@ final class DeckDetailController extends Controller
                 'deck_history' => $this->deckHistory($deckId),
                 'analysis' => $analysis['detail'],
                 'stats' => $this->stats($deck),
+                'indexed_friends' => $indexedFriends,
             ],
         );
     }
@@ -208,8 +222,8 @@ final class DeckDetailController extends Controller
         }
 
         return [
-            'wins' => $deck->userData()?->wins(),
-            'losses' => $deck->userData()?->losses(),
+            'wins' => $deck->userData()?->winsVsUsers(),
+            'losses' => $deck->userData()?->lossesVsUsers(),
             'rival' => $currentRival,
             'nemesis' => $currentNemesis,
         ];

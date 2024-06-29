@@ -78,6 +78,7 @@ game.tco_competitive: 'TCO Competitivo'
 game.lgs: 'LGS'
 game.nkfl: 'NKFL'
 game.vt: 'Vault Tour'
+game.local_league: 'Liga con amigos'
 game.type: Tipo
 game.winner: Ganador
 game.winner_chains: 'Llaves del ganador'

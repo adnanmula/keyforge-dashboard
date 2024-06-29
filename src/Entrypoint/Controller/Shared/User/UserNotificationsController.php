@@ -181,6 +181,7 @@ final class UserNotificationsController extends Controller
                     'loser_deck_id' => $game->loserDeck()->value(),
                     'winner_deck_name' => $indexedDecks[$game->winnerDeck()->value()] ?? '',
                     'loser_deck_name' => $indexedDecks[$game->loserDeck()->value()] ?? '',
+                    'score' => $game->score()->winnerScore() . '/' . $game->score()->loserScore(),
                     'created_by' => $game->createdBy()?->value(),
                     'created_by_name' => $indexedUser[$game->createdBy()?->value()] ?? '',
                     'approval_pending_by' => $approvalPendingBy,

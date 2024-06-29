@@ -8,10 +8,12 @@ use AdnanMula\Criteria\Criteria;
 use AdnanMula\Criteria\Filter\Filter;
 use AdnanMula\Criteria\Filter\FilterType;
 use AdnanMula\Criteria\FilterField\FilterField;
+use AdnanMula\Criteria\FilterField\JsonKeyFilterField;
 use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
 use AdnanMula\Criteria\FilterGroup\OrFilterGroup;
 use AdnanMula\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Criteria\FilterValue\IntFilterValue;
+use AdnanMula\Criteria\FilterValue\StringArrayFilterValue;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
 use AdnanMula\Criteria\Sorting\Order;
 use AdnanMula\Criteria\Sorting\OrderType;
@@ -44,6 +46,13 @@ final class GetGamesController extends Controller
         $deckId = $request->get('deckId');
         $userId = $request->get('userId');
 
+        $queryFilters = $request->query->all();
+
+        $extraFilterWinner = $queryFilters['extraFilterWinner'] ?? [];
+        $extraFilterLoser = $queryFilters['extraFilterLoser'] ?? [];
+        $extraFilterScore = $queryFilters['extraFilterScore'] ?? [];
+        $extraFilterCompetition = $queryFilters['extraFilterCompetition'] ?? [];
+
         $filters = [];
 
         if (null !== $deckId && null === $userId) {
@@ -73,6 +82,38 @@ final class GetGamesController extends Controller
                 FilterType::AND,
                 new Filter(new FilterField('loser'), new StringFilterValue($userId), FilterOperator::EQUAL),
                 new Filter(new FilterField('loser_deck'), new StringFilterValue($deckId), FilterOperator::EQUAL),
+            );
+        }
+
+        if (\count($extraFilterWinner) > 0) {
+            $filters[] = new AndFilterGroup(
+                FilterType::AND,
+                new Filter(new FilterField('winner'), new StringArrayFilterValue(...$extraFilterWinner), FilterOperator::IN),
+            );
+        }
+
+        if (\count($extraFilterLoser) > 0) {
+            $filters[] = new AndFilterGroup(
+                FilterType::AND,
+                new Filter(new FilterField('loser'), new StringArrayFilterValue(...$extraFilterLoser), FilterOperator::IN),
+            );
+        }
+
+        if (\count($extraFilterScore) > 0) {
+            $filters[] = new AndFilterGroup(
+                FilterType::AND,
+                new Filter(
+                    new JsonKeyFilterField('score', 'loser_score'),
+                    new StringArrayFilterValue(...$extraFilterScore),
+                    FilterOperator::IN,
+                ),
+            );
+        }
+
+        if (\count($extraFilterCompetition) > 0) {
+            $filters[] = new AndFilterGroup(
+                FilterType::AND,
+                new Filter(new FilterField('competition'), new StringArrayFilterValue(...$extraFilterCompetition), FilterOperator::IN),
             );
         }
 

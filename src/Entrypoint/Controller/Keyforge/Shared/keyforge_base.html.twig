@@ -41,11 +41,11 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-lg-0">
-                        {% if is_granted('ROLE_KEYFORGE') %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ path('keyforge_user_list') }}">{{ 'menu.players'|trans }}<span class="sr-only"></span></a>
-                        </li>
-                        {% endif %}
+{#                        {% if is_granted('ROLE_KEYFORGE') %}#}
+{#                        <li class="nav-item">#}
+{#                            <a class="nav-link" href="{{ path('keyforge_user_list') }}">{{ 'menu.players'|trans }}<span class="sr-only"></span></a>#}
+{#                        </li>#}
+{#                        {% endif %}#}
 
                         <li class="nav-item">
                             <a class="nav-link" href="{{ path('keyforge_decks') }}">{{ 'menu.decks'|trans }}<span class="sr-only"></span></a>
