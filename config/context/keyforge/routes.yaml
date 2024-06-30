@@ -18,6 +18,11 @@ keyforge_my_decks:
   controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Stats\Deck\MyDecksController
   methods: [GET]
 
+keyforge_ownership_update:
+  path: /ownership/{id}
+  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Deck\UpdateOwnership\UpdateDeckOwnershipController
+  methods: [ POST,DELETE ]
+
 keyforge_deck_update_notes:
   path: /deck/notes
   controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Deck\UpdateNotes\UpdateDeckNotesController

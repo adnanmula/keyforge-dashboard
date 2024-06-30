@@ -148,9 +148,7 @@ final class GetGamesController extends Controller
         $order = null;
 
         if (\count($queryOrder) > 0) {
-            $orderColumns = [
-                6 => 'date',
-            ];
+            $orderColumns = [6 => 'date'];
 
             $orderField = $orderColumns[(int)$queryOrder[0]['column']] ?? null;
             $orderType = $queryOrder[0]['dir'] ?? null;

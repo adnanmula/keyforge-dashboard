@@ -121,6 +121,8 @@ menu.addgame: 'Register game'
 menu.admin: Admin
 menu.all: All
 menu.any: Any
+menu.add_my_deck: 'Add to my decks'
+menu.remove_my_deck: 'Remove from my decks'
 menu.archenemy: Archenemy
 menu.best_performance: 'Best performance'
 menu.best_win_streak: 'Best win streak'

@@ -119,6 +119,11 @@
         <a href="https://decksofkeyforge.com/decks/{{ reference }}" target="_blank"><img class="img-thumbnail" width="40px" style="min-width: 40px" src="{{ asset('assets/keyforge/logos/dok.svg') }}" alt="DoK"/></a>
         <a href="https://keyforgegame.com/deck-details/{{ reference }}" target="_blank"><img class="img-thumbnail" width="50px" style="min-width: 50px" src="{{ asset('assets/keyforge/logos/vault.png') }}" alt="Vault"/></a>
         {% if is_granted('ROLE_KEYFORGE') %}
+            {% if app.user.id.value in owners %}
+                <button type="button" id="deck_remove_my_deck" class="btn btn-dark btn-sm m-1" data-deck-id="{{ deck.id }}">{{ 'menu.remove_my_deck'|trans }}</button>
+            {% else %}
+                <button type="button" id="deck_add_my_deck" class="btn btn-dark btn-sm m-1" data-deck-id="{{ deck.id }}">{{ 'menu.add_my_deck'|trans }}</button>
+            {% endif %}
             {% if deck_notes is not null %}
                 <button type="button" class="btn btn-dark btn-sm ml-1" style="width: 39px; height: 49px" data-bs-toggle="modal" data-bs-target="#deckUpdateNotes" data-deck-id="{{ deck.id }}"><i class="bi bi-pencil"></i></button>
             {% endif %}
@@ -189,6 +194,38 @@
             $('#deckNotesInput')[0].innerHTML = notes;
             $('#deckNotesInputDisabled')[0].innerHTML = notes;
             modal.modal('hide');
+        });
+    });
+
+    $('#deck_add_my_deck').click(function (e) {
+        e.preventDefault();
+
+        url = '{{ path('keyforge_ownership_update', {'id': '-id-'}) }}'
+        url = url.replace('-id-', e.target.getAttribute('data-deck-id'));
+
+        $.post({
+            url: url,
+            method: 'POST',
+        }).done(function( ) {
+            location.reload();
+        }).fail(function() {
+            alert('Error');
+        });
+    });
+
+    $('#deck_remove_my_deck').click(function (e) {
+        e.preventDefault();
+
+        url = '{{ path('keyforge_ownership_update', {'id': '-id-'}) }}'
+        url = url.replace('-id-', e.target.getAttribute('data-deck-id'));
+
+        $.post({
+            url: url,
+            method: 'DELETE',
+        }).done(function( ) {
+            location.reload();
+        }).fail(function() {
+            alert('Error');
         });
     });
 </script>

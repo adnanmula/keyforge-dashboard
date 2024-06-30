@@ -122,6 +122,8 @@ menu.admin: Admin
 menu.all: Todas
 menu.any: Cualquiera
 menu.archenemy: Archenemy
+menu.add_my_deck: 'Añadir a mis barajas'
+menu.remove_my_deck: 'Eliminar de mis barajas'
 menu.best_performance: 'Mejor rendimiento'
 menu.best_win_streak: 'Mejor racha de victorias'
 menu.change_password: 'Actualizar contraseña'
