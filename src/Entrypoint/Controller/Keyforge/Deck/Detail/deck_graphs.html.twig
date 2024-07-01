@@ -1,4 +1,4 @@
-<div class="shadow-lg p-3 mb-5 bg-white rounded">
+<div class="shadow-lg p-3 mb-3 bg-white rounded">
     <div class="row">
         <div class="col-12">
             <label>{{ 'menu.compare_to'|trans }}</label>
@@ -7,10 +7,12 @@
     </div>
 
     <div class="divider py-3"></div>
+
     <div class="row" id="stats_by_scopes_container">
         <div class="col-12 col-lg-6">
             <h4>{{ deck.name }}</h4>
             <table class="table table-hover">
+                <tr><td>{{ 'deck.set'|trans }}</td><td class="text-end">{{ deck.set }}</td></tr>
                 <tr><td>{{ 'deck_comparison.sas'|trans }}</td><td class="text-end">{{ deck.stats.sas }}</td></tr>
                 <tr><td>{{ 'deck_comparison.expectedAmber'|trans }}</td><td class="text-end">{{ deck.stats.expectedAmber }}</td></tr>
                 <tr><td>{{ 'deck_comparison.amberControl'|trans }}</td><td class="text-end">{{ deck.stats.amberControl }}</td></tr>
@@ -31,6 +33,7 @@
         <div id="compared_deck" class="col-12 col-lg-6" style="display: none">
             <h4 id="other_deck_name"></h4>
             <table class="table table-hover">
+                <tr><td>{{ 'deck.set'|trans }}</td><td id="other_deck_set" class="text-end"></td><td id="diff_set" class="comparison_stat text-end"></td></tr>
                 <tr><td>{{ 'deck_comparison.sas'|trans }}</td><td id="other_deck_sas" class="text-end"></td><td id="diff_sas" class="comparison_stat text-end"></td></tr>
                 <tr><td>{{ 'deck_comparison.expectedAmber'|trans }}</td><td id="other_deck_expectedAmber" class="text-end"></td><td id="diff_expectedAmber" class="comparison_stat text-end"></td></tr>
                 <tr><td>{{ 'deck_comparison.amberControl'|trans }}</td><td id="other_deck_amberControl" class="text-end"></td><td id="diff_amberControl" class="comparison_stat text-end"></td></tr>
@@ -51,8 +54,14 @@
     </div>
 
     <script>
-        $('select').on('select2:open', function() {
+        $('select').on('select2:open', function(e) {
+            const select2 = $(e.target).data('select2');
+
             $('.select2-search--dropdown .select2-search__field').attr('placeholder', '{{ 'menu.type_to_seach'|trans }}');
+
+            if (!select2.options.get('multiple')) {
+                select2.dropdown.$search.get(0).focus();
+            }
         });
 
         let cachedDecks = [];
@@ -62,12 +71,20 @@
                 url: '{{ path('keyforge_decks_json') }}',
                 minimumInputLength: 3,
                 data: function (params) {
-                    return {
+                    let query = {
                         search: {
                             'value': params.term,
                         },
                         'length': 20,
                     };
+
+                    if ('' === params.term || undefined === params.term) {
+                        query.extraFilterOnlyOwned = true;
+                        query.extraFilterOnlyFriends = true;
+                        query.extraFilterOwner = '{{ app.user.id }}';
+                    }
+
+                    return query;
                 },
                 processResults: function (data) {
                     cachedDecks = [];
@@ -112,6 +129,7 @@
             $('#diff_bonusAmber')[0].innerText = ({{deck.stats.rawAmber}} - deck.stats.rawAmber).toFixed(0);
 
 
+            $('#other_deck_set')[0].innerText = deck.set;
             $('#other_deck_name')[0].innerText = deck.name;
             $('#other_deck_sas')[0].innerText = deck.stats.sas;
             $('#other_deck_expectedAmber')[0].innerText = deck.stats.expectedAmber;
