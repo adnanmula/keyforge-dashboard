@@ -112,6 +112,8 @@ keyforge.set_wc: WC
 keyforge.set_woe: WoE
 locale.en: Inglés
 locale.es: Español
+menu.compare_to: 'Comparar con'
+menu.type_to_seach: 'Escribe para buscar...'
 menu.approval_pending_by: 'Pendiente de aceptar por:'
 menu.accept: Aceptar
 menu.reject: Rechazar
