@@ -8,7 +8,7 @@ use AdnanMula\Criteria\Criteria;
 interface KeyforgeDeckRepository
 {
     /** @return array<KeyforgeDeck> */
-    public function search(Criteria $criteria): array;
+    public function search(Criteria $criteria, bool $isMyDecks = false): array;
     public function searchOne(Criteria $criteria): ?KeyforgeDeck;
     public function count(Criteria $criteria): int;
     public function addOwner(Uuid $deckId, Uuid $userId): void;
@@ -19,4 +19,5 @@ interface KeyforgeDeckRepository
     public function ownedBy(Uuid $userId): array;
     public function updateNotes(Uuid $userId, Uuid $deckId, string $notes): void;
     public function save(KeyforgeDeck $deck): void;
+    public function bellCurve(): array;
 }

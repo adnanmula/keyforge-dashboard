@@ -18,7 +18,7 @@
     {% include 'Keyforge/Deck/Detail/deck_stats.html.twig' %}
 
     {% if is_granted('ROLE_KEYFORGE') %}
-        {% include 'Keyforge/Deck/Detail/deck_graphs.html.twig' with {'deck': deck} %}
+        {% include 'Keyforge/Deck/Detail/deck_graphs.html.twig' with {'deck': deck, 'deck_card_types': deck_card_types} %}
     {% endif %}
 
 {#    {% include 'Keyforge/Deck/Detail/deck_analysis.html.twig' %}#}

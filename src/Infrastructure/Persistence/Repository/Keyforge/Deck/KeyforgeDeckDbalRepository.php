@@ -30,9 +30,15 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
         'losses' => 'losses',
     ];
 
-    public function search(Criteria $criteria): array
+    public function search(Criteria $criteria, bool $isMyDecks = false): array
     {
         $builder = $this->connection->createQueryBuilder();
+
+        $condition = 'a.id = c.deck_id';
+
+        if ($isMyDecks) {
+            $condition = 'a.id = c.deck_id and b.user_id = c.user_id';
+        }
 
         $query = $builder->select('a.*')
             ->addSelect("string_agg(b.user_id::varchar, ',') as owners")
@@ -42,7 +48,7 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
             ->addSelect('COALESCE(SUM(c.wins_vs_users), 0) as wins_vs_users, COALESCE(SUM(c.losses_vs_users), 0) as losses_vs_users')
             ->from(self::TABLE, 'a')
             ->leftJoin('a', self::TABLE_OWNERSHIP, 'b', 'a.id = b.deck_id')
-            ->leftJoin('a', self::TABLE_USER_DATA, 'c', 'a.id = c.deck_id and b.user_id = c.user_id')
+            ->leftJoin('a', self::TABLE_USER_DATA, 'c', $condition)
             ->groupBy('a.id');
 
         (new DbalCriteriaAdapter($builder, self::FIELD_MAPPING))->execute($criteria);
@@ -328,6 +334,28 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
             ->setParameter('user_id', $userId->value())
             ->setParameter('notes', $notes)
             ->executeStatement();
+    }
+
+    public function bellCurve(): array
+    {
+        $stats = ['sas', 'expected_amber', 'amber_control', 'creature_control', 'artifact_control'];
+        $result = [];
+
+        foreach ($stats as $stat) {
+            $resultStats = $this->connection->createQueryBuilder()
+                ->select('ROUND(a.' . $stat . ', 0) as stat, count(a.*) as count')
+                ->from(self::TABLE, 'a')
+                ->innerJoin('a', self::TABLE_OWNERSHIP, 'b', 'a.id = b.deck_id')
+                ->groupBy('ROUND(a.' . $stat . ', 0)')
+                ->orderBy('ROUND(a.' . $stat . ', 0)', 'asc')
+                ->executeQuery()
+                ->fetchAllAssociative();
+            foreach ($resultStats as $resultStat) {
+                $result[$stat][$resultStat['stat']] = $resultStat['count'];
+            }
+        }
+
+        return $result;
     }
 
     private function map(array $deck): KeyforgeDeck

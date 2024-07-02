@@ -1,54 +1,135 @@
 <div class="shadow-lg p-3 mb-3 bg-white rounded">
-    <div class="row">
-        <div class="col-12">
-            <label>{{ 'menu.compare_to'|trans }}</label>
-            <select id="deck_compare_to" class="form-select"></select>
-        </div>
-    </div>
-
-    <div class="divider py-3"></div>
-
     <div class="row" id="stats_by_scopes_container">
-        <div class="col-12 col-lg-6">
-            <h4>{{ deck.name }}</h4>
-            <table class="table table-hover">
-                <tr><td>{{ 'deck.set'|trans }}</td><td class="text-end">{{ deck.set }}</td></tr>
-                <tr><td>{{ 'deck_comparison.sas'|trans }}</td><td class="text-end">{{ deck.stats.sas }}</td></tr>
-                <tr><td>{{ 'deck_comparison.expectedAmber'|trans }}</td><td class="text-end">{{ deck.stats.expectedAmber }}</td></tr>
-                <tr><td>{{ 'deck_comparison.amberControl'|trans }}</td><td class="text-end">{{ deck.stats.amberControl }}</td></tr>
-                <tr><td>{{ 'deck_comparison.creatureControl'|trans }}</td><td class="text-end">{{ deck.stats.creatureControl }}</td></tr>
-                <tr><td>{{ 'deck_comparison.artifactControl'|trans }}</td><td class="text-end">{{ deck.stats.artifactControl }}</td></tr>
-                <tr><td>{{ 'deck_comparison.creatureCount'|trans }}</td><td class="text-end">{{ deck.stats.creatureCount }}</td></tr>
-                <tr><td>{{ 'deck_comparison.artifactCount'|trans }}</td><td class="text-end">{{ deck.stats.artifactCount }}</td></tr>
-                <tr><td>{{ 'deck_comparison.efficiency'|trans }}</td><td class="text-end">{{ deck.stats.efficiency }}</td></tr>
-                <tr><td>{{ 'deck_comparison.disruption'|trans }}</td><td class="text-end">{{ deck.stats.disruption }}</td></tr>
-                <tr><td>{{ 'deck_comparison.recursion'|trans }}</td><td class="text-end">{{ deck.stats.recursion }}</td></tr>
-                <tr><td>{{ 'deck_comparison.other'|trans }}</td><td class="text-end">{{ deck.stats.other }}</td></tr>
-                <tr><td>{{ 'deck_comparison.effectivePower'|trans }}</td><td class="text-end">{{ deck.stats.effectivePower }}</td></tr>
-                <tr><td>{{ 'deck_comparison.aerc'|trans }}</td><td class="text-end">{{ deck.stats.aercScore }}</td></tr>
-                <tr><td>{{ 'deck_comparison.synergy'|trans }}</td><td class="text-end">{{ deck.stats.synergyRating - deck.stats.antiSynergyRating }}</td></tr>
-                <tr><td>{{ 'deck_comparison.bonusAmber'|trans }}</td><td class="text-end">{{ deck.stats.rawAmber }}</td></tr>
-            </table>
+        <div class="col-12 col-md-6">
+            <canvas id="deck_card_types" class="m-0 mt-1"></canvas>
+
+            <div class="divider py-2"></div>
+            <div class="divider py-2"></div>
+            <div class="divider py-2"></div>
+
+            <select id="deck_compare_stats" class="form-select">
+                <option value="sas">{{ 'deck.sas'|trans }}</option>
+                <option value="expected_amber">{{ 'deck.expected_amber'|trans }}</option>
+                <option value="amber_control">{{ 'deck.amber_control'|trans }}</option>
+                <option value="creature_control">{{ 'deck.creature_control'|trans }}</option>
+                <option value="artifact_control">{{ 'deck.artifact_control'|trans }}</option>
+            </select>
+
+            <div class="divider py-2"></div>
+            <div class="divider py-2"></div>
+
+            <canvas id="deck_stats_comparison_sas" class="deck_stats_comparison"></canvas>
+            <canvas id="deck_stats_comparison_expected_amber" style="display: none" class="deck_stats_comparison"></canvas>
+            <canvas id="deck_stats_comparison_amber_control" style="display: none" class="deck_stats_comparison"></canvas>
+            <canvas id="deck_stats_comparison_creature_control" style="display: none" class="deck_stats_comparison"></canvas>
+            <canvas id="deck_stats_comparison_artifact_control" style="display: none" class="deck_stats_comparison"></canvas>
         </div>
-        <div id="compared_deck" class="col-12 col-lg-6" style="display: none">
-            <h4 id="other_deck_name"></h4>
+
+        <div class="col-12 col-md-6">
+
+
+            <h4>{{ deck.name }}</h4>
+            <span>{{ 'menu.compare_to'|trans }}</span>
+            <select id="deck_compare_to" class="form-select"></select>
+            <div class="divider py-2"></div>
+
             <table class="table table-hover">
-                <tr><td>{{ 'deck.set'|trans }}</td><td id="other_deck_set" class="text-end"></td><td id="diff_set" class="comparison_stat text-end"></td></tr>
-                <tr><td>{{ 'deck_comparison.sas'|trans }}</td><td id="other_deck_sas" class="text-end"></td><td id="diff_sas" class="comparison_stat text-end"></td></tr>
-                <tr><td>{{ 'deck_comparison.expectedAmber'|trans }}</td><td id="other_deck_expectedAmber" class="text-end"></td><td id="diff_expectedAmber" class="comparison_stat text-end"></td></tr>
-                <tr><td>{{ 'deck_comparison.amberControl'|trans }}</td><td id="other_deck_amberControl" class="text-end"></td><td id="diff_amberControl" class="comparison_stat text-end"></td></tr>
-                <tr><td>{{ 'deck_comparison.creatureControl'|trans }}</td><td id="other_deck_creatureControl" class="text-end"></td><td id="diff_creatureControl" class="comparison_stat text-end"></td></tr>
-                <tr><td>{{ 'deck_comparison.artifactControl'|trans }}</td><td id="other_deck_artifactControl" class="text-end"></td><td id="diff_artifactControl" class="comparison_stat text-end"></td></tr>
-                <tr><td>{{ 'deck_comparison.creatureCount'|trans }}</td><td id="other_deck_creatureCount" class="text-end"></td><td id="diff_creatureCount" class="comparison_stat text-end"></td></tr>
-                <tr><td>{{ 'deck_comparison.artifactCount'|trans }}</td><td id="other_deck_artifactCount" class="text-end"></td><td id="diff_artifactCount" class="comparison_stat text-end"></td></tr>
-                <tr><td>{{ 'deck_comparison.efficiency'|trans }}</td><td id="other_deck_efficiency" class="text-end"></td><td id="diff_efficiency" class="comparison_stat text-end"></td></tr>
-                <tr><td>{{ 'deck_comparison.disruption'|trans }}</td><td id="other_deck_disruption" class="text-end"></td><td id="diff_disruption" class="comparison_stat text-end"></td></tr>
-                <tr><td>{{ 'deck_comparison.recursion'|trans }}</td><td id="other_deck_recursion" class="text-end"></td><td id="diff_recursion" class="comparison_stat text-end"></td></tr>
-                <tr><td>{{ 'deck_comparison.other'|trans }}</td><td id="other_deck_other" class="text-end"></td><td id="diff_other" class="comparison_stat text-end"></td></tr>
-                <tr><td>{{ 'deck_comparison.effectivePower'|trans }}</td><td id="other_deck_effectivePower" class="text-end"></td><td id="diff_effectivePower" class="comparison_stat text-end"></td></tr>
-                <tr><td>{{ 'deck_comparison.aerc'|trans }}</td><td id="other_deck_aerc" class="text-end"></td><td id="diff_aerc" class="comparison_stat text-end"></td></tr>
-                <tr><td>{{ 'deck_comparison.synergy'|trans }}</td><td id="other_deck_synergy" class="text-end"></td><td id="diff_synergy" class="comparison_stat text-end"></td></tr>
-                <tr><td>{{ 'deck_comparison.bonusAmber'|trans }}</td><td id="other_deck_bonusAmber" class="text-end"></td><td id="diff_bonusAmber" class="comparison_stat text-end"></td></tr>
+                <tr>
+                    <td>{{ 'deck.set'|trans }}</td>
+                    <td class="text-end">{{ deck.set }}</td>
+                    <td id="diff_set" style="width: 1px;" class="comparison_stat text-nowrap text-end"></td>
+                    <td id="other_deck_set" style="width: 1px;">
+                </tr>
+                <tr>
+                    <td>{{ 'deck_comparison.sas'|trans }}</td>
+                    <td class="text-end">{{ deck.stats.sas }}</td>
+                    <td id="diff_sas" style="width: 1px;" class="comparison_stat text-nowrap text-end"></td>
+                    <td id="other_deck_sas" style="width: 1px;">
+                </tr>
+                <tr>
+                    <td>{{ 'deck_comparison.expectedAmber'|trans }}</td>
+                    <td class="text-end">{{ deck.stats.expectedAmber }}</td>
+                    <td id="diff_expectedAmber" style="width: 1px;" class="comparison_stat text-nowrap text-end"></td>
+                    <td id="other_deck_expectedAmber" style="width: 1px;">
+                </tr>
+                <tr>
+                    <td>{{ 'deck_comparison.amberControl'|trans }}</td>
+                    <td class="text-end">{{ deck.stats.amberControl }}</td>
+                    <td id="diff_amberControl" style="width: 1px;" class="comparison_stat text-nowrap text-end"></td>
+                    <td id="other_deck_amberControl" style="width: 1px;">
+                </tr>
+                <tr>
+                    <td>{{ 'deck_comparison.creatureControl'|trans }}</td>
+                    <td class="text-end">{{ deck.stats.creatureControl }}</td>
+                    <td id="diff_creatureControl" style="width: 1px;" class="comparison_stat text-nowrap text-end"></td>
+                    <td id="other_deck_creatureControl" style="width: 1px;">
+                </tr>
+                <tr>
+                    <td>{{ 'deck_comparison.artifactControl'|trans }}</td>
+                    <td class="text-end">{{ deck.stats.artifactControl }}</td>
+                    <td id="diff_artifactControl" style="width: 1px;" class="comparison_stat text-nowrap text-end"></td>
+                    <td id="other_deck_artifactControl" style="width: 1px;">
+                </tr>
+                <tr>
+                    <td>{{ 'deck_comparison.creatureCount'|trans }}</td>
+                    <td class="text-end">{{ deck.stats.creatureCount }}</td>
+                    <td id="diff_creatureCount" style="width: 1px;" class="comparison_stat text-nowrap text-end"></td>
+                    <td id="other_deck_creatureCount" style="width: 1px;">
+                </tr>
+                <tr>
+                    <td>{{ 'deck_comparison.artifactCount'|trans }}</td>
+                    <td class="text-end">{{ deck.stats.artifactCount }}</td>
+                    <td id="diff_artifactCount" style="width: 1px;" class="comparison_stat text-nowrap text-end"></td>
+                    <td id="other_deck_artifactCount" style="width: 1px;">
+                </tr>
+                <tr>
+                    <td>{{ 'deck_comparison.efficiency'|trans }}</td>
+                    <td class="text-end">{{ deck.stats.efficiency }}</td>
+                    <td id="diff_efficiency" style="width: 1px;" class="comparison_stat text-nowrap text-end"></td>
+                    <td id="other_deck_efficiency" style="width: 1px;">
+                </tr>
+                <tr>
+                    <td>{{ 'deck_comparison.disruption'|trans }}</td>
+                    <td class="text-end">{{ deck.stats.disruption }}</td>
+                    <td id="diff_disruption" style="width: 1px;" class="comparison_stat text-nowrap text-end"></td>
+                    <td id="other_deck_disruption" style="width: 1px;">
+                </tr>
+                <tr>
+                    <td>{{ 'deck_comparison.recursion'|trans }}</td>
+                    <td class="text-end">{{ deck.stats.recursion }}</td>
+                    <td id="diff_recursion" style="width: 1px;" class="comparison_stat text-nowrap text-end"></td>
+                    <td id="other_deck_recursion" style="width: 1px;">
+                </tr>
+                <tr>
+                    <td>{{ 'deck_comparison.other'|trans }}</td>
+                    <td class="text-end">{{ deck.stats.other }}</td>
+                    <td id="diff_other" style="width: 1px;" class="comparison_stat text-nowrap text-end"></td>
+                    <td id="other_deck_other" style="width: 1px;">
+                </tr>
+                <tr>
+                    <td>{{ 'deck_comparison.effectivePower'|trans }}</td>
+                    <td class="text-end">{{ deck.stats.effectivePower }}</td>
+                    <td id="diff_effectivePower" style="width: 1px;" class="comparison_stat text-nowrap text-end"></td>
+                    <td id="other_deck_effectivePower" style="width: 1px;">
+                </tr>
+                <tr>
+                    <td>{{ 'deck_comparison.aerc'|trans }}</td>
+                    <td class="text-end">{{ deck.stats.aercScore }}</td>
+                    <td id="diff_aerc" style="width: 1px;" class="comparison_stat text-nowrap text-end"></td>
+                    <td id="other_deck_aerc" style="width: 1px;">
+                </tr>
+                <tr>
+                    <td>{{ 'deck_comparison.synergy'|trans }}</td>
+                    <td class="text-end">{{ deck.stats.synergyRating - deck.stats.antiSynergyRating }}</td>
+                    <td id="diff_synergy" style="width: 1px;" class="comparison_stat text-nowrap text-end"></td>
+                    <td id="other_deck_synergy" style="width: 1px;">
+                </tr>
+                <tr>
+                    <td>{{ 'deck_comparison.bonusAmber'|trans }}</td>
+                    <td class="text-end">{{ deck.stats.rawAmber }}</td>
+                    <td id="diff_bonusAmber" style="width: 1px;" class="comparison_stat text-nowrap text-end"></td>
+                    <td id="other_deck_bonusAmber" style="width: 1px;">
+                </tr>
             </table>
         </div>
     </div>
@@ -105,7 +186,6 @@
             deck = cachedDecks[$('#deck_compare_to')[0].value] ?? null;
 
             if (null === deck) {
-                $('#compared_deck').hide();
                 $( ".comparison_stat" ).each( function () {
                     $(this)[0].innerText = '';
                 });
@@ -130,7 +210,6 @@
 
 
             $('#other_deck_set')[0].innerText = deck.set;
-            $('#other_deck_name')[0].innerText = deck.name;
             $('#other_deck_sas')[0].innerText = deck.stats.sas;
             $('#other_deck_expectedAmber')[0].innerText = deck.stats.expectedAmber;
             $('#other_deck_amberControl')[0].innerText = deck.stats.amberControl;
@@ -162,8 +241,135 @@
                     $(this)[0].innerHTML = '';
                 }
             });
+        });
 
-            $('#compared_deck').show();
+        let deckCardTypes = JSON.parse('{{ deck_card_types|json_encode|raw }}');
+
+        const deckCardTypesChart = new Chart(document.getElementById('deck_card_types').getContext('2d'), {
+            type: 'doughnut',
+            data: {
+                datasets: [
+                    {
+                        data: Object.values(deckCardTypes),
+                        backgroundColor: [
+                            'rgb(41, 128, 185)',
+                            'rgb(161,29,44)',
+                            'rgb(255,145,0)',
+                            'rgb(109,175,41)',
+                        ],
+                    }
+                ],
+                labels: Object.keys(deckCardTypes),
+            },
+            options: {
+                responsive: true,
+                aspectRatio: 2,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'bottom',
+                    },
+                    title: {
+                        display: false,
+                    }
+                }
+            },
+        });
+
+        let deckBellCurves = JSON.parse('{{ bell_curve|json_encode|raw }}');
+
+        barGraph('sas', 50, deckBellCurves.sas, '{{ deck.stats.sas }}');
+        barGraph('expected_amber', 60, deckBellCurves.expected_amber, '{{ deck.stats.expectedAmber|round(0) }}');
+        barGraph('amber_control', 60, deckBellCurves.amber_control, '{{ deck.stats.amberControl|round(0) }}');
+        barGraph('creature_control', 60, deckBellCurves.creature_control, '{{ deck.stats.creatureControl|round(0) }}');
+        barGraph('artifact_control', 300, deckBellCurves.artifact_control, '{{ deck.stats.artifactControl|round(0) }}');
+
+        function barGraph(stat, max, curveStat, highlightedKey) {
+            const color1 = 'rgb(37, 41, 33)';
+            const color2 = 'rgb(255, 193, 7)';
+
+            let barColors = [];
+
+            console.log(curveStat);
+
+            for (const [key, value] of Object.entries(curveStat)) {
+                console.log(key);
+                console.log(stat);
+                if (key === highlightedKey) {
+                    barColors.push(color2);
+                } else {
+                    barColors.push(color1);
+                }
+            }
+
+            console.log(barColors);
+
+
+            // curveStat.each( function () {
+            //     barColors = color1;
+            // });
+
+            console.log(barColors);
+
+
+            new Chart(document.getElementById('deck_stats_comparison_' + stat).getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(curveStat),
+                    datasets: [
+                        {
+                            data: Object.values(curveStat),
+                            borderColor: 'rgb(37, 41, 33)',
+                            backgroundColor: barColors,
+                            maxBarThickness: 50,
+                            yAxisID: 'percentage',
+                        },
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false,
+                        },
+                        title: {
+                            display: false,
+                        }
+                    },
+                    scale: {
+                        ticks: {
+                            precision: 0,
+                        },
+                    },
+                    scales: {
+                        percentage: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            min: 0,
+                            max: max,
+                            grid: {
+                                drawOnChartArea: true,
+                            },
+                            stacked: false,
+                        },
+                        count: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            grid: {
+                                drawOnChartArea: true,
+                            },
+                            stacked: false,
+                        },
+                    },
+                },
+            });
+        }
+
+        $('#deck_compare_stats').change(function () {
+            $('.deck_stats_comparison').hide();
+            $('#deck_stats_comparison_' + $('#deck_compare_stats')[0].value).show();
         });
     </script>
 </div>

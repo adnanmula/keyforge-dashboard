@@ -51,10 +51,12 @@ final class GetDecksQueryHandler
             ];
         }
 
+        $isMyDecks = false;
         $expressions = [];
 
         if (null !== $query->owner) {
             $expressions[] = new Filter(new FilterField('owner'), new StringFilterValue($query->owner->value()), FilterOperator::EQUAL);
+            $isMyDecks = true;
         }
 
         if (null !== $query->deck) {
@@ -71,7 +73,7 @@ final class GetDecksQueryHandler
                 $this->userRepository->friends($query->onlyFriends),
             );
 
-            $expressions[] = new Filter(new FilterField('owner'), new StringArrayFilterValue($query->onlyFriends->value(), ...$friends), FilterOperator::IN);
+            $expressions[] = new Filter(new FilterField('owner'), new StringArrayFilterValue($query->onlyFriends->value(), ...\array_unique($friends)), FilterOperator::IN);
         }
 
         $expressions[] = new Filter(new FilterField('sas'), new IntFilterValue($query->maxSas), FilterOperator::LESS_OR_EQUAL);
@@ -133,17 +135,8 @@ final class GetDecksQueryHandler
                 FilterType::OR,
                 ...\array_map(
                     static fn (string $owner): Filter => new Filter(new FilterField('owner'), new StringFilterValue($owner), FilterOperator::EQUAL),
-                    $query->owners,
+                    \array_unique($query->owners),
                 ),
-            );
-        }
-
-        $userDataFilters = [];
-
-        if (null !== $query->owner) {
-            $userDataFilters[] = new AndFilterGroup(
-                FilterType::AND,
-                new Filter(new FilterField('user_stat'), new StringFilterValue($query->owner->value()), FilterOperator::EQUAL),
             );
         }
 
@@ -152,7 +145,6 @@ final class GetDecksQueryHandler
             $query->length,
             $query->sorting,
             ...$filters,
-            ...$userDataFilters,
         );
 
         $countCriteria = new Criteria(
@@ -162,7 +154,7 @@ final class GetDecksQueryHandler
             ...$filters,
         );
 
-        $decks = $this->repository->search($criteria);
+        $decks = $this->repository->search($criteria, $isMyDecks);
         $totalFiltered = $this->repository->count($countCriteria);
         $total = $this->repository->count(new Criteria(null, null, null));
 

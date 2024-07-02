@@ -7,6 +7,8 @@ use AdnanMula\Cards\Application\Query\Keyforge\Deck\GetDecksQuery;
 use AdnanMula\Cards\Application\Query\Keyforge\Deck\GetDecksStatHistoryQuery;
 use AdnanMula\Cards\Application\Query\Keyforge\Game\GetGamesQuery;
 use AdnanMula\Cards\Application\Query\Keyforge\User\GetUsersQuery;
+use AdnanMula\Cards\Domain\Model\Keyforge\Card\KeyforgeCardRepository;
+use AdnanMula\Cards\Domain\Model\Keyforge\Card\ValueObject\KeyforgeCardType;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Exception\DeckNotExistsException;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeck;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckRepository;
@@ -20,6 +22,7 @@ use AdnanMula\Criteria\Filter\FilterType;
 use AdnanMula\Criteria\FilterField\FilterField;
 use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
 use AdnanMula\Criteria\FilterValue\FilterOperator;
+use AdnanMula\Criteria\FilterValue\StringArrayFilterValue;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,6 +39,7 @@ final class DeckDetailController extends Controller
         LocaleSwitcher $localeSwitcher,
         TranslatorInterface $translator,
         private KeyforgeDeckRepository $deckRepository,
+        private KeyforgeCardRepository $cardRepository,
         private UserRepository $userRepository,
     ) {
         parent::__construct($bus, $security, $localeSwitcher, $translator);
@@ -75,6 +79,8 @@ final class DeckDetailController extends Controller
                 'analysis' => $analysis['detail'],
                 'stats' => $this->stats($deck),
                 'indexed_friends' => $indexedFriends,
+                'deck_card_types' => $this->cardTypes($deck),
+                'bell_curve' => $this->deckRepository->bellCurve(),
             ],
         );
     }
@@ -227,5 +233,44 @@ final class DeckDetailController extends Controller
             'rival' => $currentRival,
             'nemesis' => $currentNemesis,
         ];
+    }
+
+    public function cardTypes(KeyforgeDeck $deck): array
+    {
+        $cardNames = [];
+
+        foreach (array_merge($deck->cards()->firstPodCards, $deck->cards()->secondPodCards, $deck->cards()->thirdPodCards) as $card) {
+            $cardNames[] = $card->serializedName;
+        }
+
+        $cards = $this->cardRepository->search(
+            new Criteria(
+                null,
+                null,
+                null,
+                new AndFilterGroup(
+                    FilterType::AND,
+                    new Filter(new FilterField('name_url'), new StringArrayFilterValue(...$cardNames), FilterOperator::IN),
+                ),
+            ),
+        );
+
+        $indexedCards = [];
+        foreach ($cards as $card) {
+            $indexedCards[$card->nameUrl] = $card;
+        }
+
+        $cardTypes = [
+            KeyforgeCardType::ACTION->value => 0,
+            KeyforgeCardType::CREATURE->value => 0,
+            KeyforgeCardType::ARTIFACT->value => 0,
+            KeyforgeCardType::UPGRADE->value => 0,
+        ];
+
+        foreach ($cardNames as $cardName) {
+            $cardTypes[$indexedCards[$cardName]->type->value]++;
+        }
+
+        return $cardTypes;
     }
 }

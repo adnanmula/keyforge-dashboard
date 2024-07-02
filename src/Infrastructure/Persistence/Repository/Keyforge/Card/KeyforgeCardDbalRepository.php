@@ -5,6 +5,7 @@ namespace AdnanMula\Cards\Infrastructure\Persistence\Repository\Keyforge\Card;
 use AdnanMula\Cards\Application\Service\Json;
 use AdnanMula\Cards\Domain\Model\Keyforge\Card\KeyforgeCard;
 use AdnanMula\Cards\Domain\Model\Keyforge\Card\KeyforgeCardRepository;
+use AdnanMula\Cards\Domain\Model\Keyforge\Card\ValueObject\KeyforgeCardType;
 use AdnanMula\Cards\Infrastructure\Persistence\Repository\DbalRepository;
 use AdnanMula\Cards\Shared\LocalizedString;
 use AdnanMula\Criteria\Criteria;
@@ -85,19 +86,21 @@ final class KeyforgeCardDbalRepository extends DbalRepository implements Keyforg
     {
         return new KeyforgeCard(
             $row['id'],
-            $row['houses'],
-            LocalizedString::fromArray($row['name']),
+            Json::decode($row['houses']),
+            LocalizedString::fromArray(Json::decode($row['name'])),
             $row['name_url'],
-            $row['flavor_text'],
-            $row['text'],
-            $row['type'],
+            null === $row['flavor_text']
+                ? null
+                : LocalizedString::fromArray(Json::decode($row['flavor_text'])),
+            LocalizedString::fromArray(Json::decode($row['text'])),
+            KeyforgeCardType::from($row['type']),
             Json::decode($row['traits']),
             $row['amber'],
             $row['power'],
             $row['armor'],
             $row['is_big'],
             $row['is_token'],
-            $row['sets'],
+            Json::decode($row['sets']),
             Json::decode($row['tags']),
         );
     }
