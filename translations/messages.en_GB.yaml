@@ -47,6 +47,7 @@ data.wins: Wins
 deck.add_to_my_decks: 'Add to my decks'
 deck.go_to_deck: 'Go to deck'
 deck.houses: Houses
+deck.sets: Sets
 deck.import: Import
 deck.imported: Imported
 deck.notes: Notes
@@ -194,6 +195,7 @@ menu.user_select_tooltip: 'When playing with random people paste their username 
 menu.username: Username
 menu.wiki: Wiki
 menu.winrate: 'Win rate'
+menu.winrates: 'Win rates'
 menu.worst_performance: 'Worst performance'
 menu.wr%: 'WinRate%'
 menu.wr/pr: 'Win/Pick Rate'

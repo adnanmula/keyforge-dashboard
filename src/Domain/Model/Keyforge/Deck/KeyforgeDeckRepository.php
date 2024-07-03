@@ -20,4 +20,5 @@ interface KeyforgeDeckRepository
     public function updateNotes(Uuid $userId, Uuid $deckId, string $notes): void;
     public function save(KeyforgeDeck $deck): void;
     public function bellCurve(): array;
+    public function homeCounts(): array;
 }

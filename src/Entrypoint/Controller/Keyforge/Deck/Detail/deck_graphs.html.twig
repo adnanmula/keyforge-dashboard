@@ -26,8 +26,6 @@
         </div>
 
         <div class="col-12 col-md-6">
-
-
             <h4>{{ deck.name }}</h4>
             <span>{{ 'menu.compare_to'|trans }}</span>
             <select id="deck_compare_to" class="form-select"></select>
@@ -290,27 +288,13 @@
 
             let barColors = [];
 
-            console.log(curveStat);
-
             for (const [key, value] of Object.entries(curveStat)) {
-                console.log(key);
-                console.log(stat);
                 if (key === highlightedKey) {
                     barColors.push(color2);
                 } else {
                     barColors.push(color1);
                 }
             }
-
-            console.log(barColors);
-
-
-            // curveStat.each( function () {
-            //     barColors = color1;
-            // });
-
-            console.log(barColors);
-
 
             new Chart(document.getElementById('deck_stats_comparison_' + stat).getContext('2d'), {
                 type: 'bar',

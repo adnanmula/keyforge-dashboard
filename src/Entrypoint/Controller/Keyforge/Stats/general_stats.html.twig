@@ -3,4 +3,184 @@
 {% block title %}Keyforge{% endblock %}
 
 {% block body %}
+    <div class="shadow-lg p-3 mb-3 bg-white rounded">
+        <div class="row m-3">
+            <div class="col-12 col-lg-4">
+                <canvas id="housePresence" width="300" height="300"></canvas>
+            </div>
+            <div class="col-12 col-lg-4">
+                <canvas id="setPresence" width="300" height="300"></canvas>
+            </div>
+        </div>
+
+        <div class="divider py-2"></div>
+        <div class="divider py-2"></div>
+
+        <div class="row m-3">
+            <h4>{{ 'menu.winrates'|trans }}</h4>
+            <div class="divider py-1"></div>
+
+            <div class="col-12 col-lg-4">
+                <canvas id="wrSet" width="400" height="400"></canvas>
+            </div>
+            <div class="col-12 col-lg-4">
+                <canvas id="wrHouse" width="400" height="400"></canvas>
+            </div>
+            <div class="col-12 col-lg-4">
+                <canvas id="wrSas" width="400" height="400"></canvas>
+            </div>
+        </div>
+    </div>
+    <script>
+        let housePresence = JSON.parse('{{ houses|json_encode|raw }}');
+        let setPresence = JSON.parse('{{ sets|json_encode|raw }}');
+        let wrSet = JSON.parse('{{ wrBySet|json_encode|raw }}');
+        let wrHouse = JSON.parse('{{ wrByHouse|json_encode|raw }}');
+        let wrSas = JSON.parse('{{ wrBySas|json_encode|raw }}');
+
+        const houseColors = [
+            'rgb(231, 76, 60)',  //Brobnar
+            'rgb(225, 78, 183)', //Dis
+            'rgb(177, 29, 33)',  //Ekwidon
+            'rgb(37, 41, 33)', //Geistoid
+            'rgb(52, 152, 219)', //Logos
+            'rgb(46, 204, 113)', //Mars
+            'rgb(41, 128, 185)', //Sanctum
+            'rgb(22, 160, 133)', //Saurian
+            'rgb(81, 90, 90)',   //Shadows
+            'rgb(125, 60, 152)', //Star Alliance
+            'rgb(21, 67, 96)',   //Unfathomable
+            'rgb(20, 90, 50)',   //Untamed
+        ];
+
+        const setColors = [
+            'rgb(52, 152, 219)', //AoA
+            'rgb(231, 76, 60)',  //CotA
+            'rgb(7,70,113)',  //DT
+            'rgb(37, 41, 33)', //GR
+            'rgb(22, 160, 133)', //MM
+            'rgb(133,128,128)', //U22
+            'rgb(133,128,128)', //VM23
+
+            'rgb(125, 60, 152)', //WC
+            'rgb(177, 29, 33)',  //WoE
+        ];
+
+        graph('housePresence', '{{ 'deck.houses'|trans }}', housePresence, houseColors);
+        graph('setPresence', '{{ 'deck.sets'|trans }}', setPresence, setColors);
+        graph2('wrSet', wrSet, 1.5);
+        graph2('wrHouse', wrHouse, 1.2);
+        graph2('wrSas', wrSas, 1.4);
+
+        function graph(id, title, data, colors) {
+            new Chart(document.getElementById(id).getContext('2d'), {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(data),
+                    datasets: [
+                        {
+                            data: Object.values(data),
+                            borderColor: 'rgb(255,255,255)',
+                            backgroundColor: colors,
+                        },
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    aspectRatio: 1.2,
+                    plugins: {
+                        legend: {
+                            display: false,
+                            position: 'bottom',
+                        },
+                        title: {
+                            display: true,
+                            text: title,
+                        }
+                    }
+                },
+            });
+        }
+
+        function graph2(id, data, ratio) {
+            let wins = [];
+            let losses = [];
+            let wr = [];
+
+            for (const [key, value] of Object.entries(data)) {
+                wins.push(data[key].wins);
+                losses.push(data[key].losses);
+                wr.push(data[key].winrate);
+            }
+
+            new Chart(document.getElementById(id).getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(data),
+                    datasets: [
+                        {
+                            label: '{{ 'data.wins'|trans }}',
+                            data: wins,
+                            borderColor: '#688f4e',
+                            backgroundColor: '#688f4e',
+                        },
+                        {
+                            label: '{{ 'data.losses'|trans }}',
+                            data: losses,
+                            borderColor: '#d53302',
+                            backgroundColor: '#d53302',
+                        },
+                        {
+                            label: '{{ 'data.winrate'|trans }}',
+                            data: wr,
+                            borderColor: '#3a6383',
+                            backgroundColor: '#3a6383',
+                            yAxisID: 'percentage',
+                        },
+                    ],
+                },
+                options: {
+                    responsive: true,
+                    aspectRatio: ratio,
+                    plugins: {
+                        legend: {
+                            display: false,
+                            position: 'bottom',
+                        },
+                        title: {
+                            display: false,
+                            text: '',
+                        }
+                    },
+                    scale: {
+                        ticks: {
+                            precision: 0,
+                        },
+                    },
+                    scales: {
+                        wins: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            grid: {
+                                drawOnChartArea: true,
+                            },
+                            stacked: false,
+                        },
+                        percentage: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            min: 0,
+                            max: 100,
+                            grid: {
+                                drawOnChartArea: false,
+                            },
+                            stacked: false,
+                        },
+                    },
+                },
+            });
+        }
+    </script>
 {% endblock %}

@@ -47,6 +47,7 @@ data.wins: Victorias
 deck.add_to_my_decks: 'Añadir a mis barajas'
 deck.go_to_deck: 'Ir a baraja'
 deck.houses: Casas
+deck.sets: Sets
 deck.import: Importar
 deck.imported: Importada
 deck.notes: Notas
@@ -194,6 +195,7 @@ menu.user_select_tooltip: 'Al jugar con randoms pega el nombre de usuario en win
 menu.username: Usuario
 menu.wiki: Wiki
 menu.winrate: 'Win rate'
+menu.winrates: 'Win rates'
 menu.worst_performance: 'Peor rendimiento'
 menu.wr%: 'WinRate%'
 menu.wr/pr: 'Win/Pick Rate'

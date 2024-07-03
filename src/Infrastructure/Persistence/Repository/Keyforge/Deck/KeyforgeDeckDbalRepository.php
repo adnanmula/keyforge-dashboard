@@ -350,12 +350,129 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
                 ->orderBy('ROUND(a.' . $stat . ', 0)', 'asc')
                 ->executeQuery()
                 ->fetchAllAssociative();
+
             foreach ($resultStats as $resultStat) {
                 $result[$stat][$resultStat['stat']] = $resultStat['count'];
             }
         }
 
         return $result;
+    }
+
+    public function homeCounts(): array
+    {
+        $housesResult = $this->connection->executeQuery(
+            'SELECT house AS house, COUNT(*) AS count
+            FROM keyforge_decks a, jsonb_array_elements_text(houses) AS house
+            GROUP BY house;'
+        )->fetchAllAssociative();
+
+        $houses = [];
+        foreach ($housesResult as $r) {
+            $houses[$r['house']] = $r['count'];
+        }
+
+        $setsResult = $this->connection->executeQuery(
+            'SELECT set, COUNT(*) AS count
+            FROM keyforge_decks a
+            left join keyforge_decks_ownership b on a.id = b.deck_id
+            where b.deck_id is not null
+            GROUP BY set;'
+        )->fetchAllAssociative();
+
+        $sets = [];
+        foreach ($setsResult as $r) {
+            $sets[$r['set']] = $r['count'];
+        }
+
+        $wrBySetResult = $this->connection->executeQuery(
+            'SELECT 
+                    d.set,
+                    COUNT(DISTINCT g_winner.id) AS wins,
+                    COUNT(DISTINCT g_loser.id) AS losses,
+                    ROUND(COUNT(DISTINCT g_winner.id)::NUMERIC /
+                    NULLIF((COUNT(DISTINCT g_winner.id) + COUNT(DISTINCT g_loser.id)), 0) * 100, 2) AS winrate
+                FROM keyforge_decks d
+                LEFT JOIN keyforge_decks_ownership o on d.id = o.deck_id
+                LEFT JOIN keyforge_games g_winner ON d.id = g_winner.winner_deck and g_winner.approved is true
+                LEFT JOIN keyforge_games g_loser ON d.id = g_loser.loser_deck and g_loser.approved is true
+                WHERE o.deck_id is not null
+                GROUP BY d.set
+                ORDER BY winrate DESC;'
+        )->fetchAllAssociative();
+
+        $wrBySet = [];
+        foreach ($wrBySetResult as $r) {
+            $wrBySet[$r['set']] = $r;
+        }
+
+        $wrBySasResult = $this->connection->executeQuery(
+            "WITH sas_wins AS (
+                SELECT d.sas, COUNT(g.id) AS wins
+                FROM keyforge_decks d
+                LEFT JOIN keyforge_decks_ownership o on d.id = o.deck_id
+                LEFT JOIN keyforge_games g ON d.id = g.winner_deck and g.approved is true
+                where d.sas > 29 and g.competition in ('FRIENDS', 'LOCAL_LEAGUE', 'FRIENDS_LEAGUE') and o.deck_id is not null
+                GROUP BY d.sas
+            ),
+            sas_losses AS (
+                SELECT d.sas, COUNT(g.id) AS losses
+                FROM keyforge_decks d
+                LEFT JOIN keyforge_decks_ownership o on d.id = o.deck_id
+                LEFT JOIN keyforge_games g ON d.id = g.loser_deck and g.approved is true
+                where d.sas > 29 and g.competition in ('FRIENDS', 'LOCAL_LEAGUE', 'FRIENDS_LEAGUE') and o.deck_id is not null
+                GROUP BY d.sas
+            )
+            SELECT 
+                COALESCE(w.sas, l.sas) AS sas,
+                COALESCE(w.wins, 0) AS wins,
+                COALESCE(l.losses, 0) AS losses,
+                ROUND(COALESCE(w.wins, 0)::NUMERIC / NULLIF((COALESCE(w.wins, 0) + COALESCE(l.losses, 0)), 0) * 100, 2) AS winrate
+            FROM sas_wins w
+            FULL OUTER JOIN sas_losses l ON w.sas = l.sas
+            ORDER BY  sas;"
+        )->fetchAllAssociative();
+
+        $wrBySas = [];
+        foreach ($wrBySasResult as $r) {
+            $wrBySas[$r['sas']] = $r;
+        }
+
+        $wrByHouseResult = $this->connection->executeQuery(
+            'WITH house_wins AS (
+                SELECT house, COUNT(g.id) AS wins
+                FROM keyforge_decks d
+                LEFT JOIN keyforge_decks_ownership o on d.id = o.deck_id
+                CROSS JOIN LATERAL jsonb_array_elements_text(d.houses) AS h(house)
+                LEFT JOIN keyforge_games g ON d.id = g.winner_deck and g.approved is true
+                WHERE o.deck_id is not null
+                GROUP BY house
+            ),
+            house_losses AS (
+                SELECT house, COUNT(g.id) AS losses
+                FROM keyforge_decks d
+                LEFT JOIN keyforge_decks_ownership o on d.id = o.deck_id
+                CROSS JOIN LATERAL jsonb_array_elements_text(d.houses) AS h(house)
+                LEFT JOIN keyforge_games g ON d.id = g.loser_deck and g.approved is true
+                WHERE o.deck_id is not null
+                GROUP BY house
+            )
+            SELECT 
+                w.house,
+                COALESCE(w.wins, 0) AS wins,
+                COALESCE(l.losses, 0) AS losses,
+                ROUND(COALESCE(w.wins, 0)::NUMERIC / NULLIF((COALESCE(w.wins, 0) + COALESCE(l.losses, 0)), 0) * 100, 2) AS winrate
+            FROM house_wins w
+            FULL OUTER JOIN house_losses l ON w.house = l.house
+            ORDER BY winrate DESC;'
+        )->fetchAllAssociative();
+
+        $wrByHouse = [];
+        foreach ($wrByHouseResult as $r) {
+            $wrByHouse[$r['house']] = $r;
+        }
+
+        return [$houses, $sets, $wrBySet, $wrBySas, $wrByHouse];
     }
 
     private function map(array $deck): KeyforgeDeck
