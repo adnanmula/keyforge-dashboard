@@ -25,7 +25,7 @@ final class GeneralStatsController extends Controller
 
     public function __invoke(): Response
     {
-        [$houses, $sets, $wrBySet, $wrBySas, $wrByHouse] = $this->deckRepository->homeCounts();
+        [$houses, $sets, $wrBySet, $wrBySas, $wrByHouse, $avgStatsBySet] = $this->deckRepository->homeCounts();
 
         \ksort($houses, \SORT_STRING);
         \ksort($sets, \SORT_STRING);
@@ -38,50 +38,28 @@ final class GeneralStatsController extends Controller
                 'wrBySet' => $this->winrateBySet($wrBySet),
                 'wrByHouse' => $wrByHouse,
                 'wrBySas' => $this->winrateBySas($wrBySas),
+                'avgStatsBySet' => $this->avgStatsBySet($avgStatsBySet),
             ],
         );
     }
 
     public function winrateBySas(mixed $wrBySas): array
     {
-        $wrBySasOrdered = [
-            '40-49' => ['wins' => 0, 'losses' => 0],
-            '50-59' => ['wins' => 0, 'losses' => 0],
-            '60-69' => ['wins' => 0, 'losses' => 0],
-            '70-79' => ['wins' => 0, 'losses' => 0],
-            '80-89' => ['wins' => 0, 'losses' => 0],
-            '90-99' => ['wins' => 0, 'losses' => 0],
-            '100-130' => ['wins' => 0, 'losses' => 0],
-        ];
+        $ranges = [30 => 39, 40 => 49, 50 => 59, 60 => 69, 70 => 79, 80 => 89, 90 => 99, 100 => 130];
+        $wrBySasOrdered = [];
 
         foreach ($wrBySas as $key => $value) {
-            if ($key >= 40 && $key <= 49) {
-                $wrBySasOrdered['40-49']['wins'] += $value['wins'];
-                $wrBySasOrdered['40-49']['losses'] += $value['losses'];
-            }
-            if ($key >= 50 && $key <= 59) {
-                $wrBySasOrdered['50-59']['wins'] += $value['wins'];
-                $wrBySasOrdered['50-59']['losses'] += $value['losses'];
-            }
-            if ($key >= 60 && $key <= 69) {
-                $wrBySasOrdered['60-69']['wins'] += $value['wins'];
-                $wrBySasOrdered['60-69']['losses'] += $value['losses'];
-            }
-            if ($key >= 70 && $key <= 79) {
-                $wrBySasOrdered['70-79']['wins'] += $value['wins'];
-                $wrBySasOrdered['70-79']['losses'] += $value['losses'];
-            }
-            if ($key >= 80 && $key <= 89) {
-                $wrBySasOrdered['80-89']['wins'] += $value['wins'];
-                $wrBySasOrdered['80-89']['losses'] += $value['losses'];
-            }
-            if ($key >= 90 && $key <= 99) {
-                $wrBySasOrdered['90-99']['wins'] += $value['wins'];
-                $wrBySasOrdered['90-99']['losses'] += $value['losses'];
-            }
-            if ($key >= 100 && $key <= 130) {
-                $wrBySasOrdered['100-130']['wins'] += $value['wins'];
-                $wrBySasOrdered['100-130']['losses'] += $value['losses'];
+            foreach ($ranges as $from => $to) {
+                if ($key >= $from && $key <= $to) {
+                    $resultKey = $from . '-' . $to;
+
+                    if (false === \array_key_exists($resultKey, $wrBySasOrdered)) {
+                        $wrBySasOrdered[$resultKey] = ['wins' => 0, 'losses' => 0];
+                    }
+
+                    $wrBySasOrdered[$resultKey]['wins'] += $value['wins'];
+                    $wrBySasOrdered[$resultKey]['losses'] += $value['losses'];
+                }
             }
         }
 
@@ -117,5 +95,28 @@ final class GeneralStatsController extends Controller
         }
 
         return $wrBySetOrdered;
+    }
+
+    private function avgStatsBySet(mixed $avgStatsBySet): array
+    {
+        $avgStatsBySetOrdered = [
+            KeyforgeSet::CotA->value => 0,
+            KeyforgeSet::AoA->value => 0,
+            KeyforgeSet::WC->value => 0,
+            KeyforgeSet::MM->value => 0,
+            KeyforgeSet::DT->value => 0,
+            KeyforgeSet::WoE->value => 0,
+            KeyforgeSet::GR->value => 0,
+        ];
+
+        foreach ($avgStatsBySet as $key => $value) {
+            if (false === \array_key_exists($key, $avgStatsBySetOrdered)) {
+                continue;
+            }
+
+            $avgStatsBySetOrdered[$key] = $value;
+        }
+
+        return $avgStatsBySetOrdered;
     }
 }

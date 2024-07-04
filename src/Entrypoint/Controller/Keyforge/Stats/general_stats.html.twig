@@ -6,10 +6,13 @@
     <div class="shadow-lg p-3 mb-3 bg-white rounded">
         <div class="row m-3">
             <div class="col-12 col-lg-4">
-                <canvas id="housePresence" width="300" height="300"></canvas>
+                <canvas id="housePresence"></canvas>
             </div>
             <div class="col-12 col-lg-4">
-                <canvas id="setPresence" width="300" height="300"></canvas>
+                <canvas id="setPresence"></canvas>
+            </div>
+            <div class="col-12 col-lg-4">
+                <canvas id="avgStatsBySet"></canvas>
             </div>
         </div>
 
@@ -17,17 +20,21 @@
         <div class="divider py-2"></div>
 
         <div class="row m-3">
-            <h4>{{ 'menu.winrates'|trans }}</h4>
+            <h4>{{ 'data.win_rate'|trans }}</h4>
             <div class="divider py-1"></div>
 
-            <div class="col-12 col-lg-4">
-                <canvas id="wrSet" width="400" height="400"></canvas>
+            <div class="col-12 col-lg-6">
+                <canvas id="wrSet"></canvas>
             </div>
-            <div class="col-12 col-lg-4">
-                <canvas id="wrHouse" width="400" height="400"></canvas>
+            <div class="col-12 col-lg-6">
+                <canvas id="wrSas"></canvas>
             </div>
-            <div class="col-12 col-lg-4">
-                <canvas id="wrSas" width="400" height="400"></canvas>
+        </div>
+        <div class="divider py-2"></div>
+
+        <div class="row m-3">
+            <div class="col-12 col-lg-12">
+                <canvas id="wrHouse"></canvas>
             </div>
         </div>
     </div>
@@ -37,6 +44,7 @@
         let wrSet = JSON.parse('{{ wrBySet|json_encode|raw }}');
         let wrHouse = JSON.parse('{{ wrByHouse|json_encode|raw }}');
         let wrSas = JSON.parse('{{ wrBySas|json_encode|raw }}');
+        let avgStatsBySet = JSON.parse('{{ avgStatsBySet|json_encode|raw }}');
 
         const houseColors = [
             'rgb(231, 76, 60)',  //Brobnar
@@ -61,16 +69,16 @@
             'rgb(22, 160, 133)', //MM
             'rgb(133,128,128)', //U22
             'rgb(133,128,128)', //VM23
-
             'rgb(125, 60, 152)', //WC
             'rgb(177, 29, 33)',  //WoE
         ];
 
         graph('housePresence', '{{ 'deck.houses'|trans }}', housePresence, houseColors);
         graph('setPresence', '{{ 'deck.sets'|trans }}', setPresence, setColors);
-        graph2('wrSet', wrSet, 1.5);
-        graph2('wrHouse', wrHouse, 1.2);
-        graph2('wrSas', wrSas, 1.4);
+        graph2('wrSet', wrSet, '{{ 'data.by_set'|trans }}', 2);
+        graph2('wrHouse', wrHouse, '{{ 'data.by_house'|trans }}', 4);
+        graph2('wrSas', wrSas, '{{ 'data.by_sas'|trans}}', 2);
+        graph3('avgStatsBySet', avgStatsBySet, '{{ 'data.stats_by_set'|trans}}', 1);
 
         function graph(id, title, data, colors) {
             new Chart(document.getElementById(id).getContext('2d'), {
@@ -102,7 +110,7 @@
             });
         }
 
-        function graph2(id, data, ratio) {
+        function graph2(id, data, title, ratio) {
             let wins = [];
             let losses = [];
             let wr = [];
@@ -131,7 +139,7 @@
                             backgroundColor: '#d53302',
                         },
                         {
-                            label: '{{ 'data.winrate'|trans }}',
+                            label: '{{ 'data.win%_rate'|trans }}',
                             data: wr,
                             borderColor: '#3a6383',
                             backgroundColor: '#3a6383',
@@ -144,12 +152,12 @@
                     aspectRatio: ratio,
                     plugins: {
                         legend: {
-                            display: false,
+                            display: true,
                             position: 'bottom',
                         },
                         title: {
-                            display: false,
-                            text: '',
+                            display: true,
+                            text: title,
                         }
                     },
                     scale: {
@@ -177,6 +185,96 @@
                                 drawOnChartArea: false,
                             },
                             stacked: false,
+                        },
+                    },
+                },
+            });
+        }
+
+        function graph3(id, data, title, ratio) {
+            let expectedAmber = [];
+            let creatureControl = [];
+            let amberControl = [];
+            let artifactControl = [];
+            let creatureProtection = [];
+            let disruption = [];
+            let efficiency = [];
+            let recursion = [];
+
+            for (const [key, value] of Object.entries(data)) {
+                expectedAmber.push(data[key].avg_expected_amber);
+                creatureControl.push(data[key].avg_creature_control);
+                amberControl.push(data[key].avg_amber_control);
+                artifactControl.push(data[key].avg_artifact_control);
+                creatureProtection.push(data[key].avg_creature_protection);
+                disruption.push(data[key].avg_disruption);
+                efficiency.push(data[key].avg_efficiency);
+                recursion.push(data[key].avg_recursion);
+            }
+
+            new Chart(document.getElementById(id).getContext('2d'), {
+                type: 'radar',
+                data: {
+                    labels: Object.keys(data),
+                    datasets: [
+                        {
+                            label: '{{ 'deck.expected_amber'|trans }}',
+                            data: expectedAmber,
+                            borderColor: '#eac40d',
+                        },
+                        {
+                            label: '{{ 'deck.creature_control'|trans }}',
+                            data: creatureControl,
+                            borderColor: '#ff0e0e',
+                        },
+                        {
+                            label: '{{ 'deck.amber_control'|trans }}',
+                            data: amberControl,
+                            borderColor: '#2023c1',
+                        },
+                        {
+                            label: '{{ 'deck.artifact_control'|trans }}',
+                            data: artifactControl,
+                            borderColor: '#1bd84f',
+                        },
+                        {
+                            label: '{{ 'deck.creature_protection'|trans }}',
+                            data: creatureProtection,
+                            borderColor: '#858080',
+                        },
+                        {
+                            label: '{{ 'deck.disruption'|trans }}',
+                            data: disruption,
+                            borderColor: '#6e3030',
+                        },
+                        {
+                            label: '{{ 'deck.efficiency'|trans }}',
+                            data: efficiency,
+                            borderColor: '#25bde6',
+                        },
+                        {
+                            label: '{{ 'deck.recursion'|trans }}',
+                            data: recursion,
+                            borderColor: '#c934cc',
+                        },
+                    ],
+                },
+                options: {
+                    responsive: true,
+                    aspectRatio: ratio,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'bottom',
+                        },
+                        title: {
+                            display: true,
+                            text: title,
+                        }
+                    },
+                    scale: {
+                        ticks: {
+                            precision: 0,
                         },
                     },
                 },

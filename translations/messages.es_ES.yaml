@@ -43,7 +43,13 @@ data.other_players: 'Otros jugadores'
 data.other_players_tooltip: 'Gente de TCO o NKFL contra la que hemos jugado'
 data.show_all: 'Mostrar todos'
 data.winrate: 'Win rate'
+data.stats_by_set: 'Estadísicas por set'
+data.win_rate: 'Porcentaje de victorias'
+data.win%_rate: '% de victorias'
 data.wins: Victorias
+data.by_set: Por set
+data.by_house: Por casas
+data.by_sas: Por sas
 deck.add_to_my_decks: 'Añadir a mis barajas'
 deck.go_to_deck: 'Ir a baraja'
 deck.houses: Casas

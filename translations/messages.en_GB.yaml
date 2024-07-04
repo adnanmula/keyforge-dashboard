@@ -43,7 +43,13 @@ data.other_players: 'Other players'
 data.other_players_tooltip: 'Players from TCO or NKFL we have played against'
 data.show_all: 'Show all'
 data.winrate: 'Win rate'
+data.stats_by_set: 'Stats by sets'
+data.win_rate: 'Win rate'
+data.win%_rate: 'Win rate'
 data.wins: Wins
+data.by_set: By set
+data.by_house: By house
+data.by_sas: By sas
 deck.add_to_my_decks: 'Add to my decks'
 deck.go_to_deck: 'Go to deck'
 deck.houses: Houses

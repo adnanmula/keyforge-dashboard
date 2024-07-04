@@ -472,7 +472,29 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
             $wrByHouse[$r['house']] = $r;
         }
 
-        return [$houses, $sets, $wrBySet, $wrBySas, $wrByHouse];
+        $avgStatsBySetResult = $this->connection->executeQuery(
+            'SELECT d.set,   
+                ROUND(AVG(expected_amber)::numeric, 1) AS avg_expected_amber,
+                ROUND(AVG(creature_control)::numeric, 1) AS avg_creature_control,
+                ROUND(AVG(amber_control)::numeric, 1) AS avg_amber_control,
+                ROUND(AVG(artifact_control)::numeric, 1) AS avg_artifact_control,
+                ROUND(AVG(creature_protection)::numeric, 1) AS avg_creature_protection,
+                ROUND(AVG(disruption)::numeric, 1) AS avg_disruption,
+                ROUND(AVG(efficiency)::numeric, 1) AS avg_efficiency,
+                ROUND(AVG(recursion)::numeric, 1) AS avg_recursion
+                FROM keyforge_decks d
+                LEFT JOIN keyforge_decks_ownership o on d.id = o.deck_id
+                WHERE o.deck_id is not null
+                GROUP BY d.set
+                ORDER BY d.set'
+        )->fetchAllAssociative();
+
+        $avgStatsBySet = [];
+        foreach ($avgStatsBySetResult as $r) {
+            $avgStatsBySet[$r['set']] = $r;
+        }
+
+        return [$houses, $sets, $wrBySet, $wrBySas, $wrByHouse, $avgStatsBySet];
     }
 
     private function map(array $deck): KeyforgeDeck
