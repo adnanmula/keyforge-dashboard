@@ -37,30 +37,81 @@ competition_detail.w: W
 competition_detail.winner: Winner
 competition_detail.winner_deck: 'Winner deck'
 competition_detail.winner_score: 'Winner score'
+data.by_house: By house
+data.by_sas: By sas
+data.by_set: By set
 data.games_played: 'Games played'
 data.losses: Losses
 data.other_players: 'Other players'
 data.other_players_tooltip: 'Players from TCO or NKFL we have played against'
 data.show_all: 'Show all'
-data.winrate: 'Win rate'
 data.stats_by_set: 'Stats by sets'
-data.win_rate: 'Win rate'
 data.win%_rate: 'Win rate'
+data.win_rate: 'Win rate'
+data.winrate: 'Win rate'
 data.wins: Wins
-data.by_set: By set
-data.by_house: By house
-data.by_sas: By sas
+deck.actions: Actions
 deck.add_to_my_decks: 'Add to my decks'
+deck.aerc: Aerc
+deck.amber_control: Amber control
+deck.antisynergy: Antisinergy
+deck.archives: Archives
+deck.artifact_control: Artifact control
+deck.artifacts: Artifacts
+deck.board_clears: Board clears
+deck.bonus_amber: Bonus amber
+deck.creature_control: Creature control
+deck.creature_protection: Creature protection
+deck.creatures: Creatures
+deck.disruption: Disruption
+deck.effective_power: Effective power
+deck.efficiency: Efficiency
+deck.expected_amber: Expected amber
 deck.go_to_deck: 'Go to deck'
 deck.houses: Houses
-deck.sets: Sets
 deck.import: Import
 deck.imported: Imported
+deck.key_cheats: Key cheats
 deck.notes: Notes
+deck.other: Other
+deck.recursion: Recursion
+deck.sas: Sas
 deck.save: Save
+deck.scaling_amber_control: Scaling amber control
 deck.set: Set
 deck.set_main: 'Main sets'
 deck.set_other: 'Other sets'
+deck.sets: Sets
+deck.synergy: Sinergy
+deck.upgrades: Upgrades
+deck_comparison.AS: AS
+deck_comparison.AoA: AoA
+deck_comparison.CotA: CotA
+deck_comparison.DT: DT
+deck_comparison.GR: GR
+deck_comparison.M24: M24
+deck_comparison.MM: MM
+deck_comparison.U22: U22
+deck_comparison.VM23: VM23
+deck_comparison.VM24: VM24
+deck_comparison.WC: WC
+deck_comparison.WoE: WoE
+deck_comparison.aerc: Aerc
+deck_comparison.all: All
+deck_comparison.amberControl: Amber control
+deck_comparison.artifactControl: Artifact control
+deck_comparison.artifactCount: Artifacts
+deck_comparison.bonusAmber: Bonus amber
+deck_comparison.creatureControl: Creature control
+deck_comparison.creatureCount: Creatures
+deck_comparison.disruption: Disruption
+deck_comparison.effectivePower: Effective power
+deck_comparison.efficiency: Efficiency
+deck_comparison.expectedAmber: Expected amber
+deck_comparison.other: Other
+deck_comparison.recursion: Recursion
+deck_comparison.sas: Sas
+deck_comparison.synergy: Synergy
 error.denied: 'Acceso denegado'
 error.error: Error
 error.invalid_format: 'Invalid format'
@@ -71,22 +122,22 @@ game.competition: Competition
 game.date: Date
 game.first_turn: 'First turn'
 game.keys: Keys
+game.lgs: 'LGS'
+game.local_league: 'League with friends'
 game.loser: Loser
 game.loser_chains: 'Loser chains'
 game.loser_deck: 'Loser deck'
 game.loser_score: 'Loser score'
+game.mirror: 'Mirror'
+game.nkfl: 'NKFL'
 game.notes: Notes
 game.register_game: 'Register game'
 game.save: Save
 game.solo: 'Solo play'
-game.mirror: 'Mirror'
 game.tco_casual: 'TCO Casual'
 game.tco_competitive: 'TCO Competitive'
-game.lgs: 'LGS'
-game.nkfl: 'NKFL'
-game.vt: 'Vault Tour'
-game.local_league: 'League with friends'
 game.type: Type
+game.vt: 'Vault Tour'
 game.winner: Winner
 game.winner_chains: 'Winner chains'
 game.winner_deck: 'Winner deck'
@@ -119,38 +170,40 @@ keyforge.set_wc: WC
 keyforge.set_woe: WoE
 locale.en: English
 locale.es: Spanish
-menu.compare_to: 'Compare to'
-menu.type_to_seach: 'Type to search...'
-menu.approval_pending_by: 'Approval pending by:'
 menu.accept: Accept
-menu.reject: Reject
 menu.add: Add
 menu.add_friends: 'Add friends'
+menu.add_my_deck: 'Add to my decks'
 menu.addgame: 'Register game'
 menu.admin: Admin
+menu.admin_action_generate_home_projection: Regenerate home projection
+menu.admin_action_generate_user_projection: Regenerate user projection
+menu.admin_actions: Admin actions
+menu.admin_no_new_accounts: No pending accounts
 menu.all: All
 menu.any: Any
-menu.add_my_deck: 'Add to my decks'
-menu.remove_my_deck: 'Remove from my decks'
+menu.approval_pending_by: 'Approval pending by:'
 menu.archenemy: Archenemy
 menu.best_performance: 'Best performance'
 menu.best_win_streak: 'Best win streak'
 menu.change_password: 'Change password'
 menu.clear_filters: Clear
+menu.compare_to: 'Compare to'
 menu.created_by: Created by
 menu.deck: Deck
 menu.deck_select_tooltip: 'When playing with random people paste their deck id event if it is not on the selector, you do not have to import it beforehand either'
 menu.deck_wl: 'Wins/Losses by deck'
 menu.decks: Decks
+menu.decks_of: Decks of
 menu.exclude: Exclude
 menu.favorite: Favorite
 menu.friend_decks_games: 'Only friend decks'
 menu.friend_name: 'Friend name'
 menu.friend_requests: 'Friend requests'
-menu.new_accounts_pending: 'New accounts'
 menu.friends: Friends
 menu.games: Games
 menu.games_lost: 'Games lost'
+menu.general_stats: General stats
 menu.house_pr: 'House pick rate'
 menu.house_wins: 'House wins'
 menu.house_wr: 'House win rate'
@@ -168,20 +221,23 @@ menu.max_sas: 'Max SAS'
 menu.min_sas: 'Min SAS'
 menu.mydecks: 'My decks'
 menu.nemesis: Nemesis
+menu.new_accounts_pending: 'New accounts'
 menu.notes: Notes
 menu.other_options: 'Other options'
 menu.owner: Owner
 menu.password: Password
+menu.pending_games: 'Pending games'
 menu.played_times: 'Played %count% time|Played %count% times'
 menu.players: Players
 menu.pr%: 'PickRate%'
 menu.pr: 'Pick rate'
 menu.profile: Profile
-menu.pending_games: 'Pending games'
 menu.received: Received
 menu.record_book: 'Record book'
 menu.register: Register
+menu.reject: Reject
 menu.remove: Remove
+menu.remove_my_deck: 'Remove from my decks'
 menu.rival: Rival
 menu.sas: SAS
 menu.save: Save
@@ -193,9 +249,11 @@ menu.set_wins: 'Set wins'
 menu.set_wr: 'Set win rate'
 menu.settings: Settings
 menu.show_stats: 'Show/Hide stats'
+menu.stat: Stat
 menu.tags: Tags
 menu.time_wl: 'Wins/Losses along time'
 menu.tournaments: Tournaments
+menu.type_to_seach: 'Type to search...'
 menu.type_to_search: 'Type to search...'
 menu.user_select_tooltip: 'When playing with random people paste their username event if it is not on the selector'
 menu.username: Username
@@ -205,6 +263,8 @@ menu.winrates: 'Win rates'
 menu.worst_performance: 'Worst performance'
 menu.wr%: 'WinRate%'
 menu.wr/pr: 'Win/Pick Rate'
+menu.you: You
+menu.your_stats: Your stats
 wiki.adventures: Adventures
 wiki.count_greater_or_equal_than: 'Has %count% or more'
 wiki.count_lower_or_equal_than: 'Has %count% or less'
@@ -250,63 +310,3 @@ wiki.the_crucible_online: 'The crucible online'
 wiki.timing_chart: 'Timing chart'
 wiki.tournament_rules: 'Tournament rules'
 wiki.wiki_aa: 'Wiki (Archon Arcana)'
-deck.creatures: Creatures
-deck.upgrades: Upgrades
-deck.artifacts: Artifacts
-deck.actions: Actions
-deck.key_cheats: Key cheats
-deck.board_clears: Board clears
-deck.scaling_amber_control: Scaling amber control
-deck.expected_amber: Expected amber
-deck.amber_control: Amber control
-deck.creature_control: Creature control
-deck.creature_protection: Creature protection
-deck.artifact_control: Artifact control
-deck.bonus_amber: Bonus amber
-deck.archives: Archives
-deck.recursion: Recursion
-deck.disruption: Disruption
-deck.efficiency: Efficiency
-deck.other: Other
-deck.effective_power: Effective power
-deck.aerc: Aerc
-deck.synergy: Sinergy
-deck.antisynergy: Antisinergy
-deck.sas: Sas
-menu.you: You
-deck_comparison.sas: Sas
-deck_comparison.expectedAmber: Expected amber
-deck_comparison.amberControl: Amber control
-deck_comparison.creatureControl: Creature control
-deck_comparison.artifactControl: Artifact control
-deck_comparison.creatureCount: Creatures
-deck_comparison.artifactCount: Artifacts
-deck_comparison.efficiency: Efficiency
-deck_comparison.disruption: Disruption
-deck_comparison.recursion: Recursion
-deck_comparison.other: Other
-deck_comparison.effectivePower: Effective power
-deck_comparison.aerc: Aerc
-deck_comparison.synergy: Synergy
-deck_comparison.bonusAmber: Bonus amber
-deck_comparison.all: All
-deck_comparison.CotA: CotA
-deck_comparison.AoA: AoA
-deck_comparison.WC: WC
-deck_comparison.MM: MM
-deck_comparison.DT: DT
-deck_comparison.WoE: WoE
-deck_comparison.GR: GR
-deck_comparison.AS: AS
-deck_comparison.U22: U22
-deck_comparison.M24: M24
-deck_comparison.VM23: VM23
-deck_comparison.VM24: VM24
-menu.decks_of: Decks of
-menu.stat: Stat
-menu.your_stats: Your stats
-menu.general_stats: General stats
-menu.admin_actions: Admin actions
-menu.admin_action_generate_user_projection: Regenerate user projection
-menu.admin_action_generate_home_projection: Regenerate home projection
-menu.admin_no_new_accounts: No pending accounts

@@ -37,30 +37,81 @@ competition_detail.w: G
 competition_detail.winner: Ganador
 competition_detail.winner_deck: 'Baraja ganadora'
 competition_detail.winner_score: 'Puntuación del ganador'
+data.by_house: Por casas
+data.by_sas: Por sas
+data.by_set: Por set
 data.games_played: 'Partidas jugadas'
 data.losses: Derrotas
 data.other_players: 'Otros jugadores'
 data.other_players_tooltip: 'Gente de TCO o NKFL contra la que hemos jugado'
 data.show_all: 'Mostrar todos'
-data.winrate: 'Win rate'
 data.stats_by_set: 'Estadísicas por set'
-data.win_rate: 'Porcentaje de victorias'
 data.win%_rate: '% de victorias'
+data.win_rate: 'Porcentaje de victorias'
+data.winrate: 'Win rate'
 data.wins: Victorias
-data.by_set: Por set
-data.by_house: Por casas
-data.by_sas: Por sas
+deck.actions: Acciones
 deck.add_to_my_decks: 'Añadir a mis barajas'
+deck.aerc: Aerc
+deck.amber_control: Control de ámbar
+deck.antisynergy: Antisinergia
+deck.archives: Archivos
+deck.artifact_control: Control de artefactos
+deck.artifacts: Artefactos
+deck.board_clears: Board clears
+deck.bonus_amber: Iconos de ámbar
+deck.creature_control: Control de criaturas
+deck.creature_protection: Protección de criaturas
+deck.creatures: Criaturas
+deck.disruption: Disrupción
+deck.effective_power: Poder efectivo
+deck.efficiency: Eficiencia
+deck.expected_amber: Ámbar esperado
 deck.go_to_deck: 'Ir a baraja'
 deck.houses: Casas
-deck.sets: Sets
 deck.import: Importar
 deck.imported: Importada
+deck.key_cheats: Key cheats
 deck.notes: Notas
+deck.other: Otros
+deck.recursion: Recursion
+deck.sas: Sas
 deck.save: Guardar
+deck.scaling_amber_control: Control de ámbar escalado
 deck.set: Set
 deck.set_main: 'Sets principales'
 deck.set_other: 'Otros sets'
+deck.sets: Sets
+deck.synergy: Sinergia
+deck.upgrades: Mejoras
+deck_comparison.AS: AS
+deck_comparison.AoA: AoA
+deck_comparison.CotA: CotA
+deck_comparison.DT: DT
+deck_comparison.GR: GR
+deck_comparison.M24: M24
+deck_comparison.MM: MM
+deck_comparison.U22: U22
+deck_comparison.VM23: VM23
+deck_comparison.VM24: VM24
+deck_comparison.WC: WC
+deck_comparison.WoE: WoE
+deck_comparison.aerc: Aerc
+deck_comparison.all: Todos
+deck_comparison.amberControl: Control de ámbar
+deck_comparison.artifactControl: Control de artefactos
+deck_comparison.artifactCount: Artefactos
+deck_comparison.bonusAmber: Iconos de ámbar
+deck_comparison.creatureControl: Control de criaturas
+deck_comparison.creatureCount: Criaturas
+deck_comparison.disruption: Disrupción
+deck_comparison.effectivePower: Poder efectivo
+deck_comparison.efficiency: Eficiencia
+deck_comparison.expectedAmber: Ámbar esperado
+deck_comparison.other: Otros
+deck_comparison.recursion: Recursión
+deck_comparison.sas: Sas
+deck_comparison.synergy: Sinergia
 error.denied: 'Access denied'
 error.error: Error
 error.invalid_format: 'Formato inválido'
@@ -71,22 +122,22 @@ game.competition: Torneo
 game.date: Fecha
 game.first_turn: 'Primer turno'
 game.keys: Llaves
+game.lgs: 'LGS'
+game.local_league: 'Liga con amigos'
 game.loser: Perdedor
 game.loser_chains: 'Llaves del perdedor'
 game.loser_deck: 'Baraja perdedora'
 game.loser_score: 'Puntuación del perdedor'
+game.mirror: 'Mirror'
+game.nkfl: 'NKFL'
 game.notes: Notas
 game.register_game: 'Registrar partida'
 game.save: Guardar
 game.solo: 'Solitario'
-game.mirror: 'Mirror'
 game.tco_casual: 'TCO Casual'
 game.tco_competitive: 'TCO Competitivo'
-game.lgs: 'LGS'
-game.nkfl: 'NKFL'
-game.vt: 'Vault Tour'
-game.local_league: 'Liga con amigos'
 game.type: Tipo
+game.vt: 'Vault Tour'
 game.winner: Ganador
 game.winner_chains: 'Llaves del ganador'
 game.winner_deck: 'Baraja ganadora'
@@ -119,38 +170,40 @@ keyforge.set_wc: WC
 keyforge.set_woe: WoE
 locale.en: Inglés
 locale.es: Español
-menu.compare_to: 'Comparar con'
-menu.type_to_seach: 'Escribe para buscar...'
-menu.approval_pending_by: 'Pendiente de aceptar por:'
 menu.accept: Aceptar
-menu.reject: Rechazar
 menu.add: Añadir
 menu.add_friends: 'Añadir amigos'
+menu.add_my_deck: 'Añadir a mis barajas'
 menu.addgame: 'Registrar partida'
 menu.admin: Admin
+menu.admin_action_generate_home_projection: Regenerar proyección de página principal
+menu.admin_action_generate_user_projection: Regenerar proyección de usuario
+menu.admin_actions: Acciones de admin
+menu.admin_no_new_accounts: Ninguna cuenta pendiente
 menu.all: Todas
 menu.any: Cualquiera
+menu.approval_pending_by: 'Pendiente de aceptar por:'
 menu.archenemy: Archenemy
-menu.add_my_deck: 'Añadir a mis barajas'
-menu.remove_my_deck: 'Eliminar de mis barajas'
 menu.best_performance: 'Mejor rendimiento'
 menu.best_win_streak: 'Mejor racha de victorias'
 menu.change_password: 'Actualizar contraseña'
 menu.clear_filters: 'Limpiar filtros'
+menu.compare_to: 'Comparar con'
 menu.created_by: 'Creado por'
 menu.deck: Baraja
 menu.deck_select_tooltip: 'Al jugar con randoms pega el id de baraja aunque no salga en el selector, no hace falta importarla antes'
 menu.deck_wl: 'Victorias/Derrotas por baraja'
 menu.decks: Barajas
+menu.decks_of: Barajas de
 menu.exclude: Excluir
 menu.favorite: Favorita
 menu.friend_decks_games: 'Solo barajas de amigos'
 menu.friend_name: 'Nombre del amigo'
 menu.friend_requests: 'Solicitudes de amistad'
-menu.new_accounts_pending: 'Cuentas nuevas'
 menu.friends: Amigos
 menu.games: Partidas
 menu.games_lost: 'Partidas perdidas'
+menu.general_stats: Estadísticas generales
 menu.house_pr: 'Pick rate por casa'
 menu.house_wins: 'Victorias por casa'
 menu.house_wr: 'Win rate por casa'
@@ -168,20 +221,23 @@ menu.max_sas: 'Max SAS'
 menu.min_sas: 'Min SAS'
 menu.mydecks: 'Mis barajas'
 menu.nemesis: Némesis
+menu.new_accounts_pending: 'Cuentas nuevas'
 menu.notes: Notas
 menu.other_options: 'Otras opciones'
 menu.owner: Propietario
 menu.password: Contraseña
+menu.pending_games: 'Partidas pendientes'
 menu.played_times: 'Jugada %count% vez|Jugada %count% veces'
 menu.players: Jugadores
 menu.pr%: 'PickRate%'
 menu.pr: 'Pick rate'
 menu.profile: Perfil
-menu.pending_games: 'Partidas pendientes'
 menu.received: Recibidas
 menu.record_book: Palmarés
 menu.register: Registro
+menu.reject: Rechazar
 menu.remove: Eliminar
+menu.remove_my_deck: 'Eliminar de mis barajas'
 menu.rival: Rival
 menu.sas: SAS
 menu.save: Guardar
@@ -193,9 +249,11 @@ menu.set_wins: 'Victorias por set'
 menu.set_wr: 'Win rate por set'
 menu.settings: Opciones
 menu.show_stats: 'Mostrar/Ocultar estadísticas'
+menu.stat: Estadística
 menu.tags: Etiquetas
 menu.time_wl: 'Victorias/Derrotas a lo largo del tiempo'
 menu.tournaments: Torneos
+menu.type_to_seach: 'Escribe para buscar...'
 menu.type_to_search: 'Escribe para buscar...'
 menu.user_select_tooltip: 'Al jugar con randoms pega el nombre de usuario en winner/loser aunque no salga en el selector'
 menu.username: Usuario
@@ -205,6 +263,8 @@ menu.winrates: 'Win rates'
 menu.worst_performance: 'Peor rendimiento'
 menu.wr%: 'WinRate%'
 menu.wr/pr: 'Win/Pick Rate'
+menu.you: Tu
+menu.your_stats: Tus estadísticas
 wiki.adventures: Aventuras
 wiki.count_greater_or_equal_than: 'Tiene %count% o más'
 wiki.count_lower_or_equal_than: 'Tiene %count% o menos'
@@ -250,63 +310,3 @@ wiki.the_crucible_online: 'The crucible online'
 wiki.timing_chart: 'Esquema de timings'
 wiki.tournament_rules: 'Reglas de torneo'
 wiki.wiki_aa: 'Wiki (Archon Arcana)'
-deck.creatures: Criaturas
-deck.upgrades: Mejoras
-deck.artifacts: Artefactos
-deck.actions: Acciones
-deck.key_cheats: Key cheats
-deck.board_clears: Board clears
-deck.scaling_amber_control: Control de ámbar escalado
-deck.expected_amber: Ámbar esperado
-deck.amber_control: Control de ámbar
-deck.creature_control: Control de criaturas
-deck.creature_protection: Protección de criaturas
-deck.artifact_control: Control de artefactos
-deck.bonus_amber: Iconos de ámbar
-deck.archives: Archivos
-deck.recursion: Recursion
-deck.disruption: Disrupción
-deck.efficiency: Eficiencia
-deck.other: Otros
-deck.effective_power: Poder efectivo
-deck.aerc: Aerc
-deck.synergy: Sinergia
-deck.antisynergy: Antisinergia
-deck.sas: Sas
-menu.you: Tu
-deck_comparison.sas: Sas
-deck_comparison.expectedAmber: Ámbar esperado
-deck_comparison.amberControl: Control de ámbar
-deck_comparison.creatureControl: Control de criaturas
-deck_comparison.artifactControl: Control de artefactos
-deck_comparison.creatureCount: Criaturas
-deck_comparison.artifactCount: Artefactos
-deck_comparison.efficiency: Eficiencia
-deck_comparison.disruption: Disrupción
-deck_comparison.recursion: Recursión
-deck_comparison.other: Otros
-deck_comparison.effectivePower: Poder efectivo
-deck_comparison.aerc: Aerc
-deck_comparison.synergy: Sinergia
-deck_comparison.bonusAmber: Iconos de ámbar
-deck_comparison.all: Todos
-deck_comparison.CotA: CotA
-deck_comparison.AoA: AoA
-deck_comparison.WC: WC
-deck_comparison.MM: MM
-deck_comparison.DT: DT
-deck_comparison.WoE: WoE
-deck_comparison.GR: GR
-deck_comparison.AS: AS
-deck_comparison.U22: U22
-deck_comparison.M24: M24
-deck_comparison.VM23: VM23
-deck_comparison.VM24: VM24
-menu.decks_of: Barajas de
-menu.stat: Estadística
-menu.your_stats: Tus estadísticas
-menu.general_stats: Estadísticas generales
-menu.admin_actions: Acciones de admin
-menu.admin_action_generate_user_projection: Regenerar proyección de usuario
-menu.admin_action_generate_home_projection: Regenerar proyección de página principal
-menu.admin_no_new_accounts: Ninguna cuenta pendiente
