@@ -160,7 +160,10 @@
                     if ('' === params.term || undefined === params.term) {
                         query.extraFilterOnlyOwned = true;
                         query.extraFilterOnlyFriends = true;
+
+                        {% if is_granted('ROLE_KEYFORGE') %}
                         query.extraFilterOwner = '{{ app.user.id }}';
+                        {% endif %}
                     }
 
                     return query;
@@ -205,7 +208,6 @@
             $('#diff_aerc')[0].innerText = ({{ deck.stats.aercScore }} - deck.stats.aercScore).toFixed(0);
             $('#diff_synergy')[0].innerText = ({{ deck.stats.synergyRating - deck.stats.antiSynergyRating }} - (deck.stats.synergyRating - deck.stats.antiSynergyRating)).toFixed(0);
             $('#diff_bonusAmber')[0].innerText = ({{deck.stats.rawAmber}} - deck.stats.rawAmber).toFixed(0);
-
 
             $('#other_deck_set')[0].innerText = deck.set;
             $('#other_deck_sas')[0].innerText = deck.stats.sas;

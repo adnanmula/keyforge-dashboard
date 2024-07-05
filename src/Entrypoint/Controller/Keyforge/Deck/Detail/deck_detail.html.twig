@@ -16,16 +16,13 @@
 
     {% include 'Keyforge/Deck/Detail/deck.html.twig' with {'owners': deck_owners} %}
     {% include 'Keyforge/Deck/Detail/deck_stats.html.twig' %}
-
-    {% if is_granted('ROLE_KEYFORGE') %}
-        {% include 'Keyforge/Deck/Detail/deck_graphs.html.twig' with {'deck': deck, 'deck_card_types': deck_card_types} %}
-    {% endif %}
-
+    {% include 'Keyforge/Deck/Detail/deck_graphs.html.twig' with {'deck': deck, 'deck_card_types': deck_card_types} %}
 {#    {% include 'Keyforge/Deck/Detail/deck_analysis.html.twig' %}#}
     {% include 'Keyforge/Deck/Detail/deck_history.html.twig' with {'deck_history': deck_history} %}
-    {% include 'Keyforge/Deck/Detail/deck_badges.html.twig' %}
 
     {% if is_granted('ROLE_KEYFORGE') %}
+        {% include 'Keyforge/Deck/Detail/deck_badges.html.twig' %}
+
         <div class="shadow-lg p-3 mb-5 bg-white rounded">
             {% include 'Keyforge/Game/List/game_list.html.twig' with {
                 'deck_reference': reference,

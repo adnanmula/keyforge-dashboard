@@ -170,6 +170,8 @@ keyforge.set_wc: WC
 keyforge.set_woe: WoE
 locale.en: Inglés
 locale.es: Español
+menu.decks_from: 'Barajas de'
+menu.amount: 'Cantidad'
 menu.accept: Aceptar
 menu.add: Añadir
 menu.add_friends: 'Añadir amigos'

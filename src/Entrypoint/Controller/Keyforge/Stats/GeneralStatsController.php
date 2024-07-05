@@ -4,6 +4,7 @@ namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\Stats;
 
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeSet;
+use AdnanMula\Cards\Domain\Model\Shared\UserRepository;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,16 +20,30 @@ final class GeneralStatsController extends Controller
         LocaleSwitcher $localeSwitcher,
         TranslatorInterface $translator,
         private readonly KeyforgeDeckRepository $deckRepository,
+        private readonly UserRepository $userRepository,
     ) {
         parent::__construct($bus, $security, $localeSwitcher, $translator);
     }
 
     public function __invoke(): Response
     {
+        $user = $this->getUser();
+
         [$houses, $sets, $wrBySet, $wrBySas, $wrByHouse, $avgStatsBySet] = $this->deckRepository->homeCounts();
 
         \ksort($houses, \SORT_STRING);
         \ksort($sets, \SORT_STRING);
+
+        $indexedFriends = [];
+
+        if (null !== $user) {
+            $friends = $this->userRepository->friends($user->id(), false);
+
+            foreach ($friends as $friend) {
+                $indexedFriends[$friend['id']] = $friend['sender_name'];
+                $indexedFriends[$friend['friend_id']] = $friend['receiver_name'];
+            }
+        }
 
         return $this->render(
             'Keyforge/Stats/general_stats.html.twig',
@@ -39,6 +54,7 @@ final class GeneralStatsController extends Controller
                 'wrByHouse' => $wrByHouse,
                 'wrBySas' => $this->winrateBySas($wrBySas),
                 'avgStatsBySet' => $this->avgStatsBySet($avgStatsBySet),
+                'indexed_friends' => $indexedFriends,
             ],
         );
     }

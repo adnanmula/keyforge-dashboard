@@ -346,6 +346,7 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
                 ->select('ROUND(a.' . $stat . ', 0) as stat, count(a.*) as count')
                 ->from(self::TABLE, 'a')
                 ->innerJoin('a', self::TABLE_OWNERSHIP, 'b', 'a.id = b.deck_id')
+                ->where('a.sas > 30')
                 ->groupBy('ROUND(a.' . $stat . ', 0)')
                 ->orderBy('ROUND(a.' . $stat . ', 0)', 'asc')
                 ->executeQuery()
@@ -376,7 +377,7 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
             'SELECT set, COUNT(*) AS count
             FROM keyforge_decks a
             left join keyforge_decks_ownership b on a.id = b.deck_id
-            where b.deck_id is not null
+            where b.deck_id is not null and a.sas > 30
             GROUP BY set;'
         )->fetchAllAssociative();
 
@@ -396,7 +397,7 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
                 LEFT JOIN keyforge_decks_ownership o on d.id = o.deck_id
                 LEFT JOIN keyforge_games g_winner ON d.id = g_winner.winner_deck and g_winner.approved is true
                 LEFT JOIN keyforge_games g_loser ON d.id = g_loser.loser_deck and g_loser.approved is true
-                WHERE o.deck_id is not null
+                WHERE o.deck_id is not null and d.sas > 30
                 GROUP BY d.set
                 ORDER BY winrate DESC;'
         )->fetchAllAssociative();
@@ -445,7 +446,7 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
                 LEFT JOIN keyforge_decks_ownership o on d.id = o.deck_id
                 CROSS JOIN LATERAL jsonb_array_elements_text(d.houses) AS h(house)
                 LEFT JOIN keyforge_games g ON d.id = g.winner_deck and g.approved is true
-                WHERE o.deck_id is not null
+                WHERE o.deck_id is not null and d.sas > 30
                 GROUP BY house
             ),
             house_losses AS (
@@ -454,7 +455,7 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
                 LEFT JOIN keyforge_decks_ownership o on d.id = o.deck_id
                 CROSS JOIN LATERAL jsonb_array_elements_text(d.houses) AS h(house)
                 LEFT JOIN keyforge_games g ON d.id = g.loser_deck and g.approved is true
-                WHERE o.deck_id is not null
+                WHERE o.deck_id is not null and d.sas > 30
                 GROUP BY house
             )
             SELECT 
@@ -484,7 +485,7 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
                 ROUND(AVG(recursion)::numeric, 1) AS avg_recursion
                 FROM keyforge_decks d
                 LEFT JOIN keyforge_decks_ownership o on d.id = o.deck_id
-                WHERE o.deck_id is not null
+                WHERE o.deck_id is not null and d.sas > 30
                 GROUP BY d.set
                 ORDER BY d.set'
         )->fetchAllAssociative();

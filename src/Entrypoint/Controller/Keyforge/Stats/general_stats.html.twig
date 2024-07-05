@@ -38,6 +38,86 @@
             </div>
         </div>
     </div>
+
+    {% if is_granted('ROLE_KEYFORGE') %}
+        <div class="shadow-lg p-3 mb-3 bg-white rounded">
+            <div class="row">
+                {% for i in 0..1 %}
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="col-6">
+                                <span>{{ 'menu.decks_from'|trans }}</span>
+                                <select id="collection_comparison_from_{{ i }}" class="form-select compare_collection_select" data-index="{{ i }}">
+                                    <option value="{{ app.user.id }}" {% if i == 0 %}selected{% endif %}>{{ 'menu.you'|trans }}</option>
+                                    <option value="friends" {% if i == 1 %}selected{% endif %}>{{ 'menu.friends'|trans }}</option>
+                                    <option value="all">{{ 'deck_comparison.all'|trans }}</option>
+                                    {% for id,friend in indexed_friends %}
+                                        <option value="{{ id }}">{{ friend }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-6">
+                                <span>{{ 'menu.stat'|trans }}</span>
+                                <select id="collection_comparison_stat_{{ i }}" class="form-select compare_collection_select" data-index="{{ i }}">
+                                    <option value="sas" selected>{{ 'deck.sas'|trans }}</option>
+                                    <option value="expected_amber">{{ 'deck.expected_amber'|trans }}</option>
+                                    <option value="amber_control">{{ 'deck.amber_control'|trans }}</option>
+                                    <option value="creature_control">{{ 'deck.creature_control'|trans }}</option>
+                                    <option value="artifact_control">{{ 'deck.artifact_control'|trans }}</option>
+                                </select>
+                            </div>
+                            <div class="col-6 mt-2">
+                                <span>{{ 'menu.amount'|trans }}</span>
+                                <select id="collection_comparison_amount_{{ i }}" class="form-select compare_collection_select" data-index="{{ i }}">
+                                    <option value="5">5</option>
+                                    <option value="10" selected>10</option>
+                                    <option value="25">25</option>
+                                </select>
+                            </div>
+                            <div class="col-6 mt-2">
+                                <span>{{ 'menu.set'|trans }}</span>
+                                <select id="collection_comparison_set_{{ i }}" class="form-select compare_collection_select" data-index="{{ i }}">
+                                    <option value="all" selected>{{ 'menu.all'|trans }}</option>
+                                    <option value="CotA">CotA</option>
+                                    <option value="AoA">AoA</option>
+                                    <option value="WC">WC</option>
+                                    <option value="MM">MM</option>
+                                    <option value="DT">DT</option>
+                                    <option value="WoE">WoE</option>
+                                    <option value="GR">GR</option>
+                                    <option value="AS">AS</option>
+                                    <option value="U22">U22</option>
+                                    <option value="M24">M24</option>
+                                    <option value="VM23">VM23</option>
+                                    <option value="VM24">VM24</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="row">
+                {% for i in 0..1 %}
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="col-12">
+                            <table class="table table-hover" id="collection_comparison_table_{{ i }}">
+                                <thead>
+                                    <tr>
+                                        <th>{{ 'menu.deck'|trans }}</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+
     <script>
         let housePresence = JSON.parse('{{ houses|json_encode|raw }}');
         let setPresence = JSON.parse('{{ sets|json_encode|raw }}');
@@ -280,5 +360,107 @@
                 },
             });
         }
+
+        {% if is_granted('ROLE_KEYFORGE') %}
+        initDecks();
+
+        $('.compare_collection_select').change(function (e) {
+            const index = $(e.currentTarget).data('index');
+
+            fetchDecks(
+                index,
+                $('#collection_comparison_set_' + index)[0].value,
+                $('#collection_comparison_from_' + index)[0].value,
+                $('#collection_comparison_amount_' + index)[0].value,
+                $('#collection_comparison_stat_' + index)[0].value,
+            );
+        });
+
+        function initDecks() {
+            fetchDecks(0, 'all', '{{ app.user.id }}', 10, 'sas');
+            fetchDecks(1, 'all', 'friends', 10, 'sas');
+        }
+
+        function fetchDecks(index, set, owners, amount, stat) {
+            let data = {
+                extraFilterMinSas: 30,
+                length: amount,
+            };
+
+            if (set !== 'all') {
+                data.extraFilterSet = [set];
+            }
+
+            if (owners !== null && owners.length === 36) {
+                data.extraFilterOwners = [owners];
+            }
+
+            if (owners !== null && owners === 'friends') {
+                let friends = JSON.parse('{{ indexed_friends|json_encode|raw }}');
+
+                data.extraFilterOwners = Object.keys(friends).filter((friend) => friend !== '{{ app.user.id }}');
+            }
+
+            if (stat === 'sas') {
+                data.order = [{column: 5, dir: 'desc'}];
+            }
+
+            if (stat === 'expected_amber') {
+                data.order = [{column: 7, dir: 'desc'}];
+            }
+
+            if (stat === 'amber_control') {
+                data.order = [{column: 6, dir: 'desc'}];
+            }
+
+            if (stat === 'creature_control') {
+                data.order = [{column: 9, dir: 'desc'}];
+            }
+
+            if (stat === 'artifact_control') {
+                data.order = [{column: 8, dir: 'desc'}];
+            }
+
+            $.ajax({
+                type: 'GET',
+                url: '{{ path('keyforge_decks_json') }}',
+                data: data,
+            }).done(function(data) {
+                renderDecks(index, stat, data.data)
+            }).fail(function() {
+            });
+        }
+
+        function renderDecks(index, stat, decks) {
+            $('#collection_comparison_table_' + index + ' > tbody').empty();
+
+            decks.forEach(function (deck) {
+                let deckStat = deck.stats.sas;
+
+                if (stat === 'expected_amber') {
+                    deckStat = deck.stats.expectedAmber;
+                }
+
+                if (stat === 'amber_control') {
+                    deckStat = deck.stats.amberControl;
+                }
+
+                if (stat === 'creature_control') {
+                    deckStat = deck.stats.creatureControl;
+                }
+
+                if (stat === 'artifact_control') {
+                    deckStat = deck.stats.artifactControl;
+                }
+
+                let url = '{{ path('keyforge_deck_detail', {'deckId': '-replace-'}) }}';
+                url = url.replace('-replace-', deck.id);
+
+                let line = '<tr><td><a href="' + url + '">' + deck.name + '</a></td><td>' + deckStat + '</td></tr>';
+
+                $('#collection_comparison_table_' + index + ' > tbody').append(line);
+            });
+        }
+        {% endif %}
     </script>
 {% endblock %}

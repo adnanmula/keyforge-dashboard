@@ -170,6 +170,8 @@ keyforge.set_wc: WC
 keyforge.set_woe: WoE
 locale.en: English
 locale.es: Spanish
+menu.decks_from: 'Decks from'
+menu.amount: 'Amount'
 menu.accept: Accept
 menu.add: Add
 menu.add_friends: 'Add friends'
