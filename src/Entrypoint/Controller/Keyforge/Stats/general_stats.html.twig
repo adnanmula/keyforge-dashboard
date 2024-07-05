@@ -421,6 +421,11 @@
                 data.order = [{column: 8, dir: 'desc'}];
             }
 
+            $('#collection_comparison_table_' + index + ' > tbody').empty();
+
+            const spinner = '<div class="spinner-border text-dark" role="status"><span class="sr-only"></span></div>';
+            $('#collection_comparison_table_' + index + ' > tbody').append(spinner);
+
             $.ajax({
                 type: 'GET',
                 url: '{{ path('keyforge_decks_json') }}',
