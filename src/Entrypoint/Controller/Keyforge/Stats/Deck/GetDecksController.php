@@ -39,6 +39,21 @@ final class GetDecksController extends Controller
                 10 => 'efficiency',
                 11 => 'recursion',
                 12 => 'disruption',
+                13 => 'effective_power',
+                14 => 'creature_protection',
+                15 => 'total_armor',
+                16 => 'creature_count',
+                17 => 'action_count',
+                18 => 'artifact_count',
+                19 => 'upgrade_count',
+                20 => 'key_cheat_count',
+                21 => 'card_archive_count',
+                22 => 'board_clear_count',
+                23 => 'scaling_amber_control_count',
+                24 => 'raw_amber',
+                25 => 'aerc_score',
+                26 => 'synergy_rating',
+                27 => 'anti_synergy_rating',
             ];
 
             $orderField = $orderColumns[(int) $queryOrder[0]['column']] ?? null;

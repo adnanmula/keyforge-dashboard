@@ -59,11 +59,22 @@ deck.archives: Archivos
 deck.artifact_control: Control de artefactos
 deck.artifacts: Artefactos
 deck.board_clears: Board clears
+deck.creature_count: 'Criaturas'
+deck.action_count: 'Acciones'
+deck.artifact_count: 'Artefactos'
+deck.upgrade_count: 'Mejoras'
+deck.key_cheat_count: 'Key cheats'
+deck.card_archive_count: 'Cartas que archivan'
+deck.board_clear_count: 'Board clears'
+deck.scaling_amber_control_count: 'Control de ambar escalado'
+deck.raw_amber: 'Iconos de ambar'
+deck.aerc_score: 'Aerc'
 deck.bonus_amber: Iconos de ámbar
 deck.creature_control: Control de criaturas
 deck.creature_protection: Protección de criaturas
 deck.creatures: Criaturas
 deck.disruption: Disrupción
+deck.total_armor: Armadura total
 deck.effective_power: Poder efectivo
 deck.efficiency: Eficiencia
 deck.expected_amber: Ámbar esperado

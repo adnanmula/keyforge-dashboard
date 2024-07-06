@@ -59,11 +59,22 @@ deck.archives: Archives
 deck.artifact_control: Artifact control
 deck.artifacts: Artifacts
 deck.board_clears: Board clears
+deck.creature_count: 'Creature count'
+deck.action_count: 'Artion count'
+deck.artifact_count: 'Artifact count'
+deck.upgrade_count: 'Upgrade count'
+deck.key_cheat_count: 'Key cheat count'
+deck.card_archive_count: 'Archive count'
+deck.board_clear_count: 'Board clears'
+deck.scaling_amber_control_count: 'Scaling amber control'
+deck.raw_amber: 'Bonus amber'
+deck.aerc_score: 'Aerc'
 deck.bonus_amber: Bonus amber
 deck.creature_control: Creature control
 deck.creature_protection: Creature protection
 deck.creatures: Creatures
 deck.disruption: Disruption
+deck.total_armor: Total armor
 deck.effective_power: Effective power
 deck.efficiency: Efficiency
 deck.expected_amber: Expected amber

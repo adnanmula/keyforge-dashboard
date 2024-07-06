@@ -60,10 +60,28 @@
                                 <span>{{ 'menu.stat'|trans }}</span>
                                 <select id="collection_comparison_stat_{{ i }}" class="form-select compare_collection_select" data-index="{{ i }}">
                                     <option value="sas" selected>{{ 'deck.sas'|trans }}</option>
-                                    <option value="expected_amber">{{ 'deck.expected_amber'|trans }}</option>
-                                    <option value="amber_control">{{ 'deck.amber_control'|trans }}</option>
-                                    <option value="creature_control">{{ 'deck.creature_control'|trans }}</option>
-                                    <option value="artifact_control">{{ 'deck.artifact_control'|trans }}</option>
+                                    <option value="expectedAmber">{{ 'deck.expected_amber'|trans }}</option>
+                                    <option value="amberControl">{{ 'deck.amber_control'|trans }}</option>
+                                    <option value="creatureControl">{{ 'deck.creature_control'|trans }}</option>
+                                    <option value="artifactControl">{{ 'deck.artifact_control'|trans }}</option>
+                                    <option value="efficiency">{{ 'deck.efficiency'|trans }}</option>
+                                    <option value="recursion">{{ 'deck.recursion'|trans }}</option>
+                                    <option value="disruption">{{ 'deck.disruption'|trans }}</option>
+                                    <option value="effectivePower">{{ 'deck.effective_power'|trans }}</option>
+                                    <option value="creatureProtection">{{ 'deck.creature_protection'|trans }}</option>
+                                    <option value="totalArmor">{{ 'deck.total_armor'|trans }}</option>
+                                    <option value="creatureCount">{{ 'deck.creature_count'|trans }}</option>
+                                    <option value="actionCount">{{ 'deck.action_count'|trans }}</option>
+                                    <option value="artifactCount">{{ 'deck.artifact_count'|trans }}</option>
+                                    <option value="upgradeCount">{{ 'deck.upgrade_count'|trans }}</option>
+                                    <option value="keyCheatCount">{{ 'deck.key_cheat_count'|trans }}</option>
+                                    <option value="cardArchiveCount">{{ 'deck.card_archive_count'|trans }}</option>
+                                    <option value="boardClearCount">{{ 'deck.board_clear_count'|trans }}</option>
+                                    <option value="scalingAmberControlCount">{{ 'deck.scaling_amber_control_count'|trans }}</option>
+                                    <option value="rawAmber">{{ 'deck.raw_amber'|trans }}</option>
+                                    <option value="aercScore">{{ 'deck.aerc_score'|trans }}</option>
+                                    <option value="synergyRating">{{ 'deck.synergy'|trans }}</option>
+                                    <option value="antiSynergyRating">{{ 'deck.antisynergy'|trans }}</option>
                                 </select>
                             </div>
                             <div class="col-6 mt-2">
@@ -72,6 +90,7 @@
                                     <option value="5">5</option>
                                     <option value="10" selected>10</option>
                                     <option value="25">25</option>
+                                    <option value="50">50</option>
                                 </select>
                             </div>
                             <div class="col-6 mt-2">
@@ -101,15 +120,15 @@
                     <div class="col-6">
                         <div class="row">
                             <div class="col-12">
-                            <table class="table table-hover" id="collection_comparison_table_{{ i }}">
-                                <thead>
+                                <table class="table table-hover" id="collection_comparison_table_{{ i }}">
+                                    <thead>
                                     <tr>
                                         <th>{{ 'menu.deck'|trans }}</th>
                                         <th></th>
                                     </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -401,29 +420,38 @@
                 data.extraFilterOwners = Object.keys(friends).filter((friend) => friend !== '{{ app.user.id }}');
             }
 
-            if (stat === 'sas') {
-                data.order = [{column: 5, dir: 'desc'}];
-            }
+            const orderFields = {
+                sas: 5,
+                amberControl: 6,
+                expectedAmber: 7,
+                artifactControl: 8,
+                creatureControl: 9,
+                efficiency: 10,
+                recursion: 11,
+                disruption: 12,
+                effectivePower: 13,
+                creatureProtection: 14,
+                totalArmor: 15,
+                creatureCount: 16,
+                actionCount: 17,
+                artifactCount: 18,
+                upgradeCount: 19,
+                keyCheatCount: 20,
+                cardArchiveCount: 21,
+                boardClearCount: 22,
+                scalingAmberControlCount: 23,
+                rawAmber: 24,
+                aercScore: 25,
+                synergyRating: 26,
+                antiSynergyRating: 27,
+            };
 
-            if (stat === 'expected_amber') {
-                data.order = [{column: 7, dir: 'desc'}];
-            }
-
-            if (stat === 'amber_control') {
-                data.order = [{column: 6, dir: 'desc'}];
-            }
-
-            if (stat === 'creature_control') {
-                data.order = [{column: 9, dir: 'desc'}];
-            }
-
-            if (stat === 'artifact_control') {
-                data.order = [{column: 8, dir: 'desc'}];
-            }
+            data.order = [{column: orderFields[stat], dir: 'desc'}];
 
             $('#collection_comparison_table_' + index + ' > tbody').empty();
 
             const spinner = '<div class="spinner-border text-dark" role="status"><span class="sr-only"></span></div>';
+
             $('#collection_comparison_table_' + index + ' > tbody').append(spinner);
 
             $.ajax({
@@ -440,23 +468,7 @@
             $('#collection_comparison_table_' + index + ' > tbody').empty();
 
             decks.forEach(function (deck) {
-                let deckStat = deck.stats.sas;
-
-                if (stat === 'expected_amber') {
-                    deckStat = deck.stats.expectedAmber;
-                }
-
-                if (stat === 'amber_control') {
-                    deckStat = deck.stats.amberControl;
-                }
-
-                if (stat === 'creature_control') {
-                    deckStat = deck.stats.creatureControl;
-                }
-
-                if (stat === 'artifact_control') {
-                    deckStat = deck.stats.artifactControl;
-                }
+                let deckStat = deck.stats[stat];
 
                 let url = '{{ path('keyforge_deck_detail', {'deckId': '-replace-'}) }}';
                 url = url.replace('-replace-', deck.id);
