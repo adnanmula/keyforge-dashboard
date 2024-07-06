@@ -3,117 +3,75 @@
 {% block title %}{{ 'menu.games'|trans }}{% endblock %}
 
 {% block body %}
-    <div class="shadow-lg p-3 mb-5 bg-white rounded">
+    {% if username is not null %}
+
+    <div class="shadow-lg p-3 mb-1 bg-white rounded">
+        <div class="divider py-2"></div>
+
+        {% if username is not null %}
+        <div class="row">
+            <div class="col-10 d-flex justify-content-start"><h2>{{ username }}</h2></div>
+        </div>
+        {% endif %}
+
         <div class="divider py-2"></div>
 
         <div class="row">
-{#            {% if stats is not null and stats.user_is_external == false %}#}
-{#                <div class="col-10 d-flex justify-content-start"><h2>{{ stats.username }}</h2></div>#}
-
-{#                <div class="col-2 d-flex justify-content-end">#}
-{#                    <a class="btn btn-dark" data-bs-toggle="collapse" href="#userStats" role="button" aria-expanded="false" aria-controls="collapseExample">{{ 'menu.show_stats'|trans }}</a>#}
-{#                </div>#}
-{#            {% endif %}#}
+        {% for competition,wr in wr_by_competition %}
+            <div class="col-12 col-sm-6 col-md-4">
+                <canvas id="wr_by_competition_{{ competition }}" class="deck_stats_comparison"></canvas>
+            </div>
+        {% endfor %}
         </div>
-
-        <div class="divider py-2"></div>
-
-{#        {% if stats is not null and stats.user_is_external == false %}#}
-{#            <div class="collapse" id="userStats">#}
-{#            <div class="row mt-3">#}
-{#                <div class="col-12 col-sm-12 col-md-4 col-lg-4">#}
-{#                    <canvas id="winRateVsUsers" width="200" height="210"></canvas>#}
-{#                </div>#}
-{#                <div class="col-12 col-sm-12 col-md-4 col-lg-4">#}
-{#                    <canvas id="setWins" width="200" height="200"></canvas>#}
-{#                </div>#}
-{#                <div class="col-12 col-sm-12 col-md-4 col-lg-4">#}
-{#                    <canvas id="houseWins" width="200" height="200"></canvas>#}
-{#                </div>#}
-{#            </div>#}
-
-{#            <div class="divider py-2"></div>#}
-{#            <div class="divider py-2"></div>#}
-
-{#            <div class="row">#}
-{#                <div class="col">#}
-{#                    <canvas id="winsByDate" height="100"></canvas>#}
-{#                </div>#}
-{#            </div>#}
-
-{#            <div class="divider py-2"></div>#}
-{#            <div class="divider py-2"></div>#}
-
-{#            <div class="row">#}
-{#                <div class="col">#}
-{#                    <canvas id="winsByDeck" height="300"></canvas>#}
-{#                </div>#}
-{#            </div>#}
-{#        </div>#}
-
-{#        <div class="divider py-2"></div>#}
-{#        <div class="divider py-2"></div>#}
-
-{#        <div class="row m-2">#}
-{#            {% if (null != stats.best_deck) %}#}
-{#                <a href="/deck/{{ stats.best_deck.id }}?userId={{ userId }}" class="btn btn-dark col-3 border col-12 col-sm-6 col-lg-3">#}
-{#                    <h5>{{ 'menu.best_performance'|trans }}</h5>#}
-{#                    <p>{{ stats.best_deck.name }}</p>#}
-{#                    <p>{{ stats.best_deck.wins }}/{{ stats.best_deck.losses }} (WR: {{ stats.best_deck.win_rate }}%/PR: {{ stats.best_deck.pick_rate }}%)</p>#}
-{#                </a>#}
-{#            {% endif %}#}
-
-{#            {% if (null != stats.worse_deck) %}#}
-{#                <a href="/deck/{{ stats.worse_deck.id }}?userId={{ userId }}" class="btn btn-dark border col-12 col-sm-6 col-lg-3">#}
-{#                    <h5>{{ 'menu.worst_performance'|trans }}</h5>#}
-{#                    <p>{{ stats.worse_deck.name }}</p>#}
-{#                    <p>{{ stats.worse_deck.wins }}/{{ stats.worse_deck.losses }} (WR: {{ stats.worse_deck.win_rate }}%/PR: {{ stats.worse_deck.pick_rate }}%)</p>#}
-{#                </a>#}
-{#            {% endif %}#}
-
-{#            {% if (null != stats.favorite_deck) %}#}
-{#                <a href="/deck/{{ stats.favorite_deck.id }}?userId={{ userId }}" class="btn btn-dark border col-12 col-sm-6 col-lg-3">#}
-{#                    <h5>{{ 'menu.favorite'|trans }}</h5>#}
-{#                    <p>{{ stats.favorite_deck.name }}</p>#}
-{#                    <p>{{ 'menu.played_times'|trans({'%count%': stats.favorite_deck.wins + stats.favorite_deck.losses}) }}</p>#}
-{#                </a>#}
-{#            {% endif %}#}
-
-{#            {% if (null != stats.win_streak) %}#}
-{#                <a class="btn btn-dark border col-12 col-sm-6 col-lg-3">#}
-{#                    <h5>{{ 'menu.best_win_streak'|trans }}</h5>#}
-{#                    <p></p>#}
-{#                    <p>{{ stats.win_streak }}</p>#}
-{#                </a>#}
-{#            {% endif %}#}
-
-{#            {% if (null != stats.competition_wins and stats.competition_wins | length) %}#}
-{#                <div class="btn btn-dark border">#}
-{#                    <h5>{{ 'menu.record_book'|trans }}</h5>#}
-
-{#                    <div class="row">#}
-{#                        {% for win in stats.competition_wins %}#}
-{#                            <div class="col-12 col-sm-4 col-md-3 col-xl-2">#}
-{#                                <a class="text-decoration-none" href="/competitions/{{ win.reference }}" style="color: white">#}
-{#                                    <div class="row">#}
-{#                                        <i class="bi bi-trophy" style="font-size: 3em;"></i>#}
-{#                                    </div>#}
-{#                                    <div class="row">#}
-{#                                        <span>{{ win.name }}</span>#}
-{#                                    </div>#}
-{#                                    <div class="row">#}
-{#                                        <span>{{ win.date }}</span>#}
-{#                                    </div>#}
-{#                                </a>#}
-{#                            </div>#}
-{#                        {% endfor %}#}
-{#                    </div>#}
-{#                </div>#}
-{#            {% endif %}#}
-{#        </div>#}
-
-{#        {% endif %}#}
     </div>
+    <div class="p-3 mb-1 w-100">
+        <div class="row">
+            {% if deck_stats is not null and deck_stats.best_win_ratio_deck_id is defined %}
+                <a class="btn btn-dark border col-12 col-sm-6 col-lg-4" href="{{ path('keyforge_deck_detail', {'deckId': deck_stats.best_win_ratio_deck_id}) }}" target="_blank">
+                    <h5>{{ 'menu.best_wr'|trans }}</h5>
+                    <p>{{ deck_stats.best_win_ratio_deck }}</p>
+                    <p>{{ (deck_stats.best_win_ratio_deck_value * 100)|round(2) }}%</p>
+                </a>
+            {% endif %}
+
+            {% if deck_stats is not null and deck_stats.most_played_deck_id is defined %}
+                <a class="btn btn-dark border col-12 col-sm-6 col-lg-4" href="{{ path('keyforge_deck_detail', {'deckId': deck_stats.most_played_deck_id}) }}" target="_blank">
+                    <h5>{{ 'menu.most_played'|trans }}</h5>
+                    <p>{{ deck_stats.most_played_deck }}</p>
+                    <p>{{ 'menu.played_times'|trans({'%count%': deck_stats.most_played_deck_games}) }}</p>
+                </a>
+            {% endif %}
+
+            {% if deck_stats is not null and deck_stats.highest_sas_deck_id is defined %}
+                <a class="btn btn-dark border col-12 col-sm-6 col-lg-4" href="{{ path('keyforge_deck_detail', {'deckId': deck_stats.highest_sas_deck_id}) }}" target="_blank">
+                    <h5>{{ 'menu.highest_sas'|trans }}</h5>
+                    <p>{{ deck_stats.highest_sas_deck }}</p>
+                    <p>{{ deck_stats.highest_sas_deck_value ~ ' ' ~ 'deck.sas'|trans }}</p>
+                </a>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+
+    {% if competition_wins|length > 0 %}
+        <div class="btn btn-dark border w-100">
+            <h5>{{ 'menu.record_book'|trans }}</h5>
+
+            <div class="row">
+                {% for win in competition_wins %}
+                    <div class="col-12 col-sm-4 col-md-3 col-xl-2">
+                        <a class="text-decoration-none" href="/competitions/{{ win.reference }}" style="color: white">
+                            <div class="row"><i class="bi bi-trophy" style="font-size: 3em;"></i></div>
+                            <div class="row"><span>{{ win.name }}</span></div>
+                            <div class="row"><span>{{ win.finishedAt|date('Y-m-d') }}</span></div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="divider py-2"></div>
 
     <div class="shadow-lg p-3 mb-5 bg-white rounded">
         {% include 'Keyforge/Game/List/game_list.html.twig' with {
@@ -126,308 +84,38 @@
     </div>
 
     <script>
-{#        {% if stats is not null and stats.user_is_external == false %}#}
+        {% for competition,data in wr_by_competition %}
+            graph('wr_by_competition_{{ competition }}', '{{ ('game.'~competition|lower)|trans }}', JSON.parse('{{ data|json_encode|raw }}'))
+        {% endfor %}
 
-{#        let winRateVsUsers = JSON.parse('{{ stats.win_rate_vs_users|json_encode|raw }}');#}
-{#        let pickRateVsUsers = JSON.parse('{{ stats.pick_rate_vs_users|json_encode|raw }}');#}
-{#        let winsByDate = JSON.parse('{{ stats.wins_by_date|json_encode|raw }}');#}
-{#        let lossesByDate = JSON.parse('{{ stats.losses_by_date|json_encode|raw }}');#}
-{#        let winsByUsers = JSON.parse('{{ stats.wins_vs_users|json_encode|raw }}');#}
-{#        let decksStats = JSON.parse('{{ stats.decks_stats|json_encode|raw }}');#}
-{#        let winsBySet = JSON.parse('{{ stats.wins_by_set|json_encode|raw }}');#}
-{#        let winsByHouse = JSON.parse('{{ stats.wins_by_house|json_encode|raw }}');#}
-
-{#        let winsByUser = [];#}
-{#        let lossesByUser = [];#}
-
-{#        $.each(winsByUsers, function(index, value) {#}
-{#            winsByUser[index] = value['wins'];#}
-{#            lossesByUser[index] = value['losses'];#}
-{#        });#}
-
-{#        let winsByDeck = [];#}
-{#        let lossesByDeck = [];#}
-{#        let winRateByDeck = [];#}
-{#        let pickRateByDeck = [];#}
-
-{#        $.each(decksStats, function(index, value) {#}
-{#            winsByDeck[index] = value['wins'];#}
-{#            lossesByDeck[index] = value['losses'];#}
-{#            winRateByDeck[index] = value['win_rate'];#}
-{#            pickRateByDeck[index] = value['pick_rate'];#}
-{#        });#}
-
-{#        const winRateVsUsersChart = new Chart(document.getElementById('winRateVsUsers').getContext('2d'), {#}
-{#            type: 'bar',#}
-{#            data: {#}
-{#                labels: Object.keys(winRateVsUsers),#}
-{#                datasets: [#}
-{#                    {#}
-{#                        label: '{{ 'menu.wr%'|trans }}',#}
-{#                        data: Object.values(winRateVsUsers),#}
-{#                        borderColor: 'rgb(37, 41, 33)',#}
-{#                        backgroundColor: 'rgb(37, 41, 33)',#}
-{#                        maxBarThickness: 50,#}
-{#                        yAxisID: 'percentage',#}
-{#                    },#}
-{#                    {#}
-{#                        label: '{{ 'menu.pr%'|trans }}',#}
-{#                        data: Object.values(pickRateVsUsers),#}
-{#                        borderColor: 'rgb(115, 115, 115)',#}
-{#                        backgroundColor: 'rgb(115, 115, 115)',#}
-{#                        maxBarThickness: 50,#}
-{#                        yAxisID: 'percentage',#}
-{#                    },#}
-{#                    {#}
-{#                        label: '{{ 'data.wins'|trans }}',#}
-{#                        data: Object.values(winsByUser),#}
-{#                        borderColor: 'rgb(70,113,26)',#}
-{#                        backgroundColor: 'rgb(70,113,26)',#}
-{#                        maxBarThickness: 50,#}
-{#                        yAxisID: 'wins',#}
-{#                    },#}
-{#                    {#}
-{#                        label: '{{ 'data.losses'|trans }}',#}
-{#                        data: Object.values(lossesByUser),#}
-{#                        borderColor: 'rgb(148,22,68)',#}
-{#                        backgroundColor: 'rgb(148,22,68)',#}
-{#                        maxBarThickness: 50,#}
-{#                        yAxisID: 'wins',#}
-{#                    },#}
-{#                ]#}
-{#            },#}
-{#            options: {#}
-{#                responsive: true,#}
-{#                plugins: {#}
-{#                    legend: {#}
-{#                        display: false,#}
-{#                        position: 'bottom',#}
-{#                    },#}
-{#                    title: {#}
-{#                        display: true,#}
-{#                        text: '{{ 'menu.wr/pr'|trans }}'#}
-{#                    }#}
-{#                },#}
-{#                scale: {#}
-{#                    ticks: {#}
-{#                        precision: 0,#}
-{#                    },#}
-{#                },#}
-{#                scales: {#}
-{#                    percentage: {#}
-{#                        type: 'linear',#}
-{#                        display: true,#}
-{#                        position: 'left',#}
-{#                        min: 0,#}
-{#                        max: 100,#}
-{#                        grid: {#}
-{#                            drawOnChartArea: false,#}
-{#                        },#}
-{#                        stacked: false,#}
-{#                    },#}
-{#                    wins: {#}
-{#                        type: 'linear',#}
-{#                        display: true,#}
-{#                        position: 'right',#}
-{#                        grid: {#}
-{#                            drawOnChartArea: true,#}
-{#                        },#}
-{#                        stacked: false,#}
-{#                    },#}
-{#                },#}
-{#            },#}
-{#        });#}
-
-{#        const setWinsChart = new Chart(document.getElementById('setWins').getContext('2d'), {#}
-{#            type: 'doughnut',#}
-{#            data: {#}
-{#                datasets: [#}
-{#                    {#}
-{#                        data: Object.values(winsBySet),#}
-{#                        backgroundColor: [#}
-{#                            'rgb(255, 99, 132)',#}
-{#                            'rgb(54, 162, 235)',#}
-{#                            'rgb(210, 145, 188)',#}
-{#                            'rgb(179, 217, 178)',#}
-{#                            'rgb(114, 99, 143)',#}
-{#                            'rgb(177, 29, 33)',#}
-{#                            'rgb(10,73,204)',#}
-{#                        ],#}
-{#                    },#}
-{#                ],#}
-{#                labels: Object.keys(winsBySet),#}
-{#            },#}
-{#            options: {#}
-{#                responsive: true,#}
-{#                plugins: {#}
-{#                    legend: {#}
-{#                        display: false,#}
-{#                        position: 'bottom',#}
-{#                    },#}
-{#                    title: {#}
-{#                        display: true,#}
-{#                        text: '{{ 'menu.set_wins'|trans }}'#}
-{#                    }#}
-{#                }#}
-{#            },#}
-{#        });#}
-
-{#        const houseWinsChart = new Chart(document.getElementById('houseWins').getContext('2d'), {#}
-{#            type: 'doughnut',#}
-{#            data: {#}
-{#                datasets: [#}
-{#                    {#}
-{#                        data: Object.values(winsByHouse),#}
-{#                        backgroundColor: [#}
-{#                            'rgb(41, 128, 185)', //Sanctum#}
-{#                            'rgb(225, 78, 183)', //Dis#}
-{#                            'rgb(46, 204, 113)', //Mars#}
-{#                            'rgb(125, 60, 152)', //Star Alliance#}
-{#                            'rgb(22, 160, 133)', //Saurian#}
-{#                            'rgb(81, 90, 90)',   //Shadows#}
-{#                            'rgb(20, 90, 50)',   //Untamed#}
-{#                            'rgb(231, 76, 60)',  //Brobnar#}
-{#                            'rgb(21, 67, 96)',   //Unfathomable#}
-{#                            'rgb(52, 152, 219)', //Logos#}
-{#                            'rgb(177, 29, 33)',  //Ekwidon#}
-{#                        ],#}
-{#                    }#}
-{#                ],#}
-{#                labels: Object.keys(winsByHouse),#}
-{#            },#}
-{#            options: {#}
-{#                responsive: true,#}
-{#                plugins: {#}
-{#                    legend: {#}
-{#                        display: false,#}
-{#                        position: 'bottom',#}
-{#                    },#}
-{#                    title: {#}
-{#                        display: true,#}
-{#                        text: '{{ 'menu.house_wins'|trans }}'#}
-{#                    }#}
-{#                }#}
-{#            },#}
-{#        });#}
-
-{#        const winsByDecksChart = new Chart(document.getElementById('winsByDeck').getContext('2d'), {#}
-{#            type: 'bar',#}
-{#            data: {#}
-{#                labels: Object.keys(winsByDeck),#}
-{#                datasets: [#}
-{#                    {#}
-{#                        label: '{{ 'menu.winrate'|trans }}',#}
-{#                        data: Object.values(winRateByDeck),#}
-{#                        borderColor: 'rgb(37, 41, 33)',#}
-{#                        backgroundColor: 'rgb(37, 41, 33)',#}
-{#                        xAxisID: 'percentage',#}
-{#                    },#}
-{#                    {#}
-{#                        label: '{{ 'menu.pr'|trans }}',#}
-{#                        data: Object.values(pickRateByDeck),#}
-{#                        borderColor: 'rgb(115, 115, 115)',#}
-{#                        backgroundColor: 'rgb(115, 115, 115)',#}
-{#                        xAxisID: 'percentage',#}
-{#                    },#}
-{#                    {#}
-{#                        label: '{{ 'data.wins'|trans }}',#}
-{#                        data: Object.values(winsByDeck),#}
-{#                        borderColor: 'rgb(70,113,26)',#}
-{#                        backgroundColor: 'rgb(70,113,26)',#}
-{#                        xAxisID: 'wins',#}
-{#                    },#}
-{#                    {#}
-{#                        label: '{{ 'data.losses'|trans }}',#}
-{#                        data: Object.values(lossesByDeck),#}
-{#                        borderColor: 'rgb(148,22,68)',#}
-{#                        backgroundColor: 'rgb(148,22,68)',#}
-{#                        xAxisID: 'wins',#}
-{#                    },#}
-{#                ]#}
-{#            },#}
-{#            options: {#}
-{#                indexAxis: 'y',#}
-{#                responsive: true,#}
-{#                plugins: {#}
-{#                    legend: {#}
-{#                        display: true,#}
-{#                        position: 'top',#}
-{#                    },#}
-{#                    title: {#}
-{#                        display: false,#}
-{#                        text: '{{ 'menu.deck_wl'|trans }}'#}
-{#                    }#}
-{#                },#}
-{#                scale: {#}
-{#                    ticks: {#}
-{#                        precision: 0,#}
-{#                    },#}
-{#                },#}
-{#                scales: {#}
-{#                    wins: {#}
-{#                        type: 'linear',#}
-{#                        display: true,#}
-{#                        position: 'bottom',#}
-{#                        grid: {#}
-{#                            drawOnChartArea: true,#}
-{#                        },#}
-{#                        stacked: false,#}
-{#                    },#}
-{#                    percentage: {#}
-{#                        type: 'linear',#}
-{#                        display: true,#}
-{#                        position: 'top',#}
-{#                        min: 0,#}
-{#                        max: 100,#}
-{#                        grid: {#}
-{#                            drawOnChartArea: false,#}
-{#                        },#}
-{#                        stacked: false,#}
-{#                    },#}
-{#                },#}
-{#            },#}
-{#        });#}
-
-{#        const winsByDateChart = new Chart(document.getElementById('winsByDate').getContext('2d'), {#}
-{#            type: 'bar',#}
-{#            data: {#}
-{#                labels: Object.keys(winsByDate),#}
-{#                datasets: [#}
-{#                    {#}
-{#                        label: '{{ 'data.wins'|trans }}',#}
-{#                        data: Object.values(winsByDate),#}
-{#                        borderColor: 'rgb(70,113,26)',#}
-{#                        backgroundColor: 'rgb(70,113,26)',#}
-{#                    },#}
-{#                    {#}
-{#                        label: '{{ 'data.losses'|trans }}',#}
-{#                        data: Object.values(lossesByDate),#}
-{#                        borderColor: 'rgb(148,22,68)',#}
-{#                        backgroundColor: 'rgb(148,22,68)',#}
-{#                    },#}
-{#                ]#}
-{#            },#}
-{#            options: {#}
-{#                responsive: true,#}
-{#                aspectRatio: 2,#}
-{#                plugins: {#}
-{#                    legend: {#}
-{#                        display: false,#}
-{#                        position: 'bottom',#}
-{#                    },#}
-{#                    title: {#}
-{#                        display: true,#}
-{#                        text: '{{ 'menu.time_wl'|trans }}',#}
-{#                    }#}
-{#                },#}
-{#                scale: {#}
-{#                    ticks: {#}
-{#                        precision: 0,#}
-{#                    },#}
-{#                },#}
-{#            },#}
-{#        });#}
-
-{#        {% endif %}#}
+        function graph(id, title, data) {
+            new Chart(document.getElementById(id).getContext('2d'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['W', 'L'],
+                    datasets: [
+                        {
+                            data: [data.total_wins, data.total_losses],
+                            borderColor: ['rgb(105,202,26)', 'rgb(221,0,0)'],
+                            backgroundColor: ['rgb(105,202,26)', 'rgb(221,0,0)'],
+                        },
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    aspectRatio: 2,
+                    plugins: {
+                        legend: {
+                            display: false,
+                            position: 'bottom',
+                        },
+                        title: {
+                            display: true,
+                            text: title,
+                        }
+                    }
+                },
+            });
+        }
     </script>
 {% endblock %}

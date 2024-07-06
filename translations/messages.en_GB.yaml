@@ -145,6 +145,7 @@ game.notes: Notes
 game.register_game: 'Register game'
 game.save: Save
 game.solo: 'Solo play'
+game.friends: 'With friends'
 game.tco_casual: 'TCO Casual'
 game.tco_competitive: 'TCO Competitive'
 game.type: Type
@@ -241,6 +242,9 @@ menu.owner: Owner
 menu.password: Password
 menu.pending_games: 'Pending games'
 menu.played_times: 'Played %count% time|Played %count% times'
+menu.most_played: 'Most played'
+menu.highest_sas: 'Best SAS'
+menu.best_wr: 'Best win rate'
 menu.players: Players
 menu.pr%: 'PickRate%'
 menu.pr: 'Pick rate'

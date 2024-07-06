@@ -2,6 +2,7 @@
 
 namespace AdnanMula\Cards\Domain\Model\Keyforge\User;
 
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Criteria\Criteria;
 
 interface KeyforgeUserRepository
@@ -10,4 +11,8 @@ interface KeyforgeUserRepository
     public function search(Criteria $criteria): array;
 
     public function save(KeyforgeUser $user): void;
+
+    public function winrate(Uuid $id): array;
+
+    public function bestDecks(Uuid $id): array;
 }
