@@ -85,36 +85,28 @@ final class CreateGameCommandHandler
 
     private function getUsers(User $user, string $winner, string $loser, string $firstTurn, KeyforgeCompetition $competition): array
     {
-        if (\in_array($competition, self::COMPETITIONS_VS_RANDOMS, true)) {
-            if (false === Uuid::isValid($winner)) {
-                $winner = $this->fetchUserOrCreate($winner, $user, true)->id()->value();
-            }
+        $create = \in_array($competition, self::COMPETITIONS_VS_RANDOMS, true);
 
-            if (false === Uuid::isValid($loser)) {
-                $loser = $this->fetchUserOrCreate($loser, $user, true)->id()->value();
-            }
+        if (false === Uuid::isValid($winner)) {
+            $winner = $this->fetchUserOrCreate($winner, $user, $create)->id()->value();
+        }
 
-            if (false === Uuid::isValid($firstTurn)) {
-                $firstTurn = $this->fetchUserOrCreate($firstTurn, $user, true)->id()->value();
-            }
-        } else {
-            if (false === Uuid::isValid($winner)) {
-                $winner = $this->fetchUserOrCreate($winner, $user, false)->id()->value();
-            }
+        if (false === Uuid::isValid($loser)) {
+            $loser = $this->fetchUserOrCreate($loser, $user, $create)->id()->value();
+        }
 
-            if (false === Uuid::isValid($loser)) {
-                $loser = $this->fetchUserOrCreate($loser, $user, false)->id()->value();
-            }
-
-            if (false === Uuid::isValid($firstTurn)) {
-                $firstTurn = $this->fetchUserOrCreate($firstTurn, $user, false)->id()->value();
-            }
+        if (false === Uuid::isValid($firstTurn)) {
+            $firstTurn = $this->fetchUserOrCreate($firstTurn, $user, $create)->id()->value();
         }
 
         if (false === Uuid::isValid($winner)
             || false === Uuid::isValid($loser)
             || false === Uuid::isValid($firstTurn)) {
             throw new \Exception('Invalid user');
+        }
+
+        if ($firstTurn !== $winner && $firstTurn !== $loser) {
+            throw new \InvalidArgumentException('First player is not in game');
         }
 
         return [Uuid::from($winner), Uuid::from($loser), Uuid::from($firstTurn)];
