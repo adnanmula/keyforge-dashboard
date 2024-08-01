@@ -20,6 +20,7 @@ use AdnanMula\Criteria\Filter\FilterType;
 use AdnanMula\Criteria\FilterField\FilterField;
 use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
 use AdnanMula\Criteria\FilterValue\FilterOperator;
+use AdnanMula\Criteria\FilterValue\NullFilterValue;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
 use Symfony\Bundle\SecurityBundle\Security;
 
@@ -86,17 +87,18 @@ final class CreateGameCommandHandler
     private function getUsers(User $user, string $winner, string $loser, string $firstTurn, KeyforgeCompetition $competition): array
     {
         $create = \in_array($competition, self::COMPETITIONS_VS_RANDOMS, true);
+        $checkFirstLevel = \in_array($competition, self::COMPETITIONS_VS_RANDOMS, true);
 
         if (false === Uuid::isValid($winner)) {
-            $winner = $this->fetchUserOrCreate($winner, $user, $create)->id()->value();
+            $winner = $this->fetchUserOrCreate($winner, $user, $create, $checkFirstLevel)->id()->value();
         }
 
         if (false === Uuid::isValid($loser)) {
-            $loser = $this->fetchUserOrCreate($loser, $user, $create)->id()->value();
+            $loser = $this->fetchUserOrCreate($loser, $user, $create, $checkFirstLevel)->id()->value();
         }
 
         if (false === Uuid::isValid($firstTurn)) {
-            $firstTurn = $this->fetchUserOrCreate($firstTurn, $user, $create)->id()->value();
+            $firstTurn = $this->fetchUserOrCreate($firstTurn, $user, $create, true)->id()->value();
         }
 
         if (false === Uuid::isValid($winner)
@@ -112,18 +114,34 @@ final class CreateGameCommandHandler
         return [Uuid::from($winner), Uuid::from($loser), Uuid::from($firstTurn)];
     }
 
-    private function fetchUserOrCreate(string $name, User $user, bool $create): KeyforgeUser
+    private function fetchUserOrCreate(string $name, User $user, bool $create, bool $checkFirstLevel = false): KeyforgeUser
     {
+        $filterGroups = [
+            new AndFilterGroup(
+                FilterType::AND,
+                new Filter(new FilterField('name'), new StringFilterValue($name), FilterOperator::EQUAL),
+            ),
+        ];
+
+        if ($checkFirstLevel) {
+            $filterGroups[] = new AndFilterGroup(
+                FilterType::OR,
+                new Filter(new FilterField('owner'), new StringFilterValue($user->id()->value()), FilterOperator::EQUAL),
+                new Filter(new FilterField('owner'), new NullFilterValue(), FilterOperator::IS_NULL),
+            );
+        } else {
+            $filterGroups[] = new AndFilterGroup(
+                FilterType::AND,
+                new Filter(new FilterField('owner'), new StringFilterValue($user->id()->value()), FilterOperator::EQUAL),
+            );
+        }
+
         $userToCreate = $this->userRepository->search(
             new Criteria(
                 null,
                 null,
                 null,
-                new AndFilterGroup(
-                    FilterType::AND,
-                    new Filter(new FilterField('name'), new StringFilterValue($name), FilterOperator::EQUAL),
-                    new Filter(new FilterField('owner'), new StringFilterValue($user->id()->value()), FilterOperator::EQUAL),
-                ),
+                ...$filterGroups,
             ),
         )[0] ?? null;
 
