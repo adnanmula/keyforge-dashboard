@@ -21,6 +21,7 @@ enum KeyforgeSet: string
     case VM23 = 'VM23';
     case VM24 = 'VM24';
     case ANOMALY_EXPANSION = 'ANOMALY_EXPANSION';
+    case MARTIAN_CIVIL_WAR = 'MARTIAN_CIVIL_WAR';
 
     public function fullName(): string
     {
@@ -38,6 +39,7 @@ enum KeyforgeSet: string
             self::VM23 => 'Vault Masters 2023',
             self::VM24 => 'Vault Masters 2024',
             self::ANOMALY_EXPANSION => 'Anomaly',
+            self::MARTIAN_CIVIL_WAR => 'Martian Civil War',
         };
     }
 
@@ -95,13 +97,17 @@ enum KeyforgeSet: string
             return self::ANOMALY_EXPANSION;
         }
 
+        if ($set === 'MARTIAN_CIVIL_WAR') {
+            return self::MARTIAN_CIVIL_WAR;
+        }
+
         throw new \InvalidArgumentException($set);
     }
 
     public function isMain(): bool
     {
         return match ($this) {
-            self::U22,self::VM23,self::VM24,self::M24 => false,
+            self::U22, self::VM23, self::VM24, self::M24, self::MARTIAN_CIVIL_WAR => false,
             default => true,
         };
     }
@@ -109,7 +115,7 @@ enum KeyforgeSet: string
     public function isEnabled(): bool
     {
         return match ($this) {
-            self::AS, self::ANOMALY_EXPANSION => false,
+            self::AS, self::ANOMALY_EXPANSION, self::MARTIAN_CIVIL_WAR => false,
             default => true,
         };
     }

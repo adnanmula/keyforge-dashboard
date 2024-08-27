@@ -130,6 +130,16 @@ final class GetDecksQueryHandler
             );
         }
 
+        if (null !== $query->deckTypes) {
+            $filters[] = new AndFilterGroup(
+                FilterType::OR,
+                ...\array_map(
+                    static fn (string $type): Filter => new Filter(new FilterField('deck_type'), new StringArrayFilterValue($type), FilterOperator::IN),
+                    $query->deckTypes,
+                ),
+            );
+        }
+
         if (\count($query->owners) > 0) {
             $filters[] = new AndFilterGroup(
                 FilterType::OR,

@@ -76,7 +76,7 @@ final class DeckDetailController extends Controller
                 'stats' => $this->stats($deck),
                 'indexed_friends' => $indexedFriends,
                 'deck_card_types' => $this->cardTypes($deck),
-                'bell_curve' => $this->deckRepository->bellCurve(),
+                'bell_curve' => $this->deckRepository->bellCurve($deck->type()),
             ],
         );
     }
@@ -84,7 +84,7 @@ final class DeckDetailController extends Controller
     private function deck(?Uuid $userId, string $deckId): KeyforgeDeck
     {
         $deck = $this->extractResult(
-            $this->bus->dispatch(new GetDecksQuery(0, 1, null, null, null, null, null, $deckId, $userId?->value())),
+            $this->bus->dispatch(new GetDecksQuery(0, 1, null, null, null, null, null, null, $deckId, $userId?->value())),
         );
 
         if (\count($deck['decks']) === 0) {

@@ -8,6 +8,7 @@ use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeCards;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckHouses;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckStats;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckType;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeSet;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Domain\Service\Keyforge\Deck\DeckApplyPredefinedTagsService;
@@ -62,6 +63,7 @@ final class ImportDeckFromDokService implements ImportDeckService
         $newDeck = new KeyforgeDeck(
             Uuid::from($deckResponse['deck']['keyforgeId']),
             $deckResponse['deck']['id'],
+            KeyforgeDeckType::STANDARD,
             $deckResponse['deck']['name'],
             KeyforgeSet::fromDokName($deckResponse['deck']['expansion']),
             KeyforgeDeckHouses::fromDokData($deckResponse),

@@ -2,6 +2,7 @@
 
 namespace AdnanMula\Cards\Application\Query\Keyforge\Deck;
 
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckType;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeHouse;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeSet;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
@@ -16,6 +17,7 @@ final class GetDecksQuery
     public ?array $sets;
     public ?string $houseFilterType;
     public ?array $houses;
+    public ?array $deckTypes;
     public ?Sorting $sorting;
     public ?Uuid $deckId;
     public ?Uuid $owner;
@@ -35,6 +37,7 @@ final class GetDecksQuery
         ?array $sets,
         ?string $houseFilterType,
         ?array $houses,
+        ?array $deckTypes,
         ?Sorting $sorting,
         ?string $deckId = null,
         ?string $owner = null,
@@ -54,6 +57,7 @@ final class GetDecksQuery
             ->that($sets, 'set')->nullOr()->all()->inArray(KeyforgeSet::values())
             ->that($houseFilterType, 'houseFilterType')->nullOr()->inArray(['all', 'any'])
             ->that($houses, 'house')->nullOr()->all()->inArray(KeyforgeHouse::values())
+            ->that($deckTypes, 'house')->nullOr()->all()->inArray(KeyforgeDeckType::values())
             ->that($deckId, 'deckId')->nullOr()->uuid()
             ->that($owner, 'owner')->nullOr()->uuid()
             ->that($owners, 'onlyOwned')->all()->uuid()
@@ -72,6 +76,7 @@ final class GetDecksQuery
         $this->sets = $sets;
         $this->houseFilterType = $houseFilterType;
         $this->houses = $houses;
+        $this->deckTypes = $deckTypes;
         $this->sorting = $sorting;
         $this->deckId = null !== $deckId ? Uuid::from($deckId) : null;
         $this->owner = null !== $owner ? Uuid::from($owner) : null;

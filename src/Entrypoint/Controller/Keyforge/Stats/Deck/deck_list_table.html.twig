@@ -89,6 +89,10 @@
         return $('#owner-selector').val();
     }
 
+    function deckTypes() {
+        return $('#deck-type-selector').val();
+    }
+
     $(document).ready(function () {
         $("#applyFilters").click(function(event) {
             $('#deckList').DataTable().ajax.reload();
@@ -127,6 +131,7 @@
                     d.extraFilterMaxSas = maxSas();
                     d.extraFilterMinSas = minSas();
                     d.extraFilterOwners = owners();
+                    d.extraFilterDeckTypes = deckTypes();
                     {% if owner != null %}d.extraFilterOwner = '{{ owner }}';{% endif %}
                 }
             },

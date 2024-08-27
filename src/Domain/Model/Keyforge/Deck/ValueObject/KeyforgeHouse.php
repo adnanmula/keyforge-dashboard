@@ -22,6 +22,8 @@ enum KeyforgeHouse: string implements \JsonSerializable
     case GEISTOID = 'GEISTOID';
     case SKYBORN = 'SKYBORN';
     case KEYRAKEN = 'KEYRAKEN';
+    case IRONIX_REBELS = 'IRONIX_REBELS';
+    case ELDERS = 'ELDERS';
 
     public static function fromDokName(string $house): self
     {
@@ -31,6 +33,14 @@ enum KeyforgeHouse: string implements \JsonSerializable
 
         if ($house === 'StarAlliance') {
             return self::STAR_ALLIANCE;
+        }
+
+        if ($house === 'IronyxRebels') {
+            return self::IRONIX_REBELS;
+        }
+
+        if ($house === 'Elders') {
+            return self::ELDERS;
         }
 
         throw new \InvalidArgumentException($house);
@@ -53,13 +63,15 @@ enum KeyforgeHouse: string implements \JsonSerializable
             self::GEISTOID => 'Geistoid',
             self::SKYBORN => 'Skyborn',
             self::KEYRAKEN => 'Keyraken',
+            self::IRONIX_REBELS => 'Ironix Rebels',
+            self::ELDERS => 'Elders',
         };
     }
 
     public function isEnabled(): bool
     {
         return match ($this) {
-            self::SKYBORN, self::KEYRAKEN => false,
+            self::SKYBORN, self::KEYRAKEN, self::IRONIX_REBELS, self::ELDERS => false,
             default => true,
         };
     }

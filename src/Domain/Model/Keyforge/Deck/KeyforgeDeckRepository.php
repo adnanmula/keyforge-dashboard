@@ -2,6 +2,7 @@
 
 namespace AdnanMula\Cards\Domain\Model\Keyforge\Deck;
 
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckType;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Criteria\Criteria;
 
@@ -19,6 +20,6 @@ interface KeyforgeDeckRepository
     public function ownedBy(Uuid $userId): array;
     public function updateNotes(Uuid $userId, Uuid $deckId, string $notes): void;
     public function save(KeyforgeDeck $deck): void;
-    public function bellCurve(): array;
+    public function bellCurve(?KeyforgeDeckType $deckType): array;
     public function homeCounts(): array;
 }

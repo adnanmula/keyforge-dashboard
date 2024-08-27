@@ -8,6 +8,7 @@ use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeCards;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckHouses;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckStats;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckType;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeSet;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Domain\Service\Persistence\Fixture;
@@ -50,6 +51,7 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
             new KeyforgeDeck(
                 Uuid::from(self::FIXTURE_KEYFORGE_DECK_1_ID),
                 1687443,
+                KeyforgeDeckType::STANDARD,
                 'Parker la Sedienta',
                 KeyforgeSet::CotA,
                 KeyforgeDeckHouses::fromDokData($rawExtraData1),
@@ -66,6 +68,7 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
             new KeyforgeDeck(
                 Uuid::from(self::FIXTURE_KEYFORGE_DECK_2_ID),
                 16228036,
+                KeyforgeDeckType::STANDARD,
                 'Lydia la Inacabable de la Colmena',
                 KeyforgeSet::AoA,
                 KeyforgeDeckHouses::fromDokData($rawExtraData2),
@@ -82,6 +85,7 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
             new KeyforgeDeck(
                 Uuid::from(self::FIXTURE_KEYFORGE_DECK_3_ID),
                 2144406,
+                KeyforgeDeckType::STANDARD,
                 'Sátiro”, Rebelde del Foro',
                 KeyforgeSet::MM,
                 KeyforgeDeckHouses::fromDokData($rawExtraData3),
@@ -98,6 +102,7 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
             new KeyforgeDeck(
                 Uuid::from(self::FIXTURE_KEYFORGE_DECK_4_ID),
                 20199300,
+                KeyforgeDeckType::STANDARD,
                 'Cassiopeia la Artera',
                 KeyforgeSet::DT,
                 KeyforgeDeckHouses::fromDokData($rawExtraData4),
@@ -110,6 +115,7 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
             new KeyforgeDeck(
                 Uuid::from(self::FIXTURE_KEYFORGE_DECK_5_ID),
                 16206849,
+                KeyforgeDeckType::STANDARD,
                 '“Fantasma”, Rufián de Conton',
                 KeyforgeSet::CotA,
                 KeyforgeDeckHouses::fromDokData($rawExtraData5),
@@ -122,6 +128,7 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
             new KeyforgeDeck(
                 Uuid::from(self::FIXTURE_KEYFORGE_DECK_6_ID),
                 16206848,
+                KeyforgeDeckType::STANDARD,
                 'Directora “Ratona” Davenport',
                 KeyforgeSet::WC,
                 KeyforgeDeckHouses::fromDokData($rawExtraData6),
@@ -134,6 +141,7 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
             new KeyforgeDeck(
                 Uuid::from(self::FIXTURE_KEYFORGE_DECK_7_ID),
                 16206847,
+                KeyforgeDeckType::STANDARD,
                 'Isaiah el Lineal del Cráter',
                 KeyforgeSet::WC,
                 KeyforgeDeckHouses::fromDokData($rawExtraData7),

@@ -5,6 +5,7 @@ namespace AdnanMula\Cards\Domain\Model\Keyforge\Deck;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeCards;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckHouses;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckStats;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckType;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckUserData;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeSet;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
@@ -14,6 +15,7 @@ final class KeyforgeDeck implements \JsonSerializable
     public function __construct(
         private readonly Uuid $id,
         private readonly int $dokId,
+        private readonly KeyforgeDeckType $type,
         private readonly string $name,
         private readonly KeyforgeSet $set,
         private readonly KeyforgeDeckHouses $houses,
@@ -32,6 +34,11 @@ final class KeyforgeDeck implements \JsonSerializable
     public function dokId(): int
     {
         return $this->dokId;
+    }
+
+    public function type(): KeyforgeDeckType
+    {
+        return $this->type;
     }
 
     public function name(): string

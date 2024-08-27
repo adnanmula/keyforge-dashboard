@@ -8,6 +8,7 @@ use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeCards;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckHouses;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckStats;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckType;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckUserData;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeHouse;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeSet;
@@ -132,7 +133,8 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
                     previous_major_sas_rating,
                     last_sas_update,
                     cards,
-                    tags
+                    tags,
+                    deck_type
                 ) VALUES (
                     :id,
                     :name,
@@ -175,7 +177,8 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
                     :previous_major_sas_rating,
                     :last_sas_update,
                     :cards,
-                    :tags
+                    :tags,
+                    :deck_type
                 ) ON CONFLICT (id) DO UPDATE SET
                     sas = :sas,
                     amber_control = :amber_control,
@@ -258,9 +261,10 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
         $stmt->bindValue(':aerc_score', $deck->stats()->aercScore);
         $stmt->bindValue(':aerc_version', $deck->stats()->aercVersion);
         $stmt->bindValue(':sas_version', $deck->stats()->sasVersion);
-        $stmt->bindValue(':last_sas_update', $deck->stats()->lastSasUpdate->format(\DateTimeInterface::ATOM));
+        $stmt->bindValue(':last_sas_update', $deck->stats()->lastSasUpdate?->format(\DateTimeInterface::ATOM));
         $stmt->bindValue(':cards', Json::encode($deck->cards()->jsonSerialize()));
         $stmt->bindValue(':tags', Json::encode($deck->tags()));
+        $stmt->bindValue(':deck_type', $deck->type()->value);
 
         $stmt->executeStatement();
     }
@@ -336,21 +340,26 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
             ->executeStatement();
     }
 
-    public function bellCurve(): array
+    public function bellCurve(?KeyforgeDeckType $deckType): array
     {
         $stats = ['sas', 'expected_amber', 'amber_control', 'creature_control', 'artifact_control'];
         $result = [];
 
         foreach ($stats as $stat) {
-            $resultStats = $this->connection->createQueryBuilder()
+            $query = $this->connection->createQueryBuilder()
                 ->select('ROUND(a.' . $stat . ', 0) as stat, count(a.*) as count')
                 ->from(self::TABLE, 'a')
                 ->innerJoin('a', self::TABLE_OWNERSHIP, 'b', 'a.id = b.deck_id')
                 ->where('a.sas > 30')
                 ->groupBy('ROUND(a.' . $stat . ', 0)')
-                ->orderBy('ROUND(a.' . $stat . ', 0)', 'asc')
-                ->executeQuery()
-                ->fetchAllAssociative();
+                ->orderBy('ROUND(a.' . $stat . ', 0)', 'asc');
+
+            if (null !== $deckType) {
+                $query->andWhere('a.deck_type = :deckType')
+                    ->setParameter('deckType', $deckType->value);
+            }
+
+            $resultStats = $query->executeQuery()->fetchAllAssociative();
 
             foreach ($resultStats as $resultStat) {
                 $result[$stat][$resultStat['stat']] = $resultStat['count'];
@@ -365,6 +374,7 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
         $housesResult = $this->connection->executeQuery(
             'SELECT house AS house, COUNT(*) AS count
             FROM keyforge_decks a, jsonb_array_elements_text(houses) AS house
+            where a.deck_type = \'STANDARD\'
             GROUP BY house;'
         )->fetchAllAssociative();
 
@@ -377,7 +387,7 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
             'SELECT set, COUNT(*) AS count
             FROM keyforge_decks a
             left join keyforge_decks_ownership b on a.id = b.deck_id
-            where b.deck_id is not null and a.sas > 30
+            where b.deck_id is not null and a.sas > 30 and a.deck_type = \'STANDARD\'
             GROUP BY set;'
         )->fetchAllAssociative();
 
@@ -397,7 +407,7 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
                 LEFT JOIN keyforge_decks_ownership o on d.id = o.deck_id
                 LEFT JOIN keyforge_games g_winner ON d.id = g_winner.winner_deck and g_winner.approved is true
                 LEFT JOIN keyforge_games g_loser ON d.id = g_loser.loser_deck and g_loser.approved is true
-                WHERE o.deck_id is not null and d.sas > 30
+                WHERE o.deck_id is not null and d.sas > 30 and d.deck_type = \'STANDARD\'
                 GROUP BY d.set
                 ORDER BY winrate DESC;'
         )->fetchAllAssociative();
@@ -413,7 +423,7 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
                 FROM keyforge_decks d
                 LEFT JOIN keyforge_decks_ownership o on d.id = o.deck_id
                 LEFT JOIN keyforge_games g ON d.id = g.winner_deck and g.approved is true
-                where d.sas > 29 and g.competition in ('FRIENDS', 'LOCAL_LEAGUE', 'FRIENDS_LEAGUE') and o.deck_id is not null
+                where d.sas > 29 and g.competition in ('FRIENDS', 'LOCAL_LEAGUE', 'FRIENDS_LEAGUE') and o.deck_id is not null and d.deck_type = 'STANDARD'
                 GROUP BY d.sas
             ),
             sas_losses AS (
@@ -421,7 +431,7 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
                 FROM keyforge_decks d
                 LEFT JOIN keyforge_decks_ownership o on d.id = o.deck_id
                 LEFT JOIN keyforge_games g ON d.id = g.loser_deck and g.approved is true
-                where d.sas > 29 and g.competition in ('FRIENDS', 'LOCAL_LEAGUE', 'FRIENDS_LEAGUE') and o.deck_id is not null
+                where d.sas > 29 and g.competition in ('FRIENDS', 'LOCAL_LEAGUE', 'FRIENDS_LEAGUE') and o.deck_id is not null and d.deck_type = 'STANDARD'
                 GROUP BY d.sas
             )
             SELECT 
@@ -446,7 +456,7 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
                 LEFT JOIN keyforge_decks_ownership o on d.id = o.deck_id
                 CROSS JOIN LATERAL jsonb_array_elements_text(d.houses) AS h(house)
                 LEFT JOIN keyforge_games g ON d.id = g.winner_deck and g.approved is true
-                WHERE o.deck_id is not null and d.sas > 30
+                WHERE o.deck_id is not null and d.sas > 30 and d.deck_type = \'STANDARD\'
                 GROUP BY house
             ),
             house_losses AS (
@@ -455,7 +465,7 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
                 LEFT JOIN keyforge_decks_ownership o on d.id = o.deck_id
                 CROSS JOIN LATERAL jsonb_array_elements_text(d.houses) AS h(house)
                 LEFT JOIN keyforge_games g ON d.id = g.loser_deck and g.approved is true
-                WHERE o.deck_id is not null and d.sas > 30
+                WHERE o.deck_id is not null and d.sas > 30 and d.deck_type = \'STANDARD\'
                 GROUP BY house
             )
             SELECT 
@@ -474,7 +484,7 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
         }
 
         $avgStatsBySetResult = $this->connection->executeQuery(
-            'SELECT d.set,   
+            'SELECT d.set,
                 ROUND(AVG(expected_amber)::numeric, 1) AS avg_expected_amber,
                 ROUND(AVG(creature_control)::numeric, 1) AS avg_creature_control,
                 ROUND(AVG(amber_control)::numeric, 1) AS avg_amber_control,
@@ -485,7 +495,7 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
                 ROUND(AVG(recursion)::numeric, 1) AS avg_recursion
                 FROM keyforge_decks d
                 LEFT JOIN keyforge_decks_ownership o on d.id = o.deck_id
-                WHERE o.deck_id is not null and d.sas > 30
+                WHERE o.deck_id is not null and d.sas > 30 and d.deck_type = \'STANDARD\'
                 GROUP BY d.set
                 ORDER BY d.set'
         )->fetchAllAssociative();
@@ -522,6 +532,7 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
         return new KeyforgeDeck(
             Uuid::from($deck['id']),
             $deck['dok_id'],
+            KeyforgeDeckType::from($deck['deck_type']),
             $deck['name'],
             KeyforgeSet::from($deck['set']),
             KeyforgeDeckHouses::from(

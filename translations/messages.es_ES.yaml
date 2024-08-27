@@ -182,6 +182,7 @@ keyforge.set_wc: WC
 keyforge.set_woe: WoE
 locale.en: Inglés
 locale.es: Español
+menu.deck_type: 'Tipo de baraja'
 menu.decks_from: 'Barajas de'
 menu.amount: 'Cantidad'
 menu.accept: Aceptar
@@ -224,6 +225,8 @@ menu.house_wr: 'Win rate por casa'
 menu.houses: Casas
 menu.import: Importar
 menu.import_all: Importar todo
+menu.import_alliance: Importar alianza
+menu.import_theoretical: Importar teórica
 menu.import_game: 'Importar partida'
 menu.import_token: 'Api token de DoK, para importar ''my decks'''
 menu.include: Incluir
