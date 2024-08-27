@@ -57,7 +57,9 @@ final class ImportDeckController extends Controller
         $idOrLink = \preg_replace('/https:\/\/decksofkeyforge.com\/decks\//i', '', $idOrLink);
         $idOrLink = \preg_replace('/http:\/\/decksofkeyforge.com\/decks\//i', '', $idOrLink);
         $idOrLink = \preg_replace('/http:\/\/decksofkeyforge.com\/alliance-decks\//i', '', $idOrLink);
+        $idOrLink = \preg_replace('/https:\/\/decksofkeyforge.com\/alliance-decks\//i', '', $idOrLink);
         $idOrLink = \preg_replace('/http:\/\/decksofkeyforge.com\/theoretical-decks\//i', '', $idOrLink);
+        $idOrLink = \preg_replace('/https:\/\/decksofkeyforge.com\/theoretical-decks\//i', '', $idOrLink);
         $idOrLink = \preg_replace('/https:\/\/www.keyforgegame.com\/deck-details\//i', '', $idOrLink);
         $idOrLink = \preg_replace('/http:\/\/www.keyforgegame.com\/deck-details\//i', '', $idOrLink);
 

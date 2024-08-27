@@ -98,6 +98,7 @@ final class KeyforgeDeck implements \JsonSerializable
             'id' => $this->id->value(),
             'dok_id' => $this->dokId,
             'name' => $this->name,
+            'type' => $this->type->value,
             'set' => $this->set->jsonSerialize(),
             'houses' => $this->houses->jsonSerialize(),
             'cards' => $this->cards->jsonSerialize(),
