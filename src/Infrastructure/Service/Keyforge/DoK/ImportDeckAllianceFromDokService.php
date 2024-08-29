@@ -4,6 +4,7 @@ namespace AdnanMula\Cards\Infrastructure\Service\Keyforge\DoK;
 
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Exception\DeckNotExistsException;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeck;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckAllianceRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeCards;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckHouses;
@@ -27,6 +28,7 @@ final class ImportDeckAllianceFromDokService implements ImportDeckAllianceServic
 {
     public function __construct(
         private KeyforgeDeckRepository $repository,
+        private KeyforgeDeckAllianceRepository $allianceRepository,
         private HttpClientInterface $dokClient,
         private DeckApplyPredefinedTagsService $tagsService,
     ) {}
@@ -72,6 +74,8 @@ final class ImportDeckAllianceFromDokService implements ImportDeckAllianceServic
         );
 
         $this->repository->save($newDeck);
+
+        $this->allianceRepository->saveComposition($newDeck->id(), $deckResponse['deck']['allianceHouses']);
 
         if (null !== $owner) {
             $this->repository->addOwner($newDeck->id(), $owner);

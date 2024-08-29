@@ -1,0 +1,168 @@
+{% extends "Keyforge/Shared/keyforge_base.html.twig" %}
+
+{% block title %}{{ 'deck.import'|trans }}{% endblock %}
+
+{% block body %}
+    {% if result != false %}
+        <div class="row">
+            <div class="col-1 col-sm-4 col-lg-3"></div>
+            <div class="col-12 col-sm-12 col-lg-6">
+                {% if success == true %}
+                    <div class="alert alert-success" role="alert">{{ 'deck.imported'|trans }}</div>
+                {% elseif success == false %}
+                    <div class="alert alert-danger" role="alert">{{ result }}</div>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="divider py-1"></div>
+
+    <form id="generateAlliancesForm">
+        <div class="row">
+            <div class="col-1 col-sm-4 col-lg-3"></div>
+            <div class="col-12 col-sm-12 col-lg-6">
+                <div class="shadow-lg p-3 mb-5 bg-white rounded">
+                    <select id="deck1" name="deck1" class="form-select deck_selector" data-subselector="subselector1"></select>
+                    <div>
+                        <input class="form-check-input" type="checkbox" id="subselector1A" data-deck="" data-house="">
+                        <span id="subselector1A-label"></span>
+                        <input class="form-check-input" type="checkbox" id="subselector1B" data-deck="" data-house="">
+                        <span id="subselector1B-label"></span>
+                        <input class="form-check-input" type="checkbox" id="subselector1C" data-deck="" data-house="">
+                        <span id="subselector1C-label"></span>
+                    </div>
+                    <div class="divider py-1"></div>
+                    <div class="divider py-1"></div>
+
+                    <select id="deck2" name="deck2" class="form-select deck_selector" data-subselector="subselector2"></select>
+                    <div>
+                        <input class="form-check-input" type="checkbox" id="subselector2A" data-deck="" data-house="">
+                        <span id="subselector2A-label"></span>
+                        <input class="form-check-input" type="checkbox" id="subselector2B" data-deck="" data-house="">
+                        <span id="subselector2B-label"></span>
+                        <input class="form-check-input" type="checkbox" id="subselector2C" data-deck="" data-house="">
+                        <span id="subselector2C-label"></span>
+                    </div>
+                    <div class="divider py-1"></div>
+                    <div class="divider py-1"></div>
+
+                    <select id="deck3" name="deck3" class="form-select deck_selector" data-subselector="subselector3"></select>
+                    <div>
+                        <input class="form-check-input" type="checkbox" id="subselector3A" data-deck="" data-house="">
+                        <span id="subselector3A-label"></span>
+                        <input class="form-check-input" type="checkbox" id="subselector3B" data-deck="" data-house="">
+                        <span id="subselector3B-label"></span>
+                        <input class="form-check-input" type="checkbox" id="subselector3C" data-deck="" data-house="">
+                        <span id="subselector3C-label"></span>
+                    </div>
+                    <div class="divider py-1"></div>
+                    <div class="divider py-1"></div>
+
+                    <button type="submit" class="col-4 btn btn-block btn-dark w-100">{{ 'menu.generate'|trans }}</button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <script>
+        $('select').on('select2:open', function(e) {
+            const select2 = $(e.target).data('select2');
+
+            $('.select2-search--dropdown .select2-search__field').attr('placeholder', '{{ 'menu.type_to_seach'|trans }}');
+
+            if (!select2.options.get('multiple')) {
+                select2.dropdown.$search.get(0).focus();
+            }
+        });
+
+        let cachedDecks = [];
+
+        $('.deck_selector').select2({
+            ajax: {
+                url: '{{ path('keyforge_decks_json') }}',
+                minimumInputLength: 3,
+                data: function (params) {
+                    let query = {
+                        search: {
+                            'value': params.term,
+                        },
+                        'length': 20,
+                    };
+
+                    if ('' === params.term || undefined === params.term) {
+                        query.extraFilterOnlyOwned = true;
+                        query.extraFilterOnlyFriends = true;
+
+                        {% if is_granted('ROLE_KEYFORGE') %}
+                        query.extraFilterOwner = '{{ app.user.id }}';
+                        {% endif %}
+                    }
+
+                    return query;
+                },
+                processResults: function (data) {
+                    $.each(data.data, function(i, d) {
+                        data.data[i]['text'] = d.name;
+                        cachedDecks[d.id] = d;
+                    });
+
+                    return {
+                        results: data.data
+                    };
+                }
+            }
+        });
+
+        $('.deck_selector').change(function (e) {
+            const deck = cachedDecks[e.target.value] ?? null;
+            const subselector = e.target.getAttribute('data-subselector');
+
+            $('#'+subselector+'A')[0].setAttribute('data-house', deck.houses[0]);
+            $('#'+subselector+'B')[0].setAttribute('data-house', deck.houses[1]);
+            $('#'+subselector+'C')[0].setAttribute('data-house', deck.houses[2]);
+            $('#'+subselector+'A')[0].setAttribute('data-deck', deck.id);
+            $('#'+subselector+'B')[0].setAttribute('data-deck', deck.id);
+            $('#'+subselector+'C')[0].setAttribute('data-deck', deck.id);
+
+            $('#'+subselector+'A-label')[0].innerText = deck.houses[0];
+            $('#'+subselector+'B-label')[0].innerText = deck.houses[1];
+            $('#'+subselector+'C-label')[0].innerText = deck.houses[2];
+        });
+
+        $('#generateAlliancesForm').submit(function (e) {
+            e.preventDefault();
+
+            const deck1 = $('#deck1')[0].value;
+            const deck2 = $('#deck2')[0].value;
+            const deck3 = $('#deck3')[0].value;
+
+            const decks = [deck1, deck2, deck3];
+
+            let houses = {};
+
+            ['1', '2', '3'].forEach(function (a) {
+                ['A', 'B', 'C'].forEach(function (b) {
+                    if ($('#subselector'+a+b)[0].checked) {
+                        let deckId = $('#subselector'+a+b)[0].getAttribute('data-deck');
+                        let house = $('#subselector'+a+b)[0].getAttribute('data-house');
+
+                        houses[deckId] = houses[deckId] || [];
+                        houses[deckId].push(house);
+                    }
+                })
+            });
+
+            $.post({
+                url: '{{ path('keyforge_alliance_generate') }}',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    'decks': decks,
+                    'houses': houses,
+                }),
+            }).done(function() {
+                alert('OK');
+            });
+        });
+    </script>
+{% endblock %}

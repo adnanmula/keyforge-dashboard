@@ -3,10 +3,11 @@
 namespace AdnanMula\Cards\Domain\Model\Keyforge\Deck;
 
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckType;
+use AdnanMula\Cards\Domain\Model\Shared\Repository;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Criteria\Criteria;
 
-interface KeyforgeDeckRepository
+interface KeyforgeDeckRepository extends Repository
 {
     /** @return array<KeyforgeDeck> */
     public function search(Criteria $criteria, bool $isMyDecks = false): array;

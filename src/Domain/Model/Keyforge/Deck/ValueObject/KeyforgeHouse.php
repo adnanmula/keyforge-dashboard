@@ -68,6 +68,28 @@ enum KeyforgeHouse: string implements \JsonSerializable
         };
     }
 
+    public function dokName(): string
+    {
+        return match ($this) {
+            self::BROBNAR => 'Brobnar',
+            self::DIS => 'Dis',
+            self::MARS => 'Mars',
+            self::SHADOWS => 'Shadows',
+            self::UNTAMED => 'Untamed',
+            self::SANCTUM => 'Sanctum',
+            self::LOGOS => 'Logos',
+            self::SAURIAN => 'Saurian',
+            self::STAR_ALLIANCE => 'StarAlliance',
+            self::UNFATHOMABLE => 'Unfathomable',
+            self::EKWIDON => 'Ekwidon',
+            self::GEISTOID => 'Geistoid',
+            self::SKYBORN => 'Skyborn',
+            self::KEYRAKEN => 'Keyraken',
+            self::IRONIX_REBELS => 'IronixRebels',
+            self::ELDERS => 'Elders',
+        };
+    }
+
     public function isEnabled(): bool
     {
         return match ($this) {

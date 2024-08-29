@@ -14,6 +14,9 @@ services:
   AdnanMula\Cards\Application\Command\:
     resource: '../src/Application/Command/*/*/*/*Handler.php'
     tags: [{ name: messenger.message_handler, bus: messenger.bus.command }]
+    bind:
+      string $dokUser: '%env(DOK_USER)%'
+      string $dokPass: '%env(DOK_PASS)%'
 
   AdnanMula\Cards\Application\Query\:
     resource: '../src/Application/Query/*/*/*Handler.php'
