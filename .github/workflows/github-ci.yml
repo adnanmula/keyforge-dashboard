@@ -23,16 +23,16 @@ jobs:
       run: make up
 
     - name: Install dependencies
-      run: docker-compose -f ./docker-compose.yml exec -T --user=$(id -u) php-fpm sh -c "composer install --ignore-platform-reqs --prefer-dist --no-progress --no-suggest"
+      run: docker compose -f ./docker-compose.yml exec -T --user=$(id -u) php-fpm sh -c "composer install --ignore-platform-reqs --prefer-dist --no-progress --no-suggest"
 
     - name: Code sniffer
-      run: docker-compose -f ./docker-compose.yml exec -T --user=$(id -u) php-fpm sh -c "phpcs --standard=phpcs.xml.dist"
+      run: docker compose -f ./docker-compose.yml exec -T --user=$(id -u) php-fpm sh -c "phpcs --standard=phpcs.xml.dist"
 
     - name: Unit tests
-      run: docker-compose -f ./docker-compose.yml exec -T --user=$(id -u) php-fpm sh -c "php ./bin/phpunit --configuration phpunit.xml.dist --no-coverage --colors=always"
+      run: docker compose -f ./docker-compose.yml exec -T --user=$(id -u) php-fpm sh -c "php ./bin/phpunit --configuration phpunit.xml.dist --no-coverage --colors=always"
 
     - name: Php stan
-      run: docker-compose -f ./docker-compose.yml exec -T --user=$(id -u) php-fpm sh -c "php -d memory_limit=256M bin/phpstan analyse -c phpstan.neon"
+      run: docker compose -f ./docker-compose.yml exec -T --user=$(id -u) php-fpm sh -c "php -d memory_limit=256M bin/phpstan analyse -c phpstan.neon"
 
     - name: Symfony container checker
-      run: docker-compose -f ./docker-compose.yml exec -T --user=$(id -u) php-fpm sh -c "console"
+      run: docker compose -f ./docker-compose.yml exec -T --user=$(id -u) php-fpm sh -c "console"
