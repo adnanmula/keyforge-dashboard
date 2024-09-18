@@ -11,7 +11,7 @@ final class Cards extends AbstractMigration
                 id int NOT NULL,
                 houses jsonb NOT NULL,
                 name jsonb NOT NULL,
-                name_url character varying(64) NOT NULL,
+                name_url character varying(128) NOT NULL,
                 flavor_text jsonb NULL,
                 text jsonb NOT NULL,
                 type character varying(32) NOT NULL,

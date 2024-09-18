@@ -21,6 +21,7 @@ enum KeyforgeHouse: string implements \JsonSerializable
     case EKWIDON = 'EKWIDON';
     case GEISTOID = 'GEISTOID';
     case SKYBORN = 'SKYBORN';
+    case REDEMPTION = 'REDEMPTION';
     case KEYRAKEN = 'KEYRAKEN';
     case IRONIX_REBELS = 'IRONIX_REBELS';
     case ELDERS = 'ELDERS';
@@ -37,10 +38,6 @@ enum KeyforgeHouse: string implements \JsonSerializable
 
         if ($house === 'IronyxRebels') {
             return self::IRONIX_REBELS;
-        }
-
-        if ($house === 'Elders') {
-            return self::ELDERS;
         }
 
         throw new \InvalidArgumentException($house);
@@ -62,6 +59,7 @@ enum KeyforgeHouse: string implements \JsonSerializable
             self::EKWIDON => 'Ekwidon',
             self::GEISTOID => 'Geistoid',
             self::SKYBORN => 'Skyborn',
+            self::REDEMPTION => 'Redemption',
             self::KEYRAKEN => 'Keyraken',
             self::IRONIX_REBELS => 'Ironix Rebels',
             self::ELDERS => 'Elders',
@@ -84,6 +82,7 @@ enum KeyforgeHouse: string implements \JsonSerializable
             self::EKWIDON => 'Ekwidon',
             self::GEISTOID => 'Geistoid',
             self::SKYBORN => 'Skyborn',
+            self::REDEMPTION => 'Redemption',
             self::KEYRAKEN => 'Keyraken',
             self::IRONIX_REBELS => 'IronixRebels',
             self::ELDERS => 'Elders',
@@ -93,7 +92,7 @@ enum KeyforgeHouse: string implements \JsonSerializable
     public function isEnabled(): bool
     {
         return match ($this) {
-            self::SKYBORN, self::KEYRAKEN, self::IRONIX_REBELS, self::ELDERS => false,
+            self::SKYBORN, self::KEYRAKEN, self::IRONIX_REBELS, self::ELDERS, self::REDEMPTION => false,
             default => true,
         };
     }

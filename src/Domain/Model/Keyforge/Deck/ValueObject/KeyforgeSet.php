@@ -22,6 +22,8 @@ enum KeyforgeSet: string
     case VM24 = 'VM24';
     case ANOMALY_EXPANSION = 'ANOMALY_EXPANSION';
     case MARTIAN_CIVIL_WAR = 'MARTIAN_CIVIL_WAR';
+    case ToC = 'ToC';
+    case MMM = 'MMM';
 
     public function fullName(): string
     {
@@ -40,74 +42,38 @@ enum KeyforgeSet: string
             self::VM24 => 'Vault Masters 2024',
             self::ANOMALY_EXPANSION => 'Anomaly',
             self::MARTIAN_CIVIL_WAR => 'Martian Civil War',
+            self::ToC => 'Tokens of change',
+            self::MMM => 'More Mass Mutation',
         };
     }
 
     public static function fromDokName(string $set): self
     {
-        if ($set === 'CALL_OF_THE_ARCHONS') {
-            return self::CotA;
-        }
-
-        if ($set === 'AGE_OF_ASCENSION') {
-            return self::AoA;
-        }
-
-        if ($set === 'WORLDS_COLLIDE') {
-            return self::WC;
-        }
-
-        if ($set === 'MASS_MUTATION') {
-            return self::MM;
-        }
-
-        if ($set === 'DARK_TIDINGS') {
-            return self::DT;
-        }
-
-        if ($set === 'WINDS_OF_EXCHANGE') {
-            return self::WoE;
-        }
-
-        if ($set === 'GRIM_REMINDERS') {
-            return self::GR;
-        }
-
-        if ($set === 'AEMBER_SKIES') {
-            return self::AS;
-        }
-
-        if ($set === 'UNCHAINED_2022') {
-            return self::U22;
-        }
-
-        if ($set === 'VAULT_MASTERS_2023') {
-            return self::VM23;
-        }
-
-        if ($set === 'VAULT_MASTERS_2024') {
-            return self::VM24;
-        }
-
-        if ($set === 'MENAGERIE_2024') {
-            return self::M24;
-        }
-
-        if ($set === 'ANOMALY_EXPANSION') {
-            return self::ANOMALY_EXPANSION;
-        }
-
-        if ($set === 'MARTIAN_CIVIL_WAR') {
-            return self::MARTIAN_CIVIL_WAR;
-        }
-
-        throw new \InvalidArgumentException($set);
+        return match ($set) {
+            'CALL_OF_THE_ARCHONS' => self::CotA,
+            'AGE_OF_ASCENSION' => self::AoA,
+            'WORLDS_COLLIDE' => self::WC,
+            'MASS_MUTATION' => self::MM,
+            'DARK_TIDINGS' => self::DT,
+            'WINDS_OF_EXCHANGE' => self::WoE,
+            'GRIM_REMINDERS' => self::GR,
+            'AEMBER_SKIES' => self::AS,
+            'UNCHAINED_2022' => self::U22,
+            'VAULT_MASTERS_2023' => self::VM23,
+            'VAULT_MASTERS_2024' => self::VM24,
+            'MENAGERIE_2024' => self::M24,
+            'ANOMALY_EXPANSION' => self::ANOMALY_EXPANSION,
+            'MARTIAN_CIVIL_WAR' => self::MARTIAN_CIVIL_WAR,
+            'TOKENS_OF_CHANGE' => self::ToC,
+            'MORE_MASS_MUTATION' => self::MMM,
+            default => throw new \InvalidArgumentException($set),
+        };
     }
 
     public function isMain(): bool
     {
         return match ($this) {
-            self::U22, self::VM23, self::VM24, self::M24, self::MARTIAN_CIVIL_WAR => false,
+            self::U22, self::VM23, self::VM24, self::M24, self::MARTIAN_CIVIL_WAR, self::ToC, self::MMM => false,
             default => true,
         };
     }
@@ -115,7 +81,7 @@ enum KeyforgeSet: string
     public function isEnabled(): bool
     {
         return match ($this) {
-            self::AS, self::ANOMALY_EXPANSION, self::MARTIAN_CIVIL_WAR => false,
+            self::AS, self::ANOMALY_EXPANSION, self::MARTIAN_CIVIL_WAR, self::ToC, self::MMM => false,
             default => true,
         };
     }
