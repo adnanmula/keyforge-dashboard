@@ -68,6 +68,11 @@
                 <div class="col-12 col-lg-4" style="margin-top: 10px">
                     <img width="33px" src="/assets/keyforge/houses/{{ deck.houses.0 }}.png" alt="{{ deck.houses.0 }}"/><span style="font-size: 1.5em; vertical-align: middle; margin-left: 4px">{{ deck.houses.0 }}</span>
                     <div class="row">
+                        {% if deck.type == 'ALLIANCE' %}
+                            <div class="col-6 col-lg-12">
+                                <a href="{{ path('keyforge_deck_detail', {'deckId': deck.alliance_composition.0.keyforgeId}) }}">{{ deck.alliance_composition.0.name }}</a>
+                            </div>
+                        {% endif %}
                         {% for card in deck.cards.firstPodCards %}
                             <div class="col-6 col-lg-12">
                                 <img width="18px" src="/assets/keyforge/rarities/{{ card.rarity }}.svg" alt="{{ card.rarity }}" class="img-fluid"/>
@@ -80,6 +85,11 @@
                 <div class="col-12 col-lg-4" style="margin-top: 10px">
                     <img width="33px" src="/assets/keyforge/houses/{{ deck.houses.1 }}.png" alt="{{ deck.houses.1 }}"/><span style="font-size: 1.5em; vertical-align: middle; margin-left: 4px">{{ deck.houses.1 }}</span>
                     <div class="row">
+                        {% if deck.type == 'ALLIANCE' %}
+                            <div class="col-6 col-lg-12">
+                                <a href="{{ path('keyforge_deck_detail', {'deckId': deck.alliance_composition.1.keyforgeId}) }}">{{ deck.alliance_composition.1.name }}</a>
+                            </div>
+                        {% endif %}
                         {% for card in deck.cards.secondPodCards %}
                             <div class="col-6 col-lg-12" style="display: block">
                                 <img width="18px" src="/assets/keyforge/rarities/{{ card.rarity }}.svg" alt="{{ card.rarity }}" class="img-fluid"/>
@@ -92,6 +102,11 @@
                 <div class="col-12 col-lg-4" style="margin-top: 10px">
                     <img width="33px" src="/assets/keyforge/houses/{{ deck.houses.2 }}.png" alt="{{ deck.houses.2 }}"/><span style="font-size: 1.5em; vertical-align: middle; margin-left: 4px">{{ deck.houses.2 }}</span>
                     <div class="row">
+                        {% if deck.type == 'ALLIANCE' %}
+                            <div class="col-6 col-lg-12">
+                                <a href="{{ path('keyforge_deck_detail', {'deckId': deck.alliance_composition.2.keyforgeId}) }}">{{ deck.alliance_composition.2.name }}</a>
+                            </div>
+                        {% endif %}
                         {% for card in deck.cards.thirdPodCards %}
                             <div class="col-6 col-lg-12">
                                 <img width="18px" src="/assets/keyforge/rarities/{{ card.rarity }}.svg" alt="{{ card.rarity }}" class="img-fluid"/>
@@ -104,6 +119,15 @@
         </div>
 
         <div class="divider py-2"></div>
+
+        {% for extraCard in deck.cards.extraCards %}
+            <div>
+                <h3>{{ ('deck.'~extraCard.type)|trans }}</h3>
+                <span class="card_name" data-bs-toggle="modal" data-bs-target="#card_image" data-card="{{ extraCard.name }}" data-card-serialized="{{ extraCard.serializedName }}">{{ extraCard.name }}</span>
+            </div>
+
+            <div class="divider py-2"></div>
+        {% endfor %}
     </div>
 
     {% if is_granted('ROLE_KEYFORGE') %}

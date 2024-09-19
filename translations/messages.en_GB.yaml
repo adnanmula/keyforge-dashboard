@@ -95,6 +95,7 @@ deck.set_other: 'Other sets'
 deck.sets: Sets
 deck.synergy: Sinergy
 deck.upgrades: Upgrades
+deck.token-creature: Token creature
 deck_comparison.AS: AS
 deck_comparison.AoA: AoA
 deck_comparison.CotA: CotA

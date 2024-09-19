@@ -545,6 +545,7 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
             Json::decode($deck['tags']),
             $owners,
             $userData,
+            Json::decodeNullable($deck['alliance_composition']),
         );
     }
 }

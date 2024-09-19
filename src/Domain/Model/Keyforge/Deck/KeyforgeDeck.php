@@ -24,6 +24,7 @@ final class KeyforgeDeck implements \JsonSerializable
         private array $tags = [],
         private array $owners = [],
         private ?KeyforgeDeckUserData $userData = null,
+        private ?array $allianceComposition = null,
     ) {}
 
     public function id(): Uuid
@@ -92,6 +93,11 @@ final class KeyforgeDeck implements \JsonSerializable
         return $this->userData;
     }
 
+    public function allianceComposition(): ?array
+    {
+        return $this->allianceComposition;
+    }
+
     public function jsonSerialize(): array
     {
         return [
@@ -106,6 +112,7 @@ final class KeyforgeDeck implements \JsonSerializable
             'tags' => $this->tags,
             'owners' => \array_map(static fn (Uuid $id): string => $id->value(), $this->owners),
             'userData' => $this->userData?->jsonSerialize(),
+            'alliance_composition' => $this->allianceComposition,
         ];
     }
 }
