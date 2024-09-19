@@ -39,7 +39,7 @@ final readonly class KeyforgeCard implements \JsonSerializable
             id: $data['id'],
             houses: \array_map(static fn (string $h) => KeyforgeHouse::fromDokName($h), $data['houses']),
             name: LocalizedString::fromLocale($data['cardTitle'], Locale::en_GB),
-            nameUrl: $data['cardTitleUrl'],
+            nameUrl: $data['extraCardInfo']['cardNameUrl'],
             flavorText: $flavorText,
             text: LocalizedString::fromLocale($data['cardText'], Locale::en_GB),
             type: KeyforgeCardType::from(\strtoupper($data['cardType'])),

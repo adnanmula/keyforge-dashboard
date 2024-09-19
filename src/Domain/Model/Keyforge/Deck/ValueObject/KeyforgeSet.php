@@ -43,7 +43,7 @@ enum KeyforgeSet: string
             self::ANOMALY_EXPANSION => 'Anomaly',
             self::MARTIAN_CIVIL_WAR => 'Martian Civil War',
             self::ToC => 'Tokens of change',
-            self::MMM => 'More Mass Mutation',
+            self::MMM => 'More Mutation',
         };
     }
 
@@ -65,7 +65,7 @@ enum KeyforgeSet: string
             'ANOMALY_EXPANSION' => self::ANOMALY_EXPANSION,
             'MARTIAN_CIVIL_WAR' => self::MARTIAN_CIVIL_WAR,
             'TOKENS_OF_CHANGE' => self::ToC,
-            'MORE_MASS_MUTATION' => self::MMM,
+            'MORE_MUTATION' => self::MMM,
             default => throw new \InvalidArgumentException($set),
         };
     }
