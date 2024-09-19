@@ -21,6 +21,7 @@ final readonly class KeyforgeCards implements \JsonSerializable
         public array $secondPodCards,
         public KeyforgeHouse $thirdPodHouse,
         public array $thirdPodCards,
+        public array $extraCards = [],
     ) {}
 
     public static function fromArray(array $data): self
@@ -32,20 +33,35 @@ final readonly class KeyforgeCards implements \JsonSerializable
             \array_map(static fn (array $card): KeyforgeCard => KeyforgeCard::fromArray($card), $data['secondPodCards']),
             KeyforgeHouse::fromDokName($data['thirdPodHouse']),
             \array_map(static fn (array $card): KeyforgeCard => KeyforgeCard::fromArray($card), $data['thirdPodCards']),
+            $data['extraCards'] ?? [],
         );
     }
 
     public static function fromDokData(array $data): self
     {
-        $data = $data['deck']['housesAndCards'];
+        $deck = $data['deck'];
+        $cards = $deck['housesAndCards'];
+        $extraCards = [];
+
+        if (\array_key_exists('tokenInfo', $deck)) {
+            $urlPieces = explode('/', $deck['tokenInfo']['nameUrl']);
+            $serializedName = explode('.', end($urlPieces))[0];
+
+            $extraCards[] = [
+                'name' => $deck['tokenInfo']['name'],
+                'serializedName' => $serializedName,
+                'type' => 'token-creature',
+            ];
+        }
 
         return new self(
-            KeyforgeHouse::fromDokName($data[0]['house']),
-            \array_map(static fn (array $card): KeyforgeCard => KeyforgeCard::fromDokData($card), $data[0]['cards']),
-            KeyforgeHouse::fromDokName($data[1]['house']),
-            \array_map(static fn (array $card): KeyforgeCard => KeyforgeCard::fromDokData($card), $data[1]['cards']),
-            KeyforgeHouse::fromDokName($data[2]['house']),
-            \array_map(static fn (array $card): KeyforgeCard => KeyforgeCard::fromDokData($card), $data[2]['cards']),
+            KeyforgeHouse::fromDokName($cards[0]['house']),
+            \array_map(static fn (array $card): KeyforgeCard => KeyforgeCard::fromDokData($card), $cards[0]['cards']),
+            KeyforgeHouse::fromDokName($cards[1]['house']),
+            \array_map(static fn (array $card): KeyforgeCard => KeyforgeCard::fromDokData($card), $cards[1]['cards']),
+            KeyforgeHouse::fromDokName($cards[2]['house']),
+            \array_map(static fn (array $card): KeyforgeCard => KeyforgeCard::fromDokData($card), $cards[2]['cards']),
+            $extraCards,
         );
     }
 
@@ -58,6 +74,7 @@ final readonly class KeyforgeCards implements \JsonSerializable
             'secondPodCards' => \array_map(static fn (KeyforgeCard $card) => $card->jsonSerialize(), $this->secondPodCards),
             'thirdPodHouse' => $this->thirdPodHouse,
             'thirdPodCards' => \array_map(static fn (KeyforgeCard $card) => $card->jsonSerialize(), $this->thirdPodCards),
+            'extraCards' => $this->extraCards,
         ];
     }
 

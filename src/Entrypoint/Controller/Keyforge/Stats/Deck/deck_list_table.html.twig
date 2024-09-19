@@ -89,6 +89,10 @@
         return $('#owner-selector').val();
     }
 
+    function deckTypes() {
+        return $('#deck-type-selector').val();
+    }
+
     $(document).ready(function () {
         $("#applyFilters").click(function(event) {
             $('#deckList').DataTable().ajax.reload();
@@ -127,6 +131,7 @@
                     d.extraFilterMaxSas = maxSas();
                     d.extraFilterMinSas = minSas();
                     d.extraFilterOwners = owners();
+                    d.extraFilterDeckTypes = deckTypes();
                     {% if owner != null %}d.extraFilterOwner = '{{ owner }}';{% endif %}
                 }
             },
@@ -256,20 +261,40 @@
                 },
                 {
                     render: function (data, type, row) {
-                        vaultLink = 'https://www.keyforgegame.com/deck-details/' + row.id;
-                        dokLink = 'https://decksofkeyforge.com/decks/' + row.id;
-                        wikiLink = 'https://archonarcana.com/Deck:' + row.id;
+                        if ('STANDARD' === row.type) {
+                            vaultLink = 'https://www.keyforgegame.com/deck-details/' + row.id;
+                            dokLink = 'https://decksofkeyforge.com/decks/' + row.id;
+                            wikiLink = 'https://archonarcana.com/Deck:' + row.id;
 
-                        vaultLogo = '/assets/keyforge/logos/vault.png';
-                        dokLogo = '/assets/keyforge/logos/dok.svg';
-                        wikiLogo = '/assets/keyforge/logos/wiki.jpg';
+                            vaultLogo = '/assets/keyforge/logos/vault.png';
+                            dokLogo = '/assets/keyforge/logos/dok.svg';
+                            wikiLogo = '/assets/keyforge/logos/wiki.jpg';
 
-                        return '<a href="' + vaultLink + '" target="_blank">' +
-                            '<img class="img-thumbnail" width="50px" style="min-width: 50px" src="' + vaultLogo + '" alt="Vault"/></a>' +
-                            '<a href="' + dokLink + '" target="_blank">' +
-                            '<img class="img-thumbnail" width="40px" style="min-width: 40px" src="' + dokLogo + '" alt="DoK"/></a>' +
-                            '<a href="' + wikiLink + '" target="_blank">' +
-                            '<img class="img-thumbnail" width="50px" style="min-width: 40px" src="' + wikiLogo + '" alt="Wiki"/></a>';
+                            return '<a href="' + vaultLink + '" target="_blank">' +
+                                '<img class="img-thumbnail" width="50px" style="min-width: 50px" src="' + vaultLogo + '" alt="Vault"/></a>' +
+                                '<a href="' + dokLink + '" target="_blank">' +
+                                '<img class="img-thumbnail" width="40px" style="min-width: 40px" src="' + dokLogo + '" alt="DoK"/></a>' +
+                                '<a href="' + wikiLink + '" target="_blank">' +
+                                '<img class="img-thumbnail" width="50px" style="min-width: 40px" src="' + wikiLogo + '" alt="Wiki"/></a>';
+                        }
+
+                        if ('ALLIANCE' === row.type) {
+                            dokLink = 'https://decksofkeyforge.com/alliance-decks/' + row.id;
+                            dokLogo = '/assets/keyforge/logos/dok.svg';
+
+                            return '<a href="' + dokLink + '" target="_blank">' +
+                                '<img class="img-thumbnail" width="40px" style="min-width: 40px" src="' + dokLogo + '" alt="DoK"/></a>';
+                        }
+
+                        if ('THEORETICAL' === row.type) {
+                            dokLink = 'https://decksofkeyforge.com/theoretical-decks/' + row.id;
+                            dokLogo = '/assets/keyforge/logos/dok.svg';
+
+                            return '<a href="' + dokLink + '" target="_blank">' +
+                                '<img class="img-thumbnail" width="40px" style="min-width: 40px" src="' + dokLogo + '" alt="DoK"/></a>';
+                        }
+
+                        return '';
                     },
                     targets: 13, //Buttons
                 },

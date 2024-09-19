@@ -97,3 +97,8 @@ keyforge_competition_game_create:
   path: /competition/{fixtureId}/game/new
   controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Competition\CreateCompetitionGameController
   methods: [POST]
+
+keyforge_alliance_generate:
+  path: /alliance/gen
+  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Deck\Alliance\GenerateAlliancesController
+  methods: [GET,POST]

@@ -39,9 +39,12 @@ final readonly class KeyforgeCard implements \JsonSerializable
 
     public static function fromDokData(array $data): self
     {
+        $urlPieces = explode('/', $data['cardTitleUrl']);
+        $serializedName = explode('.', end($urlPieces))[0];
+
         return new self(
             $data['cardTitle'],
-            $data['cardTitleUrl'],
+            $serializedName,
             KeyforgeCardRarity::from(\strtoupper($data['rarity'])),
             $data['enhanced'] ?? false,
             $data['maverick'] ?? false,

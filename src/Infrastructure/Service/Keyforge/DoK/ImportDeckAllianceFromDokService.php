@@ -4,6 +4,7 @@ namespace AdnanMula\Cards\Infrastructure\Service\Keyforge\DoK;
 
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Exception\DeckNotExistsException;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeck;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckAllianceRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeCards;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckHouses;
@@ -12,7 +13,7 @@ use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckType;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeSet;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Domain\Service\Keyforge\Deck\DeckApplyPredefinedTagsService;
-use AdnanMula\Cards\Domain\Service\Keyforge\ImportDeckService;
+use AdnanMula\Cards\Domain\Service\Keyforge\ImportDeckAllianceService;
 use AdnanMula\Criteria\Criteria;
 use AdnanMula\Criteria\Filter\Filter;
 use AdnanMula\Criteria\Filter\FilterType;
@@ -23,16 +24,16 @@ use AdnanMula\Criteria\FilterValue\StringFilterValue;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-final class ImportDeckFromDokService implements ImportDeckService
+final class ImportDeckAllianceFromDokService implements ImportDeckAllianceService
 {
     public function __construct(
         private KeyforgeDeckRepository $repository,
+        private KeyforgeDeckAllianceRepository $allianceRepository,
         private HttpClientInterface $dokClient,
         private DeckApplyPredefinedTagsService $tagsService,
-        private ImportDeckStatHistoryFromDokService $statHistoryService,
     ) {}
 
-    public function execute(Uuid $uuid, ?Uuid $owner = null, bool $forceUpdate = false, bool $withHistory = true): ?KeyforgeDeck
+    public function execute(Uuid $uuid, ?Uuid $owner = null, bool $forceUpdate = false): ?KeyforgeDeck
     {
         $deck = $this->repository->searchOne(new Criteria(
             null,
@@ -41,6 +42,7 @@ final class ImportDeckFromDokService implements ImportDeckService
             new AndFilterGroup(
                 FilterType::AND,
                 new Filter(new FilterField('id'), new StringFilterValue($uuid->value()), FilterOperator::EQUAL),
+                new Filter(new FilterField('deck_type'), new StringFilterValue(KeyforgeDeckType::ALLIANCE->value), FilterOperator::EQUAL),
             ),
         ));
 
@@ -49,7 +51,7 @@ final class ImportDeckFromDokService implements ImportDeckService
         }
 
         try {
-            $response = $this->dokClient->request(Request::METHOD_GET, '/public-api/v3/decks/' . $uuid->value());
+            $response = $this->dokClient->request(Request::METHOD_GET, '/public-api/v1/alliance-decks/' . $uuid->value());
         } catch (\Throwable) {
             throw new \Exception('Error desconocido');
         }
@@ -63,7 +65,7 @@ final class ImportDeckFromDokService implements ImportDeckService
         $newDeck = new KeyforgeDeck(
             Uuid::from($deckResponse['deck']['keyforgeId']),
             $deckResponse['deck']['id'],
-            KeyforgeDeckType::STANDARD,
+            KeyforgeDeckType::ALLIANCE,
             $deckResponse['deck']['name'],
             KeyforgeSet::fromDokName($deckResponse['deck']['expansion']),
             KeyforgeDeckHouses::fromDokData($deckResponse),
@@ -73,12 +75,10 @@ final class ImportDeckFromDokService implements ImportDeckService
 
         $this->repository->save($newDeck);
 
+        $this->allianceRepository->saveComposition($newDeck->id(), $deckResponse['deck']['allianceHouses']);
+
         if (null !== $owner) {
             $this->repository->addOwner($newDeck->id(), $owner);
-        }
-
-        if ($withHistory) {
-            $this->statHistoryService->execute($newDeck->id());
         }
 
         $this->tagsService->execute($newDeck->id());

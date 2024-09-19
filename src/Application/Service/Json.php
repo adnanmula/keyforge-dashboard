@@ -9,6 +9,15 @@ final class Json
         return \json_decode($value, true, 512, \JSON_THROW_ON_ERROR);
     }
 
+    public static function decodeNullable(?string $value): ?array
+    {
+        if (null === $value) {
+            return null;
+        }
+
+        return self::decode($value);
+    }
+
     public static function encode(array|\JsonSerializable $value): string
     {
         return \json_encode($value, \JSON_THROW_ON_ERROR);

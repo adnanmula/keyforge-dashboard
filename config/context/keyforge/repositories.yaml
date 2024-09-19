@@ -1,6 +1,8 @@
 services:
   AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckRepository:
     alias: AdnanMula\Cards\Infrastructure\Persistence\Repository\Keyforge\Deck\KeyforgeDeckDbalRepository
+  AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckAllianceRepository:
+    alias: AdnanMula\Cards\Infrastructure\Persistence\Repository\Keyforge\Deck\KeyforgeDeckAllianceDbalRepository
   AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckUserDataRepository:
     alias: AdnanMula\Cards\Infrastructure\Persistence\Repository\Keyforge\Deck\KeyforgeDeckUserDataDbalRepository
   AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckStatHistoryRepository:

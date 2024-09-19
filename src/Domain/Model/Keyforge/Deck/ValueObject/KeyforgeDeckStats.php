@@ -41,7 +41,7 @@ final readonly class KeyforgeDeckStats implements \JsonSerializable
         public array $scalingAmberControlCards,
         public int $synergyRating,
         public int $antiSynergyRating,
-        public \DateTimeImmutable $lastSasUpdate,
+        public ?\DateTimeImmutable $lastSasUpdate,
     ) {}
 
     public static function fromArray(array $data): self
@@ -81,7 +81,7 @@ final readonly class KeyforgeDeckStats implements \JsonSerializable
             scalingAmberControlCards: Json::decode($data['scaling_amber_control_cards']),
             synergyRating: $data['synergy_rating'],
             antiSynergyRating: $data['anti_synergy_rating'],
-            lastSasUpdate: new \DateTimeImmutable($data['last_sas_update']),
+            lastSasUpdate: null === ($data['last_sas_update'] ?? null) ? null : new \DateTimeImmutable($data['last_sas_update']),
         );
     }
 
@@ -140,7 +140,7 @@ final readonly class KeyforgeDeckStats implements \JsonSerializable
             scalingAmberControlCards: $scalingAmberControlCount,
             synergyRating: $deck['synergyRating'] ?? 0,
             antiSynergyRating: $deck['antisynergyRating'] ?? 0,
-            lastSasUpdate: new \DateTimeImmutable($deck['lastSasUpdate']),
+            lastSasUpdate: null === ($deck['lastSasUpdate'] ?? null) ? null : new \DateTimeImmutable($deck['lastSasUpdate']),
         );
     }
 
@@ -181,7 +181,7 @@ final readonly class KeyforgeDeckStats implements \JsonSerializable
             'scalingAmberControlCards' => $this->scalingAmberControlCards,
             'synergyRating' => $this->synergyRating,
             'antiSynergyRating' => $this->antiSynergyRating,
-            'lastSasUpdate' => $this->lastSasUpdate->format('Y-m-d'),
+            'lastSasUpdate' => $this->lastSasUpdate?->format('Y-m-d'),
         ];
     }
 }

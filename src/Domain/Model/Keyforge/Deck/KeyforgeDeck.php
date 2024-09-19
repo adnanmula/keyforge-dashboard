@@ -5,6 +5,7 @@ namespace AdnanMula\Cards\Domain\Model\Keyforge\Deck;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeCards;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckHouses;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckStats;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckType;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckUserData;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeSet;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
@@ -14,6 +15,7 @@ final class KeyforgeDeck implements \JsonSerializable
     public function __construct(
         private readonly Uuid $id,
         private readonly int $dokId,
+        private readonly KeyforgeDeckType $type,
         private readonly string $name,
         private readonly KeyforgeSet $set,
         private readonly KeyforgeDeckHouses $houses,
@@ -22,6 +24,7 @@ final class KeyforgeDeck implements \JsonSerializable
         private array $tags = [],
         private array $owners = [],
         private ?KeyforgeDeckUserData $userData = null,
+        private ?array $allianceComposition = null,
     ) {}
 
     public function id(): Uuid
@@ -32,6 +35,11 @@ final class KeyforgeDeck implements \JsonSerializable
     public function dokId(): int
     {
         return $this->dokId;
+    }
+
+    public function type(): KeyforgeDeckType
+    {
+        return $this->type;
     }
 
     public function name(): string
@@ -85,12 +93,18 @@ final class KeyforgeDeck implements \JsonSerializable
         return $this->userData;
     }
 
+    public function allianceComposition(): ?array
+    {
+        return $this->allianceComposition;
+    }
+
     public function jsonSerialize(): array
     {
         return [
             'id' => $this->id->value(),
             'dok_id' => $this->dokId,
             'name' => $this->name,
+            'type' => $this->type->value,
             'set' => $this->set->jsonSerialize(),
             'houses' => $this->houses->jsonSerialize(),
             'cards' => $this->cards->jsonSerialize(),
@@ -98,6 +112,7 @@ final class KeyforgeDeck implements \JsonSerializable
             'tags' => $this->tags,
             'owners' => \array_map(static fn (Uuid $id): string => $id->value(), $this->owners),
             'userData' => $this->userData?->jsonSerialize(),
+            'alliance_composition' => $this->allianceComposition,
         ];
     }
 }

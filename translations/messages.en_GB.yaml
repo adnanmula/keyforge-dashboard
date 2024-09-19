@@ -95,6 +95,7 @@ deck.set_other: 'Other sets'
 deck.sets: Sets
 deck.synergy: Sinergy
 deck.upgrades: Upgrades
+deck.token-creature: Token creature
 deck_comparison.AS: AS
 deck_comparison.AoA: AoA
 deck_comparison.CotA: CotA
@@ -182,6 +183,7 @@ keyforge.set_wc: WC
 keyforge.set_woe: WoE
 locale.en: English
 locale.es: Spanish
+menu.deck_type: 'Deck type'
 menu.decks_from: 'Decks from'
 menu.amount: 'Amount'
 menu.accept: Accept
@@ -224,6 +226,8 @@ menu.house_wr: 'House win rate'
 menu.houses: Houses
 menu.import: Import
 menu.import_all: Import all
+menu.import_alliance: Import alliance
+menu.import_theoretical: Import theoretical
 menu.import_game: 'Import game'
 menu.import_token: 'Api token from DoK, to import ''my decks'''
 menu.include: Include

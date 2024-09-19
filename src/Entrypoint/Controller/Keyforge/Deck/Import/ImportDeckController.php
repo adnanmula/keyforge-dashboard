@@ -22,6 +22,7 @@ final class ImportDeckController extends Controller
         if ($request->getMethod() === Request::METHOD_POST) {
             try {
                 $deckId = $this->parseDeck($request->request->get('deck'));
+                $deckType = $request->request->get('deckType');
                 $token = $request->request->get('token');
                 $userId = null;
 
@@ -30,7 +31,7 @@ final class ImportDeckController extends Controller
                     $userId = $user->id()->value();
                 }
 
-                $this->bus->dispatch(new ImportDeckCommand($deckId, $token, $userId));
+                $this->bus->dispatch(new ImportDeckCommand($deckId, $deckType, $token, $userId));
 
                 return $this->render('Keyforge/Deck/Import/import_deck.html.twig', ['result' => 'Bien', 'success' => true, 'deckId' => $deckId]);
             } catch (InvalidUuidStringException) {
@@ -55,6 +56,10 @@ final class ImportDeckController extends Controller
 
         $idOrLink = \preg_replace('/https:\/\/decksofkeyforge.com\/decks\//i', '', $idOrLink);
         $idOrLink = \preg_replace('/http:\/\/decksofkeyforge.com\/decks\//i', '', $idOrLink);
+        $idOrLink = \preg_replace('/http:\/\/decksofkeyforge.com\/alliance-decks\//i', '', $idOrLink);
+        $idOrLink = \preg_replace('/https:\/\/decksofkeyforge.com\/alliance-decks\//i', '', $idOrLink);
+        $idOrLink = \preg_replace('/http:\/\/decksofkeyforge.com\/theoretical-decks\//i', '', $idOrLink);
+        $idOrLink = \preg_replace('/https:\/\/decksofkeyforge.com\/theoretical-decks\//i', '', $idOrLink);
         $idOrLink = \preg_replace('/https:\/\/www.keyforgegame.com\/deck-details\//i', '', $idOrLink);
         $idOrLink = \preg_replace('/http:\/\/www.keyforgegame.com\/deck-details\//i', '', $idOrLink);
 

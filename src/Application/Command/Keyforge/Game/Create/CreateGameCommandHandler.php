@@ -159,9 +159,13 @@ final class CreateGameCommandHandler
 
     private function getDecks(string $winnerDeck, string $loserDeck): array
     {
+        $winnerDeck = $this->parseDeck($winnerDeck);
+
         $winnerDeck = Uuid::isValid($winnerDeck)
             ? $this->importDeckService->execute(Uuid::from($winnerDeck), null)
             : $this->getDeckByName($winnerDeck);
+
+        $loserDeck = $this->parseDeck($loserDeck);
 
         $loserDeck = Uuid::isValid($loserDeck)
             ? $this->importDeckService->execute(Uuid::from($loserDeck), null)
@@ -187,5 +191,27 @@ final class CreateGameCommandHandler
                 ),
             ),
         );
+    }
+
+    private function parseDeck(?string $idOrLink): ?string
+    {
+        if (null === $idOrLink) {
+            return null;
+        }
+
+        if (Uuid::isValid($idOrLink)) {
+            return $idOrLink;
+        }
+
+        $idOrLink = \preg_replace('/https:\/\/decksofkeyforge.com\/decks\//i', '', $idOrLink);
+        $idOrLink = \preg_replace('/http:\/\/decksofkeyforge.com\/decks\//i', '', $idOrLink);
+        $idOrLink = \preg_replace('/http:\/\/decksofkeyforge.com\/alliance-decks\//i', '', $idOrLink);
+        $idOrLink = \preg_replace('/https:\/\/decksofkeyforge.com\/alliance-decks\//i', '', $idOrLink);
+        $idOrLink = \preg_replace('/http:\/\/decksofkeyforge.com\/theoretical-decks\//i', '', $idOrLink);
+        $idOrLink = \preg_replace('/https:\/\/decksofkeyforge.com\/theoretical-decks\//i', '', $idOrLink);
+        $idOrLink = \preg_replace('/https:\/\/www.keyforgegame.com\/deck-details\//i', '', $idOrLink);
+        $idOrLink = \preg_replace('/http:\/\/www.keyforgegame.com\/deck-details\//i', '', $idOrLink);
+
+        return $idOrLink;
     }
 }

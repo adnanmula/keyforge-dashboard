@@ -6,6 +6,7 @@ use AdnanMula\Cards\Application\Query\Keyforge\Competition\GetCompetitionDetailQ
 use AdnanMula\Cards\Application\Query\Keyforge\Deck\GetDecksQuery;
 use AdnanMula\Cards\Application\Query\Keyforge\User\GetUsersQuery;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeck;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckType;
 use AdnanMula\Cards\Domain\Model\Keyforge\User\KeyforgeUser;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
 use AdnanMula\Criteria\FilterField\FilterField;
@@ -26,7 +27,7 @@ final class CompetitionDetailController extends Controller
         );
 
         $decks = $this->extractResult(
-            $this->bus->dispatch(new GetDecksQuery(null, null, null, null, null, null, new Sorting(new Order(new FilterField('name'), OrderType::ASC)))),
+            $this->bus->dispatch(new GetDecksQuery(null, null, null, null, null, null, [KeyforgeDeckType::STANDARD->value], new Sorting(new Order(new FilterField('name'), OrderType::ASC)))),
         );
 
         $decks = \array_map(static fn (KeyforgeDeck $deck) => ['id' => $deck->id()->value(), 'name' => $deck->name()], $decks['decks']);

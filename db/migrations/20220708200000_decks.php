@@ -122,6 +122,7 @@ final class Decks extends AbstractMigration
         $this->execute('DROP TABLE IF EXISTS "keyforge_tags"');
         $this->execute('DROP TABLE IF EXISTS "keyforge_decks_data_history"');
         $this->execute('DROP TABLE IF EXISTS "keyforge_decks_user_data"');
+        $this->execute('DROP TABLE IF EXISTS "keyforge_decks_ownership"');
         $this->execute('DROP TABLE IF EXISTS "keyforge_decks"');
     }
 }
