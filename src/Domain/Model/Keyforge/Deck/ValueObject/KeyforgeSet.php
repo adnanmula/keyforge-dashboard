@@ -16,14 +16,14 @@ enum KeyforgeSet: string
     case WoE = 'WoE';
     case GR = 'GR';
     case AS = 'AS';
+    case ToC = 'ToC';
+    case MoM = 'MoM';
     case U22 = 'U22';
     case M24 = 'M24';
     case VM23 = 'VM23';
     case VM24 = 'VM24';
     case ANOMALY_EXPANSION = 'ANOMALY_EXPANSION';
     case MARTIAN_CIVIL_WAR = 'MARTIAN_CIVIL_WAR';
-    case ToC = 'ToC';
-    case MMM = 'MMM';
 
     public function fullName(): string
     {
@@ -43,7 +43,7 @@ enum KeyforgeSet: string
             self::ANOMALY_EXPANSION => 'Anomaly',
             self::MARTIAN_CIVIL_WAR => 'Martian Civil War',
             self::ToC => 'Tokens of change',
-            self::MMM => 'More Mutation',
+            self::MoM => 'More Mutation',
         };
     }
 
@@ -65,7 +65,7 @@ enum KeyforgeSet: string
             'ANOMALY_EXPANSION' => self::ANOMALY_EXPANSION,
             'MARTIAN_CIVIL_WAR' => self::MARTIAN_CIVIL_WAR,
             'TOKENS_OF_CHANGE' => self::ToC,
-            'MORE_MUTATION' => self::MMM,
+            'MORE_MUTATION' => self::MoM,
             default => throw new \InvalidArgumentException($set),
         };
     }
@@ -73,7 +73,7 @@ enum KeyforgeSet: string
     public function isMain(): bool
     {
         return match ($this) {
-            self::U22, self::VM23, self::VM24, self::M24, self::MARTIAN_CIVIL_WAR, self::ToC, self::MMM => false,
+            self::U22, self::VM23, self::VM24, self::M24, self::MARTIAN_CIVIL_WAR, self::ToC, self::MoM => false,
             default => true,
         };
     }
@@ -81,7 +81,7 @@ enum KeyforgeSet: string
     public function isEnabled(): bool
     {
         return match ($this) {
-            self::AS, self::ANOMALY_EXPANSION, self::MARTIAN_CIVIL_WAR, self::ToC, self::MMM => false,
+            self::ANOMALY_EXPANSION, self::MARTIAN_CIVIL_WAR => false,
             default => true,
         };
     }
