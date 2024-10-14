@@ -166,10 +166,13 @@ keyforge.house_sanctum: Sanctum
 keyforge.house_saurian: Saurios
 keyforge.house_shadows: Sombras
 keyforge.house_skyborn: Skyborn
+keyforge.house_redemption: Redención
 keyforge.house_star_alliance: 'Alianza estelar'
 keyforge.house_unfathomable: Insondable
 keyforge.house_untamed: Indómita
-keyforge.set_aoa: Aoa
+keyforge.set_aoa: AoA
+keyforge.set_toc: ToC
+keyforge.set_mom: MoM
 keyforge.set_as: AS
 keyforge.set_cota: CotA
 keyforge.set_dt: DT
