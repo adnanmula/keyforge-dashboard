@@ -15,6 +15,7 @@ final readonly class KeyforgeCard implements \JsonSerializable
         public array $houses,
         public LocalizedString $name,
         public string $nameUrl,
+        public string $imageUrl,
         public ?LocalizedString $flavorText,
         public LocalizedString $text,
         public KeyforgeCardType $type,
@@ -31,6 +32,9 @@ final readonly class KeyforgeCard implements \JsonSerializable
 
     public static function fromDokData(array $data): self
     {
+        $urlPieces = explode('/', $data['cardTitleUrl']);
+        $serializedName = explode('.', end($urlPieces))[0];
+
         $flavorText = null === $data['flavorText']
             ? null
             : LocalizedString::fromLocale($data['flavorText'], Locale::en_GB);
@@ -39,7 +43,8 @@ final readonly class KeyforgeCard implements \JsonSerializable
             id: $data['id'],
             houses: \array_map(static fn (string $h) => KeyforgeHouse::fromDokName($h), $data['houses']),
             name: LocalizedString::fromLocale($data['cardTitle'], Locale::en_GB),
-            nameUrl: $data['extraCardInfo']['cardNameUrl'],
+            nameUrl: $serializedName,
+            imageUrl: $data['cardTitleUrl'],
             flavorText: $flavorText,
             text: LocalizedString::fromLocale($data['cardText'], Locale::en_GB),
             type: KeyforgeCardType::from(\strtoupper($data['cardType'])),
@@ -61,6 +66,7 @@ final readonly class KeyforgeCard implements \JsonSerializable
             'houses' => $this->houses,
             'name' => $this->name->jsonSerialize(),
             'nameUrl' => $this->nameUrl,
+            'imageUrl' => $this->imageUrl,
             'flavorText' => $this->flavorText->jsonSerialize(),
             'text' => $this->text->jsonSerialize(),
             'type' => $this->type->jsonSerialize(),

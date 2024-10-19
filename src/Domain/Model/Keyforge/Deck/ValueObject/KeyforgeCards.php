@@ -51,6 +51,7 @@ final readonly class KeyforgeCards implements \JsonSerializable
                 'name' => $deck['tokenInfo']['name'],
                 'serializedName' => $serializedName,
                 'type' => 'token-creature',
+                'imageUrl' => $deck['tokenInfo']['nameUrl'],
             ];
         }
 

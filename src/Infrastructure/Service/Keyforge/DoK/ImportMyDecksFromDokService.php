@@ -2,6 +2,8 @@
 
 namespace AdnanMula\Cards\Infrastructure\Service\Keyforge\DoK;
 
+use AdnanMula\Cards\Domain\Model\Keyforge\Card\KeyforgeCard;
+use AdnanMula\Cards\Domain\Model\Keyforge\Card\KeyforgeCardRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeck;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeCards;
@@ -16,6 +18,7 @@ use AdnanMula\Criteria\Filter\Filter;
 use AdnanMula\Criteria\Filter\FilterType;
 use AdnanMula\Criteria\FilterField\FilterField;
 use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
+use AdnanMula\Criteria\FilterValue\ArrayElementFilterValue;
 use AdnanMula\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Criteria\FilterValue\StringArrayFilterValue;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,6 +29,7 @@ final readonly class ImportMyDecksFromDokService
     public function __construct(
         private HttpClientInterface $dokClient,
         private KeyforgeDeckRepository $repository,
+        private KeyforgeCardRepository $cardRepository,
         private DeckApplyPredefinedTagsService $tagsService,
     ) {}
 
@@ -66,6 +70,8 @@ final readonly class ImportMyDecksFromDokService
                 continue;
             }
 
+            [$scalingAmberCards, $boardClearCards] = $this->specialCards();
+
             $newDeck = new KeyforgeDeck(
                 Uuid::from($responseDeck['deck']['keyforgeId']),
                 $responseDeck['deck']['id'],
@@ -74,7 +80,7 @@ final readonly class ImportMyDecksFromDokService
                 KeyforgeSet::fromDokName($responseDeck['deck']['expansion']),
                 KeyforgeDeckHouses::fromDokData($responseDeck),
                 KeyforgeCards::fromDokData($responseDeck),
-                KeyforgeDeckStats::fromDokData($responseDeck),
+                KeyforgeDeckStats::fromDokData($responseDeck, $scalingAmberCards, $boardClearCards),
             );
 
             $this->repository->save($newDeck);
@@ -82,5 +88,45 @@ final readonly class ImportMyDecksFromDokService
 
             $this->tagsService->execute($newDeck->id());
         }
+    }
+
+    private function specialCards(): array
+    {
+        $scalingAmberCards = $this->cardRepository->search(
+            new Criteria(
+                null,
+                null,
+                null,
+                new AndFilterGroup(
+                    FilterType::AND,
+                    new Filter(
+                        new FilterField('tags'),
+                        new ArrayElementFilterValue('scalingAmberControl'),
+                        FilterOperator::IN_ARRAY,
+                    ),
+                ),
+            ),
+        );
+
+        $boardClearsCards = $this->cardRepository->search(
+            new Criteria(
+                null,
+                null,
+                null,
+                new AndFilterGroup(
+                    FilterType::AND,
+                    new Filter(
+                        new FilterField('tags'),
+                        new ArrayElementFilterValue('boardClear'),
+                        FilterOperator::IN_ARRAY,
+                    ),
+                ),
+            ),
+        );
+
+        return [
+            \array_map(static fn (KeyforgeCard $c): string => $c->nameUrl, $scalingAmberCards),
+            \array_map(static fn (KeyforgeCard $c): string => $c->nameUrl, $boardClearsCards),
+        ];
     }
 }

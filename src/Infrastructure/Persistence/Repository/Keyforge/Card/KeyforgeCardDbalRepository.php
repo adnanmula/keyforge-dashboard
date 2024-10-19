@@ -40,13 +40,14 @@ final class KeyforgeCardDbalRepository extends DbalRepository implements Keyforg
         $stmt = $this->connection->prepare(
             \sprintf(
                 '
-                INSERT INTO %s (id, houses, name, name_url, flavor_text, text, type, traits, amber, power, armor, is_big, is_token, sets, tags)
-                VALUES (:id, :houses, :name, :name_url, :flavor_text, :text, :type, :traits, :amber, :power, :armor, :is_big, :is_token, :sets, :tags)
+                INSERT INTO %s (id, houses, name, name_url, image_url, flavor_text, text, type, traits, amber, power, armor, is_big, is_token, sets, tags)
+                VALUES (:id, :houses, :name, :name_url, :image_url, :flavor_text, :text, :type, :traits, :amber, :power, :armor, :is_big, :is_token, :sets, :tags)
                 ON CONFLICT (id) DO UPDATE SET
                     id = :id,
                     houses = :houses,
                     name = :name,
                     name_url = :name_url,
+                    image_url = :image_url,
                     flavor_text = :flavor_text,
                     text = :text,
                     type = :type,
@@ -67,6 +68,7 @@ final class KeyforgeCardDbalRepository extends DbalRepository implements Keyforg
         $stmt->bindValue(':houses', Json::encode($card->houses));
         $stmt->bindValue(':name', Json::encode($card->name));
         $stmt->bindValue(':name_url', $card->nameUrl);
+        $stmt->bindValue(':image_url', $card->imageUrl);
         $stmt->bindValue(':flavor_text', null === $card->flavorText ? null : Json::encode($card->flavorText));
         $stmt->bindValue(':text', Json::encode($card->text));
         $stmt->bindValue(':type', $card->type->value);
@@ -89,6 +91,7 @@ final class KeyforgeCardDbalRepository extends DbalRepository implements Keyforg
             Json::decode($row['houses']),
             LocalizedString::fromArray(Json::decode($row['name'])),
             $row['name_url'],
+            $row['image_url'],
             null === $row['flavor_text']
                 ? null
                 : LocalizedString::fromArray(Json::decode($row['flavor_text'])),

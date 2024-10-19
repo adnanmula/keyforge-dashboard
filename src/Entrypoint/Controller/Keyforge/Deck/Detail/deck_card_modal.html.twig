@@ -22,9 +22,9 @@
         const button = $(event.relatedTarget)[0];
 
         const card = button.getAttribute('data-card');
-        const cardSerialized = button.getAttribute('data-card-serialized');
+        const cardImage = button.getAttribute('data-card-image');
 
         $('#modalCardImage')[0].innerText = card;
-        $('#card_image_render')[0].src = 'https://keyforge-card-images.s3-us-west-2.amazonaws.com/card-imgs/' + cardSerialized + '.png';
+        $('#card_image_render')[0].src = cardImage;
     });
 </script>

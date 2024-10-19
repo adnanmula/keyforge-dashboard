@@ -2,6 +2,8 @@
 
 namespace AdnanMula\Cards\Infrastructure\Service\Keyforge\DoK;
 
+use AdnanMula\Cards\Domain\Model\Keyforge\Card\KeyforgeCard;
+use AdnanMula\Cards\Domain\Model\Keyforge\Card\KeyforgeCardRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Exception\DeckNotExistsException;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeck;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckRepository;
@@ -18,6 +20,7 @@ use AdnanMula\Criteria\Filter\Filter;
 use AdnanMula\Criteria\Filter\FilterType;
 use AdnanMula\Criteria\FilterField\FilterField;
 use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
+use AdnanMula\Criteria\FilterValue\ArrayElementFilterValue;
 use AdnanMula\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,6 +30,7 @@ final class ImportDeckFromDokService implements ImportDeckService
 {
     public function __construct(
         private KeyforgeDeckRepository $repository,
+        private KeyforgeCardRepository $cardRepository,
         private HttpClientInterface $dokClient,
         private DeckApplyPredefinedTagsService $tagsService,
         private ImportDeckStatHistoryFromDokService $statHistoryService,
@@ -60,6 +64,8 @@ final class ImportDeckFromDokService implements ImportDeckService
             throw new DeckNotExistsException();
         }
 
+        [$scalingAmberCards, $boardClearCards] = $this->specialCards();
+
         $newDeck = new KeyforgeDeck(
             Uuid::from($deckResponse['deck']['keyforgeId']),
             $deckResponse['deck']['id'],
@@ -68,7 +74,7 @@ final class ImportDeckFromDokService implements ImportDeckService
             KeyforgeSet::fromDokName($deckResponse['deck']['expansion']),
             KeyforgeDeckHouses::fromDokData($deckResponse),
             KeyforgeCards::fromDokData($deckResponse),
-            KeyforgeDeckStats::fromDokData($deckResponse),
+            KeyforgeDeckStats::fromDokData($deckResponse, $scalingAmberCards, $boardClearCards),
         );
 
         $this->repository->save($newDeck);
@@ -84,5 +90,45 @@ final class ImportDeckFromDokService implements ImportDeckService
         $this->tagsService->execute($newDeck->id());
 
         return $newDeck;
+    }
+
+    private function specialCards(): array
+    {
+        $scalingAmberCards = $this->cardRepository->search(
+            new Criteria(
+                null,
+                null,
+                null,
+                new AndFilterGroup(
+                    FilterType::AND,
+                    new Filter(
+                        new FilterField('tags'),
+                        new ArrayElementFilterValue('scalingAmberControl'),
+                        FilterOperator::IN_ARRAY,
+                    ),
+                ),
+            ),
+        );
+
+        $boardClearsCards = $this->cardRepository->search(
+            new Criteria(
+                null,
+                null,
+                null,
+                new AndFilterGroup(
+                    FilterType::AND,
+                    new Filter(
+                        new FilterField('tags'),
+                        new ArrayElementFilterValue('boardClear'),
+                        FilterOperator::IN_ARRAY,
+                    ),
+                ),
+            ),
+        );
+
+        return [
+            \array_map(static fn (KeyforgeCard $c): string => $c->nameUrl, $scalingAmberCards),
+            \array_map(static fn (KeyforgeCard $c): string => $c->nameUrl, $boardClearsCards),
+        ];
     }
 }

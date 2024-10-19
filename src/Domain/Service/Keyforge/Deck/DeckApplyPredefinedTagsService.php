@@ -2,6 +2,8 @@
 
 namespace AdnanMula\Cards\Domain\Service\Keyforge\Deck;
 
+use AdnanMula\Cards\Domain\Model\Keyforge\Card\KeyforgeCard;
+use AdnanMula\Cards\Domain\Model\Keyforge\Card\KeyforgeCardRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeck;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckTag;
@@ -41,13 +43,16 @@ use AdnanMula\Criteria\Filter\Filter;
 use AdnanMula\Criteria\Filter\FilterType;
 use AdnanMula\Criteria\FilterField\FilterField;
 use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
+use AdnanMula\Criteria\FilterValue\ArrayElementFilterValue;
 use AdnanMula\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
 
 final readonly class DeckApplyPredefinedTagsService
 {
-    public function __construct(private KeyforgeDeckRepository $repository)
-    {}
+    public function __construct(
+        private KeyforgeDeckRepository $repository,
+        private KeyforgeCardRepository $cardRepository,
+    ) {}
 
     public function execute(Uuid $id): void
     {
@@ -384,8 +389,26 @@ final readonly class DeckApplyPredefinedTagsService
             $deck->cards()->thirdPodCards,
         );
 
+        $scalingAmberCards = $this->cardRepository->search(
+            new Criteria(
+                null,
+                null,
+                null,
+                new AndFilterGroup(
+                    FilterType::AND,
+                    new Filter(
+                        new FilterField('tags'),
+                        new ArrayElementFilterValue('scalingAmberControl'),
+                        FilterOperator::IN_ARRAY,
+                    ),
+                ),
+            ),
+        );
+
+        $scalingAmberCardNames = \array_map(static fn (KeyforgeCard $c): string => $c->nameUrl, $scalingAmberCards);
+
         foreach ($cards as $card) {
-            if (\in_array($card->serializedName, KeyforgeCards::SCALING_AMBER_CONTROL, true)) {
+            if (\in_array($card->serializedName, $scalingAmberCardNames, true)) {
                 return new KeyforgeTagHasScalingAmberControl();
             }
         }
@@ -401,8 +424,26 @@ final readonly class DeckApplyPredefinedTagsService
             $deck->cards()->thirdPodCards,
         );
 
+        $boardClearsCards = $this->cardRepository->search(
+            new Criteria(
+                null,
+                null,
+                null,
+                new AndFilterGroup(
+                    FilterType::AND,
+                    new Filter(
+                        new FilterField('tags'),
+                        new ArrayElementFilterValue('boardClear'),
+                        FilterOperator::IN_ARRAY,
+                    ),
+                ),
+            ),
+        );
+
+        $boardClearsCardNames = \array_map(static fn (KeyforgeCard $c): string => $c->nameUrl, $boardClearsCards);
+
         foreach ($cards as $card) {
-            if (\in_array($card->serializedName, KeyforgeCards::BOARD_CLEARS, true)) {
+            if (\in_array($card->serializedName, $boardClearsCardNames, true)) {
                 return new KeyforgeTagHasBoardWipes();
             }
         }

@@ -86,7 +86,7 @@ final readonly class KeyforgeDeckStats implements \JsonSerializable
     }
 
 
-    public static function fromDokData(array $data): self
+    public static function fromDokData(array $data, array $scalingAmberCards, array $boardClearCards): self
     {
         $deck = $data['deck'];
 
@@ -95,11 +95,14 @@ final readonly class KeyforgeDeckStats implements \JsonSerializable
 
         foreach ($data['deck']['housesAndCards'] as $houseCards) {
             foreach ($houseCards['cards'] as $card) {
-                if (\in_array($card['cardTitleUrl'], KeyforgeCards::BOARD_CLEARS, true)) {
+                $urlPieces = explode('/', $card['cardTitleUrl']);
+                $serializedName = explode('.', end($urlPieces))[0];
+
+                if (\in_array($serializedName, $boardClearCards, true)) {
                     $boardClearCount[] = $card['cardTitle'];
                 }
 
-                if (\in_array($card['cardTitleUrl'], KeyforgeCards::SCALING_AMBER_CONTROL, true)) {
+                if (\in_array($serializedName, $scalingAmberCards, true)) {
                     $scalingAmberControlCount[] = $card['cardTitle'];
                 }
             }

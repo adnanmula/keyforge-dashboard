@@ -76,7 +76,7 @@
                         {% for card in deck.cards.firstPodCards %}
                             <div class="col-6 col-lg-12">
                                 <img width="18px" src="/assets/keyforge/rarities/{{ card.rarity }}.svg" alt="{{ card.rarity }}" class="img-fluid"/>
-                                <span class="card_name" data-bs-toggle="modal" data-bs-target="#card_image" data-card="{{ card.name }}" data-card-serialized="{{ card.serializedName }}">{{ card.name }}</span>
+                                <span class="card_name" data-bs-toggle="modal" data-bs-target="#card_image" data-card="{{ card.name }}" data-card-image="{{ card.imageUrl }}">{{ card.name }}</span>
                             </div>
                         {% endfor %}
                     </div>
@@ -93,7 +93,7 @@
                         {% for card in deck.cards.secondPodCards %}
                             <div class="col-6 col-lg-12" style="display: block">
                                 <img width="18px" src="/assets/keyforge/rarities/{{ card.rarity }}.svg" alt="{{ card.rarity }}" class="img-fluid"/>
-                                <span class="card_name" data-bs-toggle="modal" data-bs-target="#card_image" data-card="{{ card.name }}" data-card-serialized="{{ card.serializedName }}">{{ card.name }}</span>
+                                <span class="card_name" data-bs-toggle="modal" data-bs-target="#card_image" data-card="{{ card.name }}" data-card-image="{{ card.imageUrl }}">{{ card.name }}</span>
                             </div>
                         {% endfor %}
                     </div>
@@ -110,7 +110,7 @@
                         {% for card in deck.cards.thirdPodCards %}
                             <div class="col-6 col-lg-12">
                                 <img width="18px" src="/assets/keyforge/rarities/{{ card.rarity }}.svg" alt="{{ card.rarity }}" class="img-fluid"/>
-                                <span class="card_name" data-bs-toggle="modal" data-bs-target="#card_image" data-card="{{ card.name }}" data-card-serialized="{{ card.serializedName }}">{{ card.name }}</span>
+                                <span class="card_name" data-bs-toggle="modal" data-bs-target="#card_image" data-card="{{ card.name }}" data-card-image="{{ card.imageUrl }}">{{ card.name }}</span>
                             </div>
                         {% endfor %}
                     </div>
@@ -123,7 +123,7 @@
         {% for extraCard in deck.cards.extraCards %}
             <div>
                 <h3>{{ ('deck.'~extraCard.type)|trans }}</h3>
-                <span class="card_name" data-bs-toggle="modal" data-bs-target="#card_image" data-card="{{ extraCard.name }}" data-card-serialized="{{ extraCard.serializedName }}">{{ extraCard.name }}</span>
+                <span class="card_name" data-bs-toggle="modal" data-bs-target="#card_image" data-card="{{ extraCard.name }}" data-card-image="{{ extraCard.imageUrl }}">{{ extraCard.name }}</span>
             </div>
 
             <div class="divider py-2"></div>

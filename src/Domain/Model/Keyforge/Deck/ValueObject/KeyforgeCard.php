@@ -7,6 +7,7 @@ final readonly class KeyforgeCard implements \JsonSerializable
     private function __construct(
         public string $name,
         public string $serializedName,
+        public string $imageUrl,
         public KeyforgeCardRarity $rarity,
         public bool $isEnhanced,
         public bool $isMaverick,
@@ -24,6 +25,7 @@ final readonly class KeyforgeCard implements \JsonSerializable
         return new self(
             $data['name'],
             $data['serializedName'],
+            $data['imageUrl'],
             KeyforgeCardRarity::from(\strtoupper($data['rarity'])),
             $data['isEnhanced'],
             $data['isMaverick'],
@@ -45,6 +47,7 @@ final readonly class KeyforgeCard implements \JsonSerializable
         return new self(
             $data['cardTitle'],
             $serializedName,
+            $data['cardTitleUrl'],
             KeyforgeCardRarity::from(\strtoupper($data['rarity'])),
             $data['enhanced'] ?? false,
             $data['maverick'] ?? false,
@@ -63,6 +66,7 @@ final readonly class KeyforgeCard implements \JsonSerializable
         return [
             'name' => $this->name,
             'serializedName' => $this->serializedName,
+            'imageUrl' => $this->imageUrl,
             'rarity' => $this->rarity->jsonSerialize(),
             'isEnhanced' => $this->isEnhanced,
             'isMaverick' => $this->isMaverick,
