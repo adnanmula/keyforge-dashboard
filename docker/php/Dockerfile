@@ -1,4 +1,4 @@
-FROM php:8.2-fpm-alpine
+FROM php:8.4-fpm-alpine
 RUN apk update && apk add --no-cache \
     oniguruma-dev \
     postgresql-dev \
