@@ -16,7 +16,7 @@ use AdnanMula\Criteria\FilterValue\NullFilterValue;
 use AdnanMula\Criteria\FilterValue\StringArrayFilterValue;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
 
-final class GetDecksQueryHandler
+final readonly class GetDecksQueryHandler
 {
     public function __construct(
         private KeyforgeDeckRepository $repository,

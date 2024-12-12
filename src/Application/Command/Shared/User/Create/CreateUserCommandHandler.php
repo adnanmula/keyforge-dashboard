@@ -7,7 +7,7 @@ use AdnanMula\Cards\Domain\Model\Shared\UserRepository;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-final class CreateUserCommandHandler
+final readonly class CreateUserCommandHandler
 {
     public function __construct(
         private UserRepository $repository,
@@ -16,7 +16,7 @@ final class CreateUserCommandHandler
 
     public function __invoke(CreateUserCommand $command): void
     {
-        $user = $this->repository->byName($command->name());
+        $user = $this->repository->byName($command->name);
 
         if (null !== $user) {
             throw new \InvalidArgumentException('User already exists');
@@ -24,15 +24,15 @@ final class CreateUserCommandHandler
 
         $newUser = new User(
             Uuid::v4(),
-            $command->name(),
+            $command->name,
             '',
-            $command->locale(),
-            $command->roles(),
+            $command->locale,
+            $command->roles,
         );
 
         $hashedPassword = $this->hasher->hashPassword(
             $newUser,
-            $command->password(),
+            $command->password,
         );
 
         $newUser->setPassword($hashedPassword);

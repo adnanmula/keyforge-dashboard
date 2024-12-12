@@ -5,9 +5,9 @@ namespace AdnanMula\Cards\Application\Query\Keyforge\Deck;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use Assert\Assert;
 
-final class GetDecksStatHistoryQuery
+final readonly class GetDecksStatHistoryQuery
 {
-    public array $ids;
+    private(set) array $ids;
 
     public function __construct(string ...$ids)
     {

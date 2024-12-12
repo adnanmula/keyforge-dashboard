@@ -2,7 +2,7 @@
 
 namespace AdnanMula\Cards\Application\Query\User\Account;
 
-final class GetPendingAccountsQuery
+final readonly class GetPendingAccountsQuery
 {
     public function __construct()
     {

@@ -7,8 +7,8 @@ use Assert\Assert;
 
 final readonly class StartCompetitionCommand
 {
-    public Uuid $competitionId;
-    public \DateTimeImmutable $date;
+    private(set) Uuid $competitionId;
+    private(set) \DateTimeImmutable $date;
 
     public function __construct($competitionId, $date)
     {

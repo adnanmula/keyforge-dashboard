@@ -13,7 +13,7 @@ final class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct(
         private Uuid $id,
         private string $name,
-        private string $password,
+        private ?string $password,
         private Locale $locale,
         private array $roles,
     ) {}

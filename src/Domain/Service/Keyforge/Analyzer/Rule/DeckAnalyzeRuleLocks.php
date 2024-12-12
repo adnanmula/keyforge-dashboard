@@ -38,8 +38,6 @@ final class DeckAnalyzeRuleLocks implements DeckAnalyzeRule
             ];
         }
 
-        $r = \array_values(\array_filter($r));
-
         if (\count($r) === 0) {
             return null;
         }

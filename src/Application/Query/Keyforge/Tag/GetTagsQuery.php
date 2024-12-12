@@ -6,11 +6,11 @@ use AdnanMula\Cards\Domain\Model\Shared\ValueObject\TagVisibility;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use Assert\Assert;
 
-final class GetTagsQuery
+final readonly class GetTagsQuery
 {
-    private ?array $ids;
-    private ?TagVisibility $visibility;
-    private ?bool $archived;
+    private(set) ?array $ids;
+    private(set) ?TagVisibility $visibility;
+    private(set) ?bool $archived;
 
     public function __construct($ids, $visibility, $archived)
     {
@@ -29,20 +29,5 @@ final class GetTagsQuery
             : TagVisibility::from($visibility);
 
         $this->archived = $archived;
-    }
-
-    public function ids(): ?array
-    {
-        return $this->ids;
-    }
-
-    public function visibility(): ?TagVisibility
-    {
-        return $this->visibility;
-    }
-
-    public function archived(): ?bool
-    {
-        return $this->archived;
     }
 }

@@ -7,7 +7,7 @@ use Assert\Assert;
 
 final readonly class AnalyzeDeckThreatsCommand
 {
-    public Uuid $deckId;
+    private(set) Uuid $deckId;
 
     public function __construct($deckId)
     {

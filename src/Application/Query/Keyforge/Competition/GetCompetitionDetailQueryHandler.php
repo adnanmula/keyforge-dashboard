@@ -117,12 +117,10 @@ final readonly class GetCompetitionDetailQueryHandler
                         continue;
                     }
 
-                    if (null !== $fixture['winner']) {
-                        if ($user->value() === $fixture['winner']) {
-                            $player['wins']++;
-                        } else {
-                            $player['losses']++;
-                        }
+                    if ($user->value() === $fixture['winner']) {
+                        $player['wins']++;
+                    } else {
+                        $player['losses']++;
                     }
 
                     foreach ($fixture['games'] as $game) {

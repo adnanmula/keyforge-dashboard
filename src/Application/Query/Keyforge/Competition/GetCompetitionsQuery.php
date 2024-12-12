@@ -4,10 +4,10 @@ namespace AdnanMula\Cards\Application\Query\Keyforge\Competition;
 
 use Assert\Assert;
 
-final class GetCompetitionsQuery
+final readonly class GetCompetitionsQuery
 {
-    private ?int $start;
-    private ?int $length;
+    private(set) ?int $start;
+    private(set) ?int $length;
 
     public function __construct($start, $length)
     {
@@ -18,15 +18,5 @@ final class GetCompetitionsQuery
 
         $this->start = null === $start ? null : (int) $start;
         $this->length = null === $length ? null : (int) $length;
-    }
-
-    public function start(): ?int
-    {
-        return $this->start;
-    }
-
-    public function length(): ?int
-    {
-        return $this->length;
     }
 }

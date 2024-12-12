@@ -7,10 +7,10 @@ use Assert\Assert;
 
 final class CreateUserCommand
 {
-    private string $name;
-    private string $password;
-    private Locale $locale;
-    private array $roles;
+    private(set) string $name;
+    private(set) string $password;
+    private(set) Locale $locale;
+    private(set) array $roles;
 
     public function __construct($name, $password, $locale, $roles)
     {
@@ -25,25 +25,5 @@ final class CreateUserCommand
         $this->password = $password;
         $this->locale = Locale::from($locale);
         $this->roles = $roles;
-    }
-
-    public function name(): string
-    {
-        return $this->name;
-    }
-
-    public function password(): string
-    {
-        return $this->password;
-    }
-
-    public function locale(): Locale
-    {
-        return $this->locale;
-    }
-
-    public function roles(): array
-    {
-        return $this->roles;
     }
 }

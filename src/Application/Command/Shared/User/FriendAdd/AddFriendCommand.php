@@ -7,8 +7,8 @@ use Assert\Assert;
 
 final readonly class AddFriendCommand
 {
-    public Uuid $user;
-    public string $friendName;
+    private(set) Uuid $user;
+    private(set) string $friendName;
 
     public function __construct($user, $friendName)
     {

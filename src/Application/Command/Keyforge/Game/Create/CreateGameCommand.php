@@ -5,19 +5,19 @@ namespace AdnanMula\Cards\Application\Command\Keyforge\Game\Create;
 use AdnanMula\Cards\Domain\Model\Keyforge\Game\ValueObject\KeyforgeCompetition;
 use Assert\Assert;
 
-final class CreateGameCommand
+final readonly class CreateGameCommand
 {
-    private string $winner;
-    private string $winnerDeck;
-    private int $winnerChains;
-    private string $loser;
-    private string $loserDeck;
-    private int $loserChains;
-    private int $loserScore;
-    private ?string $firstTurn;
-    private \DateTimeImmutable $date;
-    private KeyforgeCompetition $competition;
-    private string $notes;
+    private(set) string $winner;
+    private(set) string $winnerDeck;
+    private(set) int $winnerChains;
+    private(set) string $loser;
+    private(set) string $loserDeck;
+    private(set) int $loserChains;
+    private(set) int $loserScore;
+    private(set) ?string $firstTurn;
+    private(set) \DateTimeImmutable $date;
+    private(set) KeyforgeCompetition $competition;
+    private(set) string $notes;
 
     public function __construct(
         $winner,
@@ -57,60 +57,5 @@ final class CreateGameCommand
         $this->date = new \DateTimeImmutable($date);
         $this->competition = KeyforgeCompetition::fromName($competition);
         $this->notes = $notes;
-    }
-
-    public function winner(): string
-    {
-        return $this->winner;
-    }
-
-    public function winnerDeck(): string
-    {
-        return $this->winnerDeck;
-    }
-
-    public function winnerChains(): int
-    {
-        return $this->winnerChains;
-    }
-
-    public function loser(): string
-    {
-        return $this->loser;
-    }
-
-    public function loserDeck(): string
-    {
-        return $this->loserDeck;
-    }
-
-    public function loserChains(): int
-    {
-        return $this->loserChains;
-    }
-
-    public function loserScore(): int
-    {
-        return $this->loserScore;
-    }
-
-    public function firstTurn(): ?string
-    {
-        return $this->firstTurn;
-    }
-
-    public function date(): \DateTimeImmutable
-    {
-        return $this->date;
-    }
-
-    public function competition(): KeyforgeCompetition
-    {
-        return $this->competition;
-    }
-
-    public function notes(): string
-    {
-        return $this->notes;
     }
 }

@@ -6,7 +6,7 @@ use AdnanMula\Cards\Domain\Service\Keyforge\ImportDeckAllianceService;
 use AdnanMula\Cards\Domain\Service\Keyforge\ImportDeckService;
 use AdnanMula\Cards\Infrastructure\Service\Keyforge\DoK\ImportMyDecksFromDokService;
 
-final class ImportDeckCommandHandler
+final readonly class ImportDeckCommandHandler
 {
     public function __construct(
         private ImportDeckService $service,

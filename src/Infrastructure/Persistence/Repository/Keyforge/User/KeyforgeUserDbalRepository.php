@@ -12,9 +12,9 @@ use Doctrine\DBAL\Result;
 
 final class KeyforgeUserDbalRepository extends DbalRepository implements KeyforgeUserRepository
 {
-    private const TABLE = 'keyforge_users';
+    private const string TABLE = 'keyforge_users';
 
-    private const FIELD_MAPPING = [
+    private const array FIELD_MAPPING = [
         'id' => 'a.id',
         'is_external' => 'a.owner',
     ];
@@ -25,7 +25,7 @@ final class KeyforgeUserDbalRepository extends DbalRepository implements Keyforg
 
         $query = $builder->select('a.*')->from(self::TABLE, 'a');
 
-        (new DbalCriteriaAdapter($builder, self::FIELD_MAPPING))->execute($criteria);
+        new DbalCriteriaAdapter($builder, self::FIELD_MAPPING)->execute($criteria);
 
         $result = $query->executeQuery()->fetchAllAssociative();
 
@@ -85,7 +85,6 @@ final class KeyforgeUserDbalRepository extends DbalRepository implements Keyforg
 
     public function bestDecks(Uuid $id): array
     {
-        /** @var false|Result $result */
         $result = $this->connection->executeQuery(
             "WITH player_games AS (
             SELECT 
@@ -181,9 +180,6 @@ final class KeyforgeUserDbalRepository extends DbalRepository implements Keyforg
             u.id = '" . $id->value() . "';"
         );
 
-        if ($result === false) {
-            return [];
-        }
 
         $result = $result->fetchAssociative();
 

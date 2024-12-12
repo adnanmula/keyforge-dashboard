@@ -8,8 +8,8 @@ use Assert\Assert;
 
 final readonly class UpdateUserCommand
 {
-    public Uuid $id;
-    public ?Locale $locale;
+    private(set) Uuid $id;
+    private(set) ?Locale $locale;
 
     public function __construct($id, public ?string $password, $locale)
     {

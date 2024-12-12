@@ -9,26 +9,26 @@ use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Criteria\Sorting\Sorting;
 use Assert\Assert;
 
-final class GetDecksQuery
+final readonly class GetDecksQuery
 {
-    public ?int $start;
-    public ?int $length;
-    public ?string $deck;
-    public ?array $sets;
-    public ?string $houseFilterType;
-    public ?array $houses;
-    public ?array $deckTypes;
-    public ?Sorting $sorting;
-    public ?Uuid $deckId;
-    public ?Uuid $owner;
-    public array $owners;
-    public bool $onlyOwned;
-    public ?string $tagFilterType;
-    public array $tags;
-    public array $tagsExcluded;
-    public int $maxSas;
-    public int $minSas;
-    public ?Uuid $onlyFriends;
+    private(set) ?int $start;
+    private(set) ?int $length;
+    private(set) ?string $deck;
+    private(set) ?array $sets;
+    private(set) ?string $houseFilterType;
+    private(set) ?array $houses;
+    private(set) ?array $deckTypes;
+    private(set) ?Sorting $sorting;
+    private(set) ?Uuid $deckId;
+    private(set) ?Uuid $owner;
+    private(set) array $owners;
+    private(set) bool $onlyOwned;
+    private(set) ?string $tagFilterType;
+    private(set) array $tags;
+    private(set) array $tagsExcluded;
+    private(set) int $maxSas;
+    private(set) int $minSas;
+    private(set) ?Uuid $onlyFriends;
 
     public function __construct(
         $start,

@@ -4,7 +4,7 @@ namespace AdnanMula\Cards\Application\Query\Keyforge\Deck;
 
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckStatHistoryRepository;
 
-final class GetDecksStatHistoryQueryHandler
+final readonly class GetDecksStatHistoryQueryHandler
 {
     public function __construct(
         private KeyforgeDeckStatHistoryRepository $repository,

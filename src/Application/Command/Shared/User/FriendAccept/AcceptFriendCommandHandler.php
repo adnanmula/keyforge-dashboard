@@ -14,7 +14,7 @@ use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
 use AdnanMula\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
 
-final class AcceptFriendCommandHandler
+final readonly class AcceptFriendCommandHandler
 {
     public function __construct(
         private UserRepository $repository,

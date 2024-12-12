@@ -5,9 +5,9 @@ namespace AdnanMula\Cards\Application\Query\User\Friend;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use Assert\Assert;
 
-final class GetUserFriendsQuery
+final readonly class GetUserFriendsQuery
 {
-    public readonly Uuid $userId;
+    private(set) Uuid $userId;
 
     public function __construct($userId)
     {

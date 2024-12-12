@@ -5,7 +5,7 @@ namespace AdnanMula\Cards\Application\Command\Keyforge\Competition\Start;
 use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeCompetition;
 use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeCompetitionRepository;
 
-final class StartCompetitionCommandHandler
+final readonly class StartCompetitionCommandHandler
 {
     public function __construct(
         private KeyforgeCompetitionRepository $repository,

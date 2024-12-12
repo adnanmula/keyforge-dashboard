@@ -14,7 +14,7 @@ use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
 use AdnanMula\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Criteria\FilterValue\StringArrayFilterValue;
 
-final class GetGamesQueryHandler
+final readonly class GetGamesQueryHandler
 {
     public function __construct(
         private KeyforgeGameRepository $gameRepository,
@@ -24,13 +24,13 @@ final class GetGamesQueryHandler
 
     public function __invoke(GetGamesQuery $query): array
     {
-        $games = $this->gameRepository->search($query->criteria());
+        $games = $this->gameRepository->search($query->criteria);
 
         $criteriaWithoutOrder = new Criteria(
             null,
             null,
             null,
-            ...$query->criteria()->filterGroups(),
+            ...$query->criteria->filterGroups(),
         );
 
         $total = $this->gameRepository->count($criteriaWithoutOrder);

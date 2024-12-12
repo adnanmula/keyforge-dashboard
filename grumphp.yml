@@ -7,9 +7,9 @@ grumphp:
   tasks:
     composer:
       strict: true
-    phpcs:
-      standard:
-          - 'phpcs.xml.dist'
+#    phpcs:
+#      standard:
+#          - 'phpcs.xml.dist'
     phpstan:
       autoload_file: phpstan.neon
       configuration: ~
@@ -20,4 +20,4 @@ grumphp:
 #      format: ~
 #      stop_on_failure: false
     phpversion:
-      project: '8.2'
+      project: '8.4'

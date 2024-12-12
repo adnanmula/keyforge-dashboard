@@ -7,9 +7,9 @@ use Assert\Assert;
 
 final readonly class FinishCompetitionCommand
 {
-    public Uuid $competitionId;
-    public Uuid $winnerId;
-    public \DateTimeImmutable $date;
+    private(set) Uuid $competitionId;
+    private(set) Uuid $winnerId;
+    private(set) \DateTimeImmutable $date;
 
     public function __construct($competitionId, $winnerId, $date)
     {

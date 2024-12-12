@@ -5,10 +5,10 @@ namespace AdnanMula\Cards\Application\Command\Keyforge\Deck\GenerateAlliances;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeHouse;
 use Assert\Assert;
 
-final class GenerateDeckAlliancesCommand
+final readonly class GenerateDeckAlliancesCommand
 {
-    public array $deckIds;
-    public array $deckHouses;
+    private(set) array $deckIds;
+    private(set) array $deckHouses;
 
     public function __construct($deckIds, $deckHouses)
     {

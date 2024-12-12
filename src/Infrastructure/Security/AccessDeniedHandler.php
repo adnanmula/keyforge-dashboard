@@ -10,7 +10,7 @@ use Symfony\Component\Security\Http\Authorization\AccessDeniedHandlerInterface;
 
 final class AccessDeniedHandler extends Controller implements AccessDeniedHandlerInterface
 {
-    public function handle(Request $request, AccessDeniedException $accessDeniedException): ?Response
+    public function handle(Request $request, AccessDeniedException $accessDeniedException): Response
     {
         return $this->render('Shared/access_denied.html.twig', [], new Response(null, Response::HTTP_FORBIDDEN));
     }

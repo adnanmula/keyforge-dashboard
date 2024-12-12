@@ -6,20 +6,20 @@ use AdnanMula\Cards\Domain\Model\Keyforge\Game\ValueObject\KeyforgeCompetition;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use Assert\Assert;
 
-final class CreateCompetitionGameCommand
+final readonly class CreateCompetitionGameCommand
 {
-    public readonly Uuid $winner;
-    public readonly string $winnerDeck;
-    public readonly int $winnerChains;
-    public readonly Uuid $loser;
-    public readonly string $loserDeck;
-    public readonly int $loserChains;
-    public readonly int $loserScore;
-    public readonly ?Uuid $firstTurn;
-    public readonly \DateTimeImmutable $date;
-    public readonly KeyforgeCompetition $competition;
-    public readonly string $notes;
-    public readonly Uuid $fixtureId;
+    private(set) Uuid $winner;
+    private(set) string $winnerDeck;
+    private(set) int $winnerChains;
+    private(set) Uuid $loser;
+    private(set) string $loserDeck;
+    private(set) int $loserChains;
+    private(set) int $loserScore;
+    private(set) ?Uuid $firstTurn;
+    private(set) \DateTimeImmutable $date;
+    private(set) KeyforgeCompetition $competition;
+    private(set) string $notes;
+    private(set) Uuid $fixtureId;
 
     public function __construct(
         $winner,

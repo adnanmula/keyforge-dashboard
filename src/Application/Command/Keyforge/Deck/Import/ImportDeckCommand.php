@@ -8,10 +8,10 @@ use Assert\Assert;
 
 final readonly class ImportDeckCommand
 {
-    public ?Uuid $deckId;
-    public KeyforgeDeckType $deckType;
-    public ?string $token;
-    public ?Uuid $userId;
+    private(set) ?Uuid $deckId;
+    private(set) KeyforgeDeckType $deckType;
+    private(set) ?string $token;
+    private(set) ?Uuid $userId;
 
     public function __construct($deckId, $deckType, $token, $userId)
     {

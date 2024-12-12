@@ -9,13 +9,13 @@ use Assert\Assert;
 
 final readonly class CreateCompetitionCommand
 {
-    public string $reference;
-    public string $name;
-    public CompetitionType $type;
-    public CompetitionFixtureType $fixturesType;
+    private(set) string $reference;
+    private(set) string $name;
+    private(set) CompetitionType $type;
+    private(set) CompetitionFixtureType $fixturesType;
     /** @var array<Uuid> $users */
-    public array $users;
-    public string $description;
+    private(set) array $users;
+    private(set) string $description;
 
     public function __construct($reference, $name, $type, $fixturesType, $users, $description)
     {

@@ -13,7 +13,7 @@ use AdnanMula\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
 use Symfony\Bundle\SecurityBundle\Security;
 
-final class UpdateDeckNotesCommandHandler
+final readonly class UpdateDeckNotesCommandHandler
 {
     public function __construct(
         private KeyforgeDeckRepository $repository,

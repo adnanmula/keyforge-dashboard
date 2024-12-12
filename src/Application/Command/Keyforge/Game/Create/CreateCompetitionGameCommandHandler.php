@@ -22,7 +22,7 @@ use AdnanMula\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
 use Symfony\Bundle\SecurityBundle\Security;
 
-final class CreateCompetitionGameCommandHandler
+final readonly class CreateCompetitionGameCommandHandler
 {
     public function __construct(
         private KeyforgeGameRepository $gameRepository,

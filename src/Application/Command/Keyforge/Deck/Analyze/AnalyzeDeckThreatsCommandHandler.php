@@ -14,11 +14,7 @@ final readonly class AnalyzeDeckThreatsCommandHandler
 
     public function __invoke(AnalyzeDeckThreatsCommand $command): array
     {
-        $deck = $this->importDeckService->execute($command->deckId, null);
-
-        if (null === $deck) {
-            throw new \Exception('Deck not found');
-        }
+        $deck = $this->importDeckService->execute($command->deckId);
 
         $results = $this->analyzeService->execute($deck);
 

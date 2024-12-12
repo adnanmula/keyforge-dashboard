@@ -14,7 +14,7 @@ use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
 use AdnanMula\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
 
-final class CreateCompetitionCommandHandler
+final readonly class CreateCompetitionCommandHandler
 {
     public function __construct(
         private KeyforgeCompetitionRepository $repository,

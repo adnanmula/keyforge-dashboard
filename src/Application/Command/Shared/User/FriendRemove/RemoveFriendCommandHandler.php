@@ -5,7 +5,7 @@ namespace AdnanMula\Cards\Application\Command\Shared\User\FriendRemove;
 use AdnanMula\Cards\Domain\Model\Shared\Exception\UserNotExistsException;
 use AdnanMula\Cards\Domain\Model\Shared\UserRepository;
 
-final class RemoveFriendCommandHandler
+final readonly class RemoveFriendCommandHandler
 {
     public function __construct(
         private UserRepository $repository,

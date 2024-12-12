@@ -5,14 +5,14 @@ namespace AdnanMula\Cards\Application\Query\Keyforge\User;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use Assert\Assert;
 
-final class GetUsersQuery
+final readonly class GetUsersQuery
 {
-    public ?int $page;
-    public ?int $pageSize;
-    public bool $withGames;
-    public bool $withExternal;
-    public bool $onlyFriends;
-    public ?Uuid $userId;
+    private(set) ?int $page;
+    private(set) ?int $pageSize;
+    private(set) bool $withGames;
+    private(set) bool $withExternal;
+    private(set) bool $onlyFriends;
+    private(set) ?Uuid $userId;
 
     public function __construct($page, $pageSize, $withGames, $withExternal, $onlyFriends = false, $userId = null)
     {

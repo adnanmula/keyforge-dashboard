@@ -18,8 +18,8 @@ final readonly class GetCompetitionsQueryHandler
     public function __invoke(GetCompetitionsQuery $query): array
     {
         $criteria = new Criteria(
-            $query->start(),
-            $query->length(),
+            $query->start,
+            $query->length,
             new Sorting(
                 new Order(
                     new FilterField('created_at'),
@@ -35,8 +35,8 @@ final readonly class GetCompetitionsQueryHandler
             'competitions' => $competitions,
             'total' => $total,
             'totalFiltered' => $total,
-            'start' => $query->start(),
-            'length' => $query->length(),
+            'start' => $query->start,
+            'length' => $query->length,
         ];
     }
 }

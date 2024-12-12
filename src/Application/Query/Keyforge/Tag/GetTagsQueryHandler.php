@@ -24,19 +24,19 @@ final readonly class GetTagsQueryHandler
     {
         $expressions = [];
 
-        if (null !== $query->visibility()) {
-            $expressions[] = new Filter(new FilterField('visibility'), new StringFilterValue($query->visibility()->name), FilterOperator::EQUAL);
+        if (null !== $query->visibility) {
+            $expressions[] = new Filter(new FilterField('visibility'), new StringFilterValue($query->visibility->name), FilterOperator::EQUAL);
         }
 
-        if (null !== $query->archived()) {
-            $expressions[] = new Filter(new FilterField('archived'), new StringFilterValue((string) $query->archived()), FilterOperator::EQUAL);
+        if (null !== $query->archived) {
+            $expressions[] = new Filter(new FilterField('archived'), new StringFilterValue((string) $query->archived), FilterOperator::EQUAL);
         }
 
         $filters = [new AndFilterGroup(FilterType::AND, ...$expressions)];
 
-        if (null !== $query->ids()) {
+        if (null !== $query->ids) {
             $idsExpressions = [];
-            foreach ($query->ids() as $id) {
+            foreach ($query->ids as $id) {
                 $idsExpressions[] = new Filter(new FilterField('id'), new StringFilterValue($id->value()), FilterOperator::EQUAL);
             }
 

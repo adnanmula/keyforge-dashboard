@@ -5,7 +5,7 @@ namespace AdnanMula\Cards\Application\Command\Shared\User\Update;
 use AdnanMula\Cards\Domain\Model\Shared\UserRepository;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-final class UpdateUserCommandHandler
+final readonly class UpdateUserCommandHandler
 {
     public function __construct(
         private UserRepository $repository,

@@ -27,7 +27,7 @@ use AdnanMula\Criteria\FilterValue\StringFilterValue;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-final class ImportDeckAllianceFromDokService implements ImportDeckAllianceService
+final readonly class ImportDeckAllianceFromDokService implements ImportDeckAllianceService
 {
     public function __construct(
         private KeyforgeDeckRepository $repository,
@@ -37,7 +37,7 @@ final class ImportDeckAllianceFromDokService implements ImportDeckAllianceServic
         private DeckApplyPredefinedTagsService $tagsService,
     ) {}
 
-    public function execute(Uuid $uuid, ?Uuid $owner = null, bool $forceUpdate = false): ?KeyforgeDeck
+    public function execute(Uuid $uuid, ?Uuid $owner = null, bool $forceUpdate = false): KeyforgeDeck
     {
         $deck = $this->repository->searchOne(new Criteria(
             null,

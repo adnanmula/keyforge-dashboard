@@ -5,11 +5,11 @@ namespace AdnanMula\Cards\Application\Command\Keyforge\Deck\UpdateNotes;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use Assert\Assert;
 
-final class UpdateDeckNotesCommand
+final readonly class UpdateDeckNotesCommand
 {
-    public readonly Uuid $deckId;
-    public readonly string $notes;
-    public readonly Uuid $userId;
+    private(set) Uuid $deckId;
+    private(set) string $notes;
+    private(set) Uuid $userId;
 
     public function __construct($deckId, $notes, $userId)
     {

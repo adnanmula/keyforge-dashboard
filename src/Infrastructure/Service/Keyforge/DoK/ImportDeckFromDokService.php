@@ -36,7 +36,7 @@ final class ImportDeckFromDokService implements ImportDeckService
         private ImportDeckStatHistoryFromDokService $statHistoryService,
     ) {}
 
-    public function execute(Uuid $uuid, ?Uuid $owner = null, bool $forceUpdate = false, bool $withHistory = true): ?KeyforgeDeck
+    public function execute(Uuid $uuid, ?Uuid $owner = null, bool $forceUpdate = false, bool $withHistory = true): KeyforgeDeck
     {
         $deck = $this->repository->searchOne(new Criteria(
             null,

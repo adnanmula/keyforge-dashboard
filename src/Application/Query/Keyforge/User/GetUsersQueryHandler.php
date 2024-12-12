@@ -16,7 +16,7 @@ use AdnanMula\Criteria\FilterValue\NullFilterValue;
 use AdnanMula\Criteria\FilterValue\StringArrayFilterValue;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
 
-final class GetUsersQueryHandler
+final readonly class GetUsersQueryHandler
 {
     public function __construct(
         private UserRepository $userRepository,
@@ -64,13 +64,6 @@ final class GetUsersQueryHandler
         foreach ($users as $user) {
             $indexedUsers[$user->id()->value()] = $user;
             $userIds[] = $user->id()->value();
-        }
-
-        $filters = [];
-
-        foreach ($userIds as $userId) {
-            $filters[] = new Filter(new FilterField('winner'), new StringFilterValue($userId), FilterOperator::EQUAL);
-            $filters[] = new Filter(new FilterField('loser'), new StringFilterValue($userId), FilterOperator::EQUAL);
         }
 
         $userData = $this->userDataRepository->search(

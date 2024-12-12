@@ -20,7 +20,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-class GenerateDeckAlliancesCommandHandler
+readonly class GenerateDeckAlliancesCommandHandler
 {
     public function __construct(
         private KeyforgeDeckRepository $deckRepository,

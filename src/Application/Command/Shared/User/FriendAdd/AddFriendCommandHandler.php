@@ -5,7 +5,7 @@ namespace AdnanMula\Cards\Application\Command\Shared\User\FriendAdd;
 use AdnanMula\Cards\Domain\Model\Shared\Exception\UserNotExistsException;
 use AdnanMula\Cards\Domain\Model\Shared\UserRepository;
 
-final class AddFriendCommandHandler
+final readonly class AddFriendCommandHandler
 {
     public function __construct(
         private UserRepository $repository,

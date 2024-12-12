@@ -7,7 +7,7 @@ use Assert\Assert;
 
 final readonly class ApproveAccountCommand
 {
-    public Uuid $user;
+    private(set) Uuid $user;
 
     public function __construct($user)
     {

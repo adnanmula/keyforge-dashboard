@@ -24,9 +24,9 @@ use AdnanMula\Criteria\FilterValue\NullFilterValue;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
 use Symfony\Bundle\SecurityBundle\Security;
 
-final class CreateGameCommandHandler
+final readonly class CreateGameCommandHandler
 {
-    private const COMPETITIONS_VS_RANDOMS = [
+    private const array COMPETITIONS_VS_RANDOMS = [
         KeyforgeCompetition::VT,
         KeyforgeCompetition::TCO_CASUAL,
         KeyforgeCompetition::TCO_COMPETITIVE,
@@ -50,13 +50,13 @@ final class CreateGameCommandHandler
             throw new \Exception('Not authorized');
         }
 
-        [$winner, $loser, $firstTurn] = $this->getUsers($user, $command->winner(), $command->loser(), $command->firstTurn(), $command->competition());
-        [$winnerDeck, $loserDeck] = $this->getDecks($command->winnerDeck(), $command->loserDeck());
+        [$winner, $loser, $firstTurn] = $this->getUsers($user, $command->winner, $command->loser, $command->firstTurn, $command->competition);
+        [$winnerDeck, $loserDeck] = $this->getDecks($command->winnerDeck, $command->loserDeck);
 
         $approved = false;
 
-        if (\in_array($command->competition(), self::COMPETITIONS_VS_RANDOMS, true)
-            || ($command->winner() === $command->loser() && $command->competition() === KeyforgeCompetition::SOLO)) {
+        if (\in_array($command->competition, self::COMPETITIONS_VS_RANDOMS, true)
+            || ($command->winner === $command->loser && $command->competition === KeyforgeCompetition::SOLO)) {
             $approved = true;
         }
 
@@ -66,14 +66,14 @@ final class CreateGameCommandHandler
             $loser,
             $winnerDeck->id(),
             $loserDeck->id(),
-            $command->winnerChains(),
-            $command->loserChains(),
+            $command->winnerChains,
+            $command->loserChains,
             $firstTurn,
-            KeyforgeGameScore::from(3, $command->loserScore()),
-            $command->date(),
+            KeyforgeGameScore::from(3, $command->loserScore),
+            $command->date,
             new \DateTimeImmutable(),
-            $command->competition(),
-            $command->notes(),
+            $command->competition,
+            $command->notes,
             $approved,
             $user->id(),
         );

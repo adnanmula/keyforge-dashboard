@@ -4,9 +4,9 @@ namespace AdnanMula\Cards\Application\Query\Keyforge\Competition;
 
 use Assert\Assert;
 
-final class GetCompetitionDetailQuery
+final readonly class GetCompetitionDetailQuery
 {
-    public readonly string $reference;
+    private(set) string $reference;
 
     public function __construct($reference)
     {
