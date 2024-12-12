@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8c8b96d39cf90a982677faa3f40aa6b1",
+    "content-hash": "94e3593602ab49c7e93f9424d92b0dde",
     "packages": [
         {
             "name": "adnanmula/criteria",
@@ -5112,16 +5112,16 @@
         },
         {
             "name": "twig/twig",
-            "version": "v3.17.0",
+            "version": "v3.17.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "d3a64b742a5e74c57e3964d766e1032982145872"
+                "reference": "677ef8da6497a03048192aeeb5aa3018e379ac71"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/d3a64b742a5e74c57e3964d766e1032982145872",
-                "reference": "d3a64b742a5e74c57e3964d766e1032982145872",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/677ef8da6497a03048192aeeb5aa3018e379ac71",
+                "reference": "677ef8da6497a03048192aeeb5aa3018e379ac71",
                 "shasum": ""
             },
             "require": {
@@ -5176,7 +5176,7 @@
             ],
             "support": {
                 "issues": "https://github.com/twigphp/Twig/issues",
-                "source": "https://github.com/twigphp/Twig/tree/v3.17.0"
+                "source": "https://github.com/twigphp/Twig/tree/v3.17.1"
             },
             "funding": [
                 {
@@ -5188,27 +5188,27 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-12-10T15:19:11+00:00"
+            "time": "2024-12-12T09:58:10+00:00"
         }
     ],
     "packages-dev": [
         {
             "name": "adnanmula/coding-standard",
-            "version": "0.0.10",
+            "version": "0.0.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/adnanmula/coding-standard.git",
-                "reference": "f8c00f386ac51a61b0eb4148b5b1400c942acee3"
+                "reference": "ee29dd9805e399c7c21551e4069075449a8f4d8f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/adnanmula/coding-standard/zipball/f8c00f386ac51a61b0eb4148b5b1400c942acee3",
-                "reference": "f8c00f386ac51a61b0eb4148b5b1400c942acee3",
+                "url": "https://api.github.com/repos/adnanmula/coding-standard/zipball/ee29dd9805e399c7c21551e4069075449a8f4d8f",
+                "reference": "ee29dd9805e399c7c21551e4069075449a8f4d8f",
                 "shasum": ""
             },
             "require": {
-                "php": "^8.2",
-                "slevomat/coding-standard": "^8.14.1"
+                "php": "^8.4",
+                "slevomat/coding-standard": "^8.15"
             },
             "type": "library",
             "autoload": {
@@ -5228,9 +5228,9 @@
             ],
             "support": {
                 "issues": "https://github.com/adnanmula/coding-standard/issues",
-                "source": "https://github.com/adnanmula/coding-standard/tree/0.0.10"
+                "source": "https://github.com/adnanmula/coding-standard/tree/0.0.11"
             },
-            "time": "2024-04-22T10:11:00+00:00"
+            "time": "2024-12-12T15:50:05+00:00"
         },
         {
             "name": "amphp/amp",

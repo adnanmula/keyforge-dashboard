@@ -25,8 +25,8 @@ jobs:
     - name: Install dependencies
       run: docker compose -f ./docker-compose.yml exec -T --user=$(id -u) php-fpm sh -c "composer install --ignore-platform-reqs --prefer-dist --no-progress --no-suggest"
 
-#    - name: Code sniffer
-#      run: docker compose -f ./docker-compose.yml exec -T --user=$(id -u) php-fpm sh -c "phpcs --standard=phpcs.xml.dist"
+    - name: Code sniffer
+      run: docker compose -f ./docker-compose.yml exec -T --user=$(id -u) php-fpm sh -c "phpcs --standard=phpcs.xml.dist"
 
     - name: Unit tests
       run: docker compose -f ./docker-compose.yml exec -T --user=$(id -u) php-fpm sh -c "php ./bin/phpunit --configuration phpunit.xml.dist --no-coverage --colors=always"
