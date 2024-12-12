@@ -7,7 +7,7 @@ final readonly class KeyforgeCard implements \JsonSerializable
     private function __construct(
         public string $name,
         public string $serializedName,
-        public string $imageUrl,
+        public ?string $imageUrl,
         public KeyforgeCardRarity $rarity,
         public bool $isEnhanced,
         public bool $isMaverick,
