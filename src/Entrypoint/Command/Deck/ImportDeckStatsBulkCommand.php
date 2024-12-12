@@ -89,9 +89,9 @@ final class ImportDeckStatsBulkCommand extends Command
             ->select('a.id')
             ->from('keyforge_decks', 'a')
             ->where('a.id not in (:already_imported)')
-            ->andWhere('a.type = :type')
+            ->andWhere('a.deck_type = :type')
             ->setParameter('already_imported', $alreadyImported, ArrayParameterType::STRING)
-            ->setParameter('type', KeyforgeDeckType::STANDARD, ArrayParameterType::STRING);
+            ->setParameter('type', KeyforgeDeckType::STANDARD->value);
 
         if (\count($deckIds) > 0) {
             $query->andWhere('a.id in (:decks)')

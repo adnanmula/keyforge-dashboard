@@ -115,10 +115,19 @@ final class Decks extends AbstractMigration
                 PRIMARY KEY(id)
             )',
         );
+
+        $this->execute(
+            'CREATE TABLE keyforge_decks_stats_update (
+                id uuid NOT NULL,
+                at timestamptz,
+                PRIMARY KEY(id)
+            )',
+        );
     }
 
     public function down(): void
     {
+        $this->execute('DROP TABLE IF EXISTS "keyforge_decks_stats_update"');
         $this->execute('DROP TABLE IF EXISTS "keyforge_tags"');
         $this->execute('DROP TABLE IF EXISTS "keyforge_decks_data_history"');
         $this->execute('DROP TABLE IF EXISTS "keyforge_decks_user_data"');
