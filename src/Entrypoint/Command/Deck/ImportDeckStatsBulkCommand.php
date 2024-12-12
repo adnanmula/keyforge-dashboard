@@ -3,6 +3,7 @@
 namespace AdnanMula\Cards\Entrypoint\Command\Deck;
 
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Exception\DeckNotExistsException;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckType;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Domain\Service\Keyforge\ImportDeckService;
 use AdnanMula\Cards\Infrastructure\Persistence\Repository\Keyforge\Deck\KeyforgeDeckUpdateDbalRepository;
@@ -88,7 +89,9 @@ final class ImportDeckStatsBulkCommand extends Command
             ->select('a.id')
             ->from('keyforge_decks', 'a')
             ->where('a.id not in (:already_imported)')
-            ->setParameter('already_imported', $alreadyImported, ArrayParameterType::STRING);
+            ->andWhere('a.type = :type')
+            ->setParameter('already_imported', $alreadyImported, ArrayParameterType::STRING)
+            ->setParameter('type', KeyforgeDeckType::STANDARD, ArrayParameterType::STRING);
 
         if (\count($deckIds) > 0) {
             $query->andWhere('a.id in (:decks)')

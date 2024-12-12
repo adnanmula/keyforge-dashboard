@@ -49,7 +49,7 @@ readonly class GenerateDeckAlliancesCommandHandler
             ),
         ));
 
-        if (\count($decks) !== \count($command->deckIds)) {
+        if (\count($decks) !== \count(array_unique($command->deckIds))) {
             throw new \Exception('Missing deck');
         }
 
