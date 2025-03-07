@@ -184,6 +184,7 @@ keyforge.set_vm23: VM23
 keyforge.set_vm24: VM24
 keyforge.set_wc: WC
 keyforge.set_woe: WoE
+keyforge.set_dis: DIS
 locale.en: Inglés
 locale.es: Español
 menu.deck_type: 'Tipo de baraja'

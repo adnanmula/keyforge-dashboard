@@ -31,7 +31,7 @@ final class ImportDeckStatsBulkCommand extends Command
     {
         $this->setDescription('Import decks')
             ->addArgument('batch', InputArgument::OPTIONAL, 'Amount of decks to process', 10)
-            ->addOption('with-history', 'sh', InputOption::VALUE_NONE, 'Import stats history')
+            ->addOption('with-history', null, InputOption::VALUE_NONE, 'Import stats history')
             ->addOption('decks', 'd', InputOption::VALUE_REQUIRED);
     }
 
