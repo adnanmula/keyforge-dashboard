@@ -9,7 +9,7 @@ use AdnanMula\Cards\Infrastructure\Persistence\Repository\DbalRepository;
 
 final class KeyforgeDeckAllianceDbalRepository extends DbalRepository implements KeyforgeDeckAllianceRepository
 {
-    private const TABLE = 'keyforge_decks';
+    private const string TABLE = 'keyforge_decks';
 
     public function saveComposition(Uuid $id, array $composition): void
     {

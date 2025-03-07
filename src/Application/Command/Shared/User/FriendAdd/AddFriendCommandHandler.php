@@ -15,13 +15,17 @@ final readonly class AddFriendCommandHandler
     {
         $user = $this->repository->byId($command->user);
 
+        if (null === $user) {
+            throw new UserNotExistsException();
+        }
+
         if ($user->name() === $command->friendName) {
             return;
         }
 
         $friend = $this->repository->byName($command->friendName);
 
-        if (null === $user || null === $friend) {
+        if (null === $friend) {
             throw new UserNotExistsException();
         }
 

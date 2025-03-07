@@ -9,8 +9,8 @@ final class DeckAnalyzeRuleControl implements DeckAnalyzeRule
 {
     use DeckAnalyzeRuleHelper;
 
-    public const CATEGORY = 'Combo';
-    public const SUBCATEGORY = 'Control';
+    public const string CATEGORY = 'Combo';
+    public const string SUBCATEGORY = 'Control';
 
     private KeyforgeDeck $deck;
 
@@ -41,15 +41,16 @@ final class DeckAnalyzeRuleControl implements DeckAnalyzeRule
         if ($hasTheSting && $hasKeyCheat) {
             $card1 = $deck->cards()->get('The Sting');
 
-            $r[] = [
-                'description' => 'Forja con el aguijón activo',
-                'cards' => [
-                    $card1->name => $card1->serializedName,
-                    'Cualquier key cheat' => null,
-                ],
-            ];
+            if (null !== $card1) {
+                $r[] = [
+                    'description' => 'Forja con el aguijón activo',
+                    'cards' => [
+                        $card1->name => $card1->serializedName,
+                        'Cualquier key cheat' => null,
+                    ],
+                ];
+            }
         }
-
 
         $r = \array_values(\array_filter($r));
 
@@ -61,6 +62,7 @@ final class DeckAnalyzeRuleControl implements DeckAnalyzeRule
             'category' => self::CATEGORY,
             'subcategory' => self::SUBCATEGORY,
             'results' => $r,
+            'deck' => $this->deck->id()->value(),
         ];
     }
 }

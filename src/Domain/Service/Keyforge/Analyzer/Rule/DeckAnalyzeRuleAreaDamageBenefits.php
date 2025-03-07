@@ -9,8 +9,8 @@ final class DeckAnalyzeRuleAreaDamageBenefits implements DeckAnalyzeRule
 {
     use DeckAnalyzeRuleHelper;
 
-    public const CATEGORY = 'Daño en área';
-    public const SUBCATEGORY = 'Lo aprovecha';
+    public const string CATEGORY = 'Daño en área';
+    public const string SUBCATEGORY = 'Lo aprovecha';
 
     private KeyforgeDeck $deck;
 
@@ -33,6 +33,7 @@ final class DeckAnalyzeRuleAreaDamageBenefits implements DeckAnalyzeRule
             'category' => self::CATEGORY,
             'subcategory' => self::SUBCATEGORY,
             'results' => $r,
+            'deck' => $this->deck->id()->value(),
         ];
     }
 }

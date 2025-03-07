@@ -9,8 +9,8 @@ final class DeckAnalyzeRuleAmberControl implements DeckAnalyzeRule
 {
     use DeckAnalyzeRuleHelper;
 
-    public const CATEGORY = 'Combo';
-    public const SUBCATEGORY = 'Control de ámbar';
+    public const string CATEGORY = 'Combo';
+    public const string SUBCATEGORY = 'Control de ámbar';
 
     private KeyforgeDeck $deck;
 
@@ -47,6 +47,7 @@ final class DeckAnalyzeRuleAmberControl implements DeckAnalyzeRule
             'category' => self::CATEGORY,
             'subcategory' => self::SUBCATEGORY,
             'results' => $r,
+            'deck' => $this->deck->id()->value(),
         ];
     }
 }

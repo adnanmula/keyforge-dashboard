@@ -32,6 +32,18 @@ class Controller extends AbstractController
         return $user;
     }
 
+    final protected function getUserWithRole(UserRole $role): User
+    {
+        /** @var ?User $user */
+        $user = parent::getUser();
+
+        if (null === $user || false === $this->security->isGranted($role->value)) {
+            throw new AccessDeniedException();
+        }
+
+        return $user;
+    }
+
     final protected function assertIsLogged(UserRole $role = UserRole::ROLE_KEYFORGE): void
     {
         if (false === $this->security->isGranted($role->value)) {

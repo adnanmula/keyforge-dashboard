@@ -39,7 +39,7 @@ use Doctrine\DBAL\ParameterType;
 
 final class KeyforgeTagsFixtures extends DbalFixture implements Fixture
 {
-    private const TABLE = 'keyforge_tags';
+    private const string TABLE = 'keyforge_tags';
 
     private bool $loaded = false;
 

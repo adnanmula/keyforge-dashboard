@@ -3,6 +3,7 @@
 namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\User;
 
 use AdnanMula\Cards\Application\Query\Keyforge\User\GetUsersQuery;
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\UserRole;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -11,8 +12,7 @@ final class ListUsersController extends Controller
 {
     public function __invoke(Request $request): Response
     {
-        $this->assertIsLogged();
-        $user = $this->getUser();
+        $user = $this->getUserWithRole(UserRole::ROLE_KEYFORGE);
 
         $users = $this->extractResult(
             $this->bus->dispatch(new GetUsersQuery(

@@ -2,7 +2,6 @@
 
 namespace AdnanMula\Cards\Application\Command\Keyforge\Competition\Start;
 
-use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeCompetition;
 use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeCompetitionRepository;
 
 final readonly class StartCompetitionCommandHandler
@@ -15,15 +14,6 @@ final readonly class StartCompetitionCommandHandler
     {
         $competition = $this->repository->byId($command->competitionId);
 
-        $this->assert($competition);
-
-        $competition->updateStartDate($command->date);
-
-        $this->repository->save($competition);
-    }
-
-    private function assert(?KeyforgeCompetition $competition): void
-    {
         if (null === $competition) {
             throw new \Exception('Competition not found');
         }
@@ -35,5 +25,9 @@ final readonly class StartCompetitionCommandHandler
         if (null !== $competition->finishedAt()) {
             throw new \Exception('Competition already finished');
         }
+
+        $competition->updateStartDate($command->date);
+
+        $this->repository->save($competition);
     }
 }

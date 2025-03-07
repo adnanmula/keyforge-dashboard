@@ -10,12 +10,12 @@ use AdnanMula\Cards\Infrastructure\Fixtures\User\UserFixtures;
 
 final class KeyforgeUsersFixtures extends DbalFixture implements Fixture
 {
-    public const FIXTURE_KF_USER_1_ID = UserFixtures::FIXTURE_USER_1_ID;
-    public const FIXTURE_KF_USER_2_ID = UserFixtures::FIXTURE_USER_2_ID;
-    public const FIXTURE_KF_USER_3_ID = 'b889fac0-6ddb-41fe-95c2-3df1230111c6';
-    public const FIXTURE_KF_USER_4_ID = '8031c24d-6ec1-4a4c-abc9-fc7d7dc72693';
+    public const string FIXTURE_KF_USER_1_ID = UserFixtures::FIXTURE_USER_1_ID;
+    public const string FIXTURE_KF_USER_2_ID = UserFixtures::FIXTURE_USER_2_ID;
+    public const string FIXTURE_KF_USER_3_ID = 'b889fac0-6ddb-41fe-95c2-3df1230111c6';
+    public const string FIXTURE_KF_USER_4_ID = '8031c24d-6ec1-4a4c-abc9-fc7d7dc72693';
 
-    private const TABLE = 'keyforge_users';
+    private const string TABLE = 'keyforge_users';
 
     private bool $loaded = false;
 

@@ -17,7 +17,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 final class ImportDeckStatsBulkCommand extends Command
 {
-    public const NAME = 'import:deck';
+    public const string NAME = 'import:deck';
 
     public function __construct(
         private readonly Connection $connection,

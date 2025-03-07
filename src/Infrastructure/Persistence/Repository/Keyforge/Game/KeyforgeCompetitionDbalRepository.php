@@ -15,8 +15,8 @@ use AdnanMula\Criteria\DbalCriteriaAdapter;
 
 final class KeyforgeCompetitionDbalRepository extends DbalRepository implements KeyforgeCompetitionRepository
 {
-    private const TABLE = 'keyforge_competitions';
-    private const TABLE_FIXTURES = 'keyforge_competition_fixtures';
+    private const string TABLE = 'keyforge_competitions';
+    private const string TABLE_FIXTURES = 'keyforge_competition_fixtures';
 
     public function search(Criteria $criteria): array
     {

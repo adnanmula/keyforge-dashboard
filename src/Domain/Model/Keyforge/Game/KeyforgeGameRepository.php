@@ -19,5 +19,5 @@ interface KeyforgeGameRepository
 
     public function save(KeyforgeGame $game): void;
 
-    public function remove(Uuid $id);
+    public function remove(Uuid $id): void;
 }

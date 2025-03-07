@@ -15,7 +15,7 @@ use Doctrine\DBAL\ParameterType;
 
 final class KeyforgeGameDbalRepository extends DbalRepository implements KeyforgeGameRepository
 {
-    private const TABLE = 'keyforge_games';
+    private const string TABLE = 'keyforge_games';
 
     public function search(Criteria $criteria): array
     {

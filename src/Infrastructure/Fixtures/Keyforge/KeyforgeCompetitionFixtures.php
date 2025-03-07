@@ -11,10 +11,10 @@ use AdnanMula\Cards\Infrastructure\Fixtures\DbalFixture;
 
 final class KeyforgeCompetitionFixtures extends DbalFixture implements Fixture
 {
-    public const FIXTURE_KEYFORGE_COMPETITION_1_ID = 'dbeec29a-d227-45b4-9c00-709c550817a7';
-    public const FIXTURE_KEYFORGE_COMPETITION_2_ID = 'c7dfd4c4-9351-4f0f-ba2f-ca5d6b0f57e1';
+    public const string FIXTURE_KEYFORGE_COMPETITION_1_ID = 'dbeec29a-d227-45b4-9c00-709c550817a7';
+    public const string FIXTURE_KEYFORGE_COMPETITION_2_ID = 'c7dfd4c4-9351-4f0f-ba2f-ca5d6b0f57e1';
 
-    private const TABLE = 'keyforge_competitions';
+    private const string TABLE = 'keyforge_competitions';
 
     private bool $loaded = false;
 

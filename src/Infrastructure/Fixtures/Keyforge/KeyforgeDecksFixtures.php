@@ -18,13 +18,13 @@ use Doctrine\DBAL\Connection;
 
 final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
 {
-    public const FIXTURE_KEYFORGE_DECK_1_ID = '10ff6ac7-c6c9-444b-a1aa-10fe87c3c524';
-    public const FIXTURE_KEYFORGE_DECK_2_ID = '496b4258-b02c-4270-9918-4fd9c3366986';
-    public const FIXTURE_KEYFORGE_DECK_3_ID = 'aa99749f-79b3-4040-8cd7-5c824cf3da3b';
-    public const FIXTURE_KEYFORGE_DECK_4_ID = 'deb90365-d69e-4ed4-9bf9-796320230ebb';
-    public const FIXTURE_KEYFORGE_DECK_5_ID = '3966834d-7888-43e1-bc08-f343bf8ccb69';
-    public const FIXTURE_KEYFORGE_DECK_6_ID = '3fbf3e50-0056-4281-9a3e-c8b4230bb051';
-    public const FIXTURE_KEYFORGE_DECK_7_ID = '098a2c7e-02f2-4c53-b7cd-8714ea0bbe41';
+    public const string FIXTURE_KEYFORGE_DECK_1_ID = '10ff6ac7-c6c9-444b-a1aa-10fe87c3c524';
+    public const string FIXTURE_KEYFORGE_DECK_2_ID = '496b4258-b02c-4270-9918-4fd9c3366986';
+    public const string FIXTURE_KEYFORGE_DECK_3_ID = 'aa99749f-79b3-4040-8cd7-5c824cf3da3b';
+    public const string FIXTURE_KEYFORGE_DECK_4_ID = 'deb90365-d69e-4ed4-9bf9-796320230ebb';
+    public const string FIXTURE_KEYFORGE_DECK_5_ID = '3966834d-7888-43e1-bc08-f343bf8ccb69';
+    public const string FIXTURE_KEYFORGE_DECK_6_ID = '3fbf3e50-0056-4281-9a3e-c8b4230bb051';
+    public const string FIXTURE_KEYFORGE_DECK_7_ID = '098a2c7e-02f2-4c53-b7cd-8714ea0bbe41';
 
     private bool $loaded = false;
 

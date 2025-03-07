@@ -7,8 +7,8 @@ use AdnanMula\Cards\Domain\Service\Keyforge\Analyzer\DeckAnalyzeRule;
 
 final class DeckAnalyzeRuleLocks implements DeckAnalyzeRule
 {
-    public const CATEGORY = 'Combo';
-    public const SUBCATEGORY = 'Lock';
+    public const string CATEGORY = 'Combo';
+    public const string SUBCATEGORY = 'Lock';
 
     public function execute(KeyforgeDeck $deck): ?array
     {
@@ -17,25 +17,29 @@ final class DeckAnalyzeRuleLocks implements DeckAnalyzeRule
         if ($deck->cards()->has('Tezmal', 3)) {
             $card1 = $deck->cards()->get('Tezmal');
 
-            $r[] = [
-                'description' => 'Triple cosecha con tezmal no te permite seleccionar ninguna casa, game over',
-                'cards' => [
-                    $card1->name => $card1->serializedName,
-                ],
-            ];
+            if (null !== $card1) {
+                $r[] = [
+                    'description' => 'Triple cosecha con tezmal no te permite seleccionar ninguna casa, game over',
+                    'cards' => [
+                        $card1->name => $card1->serializedName,
+                    ],
+                ];
+            }
         }
 
         if ($deck->cards()->has('Tezmal', 2) && $deck->cards()->has('Rocket Boots')) {
             $card1 = $deck->cards()->get('Tezmal');
             $card2 = $deck->cards()->get('Rocket Boots');
 
-            $r[] = [
-                'description' => 'Triple cosecha con tezmal no te permite seleccionar ninguna casa, game over',
-                'cards' => [
-                    $card1->name => $card1->serializedName,
-                    $card2->name => $card2->serializedName,
-                ],
-            ];
+            if (null !== $card1 && null !== $card2) {
+                $r[] = [
+                    'description' => 'Triple cosecha con tezmal no te permite seleccionar ninguna casa, game over',
+                    'cards' => [
+                        $card1->name => $card1->serializedName,
+                        $card2->name => $card2->serializedName,
+                    ],
+                ];
+            }
         }
 
         if (\count($r) === 0) {

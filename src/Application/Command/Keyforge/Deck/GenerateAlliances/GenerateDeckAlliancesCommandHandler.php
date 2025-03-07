@@ -132,7 +132,7 @@ readonly class GenerateDeckAlliancesCommandHandler
         return $pods;
     }
 
-    private function combinations($data): array
+    private function combinations(array $data): array
     {
         $count = \count($data);
 

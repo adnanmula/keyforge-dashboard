@@ -17,8 +17,8 @@ final class UserFriendsController extends Controller
 {
     public function __invoke(Request $request): Response
     {
-        $this->assertIsLogged(UserRole::ROLE_BASIC);
-        $user = $this->getUser();
+        $user = $this->getUserWithRole(UserRole::ROLE_BASIC);
+
         $error = null;
 
         if ($request->getMethod() === Request::METHOD_PATCH) {

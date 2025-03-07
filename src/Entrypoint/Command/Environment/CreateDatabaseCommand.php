@@ -10,7 +10,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 final class CreateDatabaseCommand extends Command
 {
-    public const NAME = 'environment:database';
+    public const string NAME = 'environment:database';
 
     public function __construct(
         private Connection $defaultConnection,
@@ -27,7 +27,7 @@ final class CreateDatabaseCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $dbName = $this->connection->getParams()['dbname'];
+        $dbName = $this->connection->getParams()['dbname'] ?? null;
 
         try {
             $this->defaultConnection->createSchemaManager()->dropDatabase($dbName);

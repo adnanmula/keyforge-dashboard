@@ -14,8 +14,8 @@ use Doctrine\DBAL\ParameterType;
 
 final class UserDbalRepository extends DbalRepository implements UserRepository
 {
-    private const TABLE = 'users';
-    private const TABLE_FRIENDS = 'user_friends';
+    private const string TABLE = 'users';
+    private const string TABLE_FRIENDS = 'user_friends';
 
     public function save(User $user): void
     {

@@ -13,7 +13,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 final class ImportCardsCommand extends Command
 {
-    public const NAME = 'import:card';
+    public const string NAME = 'import:card';
 
     public function __construct(
         private HttpClientInterface $dokClient,

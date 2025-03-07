@@ -14,22 +14,22 @@ use Doctrine\DBAL\Connection;
 
 final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
 {
-    public const FIXTURE_KEYFORGE_GAME_1_ID = '1b5ba448-a1f3-436d-9fd5-2c4ec84109b3';
-    public const FIXTURE_KEYFORGE_GAME_2_ID = '3e68a25d-907b-4d6f-bab8-9b445bd7b113';
-    public const FIXTURE_KEYFORGE_GAME_3_ID = 'fa561709-58c1-4090-8089-ef2f4b721077';
-    public const FIXTURE_KEYFORGE_GAME_4_ID = 'e972eacb-0271-4b0c-9905-b403e50ff3cf';
-    public const FIXTURE_KEYFORGE_GAME_5_ID = '6d9b7423-0d9d-4e91-bf1d-b3a05e15ccca';
-    public const FIXTURE_KEYFORGE_GAME_6_ID = '4ac03ade-d1f6-4743-81f5-aa5810380476';
-    public const FIXTURE_KEYFORGE_GAME_7_ID = 'bd18c510-4f4a-4de2-a0db-8ccd5a4ab602';
-    public const FIXTURE_KEYFORGE_GAME_8_ID = '18b41976-5096-4f71-b4bd-2da2a5984b59';
-    public const FIXTURE_KEYFORGE_GAME_9_ID = 'c91e7ebf-5ef3-4c54-9ffd-24487c1597ab';
-    public const FIXTURE_KEYFORGE_GAME_10_ID = '11fdb28b-070c-4c8b-8b2b-57d4431045f7';
-    public const FIXTURE_KEYFORGE_GAME_11_ID = 'fa894952-3e79-43ad-aa83-69ebecf213fc';
-    public const FIXTURE_KEYFORGE_GAME_12_ID = '5da99bd0-563a-4247-8d04-8a904c8542ab';
-    public const FIXTURE_KEYFORGE_GAME_13_ID = 'a4e32bc2-f3ed-4c56-a742-e8d75dd2acb3';
-    public const FIXTURE_KEYFORGE_GAME_14_ID = '99ab217f-bb7f-47f4-a567-4895c2550b12';
-    public const FIXTURE_KEYFORGE_GAME_15_ID = 'efa54d26-a5a7-4b1e-8719-03ce61c95867';
-    public const FIXTURE_KEYFORGE_GAME_16_ID = '71fa478b-df90-4563-924c-c29636afacaf';
+    public const string FIXTURE_KEYFORGE_GAME_1_ID = '1b5ba448-a1f3-436d-9fd5-2c4ec84109b3';
+    public const string FIXTURE_KEYFORGE_GAME_2_ID = '3e68a25d-907b-4d6f-bab8-9b445bd7b113';
+    public const string FIXTURE_KEYFORGE_GAME_3_ID = 'fa561709-58c1-4090-8089-ef2f4b721077';
+    public const string FIXTURE_KEYFORGE_GAME_4_ID = 'e972eacb-0271-4b0c-9905-b403e50ff3cf';
+    public const string FIXTURE_KEYFORGE_GAME_5_ID = '6d9b7423-0d9d-4e91-bf1d-b3a05e15ccca';
+    public const string FIXTURE_KEYFORGE_GAME_6_ID = '4ac03ade-d1f6-4743-81f5-aa5810380476';
+    public const string FIXTURE_KEYFORGE_GAME_7_ID = 'bd18c510-4f4a-4de2-a0db-8ccd5a4ab602';
+    public const string FIXTURE_KEYFORGE_GAME_8_ID = '18b41976-5096-4f71-b4bd-2da2a5984b59';
+    public const string FIXTURE_KEYFORGE_GAME_9_ID = 'c91e7ebf-5ef3-4c54-9ffd-24487c1597ab';
+    public const string FIXTURE_KEYFORGE_GAME_10_ID = '11fdb28b-070c-4c8b-8b2b-57d4431045f7';
+    public const string FIXTURE_KEYFORGE_GAME_11_ID = 'fa894952-3e79-43ad-aa83-69ebecf213fc';
+    public const string FIXTURE_KEYFORGE_GAME_12_ID = '5da99bd0-563a-4247-8d04-8a904c8542ab';
+    public const string FIXTURE_KEYFORGE_GAME_13_ID = 'a4e32bc2-f3ed-4c56-a742-e8d75dd2acb3';
+    public const string FIXTURE_KEYFORGE_GAME_14_ID = '99ab217f-bb7f-47f4-a567-4895c2550b12';
+    public const string FIXTURE_KEYFORGE_GAME_15_ID = 'efa54d26-a5a7-4b1e-8719-03ce61c95867';
+    public const string FIXTURE_KEYFORGE_GAME_16_ID = '71fa478b-df90-4563-924c-c29636afacaf';
 
     private bool $loaded = false;
 

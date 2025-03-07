@@ -9,7 +9,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 final class EnvironmentInitCommand extends Command
 {
-    public const NAME = 'environment:init';
+    public const string NAME = 'environment:init';
 
     public function __construct()
     {

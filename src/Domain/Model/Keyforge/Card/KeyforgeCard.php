@@ -67,7 +67,7 @@ final readonly class KeyforgeCard implements \JsonSerializable
             'name' => $this->name->jsonSerialize(),
             'nameUrl' => $this->nameUrl,
             'imageUrl' => $this->imageUrl,
-            'flavorText' => $this->flavorText->jsonSerialize(),
+            'flavorText' => $this->flavorText?->jsonSerialize(),
             'text' => $this->text->jsonSerialize(),
             'type' => $this->type->jsonSerialize(),
             'traits' => $this->traits,

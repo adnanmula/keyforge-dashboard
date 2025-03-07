@@ -8,6 +8,7 @@ use AdnanMula\Cards\Application\Query\Keyforge\User\GetUsersQuery;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeck;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckType;
 use AdnanMula\Cards\Domain\Model\Keyforge\User\KeyforgeUser;
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\UserRole;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
 use AdnanMula\Criteria\FilterField\FilterField;
 use AdnanMula\Criteria\Sorting\Order;
@@ -20,9 +21,7 @@ final class CreateGameController extends Controller
 {
     public function __invoke(Request $request): Response
     {
-        $this->assertIsLogged();
-
-        $user = $this->getUser();
+        $user = $this->getUserWithRole(UserRole::ROLE_KEYFORGE);
 
         $users = $this->extractResult(
             $this->bus->dispatch(new GetUsersQuery(null, null, false, false, true, $user->id()->value())),

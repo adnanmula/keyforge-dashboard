@@ -89,7 +89,9 @@ final class GetDecksController extends Controller
                 $request->get('length'),
                 $searchDeck,
                 $request->query->all()['extraFilterSet'] ?? null,
-                $request->query->get('extraFilterHouseFilterType'),
+                null === $request->query->get('extraFilterHouseFilterType')
+                    ? null
+                    : (string) $request->query->get('extraFilterHouseFilterType'),
                 $request->query->all()['extraFilterHouses'] ?? null,
                 $request->query->all()['extraFilterDeckTypes'] ?? null,
                 $sorting,

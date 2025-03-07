@@ -11,7 +11,7 @@ use AdnanMula\Criteria\DbalCriteriaAdapter;
 
 final class KeyforgeDeckUserDataDbalRepository extends DbalRepository implements KeyforgeDeckUserDataRepository
 {
-    private const TABLE = 'keyforge_decks_user_data';
+    private const string TABLE = 'keyforge_decks_user_data';
 
     public function search(Criteria $criteria): array
     {
@@ -70,7 +70,7 @@ final class KeyforgeDeckUserDataDbalRepository extends DbalRepository implements
         );
 
         $stmt->bindValue(':deck_id', $data->deckId()->value());
-        $stmt->bindValue(':user_id', $data->userId()->value());
+        $stmt->bindValue(':user_id', $data->userId()?->value());
         $stmt->bindValue(':wins', $data->wins());
         $stmt->bindValue(':losses', $data->losses());
         $stmt->bindValue(':wins_vs_friends', $data->winsVsFriends());

@@ -163,6 +163,10 @@ final readonly class UpdateDeckWinRateService
         $friends = [];
 
         foreach ($userData as $userDatum) {
+            if (null === $userDatum->userId()) {
+                continue;
+            }
+
             $userDataIndexed[$userDatum->userId()->value()] = $userDatum;
 
             $friends[$userDatum->userId()->value()] = \array_map(

@@ -9,8 +9,8 @@ final class DeckAnalyzeRuleAreaCreaturePosition implements DeckAnalyzeRule
 {
     use DeckAnalyzeRuleHelper;
 
-    public const CATEGORY = 'Posicionamiento de criaturas';
-    public const SUBCATEGORY = 'Lo aprovecha';
+    public const string CATEGORY = 'Posicionamiento de criaturas';
+    public const string SUBCATEGORY = 'Lo aprovecha';
 
     private KeyforgeDeck $deck;
 
@@ -34,6 +34,7 @@ final class DeckAnalyzeRuleAreaCreaturePosition implements DeckAnalyzeRule
             'category' => self::CATEGORY,
             'subcategory' => self::SUBCATEGORY,
             'results' => $r,
+            'deck' => $this->deck->id()->value(),
         ];
     }
 }

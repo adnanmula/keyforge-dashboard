@@ -6,9 +6,9 @@ use Assert\Assert;
 
 final class TagStyle implements \JsonSerializable
 {
-    public const COLOR_BG = 'color_bg';
-    public const COLOR_TEXT = 'color_text';
-    public const COLOR_OUTLINE = 'color_outline';
+    public const string COLOR_BG = 'color_bg';
+    public const string COLOR_TEXT = 'color_text';
+    public const string COLOR_OUTLINE = 'color_outline';
 
     private function __construct(
         private readonly string $colorBg,

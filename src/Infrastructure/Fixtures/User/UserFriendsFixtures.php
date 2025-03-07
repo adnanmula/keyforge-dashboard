@@ -9,7 +9,7 @@ use Doctrine\DBAL\ParameterType;
 
 final class UserFriendsFixtures extends DbalFixture implements Fixture
 {
-    private const TABLE = 'user_friends';
+    private const string TABLE = 'user_friends';
 
     private bool $loaded = false;
 

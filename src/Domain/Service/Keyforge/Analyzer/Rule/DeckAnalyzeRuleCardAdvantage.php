@@ -9,8 +9,8 @@ final class DeckAnalyzeRuleCardAdvantage implements DeckAnalyzeRule
 {
     use DeckAnalyzeRuleHelper;
 
-    public const CATEGORY = 'Combo';
-    public const SUBCATEGORY = 'Ventaja de cartas';
+    public const string CATEGORY = 'Combo';
+    public const string SUBCATEGORY = 'Ventaja de cartas';
 
     private KeyforgeDeck $deck;
 
@@ -37,6 +37,7 @@ final class DeckAnalyzeRuleCardAdvantage implements DeckAnalyzeRule
             'category' => self::CATEGORY,
             'subcategory' => self::SUBCATEGORY,
             'results' => $r,
+            'deck' => $this->deck->id()->value(),
         ];
     }
 }

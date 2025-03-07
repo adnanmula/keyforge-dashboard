@@ -19,11 +19,11 @@ use AdnanMula\Criteria\DbalCriteriaAdapter;
 
 final class KeyforgeDeckDbalRepository extends DbalRepository implements KeyforgeDeckRepository
 {
-    private const TABLE = 'keyforge_decks';
-    private const TABLE_OWNERSHIP = 'keyforge_decks_ownership';
-    private const TABLE_USER_DATA = 'keyforge_decks_user_data';
+    private const string TABLE = 'keyforge_decks';
+    private const string TABLE_OWNERSHIP = 'keyforge_decks_ownership';
+    private const string TABLE_USER_DATA = 'keyforge_decks_user_data';
 
-    private const FIELD_MAPPING = [
+    private const array FIELD_MAPPING = [
         'id' => 'a.id',
         'owner' => 'b.user_id',
         'user_stat' => 'c.user_id',

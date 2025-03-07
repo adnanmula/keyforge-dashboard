@@ -9,8 +9,8 @@ final class DeckAnalyzeRuleRecursion implements DeckAnalyzeRule
 {
     use DeckAnalyzeRuleHelper;
 
-    public const CATEGORY = 'Combo';
-    public const SUBCATEGORY = 'Control';
+    public const string CATEGORY = 'Combo';
+    public const string SUBCATEGORY = 'Control';
 
     private KeyforgeDeck $deck;
 
@@ -37,6 +37,7 @@ final class DeckAnalyzeRuleRecursion implements DeckAnalyzeRule
             'category' => self::CATEGORY,
             'subcategory' => self::SUBCATEGORY,
             'results' => $r,
+            'deck' => $this->deck->id()->value(),
         ];
     }
 }

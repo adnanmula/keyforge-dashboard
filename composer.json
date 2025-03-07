@@ -26,7 +26,7 @@
         "symfony/yaml": "7.2.*"
     },
     "require-dev": {
-        "adnanmula/coding-standard": "^0.0.11",
+        "adnanmula/coding-standard": "^0.0.12",
         "behat/behat": "^3.13",
         "friends-of-behat/symfony-extension": "^2.4",
         "phpro/grumphp": "^2.9",

@@ -48,12 +48,10 @@ final class UserNotificationsController extends Controller
     public function count(Request $request): Response
     {
         try {
-            $this->assertIsLogged(UserRole::ROLE_KEYFORGE);
+            $user = $this->getUserWithRole(UserRole::ROLE_KEYFORGE);
         } catch (AccessDeniedException) {
             return new JsonResponse(['total' => 0, 'friend_requests' => 0, 'games_pending' => 0,], Response::HTTP_OK);
         }
-
-        $user = $this->getUser();
 
         $friendRequests = \count(\array_filter(
             $this->userRepository->friends($user->id(), true),
@@ -95,8 +93,8 @@ final class UserNotificationsController extends Controller
 
     public function games(Request $request): Response
     {
-        $this->assertIsLogged(UserRole::ROLE_KEYFORGE);
-        $user = $this->getUser();
+        $user = $this->getUserWithRole(UserRole::ROLE_KEYFORGE);
+
         $error = null;
 
         try {
@@ -167,6 +165,10 @@ final class UserNotificationsController extends Controller
             $response = [];
 
             foreach ($gamesPending as $game) {
+                if (null === $game->createdBy()) {
+                    continue;
+                }
+
                 $approvalPendingBy = $game->winner()->value() === $game->createdBy()->value()
                     ? $game->loser()->value()
                     : $game->winner()->value();
@@ -182,8 +184,8 @@ final class UserNotificationsController extends Controller
                     'winner_deck_name' => $indexedDecks[$game->winnerDeck()->value()] ?? '',
                     'loser_deck_name' => $indexedDecks[$game->loserDeck()->value()] ?? '',
                     'score' => $game->score()->winnerScore() . '/' . $game->score()->loserScore(),
-                    'created_by' => $game->createdBy()?->value(),
-                    'created_by_name' => $indexedUser[$game->createdBy()?->value()] ?? '',
+                    'created_by' => $game->createdBy()->value(),
+                    'created_by_name' => $indexedUser[$game->createdBy()->value()] ?? '',
                     'approval_pending_by' => $approvalPendingBy,
                     'approval_pending_by_name' => $indexedUser[$approvalPendingBy] ?? '',
                 ];
@@ -201,8 +203,7 @@ final class UserNotificationsController extends Controller
 
     public function acceptGame(Request $request): Response
     {
-        $this->assertIsLogged(UserRole::ROLE_KEYFORGE);
-        $user = $this->getUser();
+        $user = $this->getUserWithRole(UserRole::ROLE_KEYFORGE);
 
         $gameId = $request->get('game');
 
@@ -231,6 +232,10 @@ final class UserNotificationsController extends Controller
         }
 
         if (false === $this->isGranted(UserRole::ROLE_ADMIN->value)) {
+            if (null === $game->createdBy()) {
+                throw new \Exception('Error');
+            }
+
             if ($game->createdBy()->equalTo($user->id())) {
                 throw new \Exception('Error');
             }
@@ -252,8 +257,7 @@ final class UserNotificationsController extends Controller
 
     public function rejectGame(Request $request): Response
     {
-        $this->assertIsLogged(UserRole::ROLE_KEYFORGE);
-        $user = $this->getUser();
+        $user = $this->getUserWithRole(UserRole::ROLE_KEYFORGE);
 
         $gameId = $request->get('game');
 
@@ -282,6 +286,10 @@ final class UserNotificationsController extends Controller
         }
 
         if (false === $this->isGranted(UserRole::ROLE_ADMIN->value)) {
+            if (null === $game->createdBy()) {
+                throw new \Exception('Error');
+            }
+
             if ($game->createdBy()->equalTo($user->id())) {
                 throw new \Exception('Error');
             }

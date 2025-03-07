@@ -11,7 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 final class LoadFixturesCommand extends Command
 {
-    public const NAME = 'environment:fixtures';
+    public const string NAME = 'environment:fixtures';
 
     public function __construct(
         private FixturesRegistry $registry,

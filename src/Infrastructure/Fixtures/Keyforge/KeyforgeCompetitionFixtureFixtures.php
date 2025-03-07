@@ -11,14 +11,14 @@ use AdnanMula\Cards\Infrastructure\Fixtures\DbalFixture;
 
 final class KeyforgeCompetitionFixtureFixtures extends DbalFixture implements Fixture
 {
-    public const FIXTURE_KEYFORGE_COMPETITION_FIXTURE_1_ID = '4e3159be-8292-4ed3-a167-3236901ec626';
-    public const FIXTURE_KEYFORGE_COMPETITION_FIXTURE_2_ID = '390142c9-ef8d-4229-ae30-063e9fa5d131';
-    public const FIXTURE_KEYFORGE_COMPETITION_FIXTURE_3_ID = '43695a41-b7ff-45b3-9654-8253f830d92c';
-    public const FIXTURE_KEYFORGE_COMPETITION_FIXTURE_4_ID = '54b1c40a-3ef4-4aad-9b67-a23a64fc5e16';
-    public const FIXTURE_KEYFORGE_COMPETITION_FIXTURE_5_ID = '38c9f964-c2c4-4116-909c-55ee9bfd0052';
-    public const FIXTURE_KEYFORGE_COMPETITION_FIXTURE_6_ID = '2229c2fb-e520-4b98-ab1d-ce493064c40d';
+    public const string FIXTURE_KEYFORGE_COMPETITION_FIXTURE_1_ID = '4e3159be-8292-4ed3-a167-3236901ec626';
+    public const string FIXTURE_KEYFORGE_COMPETITION_FIXTURE_2_ID = '390142c9-ef8d-4229-ae30-063e9fa5d131';
+    public const string FIXTURE_KEYFORGE_COMPETITION_FIXTURE_3_ID = '43695a41-b7ff-45b3-9654-8253f830d92c';
+    public const string FIXTURE_KEYFORGE_COMPETITION_FIXTURE_4_ID = '54b1c40a-3ef4-4aad-9b67-a23a64fc5e16';
+    public const string FIXTURE_KEYFORGE_COMPETITION_FIXTURE_5_ID = '38c9f964-c2c4-4116-909c-55ee9bfd0052';
+    public const string FIXTURE_KEYFORGE_COMPETITION_FIXTURE_6_ID = '2229c2fb-e520-4b98-ab1d-ce493064c40d';
 
-    private const TABLE = 'keyforge_competition_fixtures';
+    private const string TABLE = 'keyforge_competition_fixtures';
 
     private bool $loaded = false;
 

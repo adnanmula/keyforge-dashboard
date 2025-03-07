@@ -80,8 +80,13 @@ final readonly class GetUsersQueryHandler
         $indexedUserData = [];
 
         foreach ($userData as $userDatum) {
+            if (null === $userDatum->userId()) {
+                continue;
+            }
+
             $indexedUserData[$userDatum->userId()->value()][] = $userDatum;
         }
+
         $result = [];
 
         foreach ($indexedUserData as $userId => $userData) {

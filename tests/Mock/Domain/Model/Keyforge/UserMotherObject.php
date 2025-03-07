@@ -7,8 +7,8 @@ use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 
 final class UserMotherObject
 {
-    public const MOCK_ID = 'f0f6f4b6-c1ac-4a42-804b-65fb435f1e21';
-    public const MOCK_NAME = 'Username';
+    public const string MOCK_ID = 'f0f6f4b6-c1ac-4a42-804b-65fb435f1e21';
+    public const string MOCK_NAME = 'Username';
 
     private Uuid $id;
     private string $name;

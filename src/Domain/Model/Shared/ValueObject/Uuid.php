@@ -6,7 +6,7 @@ use Ramsey\Uuid\Uuid as VendorUuid;
 
 class Uuid extends StringValueObject
 {
-    public const NULL_UUID = '00000000-0000-0000-0000-000000000000';
+    public const string NULL_UUID = '00000000-0000-0000-0000-000000000000';
 
     public static function from(string $value): static
     {

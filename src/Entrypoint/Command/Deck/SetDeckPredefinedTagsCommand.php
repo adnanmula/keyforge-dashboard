@@ -20,7 +20,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 final class SetDeckPredefinedTagsCommand extends Command
 {
-    public const NAME = 'deck:tag:set';
+    public const string NAME = 'deck:tag:set';
 
     public function __construct(
         private readonly KeyforgeDeckRepository $deckRepository,

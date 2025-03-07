@@ -9,8 +9,8 @@ final class DeckAnalyzeRuleAmberGeneration implements DeckAnalyzeRule
 {
     use DeckAnalyzeRuleHelper;
 
-    public const CATEGORY = 'Combo';
-    public const SUBCATEGORY = 'Generación de  ámbar';
+    public const string CATEGORY = 'Combo';
+    public const string SUBCATEGORY = 'Generación de  ámbar';
 
     private KeyforgeDeck $deck;
 
@@ -59,6 +59,7 @@ final class DeckAnalyzeRuleAmberGeneration implements DeckAnalyzeRule
             'category' => self::CATEGORY,
             'subcategory' => self::SUBCATEGORY,
             'results' => $r,
+            'deck' => $this->deck->id()->value(),
         ];
     }
 }

@@ -10,7 +10,7 @@ use Doctrine\DBAL\ArrayParameterType;
 
 final class KeyforgeDeckStatHistoryDbalRepository extends DbalRepository implements KeyforgeDeckStatHistoryRepository
 {
-    private const TABLE = 'keyforge_decks_data_history';
+    private const string TABLE = 'keyforge_decks_data_history';
 
     public function save(KeyforgeDeckStatHistory $data): void
     {

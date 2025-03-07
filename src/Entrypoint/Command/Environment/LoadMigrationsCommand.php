@@ -10,7 +10,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 final class LoadMigrationsCommand extends Command
 {
-    public const NAME = 'environment:migrations';
+    public const string NAME = 'environment:migrations';
 
     protected function configure(): void
     {

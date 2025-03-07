@@ -21,12 +21,12 @@ final class UserSettingsController extends Controller
             /** @var User $user */
             $user = $this->security->getUser();
             $newPassword = $request->request->get('settingsPassword');
-            $locale = $request->request->get('settingsLocale');
+            $locale = (string) $request->request->get('settingsLocale');
 
             try {
                 $this->bus->dispatch(new UpdateUserCommand(
                     $user->id()->value(),
-                    '' === $newPassword ? null : $newPassword,
+                    '' === $newPassword ? null : (string) $newPassword,
                     $locale,
                 ));
 

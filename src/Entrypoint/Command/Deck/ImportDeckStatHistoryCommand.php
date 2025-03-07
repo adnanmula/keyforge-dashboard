@@ -22,7 +22,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 final class ImportDeckStatHistoryCommand extends Command
 {
-    public const NAME = 'import:deck:history';
+    public const string NAME = 'import:deck:history';
 
     public function __construct(
         private readonly KeyforgeDeckRepository $deckRepository,

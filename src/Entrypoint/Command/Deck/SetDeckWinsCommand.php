@@ -18,7 +18,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 final class SetDeckWinsCommand extends Command
 {
-    public const NAME = 'deck:wins:set';
+    public const string NAME = 'deck:wins:set';
 
     public function __construct(
         private readonly KeyforgeDeckRepository $deckRepository,

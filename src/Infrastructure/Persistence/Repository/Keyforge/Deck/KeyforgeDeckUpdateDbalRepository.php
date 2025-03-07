@@ -7,7 +7,7 @@ use AdnanMula\Cards\Infrastructure\Persistence\Repository\DbalRepository;
 
 final class KeyforgeDeckUpdateDbalRepository extends DbalRepository
 {
-    private const TABLE = 'keyforge_decks_stats_update';
+    private const string TABLE = 'keyforge_decks_stats_update';
 
     public function add(Uuid $id): void
     {
