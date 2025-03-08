@@ -57,7 +57,7 @@ final class ImportDeckController extends Controller
 
         $patterns = [
             'https?:\/\/(?:www\.)?decksofkeyforge\.com\/(?:decks|alliance-decks|theoretical-decks)\/',
-            'https?:\/\/(?:www\.)?keyforgegame\.com\/deck-details\/'
+            'https?:\/\/(?:www\.)?keyforgegame\.com\/deck-details\/',
         ];
 
         return \preg_replace('/' . \implode('|', $patterns) . '/i', '', $idOrLink);
