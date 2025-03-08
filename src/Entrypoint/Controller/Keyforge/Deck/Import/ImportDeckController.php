@@ -22,7 +22,7 @@ final class ImportDeckController extends Controller
 
         if ($request->getMethod() === Request::METHOD_POST) {
             try {
-                $deckId = $this->parseDeck($request->request->get('deck'));
+                $deckId = $this->parseDeck($request->request->getString('deck'));
                 $deckType = $request->request->get('deckType');
                 $token = $request->request->get('token');
                 $userId = null;
@@ -45,9 +45,9 @@ final class ImportDeckController extends Controller
         throw new \InvalidArgumentException('Error');
     }
 
-    private function parseDeck(?string $idOrLink): ?string
+    private function parseDeck(string $idOrLink): ?string
     {
-        if (null === $idOrLink) {
+        if ('' === $idOrLink) {
             return null;
         }
 
@@ -55,15 +55,11 @@ final class ImportDeckController extends Controller
             return $idOrLink;
         }
 
-        $idOrLink = \preg_replace('/https:\/\/decksofkeyforge.com\/decks\//i', '', $idOrLink);
-        $idOrLink = \preg_replace('/http:\/\/decksofkeyforge.com\/decks\//i', '', $idOrLink);
-        $idOrLink = \preg_replace('/http:\/\/decksofkeyforge.com\/alliance-decks\//i', '', $idOrLink);
-        $idOrLink = \preg_replace('/https:\/\/decksofkeyforge.com\/alliance-decks\//i', '', $idOrLink);
-        $idOrLink = \preg_replace('/http:\/\/decksofkeyforge.com\/theoretical-decks\//i', '', $idOrLink);
-        $idOrLink = \preg_replace('/https:\/\/decksofkeyforge.com\/theoretical-decks\//i', '', $idOrLink);
-        $idOrLink = \preg_replace('/https:\/\/www.keyforgegame.com\/deck-details\//i', '', $idOrLink);
-        $idOrLink = \preg_replace('/http:\/\/www.keyforgegame.com\/deck-details\//i', '', $idOrLink);
+        $patterns = [
+            'https?:\/\/(?:www\.)?decksofkeyforge\.com\/(?:decks|alliance-decks|theoretical-decks)\/',
+            'https?:\/\/(?:www\.)?keyforgegame\.com\/deck-details\/'
+        ];
 
-        return $idOrLink;
+        return \preg_replace('/' . \implode('|', $patterns) . '/i', '', $idOrLink);
     }
 }

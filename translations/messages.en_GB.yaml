@@ -188,6 +188,9 @@ keyforge.set_dis: DIS
 locale.en: English
 locale.es: Spanish
 menu.deck_type: 'Deck type'
+menu.deck_type_archon: 'Archon'
+menu.deck_type_alliance: 'Alliance'
+menu.deck_type_theoretical: 'Theoretical'
 menu.decks_from: 'Decks from'
 menu.amount: 'Amount'
 menu.accept: Accept

@@ -25,7 +25,7 @@ final readonly class KeyforgeCard implements \JsonSerializable
         return new self(
             $data['name'],
             $data['serializedName'],
-            $data['imageUrl'],
+            $data['imageUrl'] ?? '',
             KeyforgeCardRarity::from(\strtoupper($data['rarity'])),
             $data['isEnhanced'],
             $data['isMaverick'],

@@ -111,6 +111,16 @@
                                     <option value="VM24">VM24</option>
                                 </select>
                             </div>
+
+                            <div class="col-12 mt-2">
+                                <span>{{ 'menu.deck_type'|trans }}</span>
+                                <select id="collection_comparison_decktype_{{ i }}" class="form-select compare_collection_select" data-index="{{ i }}">
+                                    <option value="all">{{ 'menu.all'|trans }}</option>
+                                    <option value="STANDARD" selected>{{ 'menu.deck_type_archon'|trans }}</option>
+                                    <option value="ALLIANCE">{{ 'menu.deck_type_alliance'|trans }}</option>
+                                    <option value="THEORETICAL">{{ 'menu.deck_type_theoretical'|trans }}</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 {% endfor %}
@@ -392,15 +402,16 @@
                 $('#collection_comparison_from_' + index)[0].value,
                 $('#collection_comparison_amount_' + index)[0].value,
                 $('#collection_comparison_stat_' + index)[0].value,
+                $('#collection_comparison_decktype_' + index)[0].value,
             );
         });
 
         function initDecks() {
-            fetchDecks(0, 'all', '{{ app.user.id }}', 10, 'sas');
-            fetchDecks(1, 'all', 'friends', 10, 'sas');
+            fetchDecks(0, 'all', '{{ app.user.id }}', 10, 'sas', 'STANDARD');
+            fetchDecks(1, 'all', 'friends', 10, 'sas', 'STANDARD');
         }
 
-        function fetchDecks(index, set, owners, amount, stat) {
+        function fetchDecks(index, set, owners, amount, stat, decktype) {
             let data = {
                 extraFilterMinSas: 30,
                 length: amount,
@@ -408,6 +419,10 @@
 
             if (set !== 'all') {
                 data.extraFilterSet = [set];
+            }
+
+            if (decktype !== 'all') {
+                data.extraFilterDeckTypes = [decktype];
             }
 
             if (owners !== null && owners.length === 36) {

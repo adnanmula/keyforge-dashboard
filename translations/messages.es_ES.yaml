@@ -188,6 +188,9 @@ keyforge.set_dis: DIS
 locale.en: Inglés
 locale.es: Español
 menu.deck_type: 'Tipo de baraja'
+menu.deck_type_archon: 'Arconte'
+menu.deck_type_alliance: 'Alianza'
+menu.deck_type_theoretical: 'Teórica'
 menu.decks_from: 'Barajas de'
 menu.amount: 'Cantidad'
 menu.accept: Aceptar
