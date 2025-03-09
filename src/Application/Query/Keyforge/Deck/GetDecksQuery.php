@@ -6,39 +6,39 @@ use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckType;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeHouse;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeSet;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
+use AdnanMula\Cards\Shared\CriteriaQuery;
+use AdnanMula\Criteria\Criteria;
+use AdnanMula\Criteria\Filter\Filter;
+use AdnanMula\Criteria\Filter\FilterType;
+use AdnanMula\Criteria\FilterField\FilterField;
+use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
+use AdnanMula\Criteria\FilterGroup\FilterGroup;
+use AdnanMula\Criteria\FilterValue\ArrayElementFilterValue;
+use AdnanMula\Criteria\FilterValue\FilterOperator;
+use AdnanMula\Criteria\FilterValue\IntFilterValue;
+use AdnanMula\Criteria\FilterValue\NullFilterValue;
+use AdnanMula\Criteria\FilterValue\StringArrayFilterValue;
+use AdnanMula\Criteria\FilterValue\StringFilterValue;
+use AdnanMula\Criteria\Sorting\Order;
+use AdnanMula\Criteria\Sorting\OrderType;
 use AdnanMula\Criteria\Sorting\Sorting;
 use Assert\Assert;
 
-final readonly class GetDecksQuery
+final readonly class GetDecksQuery extends CriteriaQuery
 {
-    private(set) ?int $start;
-    private(set) ?int $length;
-    private(set) ?string $deck;
-    private(set) ?array $sets;
-    private(set) ?string $houseFilterType;
-    private(set) ?array $houses;
-    private(set) ?array $deckTypes;
-    private(set) ?Sorting $sorting;
     private(set) ?Uuid $deckId;
-    private(set) ?Uuid $owner;
-    private(set) array $owners;
-    private(set) bool $onlyOwned;
-    private(set) ?string $tagFilterType;
-    private(set) array $tags;
-    private(set) array $tagsExcluded;
-    private(set) int $maxSas;
-    private(set) int $minSas;
+    private(set) ?string $owner;
     private(set) ?Uuid $onlyFriends;
 
     public function __construct(
         $start,
         $length,
         ?string $deck,
+        ?array $queryOrder,
         ?array $sets,
         ?string $houseFilterType,
         ?array $houses,
         ?array $deckTypes,
-        ?Sorting $sorting,
         ?string $deckId = null,
         ?string $owner = null,
         array $owners = [],
@@ -60,7 +60,7 @@ final readonly class GetDecksQuery
             ->that($deckTypes, 'house')->nullOr()->all()->inArray(KeyforgeDeckType::values())
             ->that($deckId, 'deckId')->nullOr()->uuid()
             ->that($owner, 'owner')->nullOr()->uuid()
-            ->that($owners, 'onlyOwned')->all()->uuid()
+            ->that($owners, 'owners')->all()->uuid()
             ->that($onlyOwned, 'onlyOwned')->boolean()
             ->that($tagFilterType, 'tagFilterType')->nullOr()->inArray(['all', 'any'])
             ->that($tags, 'tags')->all()->uuid()
@@ -70,23 +70,210 @@ final readonly class GetDecksQuery
             ->that($onlyFriends, 'onlyFriends')->nullOr()->uuid()
             ->verifyNow();
 
-        $this->start = null === $start ? null : (int) $start;
-        $this->length = null === $length ? null : (int) $length;
-        $this->deck= $deck;
-        $this->sets = $sets;
-        $this->houseFilterType = $houseFilterType;
-        $this->houses = $houses;
-        $this->deckTypes = $deckTypes;
-        $this->sorting = $sorting;
         $this->deckId = null !== $deckId ? Uuid::from($deckId) : null;
-        $this->owner = null !== $owner ? Uuid::from($owner) : null;
-        $this->owners = $owners;
-        $this->onlyOwned = $onlyOwned;
-        $this->tagFilterType = $tagFilterType;
-        $this->tags = \array_map(static fn (string $id): Uuid => Uuid::from($id), $tags);
-        $this->tagsExcluded = \array_map(static fn (string $id): Uuid => Uuid::from($id), $tagsExcluded);
-        $this->maxSas = (int) $maxSas;
-        $this->minSas = (int) $minSas;
+        $this->owner = $owner;
         $this->onlyFriends = null === $onlyFriends ? null : Uuid::from($onlyFriends);
+
+        $filters = [];
+
+        $filters[] = $this->miscFilter($owner, $deck, $onlyOwned, (int) $minSas, (int) $maxSas);
+        $filters[] = $this->tagsIncludedFilter($tagFilterType, ...$tags);
+        $filters[] = $this->tagsExcludedFilter(...$tagsExcluded);
+        $filters[] = $this->housesFilter($houseFilterType, ...$houses ?? []);
+        $filters[] = $this->deckTypeFilter(...$deckTypes ?? []);
+        $filters[] = $this->ownersFilter(...$owners);
+        $filters[] = $this->setsFilter(...$sets ?? []);
+
+        $criteria = new Criteria(
+            null === $start ? null : (int) $start,
+            null === $length ? null : (int) $length,
+            $this->sorting(
+                $queryOrder,
+                $owner,
+            ),
+            ...\array_filter($filters),
+        );
+
+        parent::__construct($criteria);
+    }
+
+    private function miscFilter(?string $owner, ?string $deck, bool $onlyOwned, int $minSas, int $maxSas): FilterGroup
+    {
+        $expressions = [];
+
+        if (null !== $owner) {
+            $expressions[] = new Filter(new FilterField('owner'), new StringFilterValue($owner), FilterOperator::EQUAL);
+        }
+
+        if (null !== $deck) {
+            $expressions[] = new Filter(new FilterField('name'), new StringFilterValue($deck), FilterOperator::CONTAINS_INSENSITIVE);
+        }
+
+        if (true === $onlyOwned) {
+            $expressions[] = new Filter(new FilterField('owner'), new NullFilterValue(), FilterOperator::IS_NOT_NULL);
+        }
+
+        $expressions[] = new Filter(new FilterField('sas'), new IntFilterValue($maxSas), FilterOperator::LESS_OR_EQUAL);
+        $expressions[] = new Filter(new FilterField('sas'), new IntFilterValue($minSas), FilterOperator::GREATER_OR_EQUAL);
+
+        return new AndFilterGroup(FilterType::AND, ...$expressions);
+    }
+
+    private function tagsIncludedFilter(string $filterType, string ...$tags): ?FilterGroup
+    {
+        if (\count($tags) > 0) {
+            $tagsExpressions = [];
+
+            foreach ($tags as $tag) {
+                $tagsExpressions[] = new Filter(new FilterField('tags'), new ArrayElementFilterValue($tag), FilterOperator::IN_ARRAY);
+            }
+
+            return new AndFilterGroup(
+                $filterType === 'any' ? FilterType::OR : FilterType::AND,
+                ...$tagsExpressions,
+            );
+        }
+
+        return null;
+    }
+
+    private function tagsExcludedFilter(string ...$tags): ?FilterGroup
+    {
+        if (\count($tags) > 0) {
+            $tagsExpressions = [];
+
+            foreach ($tags as $tag) {
+                $tagsExpressions[] = new Filter(new FilterField('tags'), new ArrayElementFilterValue($tag), FilterOperator::NOT_IN_ARRAY);
+            }
+
+            return new AndFilterGroup(
+                FilterType::AND,
+                ...$tagsExpressions,
+            );
+        }
+
+        return null;
+    }
+
+    private function housesFilter(string $filterType, string ...$houses): ?FilterGroup
+    {
+        if (\count($houses) > 0) {
+            return new AndFilterGroup(
+                $filterType === 'any' ? FilterType::OR : FilterType::AND,
+                ...\array_map(
+                    static fn (string $house): Filter => new Filter(new FilterField('houses'), new ArrayElementFilterValue($house), FilterOperator::IN_ARRAY),
+                    $houses,
+                ),
+            );
+        }
+
+        return null;
+    }
+
+    private function deckTypeFilter(string ...$types): ?FilterGroup
+    {
+        if (\count($types) > 0) {
+            return new AndFilterGroup(
+                FilterType::OR,
+                ...\array_map(
+                    static fn (string $type): Filter => new Filter(new FilterField('deck_type'), new StringArrayFilterValue($type), FilterOperator::IN),
+                    $types,
+                ),
+            );
+        }
+
+        return null;
+    }
+
+    private function ownersFilter(string ...$owners): ?FilterGroup
+    {
+        if (\count($owners) > 0) {
+            return new AndFilterGroup(
+                FilterType::OR,
+                ...\array_map(
+                    static fn (string $owner): Filter => new Filter(new FilterField('owner'), new StringFilterValue($owner), FilterOperator::EQUAL),
+                    \array_unique($owners),
+                ),
+            );
+        }
+
+        return null;
+    }
+
+    private function setsFilter(string ...$sets): ?FilterGroup
+    {
+        if (\count($sets) > 0) {
+            $setFilterExpressions = [];
+
+            foreach ($sets as $set) {
+                $setFilterExpressions[] = new Filter(new FilterField('set'), new StringFilterValue($set), FilterOperator::EQUAL);
+            }
+
+            return new AndFilterGroup(FilterType::OR, ...$setFilterExpressions);
+        }
+
+        return null;
+    }
+
+    private function sorting(?array $queryOrder, ?string $owner): ?Sorting
+    {
+        if (null !== $queryOrder && \count($queryOrder) > 0) {
+            $orderColumns = [
+                1 => 'name',
+                2 => 'set',
+                4 => 'win_rate',
+                5 => 'sas',
+                6 => 'amber_control',
+                7 => 'expected_amber',
+                8 => 'artifact_control',
+                9 => 'creature_control',
+                10 => 'efficiency',
+                11 => 'recursion',
+                12 => 'disruption',
+                13 => 'effective_power',
+                14 => 'creature_protection',
+                15 => 'total_armor',
+                16 => 'creature_count',
+                17 => 'action_count',
+                18 => 'artifact_count',
+                19 => 'upgrade_count',
+                20 => 'key_cheat_count',
+                21 => 'card_archive_count',
+                22 => 'board_clear_count',
+                23 => 'scaling_amber_control_count',
+                24 => 'raw_amber',
+                25 => 'aerc_score',
+                26 => 'synergy_rating',
+                27 => 'anti_synergy_rating',
+            ];
+
+            $orderField = $orderColumns[(int) $queryOrder[0]['column']] ?? null;
+            $orderType = $queryOrder[0]['dir'] ?? null;
+
+            if (null !== $orderField && null !== $orderType) {
+                if ($orderField === 'win_rate') {
+                    if (null === $owner) {
+                        return new Sorting(
+                            new Order(new FilterField('wins_vs_users'), OrderType::from($orderType)),
+                            new Order(new FilterField('losses_vs_users'), OrderType::from($orderType) === OrderType::ASC ? OrderType::DESC : OrderType::ASC),
+                            new Order(new FilterField('id'), OrderType::ASC),
+                        );
+                    }
+
+                    return new Sorting(
+                        new Order(new FilterField('wins'), OrderType::from($orderType)),
+                        new Order(new FilterField('losses'), OrderType::from($orderType) === OrderType::ASC ? OrderType::DESC : OrderType::ASC),
+                        new Order(new FilterField('id'), OrderType::ASC),
+                    );
+                }
+
+                return new Sorting(
+                    new Order(new FilterField($orderField), OrderType::from($orderType)),
+                    new Order(new FilterField('id'), OrderType::ASC),
+                );
+            }
+        }
+
+        return null;
     }
 }
