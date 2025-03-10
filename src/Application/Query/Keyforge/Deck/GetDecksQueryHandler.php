@@ -70,7 +70,7 @@ final readonly class GetDecksQueryHandler
         }
 
         $decks = $this->repository->search($criteria, $isMyDecks);
-        $totalFiltered = $this->repository->count($criteria->withoutPagination());
+        $totalFiltered = $this->repository->count($criteria->withoutPaginationAndSorting());
         $total = $this->repository->count(new Criteria(null, null, null));
 
         return [

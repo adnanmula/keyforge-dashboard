@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "776d373e73bc42d8397383a823921131",
+    "content-hash": "1af740e8d91706a87e1fafd3c0bf7e5c",
     "packages": [
         {
             "name": "adnanmula/criteria",
-            "version": "0.1.2",
+            "version": "0.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/adnanmula/criteria.git",
-                "reference": "a678bd7c5b1570d41cc51668072adfc66b0ddc15"
+                "reference": "3921934fb3388ef27a1a04ea4e38b32863422f71"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/adnanmula/criteria/zipball/a678bd7c5b1570d41cc51668072adfc66b0ddc15",
-                "reference": "a678bd7c5b1570d41cc51668072adfc66b0ddc15",
+                "url": "https://api.github.com/repos/adnanmula/criteria/zipball/3921934fb3388ef27a1a04ea4e38b32863422f71",
+                "reference": "3921934fb3388ef27a1a04ea4e38b32863422f71",
                 "shasum": ""
             },
             "require": {
@@ -49,9 +49,9 @@
             ],
             "support": {
                 "issues": "https://github.com/adnanmula/criteria/issues",
-                "source": "https://github.com/adnanmula/criteria/tree/0.1.2"
+                "source": "https://github.com/adnanmula/criteria/tree/0.2.0"
             },
-            "time": "2025-03-09T16:43:26+00:00"
+            "time": "2025-03-10T09:31:38+00:00"
         },
         {
             "name": "beberlei/assert",

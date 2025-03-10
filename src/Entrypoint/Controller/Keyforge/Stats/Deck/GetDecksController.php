@@ -13,20 +13,21 @@ final class GetDecksController extends Controller
     {
         $user = $this->getUser();
 
-        $queryOrder = $request->get('order');
-
         $searchDeck = null;
 
         if (null !== $request->get('search') && '' !== $request->get('search')['value']) {
             $searchDeck = $request->get('search')['value'];
         }
 
+        [$orderField, $orderDirection] = $this->orderBy($request->get('order'));
+
         $decks = $this->extractResult(
             $this->bus->dispatch(new GetDecksQuery(
                 $request->get('start'),
                 $request->get('length'),
                 $searchDeck,
-                $queryOrder,
+                $orderField,
+                $orderDirection,
                 $request->query->all()['extraFilterSet'] ?? null,
                 null === $request->query->get('extraFilterHouseFilterType')
                     ? null
@@ -54,5 +55,42 @@ final class GetDecksController extends Controller
         ];
 
         return new JsonResponse($response);
+    }
+
+    public function orderBy(?array $queryOrder): array
+    {
+        $orderColumns = [
+            1 => 'name',
+            2 => 'set',
+            4 => 'win_rate',
+            5 => 'sas',
+            6 => 'amber_control',
+            7 => 'expected_amber',
+            8 => 'artifact_control',
+            9 => 'creature_control',
+            10 => 'efficiency',
+            11 => 'recursion',
+            12 => 'disruption',
+            13 => 'effective_power',
+            14 => 'creature_protection',
+            15 => 'total_armor',
+            16 => 'creature_count',
+            17 => 'action_count',
+            18 => 'artifact_count',
+            19 => 'upgrade_count',
+            20 => 'key_cheat_count',
+            21 => 'card_archive_count',
+            22 => 'board_clear_count',
+            23 => 'scaling_amber_control_count',
+            24 => 'raw_amber',
+            25 => 'aerc_score',
+            26 => 'synergy_rating',
+            27 => 'anti_synergy_rating',
+        ];
+
+        return [
+            $orderColumns[(int) $queryOrder[0]['column']] ?? null,
+            $queryOrder[0]['dir'] ?? null,
+        ];
     }
 }
