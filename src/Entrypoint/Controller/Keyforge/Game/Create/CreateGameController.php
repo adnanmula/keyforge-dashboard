@@ -10,10 +10,7 @@ use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckType;
 use AdnanMula\Cards\Domain\Model\Keyforge\User\KeyforgeUser;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\UserRole;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
-use AdnanMula\Criteria\FilterField\FilterField;
-use AdnanMula\Criteria\Sorting\Order;
 use AdnanMula\Criteria\Sorting\OrderType;
-use AdnanMula\Criteria\Sorting\Sorting;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -28,7 +25,7 @@ final class CreateGameController extends Controller
         );
 
         $decks = $this->extractResult(
-            $this->bus->dispatch(new GetDecksQuery(null, null, null, null, null, null, [KeyforgeDeckType::STANDARD->value], new Sorting(new Order(new FilterField('name'), OrderType::ASC)))),
+            $this->bus->dispatch(new GetDecksQuery(null, null, null, 'name', OrderType::ASC->value, null, null, null, [KeyforgeDeckType::STANDARD->value])),
         );
 
         $users = \array_map(static fn (KeyforgeUser $user) => ['id' => $user->id()->value(), 'name' => $user->name()], $users);

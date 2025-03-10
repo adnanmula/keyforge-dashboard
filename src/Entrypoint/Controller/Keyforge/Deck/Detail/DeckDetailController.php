@@ -23,6 +23,7 @@ use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
 use AdnanMula\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Criteria\FilterValue\StringArrayFilterValue;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
+use AdnanMula\Criteria\Sorting\OrderType;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -84,7 +85,7 @@ final class DeckDetailController extends Controller
     private function deck(?Uuid $userId, string $deckId): KeyforgeDeck
     {
         $deck = $this->extractResult(
-            $this->bus->dispatch(new GetDecksQuery(0, 1, null, null, null, null, null, null, $deckId, $userId?->value())),
+            $this->bus->dispatch(new GetDecksQuery(0, 1, null, 'id', OrderType::ASC->value, null, null, null, null, $deckId, $userId?->value())),
         );
 
         if (\count($deck['decks']) === 0) {
