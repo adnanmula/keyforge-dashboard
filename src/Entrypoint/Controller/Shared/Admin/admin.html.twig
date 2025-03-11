@@ -21,6 +21,9 @@
                     {% for account in accountsPending %}
                         <li class="list-group-item">
                             <span class="align-middle">{{ account.name }}</span>
+                            <button data-toggle="tooltip" title="{{ 'menu.add'|trans }}" type="button" class="btn btn-dark rejectAccount" data-account="{{ account.id }}" style="float: right;">
+                                <i class="bi bi-slash" style="pointer-events: none;"></i>
+                            </button>
                             <button data-toggle="tooltip" title="{{ 'menu.add'|trans }}" type="button" class="btn btn-dark approveAccount" data-account="{{ account.id }}" style="float: right;">
                                 <i class="bi bi-check" style="pointer-events: none;"></i>
                             </button>
@@ -45,6 +48,20 @@
         $(".approveAccount").click(function(event) {
             $.ajax({
                 type: 'POST',
+                url: '{{ path('admin_accounts') }}',
+                data: {
+                    'id': $(event.target).data('account'),
+                },
+            }).done(function( ) {
+                location.reload();
+            }).fail(function() {
+                alert('Error');
+            });
+        });
+
+        $(".rejectAccount").click(function(event) {
+            $.ajax({
+                type: 'DELETE',
                 url: '{{ path('admin_accounts') }}',
                 data: {
                     'id': $(event.target).data('account'),
