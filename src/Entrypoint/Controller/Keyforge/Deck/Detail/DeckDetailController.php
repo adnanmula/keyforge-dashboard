@@ -167,7 +167,7 @@ final class DeckDetailController extends Controller
             ),
         );
 
-        $games = $this->extractResult($this->bus->dispatch(new GetGamesQuery($criteria)));
+        $games = $this->extractResult($this->bus->dispatch(new GetGamesQuery(criteria: $criteria)));
 
         $winRateVsDeck = [];
 

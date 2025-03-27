@@ -27,7 +27,7 @@ final class LoadFixturesCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        foreach ($this->connection->getSchemaManager()->listTables() as $table) {
+        foreach ($this->connection->createSchemaManager()->listTables() as $table) {
             $this->connection->executeQuery('TRUNCATE "' . $table->getName() . '" CASCADE');
         }
 
