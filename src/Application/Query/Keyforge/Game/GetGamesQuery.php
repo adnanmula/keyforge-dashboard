@@ -34,7 +34,6 @@ final readonly class GetGamesQuery extends CriteriaQuery
         $length = null,
         $orderField = null,
         $orderDirection = null,
-        $criteria = null,
     ) {
         Assert::lazy()
             ->that($deckId, 'deckId')->nullOr()->uuid()
@@ -48,29 +47,24 @@ final readonly class GetGamesQuery extends CriteriaQuery
             ->that($length, 'length')->nullOr()->integerish()->min(0)
             ->that($orderField, 'orderField')->nullOr()->string()->notBlank()
             ->that($orderDirection, 'orderDirection')->nullOr()->inArray([OrderType::ASC->value, OrderType::DESC->value])
-            ->that($criteria, 'criteria')->nullOr()->isInstanceOf(Criteria::class)
             ->verifyNow();
 
-        if (null !== $criteria) {
-            parent::__construct($criteria);
-        } else {
-            $filters = [];
-            $filters[] = $this->deckFilter($userId, $deckId);
-            $filters[] = $this->winnerFilter(...$winners);
-            $filters[] = $this->loserFilter(...$losers);
-            $filters[] = $this->scoreFilter(...$loserScores);
-            $filters[] = $this->competitionFilter(...$competitions);
-            $filters[] = $this->approvedFilter($approved);
+        $filters = [];
+        $filters[] = $this->deckFilter($userId, $deckId);
+        $filters[] = $this->winnerFilter(...$winners ?? []);
+        $filters[] = $this->loserFilter(...$losers ?? []);
+        $filters[] = $this->scoreFilter(...$loserScores ?? []);
+        $filters[] = $this->competitionFilter(...$competitions ?? []);
+        $filters[] = $this->approvedFilter($approved);
 
-            $criteria = new Criteria(
-                null === $start ? null : (int) $start,
-                null === $length ? null : (int) $length,
-                $this->sorting($orderField, $orderDirection),
-                ...\array_filter($filters),
-            );
+        $criteria = new Criteria(
+            null === $start ? null : (int) $start,
+            null === $length ? null : (int) $length,
+            $this->sorting($orderField, $orderDirection),
+            ...\array_filter($filters),
+        );
 
-            parent::__construct($criteria);
-        }
+        parent::__construct($criteria);
     }
 
     private function deckFilter(?string $userId, ?string $deckId): ?FilterGroup

@@ -156,18 +156,7 @@ final class DeckDetailController extends Controller
 
     private function stats(KeyforgeDeck $deck): array
     {
-        $criteria = new Criteria(
-            null,
-            null,
-            null,
-            new AndFilterGroup(
-                FilterType::OR,
-                new Filter(new FilterField('winner_deck'), new StringFilterValue($deck->id()->value()), FilterOperator::EQUAL),
-                new Filter(new FilterField('loser_deck'), new StringFilterValue($deck->id()->value()), FilterOperator::EQUAL),
-            ),
-        );
-
-        $games = $this->extractResult($this->bus->dispatch(new GetGamesQuery(criteria: $criteria)));
+        $games = $this->extractResult($this->bus->dispatch(new GetGamesQuery(deckId: $deck->id()->value())));
 
         $winRateVsDeck = [];
 
