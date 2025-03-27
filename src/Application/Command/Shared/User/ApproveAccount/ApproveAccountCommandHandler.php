@@ -28,9 +28,14 @@ final readonly class ApproveAccountCommandHandler
             throw new UnsupportedUserException();
         }
 
-        $user->setRole(UserRole::ROLE_KEYFORGE);
+        if ($command->approve) {
+            $user->setRole(UserRole::ROLE_KEYFORGE);
+
+            $this->kfUserRepository->save(KeyforgeUser::create($user->id(), $user->name(), null));
+        } else {
+            $user->setRole(UserRole::ROLE_REJECTED_ACCOUNT);
+        }
 
         $this->repository->save($user);
-        $this->kfUserRepository->save(KeyforgeUser::create($user->id(), $user->name(), null));
     }
 }

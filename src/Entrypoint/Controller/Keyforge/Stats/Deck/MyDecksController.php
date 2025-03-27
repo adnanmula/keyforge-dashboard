@@ -9,6 +9,7 @@ use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeSet;
 use AdnanMula\Cards\Domain\Model\Keyforge\User\KeyforgeUserRepository;
 use AdnanMula\Cards\Domain\Model\Shared\User;
 use AdnanMula\Cards\Domain\Model\Shared\UserRepository;
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\UserRole;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
 use AdnanMula\Criteria\Criteria;
 use AdnanMula\Criteria\Filter\Filter;
@@ -44,16 +45,9 @@ final class MyDecksController extends Controller
 
     public function __invoke(): Response
     {
-        $this->assertIsLogged();
+        $user = $this->getUserWithRole(UserRole::ROLE_KEYFORGE);
 
-        /** @var User $user */
-        $user = $this->security->getUser();
-
-        $tags = $this->extractResult($this->bus->dispatch(new GetTagsQuery(
-            null,
-            null,
-            null,
-        )));
+        $tags = $this->extractResult($this->bus->dispatch(new GetTagsQuery(null, null, null)));
 
         return $this->render(
             'Keyforge/Stats/Deck/list_decks.html.twig',

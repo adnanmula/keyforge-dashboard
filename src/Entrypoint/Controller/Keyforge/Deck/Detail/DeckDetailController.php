@@ -23,6 +23,7 @@ use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
 use AdnanMula\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Criteria\FilterValue\StringArrayFilterValue;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
+use AdnanMula\Criteria\Sorting\OrderType;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -84,7 +85,7 @@ final class DeckDetailController extends Controller
     private function deck(?Uuid $userId, string $deckId): KeyforgeDeck
     {
         $deck = $this->extractResult(
-            $this->bus->dispatch(new GetDecksQuery(0, 1, null, null, null, null, null, null, $deckId, $userId?->value())),
+            $this->bus->dispatch(new GetDecksQuery(0, 1, null, 'id', OrderType::ASC->value, null, null, null, null, $deckId, $userId?->value())),
         );
 
         if (\count($deck['decks']) === 0) {
@@ -155,18 +156,7 @@ final class DeckDetailController extends Controller
 
     private function stats(KeyforgeDeck $deck): array
     {
-        $criteria = new Criteria(
-            null,
-            null,
-            null,
-            new AndFilterGroup(
-                FilterType::OR,
-                new Filter(new FilterField('winner_deck'), new StringFilterValue($deck->id()->value()), FilterOperator::EQUAL),
-                new Filter(new FilterField('loser_deck'), new StringFilterValue($deck->id()->value()), FilterOperator::EQUAL),
-            ),
-        );
-
-        $games = $this->extractResult($this->bus->dispatch(new GetGamesQuery($criteria)));
+        $games = $this->extractResult($this->bus->dispatch(new GetGamesQuery(deckId: $deck->id()->value())));
 
         $winRateVsDeck = [];
 

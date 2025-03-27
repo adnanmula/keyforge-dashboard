@@ -14,16 +14,15 @@ final class AdminAccountsController extends Controller
     {
         $this->assertIsLogged(UserRole::ROLE_ADMIN);
 
-        if (Request::METHOD_POST === $request->getMethod()) {
-            $this->bus->dispatch(new ApproveAccountCommand($request->request->get('id')));
-
-            return new Response('', Response::HTTP_OK);
-        }
-
-        if (Request::METHOD_DELETE === $request->getMethod()) {
+        if (false === \in_array($request->getMethod(), [Request::METHOD_POST, Request::METHOD_DELETE], true)) {
             throw new \Exception('Operation not supported');
         }
 
-        throw new \Exception('Operation not supported');
+        $this->bus->dispatch(new ApproveAccountCommand(
+            $request->request->get('id'),
+            $request->getMethod() === Request::METHOD_POST,
+        ));
+
+        return new Response('', Response::HTTP_OK);
     }
 }

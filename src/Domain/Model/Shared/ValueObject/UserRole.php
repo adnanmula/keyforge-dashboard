@@ -11,4 +11,5 @@ enum UserRole: string
     case ROLE_ADMIN = 'ROLE_ADMIN';
     case ROLE_KEYFORGE = 'ROLE_KEYFORGE';
     case ROLE_BASIC = 'ROLE_BASIC';
+    case ROLE_REJECTED_ACCOUNT = 'ROLE_REJECTED_ACCOUNT';
 }

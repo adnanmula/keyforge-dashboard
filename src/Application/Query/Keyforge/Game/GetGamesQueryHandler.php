@@ -25,15 +25,7 @@ final readonly class GetGamesQueryHandler
     public function __invoke(GetGamesQuery $query): array
     {
         $games = $this->gameRepository->search($query->criteria);
-
-        $criteriaWithoutOrder = new Criteria(
-            null,
-            null,
-            null,
-            ...$query->criteria->filterGroups(),
-        );
-
-        $total = $this->gameRepository->count($criteriaWithoutOrder);
+        $total = $this->gameRepository->count($query->criteria->withoutPaginationAndSorting());
 
         $userIds = [];
         $decksIds = [];

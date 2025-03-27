@@ -8,13 +8,16 @@ use Assert\Assert;
 final readonly class ApproveAccountCommand
 {
     private(set) Uuid $user;
+    private(set) bool $approve;
 
-    public function __construct($user)
+    public function __construct($user, $approve)
     {
         Assert::lazy()
             ->that($user, 'user_id')->uuid()
+            ->that($approve, 'approve')->boolean()
             ->verifyNow();
 
         $this->user = Uuid::from($user);
+        $this->approve = $approve;
     }
 }

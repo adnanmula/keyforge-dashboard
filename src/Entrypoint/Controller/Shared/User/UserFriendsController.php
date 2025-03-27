@@ -18,7 +18,6 @@ final class UserFriendsController extends Controller
     public function __invoke(Request $request): Response
     {
         $user = $this->getUserWithRole(UserRole::ROLE_BASIC);
-
         $error = null;
 
         if ($request->getMethod() === Request::METHOD_PATCH) {
