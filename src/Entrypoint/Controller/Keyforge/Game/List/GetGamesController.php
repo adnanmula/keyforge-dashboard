@@ -181,7 +181,7 @@ final class GetGamesController extends Controller
             ),
             new OA\Response(
                 response: 403,
-                description: 'Unexpected error',
+                description: 'Access denied',
                 content: new OA\JsonContent(
                     properties: [
                         new OA\Property(property: 'error', description: 'Error message', type: 'string'),
