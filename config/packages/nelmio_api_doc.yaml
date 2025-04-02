@@ -1,0 +1,15 @@
+nelmio_api_doc:
+    documentation:
+        info:
+            title: Keyforge Dashboard
+            description: Dashboard to manage decks, games and tournaments for keyforge.
+            version: 1.0.0
+        server:
+          url: http://localhost:7009
+          description: Local Development Server
+
+    areas:
+        path_patterns:
+            - ^/api(?!/doc$) # Accepts routes under /api except /api/doc
+            - ^/decks/json
+            - ^/games/json

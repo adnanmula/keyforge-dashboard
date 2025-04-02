@@ -1,0 +1,19 @@
+documentation.dashboard:
+  path: /doc
+  methods: GET
+  defaults: { _controller: nelmio_api_doc.controller.swagger_ui }
+
+documentation2.dashboard:
+  path: /doc2
+  methods: GET
+  defaults: { _controller: nelmio_api_doc.controller.redocly }
+
+documentation3.dashboard:
+  path: /doc3
+  methods: GET
+  defaults: { _controller: nelmio_api_doc.controller.stoplight }
+
+documentation.raw:
+  path: /doc.json
+  methods: GET
+  defaults: { _controller: nelmio_api_doc.controller.swagger }

@@ -221,7 +221,7 @@ final class DeckDetailController extends Controller
         ];
     }
 
-    public function cardTypes(KeyforgeDeck $deck): array
+    private function cardTypes(KeyforgeDeck $deck): array
     {
         $cardNames = [];
 

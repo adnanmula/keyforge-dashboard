@@ -11,6 +11,7 @@
         "adnanmula/criteria": "^0.2.1",
         "beberlei/assert": "^3.3",
         "doctrine/dbal": "^3.6",
+        "nelmio/api-doc-bundle": "^5.0",
         "ramsey/uuid": "^4.7",
         "robmorgan/phinx": "^0.16",
         "symfony/asset": "7.2.*",

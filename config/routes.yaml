@@ -57,7 +57,10 @@ admin_accounts:
   controller: AdnanMula\Cards\Entrypoint\Controller\Shared\Admin\AdminAccountsController
   methods: [POST,DELETE]
 
+documentation:
+  resource: context/documentation/routes.yaml
+  prefix: /api
+
 keyforge:
   resource: context/keyforge/routes.yaml
   prefix: /
-
