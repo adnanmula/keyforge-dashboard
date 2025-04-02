@@ -25,7 +25,13 @@ final class GetDecksController extends Controller
         parameters: [
             new OA\Parameter(name: 'extraDeckId', description: 'Filter by deck ID', in: 'query', required: false, schema: new OA\Schema(type: 'string', format: 'uuid')),
             new OA\Parameter(name: 'extraFilterOwner', description: 'Filter by deck owner', in: 'query', required: false, schema: new OA\Schema(type: 'string', format: 'uuid')),
-            new OA\Parameter(name: 'extraFilterOwners', description: 'Filter by multiple deck owners', in: 'query', required: false, schema: new OA\Schema(type: 'array', items: new OA\Items(type: 'string', format: 'uuid'))),
+            new OA\Parameter(
+                name: 'extraFilterOwners',
+                description: 'Filter by multiple deck owners',
+                in: 'query',
+                required: false,
+                schema: new OA\Schema(type: 'array', items: new OA\Items(type: 'string', format: 'uuid')),
+            ),
             new OA\Parameter(name: 'extraFilterSet', description: 'Filter by deck set', in: 'query', required: false, schema: new OA\Schema(type: 'string')),
             new OA\Parameter(name: 'extraFilterMaxSas', description: 'Maximum SAS filter', in: 'query', required: false, schema: new OA\Schema(type: 'integer')),
             new OA\Parameter(name: 'extraFilterMinSas', description: 'Minimum SAS filter', in: 'query', required: false, schema: new OA\Schema(type: 'integer')),
@@ -43,10 +49,34 @@ final class GetDecksController extends Controller
             ),
             new OA\Parameter(name: 'extraFilterOnlyFriends', description: 'Filter only friends', in: 'query', required: false, schema: new OA\Schema(type: 'boolean')),
             new OA\Parameter(name: 'extraFilterOnlyOwned', description: 'Filter only owned decks', in: 'query', required: false, schema: new OA\Schema(type: 'boolean')),
-            new OA\Parameter(name: 'extraFilterTagType', description: 'Defines the type of tag filter. Use it with extraFilterTags and extraFilterExcluded', in: 'query', required: false, schema: new OA\Schema(type: 'string', enum: ['all', 'any'])),
-            new OA\Parameter(name: 'extraFilterTags', description: 'Filter by tags', in: 'query', required: false, schema: new OA\Schema(type: 'array', items: new OA\Items(type: 'string', format: 'uuid'))),
-            new OA\Parameter(name: 'extraFilterTagsExcluded', description: 'Exclude decks with these tags', in: 'query', required: false, schema: new OA\Schema(type: 'array', items: new OA\Items(type: 'string', format: 'uuid'))),
-            new OA\Parameter(name: 'extraFilterHouseFilterType', description: 'Defines the type of house filter. Use it with extraFilterHouses', in: 'query', required: false, schema: new OA\Schema(type: 'string', enum: ['all', 'any'])),
+            new OA\Parameter(
+                name: 'extraFilterTagType',
+                description: 'Defines the type of tag filter. Use it with extraFilterTags and extraFilterExcluded',
+                in: 'query',
+                required: false,
+                schema: new OA\Schema(type: 'string', enum: ['all', 'any']),
+            ),
+            new OA\Parameter(
+                name: 'extraFilterTags',
+                description: 'Filter by tags',
+                in: 'query',
+                required: false,
+                schema: new OA\Schema(type: 'array', items: new OA\Items(type: 'string', format: 'uuid'))
+            ),
+            new OA\Parameter(
+                name: 'extraFilterTagsExcluded',
+                description: 'Exclude decks with these tags',
+                in: 'query',
+                required: false,
+                schema: new OA\Schema(type: 'array', items: new OA\Items(type: 'string', format: 'uuid')),
+            ),
+            new OA\Parameter(
+                name: 'extraFilterHouseFilterType',
+                description: 'Defines the type of house filter. Use it with extraFilterHouses',
+                in: 'query',
+                required: false,
+                schema: new OA\Schema(type: 'string', enum: ['all', 'any']),
+            ),
             new OA\Parameter(
                 name: 'extraFilterHouses',
                 description: 'Filter by houses',
