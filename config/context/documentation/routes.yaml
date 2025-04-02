@@ -1,0 +1,9 @@
+documentation.dashboard:
+  path: /doc
+  methods: GET
+  defaults: { _controller: nelmio_api_doc.controller.stoplight }
+
+documentation.raw:
+  path: /doc.json
+  methods: GET
+  defaults: { _controller: nelmio_api_doc.controller.swagger }

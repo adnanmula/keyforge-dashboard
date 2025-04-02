@@ -25,6 +25,7 @@ security:
          - { path: ^/competitions, roles: ROLE_KEYFORGE }
          - { path: ^/users, roles: ROLE_KEYFORGE }
          - { path: ^/admin, roles: ROLE_ADMIN }
+         - { path: ^/api/doc, roles: ROLE_ADMIN }
 
     role_hierarchy:
         ROLE_ADMIN: ROLE_KEYFORGE
