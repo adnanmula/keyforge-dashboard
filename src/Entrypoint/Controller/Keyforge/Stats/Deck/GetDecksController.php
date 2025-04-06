@@ -13,7 +13,6 @@ use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 final class GetDecksController extends Controller
 {
@@ -498,18 +497,6 @@ final class GetDecksController extends Controller
                 )
             ),
             new OA\Response(
-                response: 403,
-                description: 'Access denied',
-                content: new OA\JsonContent(
-                    properties: [
-                        new OA\Property(property: 'error', description: 'Error message', type: 'string'),
-                    ],
-                    example: [
-                        'error' => 'Access denied',
-                    ],
-                )
-            ),
-            new OA\Response(
                 response: 409,
                 description: 'Unexpected error',
                 content: new OA\JsonContent(
@@ -525,12 +512,6 @@ final class GetDecksController extends Controller
     )]
     public function __invoke(Request $request): JsonResponse
     {
-        try {
-            $this->assertIsLogged();
-        } catch (AccessDeniedException) {
-            return new JsonResponse(['error' => 'Access denied'], Response::HTTP_FORBIDDEN);
-        }
-
         $user = $this->getUser();
 
         $searchDeck = null;
