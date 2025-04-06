@@ -18,6 +18,13 @@ final readonly class KeyforgeCard implements \JsonSerializable
         public int $bonusDamage,
         public int $bonusDraw,
         public int $bonusDiscard,
+        public bool $bonusBrobnar,
+        public bool $bonusDis,
+        public bool $bonusEkwidon,
+        public bool $bonusGeistoid,
+        public bool $bonusLogos,
+        public bool $bonusMars,
+        public bool $bonusSkyborn,
     ) {}
 
     public static function fromArray(array $data): self
@@ -36,6 +43,13 @@ final readonly class KeyforgeCard implements \JsonSerializable
             $data['bonusDamage'],
             $data['bonusDraw'],
             $data['bonusDiscard'],
+            $data['bonusBrobnar'],
+            $data['bonusDis'],
+            $data['bonusEkwidon'],
+            $data['bonusGeistoid'],
+            $data['bonusLogos'],
+            $data['bonusMars'],
+            $data['bonusSkyborn'],
         );
     }
 
@@ -58,6 +72,13 @@ final readonly class KeyforgeCard implements \JsonSerializable
             $data['bonusDamage'] ?? 0,
             $data['bonusDraw'] ?? 0,
             $data['bonusDiscard'] ?? 0,
+            $data['bonusBobnar'] ?? false,
+            $data['bonusDis'] ?? false,
+            $data['bonusEkwidon'] ?? false,
+            $data['bonusGeistoid'] ?? false,
+            $data['bonusLogos'] ?? false,
+            $data['bonusMars'] ?? false,
+            $data['bonusSkyborn'] ?? false,
         );
     }
 
@@ -77,6 +98,13 @@ final readonly class KeyforgeCard implements \JsonSerializable
             'bonusDamage' => $this->bonusDamage,
             'bonusDraw' => $this->bonusDraw,
             'bonusDiscard' => $this->bonusDiscard,
+            'bonusBrobnar' => $this->bonusBrobnar,
+            'bonusDis' => $this->bonusDis,
+            'bonusEkwidon' => $this->bonusEkwidon,
+            'bonusGeistoid' => $this->bonusGeistoid,
+            'bonusLogos' => $this->bonusLogos,
+            'bonusMars' => $this->bonusMars,
+            'bonusSkyborn' => $this->bonusSkyborn,
         ];
     }
 }

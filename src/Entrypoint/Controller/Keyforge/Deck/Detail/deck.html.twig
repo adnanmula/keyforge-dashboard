@@ -77,6 +77,21 @@
                             <div class="col-6 col-lg-12">
                                 <img width="18px" src="/assets/keyforge/rarities/{{ card.rarity }}.svg" alt="{{ card.rarity }}" class="img-fluid"/>
                                 <span class="card_name" data-bs-toggle="modal" data-bs-target="#card_image" data-card="{{ card.name }}" data-card-image="{{ card.imageUrl }}">{{ card.name }}</span>
+
+                                {% if card.isEnhanced %}
+                                    {% set bonuses = ['aember','capture','damage','draw','discard','mars','dis','geistoid','skyborn','ekwidon','brobnar','logos'] %}
+
+                                    {% for bonus in bonuses %}
+                                        {% set bonusCount = card["bonus" ~ bonus|capitalize] %}
+                                        {% if bonusCount > 0 %}
+                                            {% set fileType = bonusCount is same as (true) ? 'svg' : 'png' %}
+
+                                            {% for i in 1..bonusCount %}
+                                                <img width="18px" src="/assets/keyforge/logos/bonus/{{ bonus }}.{{ fileType }}" alt="{{ bonus }}" class="img-fluid"/>
+                                            {% endfor %}
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
                             </div>
                         {% endfor %}
                     </div>
@@ -94,6 +109,21 @@
                             <div class="col-6 col-lg-12" style="display: block">
                                 <img width="18px" src="/assets/keyforge/rarities/{{ card.rarity }}.svg" alt="{{ card.rarity }}" class="img-fluid"/>
                                 <span class="card_name" data-bs-toggle="modal" data-bs-target="#card_image" data-card="{{ card.name }}" data-card-image="{{ card.imageUrl }}">{{ card.name }}</span>
+
+                                {% if card.isEnhanced %}
+                                    {% set bonuses = ['aember','capture','damage','draw','discard','mars','dis','geistoid','skyborn','ekwidon','brobnar','logos'] %}
+
+                                    {% for bonus in bonuses %}
+                                        {% set bonusCount = card["bonus" ~ bonus|capitalize] %}
+                                        {% if bonusCount > 0 %}
+                                            {% set fileType = bonusCount is same as (true) ? 'svg' : 'png' %}
+
+                                            {% for i in 1..bonusCount %}
+                                                <img width="18px" src="/assets/keyforge/logos/bonus/{{ bonus }}.{{ fileType }}" alt="{{ bonus }}" class="img-fluid"/>
+                                            {% endfor %}
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
                             </div>
                         {% endfor %}
                     </div>
@@ -111,6 +141,21 @@
                             <div class="col-6 col-lg-12">
                                 <img width="18px" src="/assets/keyforge/rarities/{{ card.rarity }}.svg" alt="{{ card.rarity }}" class="img-fluid"/>
                                 <span class="card_name" data-bs-toggle="modal" data-bs-target="#card_image" data-card="{{ card.name }}" data-card-image="{{ card.imageUrl }}">{{ card.name }}</span>
+
+                                {% if card.isEnhanced %}
+                                    {% set bonuses = ['aember','capture','damage','draw','discard','mars','dis','geistoid','skyborn','ekwidon','brobnar','logos'] %}
+
+                                    {% for bonus in bonuses %}
+                                        {% set bonusCount = card["bonus" ~ bonus|capitalize] %}
+                                        {% if bonusCount > 0 %}
+                                            {% set fileType = bonusCount is same as (true) ? 'svg' : 'png' %}
+
+                                            {% for i in 1..bonusCount %}
+                                                <img width="18px" src="/assets/keyforge/logos/bonus/{{ bonus }}.{{ fileType }}" alt="{{ bonus }}" class="img-fluid"/>
+                                            {% endfor %}
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
                             </div>
                         {% endfor %}
                     </div>
