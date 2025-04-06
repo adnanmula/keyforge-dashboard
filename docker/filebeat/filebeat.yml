@@ -1,0 +1,21 @@
+filebeat.inputs:
+  - type: log
+    paths:
+      - /var/www/html/var/log/*.log
+    json.keys_under_root: true
+    json.add_error_key: true
+
+output.elasticsearch:
+  hosts: ["http://cards_elasticsearch:9200"]
+  index: "symfony-logs-%{+yyyy.MM.dd}"
+  data_stream.enabled: false
+
+setup.ilm.enabled: false
+path.data: /usr/share/filebeat/data
+
+# Template config
+setup.template.name: "symfony-logs-template"
+setup.template.pattern: "symfony-logs-*"
+setup.template.fields: "/usr/share/filebeat/fields.yml"
+setup.template.enabled: true
+setup.template.overwrite: true

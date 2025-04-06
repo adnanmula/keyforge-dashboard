@@ -38,7 +38,40 @@ services:
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
     networks:
       - network_cards
-
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.6.2
+    container_name: cards_elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+    ports:
+      - ${ELASTIC_PORT}:9200
+    networks:
+      - network_cards
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:8.13.2
+    container_name: cards_filebeat
+    user: root
+    volumes:
+      - ./docker/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - ./var/log:/var/www/html/var/log
+      - ./docker/filebeat/fields.yml:/usr/share/filebeat/fields.yml:ro
+    depends_on:
+      - elasticsearch
+    command: ["--strict.perms=false"]
+    networks:
+      - network_cards
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.6.2
+    container_name: cards_kibana
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    depends_on:
+      - elasticsearch
+    ports:
+      - ${KIBANA_PORT}:5601
+    networks:
+      - network_cards
 networks:
   network_cards:
     driver: bridge

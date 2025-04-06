@@ -1,0 +1,8 @@
+- name: "@timestamp"
+  type: "date"
+- name: "message"
+  type: "text"
+- name: "level"
+  type: "keyword"
+- name: "host"
+  type: "keyword"

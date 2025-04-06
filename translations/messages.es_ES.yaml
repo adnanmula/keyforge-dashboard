@@ -263,6 +263,7 @@ menu.profile: Perfil
 menu.received: Recibidas
 menu.record_book: Palmarés
 menu.register: Registro
+menu.approve: Aprovar
 menu.reject: Rechazar
 menu.remove: Eliminar
 menu.remove_my_deck: 'Eliminar de mis barajas'

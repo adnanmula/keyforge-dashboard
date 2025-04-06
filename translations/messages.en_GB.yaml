@@ -263,6 +263,7 @@ menu.profile: Profile
 menu.received: Received
 menu.record_book: 'Record book'
 menu.register: Register
+menu.approve: Approve
 menu.reject: Reject
 menu.remove: Remove
 menu.remove_my_deck: 'Remove from my decks'
