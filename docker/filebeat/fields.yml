@@ -1,8 +1,25 @@
 - name: "@timestamp"
   type: "date"
+
 - name: "message"
   type: "text"
+
 - name: "level"
   type: "keyword"
+
 - name: "host"
   type: "keyword"
+
+- name: "extra"
+  type: "group"
+  fields:
+    - name: "ip"
+      type: "ip"
+    - name: "load_average"
+      type: "float"
+    - name: "http_method"
+      type: "keyword"
+    - name: "server"
+      type: "keyword"
+    - name: "url"
+      type: "keyword"
