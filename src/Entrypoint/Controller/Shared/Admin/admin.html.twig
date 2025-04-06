@@ -21,10 +21,10 @@
                     {% for account in accountsPending %}
                         <li class="list-group-item">
                             <span class="align-middle">{{ account.name }}</span>
-                            <button data-toggle="tooltip" title="{{ 'menu.add'|trans }}" type="button" class="btn btn-dark rejectAccount" data-account="{{ account.id }}" style="float: right;">
+                            <button data-toggle="tooltip" title="{{ 'menu.reject'|trans }}" type="button" class="btn btn-dark rejectAccount" data-account="{{ account.id }}" style="float: right;">
                                 <i class="bi bi-slash" style="pointer-events: none;"></i>
                             </button>
-                            <button data-toggle="tooltip" title="{{ 'menu.add'|trans }}" type="button" class="btn btn-dark approveAccount" data-account="{{ account.id }}" style="float: right;">
+                            <button data-toggle="tooltip" title="{{ 'menu.approve'|trans }}" type="button" class="btn btn-dark approveAccount" data-account="{{ account.id }}" style="float: right;">
                                 <i class="bi bi-check" style="pointer-events: none;"></i>
                             </button>
                         </li>
