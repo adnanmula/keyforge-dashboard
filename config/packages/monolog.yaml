@@ -10,7 +10,6 @@ when@dev:
             path: '%kernel.logs_dir%/%kernel.environment%.log'
             level: debug
             formatter: monolog.formatter.json
-            channels: [ "!event" ]
 
 when@test:
     monolog:
@@ -25,32 +24,17 @@ when@test:
                 type: stream
                 path: "%kernel.logs_dir%/%kernel.environment%.log"
                 level: debug
-#when@prod:
-#    monolog:
-#        handlers:
-#            main:
-#                type: fingers_crossed
-#                action_level: error
-#                handler: nested
-#                excluded_http_codes: [404, 405]
-#                buffer_size: 50
-#            nested:
-#                type: stream
-#                path: php://stderr
-#                level: debug
-#                formatter: monolog.formatter.json
-#            deprecation:
-#                type: stream
-#                channels: [deprecation]
-#                path: php://stderr
-#                formatter: monolog.formatter.json
 
 when@prod:
   monolog:
     handlers:
       main:
+        type: fingers_crossed
+        action_level: error
+        handler: nested
+        buffer_size: 50
+      nested:
         type: stream
         path: '%kernel.logs_dir%/%kernel.environment%.log'
         level: debug
         formatter: monolog.formatter.json
-        channels: [ "!event" ]
