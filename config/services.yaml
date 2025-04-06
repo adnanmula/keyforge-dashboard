@@ -59,4 +59,5 @@ services:
 imports:
     - { resource: context/system/buses.yaml }
     - { resource: context/system/repositories.yaml }
+    - { resource: context/system/logs.yaml }
     - { resource: context/keyforge/repositories.yaml }
