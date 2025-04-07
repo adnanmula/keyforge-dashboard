@@ -43,13 +43,13 @@ final readonly class KeyforgeCard implements \JsonSerializable
             $data['bonusDamage'],
             $data['bonusDraw'],
             $data['bonusDiscard'],
-            $data['bonusBrobnar'],
-            $data['bonusDis'],
-            $data['bonusEkwidon'],
-            $data['bonusGeistoid'],
-            $data['bonusLogos'],
-            $data['bonusMars'],
-            $data['bonusSkyborn'],
+            $data['bonusBrobnar'] ?? false,
+            $data['bonusDis'] ?? false,
+            $data['bonusEkwidon'] ?? false,
+            $data['bonusGeistoid'] ?? false,
+            $data['bonusLogos'] ?? false,
+            $data['bonusMars'] ?? false,
+            $data['bonusSkyborn'] ?? false,
         );
     }
 
