@@ -212,7 +212,8 @@ menu.best_win_streak: 'Best win streak'
 menu.change_password: 'Change password'
 menu.clear_filters: Clear
 menu.compare_to: 'Compare to'
-menu.created_by: Created by
+menu.create: Create
+menu.created_by: 'Created by'
 menu.deck: Deck
 menu.deck_select_tooltip: 'When playing with random people paste their deck id event if it is not on the selector, you do not have to import it beforehand either'
 menu.deck_wl: 'Wins/Losses by deck'
@@ -294,6 +295,8 @@ menu.wr%: 'WinRate%'
 menu.wr/pr: 'Win/Pick Rate'
 menu.you: You
 menu.your_stats: Your stats
+menu.tag_predefined: Predefined tags
+menu.tag_yours: Your tags
 wiki.adventures: Adventures
 wiki.count_greater_or_equal_than: 'Has %count% or more'
 wiki.count_lower_or_equal_than: 'Has %count% or less'

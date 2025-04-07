@@ -566,6 +566,10 @@ final class GetDecksController extends Controller
 
     public function orderBy(?array $queryOrder): array
     {
+        if (null === $queryOrder) {
+            return [null, null];
+        }
+
         $orderColumns = [
             1 => 'name',
             2 => 'set',

@@ -212,6 +212,7 @@ menu.best_win_streak: 'Mejor racha de victorias'
 menu.change_password: 'Actualizar contraseña'
 menu.clear_filters: 'Limpiar filtros'
 menu.compare_to: 'Comparar con'
+menu.create: Crear
 menu.created_by: 'Creado por'
 menu.deck: Baraja
 menu.deck_select_tooltip: 'Al jugar con randoms pega el id de baraja aunque no salga en el selector, no hace falta importarla antes'
@@ -294,6 +295,8 @@ menu.wr%: 'WinRate%'
 menu.wr/pr: 'Win/Pick Rate'
 menu.you: Tu
 menu.your_stats: Tus estadísticas
+menu.tag_predefined: Etiquetas predefinidas
+menu.tag_yours: Tus etiquetas
 wiki.adventures: Aventuras
 wiki.count_greater_or_equal_than: 'Tiene %count% o más'
 wiki.count_lower_or_equal_than: 'Tiene %count% o menos'

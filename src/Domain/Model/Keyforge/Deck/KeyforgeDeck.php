@@ -79,7 +79,7 @@ final class KeyforgeDeck implements \JsonSerializable
 
     public function setTags(string ...$tags): void
     {
-        $this->tags = $tags;
+        $this->tags = \array_values(\array_unique($tags));
     }
 
     /** @return array<Uuid> */

@@ -11,6 +11,7 @@ use AdnanMula\Criteria\FilterField\FilterField;
 use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
 use AdnanMula\Criteria\FilterGroup\FilterGroup;
 use AdnanMula\Criteria\FilterValue\FilterOperator;
+use AdnanMula\Criteria\FilterValue\NullFilterValue;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
 use AdnanMula\Criteria\Sorting\Order;
 use AdnanMula\Criteria\Sorting\OrderType;
@@ -19,18 +20,26 @@ use Assert\Assert;
 
 final readonly class GetTagsQuery extends CriteriaQuery
 {
-    public function __construct($visibility, $archived, $ids)
+    public function __construct($visibility = null, $archived = null, $ids = null, $userIds = null)
     {
         Assert::lazy()
             ->that($visibility, 'visibility')->nullOr()->inArray(TagVisibility::values())
             ->that($archived, 'archived')->nullOr()->boolean()
             ->that($ids, 'ids')->nullOr()->all()->uuid()
+            ->that($userIds, 'userIds')->nullOr()->isArray()
             ->verifyNow();
+
+        if (null !== $userIds) {
+            foreach ($userIds as $userId) {
+                Assert::that($userId, 'userId')->nullOr()->uuid();
+            }
+        }
 
         $filters = [];
         $filters[] = $this->visibilityFilter($visibility);
         $filters[] = $this->archivedFilter($archived);
         $filters[] = $this->idsFilter(...$ids ?? []);
+        $filters[] = $this->userIdFilter(...$userIds ?? []);
 
         $criteria = new Criteria(
             null,
@@ -89,6 +98,25 @@ final readonly class GetTagsQuery extends CriteriaQuery
                     $ids,
                 ),
             );
+        }
+
+        return null;
+    }
+
+    private function userIdFilter(?string ...$userIds): ?FilterGroup
+    {
+        $filters = [];
+
+        foreach ($userIds as $userId) {
+            if (null === $userId) {
+                $filters[] = new Filter(new FilterField('user_id'), new NullFilterValue(), FilterOperator::IS_NULL);
+            } else {
+                $filters[] = new Filter(new FilterField('user_id'), new StringFilterValue($userId), FilterOperator::EQUAL);
+            }
+        }
+
+        if (\count($filters) > 0) {
+            return new AndFilterGroup(FilterType::OR, ...$filters);
         }
 
         return null;

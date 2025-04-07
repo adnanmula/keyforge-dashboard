@@ -15,6 +15,11 @@
             min-width: 0;
         }
 
+        .btn-xs > .btn, .btn-xs {
+            font-size  : .800rem;
+            line-height  : .85;
+        }
+
         @media (min-width: 501px) {
             .card_name {
                 max-width: 300px;
@@ -65,7 +70,6 @@
     <div class="row">
         <div class="col-12">
             <div class="row">
-
                 {% for pod in 0..2 %}
                     <div class="col-12 col-lg-4" style="margin-top: 10px">
                         <img width="33px" src="/assets/keyforge/houses/{{ deck.houses[pod] }}.png" alt="{{ deck.houses[pod] }}"/><span style="font-size: 1.5em; vertical-align: middle; margin-left: 4px">{{ deck.houses[pod] }}</span>
@@ -115,6 +119,30 @@
 
             <div class="divider py-2"></div>
         {% endfor %}
+
+        <div>
+            {% if public_tags|length > 0 %}
+                <h6 style="white-space: nowrap;">{{ 'menu.tag_predefined'|trans }}</h6>
+            {% endif %}
+
+            {% for tag in public_tags %}
+                <button type="button" class="btn btn-xs btn-outline-dark" data-type="{{ tag.type.value }}" data-value="{{ tag.name.jsonSerialize[app.locale] }}"
+                        style="background-color: {{  tag.style.colorBg }}; color: {{ tag.style.colorText }}; border-color: {{  tag.style.colorOutline }}">{{ tag.name.jsonSerialize[app.locale] }}</button>
+            {% endfor %}
+
+            {% if is_granted('ROLE_KEYFORGE') and app.user.id.value in owners %}
+                <div class="divider py-2"></div>
+
+                <h6 style="white-space: nowrap;">{{ 'menu.tag_yours'|trans }}</h6>
+
+                {% for tag in private_tags %}
+                    <button type="button" class="btn btn-xs btn-outline-dark" data-type="{{ tag.type.value }}" data-value="{{ tag.name.jsonSerialize[app.locale] }}"
+                            style="background-color: {{  tag.style.colorBg }}; color: {{ tag.style.colorText }}; border-color: {{  tag.style.colorOutline }}">{{ tag.name.jsonSerialize[app.locale] }}</button>
+                {% endfor %}
+
+                <button type="button" id="" class="btn btn-dark btn-sm m-1" data-deck-id="{{ deck.id }}" data-bs-toggle="modal" data-bs-target="#deckUserTags">{{ 'menu.add'|trans }}</button>
+            {% endif %}
+        </div>
     </div>
 
     {% if is_granted('ROLE_KEYFORGE') %}
@@ -126,7 +154,6 @@
     {% endif %}
 
     <div class="d-flex flex-row-reverse">
-
         {% if deck.type == 'STANDARD' %}
             <a href="https://archonarcana.com/Deck:{{ reference }}" target="_blank"><img class="img-thumbnail" width="50px" style="min-width: 40px" src="{{ asset('assets/keyforge/logos/wiki.jpg') }}" alt="Wiki"/></a>
             <a href="https://decksofkeyforge.com/decks/{{ reference }}" target="_blank"><img class="img-thumbnail" width="40px" style="min-width: 40px" src="{{ asset('assets/keyforge/logos/dok.svg') }}" alt="DoK"/></a>
@@ -174,6 +201,125 @@
                     <div>
                         <input type="hidden" id="hiddenDeckId" value="">
                     </div>
+
+                    <div class="divider py-1"></div>
+
+                    <button type="submit" id="updateNotesSubmit" class="btn btn-block btn-dark" style="width: 100%">{{ 'deck.save'|trans }}</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deckUserTags" tabindex="-1" role="dialog" aria-labelledby="deckUserTags" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modelaTitleLabel">{{ 'menu.tags'|trans }}</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="createUserTags">
+                    <input type="hidden" id="hiddenDeckId2" value="{{ deck.id }}">
+
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="name" class="form-label">{{ 'menu.name'|trans }}</label>
+                            <input id="createTagName" class="form-control" type="text" name="name" required>
+
+                            <div class="divider py-1"></div>
+                        </div>
+                    </div>
+
+                    <div class="divider py-2"></div>
+
+                    <div class="row">
+                        <div class="col-7">
+                            <h6>{{ 'menu.colors'|trans }}</h6>
+
+                            <input type="color" id="colorPickerBg" name="colorBg" value="#212529">
+                            <label for="name" class="form-label">{{ 'menu.bg'|trans }}</label>
+                            <div class="divider py-1"></div>
+
+                            <input type="color" id="colorPickerText" name="colorText" value="#f8f9fa">
+                            <label for="name" class="form-label">{{ 'menu.text'|trans }}</label>
+                            <div class="divider py-1"></div>
+
+                            <input type="color" id="colorPickerOutline" name="colorOutline" value="#212529">
+                            <label for="name" class="form-label">{{ 'menu.outline'|trans }}</label>
+                        </div>
+
+                        <div class="col-4">
+                            <h6>{{ 'menu.preview'|trans }}</h6>
+                            <button id="tagPreview" type="button" class="btn btn-xs">Preview</button>
+                        </div>
+                    </div>
+                    <div class="divider py-1"></div>
+
+                    <div class="row">
+                        <h6>{{ 'menu.presets'|trans }}</h6>
+                        <div class="col-6">
+                            <button type="button" class="presetTag btn btn-sm btn-primary" data-preset="TRAIT_POSITIVE" style="width: 100%">{{ 'menu.blue'|trans }}</button>
+                            <button type="button" class="presetTag btn btn-sm btn-danger" data-preset="TRAIT_NEGATIVE" style="width: 100%">{{ 'menu.red'|trans }}</button>
+                            <button type="button" class="presetTag btn btn-sm btn-warning" data-preset="OTHER" style="width: 100%">{{ 'menu.yellow'|trans }}</button>
+                        </div>
+                        <div class="col-6">
+                            <button type="button" class="presetTag btn btn-sm btn-dark" data-preset="DARK" style="width: 100%;">{{ 'menu.dark'|trans }}</button>
+                            <button type="button" class="presetTag btn btn-sm" data-preset="LIGHT" style="background-color: #f8f9fa; color: #212529; border: 1px solid #212529; width: 100%">{{ 'menu.purple'|trans }}</button>
+                            <button type="button" class="presetTag btn btn-sm" data-preset="PURPLE" style="background-color: #4B0082; color: #f8f9fa; border: 1px solid #4B0082; width: 100%">{{ 'menu.purple'|trans }}</button>
+                        </div>
+                    </div>
+
+                    <div class="divider py-2"></div>
+
+                    <button type="submit" id="createTagSubmit" class="btn btn-block btn-dark" style="width: 100%">{{ 'menu.create'|trans }}</button>
+                </form>
+                <div class="divider py-3"></div>
+                <form id="assignUserTag">
+                    <div class="form-group">
+                        <h6>{{ 'menu.add'|trans }}</h6>
+                        <select id="assignTagSelector" class="form-select">
+                            {% for tag in all_private_tags %}
+                                <option value="{{ tag.id }}">{{ tag.name.jsonSerialize[app.locale] }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="divider py-1"></div>
+
+                    <div>
+                        <input type="hidden" id="hiddenDeckId" value="">
+                    </div>
+
+                    <div class="divider py-2"></div>
+
+                    <button type="submit" id="addTagSubmit" class="btn btn-block btn-dark" style="width: 100%">{{ 'deck.save'|trans }}</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deckUpdateNotes" tabindex="-1" role="dialog" aria-labelledby="deckUpdateNotes" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modelaTitleLabel">{{ 'deck.notes'|trans }}</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="updateDeckNotesForm">
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <textarea class="form-control" name="notes" id="deckNotesInput" rows="8" maxlength="512">{{ deck_notes }}</textarea>
+                        </div>
+                    </div>
+
+                    <input type="hidden" id="hiddenDeckId" value="">
 
                     <div class="divider py-1"></div>
 
@@ -250,5 +396,77 @@
         }).fail(function() {
             alert('Error');
         });
+    });
+
+    // Tag modal
+
+    const presets = {
+        TRAIT_POSITIVE: {color_bg: "#1e75e6", color_text: "#ffffff", color_outline: "#1e75e6"},
+        TRAIT_NEGATIVE: {color_bg: "#f50529", color_text: "#ffffff", color_outline: "#f50529"},
+        OTHER: {color_bg: "#e8db1e", color_text: "#000000", color_outline: "#e8db1e"},
+        LIGHT: {color_bg: "#f8f9fa", color_text: "#212529", color_outline: "#212529"},
+        DARK: {color_bg: "#212529", color_text: "#f8f9fa", color_outline: "#212529"},
+        PURPLE: {color_bg: "#4B0082", color_text: "#f8f9fa", color_outline: "#4B0082"},
+    };
+
+    $('.presetTag').on('click', function () {
+        applyPreset(presets[$(this).data('preset')]);
+    });
+
+    function applyPreset(preset) {
+        $('#colorPickerBg').val(preset.color_bg);
+        $('#colorPickerText').val(preset.color_text);
+        $('#colorPickerOutline').val(preset.color_outline);
+        updateTagPreview();
+    }
+
+    function updateTagPreview() {
+        $('#tagPreview').css({
+            'background-color': $('#colorPickerBg').val(),
+            'color': $('#colorPickerText').val(),
+            'border': '1px solid ' + $('#colorPickerOutline').val()
+        });
+
+        const text = $('#createTagName').val();
+        $('#tagPreview').text(text || '{{ 'menu.preview'|trans }}');
+    }
+
+    $('#colorPickerBg, #colorPickerText, #colorPickerOutline, #createTagName').on('input', updateTagPreview);
+
+    $('#createUserTags').submit(function (e) {
+        e.preventDefault();
+
+        $.post({
+            url: '{{ path('keyforge_create_tag') }}',
+            method: 'POST',
+            data: {
+                'name': $('#createTagName').val(),
+                'styleBg': $('#colorPickerBg').val(),
+                'styleText': $('#colorPickerText').val(),
+                'styleOutline': $('#colorPickerOutline').val(),
+                'deckId': $('#hiddenDeckId2').val(),
+            },
+        }).done(function() {
+            location.reload();
+        });
+    });
+
+    $('#assignUserTag').submit(function (e) {
+        e.preventDefault();
+
+        $.post({
+            url: '{{ path('keyforge_assign_tag') }}',
+            method: 'PUT',
+            data: {
+                'deckId': $('#hiddenDeckId2').val(),
+                'tagId': $('#assignTagSelector').val(),
+            },
+        }).done(function() {
+            location.reload();
+        });
+    });
+
+    $(document).ready(function () {
+        updateTagPreview();
     });
 </script>

@@ -37,10 +37,10 @@ final class KeyforgeTagDbalRepository extends DbalRepository implements Keyforge
         $stmt = $this->connection->prepare(
             \sprintf(
                 '
-                    INSERT INTO %s (id, name, visibility, style, type, archived)
-                    VALUES (:id, :name, :visibility, :style, :type, :archived)
+                    INSERT INTO %s (id, user_id, name, visibility, style, type, archived)
+                    VALUES (:id, :user_id, :name, :visibility, :style, :type, :archived)
                     ON CONFLICT (id) DO UPDATE SET
-                        id = :id,
+                        user_id = :user_id,
                         name = :name,
                         visibility = :visibility,
                         style = :style,
@@ -52,6 +52,7 @@ final class KeyforgeTagDbalRepository extends DbalRepository implements Keyforge
         );
 
         $stmt->bindValue(':id', $tag->id->value());
+        $stmt->bindValue(':user_id', $tag->userId?->value());
         $stmt->bindValue(':name', Json::encode($tag->name));
         $stmt->bindValue(':visibility', $tag->visibility->name);
         $stmt->bindValue(':style', Json::encode($tag->style));
@@ -70,6 +71,7 @@ final class KeyforgeTagDbalRepository extends DbalRepository implements Keyforge
             TagStyle::from(Json::decode($tag['style'])),
             TagType::from($tag['type']),
             $tag['archived'],
+            Uuid::fromNullable($tag['user_id']),
         );
     }
 }

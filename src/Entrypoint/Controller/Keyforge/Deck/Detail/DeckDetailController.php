@@ -5,6 +5,7 @@ namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\Deck\Detail;
 use AdnanMula\Cards\Application\Query\Keyforge\Deck\GetDecksQuery;
 use AdnanMula\Cards\Application\Query\Keyforge\Deck\GetDecksStatHistoryQuery;
 use AdnanMula\Cards\Application\Query\Keyforge\Game\GetGamesQuery;
+use AdnanMula\Cards\Application\Query\Keyforge\Tag\GetTagsQuery;
 use AdnanMula\Cards\Application\Query\Keyforge\User\GetUsersQuery;
 use AdnanMula\Cards\Domain\Model\Keyforge\Card\KeyforgeCardRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\Card\ValueObject\KeyforgeCardType;
@@ -13,6 +14,7 @@ use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeck;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Shared\User;
 use AdnanMula\Cards\Domain\Model\Shared\UserRepository;
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\TagVisibility;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
 use AdnanMula\Criteria\Criteria;
@@ -62,6 +64,8 @@ final class DeckDetailController extends Controller
             }
         }
 
+        [$publicTags, $privateTags, $allPrivateTags] = $this->tags($user, $deck);
+
         return $this->render(
             'Keyforge/Deck/Detail/deck_detail.html.twig',
             [
@@ -78,6 +82,9 @@ final class DeckDetailController extends Controller
                 'indexed_friends' => $indexedFriends,
                 'deck_card_types' => $this->cardTypes($deck),
                 'bell_curve' => $this->deckRepository->bellCurve($deck->type()),
+                'public_tags' => $publicTags,
+                'private_tags' => $privateTags,
+                'all_private_tags' => $allPrivateTags,
             ],
         );
     }
@@ -258,5 +265,40 @@ final class DeckDetailController extends Controller
         }
 
         return $cardTypes;
+    }
+
+    private function tags(?User $user, KeyforgeDeck $deck): array
+    {
+        $userIds = [null];
+
+        if (null !== $user && \in_array($user->id(), $deck->owners(), false)) {
+            $userIds[] = $user->id()->value();
+        }
+
+        $tagDefinitions = $this->extractResult($this->bus->dispatch(new GetTagsQuery(userIds: $userIds)));
+
+        $publicTags = [];
+        $privateTags = [];
+        $allPrivateTags = [];
+
+        foreach ($tagDefinitions['tags'] as $tagDefinition) {
+            foreach ($deck->tags() as $tagId) {
+                if ($tagDefinition->id->value() === $tagId) {
+                    if ($tagDefinition->visibility === TagVisibility::PUBLIC) {
+                        $publicTags[] = $tagDefinition;
+                    } else {
+                        $privateTags[] = $tagDefinition;
+                    }
+                }
+            }
+        }
+
+        foreach ($tagDefinitions['tags'] as $tagDefinition) {
+            if ($tagDefinition->visibility === TagVisibility::PRIVATE) {
+                $allPrivateTags[] = $tagDefinition;
+            }
+        }
+
+        return [$publicTags, $privateTags, $allPrivateTags];
     }
 }
