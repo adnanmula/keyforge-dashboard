@@ -225,7 +225,7 @@ final class DeckDetailController extends Controller
     {
         $cardNames = [];
 
-        foreach (array_merge($deck->cards()->firstPodCards, $deck->cards()->secondPodCards, $deck->cards()->thirdPodCards) as $card) {
+        foreach (\array_merge($deck->cards()->firstPodCards, $deck->cards()->secondPodCards, $deck->cards()->thirdPodCards) as $card) {
             $cardNames[] = $card->serializedName;
         }
 
