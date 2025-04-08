@@ -342,3 +342,17 @@ wiki.the_crucible_online: 'The crucible online'
 wiki.timing_chart: 'Timing chart'
 wiki.tournament_rules: 'Tournament rules'
 wiki.wiki_aa: 'Wiki (Archon Arcana)'
+menu.name: Name
+menu.colors: Colors
+menu.bg: Background
+menu.text: Text
+menu.outline: Outline
+menu.preview: Preview
+menu.presets: Presets
+menu.blue: Blue
+menu.red: Red
+menu.yellow: Yellow
+menu.dark: Dark
+menu.purple: Purple
+menu.light: Light
+menu.assign: Assign
