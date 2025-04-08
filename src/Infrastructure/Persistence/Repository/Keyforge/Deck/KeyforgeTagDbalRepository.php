@@ -29,7 +29,21 @@ final class KeyforgeTagDbalRepository extends DbalRepository implements Keyforge
 
         $result = $query->executeQuery()->fetchAllAssociative();
 
-        return \array_map(fn (array $row) => $this->map($row), $result);
+        return \array_map(fn(array $row) => $this->map($row), $result);
+    }
+
+    public function searchOne(Criteria $criteria): ?KeyforgeDeckTag
+    {
+        $criteria = new Criteria(
+            $criteria->offset(),
+            1,
+            $criteria->sorting(),
+            ...$criteria->filterGroups(),
+        );
+
+        $result = $this->search($criteria);
+
+        return $result[0] ?? null;
     }
 
     public function save(KeyforgeDeckTag $tag): void
@@ -60,6 +74,15 @@ final class KeyforgeTagDbalRepository extends DbalRepository implements Keyforge
         $stmt->bindValue(':archived', $tag->archived, ParameterType::BOOLEAN);
 
         $stmt->executeStatement();
+    }
+
+    public function remove(Uuid $id): void
+    {
+        $this->connection->createQueryBuilder()
+            ->delete(self::TABLE, 'a')
+            ->where('a.id = :id')
+            ->setParameter('id', $id->value())
+            ->executeStatement();
     }
 
     private function map(array $tag): KeyforgeDeckTag

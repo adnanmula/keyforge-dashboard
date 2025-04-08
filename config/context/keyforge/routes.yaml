@@ -112,3 +112,8 @@ keyforge_assign_tag:
   path: /tag
   controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Tag\AssignTagController
   methods: [PUT]
+
+keyforge_remove_tag:
+  path: /tag
+  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Tag\RemoveTagController
+  methods: [DELETE]

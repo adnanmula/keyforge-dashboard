@@ -211,8 +211,9 @@
     </div>
 </div>
 
+{% if is_granted('ROLE_KEYFORGE') and app.user.id.value in owners %}
 <div class="modal fade" id="deckUserTags" tabindex="-1" role="dialog" aria-labelledby="deckUserTags" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="modelaTitleLabel">{{ 'menu.tags'|trans }}</h5>
@@ -221,65 +222,90 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="createUserTags">
-                    <input type="hidden" id="hiddenDeckId2" value="{{ deck.id }}">
+                <div class="row">
+                    <div class="col-6">
+                        <h5>{{ 'menu.all_your_tags'|trans }}</h5>
 
-                    <div class="row">
-                        <div class="form-group">
-                            <label for="name" class="form-label">{{ 'menu.name'|trans }}</label>
-                            <input id="createTagName" class="form-control" type="text" name="name" maxlength="100" required>
-
-                            <div class="divider py-1"></div>
-                        </div>
+                        {% for tag in all_private_tags %}
+                            <div class="row" style="margin-left: 10px; margin-bottom: 10px">
+                                <div class="col-8">
+                                    <button type="button" class="btn btn-xs btn-outline-dark" data-type="{{ tag.type.value }}" data-value="{{ tag.name.jsonSerialize[app.locale] }}" style="margin: 1px; background-color: {{  tag.style.colorBg }}; color: {{ tag.style.colorText }}; border-color: {{  tag.style.colorOutline }}">{{ tag.name.jsonSerialize[app.locale] }}</button>
+                                </div>
+                                <div class="col-4">
+                                    <button disabled data-toggle="tooltip" title="{{ 'menu.edit'|trans }}" type="button" class="btn btn-dark editTag" data-tag="{{ tag.id }}">
+                                        <i class="bi bi-pencil" style="pointer-events: none;"></i>
+                                    </button>
+                                    <button data-toggle="tooltip" title="{{ 'menu.remove'|trans }}" type="button" class="btn btn-dark removeTag" data-tag="{{ tag.id }}">
+                                        <i class="bi bi-trash" style="pointer-events: none;"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        {% endfor %}
                     </div>
+                    <div class="col-6">
+                        <h5>{{ 'menu.create_new'|trans }}</h5>
 
-                    <div class="divider py-2"></div>
+                        <form id="createUserTags">
+                            <input type="hidden" id="hiddenDeckId2" value="{{ deck.id }}">
 
-                    <div class="row">
-                        <div class="col-7">
-                            <h6>{{ 'menu.colors'|trans }}</h6>
+                            <div class="row">
+                                <div class="form-group">
+                                    <label for="name" class="form-label">{{ 'menu.name'|trans }}</label>
+                                    <input id="createTagName" class="form-control" type="text" name="name" maxlength="100" required>
 
-                            <input type="color" id="colorPickerBg" name="colorBg" value="#212529">
-                            <label for="name" class="form-label">{{ 'menu.bg'|trans }}</label>
+                                    <div class="divider py-1"></div>
+                                </div>
+                            </div>
+
+                            <div class="divider py-2"></div>
+
+                            <div class="row">
+                                <div class="col-7">
+                                    <h6>{{ 'menu.colors'|trans }}</h6>
+
+                                    <input type="color" id="colorPickerBg" name="colorBg" value="#212529">
+                                    <label for="name" class="form-label">{{ 'menu.bg'|trans }}</label>
+                                    <div class="divider py-1"></div>
+
+                                    <input type="color" id="colorPickerText" name="colorText" value="#f8f9fa">
+                                    <label for="name" class="form-label">{{ 'menu.text'|trans }}</label>
+                                    <div class="divider py-1"></div>
+
+                                    <input type="color" id="colorPickerOutline" name="colorOutline" value="#212529">
+                                    <label for="name" class="form-label">{{ 'menu.outline'|trans }}</label>
+                                </div>
+
+                                <div class="col-4">
+                                    <h6>{{ 'menu.preview'|trans }}</h6>
+                                    <button id="tagPreview" type="button" class="btn btn-xs">Preview</button>
+                                </div>
+                            </div>
                             <div class="divider py-1"></div>
 
-                            <input type="color" id="colorPickerText" name="colorText" value="#f8f9fa">
-                            <label for="name" class="form-label">{{ 'menu.text'|trans }}</label>
-                            <div class="divider py-1"></div>
+                            <div class="row">
+                                <h6>{{ 'menu.presets'|trans }}</h6>
+                                <div class="col-6">
+                                    <button type="button" class="presetTag btn btn-sm btn-primary" data-preset="TRAIT_POSITIVE" style="width: 100%">{{ 'menu.blue'|trans }}</button>
+                                    <button type="button" class="presetTag btn btn-sm btn-danger" data-preset="TRAIT_NEGATIVE" style="width: 100%">{{ 'menu.red'|trans }}</button>
+                                    <button type="button" class="presetTag btn btn-sm btn-warning" data-preset="OTHER" style="width: 100%">{{ 'menu.yellow'|trans }}</button>
+                                </div>
+                                <div class="col-6">
+                                    <button type="button" class="presetTag btn btn-sm btn-dark" data-preset="DARK" style="width: 100%;">{{ 'menu.dark'|trans }}</button>
+                                    <button type="button" class="presetTag btn btn-sm" data-preset="LIGHT" style="background-color: #f8f9fa; color: #212529; border: 1px solid #212529; width: 100%">{{ 'menu.light'|trans }}</button>
+                                    <button type="button" class="presetTag btn btn-sm" data-preset="PURPLE" style="background-color: #4B0082; color: #f8f9fa; border: 1px solid #4B0082; width: 100%">{{ 'menu.purple'|trans }}</button>
+                                </div>
+                            </div>
 
-                            <input type="color" id="colorPickerOutline" name="colorOutline" value="#212529">
-                            <label for="name" class="form-label">{{ 'menu.outline'|trans }}</label>
-                        </div>
+                            <div class="divider py-2"></div>
 
-                        <div class="col-4">
-                            <h6>{{ 'menu.preview'|trans }}</h6>
-                            <button id="tagPreview" type="button" class="btn btn-xs">Preview</button>
-                        </div>
+                            <button type="submit" id="createTagSubmit" class="btn btn-block btn-dark" style="width: 100%">{{ 'menu.create'|trans }}</button>
+                        </form>
                     </div>
-                    <div class="divider py-1"></div>
-
-                    <div class="row">
-                        <h6>{{ 'menu.presets'|trans }}</h6>
-                        <div class="col-6">
-                            <button type="button" class="presetTag btn btn-sm btn-primary" data-preset="TRAIT_POSITIVE" style="width: 100%">{{ 'menu.blue'|trans }}</button>
-                            <button type="button" class="presetTag btn btn-sm btn-danger" data-preset="TRAIT_NEGATIVE" style="width: 100%">{{ 'menu.red'|trans }}</button>
-                            <button type="button" class="presetTag btn btn-sm btn-warning" data-preset="OTHER" style="width: 100%">{{ 'menu.yellow'|trans }}</button>
-                        </div>
-                        <div class="col-6">
-                            <button type="button" class="presetTag btn btn-sm btn-dark" data-preset="DARK" style="width: 100%;">{{ 'menu.dark'|trans }}</button>
-                            <button type="button" class="presetTag btn btn-sm" data-preset="LIGHT" style="background-color: #f8f9fa; color: #212529; border: 1px solid #212529; width: 100%">{{ 'menu.light'|trans }}</button>
-                            <button type="button" class="presetTag btn btn-sm" data-preset="PURPLE" style="background-color: #4B0082; color: #f8f9fa; border: 1px solid #4B0082; width: 100%">{{ 'menu.purple'|trans }}</button>
-                        </div>
-                    </div>
-
-                    <div class="divider py-2"></div>
-
-                    <button type="submit" id="createTagSubmit" class="btn btn-block btn-dark" style="width: 100%">{{ 'menu.create'|trans }}</button>
-                </form>
+                </div>
                 <hr>
                 <form id="assignUserTag">
                     <div class="form-group">
-                        <h6>{{ 'menu.assign'|trans }}</h6>
+                        <h5>{{ 'menu.assign'|trans }}</h5>
                         <select id="assignTagSelector" class="form-select" multiple>
 
                             {% for tag in all_private_tags %}
@@ -305,6 +331,7 @@
         </div>
     </div>
 </div>
+{% endif %}
 
 <div class="modal fade" id="deckUpdateNotes" tabindex="-1" role="dialog" aria-labelledby="deckUpdateNotes" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -402,8 +429,25 @@
         });
     });
 
-    // Tag modal
+    {% if is_granted('ROLE_KEYFORGE') and app.user.id.value in owners %}
 
+    $('.removeTag').click(function (e) {
+        e.preventDefault();
+
+        $.post({
+            url: '{{ path('keyforge_remove_tag') }}',
+            method: 'DELETE',
+            data: {
+                'id': $(this).data('tag'),
+            },
+        }).done(function( ) {
+            location.reload();
+        }).fail(function() {
+            alert('Error');
+        });
+    });
+
+    // Tag modal
     const presets = {
         TRAIT_POSITIVE: {color_bg: "#1e75e6", color_text: "#ffffff", color_outline: "#1e75e6"},
         TRAIT_NEGATIVE: {color_bg: "#f50529", color_text: "#ffffff", color_outline: "#f50529"},
@@ -484,4 +528,5 @@
 
         updateTagPreview();
     });
+    {% endif %}
 </script>
