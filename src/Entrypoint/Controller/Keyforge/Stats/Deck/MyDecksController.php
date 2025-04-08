@@ -47,7 +47,7 @@ final class MyDecksController extends Controller
     {
         $user = $this->getUserWithRole(UserRole::ROLE_KEYFORGE);
 
-        $tags = $this->extractResult($this->bus->dispatch(new GetTagsQuery(null, null, null)));
+        $tags = $this->extractResult($this->bus->dispatch(new GetTagsQuery(userIds: [null, $user->id()->value()])));
 
         return $this->render(
             'Keyforge/Stats/Deck/list_decks.html.twig',

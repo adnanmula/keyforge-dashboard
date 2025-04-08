@@ -46,8 +46,12 @@ final readonly class GetTagsQuery extends CriteriaQuery
             null,
             new Sorting(
                 new Order(
-                    new FilterField('type'),
+                    new FilterField('visibility'),
                     OrderType::ASC,
+                ),
+                new Order(
+                    new FilterField('type'),
+                    OrderType::DESC,
                 ),
             ),
             ...\array_filter($filters),

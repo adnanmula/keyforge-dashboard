@@ -12,6 +12,8 @@ use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 
 final class KeyforgeDeck implements \JsonSerializable
 {
+    private array $userTags = [];
+
     public function __construct(
         private readonly Uuid $id,
         private readonly int $dokId,
@@ -82,6 +84,16 @@ final class KeyforgeDeck implements \JsonSerializable
         $this->tags = \array_values(\array_unique($tags));
     }
 
+    public function userTags(): array
+    {
+        return $this->userTags;
+    }
+
+    public function setUserTags(string ...$tags): void
+    {
+        $this->userTags = \array_values(\array_unique($tags));
+    }
+
     /** @return array<Uuid> */
     public function owners(): array
     {
@@ -110,6 +122,7 @@ final class KeyforgeDeck implements \JsonSerializable
             'cards' => $this->cards->jsonSerialize(),
             'stats' => $this->stats->jsonSerialize(),
             'tags' => $this->tags,
+            'user_tags' => $this->userTags,
             'owners' => \array_map(static fn (Uuid $id): string => $id->value(), $this->owners),
             'userData' => $this->userData?->jsonSerialize(),
             'alliance_composition' => $this->allianceComposition,
