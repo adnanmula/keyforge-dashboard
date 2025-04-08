@@ -51,6 +51,21 @@
         return $('#tag-selector-exclude').val();
     }
 
+    function tagPrivateFilterType() {
+        const el = $('.tag_private_type_selector:checked');
+        return el.length ? el[0].value : [];
+    }
+
+    function tagsPrivate() {
+        const el = $('#tag-private-selector');
+        return el.length ? el.val() : [];
+    }
+
+    function tagsPrivateExcluded() {
+        const el = $('#tag-private-selector-exclude');
+        return el.length ? el.val() : [];
+    }
+
     function maxSas() {
         return $('#filter_max_sas')[0].value;
     }
@@ -125,6 +140,9 @@
                     d.extraFilterTagType = tagFilterType();
                     d.extraFilterTags = tags();
                     d.extraFilterTagsExcluded = tagsExcluded();
+                    d.extraFilterTagTypePrivate = tagPrivateFilterType();
+                    d.extraFilterTagsPrivate = tagsPrivate();
+                    d.extraFilterTagsPrivateExcluded = tagsPrivateExcluded();
                     d.extraFilterHouses = houses();
                     d.extraFilterHouseFilterType = houseFilterType();
                     d.extraFilterSet = set();
@@ -162,8 +180,20 @@
                         data.forEach(function (tagId) {
                             tagsJson.forEach(function (item) {
                                 if (tagId === item.id) {
-                                    const tag = '<button type="button" class="btn btn-xs btn-outline-dark" data-type="'+item.type+'" data-value="' + item.name
-                                        + '" style="background-color: ' + item.style.color_bg + '; color: ' + item.style.color_text + '; border-color: ' + item.style.color_outline + '">'
+                                    const tag = '<button type="button" class="btn btn-xs" data-type="'+item.type+'" data-value="' + item.name
+                                        + '" style="margin: 1px; background-color: ' + item.style.color_bg + '; color: ' + item.style.color_text + '; border-color: ' + item.style.color_outline + '">'
+                                        + item.name[locale] + '</button>';
+
+                                    tags.push(tag);
+                                }
+                            })
+                        })
+
+                        row.user_tags.forEach(function (tagId) {
+                            tagsJson.forEach(function (item) {
+                                if (tagId === item.id) {
+                                    const tag = '<button type="button" class="btn btn-xs" data-type="'+item.type+'" data-value="' + item.name
+                                        + '" style="margin: 1px; background-color: ' + item.style.color_bg + '; color: ' + item.style.color_text + '; border-color: ' + item.style.color_outline + '">'
                                         + item.name[locale] + '</button>';
 
                                     tags.push(tag);

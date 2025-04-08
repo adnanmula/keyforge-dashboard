@@ -3,6 +3,8 @@
 namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\Stats\Deck;
 
 use AdnanMula\Cards\Application\Query\Keyforge\Deck\GetDecksQuery;
+use AdnanMula\Cards\Application\Query\Keyforge\Deck\GetDecksTagsQuery;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeck;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeCardRarity;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckType;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeHouse;
@@ -523,7 +525,7 @@ final class GetDecksController extends Controller
         [$orderField, $orderDirection] = $this->orderBy($request->get('order'));
 
         try {
-            $result = $this->bus->dispatch(new GetDecksQuery(
+            $deckResult = $this->bus->dispatch(new GetDecksQuery(
                 $request->get('start'),
                 $request->get('length'),
                 $searchDeck,
@@ -545,14 +547,34 @@ final class GetDecksController extends Controller
                 $request->get('extraFilterMaxSas', 150),
                 $request->get('extraFilterMinSas', 0),
                 $request->get('extraFilterOnlyFriends') === 'true' ? $user?->id()->value() : null,
+                $request->get('extraFilterTagTypePrivate'),
+                $request->query->all()['extraFilterTagsPrivate'] ?? [],
+                $request->query->all()['extraFilterTagsPrivateExcluded'] ?? [],
             ));
+
+            $decks = $this->extractResult($deckResult);
+
+            $tags = [];
+
+            if (count($decks['decks']) > 0) {
+                $tagsResult = $this->bus->dispatch(new GetDecksTagsQuery(
+                    $user->id()->value(),
+                    array_map(static fn (KeyforgeDeck $d) => $d->id()->value(), $decks['decks']),
+                ));
+
+                $tags = $this->extractResult($tagsResult);
+            }
         } catch (LazyAssertionException $e) {
             return new JsonResponse(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         } catch (\Throwable $e) {
             return new JsonResponse(['error' => $e->getMessage()], Response::HTTP_CONFLICT);
         }
 
-        $decks = $this->extractResult($result);
+        foreach ($decks['decks'] as $deck) {
+            if (array_key_exists($deck->id()->value(), $tags)) {
+                $deck->setUserTags(...$tags[$deck->id()->value()]['user_tags']);
+            }
+        }
 
         $response = [
             'data' => $decks['decks'],
@@ -566,6 +588,10 @@ final class GetDecksController extends Controller
 
     public function orderBy(?array $queryOrder): array
     {
+        if (null === $queryOrder) {
+            return [null, null];
+        }
+
         $orderColumns = [
             1 => 'name',
             2 => 'set',

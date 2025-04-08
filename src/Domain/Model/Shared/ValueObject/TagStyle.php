@@ -11,9 +11,9 @@ final class TagStyle implements \JsonSerializable
     public const string COLOR_OUTLINE = 'color_outline';
 
     private function __construct(
-        private readonly string $colorBg,
-        private readonly string $colorText,
-        private readonly string $colorOutline,
+        public readonly string $colorBg,
+        public readonly string $colorText,
+        public readonly string $colorOutline,
     ) {}
 
     public static function from(array $style): self

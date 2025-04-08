@@ -29,6 +29,7 @@ use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagEfficiencyHigh;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagEfficiencyLow;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagHasAnomaly;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagHasBoardWipes;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagHasGigantic;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagHasKeyCheats;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagHasLegacy;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagHasMaverick;
@@ -45,6 +46,7 @@ use AdnanMula\Criteria\FilterField\FilterField;
 use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
 use AdnanMula\Criteria\FilterValue\ArrayElementFilterValue;
 use AdnanMula\Criteria\FilterValue\FilterOperator;
+use AdnanMula\Criteria\FilterValue\IntFilterValue;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
 
 final readonly class DeckApplyPredefinedTagsService
@@ -103,6 +105,7 @@ final readonly class DeckApplyPredefinedTagsService
         $newTags[] = $this->tagRecursion($deck);
         $newTags[] = $this->tagSynergy($deck);
         $newTags[] = $this->tagUpgradeCount($deck);
+        $newTags[] = $this->tagHasGiganticCreatures($deck);
 
         $draftDecks = [
             '19ee9a3b-cbe5-4fe5-b4a5-388a1cc3c37a',
@@ -133,7 +136,7 @@ final readonly class DeckApplyPredefinedTagsService
         $legacyCount = 0;
         $anomalyCount = 0;
 
-        $cards = array_merge(
+        $cards = \array_merge(
             $cards->firstPodCards,
             $cards->secondPodCards,
             $cards->thirdPodCards,
@@ -468,6 +471,41 @@ final readonly class DeckApplyPredefinedTagsService
 
         if ($value >= 2) {
             return new KeyforgeTagAntiSynergyHigh();
+        }
+
+        return null;
+    }
+
+    private function tagHasGiganticCreatures(KeyforgeDeck $deck): ?KeyforgeDeckTag
+    {
+        $cards = \array_merge(
+            $deck->cards()->firstPodCards,
+            $deck->cards()->secondPodCards,
+            $deck->cards()->thirdPodCards,
+        );
+
+        $giganticCards = $this->cardRepository->search(
+            new Criteria(
+                null,
+                null,
+                null,
+                new AndFilterGroup(
+                    FilterType::AND,
+                    new Filter(
+                        new FilterField('is_big'),
+                        new IntFilterValue(1),
+                        FilterOperator::EQUAL,
+                    ),
+                ),
+            ),
+        );
+
+        $giganticNames = \array_map(static fn (KeyforgeCard $c): string => $c->nameUrl, $giganticCards);
+
+        foreach ($cards as $card) {
+            if (\in_array($card->serializedName, $giganticNames, true)) {
+                return new KeyforgeTagHasGigantic();
+            }
         }
 
         return null;

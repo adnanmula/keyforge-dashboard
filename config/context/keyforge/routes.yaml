@@ -102,3 +102,18 @@ keyforge_alliance_generate:
   path: /alliance/gen
   controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Deck\Alliance\GenerateAlliancesController
   methods: [GET,POST]
+
+keyforge_create_tag:
+  path: /tag
+  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Tag\CreateTagController
+  methods: [POST]
+
+keyforge_assign_tag:
+  path: /tag
+  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Tag\AssignTagController
+  methods: [PUT]
+
+keyforge_remove_tag:
+  path: /tag
+  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Tag\RemoveTagController
+  methods: [DELETE]

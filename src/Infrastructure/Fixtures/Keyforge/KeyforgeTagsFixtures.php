@@ -26,6 +26,7 @@ use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagEfficiencyHigh;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagEfficiencyLow;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagHasAnomaly;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagHasBoardWipes;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagHasGigantic;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagHasKeyCheats;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagHasLegacy;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagHasMaverick;
@@ -74,6 +75,7 @@ final class KeyforgeTagsFixtures extends DbalFixture implements Fixture
         $this->save(new KeyforgeTagRecursionHigh());
         $this->save(new KeyforgeTagSynergyHigh());
         $this->save(new KeyforgeTagUpgradeCountHigh());
+        $this->save(new KeyforgeTagHasGigantic());
 
         $this->loaded = true;
     }

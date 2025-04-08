@@ -212,6 +212,7 @@ menu.best_win_streak: 'Mejor racha de victorias'
 menu.change_password: 'Actualizar contraseña'
 menu.clear_filters: 'Limpiar filtros'
 menu.compare_to: 'Comparar con'
+menu.create: Crear
 menu.created_by: 'Creado por'
 menu.deck: Baraja
 menu.deck_select_tooltip: 'Al jugar con randoms pega el id de baraja aunque no salga en el selector, no hace falta importarla antes'
@@ -294,6 +295,8 @@ menu.wr%: 'WinRate%'
 menu.wr/pr: 'Win/Pick Rate'
 menu.you: Tu
 menu.your_stats: Tus estadísticas
+menu.tag_predefined: Etiquetas predefinidas
+menu.tag_yours: Tus etiquetas
 wiki.adventures: Aventuras
 wiki.count_greater_or_equal_than: 'Tiene %count% o más'
 wiki.count_lower_or_equal_than: 'Tiene %count% o menos'
@@ -339,3 +342,20 @@ wiki.the_crucible_online: 'The crucible online'
 wiki.timing_chart: 'Esquema de timings'
 wiki.tournament_rules: 'Reglas de torneo'
 wiki.wiki_aa: 'Wiki (Archon Arcana)'
+menu.name: Nombre
+menu.colors: Colores
+menu.bg: Fondo
+menu.text: Texto
+menu.outline: Borde
+menu.preview: Previsualización
+menu.presets: Predeterminados
+menu.blue: Azul
+menu.red: Rojo
+menu.yellow: Amarillo
+menu.dark: Oscuro
+menu.purple: Morado
+menu.light: Claro
+menu.assign: Asignar
+menu.edit: Editar
+menu.create_new: Crear nueva
+menu.all_your_tags: Todas tus etiquetas

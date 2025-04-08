@@ -17,6 +17,7 @@ class KeyforgeDeckTag implements \JsonSerializable
         public TagStyle $style,
         public TagType $type,
         public bool $archived,
+        public ?Uuid $userId = null,
     ) {}
 
     public function jsonSerialize(): array
