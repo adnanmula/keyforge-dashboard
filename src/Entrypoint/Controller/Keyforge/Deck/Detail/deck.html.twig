@@ -227,7 +227,7 @@
                     <div class="row">
                         <div class="form-group">
                             <label for="name" class="form-label">{{ 'menu.name'|trans }}</label>
-                            <input id="createTagName" class="form-control" type="text" name="name" required>
+                            <input id="createTagName" class="form-control" type="text" name="name" maxlength="100" required>
 
                             <div class="divider py-1"></div>
                         </div>
@@ -279,23 +279,27 @@
                 <div class="divider py-3"></div>
                 <form id="assignUserTag">
                     <div class="form-group">
-                        <h6>{{ 'menu.add'|trans }}</h6>
-                        <select id="assignTagSelector" class="form-select">
+                        <h6>{{ 'menu.assign'|trans }}</h6>
+                        <select id="assignTagSelector" class="form-select" multiple>
+
                             {% for tag in all_private_tags %}
-                                <option value="{{ tag.id }}">{{ tag.name.jsonSerialize[app.locale] }}</option>
+                                {% set selected = '' %}
+
+                                {% for selectedTag in private_tags %}
+                                    {% if tag.id == selectedTag.id %}
+                                        {% set selected = 'selected' %}
+                                    {% endif %}
+                                {% endfor %}
+
+                                <option value="{{ tag.id }}" {{ selected }}>{{ tag.name.jsonSerialize[app.locale] }}</option>
                             {% endfor %}
                         </select>
                     </div>
 
-                    <div class="divider py-1"></div>
-
-                    <div>
-                        <input type="hidden" id="hiddenDeckId" value="">
-                    </div>
-
+                    <input type="hidden" id="hiddenDeckId" value="">
                     <div class="divider py-2"></div>
 
-                    <button type="submit" id="addTagSubmit" class="btn btn-block btn-dark" style="width: 100%">{{ 'deck.save'|trans }}</button>
+                    <button type="submit" id="addTagSubmit" class="btn btn-block btn-dark" style="width: 100%">{{ 'menu.save'|trans }}</button>
                 </form>
             </div>
         </div>
@@ -467,6 +471,17 @@
     });
 
     $(document).ready(function () {
+        $('#assignTagSelector').select2({
+            minimumResultsForSearch: 0,
+            minimumInputLength: 0,
+            multiple: true,
+            closeOnSelect: true,
+            allowClear: true,
+            placeholder: '{{ 'menu.tags'|trans }}',
+            theme: 'bootstrap-5',
+            dropdownParent: $('#deckUserTags')
+        });
+
         updateTagPreview();
     });
 </script>

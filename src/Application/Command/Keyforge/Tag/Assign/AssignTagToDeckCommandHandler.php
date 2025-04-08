@@ -45,16 +45,19 @@ final readonly class AssignTagToDeckCommandHandler
             return;
         }
 
-        $isOwner = \count(\array_filter(
-            $this->repository->ownedBy($user->id()),
-            static fn (array $deckOwnership): bool => $deckOwnership['user_id'] === $user->id()->value(),
-        )) > 0;
+        $ownedDecks = $this->repository->ownedBy($user->id());
+        $isOwner = null;
 
-        if (false === $isOwner) {
+        foreach ($ownedDecks as $ownedDeck) {
+            if ($deck->id()->value() === $ownedDeck['deck_id']) {
+                $isOwner = $ownedDeck;
+            }
+        }
+
+        if (null === $isOwner) {
             return;
         }
 
-        $deck->setTags(...\array_merge($deck->tags(), [$command->tagId->value()]));
-        $this->repository->save($deck);
+        $this->repository->updateUserTags($user->id(), $deck->id(), ...$command->tagIds);
     }
 }

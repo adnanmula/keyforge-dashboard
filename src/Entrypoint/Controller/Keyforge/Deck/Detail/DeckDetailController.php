@@ -7,6 +7,7 @@ use AdnanMula\Cards\Application\Query\Keyforge\Deck\GetDecksStatHistoryQuery;
 use AdnanMula\Cards\Application\Query\Keyforge\Game\GetGamesQuery;
 use AdnanMula\Cards\Application\Query\Keyforge\Tag\GetTagsQuery;
 use AdnanMula\Cards\Application\Query\Keyforge\User\GetUsersQuery;
+use AdnanMula\Cards\Application\Service\Json;
 use AdnanMula\Cards\Domain\Model\Keyforge\Card\KeyforgeCardRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\Card\ValueObject\KeyforgeCardType;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Exception\DeckNotExistsException;
@@ -270,9 +271,15 @@ final class DeckDetailController extends Controller
     private function tags(?User $user, KeyforgeDeck $deck): array
     {
         $userIds = [null];
+        $selectedTags = [];
 
         if (null !== $user && \in_array($user->id(), $deck->owners(), false)) {
             $userIds[] = $user->id()->value();
+            $ownedInfo = $this->deckRepository->ownedInfo($user->id(), $deck->id());
+
+            if (null !== $ownedInfo) {
+                $selectedTags = Json::decode($ownedInfo['user_tags']);
+            }
         }
 
         $tagDefinitions = $this->extractResult($this->bus->dispatch(new GetTagsQuery(userIds: $userIds)));
@@ -286,14 +293,16 @@ final class DeckDetailController extends Controller
                 if ($tagDefinition->id->value() === $tagId) {
                     if ($tagDefinition->visibility === TagVisibility::PUBLIC) {
                         $publicTags[] = $tagDefinition;
-                    } else {
-                        $privateTags[] = $tagDefinition;
                     }
                 }
             }
-        }
 
-        foreach ($tagDefinitions['tags'] as $tagDefinition) {
+            foreach ($selectedTags as $selectedTagId) {
+                if ($tagDefinition->id->value() === $selectedTagId) {
+                    $privateTags[] = $tagDefinition;
+                }
+            }
+
             if ($tagDefinition->visibility === TagVisibility::PRIVATE) {
                 $allPrivateTags[] = $tagDefinition;
             }

@@ -315,7 +315,7 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
             ->fetchAllAssociative();
     }
 
-    /** @return array<array{deck_id: string, user_id: string, notes: string}> */
+    /** @return array<array{deck_id: string, user_id: string, notes: string, user_tags: string}> */
     public function ownedBy(Uuid $userId): array
     {
         return $this->connection->createQueryBuilder()
@@ -325,6 +325,38 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
             ->setParameter('user_id', $userId->value())
             ->executeQuery()
             ->fetchAllAssociative();
+    }
+
+    public function ownedInfo(Uuid $userId, Uuid $deckId): ?array
+    {
+        $result = $this->connection->createQueryBuilder()
+            ->select('a.*')
+            ->from(self::TABLE_OWNERSHIP, 'a')
+            ->where('a.user_id = :user_id')
+            ->andWhere('a.deck_id = :deck_id')
+            ->setParameter('user_id', $userId->value())
+            ->setParameter('deck_id', $deckId->value())
+            ->executeQuery()
+            ->fetchAssociative();
+
+        if (false === $result) {
+            return null;
+        }
+
+        return $result;
+    }
+
+    public function updateUserTags(Uuid $userId, Uuid $deckId, string ...$tags): void
+    {
+        $this->connection->createQueryBuilder()
+            ->update(self::TABLE_OWNERSHIP)
+            ->set('user_tags', ':user_tags')
+            ->where('deck_id = :deck_id')
+            ->andWhere('user_id = :user_id')
+            ->setParameter('deck_id', $deckId->value())
+            ->setParameter('user_id', $userId->value())
+            ->setParameter('user_tags', Json::encode($tags))
+            ->executeStatement();
     }
 
     public function updateNotes(Uuid $userId, Uuid $deckId, string $notes): void

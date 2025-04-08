@@ -15,7 +15,7 @@ final class AssignTagController extends Controller
 
         $this->bus->dispatch(new AssignTagToDeckCommand(
             $request->get('deckId'),
-            $request->get('tagId'),
+            $request->get('tagId', []),
         ));
 
         return new Response('', Response::HTTP_OK);

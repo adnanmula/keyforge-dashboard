@@ -8,16 +8,16 @@ use Assert\Assert;
 final readonly class AssignTagToDeckCommand
 {
     private(set) Uuid $deckId;
-    private(set) Uuid $tagId;
+    private(set) array $tagIds;
 
-    public function __construct($deckId, $tagId)
+    public function __construct($deckId, $tagIds)
     {
         Assert::lazy()
             ->that($deckId, 'deckId')->uuid()
-            ->that($tagId, 'tagId')->uuid()
+            ->that($tagIds, 'tagIds')->all()->uuid()
             ->verifyNow();
 
         $this->deckId = Uuid::from($deckId);
-        $this->tagId = Uuid::from($tagId);
+        $this->tagIds = $tagIds;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace AdnanMula\Cards\Application\Command\Keyforge\Tag\Create;
 
+use AdnanMula\Cards\Application\Service\Json;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckTag;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeTagRepository;
@@ -68,16 +69,23 @@ final readonly class CreateTagCommandHandler
             return;
         }
 
-        $isOwner = \count(\array_filter(
-            $this->deckRepository->ownedBy($user->id()),
-            static fn (array $deckOwnership): bool => $deckOwnership['user_id'] === $user->id()->value(),
-        )) > 0;
+        $ownedDecks = $this->deckRepository->ownedBy($user->id());
+        $isOwner = null;
 
-        if (false === $isOwner) {
+        foreach ($ownedDecks as $ownedDeck) {
+            if ($deckId->value() === $ownedDeck['deck_id']) {
+                $isOwner = $ownedDeck;
+            }
+        }
+
+        if (null === $isOwner) {
             return;
         }
 
-        $deck->setTags(...\array_merge($deck->tags(), [$id->value()]));
-        $this->deckRepository->save($deck);
+        $this->deckRepository->updateUserTags(
+            $user->id(),
+            $deck->id(),
+            ...\array_merge(Json::decode($isOwner['user_tags']), [$id->value()]),
+        );
     }
 }
