@@ -50,6 +50,9 @@ final readonly class GetDecksQuery extends CriteriaQuery
         $maxSas = 150,
         $minSas = 0,
         $onlyFriends = null,
+        ?string $tagPrivateFilterType = null,
+        array $tagsPrivate = [],
+        array $tagsPrivateExcluded = [],
     ) {
         Assert::lazy()
             ->that($start, 'start')->nullOr()->integerish()->greaterOrEqualThan(0)
@@ -71,6 +74,9 @@ final readonly class GetDecksQuery extends CriteriaQuery
             ->that($maxSas, 'maxSas')->integerish()
             ->that($minSas, 'minSas')->integerish()
             ->that($onlyFriends, 'onlyFriends')->nullOr()->uuid()
+            ->that($tagPrivateFilterType, 'tagPrivateFilterType')->nullOr()->inArray(['all', 'any'])
+            ->that($tagsPrivate, 'tagsPrivate')->all()->uuid()
+            ->that($tagsPrivateExcluded, 'tagsPrivateExcluded')->all()->uuid()
             ->verifyNow();
 
         $this->deckId = null !== $deckId ? Uuid::from($deckId) : null;
@@ -81,7 +87,9 @@ final readonly class GetDecksQuery extends CriteriaQuery
 
         $filters[] = $this->miscFilter($owner, $deck, $onlyOwned, (int) $minSas, (int) $maxSas);
         $filters[] = $this->tagsIncludedFilter($tagFilterType, ...$tags);
-        $filters[] = $this->tagsExcludedFilter(...$tagsExcluded);
+        $filters[] = $this->tagsExcludedFilter($tagFilterType, ...$tagsExcluded);
+        $filters[] = $this->tagsPrivateIncludedFilter($tagPrivateFilterType, ...$tagsPrivate);
+        $filters[] = $this->tagsPrivateExcludedFilter($tagPrivateFilterType, ...$tagsPrivateExcluded);
         $filters[] = $this->housesFilter($houseFilterType, ...$houses ?? []);
         $filters[] = $this->deckTypeFilter(...$deckTypes ?? []);
         $filters[] = $this->ownersFilter(...$owners);
@@ -141,9 +149,9 @@ final readonly class GetDecksQuery extends CriteriaQuery
         return null;
     }
 
-    private function tagsExcludedFilter(string ...$tags): ?FilterGroup
+    private function tagsExcludedFilter(?string $filterType, string ...$tags): ?FilterGroup
     {
-        if (\count($tags) > 0) {
+        if (null !== $filterType && \count($tags) > 0) {
             $tagsExpressions = [];
 
             foreach ($tags as $tag) {
@@ -151,7 +159,43 @@ final readonly class GetDecksQuery extends CriteriaQuery
             }
 
             return new AndFilterGroup(
-                FilterType::AND,
+                $filterType === 'any' ? FilterType::OR : FilterType::AND,
+                ...$tagsExpressions,
+            );
+        }
+
+        return null;
+    }
+
+    private function tagsPrivateIncludedFilter(?string $filterType, string ...$tags): ?FilterGroup
+    {
+        if (null !== $filterType && \count($tags) > 0) {
+            $tagsExpressions = [];
+
+            foreach ($tags as $tag) {
+                $tagsExpressions[] = new Filter(new FilterField('user_tags'), new ArrayElementFilterValue($tag), FilterOperator::IN_ARRAY);
+            }
+
+            return new AndFilterGroup(
+                $filterType === 'any' ? FilterType::OR : FilterType::AND,
+                ...$tagsExpressions,
+            );
+        }
+
+        return null;
+    }
+
+    private function tagsPrivateExcludedFilter(?string $filterType, string ...$tags): ?FilterGroup
+    {
+        if (null !== $filterType && \count($tags) > 0) {
+            $tagsExpressions = [];
+
+            foreach ($tags as $tag) {
+                $tagsExpressions[] = new Filter(new FilterField('user_tags'), new ArrayElementFilterValue($tag), FilterOperator::NOT_IN_ARRAY);
+            }
+
+            return new AndFilterGroup(
+                $filterType === 'any' ? FilterType::OR : FilterType::AND,
                 ...$tagsExpressions,
             );
         }

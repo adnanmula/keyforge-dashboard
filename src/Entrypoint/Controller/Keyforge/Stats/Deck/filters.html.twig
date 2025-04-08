@@ -64,26 +64,58 @@
                 <div class="divider py-1"></div>
 
                 <div class="form-group">
-                    <label for="tags" class="form-label">{{ 'menu.tags'|trans }}</label>
-                    <input class="form-check-input tag_type_selector" type="radio" name="tags_filter_type" id="tags_filter_type_1" value="all" checked>
-                    <label class="form-check-label" for="tags_filter_type_1">{{ 'menu.all'|trans }}</label>
-                    <input class="form-check-input tag_type_selector" type="radio" name="tags_filter_type" id="tags_filter_type_2" value="any">
-                    <label class="form-check-label" for="tags_filter_type_2">{{ 'menu.any'|trans }}</label>
+                    <div class="row">
+                        {% if owner is null %}
+                        <div class="col-md-12">
+                        {% else %}
+                        <div class="col-md-6">
+                        {% endif %}
+                            <label for="tags" class="form-label">{{ 'menu.tag_predefined'|trans }}</label>
+                            <input class="form-check-input tag_type_selector" type="radio" name="tags_filter_type" id="tags_filter_type_1" value="all" checked>
+                            <label class="form-check-label" for="tags_filter_type_1">{{ 'menu.all'|trans }}</label>
+                            <input class="form-check-input tag_type_selector" type="radio" name="tags_filter_type" id="tags_filter_type_2" value="any">
+                            <label class="form-check-label" for="tags_filter_type_2">{{ 'menu.any'|trans }}</label>
+                            <div class="form-group">
+                                <select id="tag-selector" class="form-select">
+                                    {% for tag in tags %}
+                                        <option value="{{ tag.id }}">{{ tag.name[app.locale] }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="divider py-1"></div>
+                            <div class="form-group">
+                                <select id="tag-selector-exclude" class="form-select">
+                                    {% for tag in tags %}
+                                        <option value="{{ tag.id }}">{{ tag.name[app.locale] }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
 
-                    <div class="form-group">
-                        <select id="tag-selector" class="form-select">
-                            {% for tag in tags %}
-                                <option value="{{ tag.id }}">{{ tag.name[app.locale] }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="divider py-1"></div>
-                    <div class="form-group">
-                        <select id="tag-selector-exclude" class="form-select">
-                            {% for tag in tags %}
-                                <option value="{{ tag.id }}">{{ tag.name[app.locale] }}</option>
-                            {% endfor %}
-                        </select>
+                        {% if owner is not null %}
+                        <div class="col-md-6">
+                            <label for="tags" class="form-label">{{ 'menu.tag_yours'|trans }}</label>
+                            <input class="form-check-input tag_private_type_selector" type="radio" name="tags_private_filter_type" id="tags_private_filter_type_1" value="all" checked>
+                            <label class="form-check-label" for="tags_private_filter_type_1">{{ 'menu.all'|trans }}</label>
+                            <input class="form-check-input tag_private_type_selector" type="radio" name="tags_private_filter_type" id="tags_private_filter_type_2" value="any">
+                            <label class="form-check-label" for="tags_private_filter_type_2">{{ 'menu.any'|trans }}</label>
+                            <div class="form-group">
+                                <select id="tag-private-selector" class="form-select">
+                                    {% for tag in privateTags %}
+                                        <option value="{{ tag.id }}">{{ tag.name[app.locale] }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="divider py-1"></div>
+                            <div class="form-group">
+                                <select id="tag-private-selector-exclude" class="form-select">
+                                    {% for tag in privateTags %}
+                                        <option value="{{ tag.id }}">{{ tag.name[app.locale] }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        {% endif %}
                     </div>
                 </div>
 
@@ -218,4 +250,26 @@
 
     $("#tag-selector-exclude").val("")
     $("#tag-selector-exclude").trigger("change");
+
+    $("#tag-private-selector").select2({
+        multiple: true,
+        closeOnSelect: false,
+        allowClear: false,
+        placeholder: '{{ 'menu.include'|trans }}',
+        theme: 'bootstrap-5'
+    });
+
+    $("#tag-private-selector").val("")
+    $("#tag-private-selector").trigger("change");
+
+    $('#tag-private-selector-exclude').select2({
+        multiple: true,
+        closeOnSelect: false,
+        allowClear: false,
+        placeholder: '{{ 'menu.exclude'|trans }}',
+        theme: 'bootstrap-5'
+    });
+
+    $("#tag-private-selector-exclude").val("")
+    $("#tag-private-selector-exclude").trigger("change");
 </script>

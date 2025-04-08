@@ -55,6 +55,7 @@ final class ListDecksController extends Controller
             [
                 'owner' => null,
                 'tags' => \array_map(static fn (KeyforgeDeckTag $tag) => $tag->jsonSerialize(), $tags['tags']),
+                'privateTags' => [],
                 'users' => $this->users(),
                 'sets' => KeyforgeSet::cases(),
                 'houses' => KeyforgeHouse::cases(),

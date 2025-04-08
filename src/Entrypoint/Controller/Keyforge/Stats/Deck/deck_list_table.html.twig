@@ -51,6 +51,21 @@
         return $('#tag-selector-exclude').val();
     }
 
+    function tagPrivateFilterType() {
+        const el = $('.tag_private_type_selector:checked');
+        return el.length ? el[0].value : [];
+    }
+
+    function tagsPrivate() {
+        const el = $('#tag-private-selector');
+        return el.length ? el.val() : [];
+    }
+
+    function tagsPrivateExcluded() {
+        const el = $('#tag-private-selector-exclude');
+        return el.length ? el.val() : [];
+    }
+
     function maxSas() {
         return $('#filter_max_sas')[0].value;
     }
@@ -125,6 +140,9 @@
                     d.extraFilterTagType = tagFilterType();
                     d.extraFilterTags = tags();
                     d.extraFilterTagsExcluded = tagsExcluded();
+                    d.extraFilterTagTypePrivate = tagPrivateFilterType();
+                    d.extraFilterTagsPrivate = tagsPrivate();
+                    d.extraFilterTagsPrivateExcluded = tagsPrivateExcluded();
                     d.extraFilterHouses = houses();
                     d.extraFilterHouseFilterType = houseFilterType();
                     d.extraFilterSet = set();

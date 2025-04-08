@@ -3,12 +3,12 @@
 namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\Stats\Deck;
 
 use AdnanMula\Cards\Application\Query\Keyforge\Tag\GetTagsQuery;
-use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckTag;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeHouse;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeSet;
 use AdnanMula\Cards\Domain\Model\Keyforge\User\KeyforgeUserRepository;
 use AdnanMula\Cards\Domain\Model\Shared\User;
 use AdnanMula\Cards\Domain\Model\Shared\UserRepository;
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\TagVisibility;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\UserRole;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
 use AdnanMula\Criteria\Criteria;
@@ -49,11 +49,23 @@ final class MyDecksController extends Controller
 
         $tags = $this->extractResult($this->bus->dispatch(new GetTagsQuery(userIds: [null, $user->id()->value()])));
 
+        $publicTags = [];
+        $privateTags = [];
+
+        foreach ($tags['tags'] as $tag) {
+            $publicTags[] = $tag->jsonSerialize();
+
+            if (TagVisibility::PRIVATE === $tag->visibility) {
+                $privateTags[] = $tag->jsonSerialize();
+            }
+        }
+
         return $this->render(
             'Keyforge/Stats/Deck/list_decks.html.twig',
             [
                 'owner' => $user->id()->value(),
-                'tags' => \array_map(static fn (KeyforgeDeckTag $tag) => $tag->jsonSerialize(), $tags['tags']),
+                'tags' => $publicTags,
+                'privateTags' => $privateTags,
                 'users' => $this->users($user),
                 'sets' => KeyforgeSet::cases(),
                 'houses' => KeyforgeHouse::cases(),

@@ -547,16 +547,23 @@ final class GetDecksController extends Controller
                 $request->get('extraFilterMaxSas', 150),
                 $request->get('extraFilterMinSas', 0),
                 $request->get('extraFilterOnlyFriends') === 'true' ? $user?->id()->value() : null,
+                $request->get('extraFilterTagTypePrivate'),
+                $request->query->all()['extraFilterTagsPrivate'] ?? [],
+                $request->query->all()['extraFilterTagsPrivateExcluded'] ?? [],
             ));
 
             $decks = $this->extractResult($deckResult);
 
-            $tagsResult = $this->bus->dispatch(new GetDecksTagsQuery(
-                $user->id()->value(),
-                array_map(static fn (KeyforgeDeck $d) => $d->id()->value(), $decks['decks']),
-            ));
+            $tags = [];
 
-            $tags = $this->extractResult($tagsResult);
+            if (count($decks['decks']) > 0) {
+                $tagsResult = $this->bus->dispatch(new GetDecksTagsQuery(
+                    $user->id()->value(),
+                    array_map(static fn (KeyforgeDeck $d) => $d->id()->value(), $decks['decks']),
+                ));
+
+                $tags = $this->extractResult($tagsResult);
+            }
         } catch (LazyAssertionException $e) {
             return new JsonResponse(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         } catch (\Throwable $e) {

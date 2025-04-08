@@ -29,6 +29,7 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
         'user_stat' => 'c.user_id',
         'wins' => 'wins',
         'losses' => 'losses',
+        'user_tags' => 'b.user_tags',
     ];
 
     public function search(Criteria $criteria, bool $isMyDecks = false): array
