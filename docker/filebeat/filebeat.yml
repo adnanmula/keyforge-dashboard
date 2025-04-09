@@ -8,7 +8,8 @@ filebeat.inputs:
 output.elasticsearch:
   hosts: ["http://cards_elasticsearch:9200"]
   index: "symfony-logs-%{+yyyy.MM.dd}"
-  data_stream.enabled: false
+  username: "${ELASTIC_USER}"
+  password: "${ELASTIC_PASS}"
 
 setup.ilm.enabled: false
 path.data: /usr/share/filebeat/data

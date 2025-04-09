@@ -43,10 +43,47 @@ services:
     container_name: cards_elasticsearch
     environment:
       - discovery.type=single-node
-      - xpack.security.enabled=false
+      - xpack.security.enabled=true
       - xpack.ml.enabled=false
+      - ELASTIC_PASSWORD=${ELASTIC_ADMIN_PASS}
     ports:
       - ${ELASTIC_PORT}:9200
+    networks:
+      - network_cards
+  init-kibana-user:
+    image: curlimages/curl:8.4.0
+    container_name: cards_init_kibana_user
+    depends_on:
+      - elasticsearch
+    entrypoint: >
+      sh -c "
+        echo 'Waiting for Elastic...';
+        until curl -s -u elastic:${ELASTIC_ADMIN_PASS} http://cards_elasticsearch:9200 >/dev/null; do
+          sleep 2;
+        done;
+        echo 'Creating role for Filebeat...';
+        curl -s -u elastic:${ELASTIC_ADMIN_PASS} -X POST http://cards_elasticsearch:9200/_security/role/filebeat_writer -H 'Content-Type: application/json' -d '{
+          \"cluster\": [\"all\"],
+          \"index\": [
+            {
+              \"names\": [\"symfony-logs-*\"],
+              \"privileges\": [\"create_index\", \"write\", \"manage\", \"read\", \"index\", \"create\", \"delete\", \"monitor\"]
+            }
+          ],
+          \"run_as\": [\"*\"]
+        }';
+        echo 'Creating user with the filebeat_writer role...';
+        curl -s -u elastic:${ELASTIC_ADMIN_PASS} -X POST http://cards_elasticsearch:9200/_security/user/${ELASTIC_USER} -H 'Content-Type: application/json' -d '{
+          \"password\": \"${ELASTIC_PASS}\",
+          \"roles\": [\"kibana_admin\", \"kibana_system\", \"filebeat_writer\"],
+          \"full_name\": \"User\"
+        }';
+        echo 'Done!'
+      "
+    environment:
+      - ELASTIC_ADMIN_PASS=${ELASTIC_ADMIN_PASS}
+      - ELASTIC_USER=${ELASTIC_USER}
+      - ELASTIC_PASS=${ELASTIC_PASS}
     networks:
       - network_cards
   filebeat:
@@ -57,6 +94,9 @@ services:
       - ./docker/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
       - ./var/log:/var/www/html/var/log
       - ./docker/filebeat/fields.yml:/usr/share/filebeat/fields.yml:ro
+    environment:
+      - ELASTIC_USER=${ELASTIC_USER}
+      - ELASTIC_PASS=${ELASTIC_PASS}
     depends_on:
       - elasticsearch
     command: ["--strict.perms=false"]
@@ -66,9 +106,12 @@ services:
     image: docker.elastic.co/kibana/kibana:8.6.2
     container_name: cards_kibana
     environment:
-      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - ELASTICSEARCH_HOSTS=http://cards_elasticsearch:9200
+      - ELASTICSEARCH_USERNAME=${ELASTIC_USER}
+      - ELASTICSEARCH_PASSWORD=${ELASTIC_PASS}
     depends_on:
       - elasticsearch
+      - init-kibana-user
     ports:
       - ${KIBANA_PORT}:5601
     networks:
