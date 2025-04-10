@@ -38,8 +38,8 @@
                     </div>
                 </div>
 
-                <div class="divider py-1"></div>
-                <div class="divider py-1"></div>
+                <div class="divider py-2"></div>
+
                 <div class="form-group col-12">
                     <label for="houses" class="form-label">{{ 'deck.houses'|trans }}</label><b></b>
                     <input class="form-check-input house_type_selector" type="radio" name="houses_filter_type" id="houses_filter_type_1" value="all" checked>
@@ -59,9 +59,7 @@
                     </div>
                 </div>
 
-                <div class="divider py-1"></div>
-                <div class="divider py-1"></div>
-                <div class="divider py-1"></div>
+                <div class="divider py-3"></div>
 
                 <div class="form-group">
                     <div class="row">
@@ -119,28 +117,22 @@
                     </div>
                 </div>
 
-                <div class="divider py-1"></div>
-                <div class="divider py-1"></div>
-                <div class="divider py-1"></div>
+                <div class="divider py-3"></div>
 
                 <div class="row">
                     <div class="col-md-4 col-sm-12">
-                        <label>{{ 'menu.min_sas'|trans }}</label>
+                        <label for="filter_min_sas" class="form-label">{{ 'menu.min_sas'|trans }}</label>
                         <input type="number" class="form-control" name="min-sas" id="filter_min_sas" min="30" max="200" value="30">
                         <div class="divider py-1"></div>
-                        <label>{{ 'menu.max_sas'|trans }}</label>
+                        <label for="filter_max_sas" class="form-label">{{ 'menu.max_sas'|trans }}</label>
                         <input type="number" class="form-control" name="max-sas" id="filter_max_sas" min="30" max="200" value="200">
                     </div>
 
                     {% if is_granted('ROLE_KEYFORGE') %}
                     {% if owner is null %}
 
-                    <div class="divider py-1"></div>
-                    <div class="divider py-1"></div>
-                    <div class="divider py-1"></div>
-
                     <div class="col-md-4 col-sm-12">
-                        <label for="tags" class="form-label">{{ 'menu.other_options'|trans }}</label>
+                        <label for="owner-selector" class="form-label">{{ 'menu.owner'|trans }}</label>
 
                         <div class="form-group">
                             <select id="owner-selector" class="form-select">
@@ -150,7 +142,15 @@
                             </select>
                         </div>
 
-                        <div class="divider py-1"></div>
+                        <div class="divider py-2"></div>
+
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="only_friends" checked>
+                            <label class="form-check-label" for="only_friends">{{ 'menu.friend_decks_games'|trans }}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-12">
+                        <label for="deck-type-selector" class="form-label">{{ 'menu.deck_type'|trans }}</label>
 
                         <div class="form-group">
                             <select id="deck-type-selector" class="form-select">
@@ -159,30 +159,29 @@
                                 <option value="THEORETICAL">Theoretical</option>
                             </select>
                         </div>
-
-                        <div class="divider py-1"></div>
-                        <div class="divider py-1"></div>
-
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="only_friends" checked>
-                            <label class="form-check-label" for="only_friends">{{ 'menu.friend_decks_games'|trans }}</label>
-                        </div>
                     </div>
 
                     {% else %}
 
-                    <div class="divider py-1"></div>
-                    <div class="divider py-1"></div>
-                    <div class="divider py-1"></div>
-
                     <div class="col-md-4 col-sm-12">
-                        <label for="tags" class="form-label">{{ 'menu.other_options'|trans }}</label>
+                        <label for="deck-type-selector" class="form-label">{{ 'menu.deck_type'|trans }}</label>
 
                         <div class="form-group">
                             <select id="deck-type-selector" class="form-select">
                                 <option value="STANDARD">Standard</option>
                                 <option value="ALLIANCE">Alliance</option>
                                 <option value="THEORETICAL">Theoretical</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 col-sm-12">
+                        <label for="tags-shown-selector" class="form-label">{{ 'menu.tags_to_show'|trans }}</label>
+
+                        <div class="form-group">
+                            <select id="tags-shown-selector" class="form-select">
+                                <option value="predetermined">{{ 'menu.tag_predefined'|trans }}</option>
+                                <option value="custom">{{ 'menu.tag_yours'|trans }}</option>
                             </select>
                         </div>
                     </div>
@@ -272,4 +271,14 @@
 
     $("#tag-private-selector-exclude").val("")
     $("#tag-private-selector-exclude").trigger("change");
+
+    $('#tags-shown-selector').select2({
+        multiple: true,
+        closeOnSelect: false,
+        allowClear: false,
+        theme: 'bootstrap-5'
+    });
+
+    $("#tags-shown-selector").val(['predetermined', 'custom']);
+    $("#tags-shown-selector").trigger('change');
 </script>
