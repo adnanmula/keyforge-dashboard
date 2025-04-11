@@ -178,34 +178,32 @@
                         let tags = [];
 
                         const tagsToShow = $("#tags-shown-selector").val();
+                        const showPredefined = (undefined === tagsToShow || tagsToShow.includes('predetermined')) ? '' : ';display: none';
+                        const showCustom = (undefined === tagsToShow || tagsToShow.includes('custom')) ? '' : ';display: none';
 
-                        if (undefined === tagsToShow || tagsToShow.includes('predetermined')) {
-                            data.forEach(function (tagId) {
-                                tagsJson.forEach(function (item) {
-                                    if (tagId === item.id) {
-                                        const tag = '<button type="button" class="btn btn-xs" data-type="'+item.type+'" data-value="' + item.name
-                                            + '" style="margin: 1px; background-color: ' + item.style.color_bg + '; color: ' + item.style.color_text + '; border-color: ' + item.style.color_outline + '">'
-                                            + item.name[locale] + '</button>';
+                        data.forEach(function (tagId) {
+                            tagsJson.forEach(function (item) {
+                                if (tagId === item.id) {
+                                    const tag = '<button type="button" class="btn btn-xs predefinedTag" data-type="'+item.type+'" data-value="' + item.name
+                                        + '" style="margin: 1px; background-color: ' + item.style.color_bg + '; color: ' + item.style.color_text + '; border-color: ' + item.style.color_outline + showPredefined + '">'
+                                        + item.name[locale] + '</button>';
 
-                                        tags.push(tag);
-                                    }
-                                })
-                            });
-                        }
+                                    tags.push(tag);
+                                }
+                            })
+                        });
 
-                        if (undefined === tagsToShow || tagsToShow.includes('custom')) {
-                            row.user_tags.forEach(function (tagId) {
-                                tagsJson.forEach(function (item) {
-                                    if (tagId === item.id) {
-                                        const tag = '<button type="button" class="btn btn-xs" data-type="' + item.type + '" data-value="' + item.name
-                                            + '" style="margin: 1px; background-color: ' + item.style.color_bg + '; color: ' + item.style.color_text + '; border-color: ' + item.style.color_outline + '">'
-                                            + item.name[locale] + '</button>';
+                        row.user_tags.forEach(function (tagId) {
+                            tagsJson.forEach(function (item) {
+                                if (tagId === item.id) {
+                                    const tag = '<button type="button" class="btn btn-xs customTag" data-type="' + item.type + '" data-value="' + item.name
+                                        + '" style="margin: 1px; background-color: ' + item.style.color_bg + '; color: ' + item.style.color_text + '; border-color: ' + item.style.color_outline + showCustom + '">'
+                                        + item.name[locale] + '</button>';
 
-                                        tags.push(tag);
-                                    }
-                                })
-                            });
-                        }
+                                    tags.push(tag);
+                                }
+                            })
+                        });
 
                         return tags.sort().join('');
                     },

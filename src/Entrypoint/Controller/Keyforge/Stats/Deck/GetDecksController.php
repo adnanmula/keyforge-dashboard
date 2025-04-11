@@ -556,7 +556,7 @@ final class GetDecksController extends Controller
 
             $tags = [];
 
-            if (count($decks['decks']) > 0) {
+            if (null !== $user && count($decks['decks']) > 0) {
                 $tagsResult = $this->bus->dispatch(new GetDecksTagsQuery(
                     $user->id()->value(),
                     array_map(static fn (KeyforgeDeck $d) => $d->id()->value(), $decks['decks']),

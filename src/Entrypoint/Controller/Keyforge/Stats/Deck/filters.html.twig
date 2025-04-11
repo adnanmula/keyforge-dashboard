@@ -16,7 +16,7 @@
                             {% if set.isMain and set.isEnabled %}
                                 <div class="form-check col-6 col-sm-4 col-md-4 col-lg-2 col-xl-2" style="display: flex; align-items: center;">
                                     <input class="form-check-input set_selector" type="checkbox" value="{{ set.name }}" id="check_set_{{ set.name }}">
-                                    <label for="check_set_{{ set.name }}"><img width="33px" src="{{ asset('assets/keyforge/sets/' ~ set.name ~ '.svg') }}" alt="CotA"/>{{ ('keyforge.set_' ~ set.name)|lower|trans }}</label>
+                                    <label for="check_set_{{ set.name }}"><img width="33px" src="{{ asset('assets/keyforge/sets/' ~ set.name ~ '.svg') }}" alt="{{ set.name }}"/>{{ ('keyforge.set_' ~ set.name)|lower|trans }}</label>
                                 </div>
                             {% endif %}
                         {% endfor %}
@@ -41,7 +41,7 @@
                 <div class="divider py-2"></div>
 
                 <div class="form-group col-12">
-                    <label for="houses" class="form-label">{{ 'deck.houses'|trans }}</label><b></b>
+                    <label for="houses" class="form-label">{{ 'deck.houses'|trans }}</label>
                     <input class="form-check-input house_type_selector" type="radio" name="houses_filter_type" id="houses_filter_type_1" value="all" checked>
                     <label class="form-check-label" for="houses_filter_type_1">{{ 'menu.all'|trans }}</label>
                     <input class="form-check-input house_type_selector" type="radio" name="houses_filter_type" id="houses_filter_type_2" value="any">
@@ -206,79 +206,37 @@
 </div>
 
 <script>
-    $('#owner-selector').select2({
-        multiple: true,
-        closeOnSelect: false,
-        allowClear: false,
-        placeholder: '{{ 'menu.owner'|trans }}',
-        theme: 'bootstrap-5'
+    prepareSelector('#owner-selector', '{{ 'menu.owner'|trans }}', '')
+    prepareSelector('#deck-type-selector', '{{ 'menu.deck_type'|trans }}', 'STANDARD');
+    prepareSelector('#tag-selector', '{{ 'menu.include'|trans }}', '');
+    prepareSelector('#tag-selector-exclude', '{{ 'menu.exclude'|trans }}', '');
+    prepareSelector('#tag-private-selector', '{{ 'menu.include'|trans }}', '');
+    prepareSelector('#tag-private-selector-exclude', '{{ 'menu.exclude'|trans }}', '');
+    prepareSelector('#tags-shown-selector', '', ['predetermined', 'custom']);
+
+    function prepareSelector (selector, placeholder, defaultValue) {
+        $(selector).select2({
+            multiple: true,
+            closeOnSelect: false,
+            allowClear: false,
+            placeholder: placeholder,
+            theme: 'bootstrap-5'
+        });
+
+        $(selector).val(defaultValue)
+        $(selector).trigger("change");
+    }
+
+    $('#tags-shown-selector').on('change', function () {
+        $('.customTag, .predefinedTag').hide();
+        const selectedValues = $(this).val();
+
+        if (selectedValues.includes('predetermined')) {
+            $('.predefinedTag').show();
+        }
+
+        if (selectedValues.includes('custom')) {
+            $('.customTag').show();
+        }
     });
-
-    $("#owner-selector").val("")
-    $("#owner-selector").trigger("change");
-
-    $('#deck-type-selector').select2({
-        multiple: true,
-        closeOnSelect: false,
-        allowClear: false,
-        placeholder: '{{ 'menu.deck_type'|trans }}',
-        theme: 'bootstrap-5'
-    });
-
-    $("#deck-type-selector").val("STANDARD")
-    $("#deck-type-selector").trigger("change");
-
-    $('#tag-selector').select2({
-        multiple: true,
-        closeOnSelect: false,
-        allowClear: false,
-        placeholder: '{{ 'menu.include'|trans }}',
-        theme: 'bootstrap-5'
-    });
-
-    $("#tag-selector").val("")
-    $("#tag-selector").trigger("change");
-
-    $('#tag-selector-exclude').select2({
-        multiple: true,
-        closeOnSelect: false,
-        allowClear: false,
-        placeholder: '{{ 'menu.exclude'|trans }}',
-        theme: 'bootstrap-5'
-    });
-
-    $("#tag-selector-exclude").val("")
-    $("#tag-selector-exclude").trigger("change");
-
-    $("#tag-private-selector").select2({
-        multiple: true,
-        closeOnSelect: false,
-        allowClear: false,
-        placeholder: '{{ 'menu.include'|trans }}',
-        theme: 'bootstrap-5'
-    });
-
-    $("#tag-private-selector").val("")
-    $("#tag-private-selector").trigger("change");
-
-    $('#tag-private-selector-exclude').select2({
-        multiple: true,
-        closeOnSelect: false,
-        allowClear: false,
-        placeholder: '{{ 'menu.exclude'|trans }}',
-        theme: 'bootstrap-5'
-    });
-
-    $("#tag-private-selector-exclude").val("")
-    $("#tag-private-selector-exclude").trigger("change");
-
-    $('#tags-shown-selector').select2({
-        multiple: true,
-        closeOnSelect: false,
-        allowClear: false,
-        theme: 'bootstrap-5'
-    });
-
-    $("#tags-shown-selector").val(['predetermined', 'custom']);
-    $("#tags-shown-selector").trigger('change');
 </script>
