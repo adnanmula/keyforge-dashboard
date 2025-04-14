@@ -419,6 +419,7 @@
 
         function fetchDecks(index, set, owners, amount, stat, decktype) {
             let data = {
+                extraFilterOwners: [],
                 extraFilterMinSas: 30,
                 length: amount,
             };
@@ -474,6 +475,11 @@
             const spinner = '<div class="spinner-border text-dark" role="status"><span class="sr-only"></span></div>';
 
             $('#collection_comparison_table_' + index + ' > tbody').append(spinner);
+
+            if (0 === data.extraFilterOwners.length && owners === 'friends') {
+                renderDecks(index, stat, [])
+                return;
+            }
 
             $.ajax({
                 type: 'GET',

@@ -30,6 +30,8 @@ final readonly class CreateGameCommandHandler
         KeyforgeCompetition::VT,
         KeyforgeCompetition::TCO_CASUAL,
         KeyforgeCompetition::TCO_COMPETITIVE,
+        KeyforgeCompetition::LGS,
+        KeyforgeCompetition::NKFL,
     ];
 
     public function __construct(
