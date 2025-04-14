@@ -278,11 +278,17 @@
 
         let deckBellCurves = JSON.parse('{{ bell_curve|json_encode|raw }}');
 
-        barGraph('sas', 50, deckBellCurves.sas, '{{ deck.stats.sas }}');
-        barGraph('expected_amber', 60, deckBellCurves.expected_amber, '{{ deck.stats.expectedAmber|round(0) }}');
-        barGraph('amber_control', 60, deckBellCurves.amber_control, '{{ deck.stats.amberControl|round(0) }}');
-        barGraph('creature_control', 60, deckBellCurves.creature_control, '{{ deck.stats.creatureControl|round(0) }}');
-        barGraph('artifact_control', 300, deckBellCurves.artifact_control, '{{ deck.stats.artifactControl|round(0) }}');
+        const maxSasRounded = Math.ceil(Math.max(...Object.values(deckBellCurves.sas)) / 10) * 10;
+        const maxExpectedRounded = Math.ceil(Math.max(...Object.values(deckBellCurves.expected_amber)) / 10) * 10;
+        const maxAmberControlRounded = Math.ceil(Math.max(...Object.values(deckBellCurves.amber_control)) / 10) * 10;
+        const maxCreatureControlRounded = Math.ceil(Math.max(...Object.values(deckBellCurves.creature_control)) / 10) * 10;
+        const maxArtifactControlRounded = Math.ceil(Math.max(...Object.values(deckBellCurves.artifact_control)) / 10) * 10;
+
+        barGraph('sas', maxSasRounded, deckBellCurves.sas, '{{ deck.stats.sas }}');
+        barGraph('expected_amber', maxExpectedRounded, deckBellCurves.expected_amber, '{{ deck.stats.expectedAmber|round(0) }}');
+        barGraph('amber_control', maxAmberControlRounded, deckBellCurves.amber_control, '{{ deck.stats.amberControl|round(0) }}');
+        barGraph('creature_control', maxCreatureControlRounded, deckBellCurves.creature_control, '{{ deck.stats.creatureControl|round(0) }}');
+        barGraph('artifact_control', maxArtifactControlRounded, deckBellCurves.artifact_control, '{{ deck.stats.artifactControl|round(0) }}');
 
         function barGraph(stat, max, curveStat, highlightedKey) {
             const color1 = 'rgb(37, 41, 33)';
