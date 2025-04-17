@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "be574374b9e97c0bc9ca18d9ace03c17",
+    "content-hash": "7dad622c13c51bb1997bef805a17fa18",
     "packages": [
         {
             "name": "adnanmula/criteria",
@@ -52,6 +52,54 @@
                 "source": "https://github.com/adnanmula/criteria/tree/0.2.1"
             },
             "time": "2025-03-27T21:12:37+00:00"
+        },
+        {
+            "name": "adnanmula/keyforge-game-log-parser",
+            "version": "0.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/adnanmula/keyforge-game-log-parser.git",
+                "reference": "7f57fb3e7b71adb9e0793bbd221d507ba90fb4fd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/adnanmula/keyforge-game-log-parser/zipball/7f57fb3e7b71adb9e0793bbd221d507ba90fb4fd",
+                "reference": "7f57fb3e7b71adb9e0793bbd221d507ba90fb4fd",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.4",
+                "symfony/css-selector": "^7.2",
+                "symfony/dom-crawler": "^7.2"
+            },
+            "require-dev": {
+                "adnanmula/coding-standard": "^0.0.10",
+                "phpro/grumphp": "^2.5",
+                "phpstan/phpstan": "^1.10",
+                "phpunit/phpunit": "^11.0",
+                "symfony/var-dumper": "^7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "AdnanMula\\KeyforgeGameLogParser\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Adnan Mula",
+                    "email": "adnan.mula.bakkar@gmail.com"
+                }
+            ],
+            "support": {
+                "issues": "https://github.com/adnanmula/keyforge-game-log-parser/issues",
+                "source": "https://github.com/adnanmula/keyforge-game-log-parser/tree/0.0.1"
+            },
+            "time": "2025-04-16T20:12:09+00:00"
         },
         {
             "name": "beberlei/assert",
@@ -241,16 +289,16 @@
         },
         {
             "name": "cakephp/core",
-            "version": "5.2.0",
+            "version": "5.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/core.git",
-                "reference": "3c363b20b52af996e535bf24b85fee77c110a50d"
+                "reference": "ba182a1410f1b06e8d1ab4d874b6f9797fbee165"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/core/zipball/3c363b20b52af996e535bf24b85fee77c110a50d",
-                "reference": "3c363b20b52af996e535bf24b85fee77c110a50d",
+                "url": "https://api.github.com/repos/cakephp/core/zipball/ba182a1410f1b06e8d1ab4d874b6f9797fbee165",
+                "reference": "ba182a1410f1b06e8d1ab4d874b6f9797fbee165",
                 "shasum": ""
             },
             "require": {
@@ -270,7 +318,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-5.next": "5.2.x-dev"
+                    "dev-5.x": "5.2.x-dev"
                 }
             },
             "autoload": {
@@ -304,20 +352,20 @@
                 "issues": "https://github.com/cakephp/cakephp/issues",
                 "source": "https://github.com/cakephp/core"
             },
-            "time": "2025-01-31T16:36:33+00:00"
+            "time": "2025-04-02T12:02:03+00:00"
         },
         {
             "name": "cakephp/database",
-            "version": "5.2.0",
+            "version": "5.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/database.git",
-                "reference": "b06cfc843898525ae8a1b17a3963d12d9cff8046"
+                "reference": "f356a3fc78ff1c746d78786806f67ef22505cd76"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/database/zipball/b06cfc843898525ae8a1b17a3963d12d9cff8046",
-                "reference": "b06cfc843898525ae8a1b17a3963d12d9cff8046",
+                "url": "https://api.github.com/repos/cakephp/database/zipball/f356a3fc78ff1c746d78786806f67ef22505cd76",
+                "reference": "f356a3fc78ff1c746d78786806f67ef22505cd76",
                 "shasum": ""
             },
             "require": {
@@ -338,7 +386,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-5.next": "5.2.x-dev"
+                    "dev-5.x": "5.2.x-dev"
                 }
             },
             "autoload": {
@@ -371,20 +419,20 @@
                 "issues": "https://github.com/cakephp/cakephp/issues",
                 "source": "https://github.com/cakephp/database"
             },
-            "time": "2025-03-25T02:26:39+00:00"
+            "time": "2025-04-05T04:18:59+00:00"
         },
         {
             "name": "cakephp/datasource",
-            "version": "5.2.0",
+            "version": "5.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/datasource.git",
-                "reference": "fcba5eccaa045a55b01d6481ce7d563ebda9e567"
+                "reference": "2b4f33fcc8c5d13261b851e8299c9fa85ff11b6e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/datasource/zipball/fcba5eccaa045a55b01d6481ce7d563ebda9e567",
-                "reference": "fcba5eccaa045a55b01d6481ce7d563ebda9e567",
+                "url": "https://api.github.com/repos/cakephp/datasource/zipball/2b4f33fcc8c5d13261b851e8299c9fa85ff11b6e",
+                "reference": "2b4f33fcc8c5d13261b851e8299c9fa85ff11b6e",
                 "shasum": ""
             },
             "require": {
@@ -405,7 +453,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-5.next": "5.2.x-dev"
+                    "dev-5.x": "5.2.x-dev"
                 }
             },
             "autoload": {
@@ -438,20 +486,20 @@
                 "issues": "https://github.com/cakephp/cakephp/issues",
                 "source": "https://github.com/cakephp/datasource"
             },
-            "time": "2025-03-21T17:20:29+00:00"
+            "time": "2025-04-05T02:12:27+00:00"
         },
         {
             "name": "cakephp/utility",
-            "version": "5.2.0",
+            "version": "5.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/utility.git",
-                "reference": "23914ff52d70671d696b019c34fe82503231dcf5"
+                "reference": "8b97361c71d30a9f1df2c8e98469d20af78d6ed6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/utility/zipball/23914ff52d70671d696b019c34fe82503231dcf5",
-                "reference": "23914ff52d70671d696b019c34fe82503231dcf5",
+                "url": "https://api.github.com/repos/cakephp/utility/zipball/8b97361c71d30a9f1df2c8e98469d20af78d6ed6",
+                "reference": "8b97361c71d30a9f1df2c8e98469d20af78d6ed6",
                 "shasum": ""
             },
             "require": {
@@ -465,7 +513,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-5.next": "5.2.x-dev"
+                    "dev-5.x": "5.2.x-dev"
                 }
             },
             "autoload": {
@@ -502,7 +550,7 @@
                 "issues": "https://github.com/cakephp/cakephp/issues",
                 "source": "https://github.com/cakephp/utility"
             },
-            "time": "2025-03-21T17:20:29+00:00"
+            "time": "2025-04-05T02:12:27+00:00"
         },
         {
             "name": "doctrine/cache",
@@ -710,26 +758,29 @@
         },
         {
             "name": "doctrine/deprecations",
-            "version": "1.1.4",
+            "version": "1.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/deprecations.git",
-                "reference": "31610dbb31faa98e6b5447b62340826f54fbc4e9"
+                "reference": "459c2f5dd3d6a4633d3b5f46ee2b1c40f57d3f38"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/deprecations/zipball/31610dbb31faa98e6b5447b62340826f54fbc4e9",
-                "reference": "31610dbb31faa98e6b5447b62340826f54fbc4e9",
+                "url": "https://api.github.com/repos/doctrine/deprecations/zipball/459c2f5dd3d6a4633d3b5f46ee2b1c40f57d3f38",
+                "reference": "459c2f5dd3d6a4633d3b5f46ee2b1c40f57d3f38",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.1 || ^8.0"
             },
+            "conflict": {
+                "phpunit/phpunit": "<=7.5 || >=13"
+            },
             "require-dev": {
-                "doctrine/coding-standard": "^9 || ^12",
-                "phpstan/phpstan": "1.4.10 || 2.0.3",
+                "doctrine/coding-standard": "^9 || ^12 || ^13",
+                "phpstan/phpstan": "1.4.10 || 2.1.11",
                 "phpstan/phpstan-phpunit": "^1.0 || ^2",
-                "phpunit/phpunit": "^7.5 || ^8.5 || ^9.5",
+                "phpunit/phpunit": "^7.5 || ^8.5 || ^9.6 || ^10.5 || ^11.5 || ^12",
                 "psr/log": "^1 || ^2 || ^3"
             },
             "suggest": {
@@ -749,9 +800,9 @@
             "homepage": "https://www.doctrine-project.org/",
             "support": {
                 "issues": "https://github.com/doctrine/deprecations/issues",
-                "source": "https://github.com/doctrine/deprecations/tree/1.1.4"
+                "source": "https://github.com/doctrine/deprecations/tree/1.1.5"
             },
-            "time": "2024-12-07T21:18:45+00:00"
+            "time": "2025-04-07T20:06:18+00:00"
         },
         {
             "name": "doctrine/event-manager",
@@ -925,6 +976,73 @@
                 }
             ],
             "time": "2024-11-10T12:42:13+00:00"
+        },
+        {
+            "name": "masterminds/html5",
+            "version": "2.9.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Masterminds/html5-php.git",
+                "reference": "f5ac2c0b0a2eefca70b2ce32a5809992227e75a6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Masterminds/html5-php/zipball/f5ac2c0b0a2eefca70b2ce32a5809992227e75a6",
+                "reference": "f5ac2c0b0a2eefca70b2ce32a5809992227e75a6",
+                "shasum": ""
+            },
+            "require": {
+                "ext-dom": "*",
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8.35 || ^5.7.21 || ^6 || ^7 || ^8 || ^9"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.7-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Masterminds\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Matt Butcher",
+                    "email": "technosophos@gmail.com"
+                },
+                {
+                    "name": "Matt Farina",
+                    "email": "matt@mattfarina.com"
+                },
+                {
+                    "name": "Asmir Mustafic",
+                    "email": "goetas@gmail.com"
+                }
+            ],
+            "description": "An HTML5 parser and serializer.",
+            "homepage": "http://masterminds.github.io/html5-php",
+            "keywords": [
+                "HTML5",
+                "dom",
+                "html",
+                "parser",
+                "querypath",
+                "serializer",
+                "xml"
+            ],
+            "support": {
+                "issues": "https://github.com/Masterminds/html5-php/issues",
+                "source": "https://github.com/Masterminds/html5-php/tree/2.9.0"
+            },
+            "time": "2024-03-31T07:05:07+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -1263,16 +1381,16 @@
         },
         {
             "name": "phpdocumentor/reflection-docblock",
-            "version": "5.6.1",
+            "version": "5.6.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpDocumentor/ReflectionDocBlock.git",
-                "reference": "e5e784149a09bd69d9a5e3b01c5cbd2e2bd653d8"
+                "reference": "92dde6a5919e34835c506ac8c523ef095a95ed62"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/e5e784149a09bd69d9a5e3b01c5cbd2e2bd653d8",
-                "reference": "e5e784149a09bd69d9a5e3b01c5cbd2e2bd653d8",
+                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/92dde6a5919e34835c506ac8c523ef095a95ed62",
+                "reference": "92dde6a5919e34835c506ac8c523ef095a95ed62",
                 "shasum": ""
             },
             "require": {
@@ -1321,9 +1439,9 @@
             "description": "With this component, a library can provide support for annotations via DocBlocks or otherwise retrieve information that is embedded in a DocBlock.",
             "support": {
                 "issues": "https://github.com/phpDocumentor/ReflectionDocBlock/issues",
-                "source": "https://github.com/phpDocumentor/ReflectionDocBlock/tree/5.6.1"
+                "source": "https://github.com/phpDocumentor/ReflectionDocBlock/tree/5.6.2"
             },
-            "time": "2024-12-07T09:39:29+00:00"
+            "time": "2025-04-13T19:20:35+00:00"
         },
         {
             "name": "phpdocumentor/type-resolver",
@@ -2472,6 +2590,71 @@
             "time": "2025-03-12T08:11:12+00:00"
         },
         {
+            "name": "symfony/css-selector",
+            "version": "v7.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/css-selector.git",
+                "reference": "601a5ce9aaad7bf10797e3663faefce9e26c24e2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/css-selector/zipball/601a5ce9aaad7bf10797e3663faefce9e26c24e2",
+                "reference": "601a5ce9aaad7bf10797e3663faefce9e26c24e2",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\CssSelector\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Jean-François Simon",
+                    "email": "jeanfrancois.simon@sensiolabs.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Converts CSS selectors to XPath expressions",
+            "homepage": "https://symfony.com",
+            "support": {
+                "source": "https://github.com/symfony/css-selector/tree/v7.2.0"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2024-09-25T14:21:43+00:00"
+        },
+        {
             "name": "symfony/dependency-injection",
             "version": "v7.2.5",
             "source": {
@@ -2617,6 +2800,73 @@
                 }
             ],
             "time": "2024-09-25T14:20:29+00:00"
+        },
+        {
+            "name": "symfony/dom-crawler",
+            "version": "v7.2.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/dom-crawler.git",
+                "reference": "19cc7b08efe9ad1ab1b56e0948e8d02e15ed3ef7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/dom-crawler/zipball/19cc7b08efe9ad1ab1b56e0948e8d02e15ed3ef7",
+                "reference": "19cc7b08efe9ad1ab1b56e0948e8d02e15ed3ef7",
+                "shasum": ""
+            },
+            "require": {
+                "masterminds/html5": "^2.6",
+                "php": ">=8.2",
+                "symfony/polyfill-ctype": "~1.8",
+                "symfony/polyfill-mbstring": "~1.0"
+            },
+            "require-dev": {
+                "symfony/css-selector": "^6.4|^7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\DomCrawler\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Eases DOM navigation for HTML and XML documents",
+            "homepage": "https://symfony.com",
+            "support": {
+                "source": "https://github.com/symfony/dom-crawler/tree/v7.2.4"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2025-02-17T15:53:07+00:00"
         },
         {
             "name": "symfony/dotenv",
@@ -8287,16 +8537,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "2.1.11",
+            "version": "2.1.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "8ca5f79a8f63c49b2359065832a654e1ec70ac30"
+                "reference": "96dde49e967c0c22812bcfa7bda4ff82c09f3b0c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/8ca5f79a8f63c49b2359065832a654e1ec70ac30",
-                "reference": "8ca5f79a8f63c49b2359065832a654e1ec70ac30",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/96dde49e967c0c22812bcfa7bda4ff82c09f3b0c",
+                "reference": "96dde49e967c0c22812bcfa7bda4ff82c09f3b0c",
                 "shasum": ""
             },
             "require": {
@@ -8341,7 +8591,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-03-24T13:45:00+00:00"
+            "time": "2025-04-16T13:19:18+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -9974,23 +10224,23 @@
         },
         {
             "name": "slevomat/coding-standard",
-            "version": "8.16.2",
+            "version": "8.17.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/slevomat/coding-standard.git",
-                "reference": "8bf0408a9cf30687d87957d364de9a3d5d00d948"
+                "reference": "ace04a4e2e20c9bc26ad14d6c4c737cde6056ec0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/slevomat/coding-standard/zipball/8bf0408a9cf30687d87957d364de9a3d5d00d948",
-                "reference": "8bf0408a9cf30687d87957d364de9a3d5d00d948",
+                "url": "https://api.github.com/repos/slevomat/coding-standard/zipball/ace04a4e2e20c9bc26ad14d6c4c737cde6056ec0",
+                "reference": "ace04a4e2e20c9bc26ad14d6c4c737cde6056ec0",
                 "shasum": ""
             },
             "require": {
                 "dealerdirect/phpcodesniffer-composer-installer": "^0.6.2 || ^0.7 || ^1.0",
                 "php": "^7.4 || ^8.0",
                 "phpstan/phpdoc-parser": "^2.1.0",
-                "squizlabs/php_codesniffer": "^3.11.3"
+                "squizlabs/php_codesniffer": "^3.12.1"
             },
             "require-dev": {
                 "phing/phing": "3.0.1",
@@ -9999,7 +10249,7 @@
                 "phpstan/phpstan-deprecation-rules": "2.0.1",
                 "phpstan/phpstan-phpunit": "2.0.6",
                 "phpstan/phpstan-strict-rules": "2.0.4",
-                "phpunit/phpunit": "9.6.8|10.5.45|11.4.4|11.5.15|12.0.10"
+                "phpunit/phpunit": "9.6.8|10.5.45|11.4.4|11.5.17|12.1.2"
             },
             "type": "phpcodesniffer-standard",
             "extra": {
@@ -10023,7 +10273,7 @@
             ],
             "support": {
                 "issues": "https://github.com/slevomat/coding-standard/issues",
-                "source": "https://github.com/slevomat/coding-standard/tree/8.16.2"
+                "source": "https://github.com/slevomat/coding-standard/tree/8.17.0"
             },
             "funding": [
                 {
@@ -10035,20 +10285,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-03-27T19:37:58+00:00"
+            "time": "2025-04-10T06:06:16+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",
-            "version": "3.12.1",
+            "version": "3.12.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPCSStandards/PHP_CodeSniffer.git",
-                "reference": "ea16a1f3719783345febd3aab41beb55c8c84bfd"
+                "reference": "6d4cf6032d4b718f168c90a96e36c7d0eaacb2aa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPCSStandards/PHP_CodeSniffer/zipball/ea16a1f3719783345febd3aab41beb55c8c84bfd",
-                "reference": "ea16a1f3719783345febd3aab41beb55c8c84bfd",
+                "url": "https://api.github.com/repos/PHPCSStandards/PHP_CodeSniffer/zipball/6d4cf6032d4b718f168c90a96e36c7d0eaacb2aa",
+                "reference": "6d4cf6032d4b718f168c90a96e36c7d0eaacb2aa",
                 "shasum": ""
             },
             "require": {
@@ -10119,7 +10369,7 @@
                     "type": "thanks_dev"
                 }
             ],
-            "time": "2025-04-04T12:57:55+00:00"
+            "time": "2025-04-13T04:10:18+00:00"
         },
         {
             "name": "symfony/expression-language",

@@ -59,6 +59,7 @@ final readonly class CreateCompetitionGameCommandHandler
             $command->notes,
             false,
             $user->id(),
+            null,
         );
 
         $this->gameRepository->save($game);

@@ -360,3 +360,5 @@ menu.edit: Editar
 menu.create_new: Crear nueva
 menu.all_your_tags: Todas tus etiquetas
 menu.tags_to_show: Etiquetas a mostrar
+game.log: Registro de partida
+menu.game_log_tooltip: Registro de partida del TCO
