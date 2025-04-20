@@ -23,6 +23,7 @@ use Assert\Assert;
 final readonly class GetGamesQuery extends CriteriaQuery
 {
     public function __construct(
+        $ids = null,
         $deckId = null,
         $userId = null,
         $winners = null,
@@ -36,6 +37,7 @@ final readonly class GetGamesQuery extends CriteriaQuery
         $orderDirection = null,
     ) {
         Assert::lazy()
+            ->that($ids, 'ids')->nullOr()->all()->uuid()
             ->that($deckId, 'deckId')->nullOr()->uuid()
             ->that($userId, 'userId')->nullOr()->uuid()
             ->that($winners, 'winners')->nullOr()->all()->uuid()
@@ -50,6 +52,7 @@ final readonly class GetGamesQuery extends CriteriaQuery
             ->verifyNow();
 
         $filters = [];
+        $filters[] = $this->idFilter(...$ids ?? []);
         $filters[] = $this->deckFilter($userId, $deckId);
         $filters[] = $this->winnerFilter(...$winners ?? []);
         $filters[] = $this->loserFilter(...$losers ?? []);
@@ -65,6 +68,18 @@ final readonly class GetGamesQuery extends CriteriaQuery
         );
 
         parent::__construct($criteria);
+    }
+
+    private function idFilter(string ...$ids): ?FilterGroup
+    {
+        if (0 === count($ids)) {
+            return null;
+        }
+
+        return new AndFilterGroup(
+            FilterType::OR,
+            new Filter(new FilterField('id'), new StringArrayFilterValue(...$ids), FilterOperator::IN),
+        );
     }
 
     private function deckFilter(?string $userId, ?string $deckId): ?FilterGroup

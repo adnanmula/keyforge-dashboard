@@ -1,0 +1,20 @@
+<div class="card-body">
+    <div class="row text-center">
+        <div class="col-md-6 mb-3">
+            <i class="bi bi-trophy-fill me-2 fs-4"></i>
+            <span class="text-success fw-bold">{{ game.log.winner.name }}</span>
+        </div>
+        <div class="col-md-6 mb-3">
+            <i class="bi bi-clock-fill text me-2 fs-4"></i>
+            <span class="text">{{ game.date }}</span>
+        </div>
+    </div>
+</div>
+
+<div class="card-body">
+    {% include 'Keyforge/Game/Detail/game_stat_comparison_row.html.twig' with {label: 'Amber Obtained',left: game.log.winner.amberObtained.total,right: game.log.loser.amberObtained.total} %}
+    {% include 'Keyforge/Game/Detail/game_stat_comparison_row.html.twig' with {label: 'Cards Played',left: game.log.winner.cardsPlayed.total,right: game.log.loser.cardsPlayed.total} %}
+    {% include 'Keyforge/Game/Detail/game_stat_comparison_row.html.twig' with {label: 'Cards Drawn',left: game.log.winner.cardsDrawn.total,right: game.log.loser.cardsDrawn.total} %}
+    {% include 'Keyforge/Game/Detail/game_stat_comparison_row.html.twig' with {label: 'Cards Discarded',left: game.log.winner.cardsDiscarded.total,right: game.log.loser.cardsDiscarded.total} %}
+    {% include 'Keyforge/Game/Detail/game_stat_comparison_row.html.twig' with {label: 'Keys Forged',left: game.log.winner.keysForged.count,right: game.log.loser.keysForged.count} %}
+</div>

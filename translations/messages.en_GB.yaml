@@ -225,6 +225,7 @@ menu.friend_decks_games: 'Only friend decks'
 menu.friend_name: 'Friend name'
 menu.friend_requests: 'Friend requests'
 menu.friends: Friends
+menu.game: Game
 menu.games: Games
 menu.games_lost: 'Games lost'
 menu.general_stats: General stats
@@ -362,3 +363,11 @@ menu.all_your_tags: All your tags
 menu.tags_to_show: Tags to show
 game.log: Game log
 menu.game_log_tooltip: TCO game log
+menu.amber_cost: Amber cost
+menu.amber_remaining: Amber remaining
+menu.turn: Turn
+menu.timeline_played_cards: Played cards
+menu.timeline_keys_forged: Keys forged
+menu.graph_amber_generation_accumulated: Amber generation accumulated
+menu.graph_amber_generation_by_turn: Amber generation by turn
+menu.total: Total

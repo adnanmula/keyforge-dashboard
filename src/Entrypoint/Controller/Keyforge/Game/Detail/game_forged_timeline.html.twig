@@ -1,0 +1,98 @@
+<div class="row">
+    <h5>{{ 'menu.timeline_keys_forged'|trans }}</h5>
+    <canvas id="timelineChart" height="150px"></canvas>
+</div>
+
+<script>
+    const forgeEvents = JSON.parse('{{ game.log.keysForged|json_encode|raw }}');
+
+    const playerMap = {};
+    let playerIndex = 0;
+
+    forgeEvents.forEach(e => {
+        if (!(e.player in playerMap)) {
+            playerMap[e.player] = playerIndex++;
+        }
+    });
+
+    const keyColors = {
+        red: 'rgba(188,31,31,0.8)',
+        blue: 'rgba(0, 0, 255, 0.8)',
+        yellow: 'rgba(189,189,32,0.8)',
+    };
+
+    const dataPoints = forgeEvents.map(e => ({
+        x: e.turn.value,
+        y: playerMap[e.player],
+        borderWidth: 0,
+        player: e.player,
+        key: e.value,
+        keyColor: keyColors[e.value],
+        turn: '{{ 'menu.turn'|trans }}: ' + e.turn.value,
+        amberCost: '{{ 'menu.amber_cost'|trans }}: ' + e.amber_cost,
+        amberRemaining: '{{ 'menu.amber_remaining'|trans }}: ' + e.amber_remaining,
+    }));
+
+    const ctx = document.getElementById('timelineChart').getContext('2d');
+
+    new Chart(ctx, {
+        type: 'scatter',
+        data: {
+            datasets: [{
+                data: dataPoints,
+                pointRadius: 20,
+                pointStyle: 'circle',
+                backgroundColor: dataPoints.map(k => k.keyColor),
+                showLine: false,
+            }],
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: ctx => {
+                            return [
+                                `${ctx.raw.turn}`,
+                                `${ctx.raw.amberCost}`,
+                                `${ctx.raw.amberRemaining}`
+                            ];
+                        },
+                    },
+                },
+                legend: { display: false }
+            },
+            scales: {
+                x: {
+                    ticks: {
+                        stepSize: 1,
+                        suggestedMin: 1,
+                        min: 1,
+                    },
+                    grid: {
+                        drawOnChartArea: false,
+                    },
+                },
+                y: {
+                    ticks: {
+                        callback: value => {
+                            const name = Object.entries(playerMap).find(([_, idx]) => idx === value);
+                            return name ? name[0] : '';
+                        },
+                        font: {
+                            size: 14,
+                            weight: 'bold',
+                        },
+                        stepSize: 0,
+                        padding: 10,
+                    },
+                    min: -0.5,
+                    max: Object.keys(playerMap).length - 0.5,
+                    grid: {
+                        drawOnChartArea: false,
+                    },
+                },
+            },
+        },
+    });
+</script>

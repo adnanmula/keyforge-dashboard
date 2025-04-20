@@ -1,0 +1,130 @@
+<div class="row">
+    <div class="col-12 col-md-6">
+        <h5>{{ 'menu.graph_amber_generation_by_turn'|trans }}</h5>
+        <canvas id="amberByTurnChart"></canvas>
+    </div>
+
+    <div class="col-12 col-md-6">
+        <h5>{{ 'menu.graph_amber_generation_accumulated'|trans }}</h5>
+        <canvas id="amberAccumulatedChart"></canvas>
+    </div>
+</div>
+
+<script>
+    const player1Data = JSON.parse('{{ game.log.player1.amberObtained|json_encode|raw }}');
+    const player2Data = JSON.parse('{{ game.log.player2.amberObtained|json_encode|raw }}');
+
+    function processPlayerData(playerData) {
+        const turns = {};
+        playerData.forEach(entry => {
+            const turn = entry.turn.value;
+            const moment = entry.turn.moment;
+            const value = entry.value;
+            if (!turns[turn]) turns[turn] = {};
+            turns[turn][moment] = value;
+        });
+
+        const amberPerTurn = [];
+        const amberCumulative = [];
+        let cumulative = 0;
+
+        Object.keys(turns).sort((a, b) => a - b).forEach(turn => {
+            const start = turns[turn]["START"] || 0;
+            const end = turns[turn]["END"] || 0;
+            const diff = end - start;
+            amberPerTurn.push(diff);
+            cumulative += Math.abs(diff);
+            amberCumulative.push(cumulative);
+        });
+
+        return { amberPerTurn, amberCumulative };
+    }
+
+    const player1 = processPlayerData(player1Data);
+    const player2 = processPlayerData(player2Data);
+
+    console.log(player1Data, player1);
+
+    const labels = Array.from(new Set([
+        ...player1Data.map(e => e.turn.value),
+        ...player2Data.map(e => e.turn.value),
+    ])).sort((a, b) => a - b);
+
+    // Total por turno y acumulado
+    const totalPerTurn = player1.amberPerTurn.map((val, i) => val + (player2.amberPerTurn[i] || 0));
+    const totalPerTurnAcc = player1.amberCumulative.map((val, i) => val + (player2.amberCumulative[i] || 0));
+    const totalCumulative = totalPerTurnAcc.reduce((acc, val) => {
+        acc.push(val);
+        return acc;
+    }, []);
+
+    {% if game.log.winner.name == game.log.player1.name %}
+        const colorList = [
+            'rgba(25, 135, 84, 0.7)',
+            'rgba(220, 53, 69, 0.7)',
+            'rgba(0, 0, 0, 0.5)',
+        ];
+    {% else %}
+        const colorList = [
+            'rgba(220, 53, 69, 0.7)',
+            'rgba(25, 135, 84, 0.7)',
+            'rgba(0, 0, 0, 0.5)',
+        ];
+    {% endif %}
+
+    new Chart(document.getElementById('amberByTurnChart').getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: '{{ game.log.player1.name }}',
+                    data: player1.amberPerTurn,
+                    backgroundColor: colorList[0],
+                },
+                {
+                    label: '{{ game.log.player2.name }}',
+                    data: player2.amberPerTurn,
+                    backgroundColor: colorList[1],
+                },
+                // {
+                //     label: 'Total',
+                //     data: totalPerTurn,
+                //     backgroundColor: colorList[2],
+                // }
+            ]
+        },
+    });
+
+    new Chart(document.getElementById('amberAccumulatedChart').getContext('2d'), {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: '{{ game.log.player1.name }}',
+                    data: player1.amberCumulative,
+                    borderColor: colorList[0].replace('0.7', '1'),
+                    backgroundColor: colorList[0],
+                    fill: false
+                },
+                {
+                    label: '{{ game.log.player2.name }}',
+                    data: player2.amberCumulative,
+                    borderColor: colorList[1].replace('0.7', '1'),
+                    backgroundColor: colorList[1],
+                    fill: false
+                },
+                {
+                    label: '{{ 'menu.total'|trans }}',
+                    data: totalCumulative,
+                    borderColor: colorList[2].replace('0.5', '1'),
+                    fill: false
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+        }
+    });
+</script>

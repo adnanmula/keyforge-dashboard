@@ -1,0 +1,42 @@
+<div class="card-body">
+    <div class="row align-items-center mb-3">
+        <div class="col-md-5 text-center">
+            <h5 class="fw-bold text-success">{{ game.log.winner.name }}</h5>
+            <p class="text-muted">{{ game.log.winner.deck }}</p>
+        </div>
+        <div class="col-md-2 text-center">
+            <div class="display-6 fw-bold text-secondary">VS</div>
+        </div>
+        <div class="col-md-5 text-center">
+            <h5 class="fw-bold text-danger">{{ game.log.loser.name }}</h5>
+            <p class="text-muted">{{ game.log.loser.deck }}</p>
+        </div>
+    </div>
+
+    <div class="row text-center">
+        <div class="col-6 col-md-2 mb-3">
+            <h6 class="fw-bold">Turns</h6>
+            <p class="text">{{ game.log.length }}</p>
+        </div>
+        <div class="col-6 col-md-2 mb-3">
+            <h6 class="fw-bold">Amber Collected</h6>
+            <p class="text">{{ game.log.amberObtained.total }}</p>
+        </div>
+        <div class="col-6 col-md-2 mb-3">
+            <h6 class="fw-bold">Cards Played</h6>
+            <p class="text">{{ game.log.cardsPlayed.total }}</p>
+        </div>
+        <div class="col-6 col-md-2 mb-3">
+            <h6 class="fw-bold">Cards Discarded</h6>
+            <p class="text">{{ game.log.totalCardsDiscarded }}</p>
+        </div>
+        <div class="col-6 col-md-2 mb-3">
+            <h6 class="fw-bold">Cards Drawn</h6>
+            <p class="text">{{ game.log.totalCardsDrawn }}</p>
+        </div>
+        <div class="col-6 col-md-2 mb-3">
+            <h6 class="fw-bold">Keys Forged</h6>
+            <p class="text">{{ game.log.keysForged.count }}</p>
+        </div>
+    </div>
+</div>

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7dad622c13c51bb1997bef805a17fa18",
+    "content-hash": "e00a3e06a9d875e11896cf18f9f00321",
     "packages": [
         {
             "name": "adnanmula/criteria",
@@ -55,16 +55,16 @@
         },
         {
             "name": "adnanmula/keyforge-game-log-parser",
-            "version": "0.0.1",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/adnanmula/keyforge-game-log-parser.git",
-                "reference": "7f57fb3e7b71adb9e0793bbd221d507ba90fb4fd"
+                "reference": "e8282f8003a4af36db95728208ce6fb8399ce100"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/adnanmula/keyforge-game-log-parser/zipball/7f57fb3e7b71adb9e0793bbd221d507ba90fb4fd",
-                "reference": "7f57fb3e7b71adb9e0793bbd221d507ba90fb4fd",
+                "url": "https://api.github.com/repos/adnanmula/keyforge-game-log-parser/zipball/e8282f8003a4af36db95728208ce6fb8399ce100",
+                "reference": "e8282f8003a4af36db95728208ce6fb8399ce100",
                 "shasum": ""
             },
             "require": {
@@ -79,6 +79,7 @@
                 "phpunit/phpunit": "^11.0",
                 "symfony/var-dumper": "^7.0"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -97,9 +98,9 @@
             ],
             "support": {
                 "issues": "https://github.com/adnanmula/keyforge-game-log-parser/issues",
-                "source": "https://github.com/adnanmula/keyforge-game-log-parser/tree/0.0.1"
+                "source": "https://github.com/adnanmula/keyforge-game-log-parser/tree/master"
             },
-            "time": "2025-04-16T20:12:09+00:00"
+            "time": "2025-04-20T19:51:07+00:00"
         },
         {
             "name": "beberlei/assert",
@@ -289,16 +290,16 @@
         },
         {
             "name": "cakephp/core",
-            "version": "5.2.1",
+            "version": "5.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/core.git",
-                "reference": "ba182a1410f1b06e8d1ab4d874b6f9797fbee165"
+                "reference": "fcb8dc5bb17c379e43fa233a7a510bdffa7e7b8f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/core/zipball/ba182a1410f1b06e8d1ab4d874b6f9797fbee165",
-                "reference": "ba182a1410f1b06e8d1ab4d874b6f9797fbee165",
+                "url": "https://api.github.com/repos/cakephp/core/zipball/fcb8dc5bb17c379e43fa233a7a510bdffa7e7b8f",
+                "reference": "fcb8dc5bb17c379e43fa233a7a510bdffa7e7b8f",
                 "shasum": ""
             },
             "require": {
@@ -352,20 +353,20 @@
                 "issues": "https://github.com/cakephp/cakephp/issues",
                 "source": "https://github.com/cakephp/core"
             },
-            "time": "2025-04-02T12:02:03+00:00"
+            "time": "2025-04-15T17:52:03+00:00"
         },
         {
             "name": "cakephp/database",
-            "version": "5.2.1",
+            "version": "5.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/database.git",
-                "reference": "f356a3fc78ff1c746d78786806f67ef22505cd76"
+                "reference": "c52a8209ea125abd396bd6b434b5ff5430eb8c25"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/database/zipball/f356a3fc78ff1c746d78786806f67ef22505cd76",
-                "reference": "f356a3fc78ff1c746d78786806f67ef22505cd76",
+                "url": "https://api.github.com/repos/cakephp/database/zipball/c52a8209ea125abd396bd6b434b5ff5430eb8c25",
+                "reference": "c52a8209ea125abd396bd6b434b5ff5430eb8c25",
                 "shasum": ""
             },
             "require": {
@@ -419,20 +420,20 @@
                 "issues": "https://github.com/cakephp/cakephp/issues",
                 "source": "https://github.com/cakephp/database"
             },
-            "time": "2025-04-05T04:18:59+00:00"
+            "time": "2025-04-15T17:52:03+00:00"
         },
         {
             "name": "cakephp/datasource",
-            "version": "5.2.1",
+            "version": "5.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/datasource.git",
-                "reference": "2b4f33fcc8c5d13261b851e8299c9fa85ff11b6e"
+                "reference": "a1e9d639d1e6ae28b32c57966373250c8b9f6d8b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/datasource/zipball/2b4f33fcc8c5d13261b851e8299c9fa85ff11b6e",
-                "reference": "2b4f33fcc8c5d13261b851e8299c9fa85ff11b6e",
+                "url": "https://api.github.com/repos/cakephp/datasource/zipball/a1e9d639d1e6ae28b32c57966373250c8b9f6d8b",
+                "reference": "a1e9d639d1e6ae28b32c57966373250c8b9f6d8b",
                 "shasum": ""
             },
             "require": {
@@ -486,20 +487,20 @@
                 "issues": "https://github.com/cakephp/cakephp/issues",
                 "source": "https://github.com/cakephp/datasource"
             },
-            "time": "2025-04-05T02:12:27+00:00"
+            "time": "2025-04-18T03:47:06+00:00"
         },
         {
             "name": "cakephp/utility",
-            "version": "5.2.1",
+            "version": "5.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/utility.git",
-                "reference": "8b97361c71d30a9f1df2c8e98469d20af78d6ed6"
+                "reference": "97842fe780372d2f72f733e72e9a900ad11b239e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/utility/zipball/8b97361c71d30a9f1df2c8e98469d20af78d6ed6",
-                "reference": "8b97361c71d30a9f1df2c8e98469d20af78d6ed6",
+                "url": "https://api.github.com/repos/cakephp/utility/zipball/97842fe780372d2f72f733e72e9a900ad11b239e",
+                "reference": "97842fe780372d2f72f733e72e9a900ad11b239e",
                 "shasum": ""
             },
             "require": {
@@ -550,7 +551,7 @@
                 "issues": "https://github.com/cakephp/cakephp/issues",
                 "source": "https://github.com/cakephp/utility"
             },
-            "time": "2025-04-05T02:12:27+00:00"
+            "time": "2025-04-15T17:52:03+00:00"
         },
         {
             "name": "doctrine/cache",
@@ -2019,16 +2020,16 @@
         },
         {
             "name": "robmorgan/phinx",
-            "version": "0.16.6",
+            "version": "0.16.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/phinx.git",
-                "reference": "5bad10934336e8cf45d50d529cabfcbe7fe287c5"
+                "reference": "edd61785fe6b57a5992afafcc8cfdf5ea612d50d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/phinx/zipball/5bad10934336e8cf45d50d529cabfcbe7fe287c5",
-                "reference": "5bad10934336e8cf45d50d529cabfcbe7fe287c5",
+                "url": "https://api.github.com/repos/cakephp/phinx/zipball/edd61785fe6b57a5992afafcc8cfdf5ea612d50d",
+                "reference": "edd61785fe6b57a5992afafcc8cfdf5ea612d50d",
                 "shasum": ""
             },
             "require": {
@@ -2040,8 +2041,8 @@
                 "symfony/console": "^6.0|^7.0"
             },
             "require-dev": {
-                "cakephp/cakephp": "^5.0.2",
                 "cakephp/cakephp-codesniffer": "^5.0",
+                "cakephp/i18n": "^5.0",
                 "ext-json": "*",
                 "ext-pdo": "*",
                 "phpunit/phpunit": "^9.5.19",
@@ -2100,9 +2101,9 @@
             ],
             "support": {
                 "issues": "https://github.com/cakephp/phinx/issues",
-                "source": "https://github.com/cakephp/phinx/tree/0.16.6"
+                "source": "https://github.com/cakephp/phinx/tree/0.16.7"
             },
-            "time": "2024-12-20T23:02:54+00:00"
+            "time": "2025-04-17T17:32:39+00:00"
         },
         {
             "name": "symfony/asset",
@@ -6161,16 +6162,16 @@
         },
         {
             "name": "zircote/swagger-php",
-            "version": "5.0.7",
+            "version": "5.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zircote/swagger-php.git",
-                "reference": "18457fa71f753cfd4a2b21916baf329864fdfaa6"
+                "reference": "a9b953c25f5bd11ea0542636936de04504496bd9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zircote/swagger-php/zipball/18457fa71f753cfd4a2b21916baf329864fdfaa6",
-                "reference": "18457fa71f753cfd4a2b21916baf329864fdfaa6",
+                "url": "https://api.github.com/repos/zircote/swagger-php/zipball/a9b953c25f5bd11ea0542636936de04504496bd9",
+                "reference": "a9b953c25f5bd11ea0542636936de04504496bd9",
                 "shasum": ""
             },
             "require": {
@@ -6231,8 +6232,8 @@
                     "homepage": "https://radebatz.net"
                 }
             ],
-            "description": "swagger-php - Generate interactive documentation for your RESTful API using phpdoc annotations",
-            "homepage": "https://github.com/zircote/swagger-php/",
+            "description": "Generate interactive documentation for your RESTful API using PHP attributes (preferred) or PHPDoc annotations",
+            "homepage": "https://github.com/zircote/swagger-php",
             "keywords": [
                 "api",
                 "json",
@@ -6241,9 +6242,9 @@
             ],
             "support": {
                 "issues": "https://github.com/zircote/swagger-php/issues",
-                "source": "https://github.com/zircote/swagger-php/tree/5.0.7"
+                "source": "https://github.com/zircote/swagger-php/tree/5.1.0"
             },
-            "time": "2025-03-19T03:31:11+00:00"
+            "time": "2025-04-18T00:35:12+00:00"
         }
     ],
     "packages-dev": [
@@ -10625,7 +10626,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {},
+    "stability-flags": {
+        "adnanmula/keyforge-game-log-parser": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
