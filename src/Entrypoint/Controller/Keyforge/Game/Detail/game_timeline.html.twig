@@ -149,6 +149,9 @@
                 case 'AMBER_OBTAINED':
                     actions.push('{{ 'menu.current_amber'|trans }}: ' + event.value + ' (delta: ' + event.delta + ')');
                     break;
+                case 'HOUSE_CHOSEN':
+                    actions.push('{{ 'menu.house_chosen'|trans }}: ' + event.value);
+                    break;
             }
         })
 
