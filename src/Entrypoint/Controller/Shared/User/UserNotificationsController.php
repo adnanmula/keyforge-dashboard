@@ -20,6 +20,7 @@ use AdnanMula\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Criteria\FilterValue\IntFilterValue;
 use AdnanMula\Criteria\FilterValue\StringArrayFilterValue;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,13 +37,14 @@ final class UserNotificationsController extends Controller
         Security $security,
         LocaleSwitcher $localeSwitcher,
         TranslatorInterface $translator,
+        LoggerInterface $logger,
         private readonly UserRepository $userRepository,
         private readonly KeyforgeUserRepository $keyforgeUserRepository,
         private readonly KeyforgeDeckRepository $deckRepository,
         private readonly KeyforgeGameRepository $gameRepository,
         private readonly UpdateDeckWinRateService $updateDeckWinRateService,
     ) {
-        parent::__construct($bus, $security, $localeSwitcher, $translator);
+        parent::__construct($bus, $security, $localeSwitcher, $translator, $logger);
     }
 
     public function count(Request $request): Response

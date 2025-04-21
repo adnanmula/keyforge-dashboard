@@ -25,11 +25,17 @@ final class GameAnalyzeController extends Controller
         try {
             $p = new GameLogParser();
             $parsedLog = $p->execute($log);
+
+            if (null === $parsedLog->winner()) {
+                throw new \Exception('Incomplete or malformed log asd');
+            }
         } catch (\Throwable $e) {
+            $this->logger->error($e->getMessage());
+
             return $this->render(
                 'Keyforge/Game/Detail/game_analyze.html.twig',
                 [
-                    'error' => $e->getMessage(),
+                    'error' => $this->translator->trans('menu.log_error'),
                 ],
             );
         }

@@ -384,3 +384,4 @@ menu.key_forged: Key forged
 menu.cost: Cost
 menu.remaining: Remaining
 menu.house_chosen: House chosen
+menu.log_error: Incomplete or malformed log
