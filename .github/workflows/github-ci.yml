@@ -26,10 +26,10 @@ jobs:
       run: docker compose -f ./docker-compose.yml exec -T --user=$(id -u) php-fpm sh -c "ls -la /var/www/html/var"
 
     - name: Fix permissions
-      run: docker compose -f ./docker-compose.yml exec -T --user=$(id -u) php-fpm sh -c "chown -R www-data:www-data /var/www/html/var"
+      run: docker compose -f ./docker-compose.yml exec -T php-fpm sh -c "chown -R www-data:www-data /var/www/html/var"
 
     - name: Install dependencies
-      run: docker compose -f ./docker-compose.yml exec -T php-fpm sh -c "composer install --ignore-platform-reqs --prefer-dist --no-progress --no-suggest"
+      run: docker compose -f ./docker-compose.yml exec -T --user=$(id -u) php-fpm sh -c "composer install --ignore-platform-reqs --prefer-dist --no-progress --no-suggest"
 
 #    - name: Code sniffer
 #      run: docker compose -f ./docker-compose.yml exec -T --user=$(id -u) php-fpm sh -c "phpcs --standard=phpcs.xml.dist"
