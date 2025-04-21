@@ -92,8 +92,8 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
         $stmt = $this->connection->prepare(
             \sprintf(
                 '
-                    INSERT INTO %s (id, winner, loser, winner_deck, loser_deck, first_turn, score, date, created_at, winner_chains, loser_chains, competition, notes, approved, created_by)
-                    VALUES (:id, :winner, :loser, :winner_deck, :loser_deck, :first_turn, :score, :date, :created_at, :winner_chains, :loser_chains, :competition, :notes, :approved, :created_by)
+                    INSERT INTO %s (id, winner, loser, winner_deck, loser_deck, first_turn, score, date, created_at, winner_chains, loser_chains, competition, notes, approved, created_by, log)
+                    VALUES (:id, :winner, :loser, :winner_deck, :loser_deck, :first_turn, :score, :date, :created_at, :winner_chains, :loser_chains, :competition, :notes, :approved, :created_by, :log)
                     ON CONFLICT (id) DO UPDATE SET
                         id = :id,
                         winner = :winner,
@@ -109,7 +109,8 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
                         competition = :competition,
                         notes = :notes,
                         approved = :approved,
-                        created_by = :created_by
+                        created_by = :created_by,
+                        log = :log
                     ',
                 self::TABLE,
             ),
@@ -129,7 +130,8 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
         $stmt->bindValue(':competition', $game->competition()->name);
         $stmt->bindValue(':notes', $game->notes());
         $stmt->bindValue(':approved', $game->approved(), ParameterType::BOOLEAN);
-        $stmt->bindValue(':created_by', $game->createdBy()?->value(), ParameterType::BOOLEAN);
+        $stmt->bindValue(':created_by', $game->createdBy()?->value());
+        $stmt->bindValue(':log', null === $game->log() ? null : Json::encode($game->log()));
 
         $stmt->executeStatement();
     }
@@ -163,6 +165,7 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
             $game['notes'],
             $game['approved'],
             Uuid::fromNullable($game['created_by']),
+            Json::decodeNullable($game['log']),
         );
     }
 }

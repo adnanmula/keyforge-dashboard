@@ -17,6 +17,7 @@ use AdnanMula\Criteria\FilterField\FilterField;
 use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
 use AdnanMula\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Criteria\FilterValue\StringArrayFilterValue;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -33,13 +34,14 @@ final class ListDecksController extends Controller
         Security $security,
         LocaleSwitcher $localeSwitcher,
         TranslatorInterface $translator,
+        LoggerInterface $logger,
         UserRepository $userRepository,
         KeyforgeUserRepository $kfUserRepository,
     ) {
         $this->userRepository = $userRepository;
         $this->kfUserRepository = $kfUserRepository;
 
-        parent::__construct($bus, $security, $localeSwitcher, $translator);
+        parent::__construct($bus, $security, $localeSwitcher, $translator, $logger);
     }
 
     public function __invoke(): Response

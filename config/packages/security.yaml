@@ -21,6 +21,7 @@ security:
 
     access_control:
          - { path: ^/games/new, roles: ROLE_KEYFORGE }
+         - { path: ^/game, roles: ROLE_KEYFORGE }
          - { path: ^/decks/import, roles: ROLE_KEYFORGE }
          - { path: ^/competitions, roles: ROLE_KEYFORGE }
          - { path: ^/users, roles: ROLE_KEYFORGE }

@@ -60,6 +60,7 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                 '',
                 true,
                 null,
+                null,
             ),
         );
 
@@ -79,6 +80,7 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                 KeyforgeCompetition::FRIENDS,
                 '',
                 true,
+                null,
                 null,
             ),
         );
@@ -100,6 +102,7 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                 '',
                 true,
                 null,
+                null,
             ),
         );
 
@@ -119,6 +122,7 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                 KeyforgeCompetition::FRIENDS,
                 '',
                 true,
+                null,
                 null,
             ),
         );
@@ -140,6 +144,7 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                 '',
                 true,
                 null,
+                null,
             ),
         );
 
@@ -160,6 +165,7 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                 '',
                 true,
                 null,
+                null,
             ),
         );
 
@@ -179,6 +185,7 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                 KeyforgeCompetition::FRIENDS,
                 '',
                 true,
+                null,
                 null,
             ),
         );
@@ -201,6 +208,7 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                 '',
                 true,
                 null,
+                null,
             ),
         );
 
@@ -220,6 +228,7 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                 KeyforgeCompetition::FRIENDS,
                 '',
                 true,
+                null,
                 null,
             ),
         );
@@ -241,6 +250,7 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                 '',
                 true,
                 null,
+                null,
             ),
         );
 
@@ -260,6 +270,7 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                 KeyforgeCompetition::FRIENDS,
                 '',
                 true,
+                null,
                 null,
             ),
         );
@@ -281,6 +292,7 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                 '',
                 true,
                 null,
+                null,
             ),
         );
 
@@ -300,6 +312,7 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                 KeyforgeCompetition::NKFL,
                 '',
                 true,
+                null,
                 null,
             ),
         );
@@ -321,6 +334,7 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                 'Torneo 1 | Jornada 1',
                 true,
                 null,
+                null,
             ),
         );
 
@@ -341,6 +355,7 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                 'Torneo 1 | Jornada 2',
                 true,
                 null,
+                null,
             ),
         );
 
@@ -360,6 +375,7 @@ final class KeyforgeGamesFixtures extends DbalFixture implements Fixture
                 KeyforgeCompetition::LOCAL_LEAGUE,
                 'Torneo 1 | Jornada 3',
                 true,
+                null,
                 null,
             ),
         );

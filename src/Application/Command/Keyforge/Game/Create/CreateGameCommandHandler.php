@@ -22,6 +22,7 @@ use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
 use AdnanMula\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Criteria\FilterValue\NullFilterValue;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
+use AdnanMula\KeyforgeGameLogParser\GameLogParser;
 use Symfony\Bundle\SecurityBundle\Security;
 
 final readonly class CreateGameCommandHandler
@@ -62,6 +63,16 @@ final readonly class CreateGameCommandHandler
             $approved = true;
         }
 
+        $log = null;
+        if (null !== $command->log) {
+            try {
+                $logParser = new GameLogParser();
+                $game = $logParser->execute($command->log);
+                $log = $game->rawLog;
+            } catch (\Throwable) {
+            }
+        }
+
         $game = new KeyforgeGame(
             Uuid::v4(),
             $winner,
@@ -78,6 +89,7 @@ final readonly class CreateGameCommandHandler
             $command->notes,
             $approved,
             $user->id(),
+            $log,
         );
 
         $this->gameRepository->save($game);

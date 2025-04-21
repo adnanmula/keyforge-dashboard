@@ -20,6 +20,7 @@ use AdnanMula\Criteria\FilterValue\StringFilterValue;
 use AdnanMula\Criteria\Sorting\Order;
 use AdnanMula\Criteria\Sorting\OrderType;
 use AdnanMula\Criteria\Sorting\Sorting;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -33,11 +34,12 @@ final class UserDetailController extends Controller
         Security $security,
         LocaleSwitcher $localeSwitcher,
         TranslatorInterface $translator,
+        LoggerInterface $logger,
         private UserRepository $userRepository,
         private KeyforgeUserRepository $kfUserRepository,
         private KeyforgeCompetitionRepository $competitionRepository,
     ) {
-        parent::__construct($bus, $security, $localeSwitcher, $translator);
+        parent::__construct($bus, $security, $localeSwitcher, $translator, $logger);
     }
 
     public function __invoke(string $userId): Response

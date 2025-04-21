@@ -27,6 +27,7 @@ use AdnanMula\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Criteria\FilterValue\StringArrayFilterValue;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
 use AdnanMula\Criteria\Sorting\OrderType;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -41,11 +42,12 @@ final class DeckDetailController extends Controller
         Security $security,
         LocaleSwitcher $localeSwitcher,
         TranslatorInterface $translator,
+        LoggerInterface $logger,
         private KeyforgeDeckRepository $deckRepository,
         private KeyforgeCardRepository $cardRepository,
         private UserRepository $userRepository,
     ) {
-        parent::__construct($bus, $security, $localeSwitcher, $translator);
+        parent::__construct($bus, $security, $localeSwitcher, $translator, $logger);
     }
 
     public function __invoke(Request $request, string $deckId): Response
@@ -272,8 +274,9 @@ final class DeckDetailController extends Controller
     {
         $userIds = [null];
         $selectedTags = [];
+        $ownerIds = \array_map(static fn (Uuid $id) => $id->value(), $deck->owners());
 
-        if (null !== $user && \in_array($user->id(), $deck->owners(), false)) {
+        if (null !== $user && \in_array($user->id()->value(), $ownerIds, true)) {
             $userIds[] = $user->id()->value();
             $ownedInfo = $this->deckRepository->ownedInfo($user->id(), $deck->id());
 

@@ -59,6 +59,7 @@ final class CreateGameController extends Controller
                     $request->request->get('date'),
                     $request->request->get('competition'),
                     $request->request->get('notes'),
+                    $request->request->get('log') === '' ? null : $request->request->get('log'),
                 ));
 
                 return $this->render(

@@ -6,6 +6,7 @@ use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeSet;
 use AdnanMula\Cards\Domain\Model\Shared\UserRepository;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -19,10 +20,11 @@ final class GeneralStatsController extends Controller
         Security $security,
         LocaleSwitcher $localeSwitcher,
         TranslatorInterface $translator,
+        LoggerInterface $logger,
         private readonly KeyforgeDeckRepository $deckRepository,
         private readonly UserRepository $userRepository,
     ) {
-        parent::__construct($bus, $security, $localeSwitcher, $translator);
+        parent::__construct($bus, $security, $localeSwitcher, $translator, $logger);
     }
 
     public function __invoke(): Response
@@ -100,6 +102,7 @@ final class GeneralStatsController extends Controller
             KeyforgeSet::DT->value => 0,
             KeyforgeSet::WoE->value => 0,
             KeyforgeSet::GR->value => 0,
+            KeyforgeSet::AS->value => 0,
         ];
 
         foreach ($wrBySet as $key => $value) {
@@ -123,6 +126,7 @@ final class GeneralStatsController extends Controller
             KeyforgeSet::DT->value => 0,
             KeyforgeSet::WoE->value => 0,
             KeyforgeSet::GR->value => 0,
+            KeyforgeSet::AS->value => 0,
         ];
 
         foreach ($avgStatsBySet as $key => $value) {

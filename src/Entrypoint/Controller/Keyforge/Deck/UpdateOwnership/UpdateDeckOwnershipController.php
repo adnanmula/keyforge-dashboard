@@ -6,6 +6,7 @@ use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Shared\User;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,9 +21,10 @@ final class UpdateDeckOwnershipController extends Controller
         Security $security,
         LocaleSwitcher $localeSwitcher,
         TranslatorInterface $translator,
+        LoggerInterface $logger,
         private KeyforgeDeckRepository $deckRepository,
     ) {
-        parent::__construct($bus, $security, $localeSwitcher, $translator);
+        parent::__construct($bus, $security, $localeSwitcher, $translator, $logger);
     }
 
     public function __invoke(Request $request, string $id): Response

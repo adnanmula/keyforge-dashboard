@@ -1,0 +1,17 @@
+{% extends "Keyforge/Shared/keyforge_base.html.twig" %}
+
+{% block title %}{{ 'menu.game'|trans }}{% endblock %}
+
+{% block body %}
+    <div class="card shadow-lg p-3 mb-4 bg-white rounded">
+        {% if error is not null %}
+            <div class="alert alert-danger" role="alert">{{ error }}</div>
+        {% endif %}
+
+        <form action="{{ path('keyforge_game_analyze') }}" method="post">
+            <label for="log" class="form-label">{{ 'game.log'|trans }}</label>
+            <textarea class="form-control" name="log" id="log" rows="10"></textarea>
+            <button class="btn btn-block btn-dark w-100 mt-2" type="submit">{{ 'menu.analyze'|trans }}</button>
+        </form>
+    </div>
+{% endblock %}

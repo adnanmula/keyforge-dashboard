@@ -5,6 +5,7 @@ namespace AdnanMula\Cards\Entrypoint\Controller\Shared;
 use AdnanMula\Cards\Domain\Model\Shared\User;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Locale;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\UserRole;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -20,6 +21,7 @@ class Controller extends AbstractController
         protected Security $security,
         protected LocaleSwitcher $localeSwitcher,
         protected TranslatorInterface $translator,
+        protected LoggerInterface $logger,
     ) {
         $this->setLocaleToUser();
     }

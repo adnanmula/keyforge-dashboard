@@ -23,6 +23,7 @@ final class Games extends AbstractMigration
                 notes character varying(512) NOT NULL,
                 approved bool NOT NULL,
                 created_by uuid NULL,
+                log jsonb NULL,
                 PRIMARY KEY(id)
             )',
         );

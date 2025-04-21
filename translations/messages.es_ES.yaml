@@ -225,6 +225,7 @@ menu.friend_decks_games: 'Solo barajas de amigos'
 menu.friend_name: 'Nombre del amigo'
 menu.friend_requests: 'Solicitudes de amistad'
 menu.friends: Amigos
+menu.game: Partida
 menu.games: Partidas
 menu.games_lost: 'Partidas perdidas'
 menu.general_stats: Estadísticas generales
@@ -360,3 +361,27 @@ menu.edit: Editar
 menu.create_new: Crear nueva
 menu.all_your_tags: Todas tus etiquetas
 menu.tags_to_show: Etiquetas a mostrar
+game.log: Registro de partida
+menu.game_log_tooltip: Registro de partida del TCO
+menu.amber_cost: Coste de ambar
+menu.amber_remaining: Ambar restante
+menu.turn: Turno
+menu.turns: Turnos
+menu.timeline_played_cards: Cartas jugadas
+menu.timeline_keys_forged: Llaves forjadas
+menu.graph_amber_generation_accumulated: Generación de ambar acumulada
+menu.graph_amber_generation_by_turn: Generación de ambar por turno
+menu.total: Total
+menu.analyze: Analizar
+menu.amber_obtained: Ambar obtenido
+menu.cards_played: Cartas jugadas
+menu.cards_drawn: Cartas robadas
+menu.cards_discarded: Cartas descartadas
+menu.keys_forged: Llaves forjadas
+menu.current_amber: Ambar actual
+menu.played: Jugado
+menu.key_forged: Llave forjada
+menu.cost: Coste
+menu.remaining: Restante
+menu.house_chosen: Casa elegida
+menu.log_error: Registro de partida incompleto o erróneo

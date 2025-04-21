@@ -1,0 +1,30 @@
+{% extends "Keyforge/Shared/keyforge_base.html.twig" %}
+
+{% block title %}{{ 'menu.game'|trans }}{% endblock %}
+
+{% block body %}
+    <div class="card shadow-lg p-3 mb-4 bg-white rounded">
+        {% include 'Keyforge/Game/Detail/game_header.html.twig' %}
+
+        <hr>
+
+        {% include 'Keyforge/Game/Detail/game_stat_comparison.html.twig' %}
+
+        <div class="divider py-1"></div>
+        <hr>
+        <div class="divider py-1"></div>
+
+        {% include 'Keyforge/Game/Detail/game_forged_timeline.html.twig' %}
+
+        <div class="divider py-1"></div>
+        <hr>
+        <div class="divider py-1"></div>
+        {% include 'Keyforge/Game/Detail/game_amber_generation.html.twig' %}
+
+        <div class="divider py-1"></div>
+        <hr>
+        <div class="divider py-1"></div>
+
+        {% include 'Keyforge/Game/Detail/game_timeline.html.twig' %}
+    </div>
+{% endblock %}

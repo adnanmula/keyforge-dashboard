@@ -76,6 +76,7 @@ final readonly class GetGamesQueryHandler
 
         foreach ($games as $game) {
             $result[] = [
+                'id' => $game->id()->value(),
                 'winner' => $game->winner()->value(),
                 'winner_name' => $indexedUsers[$game->winner()->value()],
                 'winner_deck' => $game->winnerDeck()->value(),
@@ -89,6 +90,7 @@ final readonly class GetGamesQueryHandler
                 'date' => $game->date()->format('Y-m-d'),
                 'competition' => $game->competition()->value,
                 'notes' => $game->notes(),
+                'log' => $game->log(),
             ];
         }
 

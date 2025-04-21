@@ -18,6 +18,7 @@ final readonly class CreateGameCommand
     private(set) \DateTimeImmutable $date;
     private(set) KeyforgeCompetition $competition;
     private(set) string $notes;
+    private(set) ?string $log;
 
     public function __construct(
         $winner,
@@ -31,6 +32,7 @@ final readonly class CreateGameCommand
         $date,
         $competition,
         $notes,
+        $log,
     ) {
         Assert::lazy()
             ->that($winner, 'winner')->string()
@@ -44,6 +46,7 @@ final readonly class CreateGameCommand
             ->that($date, 'date')->date('Y-m-d')
             ->that($competition, 'competition')->inArray(KeyforgeCompetition::values())
             ->that($notes, 'notes')->string()->maxLength(512)
+            ->that($log, 'log')->nullOr()->string()
             ->verifyNow();
 
         $this->winner = $winner;
@@ -57,5 +60,6 @@ final readonly class CreateGameCommand
         $this->date = new \DateTimeImmutable($date);
         $this->competition = KeyforgeCompetition::fromName($competition);
         $this->notes = $notes;
+        $this->log = $log;
     }
 }
