@@ -11,66 +11,47 @@
 </div>
 
 <script>
-    const player1Data = JSON.parse('{{ game.log.player1.amberObtained|json_encode|raw }}');
-    const player2Data = JSON.parse('{{ game.log.player2.amberObtained|json_encode|raw }}');
-
-    function processPlayerData(playerData) {
-        const turns = {};
-        playerData.forEach(entry => {
-            const turn = entry.turn.value;
-            const moment = entry.turn.moment;
-            const value = entry.value;
-            if (!turns[turn]) turns[turn] = {};
-            turns[turn][moment] = value;
-        });
-
-        const amberPerTurn = [];
-        const amberCumulative = [];
-        let cumulative = 0;
-
-        Object.keys(turns).sort((a, b) => a - b).forEach(turn => {
-            const start = turns[turn]["START"] || 0;
-            const end = turns[turn]["END"] || 0;
-            const diff = end - start;
-            amberPerTurn.push(diff);
-            cumulative += Math.abs(diff);
-            amberCumulative.push(cumulative);
-        });
-
-        return { amberPerTurn, amberCumulative };
+    const amberPlayerData = {
+        winner: {
+            raw: JSON.parse('{{ game.log.winner.amberObtained|json_encode|raw }}'),
+            byTurn: [],
+            accumulative: [],
+            color: 'rgba(25, 135, 84, 0.7)',
+        },
+        loser: {
+            raw: JSON.parse('{{ game.log.loser.amberObtained|json_encode|raw }}'),
+            byTurn: [],
+            accumulative: [],
+            color: 'rgba(220, 53, 69, 0.7)',
+        },
+        total: {
+            accumulative: [],
+            color: 'rgba(0, 0, 0, 0.7)',
+        }
     }
 
-    const player1 = processPlayerData(player1Data);
-    const player2 = processPlayerData(player2Data);
+    amberPlayerData.winner.raw.forEach(entry => {
+        const accumulative = amberPlayerData.winner.accumulative;
+        const last = accumulative.length ? accumulative[accumulative.length - 1] : 0;
 
-    console.log(player1Data, player1);
+        amberPlayerData.winner.byTurn.push(entry.delta);
+        amberPlayerData.winner.accumulative.push(last + entry.delta);
+    });
+
+    amberPlayerData.loser.raw.forEach(entry => {
+        const accumulative = amberPlayerData.loser.accumulative;
+        const last = accumulative.length ? accumulative[accumulative.length - 1] : 0;
+
+        amberPlayerData.loser.byTurn.push(entry.delta);
+        amberPlayerData.loser.accumulative.push(last + entry.delta);
+    });
+
+    amberPlayerData.total.accumulative = amberPlayerData.winner.accumulative.map((value, index) => value + amberPlayerData.loser.accumulative[index]);
 
     const labels = Array.from(new Set([
-        ...player1Data.map(e => e.turn.value),
-        ...player2Data.map(e => e.turn.value),
-    ])).sort((a, b) => a - b);
-
-    // Total por turno y acumulado
-    const totalPerTurn = player1.amberPerTurn.map((val, i) => val + (player2.amberPerTurn[i] || 0));
-    const totalPerTurnAcc = player1.amberCumulative.map((val, i) => val + (player2.amberCumulative[i] || 0));
-    const totalCumulative = totalPerTurnAcc.reduce((acc, val) => {
-        acc.push(val);
-        return acc;
-    }, []);
-
-    {% if game.log.winner.name == game.log.player1.name %}
-        const colorList = [
-            'rgba(25, 135, 84, 0.7)',
-            'rgba(220, 53, 69, 0.7)',
-            'rgba(0, 0, 0, 0.5)',
-        ];
-    {% else %}
-        const colorList = [
-            'rgba(220, 53, 69, 0.7)',
-            'rgba(25, 135, 84, 0.7)',
-            'rgba(0, 0, 0, 0.5)',
-        ];
-    {% endif %}
+        ...amberPlayerData.winner.raw.map(e => e.turn.value + ' ' + e.turn.moment),
+        ...amberPlayerData.loser.raw.map(e => e.turn.value + ' ' + e.turn.moment),
+    ]));
 
     new Chart(document.getElementById('amberByTurnChart').getContext('2d'), {
         type: 'bar',
@@ -78,20 +59,15 @@
             labels: labels,
             datasets: [
                 {
-                    label: '{{ game.log.player1.name }}',
-                    data: player1.amberPerTurn,
-                    backgroundColor: colorList[0],
+                    label: '{{ game.log.winner.name }}',
+                    data: amberPlayerData.winner.byTurn,
+                    backgroundColor: amberPlayerData.winner.color,
                 },
                 {
-                    label: '{{ game.log.player2.name }}',
-                    data: player2.amberPerTurn,
-                    backgroundColor: colorList[1],
+                    label: '{{ game.log.loser.name }}',
+                    data: amberPlayerData.loser.byTurn,
+                    backgroundColor: amberPlayerData.loser.color,
                 },
-                // {
-                //     label: 'Total',
-                //     data: totalPerTurn,
-                //     backgroundColor: colorList[2],
-                // }
             ]
         },
     });
@@ -103,22 +79,22 @@
             datasets: [
                 {
                     label: '{{ game.log.player1.name }}',
-                    data: player1.amberCumulative,
-                    borderColor: colorList[0].replace('0.7', '1'),
-                    backgroundColor: colorList[0],
+                    data: amberPlayerData.winner.accumulative,
+                    borderColor: amberPlayerData.winner.color.replace('0.7', '1'),
+                    backgroundColor: amberPlayerData.winner.color,
                     fill: false
                 },
                 {
                     label: '{{ game.log.player2.name }}',
-                    data: player2.amberCumulative,
-                    borderColor: colorList[1].replace('0.7', '1'),
-                    backgroundColor: colorList[1],
+                    data: amberPlayerData.loser.accumulative,
+                    borderColor: amberPlayerData.loser.color.replace('0.7', '1'),
+                    backgroundColor: amberPlayerData.loser.color,
                     fill: false
                 },
                 {
                     label: '{{ 'menu.total'|trans }}',
-                    data: totalCumulative,
-                    borderColor: colorList[2].replace('0.5', '1'),
+                    data: amberPlayerData.total.accumulative,
+                    borderColor: amberPlayerData.total.color,
                     fill: false
                 }
             ]

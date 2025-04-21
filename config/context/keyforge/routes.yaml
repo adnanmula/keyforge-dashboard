@@ -118,6 +118,11 @@ keyforge_remove_tag:
   controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Tag\RemoveTagController
   methods: [DELETE]
 
+keyforge_game_analyze:
+  path: /game/analyze
+  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Game\Detail\GameAnalyzeController
+  methods: [GET, POST]
+
 keyforge_game_detail:
   path: /game/{id}
   controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Game\Detail\GameDetailController

@@ -272,8 +272,9 @@ final class DeckDetailController extends Controller
     {
         $userIds = [null];
         $selectedTags = [];
+        $ownerIds = \array_map(static fn (Uuid $id) => $id->value(), $deck->owners());
 
-        if (null !== $user && \in_array($user->id(), $deck->owners(), false)) {
+        if (null !== $user && \in_array($user->id()->value(), $ownerIds, true)) {
             $userIds[] = $user->id()->value();
             $ownedInfo = $this->deckRepository->ownedInfo($user->id(), $deck->id());
 

@@ -226,6 +226,7 @@
                     <div class="col-6">
                         <h5>{{ 'menu.all_your_tags'|trans }}</h5>
 
+                        <div style="max-height: 450px; overflow-y: auto; overflow-x: hidden">
                         {% for tag in all_private_tags %}
                             <div class="row" style="margin-left: 10px; margin-bottom: 10px">
                                 <div class="col-8">
@@ -241,6 +242,7 @@
                                 </div>
                             </div>
                         {% endfor %}
+                        </div>
                     </div>
                     <div class="col-6">
                         <h5>{{ 'menu.create_new'|trans }}</h5>
