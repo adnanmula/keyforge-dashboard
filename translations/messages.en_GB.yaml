@@ -366,9 +366,20 @@ menu.game_log_tooltip: TCO game log
 menu.amber_cost: Amber cost
 menu.amber_remaining: Amber remaining
 menu.turn: Turn
+menu.turns: Turns
 menu.timeline_played_cards: Played cards
 menu.timeline_keys_forged: Keys forged
 menu.graph_amber_generation_accumulated: Amber generation accumulated
 menu.graph_amber_generation_by_turn: Amber generation by turn
 menu.total: Total
 menu.analyze: Analyze
+menu.amber_obtained: Amber obtained
+menu.cards_played: Cards played
+menu.cards_drawn: Cards drawn
+menu.cards_discarded: Cards discarded
+menu.keys_forged: Keys forged
+menu.current_amber: Current amber
+menu.played: Played
+menu.key_forged: Key forged
+menu.cost: Cost
+menu.remaining: Remaining

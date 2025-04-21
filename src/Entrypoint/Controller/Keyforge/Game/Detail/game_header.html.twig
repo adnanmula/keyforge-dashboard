@@ -15,27 +15,27 @@
 
     <div class="row text-center">
         <div class="col-6 col-md-2 mb-3">
-            <h6 class="fw-bold">Turns</h6>
+            <h6 class="fw-bold">{{ 'menu.turns'|trans }}</h6>
             <p class="text">{{ game.log.length }}</p>
         </div>
         <div class="col-6 col-md-2 mb-3">
-            <h6 class="fw-bold">Amber Collected</h6>
+            <h6 class="fw-bold">{{ 'menu.amber_obtained'|trans }}</h6>
             <p class="text">{{ game.log.amberObtained.total }}</p>
         </div>
         <div class="col-6 col-md-2 mb-3">
-            <h6 class="fw-bold">Cards Played</h6>
+            <h6 class="fw-bold">{{ 'menu.cards_played'|trans }}</h6>
             <p class="text">{{ game.log.cardsPlayed.total }}</p>
         </div>
         <div class="col-6 col-md-2 mb-3">
-            <h6 class="fw-bold">Cards Discarded</h6>
+            <h6 class="fw-bold">{{ 'menu.cards_discarded'|trans }}</h6>
             <p class="text">{{ game.log.cardsDiscarded.total }}</p>
         </div>
         <div class="col-6 col-md-2 mb-3">
-            <h6 class="fw-bold">Cards Drawn</h6>
+            <h6 class="fw-bold">{{ 'menu.cards_drawn'|trans }}</h6>
             <p class="text">{{ game.log.cardsDrawn.total }}</p>
         </div>
         <div class="col-6 col-md-2 mb-3">
-            <h6 class="fw-bold">Keys Forged</h6>
+            <h6 class="fw-bold">{{ 'menu.keys_forged'|trans }}</h6>
             <p class="text">{{ game.log.keysForged.count }}</p>
         </div>
     </div>

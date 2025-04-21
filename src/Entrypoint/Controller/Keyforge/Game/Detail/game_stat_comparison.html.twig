@@ -12,9 +12,9 @@
 </div>
 
 <div class="card-body">
-    {% include 'Keyforge/Game/Detail/game_stat_comparison_row.html.twig' with {label: 'Amber Obtained',left: game.log.winner.amberObtained.total,right: game.log.loser.amberObtained.total} %}
-    {% include 'Keyforge/Game/Detail/game_stat_comparison_row.html.twig' with {label: 'Cards Played',left: game.log.winner.cardsPlayed.total,right: game.log.loser.cardsPlayed.total} %}
-    {% include 'Keyforge/Game/Detail/game_stat_comparison_row.html.twig' with {label: 'Cards Drawn',left: game.log.winner.cardsDrawn.total,right: game.log.loser.cardsDrawn.total} %}
-    {% include 'Keyforge/Game/Detail/game_stat_comparison_row.html.twig' with {label: 'Cards Discarded',left: game.log.winner.cardsDiscarded.total,right: game.log.loser.cardsDiscarded.total} %}
-    {% include 'Keyforge/Game/Detail/game_stat_comparison_row.html.twig' with {label: 'Keys Forged',left: game.log.winner.keysForged.count,right: game.log.loser.keysForged.count} %}
+    {% include 'Keyforge/Game/Detail/game_stat_comparison_row.html.twig' with {label: 'menu.amber_obtained'|trans,left: game.log.winner.amberObtained.total,right: game.log.loser.amberObtained.total} %}
+    {% include 'Keyforge/Game/Detail/game_stat_comparison_row.html.twig' with {label: 'menu.cards_played'|trans,left: game.log.winner.cardsPlayed.total,right: game.log.loser.cardsPlayed.total} %}
+    {% include 'Keyforge/Game/Detail/game_stat_comparison_row.html.twig' with {label: 'menu.cards_drawn'|trans,left: game.log.winner.cardsDrawn.total,right: game.log.loser.cardsDrawn.total} %}
+    {% include 'Keyforge/Game/Detail/game_stat_comparison_row.html.twig' with {label: 'menu.cards_discarded'|trans,left: game.log.winner.cardsDiscarded.total,right: game.log.loser.cardsDiscarded.total} %}
+    {% include 'Keyforge/Game/Detail/game_stat_comparison_row.html.twig' with {label: 'menu.keys_forged'|trans,left: game.log.winner.keysForged.count,right: game.log.loser.keysForged.count} %}
 </div>

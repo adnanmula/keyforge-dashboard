@@ -99,59 +99,73 @@
 {% endblock %}
 
 <div class="row">
-    <h5 style="text-align:center;">{{ 'menu.timeline_played_cards'|trans }}</h5>
-
-    <div class="divider py-1"></div>
-
-    <div class="col-6"><h5 style="text-align:right;" id="player1Name"></h5></div>
-    <div class="col-6"><h5 style="text-align:left;" id="player2Name"></h5></div>
+    <div class="col-6"><h5 style="text-align:right;" id="fullTimelinePlayer1">{{ game.log.player1.name }}</h5></div>
+    <div class="col-6"><h5 style="text-align:left;" id="fullTimelinePlayer2">{{ game.log.player2.name }}</h5></div>
     <div class="timeline" id="timeline"></div>
 </div>
 
 <script>
     const cardsPlayedData = JSON.parse('{{ game.log.cardsPlayed|json_encode|raw }}');
-    const [playerName1, playerName2] = [...new Set(cardsPlayedData.map(item => item.player))];
+    const fullTimelineEvents = JSON.parse('{{ game.log.timeline|json_encode|raw }}');
 
-    document.getElementById("player1Name").textContent = playerName1;
-    document.getElementById("player2Name").textContent = playerName2;
+    const fullTimelineEventsGrouped = [];
 
-    const grouped = {};
-
-    cardsPlayedData.forEach(entry => {
-        const key = `${entry.player}_${entry.turn.value}`;
-        if (!grouped[key]) {
-            grouped[key] = {
-                player: entry.player,
-                turn: entry.turn.value,
-                cards: []
-            };
+    fullTimelineEvents.forEach(entry => {
+        const key = `${entry.player}|${entry.turn.value}`;
+        if (!fullTimelineEventsGrouped[key]) {
+            fullTimelineEventsGrouped[key] = [];
         }
-        grouped[key].cards.push(...entry.value.map(v => v.trim()));
+
+        fullTimelineEventsGrouped[key].push(entry);
     });
 
-    const sorted = Object.values(grouped).sort((a, b) => a.turn - b.turn);
     const timeline = document.getElementById('timeline');
 
-    sorted.forEach(entry => {
-        const side = entry.player === playerName1 ? 'left' : 'right';
+    Object.keys(fullTimelineEventsGrouped).forEach(key => {
+        const turnEntry = fullTimelineEventsGrouped[key];
+
+        let actions = [];
+        Object.keys(turnEntry).forEach(key2 => {
+            const event = turnEntry[key2];
+            switch (event.type) {
+                case 'CARDS_PLAYED':
+                    event.value.forEach(card => {
+                        actions.push('{{ 'menu.played'|trans }} ' + card);
+                    });
+                    break;
+
+                case 'KEY_FORGED':
+                    actions.push('{{ 'menu.key_forged'|trans }}: ' + event.value + ' {{ 'menu.cost'|trans }}: ' + event.amber_cost + ' {{ 'menu.remaining'|trans }}: ' + event.amber_remaining);
+                    break;
+
+                case 'CARDS_DISCARDED':
+                    actions.push('{{ 'menu.cards_discarded'|trans }}: ' + event.value);
+                    break;
+
+                case 'CARDS_DRAWN':
+                    actions.push('{{ 'menu.cards_drawn'|trans }}: ' + event.value);
+                    break;
+
+                case 'AMBER_OBTAINED':
+                    actions.push('{{ 'menu.current_amber'|trans }}: ' + event.value + ' (delta: ' + event.delta + ')');
+                    break;
+            }
+        })
+
+        const player = key.split('|')[0];
+        const turn = key.split('|')[1];
+        const side = player === '{{ game.log.player1.name }}' ? 'left' : 'right';
+        const turnLabel = '{{ 'menu.turn'|trans }} ' + turn;
 
         const item = document.createElement('div');
         item.className = `timeline-item ${side}`;
-
         const content = document.createElement('div');
         content.className = 'timeline-content';
 
-        let bulletPosition = '';
-        if ('left' === side) {
-            content.style.textAlign = 'right';
-        }
-
-        const turn = '{{ 'menu.turn'|trans }}' + entry.turn;
-
         content.innerHTML = `
-          <h5 class="timeline-user">${entry.player}</h5>
-          <h5>${turn}</h5>
-          <span class="text-nowrap">${entry.cards.map(card => `${card}`).join("<br>")}</span>
+          <h5 class="timeline-user">${player}</h5>
+          <h5>${turnLabel}</h5>
+          <span class="text-nowrap">${actions.join("<br>")}</span>
         `;
 
         item.appendChild(content);
