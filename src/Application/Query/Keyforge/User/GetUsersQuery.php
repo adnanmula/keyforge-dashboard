@@ -13,8 +13,9 @@ final readonly class GetUsersQuery
     private(set) bool $withExternal;
     private(set) bool $onlyFriends;
     private(set) ?Uuid $userId;
+    private(set) ?string $name;
 
-    public function __construct($page, $pageSize, $withGames, $withExternal, $onlyFriends = false, $userId = null)
+    public function __construct($page, $pageSize, $withGames, $withExternal, $onlyFriends = false, $userId = null, $name = null)
     {
         Assert::lazy()
             ->that($page, 'page')->nullOr()->integerish()->greaterOrEqualThan(0)
@@ -23,6 +24,7 @@ final readonly class GetUsersQuery
             ->that($withExternal, 'with_external')->boolean()
             ->that($onlyFriends, 'only_friends')->boolean()
             ->that($userId, 'user_id')->nullOr()->uuid()
+            ->that($name, 'name')->nullOr()->string()
             ->verifyNow();
 
         if ($onlyFriends) {
@@ -34,6 +36,7 @@ final readonly class GetUsersQuery
         $this->withGames = $withGames;
         $this->withExternal = $withExternal;
         $this->onlyFriends = $onlyFriends;
-        $this->userId = null === $userId ? null : Uuid::from($userId);
+        $this->userId = Uuid::fromNullable($userId);
+        $this->name = $name;
     }
 }

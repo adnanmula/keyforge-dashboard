@@ -215,7 +215,6 @@ menu.compare_to: 'Comparar con'
 menu.create: Crear
 menu.created_by: 'Creado por'
 menu.deck: Baraja
-menu.deck_select_tooltip: 'Al jugar con randoms pega el id de baraja aunque no salga en el selector, no hace falta importarla antes'
 menu.deck_wl: 'Victorias/Derrotas por baraja'
 menu.decks: Barajas
 menu.decks_of: Barajas de
@@ -284,9 +283,7 @@ menu.stat: Estadística
 menu.tags: Etiquetas
 menu.time_wl: 'Victorias/Derrotas a lo largo del tiempo'
 menu.tournaments: Torneos
-menu.type_to_seach: 'Escribe para buscar...'
 menu.type_to_search: 'Escribe para buscar...'
-menu.user_select_tooltip: 'Al jugar con randoms pega el nombre de usuario en winner/loser aunque no salga en el selector'
 menu.username: Usuario
 menu.wiki: Wiki
 menu.winrate: 'Win rate'
@@ -385,3 +382,6 @@ menu.cost: Coste
 menu.remaining: Restante
 menu.house_chosen: Casa elegida
 menu.log_error: Registro de partida incompleto o erróneo
+menu.game_saved: Partida guardada
+menu.external: Externo
+menu.use_id: Usar id

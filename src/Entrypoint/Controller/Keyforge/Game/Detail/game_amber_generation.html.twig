@@ -78,14 +78,14 @@
             labels: labels,
             datasets: [
                 {
-                    label: '{{ game.log.player1.name }}',
+                    label: '{{ game.log.winner.name }}',
                     data: amberPlayerData.winner.accumulative,
                     borderColor: amberPlayerData.winner.color.replace('0.7', '1'),
                     backgroundColor: amberPlayerData.winner.color,
                     fill: false
                 },
                 {
-                    label: '{{ game.log.player2.name }}',
+                    label: '{{ game.log.loser.name }}',
                     data: amberPlayerData.loser.accumulative,
                     borderColor: amberPlayerData.loser.color.replace('0.7', '1'),
                     backgroundColor: amberPlayerData.loser.color,

@@ -215,7 +215,6 @@ menu.compare_to: 'Compare to'
 menu.create: Create
 menu.created_by: 'Created by'
 menu.deck: Deck
-menu.deck_select_tooltip: 'When playing with random people paste their deck id event if it is not on the selector, you do not have to import it beforehand either'
 menu.deck_wl: 'Wins/Losses by deck'
 menu.decks: Decks
 menu.decks_of: Decks of
@@ -284,9 +283,7 @@ menu.stat: Stat
 menu.tags: Tags
 menu.time_wl: 'Wins/Losses along time'
 menu.tournaments: Tournaments
-menu.type_to_seach: 'Type to search...'
 menu.type_to_search: 'Type to search...'
-menu.user_select_tooltip: 'When playing with random people paste their username event if it is not on the selector'
 menu.username: Username
 menu.wiki: Wiki
 menu.winrate: 'Win rate'
@@ -385,3 +382,6 @@ menu.cost: Cost
 menu.remaining: Remaining
 menu.house_chosen: House chosen
 menu.log_error: Incomplete or malformed log
+menu.game_saved: Game saved
+menu.external: External
+menu.use_id: Use id

@@ -14,6 +14,7 @@ use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
 use AdnanMula\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Criteria\FilterValue\NullFilterValue;
 use AdnanMula\Criteria\FilterValue\StringArrayFilterValue;
+use AdnanMula\Criteria\FilterValue\StringFilterValue;
 
 final readonly class GetUsersQueryHandler
 {
@@ -26,6 +27,13 @@ final readonly class GetUsersQueryHandler
     public function __invoke(GetUsersQuery $query): array
     {
         $filters = [];
+
+        if (null !== $query->name) {
+            $filters[] = new AndFilterGroup(
+                FilterType::AND,
+                new Filter(new FilterField('name'), new StringFilterValue($query->name), FilterOperator::CONTAINS_INSENSITIVE),
+            );
+        }
 
         if (false === $query->withExternal) {
             $filters[] = new AndFilterGroup(

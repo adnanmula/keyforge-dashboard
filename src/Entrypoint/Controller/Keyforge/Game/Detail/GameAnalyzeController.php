@@ -27,7 +27,7 @@ final class GameAnalyzeController extends Controller
             $parsedLog = $p->execute($log);
 
             if (null === $parsedLog->winner()) {
-                throw new \Exception('Incomplete or malformed log asd');
+                throw new \Exception('Incomplete or malformed log');
             }
         } catch (\Throwable $e) {
             $this->logger->error($e->getMessage());

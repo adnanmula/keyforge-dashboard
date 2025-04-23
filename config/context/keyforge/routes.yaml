@@ -28,6 +28,11 @@ keyforge_deck_update_notes:
   controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Deck\UpdateNotes\UpdateDeckNotesController
   methods: [POST]
 
+keyforge_users_json:
+  path: /users/json
+  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\User\GetUsersController
+  methods: [GET]
+
 keyforge_decks_json:
   path: /decks/json
   controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Stats\Deck\GetDecksController
