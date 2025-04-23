@@ -23,7 +23,7 @@
 {#    </div>#}
 
     <div class="shadow-lg p-3 mb-5 bg-white rounded">
-        <form action="{{ path('keyforge_game_create') }}" method="post">
+        <form id="createGame" action="{{ path('keyforge_game_create') }}" method="post">
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
@@ -185,12 +185,14 @@
 
     <script>
         $(document).ready(function () {
-            $('#datepicker')[0].value = new Date().toISOString().split('T')[0];
-        });
+            $('#winnerSwitch').prop('checked', false);
+            $('#winnerSwitch').prop('disabled', true);
+            $('#loserSwitch').prop('checked', false);
+            $('#loserSwitch').prop('disabled', true);
+            $('#winnerSwitch').trigger('change');
+            $('#loserSwitch').trigger('change');
 
-        $('#winner, #loser, #winnerId, #loserId').on('change', function() {
-            refreshFirstPlayerInput();
-            checkSoloPlay();
+            $('#datepicker')[0].value = new Date().toISOString().split('T')[0];
         });
 
         function currentUsers() {
@@ -344,6 +346,45 @@
             minimumResultsForSearch: Infinity,
         });
 
+        $('#competition').select2({
+            theme: 'bootstrap-5',
+            minimumResultsForSearch: Infinity,
+        });
+
+        $('#competition').on('change', function() {
+            const value = $(this).val();
+            let shouldTrigger = false;
+
+            if ('SOLO' === value || 'FRIENDS' === value) {
+                if (false === $('#winnerSwitch').prop('disabled')) {
+                    $('#winnerSwitch').prop('checked', false);
+                    $('#winnerSwitch').prop('disabled', true);
+                    shouldTrigger = true;
+                }
+
+                if (false === $('#loserSwitch').prop('disabled')) {
+                    $('#loserSwitch').prop('checked', false);
+                    $('#loserSwitch').prop('disabled', true);
+                    shouldTrigger = true;
+                }
+            } else {
+                if ($('#winnerSwitch').prop('disabled')) {
+                    $('#winnerSwitch').prop('disabled', false);
+                    shouldTrigger = true;
+                }
+
+                if ($('#loserSwitch').prop('disabled')) {
+                    $('#loserSwitch').prop('disabled', false);
+                    shouldTrigger = true;
+                }
+            }
+
+            if (shouldTrigger) {
+                $('#winnerSwitch').trigger('change');
+                $('#loserSwitch').trigger('change');
+            }
+        });
+
         $('.deckSelector').select2({
             theme: 'bootstrap-5',
             ajax: {
@@ -407,11 +448,6 @@
             }
         });
 
-        $('#competition').select2({
-            theme: 'bootstrap-5',
-            minimumResultsForSearch: Infinity,
-        });
-
         $('.selectSwitch').on('change', function() {
             const isExternalOrId = $(this).is(':checked');
             const entity = $(this).data('entity');
@@ -448,6 +484,27 @@
 
             refreshFirstPlayerInput();
             checkSoloPlay();
+        });
+
+        $('#winner, #loser, #winnerId, #loserId').on('change', function() {
+            refreshFirstPlayerInput();
+            checkSoloPlay();
+        });
+
+        $('#createGame').on('submit', function(e) {
+            e.preventDefault();
+
+            const fieldsToCheck = ['winner', 'loser', 'winnerDeck', 'loserDeck'];
+
+            fieldsToCheck.forEach(function(field) {
+                $(`input[name="${field}"], select[name="${field}"]`).each(function() {
+                    if (!$(this).val()) {
+                        $(this).remove();
+                    }
+                });
+            });
+
+            this.submit();
         });
     </script>
 {% endblock %}
