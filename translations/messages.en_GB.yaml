@@ -385,3 +385,11 @@ menu.log_error: Incomplete or malformed log
 menu.game_saved: Game saved
 menu.external: External
 menu.use_id: Use id
+game.timeline.versus: Versus
+game.timeline.fought_with: Fought with
+game.timeline.reaped_with: Reaped with
+game.timeline.used: Used
+game.timeline.to_fight_with: To fight with
+game.timeline.to_reap_with: To reap with
+game.timeline.to_steal: To steal
+game.timeline.amber: Amber

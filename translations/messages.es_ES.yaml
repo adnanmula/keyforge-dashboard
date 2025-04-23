@@ -385,3 +385,11 @@ menu.log_error: Registro de partida incompleto o erróneo
 menu.game_saved: Partida guardada
 menu.external: Externo
 menu.use_id: Usar id
+game.timeline.versus: Contra
+game.timeline.fought_with: Lucho con
+game.timeline.reaped_with: Cosecho con
+game.timeline.used: Uso a
+game.timeline.to_fight_with: Para luchar con
+game.timeline.to_reap_with: Para cosechar con
+game.timeline.to_steal: Para robar
+game.timeline.amber: Ambar

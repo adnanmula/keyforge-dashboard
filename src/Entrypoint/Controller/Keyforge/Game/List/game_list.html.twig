@@ -216,6 +216,13 @@
                             cell += '<i class="bi bi-journal-text" data-toggle="tooltip" title="' + row.notes + '"></i>'
                         }
 
+                        if (null !== row.log) {
+                            let url = '{{ path('keyforge_game_detail', {'id': '-replace-'}) }}';
+                            url = url.replace('-replace-', row.id);
+
+                            cell += '<a href="'+url+'" target="_blank"><i class="bi bi-graph-up" data-toggle="tooltip" title="{{ 'game.log'|trans }}"></i></a>';
+                        }
+
                         return cell;
                     },
                     targets: 8, //Notes

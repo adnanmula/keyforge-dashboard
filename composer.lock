@@ -59,12 +59,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/adnanmula/keyforge-game-log-parser.git",
-                "reference": "8c0e6901be4b3815f028254df386f62382d9b11e"
+                "reference": "2c491f389e654442e7f9113cfaa20b5523d9a219"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/adnanmula/keyforge-game-log-parser/zipball/8c0e6901be4b3815f028254df386f62382d9b11e",
-                "reference": "8c0e6901be4b3815f028254df386f62382d9b11e",
+                "url": "https://api.github.com/repos/adnanmula/keyforge-game-log-parser/zipball/2c491f389e654442e7f9113cfaa20b5523d9a219",
+                "reference": "2c491f389e654442e7f9113cfaa20b5523d9a219",
                 "shasum": ""
             },
             "require": {
@@ -100,7 +100,7 @@
                 "issues": "https://github.com/adnanmula/keyforge-game-log-parser/issues",
                 "source": "https://github.com/adnanmula/keyforge-game-log-parser/tree/master"
             },
-            "time": "2025-04-21T10:46:16+00:00"
+            "time": "2025-04-23T23:41:23+00:00"
         },
         {
             "name": "beberlei/assert",
@@ -7098,16 +7098,16 @@
         },
         {
             "name": "behat/behat",
-            "version": "v3.21.0",
+            "version": "v3.21.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Behat/Behat.git",
-                "reference": "4b6a6cd83202619d22bea6f27a2e8b91d9a3ba8c"
+                "reference": "315970f1f0c7c65e50aac87494575cfb9c6aa9e3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Behat/Behat/zipball/4b6a6cd83202619d22bea6f27a2e8b91d9a3ba8c",
-                "reference": "4b6a6cd83202619d22bea6f27a2e8b91d9a3ba8c",
+                "url": "https://api.github.com/repos/Behat/Behat/zipball/315970f1f0c7c65e50aac87494575cfb9c6aa9e3",
+                "reference": "315970f1f0c7c65e50aac87494575cfb9c6aa9e3",
                 "shasum": ""
             },
             "require": {
@@ -7185,9 +7185,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Behat/Behat/issues",
-                "source": "https://github.com/Behat/Behat/tree/v3.21.0"
+                "source": "https://github.com/Behat/Behat/tree/v3.21.1"
             },
-            "time": "2025-04-21T07:26:35+00:00"
+            "time": "2025-04-22T17:38:51+00:00"
         },
         {
             "name": "behat/gherkin",

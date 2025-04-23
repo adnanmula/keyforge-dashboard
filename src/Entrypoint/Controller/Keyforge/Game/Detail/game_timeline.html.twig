@@ -149,8 +149,29 @@
                 case 'AMBER_OBTAINED':
                     actions.push('{{ 'menu.current_amber'|trans }}: ' + event.value + ' (delta: ' + event.delta + ')');
                     break;
+
                 case 'HOUSE_CHOSEN':
                     actions.push('{{ 'menu.house_chosen'|trans }}: ' + event.value);
+                    break;
+
+                case 'AMBER_STOLEN':
+                    actions.push('{{ 'game.timeline.used'|trans }} ' + event.trigger + ' {{ 'game.timeline.to_steal'|trans|lower }} ' + event.value + ' {{ 'game.timeline.amber'|trans|lower }}');
+                    break;
+
+                case 'FIGHT':
+                    if (event.trigger === event.value) {
+                        actions.push('{{ 'game.timeline.fought_with'|trans }} ' + event.value + ' {{ 'game.timeline.versus'|trans|lower }} ' + event.target);
+                    } else {
+                        actions.push('{{ 'game.timeline.used'|trans }} ' + event.trigger + ' {{ 'game.timeline.to_fight_with'|trans|lower }} ' + event.value + ' {{ 'game.timeline.versus'|trans|lower }} ' + event.target);
+                    }
+                    break;
+
+                case 'REAP':
+                    if (event.trigger === event.value) {
+                        actions.push('{{ 'game.timeline.reaped_with'|trans }} ' + event.value);
+                    } else {
+                        actions.push('{{ 'game.timeline.used'|trans }} ' + event.trigger + ' {{ 'game.timeline.to_reap_with'|trans|lower }} ' + event.value);
+                    }
                     break;
             }
         })
