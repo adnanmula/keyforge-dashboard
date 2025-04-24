@@ -9,6 +9,17 @@
         <canvas id="amberAccumulatedChart"></canvas>
     </div>
 
+
+    <div class="col-12 col-md-3 mt-3">
+        <h5>{{ 'menu.houses_chosen'|trans }} {{ game.log.winner.name }} </h5>
+        <canvas id="winnerHousesByTurnChart"></canvas>
+    </div>
+
+    <div class="col-12 col-md-3 mt-3">
+        <h5>{{ 'menu.houses_chosen'|trans }} {{ game.log.loser.name }}</h5>
+        <canvas id="loserHousesByTurnChart"></canvas>
+    </div>
+
     <div class="col-12 col-md-6 mt-3">
         <h5>{{ 'menu.amber_stolen_by_turn'|trans }}</h5>
         <canvas id="amberStolenByTurnChart"></canvas>
@@ -180,5 +191,94 @@
                 },
             ]
         },
+    });
+
+    const houseColors = {
+        brobnar: 'rgb(231, 76, 60)',
+        dis: 'rgb(225, 78, 183)',
+        ekwidon: 'rgb(177, 29, 33)',
+        geistoid: 'rgb(37, 41, 33)',
+        logos: 'rgb(52, 152, 219)',
+        mars: 'rgb(46, 204, 113)',
+        redemption: 'rgb(218,8,8)',
+        sanctum: 'rgb(41, 128, 185)',
+        saurian: 'rgb(22, 160, 133)',
+        shadows: 'rgb(81, 90, 90)',
+        skyborn: 'rgb(9,237,211)',
+        star_alliance: 'rgb(125, 60, 152)',
+        unfathomable: 'rgb(21, 67, 96)',
+        untamed: 'rgb(20, 90, 50)',
+    };
+
+    const houseChosenEvent = {
+        winner: {
+            events: JSON.parse('{{ game.log.winner.housesChosen|json_encode|raw }}'),
+            aggregated: [],
+            labels: [],
+            bgColors: [],
+        },
+        loser: {
+            events: JSON.parse('{{ game.log.loser.housesChosen|json_encode|raw }}'),
+            aggregated: [],
+            labels: [],
+            bgColors: [],
+        },
+    };
+
+    houseChosenEvent.winner.events.forEach(event => {
+        const house = event.value;
+        houseChosenEvent.winner.aggregated[house] = (houseChosenEvent.winner.aggregated[house] || 0) + 1;
+    });
+
+    houseChosenEvent.loser.events.forEach(event => {
+        const house = event.value;
+        houseChosenEvent.loser.aggregated[house] = (houseChosenEvent.loser.aggregated[house] || 0) + 1;
+    });
+
+    houseChosenEvent.winner.labels = Object.keys(houseChosenEvent.winner.aggregated);
+    houseChosenEvent.loser.labels = Object.keys(houseChosenEvent.loser.aggregated);
+    houseChosenEvent.winner.bgColors = houseChosenEvent.winner.labels.map(house => houseColors[house]);
+    houseChosenEvent.loser.bgColors = houseChosenEvent.loser.labels.map(house => houseColors[house]);
+
+    new Chart(document.getElementById('winnerHousesByTurnChart').getContext('2d'), {
+        type: 'doughnut',
+        data: {
+            labels: houseChosenEvent.winner.labels,
+            datasets: [{
+                data: Object.values(houseChosenEvent.winner.aggregated),
+                backgroundColor: houseChosenEvent.winner.bgColors,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                },
+            },
+            cutout: '60%'
+        }
+    });
+
+    new Chart(document.getElementById('loserHousesByTurnChart').getContext('2d'), {
+        type: 'doughnut',
+        data: {
+            labels: houseChosenEvent.loser.labels,
+            datasets: [{
+                data: Object.values(houseChosenEvent.loser.aggregated),
+                backgroundColor: houseChosenEvent.loser.bgColors,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                },
+            },
+            cutout: '60%'
+        }
     });
 </script>

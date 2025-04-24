@@ -232,6 +232,7 @@ menu.house_pr: 'House pick rate'
 menu.house_wins: 'House wins'
 menu.house_wr: 'House win rate'
 menu.houses: Houses
+menu.houses_chosen: Houses chosen
 menu.import: Import
 menu.import_all: Import all
 menu.import_alliance: Import alliance

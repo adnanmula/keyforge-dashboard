@@ -12,12 +12,15 @@
 </div>
 
 <div class="card-body">
-    {% include 'Keyforge/Game/Detail/game_stat_comparison_row.html.twig' with {label: 'menu.amber_obtained'|trans,left: game.log.winner.amberObtained.total,right: game.log.loser.amberObtained.total} %}
-    {% include 'Keyforge/Game/Detail/game_stat_comparison_row.html.twig' with {label: 'menu.amber_stolen'|trans,left: game.log.winner.amberStolen.total,right: game.log.loser.amberStolen.total} %}
-    {% include 'Keyforge/Game/Detail/game_stat_comparison_row.html.twig' with {label: 'menu.cards_played'|trans,left: game.log.winner.cardsPlayed.total,right: game.log.loser.cardsPlayed.total} %}
-    {% include 'Keyforge/Game/Detail/game_stat_comparison_row.html.twig' with {label: 'menu.cards_drawn'|trans,left: game.log.winner.cardsDrawn.total,right: game.log.loser.cardsDrawn.total} %}
-    {% include 'Keyforge/Game/Detail/game_stat_comparison_row.html.twig' with {label: 'menu.cards_discarded'|trans,left: game.log.winner.cardsDiscarded.total,right: game.log.loser.cardsDiscarded.total} %}
-    {% include 'Keyforge/Game/Detail/game_stat_comparison_row.html.twig' with {label: 'menu.fights'|trans,left: game.log.winner.fights.count,right: game.log.loser.fights.count} %}
-    {% include 'Keyforge/Game/Detail/game_stat_comparison_row.html.twig' with {label: 'menu.reaps'|trans,left: game.log.winner.reaps.count,right: game.log.loser.reaps.count} %}
-    {% include 'Keyforge/Game/Detail/game_stat_comparison_row.html.twig' with {label: 'menu.keys_forged'|trans,left: game.log.winner.keysForged.count,right: game.log.loser.keysForged.count} %}
+    {% set winner = game.log.winner %}
+    {% set loser = game.log.loser %}
+
+    {% include 'Keyforge/Game/Detail/game_stat_comparison_row.html.twig' with {label: 'menu.amber_obtained'|trans, left: winner.amberObtained.total, right: loser.amberObtained.total, extraLeft: '(+'~winner.amberObtained.totalPositive~winner.amberObtained.totalNegative~')', extraRight: '(+'~loser.amberObtained.totalPositive~loser.amberObtained.totalNegative~')' } %}
+    {% include 'Keyforge/Game/Detail/game_stat_comparison_row.html.twig' with {label: 'menu.amber_stolen'|trans, left: winner.amberStolen.total, right: loser.amberStolen.total, extraLeft: '', extraRight: '' } %}
+    {% include 'Keyforge/Game/Detail/game_stat_comparison_row.html.twig' with {label: 'menu.cards_played'|trans, left: winner.cardsPlayed.total, right: loser.cardsPlayed.total, extraLeft: '', extraRight: '' } %}
+    {% include 'Keyforge/Game/Detail/game_stat_comparison_row.html.twig' with {label: 'menu.cards_drawn'|trans, left: winner.cardsDrawn.total, right: loser.cardsDrawn.total, extraLeft: '', extraRight: '' } %}
+    {% include 'Keyforge/Game/Detail/game_stat_comparison_row.html.twig' with {label: 'menu.cards_discarded'|trans, left: winner.cardsDiscarded.total, right: loser.cardsDiscarded.total, extraLeft: '', extraRight: '' } %}
+    {% include 'Keyforge/Game/Detail/game_stat_comparison_row.html.twig' with {label: 'menu.fights'|trans, left: winner.fights.count, right: loser.fights.count, extraLeft: '', extraRight: '' } %}
+    {% include 'Keyforge/Game/Detail/game_stat_comparison_row.html.twig' with {label: 'menu.reaps'|trans, left: winner.reaps.count, right: loser.reaps.count, extraLeft: '', extraRight: '' } %}
+    {% include 'Keyforge/Game/Detail/game_stat_comparison_row.html.twig' with {label: 'menu.keys_forged'|trans, left: winner.keysForged.count, right: loser.keysForged.count, extraLeft: '', extraRight: '' } %}
 </div>

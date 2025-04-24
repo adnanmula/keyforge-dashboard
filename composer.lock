@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e00a3e06a9d875e11896cf18f9f00321",
+    "content-hash": "2840822d2f97d2eed862a2f2bfdf1807",
     "packages": [
         {
             "name": "adnanmula/criteria",
@@ -55,16 +55,16 @@
         },
         {
             "name": "adnanmula/keyforge-game-log-parser",
-            "version": "dev-master",
+            "version": "0.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/adnanmula/keyforge-game-log-parser.git",
-                "reference": "75b5984760446089a1a456356fc0f20b3db86f37"
+                "reference": "25ee58ec1d78b7f8a91aed23426fa15a5ca3adb2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/adnanmula/keyforge-game-log-parser/zipball/75b5984760446089a1a456356fc0f20b3db86f37",
-                "reference": "75b5984760446089a1a456356fc0f20b3db86f37",
+                "url": "https://api.github.com/repos/adnanmula/keyforge-game-log-parser/zipball/25ee58ec1d78b7f8a91aed23426fa15a5ca3adb2",
+                "reference": "25ee58ec1d78b7f8a91aed23426fa15a5ca3adb2",
                 "shasum": ""
             },
             "require": {
@@ -79,7 +79,6 @@
                 "phpunit/phpunit": "^11.0",
                 "symfony/var-dumper": "^7.0"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -98,9 +97,9 @@
             ],
             "support": {
                 "issues": "https://github.com/adnanmula/keyforge-game-log-parser/issues",
-                "source": "https://github.com/adnanmula/keyforge-game-log-parser/tree/master"
+                "source": "https://github.com/adnanmula/keyforge-game-log-parser/tree/0.1.0"
             },
-            "time": "2025-04-24T00:58:47+00:00"
+            "time": "2025-04-24T10:27:41+00:00"
         },
         {
             "name": "beberlei/assert",
@@ -290,16 +289,16 @@
         },
         {
             "name": "cakephp/core",
-            "version": "5.2.2",
+            "version": "5.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/core.git",
-                "reference": "fcb8dc5bb17c379e43fa233a7a510bdffa7e7b8f"
+                "reference": "a0a92ee7fbb7b7555dbf4ea7ff3fd4e779693da6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/core/zipball/fcb8dc5bb17c379e43fa233a7a510bdffa7e7b8f",
-                "reference": "fcb8dc5bb17c379e43fa233a7a510bdffa7e7b8f",
+                "url": "https://api.github.com/repos/cakephp/core/zipball/a0a92ee7fbb7b7555dbf4ea7ff3fd4e779693da6",
+                "reference": "a0a92ee7fbb7b7555dbf4ea7ff3fd4e779693da6",
                 "shasum": ""
             },
             "require": {
@@ -353,20 +352,20 @@
                 "issues": "https://github.com/cakephp/cakephp/issues",
                 "source": "https://github.com/cakephp/core"
             },
-            "time": "2025-04-15T17:52:03+00:00"
+            "time": "2025-04-19T12:34:03+00:00"
         },
         {
             "name": "cakephp/database",
-            "version": "5.2.2",
+            "version": "5.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/database.git",
-                "reference": "c52a8209ea125abd396bd6b434b5ff5430eb8c25"
+                "reference": "8aa2df292e8b0e0c27e50bd6ed808fbf32f9c25a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/database/zipball/c52a8209ea125abd396bd6b434b5ff5430eb8c25",
-                "reference": "c52a8209ea125abd396bd6b434b5ff5430eb8c25",
+                "url": "https://api.github.com/repos/cakephp/database/zipball/8aa2df292e8b0e0c27e50bd6ed808fbf32f9c25a",
+                "reference": "8aa2df292e8b0e0c27e50bd6ed808fbf32f9c25a",
                 "shasum": ""
             },
             "require": {
@@ -420,11 +419,11 @@
                 "issues": "https://github.com/cakephp/cakephp/issues",
                 "source": "https://github.com/cakephp/database"
             },
-            "time": "2025-04-15T17:52:03+00:00"
+            "time": "2025-04-22T19:16:58+00:00"
         },
         {
             "name": "cakephp/datasource",
-            "version": "5.2.2",
+            "version": "5.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/datasource.git",
@@ -491,16 +490,16 @@
         },
         {
             "name": "cakephp/utility",
-            "version": "5.2.2",
+            "version": "5.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/utility.git",
-                "reference": "97842fe780372d2f72f733e72e9a900ad11b239e"
+                "reference": "76dcd5c20e46aaf5bfdf9ad51e9f5313abffe104"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/utility/zipball/97842fe780372d2f72f733e72e9a900ad11b239e",
-                "reference": "97842fe780372d2f72f733e72e9a900ad11b239e",
+                "url": "https://api.github.com/repos/cakephp/utility/zipball/76dcd5c20e46aaf5bfdf9ad51e9f5313abffe104",
+                "reference": "76dcd5c20e46aaf5bfdf9ad51e9f5313abffe104",
                 "shasum": ""
             },
             "require": {
@@ -551,7 +550,7 @@
                 "issues": "https://github.com/cakephp/cakephp/issues",
                 "source": "https://github.com/cakephp/utility"
             },
-            "time": "2025-04-15T17:52:03+00:00"
+            "time": "2025-04-19T12:34:03+00:00"
         },
         {
             "name": "doctrine/cache",
@@ -10626,9 +10625,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "adnanmula/keyforge-game-log-parser": 20
-    },
+    "stability-flags": {},
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
