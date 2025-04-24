@@ -66,8 +66,8 @@ deck.upgrade_count: 'Mejoras'
 deck.key_cheat_count: 'Key cheats'
 deck.card_archive_count: 'Cartas que archivan'
 deck.board_clear_count: 'Board clears'
-deck.scaling_amber_control_count: 'Control de ambar escalado'
-deck.raw_amber: 'Iconos de ambar'
+deck.scaling_amber_control_count: 'Control de ámbar escalado'
+deck.raw_amber: 'Iconos de ámbar'
 deck.aerc_score: 'Aerc'
 deck.bonus_amber: Iconos de ámbar
 deck.creature_control: Control de criaturas
@@ -314,10 +314,10 @@ wiki.score_greater_or_equal_than: 'Puntuación mayor o igual a %score%'
 wiki.score_lower_than: 'Puntuación menor a %score%'
 wiki.tag: Tag
 wiki.tag_action_count_high: 'Muchas acciones'
-wiki.tag_amber_control_high: 'Control de ambar alto'
-wiki.tag_amber_control_low: 'Control de ambar bajo'
-wiki.tag_amber_pip_count_high: 'Muchos pimpollos de ambar'
-wiki.tag_amber_pip_count_low: 'Pocos pimpollos de ambar'
+wiki.tag_amber_control_high: 'Control de ámbar alto'
+wiki.tag_amber_control_low: 'Control de ámbar bajo'
+wiki.tag_amber_pip_count_high: 'Muchos pimpollos de ámbar'
+wiki.tag_amber_pip_count_low: 'Pocos pimpollos de ámbar'
 wiki.tag_antisynergistic: 'Antisinérgico'
 wiki.tag_archives_high: 'Archiva mucho'
 wiki.tag_artifact_control_high: 'Control de artefactos alto'
@@ -332,9 +332,9 @@ wiki.tag_effective_power_high: 'Poder efectivo alto'
 wiki.tag_efficiency_high: 'Eficiencia alta'
 wiki.tag_efficiency_low: 'Eficiencia baja'
 wiki.tag_expected_amber_high: 'Ámbar esperado alto'
-wiki.tag_expected_amber_low: 'Ambar esperado bajo'
+wiki.tag_expected_amber_low: 'Ámbar esperado bajo'
 wiki.tag_has_board_wipes: 'Tiene board wipes'
-wiki.tag_has_scaling_amber_control: 'Tiene control de ambar escalado'
+wiki.tag_has_scaling_amber_control: 'Tiene control de ámbar escalado'
 wiki.tag_synergistic: 'Sinérgico'
 wiki.tag_upgrades_count_high: 'Muchas mejoras'
 wiki.the_crucible_online: 'The crucible online'
@@ -361,22 +361,22 @@ menu.all_your_tags: Todas tus etiquetas
 menu.tags_to_show: Etiquetas a mostrar
 game.log: Registro de partida
 menu.game_log_tooltip: Registro de partida del TCO
-menu.amber_cost: Coste de ambar
-menu.amber_remaining: Ambar restante
+menu.amber_cost: Coste de ámbar
+menu.amber_remaining: Ámbar restante
 menu.turn: Turno
 menu.turns: Turnos
 menu.timeline_played_cards: Cartas jugadas
 menu.timeline_keys_forged: Llaves forjadas
-menu.graph_amber_generation_accumulated: Generación de ambar acumulada
-menu.graph_amber_generation_by_turn: Generación de ambar por turno
+menu.graph_amber_generation_accumulated: Generación de ámbar acumulada
+menu.graph_amber_generation_by_turn: Generación de ámbar por turno
 menu.total: Total
 menu.analyze: Analizar
-menu.amber_obtained: Ambar obtenido
+menu.amber_obtained: Ámbar obtenido
 menu.cards_played: Cartas jugadas
 menu.cards_drawn: Cartas robadas
 menu.cards_discarded: Cartas descartadas
 menu.keys_forged: Llaves forjadas
-menu.current_amber: Ambar actual
+menu.current_amber: Ámbar actual
 menu.played: Jugado
 menu.key_forged: Llave forjada
 menu.cost: Coste
@@ -393,10 +393,10 @@ game.timeline.used: Uso a
 game.timeline.to_fight_with: Para luchar con
 game.timeline.to_reap_with: Para cosechar con
 game.timeline.to_steal: Para robar
-game.timeline.amber: Ambar
+game.timeline.amber: Ámbar
 menu.fights: Luchas
 menu.reaps: Cosechas
-menu.amber_stolen: Ambar robado
-menu.amber_stolen_by_turn: Ambar robado por turno
+menu.amber_stolen: Ámbar robado
+menu.amber_stolen_by_turn: Ámbar robado por turno
 menu.fights_by_turn: Luchas por turno
 menu.reaps_by_turn: Cosechas por turno
