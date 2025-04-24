@@ -23,16 +23,28 @@
             <p class="text">{{ game.log.amberObtained.total }}</p>
         </div>
         <div class="col-6 col-md-2 mb-3">
+            <h6 class="fw-bold">{{ 'menu.amber_stolen'|trans }}</h6>
+            <p class="text">{{ game.log.amberStolen.total }}</p>
+        </div>
+        <div class="col-6 col-md-2 mb-3">
             <h6 class="fw-bold">{{ 'menu.cards_played'|trans }}</h6>
             <p class="text">{{ game.log.cardsPlayed.total }}</p>
+        </div>
+        <div class="col-6 col-md-2 mb-3">
+            <h6 class="fw-bold">{{ 'menu.cards_drawn'|trans }}</h6>
+            <p class="text">{{ game.log.cardsDrawn.total }}</p>
         </div>
         <div class="col-6 col-md-2 mb-3">
             <h6 class="fw-bold">{{ 'menu.cards_discarded'|trans }}</h6>
             <p class="text">{{ game.log.cardsDiscarded.total }}</p>
         </div>
         <div class="col-6 col-md-2 mb-3">
-            <h6 class="fw-bold">{{ 'menu.cards_drawn'|trans }}</h6>
-            <p class="text">{{ game.log.cardsDrawn.total }}</p>
+            <h6 class="fw-bold">{{ 'menu.fights'|trans }}</h6>
+            <p class="text">{{ game.log.fights.count }}</p>
+        </div>
+        <div class="col-6 col-md-2 mb-3">
+            <h6 class="fw-bold">{{ 'menu.reaps'|trans }}</h6>
+            <p class="text">{{ game.log.reaps.count }}</p>
         </div>
         <div class="col-6 col-md-2 mb-3">
             <h6 class="fw-bold">{{ 'menu.keys_forged'|trans }}</h6>

@@ -59,12 +59,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/adnanmula/keyforge-game-log-parser.git",
-                "reference": "2c491f389e654442e7f9113cfaa20b5523d9a219"
+                "reference": "75b5984760446089a1a456356fc0f20b3db86f37"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/adnanmula/keyforge-game-log-parser/zipball/2c491f389e654442e7f9113cfaa20b5523d9a219",
-                "reference": "2c491f389e654442e7f9113cfaa20b5523d9a219",
+                "url": "https://api.github.com/repos/adnanmula/keyforge-game-log-parser/zipball/75b5984760446089a1a456356fc0f20b3db86f37",
+                "reference": "75b5984760446089a1a456356fc0f20b3db86f37",
                 "shasum": ""
             },
             "require": {
@@ -100,7 +100,7 @@
                 "issues": "https://github.com/adnanmula/keyforge-game-log-parser/issues",
                 "source": "https://github.com/adnanmula/keyforge-game-log-parser/tree/master"
             },
-            "time": "2025-04-23T23:41:23+00:00"
+            "time": "2025-04-24T00:58:47+00:00"
         },
         {
             "name": "beberlei/assert",

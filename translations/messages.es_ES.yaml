@@ -393,3 +393,9 @@ game.timeline.to_fight_with: Para luchar con
 game.timeline.to_reap_with: Para cosechar con
 game.timeline.to_steal: Para robar
 game.timeline.amber: Ambar
+menu.fights: Luchas
+menu.reaps: Cosechas
+menu.amber_stolen: Ambar robado
+menu.amber_stolen_by_turn: Ambar robado por turno
+menu.fights_by_turn: Luchas por turno
+menu.reaps_by_turn: Cosechas por turno

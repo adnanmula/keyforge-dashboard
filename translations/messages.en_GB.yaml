@@ -393,3 +393,9 @@ game.timeline.to_fight_with: To fight with
 game.timeline.to_reap_with: To reap with
 game.timeline.to_steal: To steal
 game.timeline.amber: Amber
+menu.fights: Fights
+menu.reaps: Reaps
+menu.amber_stolen: Amber stolen
+menu.amber_stolen_by_turn: Amber stolen by turn
+menu.fights_by_turn: Fights by turn
+menu.reaps_by_turn: Reaps by turn
