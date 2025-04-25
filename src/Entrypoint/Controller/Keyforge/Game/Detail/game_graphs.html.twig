@@ -153,6 +153,16 @@
                 },
             ]
         },
+        options: {
+            scales: {
+                y: {
+                    ticks: {
+                        stepSize: 1,
+                    },
+                    beginAtZero: true
+                },
+            },
+        },
     });
 
     new Chart(document.getElementById('fightsByTurnChart').getContext('2d'), {
@@ -172,6 +182,16 @@
                 },
             ]
         },
+        options: {
+            scales: {
+                y: {
+                    ticks: {
+                        stepSize: 1,
+                    },
+                    beginAtZero: true
+                },
+            },
+        },
     });
 
     new Chart(document.getElementById('reapsByTurnChart').getContext('2d'), {
@@ -190,6 +210,16 @@
                     backgroundColor: playerData.loser.color,
                 },
             ]
+        },
+        options: {
+            scales: {
+                y: {
+                    ticks: {
+                        stepSize: 1,
+                    },
+                    beginAtZero: true
+                },
+            },
         },
     });
 
@@ -248,7 +278,7 @@
                 data: Object.values(houseChosenEvent.winner.aggregated),
                 backgroundColor: houseChosenEvent.winner.bgColors,
                 borderWidth: 1
-            }]
+            }],
         },
         options: {
             responsive: true,
@@ -257,8 +287,8 @@
                     position: 'bottom',
                 },
             },
-            cutout: '60%'
-        }
+            cutout: '60%',
+        },
     });
 
     new Chart(document.getElementById('loserHousesByTurnChart').getContext('2d'), {
@@ -268,8 +298,8 @@
             datasets: [{
                 data: Object.values(houseChosenEvent.loser.aggregated),
                 backgroundColor: houseChosenEvent.loser.bgColors,
-                borderWidth: 1
-            }]
+                borderWidth: 1,
+            }],
         },
         options: {
             responsive: true,
@@ -278,7 +308,7 @@
                     position: 'bottom',
                 },
             },
-            cutout: '60%'
-        }
+            cutout: '60%',
+        },
     });
 </script>

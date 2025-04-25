@@ -106,6 +106,7 @@ deck_comparison.MM: MM
 deck_comparison.U22: U22
 deck_comparison.VM23: VM23
 deck_comparison.VM24: VM24
+deck_comparison.VM25: VM25
 deck_comparison.WC: WC
 deck_comparison.WoE: WoE
 deck_comparison.aerc: Aerc
@@ -182,6 +183,7 @@ keyforge.set_mm: MM
 keyforge.set_u22: U22
 keyforge.set_vm23: VM23
 keyforge.set_vm24: VM24
+keyforge.set_vm25: VM25
 keyforge.set_wc: WC
 keyforge.set_woe: WoE
 keyforge.set_dis: DIS
