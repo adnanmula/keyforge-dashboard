@@ -223,28 +223,7 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-6">
-                        <h5>{{ 'menu.all_your_tags'|trans }}</h5>
-
-                        <div style="max-height: 450px; overflow-y: auto; overflow-x: hidden">
-                        {% for tag in all_private_tags %}
-                            <div class="row" style="margin-left: 10px; margin-bottom: 10px">
-                                <div class="col-8">
-                                    <button type="button" class="btn btn-xs btn-outline-dark" data-type="{{ tag.type.value }}" data-value="{{ tag.name.jsonSerialize[app.locale] }}" style="margin: 1px; background-color: {{  tag.style.colorBg }}; color: {{ tag.style.colorText }}; border-color: {{  tag.style.colorOutline }}">{{ tag.name.jsonSerialize[app.locale] }}</button>
-                                </div>
-                                <div class="col-4">
-                                    <button disabled data-toggle="tooltip" title="{{ 'menu.edit'|trans }}" type="button" class="btn btn-dark editTag" data-tag="{{ tag.id }}">
-                                        <i class="bi bi-pencil" style="pointer-events: none;"></i>
-                                    </button>
-                                    <button data-toggle="tooltip" title="{{ 'menu.remove'|trans }}" type="button" class="btn btn-dark removeTag" data-tag="{{ tag.id }}">
-                                        <i class="bi bi-trash" style="pointer-events: none;"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        {% endfor %}
-                        </div>
-                    </div>
-                    <div class="col-6">
+                    <div class="col-12 col-md-6">
                         <h5>{{ 'menu.create_new'|trans }}</h5>
 
                         <form id="createUserTags">
@@ -303,6 +282,29 @@
                             <button type="submit" id="createTagSubmit" class="btn btn-block btn-dark" style="width: 100%">{{ 'menu.create'|trans }}</button>
                         </form>
                     </div>
+                    {% if all_private_tags|length > 0 %}
+                    <div class="col-12 col-md-6 mt-4 mt-md-0">
+                        <h5>{{ 'menu.all_your_tags'|trans }}</h5>
+
+                        <div style="max-height: 450px; overflow-y: auto; overflow-x: hidden">
+                            {% for tag in all_private_tags %}
+                                <div class="row" style="margin-left: 10px; margin-bottom: 10px">
+                                    <div class="col-8">
+                                        <button type="button" class="btn btn-xs btn-outline-dark" data-type="{{ tag.type.value }}" data-value="{{ tag.name.jsonSerialize[app.locale] }}" style="margin: 1px; background-color: {{  tag.style.colorBg }}; color: {{ tag.style.colorText }}; border-color: {{  tag.style.colorOutline }}">{{ tag.name.jsonSerialize[app.locale] }}</button>
+                                    </div>
+                                    <div class="col-4">
+                                        <button disabled data-toggle="tooltip" title="{{ 'menu.edit'|trans }}" type="button" class="btn btn-dark editTag" data-tag="{{ tag.id }}">
+                                            <i class="bi bi-pencil" style="pointer-events: none;"></i>
+                                        </button>
+                                        <button data-toggle="tooltip" title="{{ 'menu.remove'|trans }}" type="button" class="btn btn-dark removeTag" data-tag="{{ tag.id }}">
+                                            <i class="bi bi-trash" style="pointer-events: none;"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
                 </div>
                 <hr>
                 <form id="assignUserTag">

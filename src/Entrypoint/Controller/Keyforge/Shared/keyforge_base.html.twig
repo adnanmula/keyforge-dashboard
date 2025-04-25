@@ -31,7 +31,7 @@
         <title>{% block title %}{% endblock %}</title>
     </head>
     <body>
-        <nav class="navbar navbar-expand-md navbar-expand-lg navbar-dark bg-dark">
+        <nav class="navbar navbar-expand-md navbar-expand-lg navbar-dark bg-dark fixed-top">
             <div class="container-fluid">
                 <nav class="navbar navbar-dark bg-dark">
                     <a class="navbar-brand" href="{{ path('keyforge_home') }}"><img src="{{ asset('icons/icon_white_32.png') }}" width="30" height="30" class="d-inline-block align-top" alt=""></a>
@@ -183,10 +183,8 @@
             {% endif %}
         </script>
 
-        <div class="container">
+        <div class="container" style="padding-top: 72px">
             {% block body %}{% endblock %}
         </div>
-
-        {% block body_without_container %}{% endblock %}
     </body>
 </html>

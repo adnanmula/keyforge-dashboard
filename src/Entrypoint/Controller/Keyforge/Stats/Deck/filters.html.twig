@@ -3,7 +3,7 @@
         <a style="position: fixed; bottom: 20px; right: 20px; z-index: 99999" class="btn btn-dark" data-bs-toggle="offcanvas" href="#filters" role="button" aria-expanded="false"><i class="bi bi-filter"></i></a>
     </div>
 </div>
-<div class="offcanvas offcanvas-start show filters-margin" tabindex="-1" id="filters" data-bs-scroll="true" data-bs-backdrop="false">
+<div class="offcanvas offcanvas-start filters-margin" tabindex="-1" id="filters" data-bs-scroll="true" data-bs-backdrop="false">
     <div class="offcanvas-header">
         <h5 id="offcanvasRightLabel">{{ 'menu.filters'|trans }}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
@@ -15,7 +15,7 @@
             <div class="row g-2 ps-2 mt-2">
                 {% for set in sets %}
                     {% if set.isMain and set.isEnabled %}
-                        <div class="col-12 col-md-6 d-flex align-items-center">
+                        <div class="col-6 d-flex align-items-center">
                             <div class="form-check d-flex align-items-center w-100">
                                 <input class="form-check-input me-2 set_selector" type="checkbox" value="{{ set.name }}" id="check_set_{{ set.name }}">
                                 <label class="form-check-label d-flex align-items-center" for="check_set_{{ set.name }}">
@@ -39,7 +39,7 @@
                 <div class="row g-2 ps-2 mt-2">
                     {% for set in sets %}
                         {% if not set.isMain and set.isEnabled %}
-                            <div class="col-12 col-sm-6 d-flex align-items-center">
+                            <div class="col-6 d-flex align-items-center">
                                 <div class="form-check d-flex align-items-center w-100">
                                     <input class="form-check-input me-2 set_selector" type="checkbox" value="{{ set.name }}" id="check_set_{{ set.name }}">
                                     <label class="form-check-label d-flex align-items-center" for="check_set_{{ set.name }}">
@@ -76,7 +76,7 @@
                 <div class="row g-2 ps-2 mt-2">
                     {% for house in houses %}
                         {% if house.isEnabled %}
-                            <div class="col-12 col-sm-6 d-flex align-items-center">
+                            <div class="col-6 d-flex align-items-center">
                                 <div class="form-check d-flex align-items-center w-100">
                                     <input class="form-check-input me-2 houses_selector" type="checkbox" value="{{ house.name|upper }}" id="check_house_{{ house.name|lower }}">
                                     <label class="form-check-label d-flex align-items-center" for="check_house_{{ house.name|lower }}">
@@ -219,9 +219,9 @@
                             <div class="col-12">
                                 <label for="deck-type-selector" class="form-label">{{ 'menu.deck_type'|trans }}</label>
                                 <select id="deck-type-selector" class="form-select">
-                                    <option value="STANDARD">Standard</option>
-                                    <option value="ALLIANCE">Alliance</option>
-                                    <option value="THEORETICAL">Theoretical</option>
+                                    <option value="STANDARD">{{ 'menu.deck_type_archon'|trans }}</option>
+                                    <option value="ALLIANCE">{{ 'menu.deck_type_alliance'|trans }}</option>
+                                    <option value="THEORETICAL">{{ 'menu.deck_type_theoretical'|trans }}</option>
                                 </select>
                             </div>
 
@@ -229,9 +229,9 @@
                             <div class="col-12">
                                 <label for="deck-type-selector" class="form-label">{{ 'menu.deck_type'|trans }}</label>
                                 <select id="deck-type-selector" class="form-select">
-                                    <option value="STANDARD">Standard</option>
-                                    <option value="ALLIANCE">Alliance</option>
-                                    <option value="THEORETICAL">Theoretical</option>
+                                    <option value="STANDARD">{{ 'menu.deck_type_archon'|trans }}</option>
+                                    <option value="ALLIANCE">{{ 'menu.deck_type_alliance'|trans }}</option>
+                                    <option value="THEORETICAL">{{ 'menu.deck_type_theoretical'|trans }}</option>
                                 </select>
                             </div>
                         {% endif %}
@@ -289,9 +289,18 @@
     });
 
     document.addEventListener('DOMContentLoaded', function () {
+        if (window.innerWidth >= 768) {
+            document.getElementById("filters").classList.add('show');
+        }
+
         const toggleButtons = document.querySelectorAll('[data-bs-toggle="collapse"]');
         toggleButtons.forEach(button => {
             const icon = button.querySelector('.toggle-icon');
+
+            if (null === icon) {
+                return;
+            }
+
             const target = document.querySelector(button.getAttribute('data-bs-target'));
 
             target.addEventListener('show.bs.collapse', function () {
