@@ -1,87 +1,130 @@
 <div class="row">
     <div>
-        <a style="position: fixed; bottom: 20px; left: 20px; z-index: 99999" class="btn btn-dark" data-bs-toggle="collapse" href="#filters" role="button" aria-expanded="false"><i class="bi bi-filter"></i></a>
+        <a style="position: fixed; bottom: 20px; right: 20px; z-index: 99999" class="btn btn-dark" data-bs-toggle="offcanvas" href="#filters" role="button" aria-expanded="false"><i class="bi bi-filter"></i></a>
     </div>
 </div>
+<div class="offcanvas offcanvas-start show filters-margin" tabindex="-1" id="filters" data-bs-scroll="true" data-bs-backdrop="false" style="position: fixed; z-index: 1020">
+    <div class="offcanvas-header">
+        <h5 id="offcanvasRightLabel">{{ 'menu.filters'|trans }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+    </div>
+    <div class="offcanvas-body" style="overflow-x: hidden">
+        <div class="mb-2">
+            <label for="sets" class="form-label fw-bold">{{ 'deck.set_main'|trans }}</label>
 
-<div class="collapse" id="filters">
-    <div class="shadow-lg p-3 mb-5 bg-white rounded">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="form-group col-12">
-                    <label for="sets" class="form-label">{{ 'deck.set_main'|trans }}</label>
+            <div class="row g-2 ps-2 mt-2">
+                {% for set in sets %}
+                    {% if set.isMain and set.isEnabled %}
+                        <div class="col-12 col-md-6 d-flex align-items-center">
+                            <div class="form-check d-flex align-items-center w-100">
+                                <input class="form-check-input me-2 set_selector" type="checkbox" value="{{ set.name }}" id="check_set_{{ set.name }}">
+                                <label class="form-check-label d-flex align-items-center" for="check_set_{{ set.name }}">
+                                    <img src="{{ asset('assets/keyforge/sets/' ~ set.name ~ '.svg') }}" alt="{{ set.name }}" width="33" height="33" class="me-2">
+                                    {{ ('keyforge.set_' ~ set.name)|lower|trans }}
+                                </label>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
 
-                    <div class="row" style="padding-left: .8em;">
-                        {% for set in sets %}
-                            {% if set.isMain and set.isEnabled %}
-                                <div class="form-check col-6 col-sm-4 col-md-4 col-lg-2 col-xl-2" style="display: flex; align-items: center;">
-                                    <input class="form-check-input set_selector" type="checkbox" value="{{ set.name }}" id="check_set_{{ set.name }}">
-                                    <label for="check_set_{{ set.name }}"><img width="33px" src="{{ asset('assets/keyforge/sets/' ~ set.name ~ '.svg') }}" alt="{{ set.name }}"/>{{ ('keyforge.set_' ~ set.name)|lower|trans }}</label>
+        <div class="mb-2">
+            <button class="btn text-decoration-none fw-bold ps-0 d-flex justify-content-between align-items-center w-100 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSets" aria-expanded="false" aria-controls="collapseSets">
+                {{ 'deck.set_other'|trans }}
+                <i class="bi bi-chevron-up toggle-icon"></i>
+            </button>
+
+            <div class="collapse mt-2" id="collapseSets">
+                <div class="row g-2 ps-2 mt-2">
+                    {% for set in sets %}
+                        {% if not set.isMain and set.isEnabled %}
+                            <div class="col-12 col-sm-6 d-flex align-items-center">
+                                <div class="form-check d-flex align-items-center w-100">
+                                    <input class="form-check-input me-2 set_selector" type="checkbox" value="{{ set.name }}" id="check_set_{{ set.name }}">
+                                    <label class="form-check-label d-flex align-items-center" for="check_set_{{ set.name }}">
+                                        <img src="{{ asset('assets/keyforge/sets/' ~ set.name ~ '.svg') }}" alt="{{ set.name }}" width="33" height="33" class="me-2">
+                                        {{ ('keyforge.set_' ~ set.name)|lower|trans }}
+                                    </label>
                                 </div>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                </div>
-
-                <div class="form-group col-12  mt-3">
-                    <label for="sets" class="form-label">{{ 'deck.set_other'|trans }}</label>
-
-                    <div class="row" style="padding-left: .8em;">
-                        {% for set in sets %}
-                            {% if false == set.isMain and set.isEnabled %}
-                                <div class="form-check col-6 col-sm-4 col-md-4 col-lg-2 col-xl-2" style="display: flex; align-items: center;">
-                                    <input class="form-check-input set_selector" type="checkbox" value="{{ set.name }}" id="check_set_{{ set.name }}">
-                                    <label for="check_set_{{ set.name }}"><img width="33px" src="{{ asset('assets/keyforge/sets/' ~ set.name ~ '.svg') }}" alt="CotA"/>{{ ('keyforge.set_' ~ set.name)|lower|trans }}</label>
-                                </div>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                </div>
-
-                <div class="divider py-2"></div>
-
-                <div class="form-group col-12">
-                    <label for="houses" class="form-label">{{ 'deck.houses'|trans }}</label>
-                    <input class="form-check-input house_type_selector" type="radio" name="houses_filter_type" id="houses_filter_type_1" value="all" checked>
-                    <label class="form-check-label" for="houses_filter_type_1">{{ 'menu.all'|trans }}</label>
-                    <input class="form-check-input house_type_selector" type="radio" name="houses_filter_type" id="houses_filter_type_2" value="any">
-                    <label class="form-check-label" for="houses_filter_type_2">{{ 'menu.any'|trans }}</label>
-
-                    <div class="row" style="padding-left: .8em;">
-                        {% for house in houses %}
-                            {% if house.isEnabled %}
-                                <div class="form-check col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2" style="display: flex; align-items: center;">
-                                    <input class="form-check-input houses_selector" type="checkbox" value="{{ house.name|upper }}" id="check_house_{{ house.name|lower }}">
-                                    <label for="check_house_{{ house.name|lower }}"><img width="35px" src="{{ asset('assets/keyforge/houses/' ~ house.name|upper ~ '.png') }}" alt="{{ house.name|upper }}"/>{{ ('keyforge.house_' ~ house.name|lower)|trans }}</label>
-                                </div>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                </div>
-
-                <div class="divider py-3"></div>
-
-                <div class="form-group">
-                    <div class="row">
-                        {% if owner is null %}
-                        <div class="col-md-12">
-                        {% else %}
-                        <div class="col-md-6">
+                            </div>
                         {% endif %}
-                            <label for="tags" class="form-label">{{ 'menu.tag_predefined'|trans }}</label>
-                            <input class="form-check-input tag_type_selector" type="radio" name="tags_filter_type" id="tags_filter_type_1" value="all" checked>
-                            <label class="form-check-label" for="tags_filter_type_1">{{ 'menu.all'|trans }}</label>
-                            <input class="form-check-input tag_type_selector" type="radio" name="tags_filter_type" id="tags_filter_type_2" value="any">
-                            <label class="form-check-label" for="tags_filter_type_2">{{ 'menu.any'|trans }}</label>
-                            <div class="form-group">
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-2">
+            <button class="btn text-decoration-none fw-bold ps-0 d-flex justify-content-between align-items-center w-100 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHouses" aria-expanded="false" aria-controls="collapseHouses">
+                {{ 'deck.houses'|trans }}
+                <i class="bi bi-chevron-up toggle-icon"></i>
+            </button>
+
+            <div class="collapse mt-2" id="collapseHouses">
+                <div class="mb-2 d-flex gap-4 flex-wrap">
+                    <div class="form-check">
+                        <input class="form-check-input house_type_selector" type="radio" name="houses_filter_type" id="houses_filter_type_1" value="all" checked>
+                        <label class="form-check-label" for="houses_filter_type_1">{{ 'menu.all'|trans }}</label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input house_type_selector" type="radio" name="houses_filter_type" id="houses_filter_type_2" value="any">
+                        <label class="form-check-label" for="houses_filter_type_2">{{ 'menu.any'|trans }}</label>
+                    </div>
+                </div>
+
+                <div class="row g-2 ps-2 mt-2">
+                    {% for house in houses %}
+                        {% if house.isEnabled %}
+                            <div class="col-12 col-sm-6 d-flex align-items-center">
+                                <div class="form-check d-flex align-items-center w-100">
+                                    <input class="form-check-input me-2 houses_selector" type="checkbox" value="{{ house.name|upper }}" id="check_house_{{ house.name|lower }}">
+                                    <label class="form-check-label d-flex align-items-center" for="check_house_{{ house.name|lower }}">
+                                        <img src="{{ asset('assets/keyforge/houses/' ~ house.name|upper ~ '.png') }}" alt="{{ house.name|upper }}" width="35" height="35" class="me-2">
+                                        {{ ('keyforge.house_' ~ house.name|lower)|trans }}
+                                    </label>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-2">
+            <button class="btn text-decoration-none fw-bold ps-0 d-flex justify-content-between align-items-center w-100 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTags" aria-expanded="false" aria-controls="collapseTags">
+                {{ 'menu.tags'|trans }}
+                <i class="bi bi-chevron-up toggle-icon"></i>
+            </button>
+
+            <div class="collapse mt-2" id="collapseTags">
+                <div class="mb-3">
+                    <div class="row">
+                        <div class="col-12">
+                            <label for="tags" class="form-label">{{ 'menu.predefined'|trans }}</label>
+
+                            <div class="d-flex gap-3 mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input tag_type_selector" type="radio" name="tags_filter_type" id="tags_filter_type_1" value="all" checked>
+                                    <label class="form-check-label" for="tags_filter_type_1">{{ 'menu.all'|trans }}</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input tag_type_selector" type="radio" name="tags_filter_type" id="tags_filter_type_2" value="any">
+                                    <label class="form-check-label" for="tags_filter_type_2">{{ 'menu.any'|trans }}</label>
+                                </div>
+                            </div>
+
+                            <div class="form-group mb-3">
                                 <select id="tag-selector" class="form-select">
                                     {% for tag in tags %}
                                         <option value="{{ tag.id }}">{{ tag.name[app.locale] }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
+
                             <div class="divider py-1"></div>
-                            <div class="form-group">
+
+                            <div class="form-group mb-3">
                                 <select id="tag-selector-exclude" class="form-select">
                                     {% for tag in tags %}
                                         <option value="{{ tag.id }}">{{ tag.name[app.locale] }}</option>
@@ -91,120 +134,125 @@
                         </div>
 
                         {% if owner is not null %}
-                        <div class="col-md-6">
-                            <label for="tags" class="form-label">{{ 'menu.tag_yours'|trans }}</label>
-                            <input class="form-check-input tag_private_type_selector" type="radio" name="tags_private_filter_type" id="tags_private_filter_type_1" value="all" checked>
-                            <label class="form-check-label" for="tags_private_filter_type_1">{{ 'menu.all'|trans }}</label>
-                            <input class="form-check-input tag_private_type_selector" type="radio" name="tags_private_filter_type" id="tags_private_filter_type_2" value="any">
-                            <label class="form-check-label" for="tags_private_filter_type_2">{{ 'menu.any'|trans }}</label>
-                            <div class="form-group">
-                                <select id="tag-private-selector" class="form-select">
-                                    {% for tag in privateTags %}
-                                        <option value="{{ tag.id }}">{{ tag.name[app.locale] }}</option>
-                                    {% endfor %}
-                                </select>
+                            <div class="col-12 mt-2">
+                                <label for="tags" class="form-label">{{ 'menu.tag_yours'|trans }}</label>
+
+                                <div class="d-flex gap-3 mb-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input tag_private_type_selector" type="radio" name="tags_private_filter_type" id="tags_private_filter_type_1" value="all" checked>
+                                        <label class="form-check-label" for="tags_private_filter_type_1">{{ 'menu.all'|trans }}</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input tag_private_type_selector" type="radio" name="tags_private_filter_type" id="tags_private_filter_type_2" value="any">
+                                        <label class="form-check-label" for="tags_private_filter_type_2">{{ 'menu.any'|trans }}</label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group mt-2">
+                                    <select id="tag-private-selector" class="form-select">
+                                        {% for tag in privateTags %}
+                                            <option value="{{ tag.id }}">{{ tag.name[app.locale] }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="form-group mt-2">
+                                    <select id="tag-private-selector-exclude" class="form-select">
+                                        {% for tag in privateTags %}
+                                            <option value="{{ tag.id }}">{{ tag.name[app.locale] }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="form-group mt-2">
+                                    <label for="tags-shown-selector" class="form-label">{{ 'menu.show'|trans }}</label>
+                                    <select id="tags-shown-selector" class="form-select">
+                                        <option value="predetermined">{{ 'menu.tag_predefined'|trans }}</option>
+                                        <option value="custom">{{ 'menu.tag_yours'|trans }}</option>
+                                    </select>
+                                </div>
                             </div>
-                            <div class="divider py-1"></div>
-                            <div class="form-group">
-                                <select id="tag-private-selector-exclude" class="form-select">
-                                    {% for tag in privateTags %}
-                                        <option value="{{ tag.id }}">{{ tag.name[app.locale] }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
                         {% endif %}
                     </div>
                 </div>
+            </div>
+        </div>
 
-                <div class="divider py-3"></div>
+        <div class="mt-2">
+            <button class="btn text-decoration-none fw-bold ps-0 d-flex justify-content-between align-items-center w-100 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOtherFilters" aria-expanded="false" aria-controls="collapseOtherFilters">
+                {{ 'menu.other_filters'|trans }}
+                <i class="bi bi-chevron-up toggle-icon"></i>
+            </button>
 
-                <div class="row">
-                    <div class="col-md-4 col-sm-12">
+            <div class="collapse mt-2" id="collapseOtherFilters">
+                <div class="row g-3">
+                    <div class="col-12 col-md-6">
                         <label for="filter_min_sas" class="form-label">{{ 'menu.min_sas'|trans }}</label>
                         <input type="number" class="form-control" name="min-sas" id="filter_min_sas" min="30" max="200" value="30">
-                        <div class="divider py-1"></div>
+                    </div>
+
+                    <div class="col-12 col-md-6">
                         <label for="filter_max_sas" class="form-label">{{ 'menu.max_sas'|trans }}</label>
                         <input type="number" class="form-control" name="max-sas" id="filter_max_sas" min="30" max="200" value="200">
                     </div>
 
                     {% if is_granted('ROLE_KEYFORGE') %}
-                    {% if owner is null %}
+                        {% if owner is null %}
+                            <div class="col-12">
+                                <label for="owner-selector" class="form-label">{{ 'menu.owner'|trans }}</label>
+                                <select id="owner-selector" class="form-select">
+                                    {% for user in users %}
+                                        <option value="{{ user.id }}">{{ user.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
 
-                    <div class="col-md-4 col-sm-12">
-                        <label for="owner-selector" class="form-label">{{ 'menu.owner'|trans }}</label>
+                            <div class="divider py-2"></div>
 
-                        <div class="form-group">
-                            <select id="owner-selector" class="form-select">
-                                {% for user in users %}
-                                    <option value="{{ user.id }}">{{ user.name }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
+                            <div class="col-12">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="only_friends" checked>
+                                    <label class="form-check-label" for="only_friends">{{ 'menu.friend_decks_games'|trans }}</label>
+                                </div>
+                            </div>
 
-                        <div class="divider py-2"></div>
+                            <div class="col-12">
+                                <label for="deck-type-selector" class="form-label">{{ 'menu.deck_type'|trans }}</label>
+                                <select id="deck-type-selector" class="form-select">
+                                    <option value="STANDARD">Standard</option>
+                                    <option value="ALLIANCE">Alliance</option>
+                                    <option value="THEORETICAL">Theoretical</option>
+                                </select>
+                            </div>
 
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="only_friends" checked>
-                            <label class="form-check-label" for="only_friends">{{ 'menu.friend_decks_games'|trans }}</label>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-sm-12">
-                        <label for="deck-type-selector" class="form-label">{{ 'menu.deck_type'|trans }}</label>
-
-                        <div class="form-group">
-                            <select id="deck-type-selector" class="form-select">
-                                <option value="STANDARD">Standard</option>
-                                <option value="ALLIANCE">Alliance</option>
-                                <option value="THEORETICAL">Theoretical</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    {% else %}
-
-                    <div class="col-md-4 col-sm-12">
-                        <label for="deck-type-selector" class="form-label">{{ 'menu.deck_type'|trans }}</label>
-
-                        <div class="form-group">
-                            <select id="deck-type-selector" class="form-select">
-                                <option value="STANDARD">Standard</option>
-                                <option value="ALLIANCE">Alliance</option>
-                                <option value="THEORETICAL">Theoretical</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="col-md-4 col-sm-12">
-                        <label for="tags-shown-selector" class="form-label">{{ 'menu.tags_to_show'|trans }}</label>
-
-                        <div class="form-group">
-                            <select id="tags-shown-selector" class="form-select">
-                                <option value="predetermined">{{ 'menu.tag_predefined'|trans }}</option>
-                                <option value="custom">{{ 'menu.tag_yours'|trans }}</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    {% endif %}
+                        {% else %}
+                            <div class="col-12">
+                                <label for="deck-type-selector" class="form-label">{{ 'menu.deck_type'|trans }}</label>
+                                <select id="deck-type-selector" class="form-select">
+                                    <option value="STANDARD">Standard</option>
+                                    <option value="ALLIANCE">Alliance</option>
+                                    <option value="THEORETICAL">Theoretical</option>
+                                </select>
+                            </div>
+                        {% endif %}
                     {% endif %}
                 </div>
+            </div>
+        </div>
 
-                <div class="divider py-1"></div>
+        <div class="row mt-3">
+            <div class="col-12 col-md-3 mb-3 mb-md-0">
+                <button class="btn btn-dark w-100 text-nowrap" id="clearFilters">
+                    <i class="bi bi-arrow-repeat fs-8"></i>
+                </button>
+            </div>
 
-                <div class="row mt-3">
-                    <div class="col-4 col-md-2">
-                        <button class="btn btn-block btn-dark w-100" id="clearFilters">{{ 'menu.clear_filters'|trans }}</button>
-                    </div>
-                    <div class="col-8 col-md-10">
-                        <button class="btn btn-block btn-dark w-100" id="applyFilters">{{ 'menu.search'|trans }}</button>
-                    </div>
-                </div>
+            <div class="col-12 col-md-9">
+                <button class="btn btn-dark w-100" id="applyFilters">{{ 'menu.search'|trans }}</button>
             </div>
         </div>
     </div>
 </div>
-
 <script>
     prepareSelector('#owner-selector', '{{ 'menu.owner'|trans }}', '')
     prepareSelector('#deck-type-selector', '{{ 'menu.deck_type'|trans }}', 'STANDARD');
@@ -238,5 +286,21 @@
         if (selectedValues.includes('custom')) {
             $('.customTag').show();
         }
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const toggleButtons = document.querySelectorAll('[data-bs-toggle="collapse"]');
+        toggleButtons.forEach(button => {
+            const icon = button.querySelector('.toggle-icon');
+            const target = document.querySelector(button.getAttribute('data-bs-target'));
+
+            target.addEventListener('show.bs.collapse', function () {
+                icon.classList.add('rotate-down');
+            });
+
+            target.addEventListener('hide.bs.collapse', function () {
+                icon.classList.remove('rotate-down');
+            });
+        });
     });
 </script>

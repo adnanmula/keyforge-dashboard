@@ -16,13 +16,15 @@ enum KeyforgeSet: string
     case WoE = 'WoE';
     case GR = 'GR';
     case AS = 'AS';
-    case ToC = 'ToC';
-    case MoM = 'MoM';
-    case DIS = 'DIS';
+
     case U22 = 'U22';
-    case M24 = 'M24';
     case VM23 = 'VM23';
     case VM24 = 'VM24';
+    case M24 = 'M24';
+    case MoM = 'MoM';
+    case ToC = 'ToC';
+    case DIS = 'DIS';
+
     case ANOMALY_EXPANSION = 'ANOMALY_EXPANSION';
     case MARTIAN_CIVIL_WAR = 'MARTIAN_CIVIL_WAR';
 
