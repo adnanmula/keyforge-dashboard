@@ -7,7 +7,8 @@ RUN apk update && apk add --no-cache \
         bcmath \
         mbstring \
         pdo \
-        pdo_pgsql
+        pdo_pgsql \
+        intl
 
 RUN mkdir /.composer \
     && chown -R www-data:www-data /.composer
