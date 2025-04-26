@@ -4,11 +4,27 @@ namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\Game\Detail;
 
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
 use AdnanMula\KeyforgeGameLogParser\GameLogParser;
+use Psr\Log\LoggerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Translation\LocaleSwitcher;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class GameAnalyzeController extends Controller
 {
+    public function __construct(
+        MessageBusInterface $bus,
+        Security $security,
+        LocaleSwitcher $localeSwitcher,
+        TranslatorInterface $translator,
+        LoggerInterface $logger,
+        private readonly LoggerInterface $userActivityLogger,
+    ) {
+        parent::__construct($bus, $security, $localeSwitcher, $translator, $logger);
+    }
+
     public function __invoke(Request $request): Response
     {
         $log = $request->get('log');
@@ -39,6 +55,8 @@ final class GameAnalyzeController extends Controller
                 ],
             );
         }
+
+        $this->userActivityLogger->info('Game analyzed', ['user' => $this->getUser()?->id()->value()]);
 
         return $this->render(
             'Keyforge/Game/Detail/game.html.twig',

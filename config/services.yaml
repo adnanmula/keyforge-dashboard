@@ -10,6 +10,7 @@ services:
     bind:
       Doctrine\DBAL\Connection $defaultConnection: '@repository.dbal.connection_default'
       Doctrine\DBAL\Connection $connection: '@repository.dbal.connection'
+      Psr\Log\LoggerInterface $userActivityLogger: '@monolog.logger.user_activity'
 
   AdnanMula\Cards\Application\Command\:
     resource: '../src/Application/Command/*/*/*/*Handler.php'

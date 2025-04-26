@@ -23,6 +23,7 @@ use AdnanMula\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Criteria\FilterValue\NullFilterValue;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
 use AdnanMula\KeyforgeGameLogParser\GameLogParser;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 
 final readonly class CreateGameCommandHandler
@@ -42,6 +43,7 @@ final readonly class CreateGameCommandHandler
         private ImportDeckService $importDeckService,
         private UpdateDeckWinRateService $updateDeckWinRateService,
         private Security $security,
+        private LoggerInterface $userActivityLogger,
     ) {}
 
     public function __invoke(CreateGameCommand $command): void
@@ -96,6 +98,8 @@ final readonly class CreateGameCommandHandler
 
         $this->updateDeckWinRateService->execute($winnerDeck->id());
         $this->updateDeckWinRateService->execute($loserDeck->id());
+
+        $this->userActivityLogger->info('Game created', ['id' => $game->id()->value(), 'user' => $user->id()->value()]);
     }
 
     private function getUsers(User $user, string $winner, string $loser, string $firstTurn, KeyforgeCompetition $competition): array
