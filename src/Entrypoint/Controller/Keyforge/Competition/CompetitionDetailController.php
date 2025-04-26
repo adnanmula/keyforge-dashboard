@@ -24,7 +24,7 @@ final class CompetitionDetailController extends Controller
         );
 
         $decks = $this->extractResult(
-            $this->bus->dispatch(new GetDecksQuery(null, null, null, 'name', OrderType::ASC->value, null, null, null, [KeyforgeDeckType::STANDARD->value])),
+            $this->bus->dispatch(new GetDecksQuery(null, null, null, 'name', OrderType::ASC->value, null, null, null, null, [KeyforgeDeckType::STANDARD->value])),
         );
 
         $decks = \array_map(static fn (KeyforgeDeck $deck) => ['id' => $deck->id()->value(), 'name' => $deck->name()], $decks['decks']);

@@ -311,5 +311,29 @@
                 icon.classList.remove('rotate-down');
             });
         });
+
+        const checkboxes = document.querySelectorAll('.houses_selector');
+
+        checkboxes.forEach(cb => {
+            cb.dataset.state = 'unchecked';
+
+            cb.addEventListener('click', function(e) {
+                if (cb.dataset.state === 'unchecked') {
+                    cb.checked = true;
+                    cb.indeterminate = false;
+                    cb.dataset.state = 'checked';
+                } else if (cb.dataset.state === 'checked') {
+                    cb.checked = false;
+                    cb.indeterminate = true;
+                    cb.dataset.state = 'indeterminate';
+                } else {
+                    cb.checked = false;
+                    cb.indeterminate = false;
+                    cb.dataset.state = 'unchecked';
+                }
+
+                cb.dispatchEvent(new Event('change'));
+            });
+        });
     });
 </script>

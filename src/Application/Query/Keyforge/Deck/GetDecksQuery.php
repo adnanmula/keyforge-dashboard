@@ -39,6 +39,7 @@ final readonly class GetDecksQuery extends CriteriaQuery
         ?array $sets,
         ?string $houseFilterType,
         ?array $houses,
+        ?array $housesExcluded,
         ?array $deckTypes,
         ?string $deckId = null,
         ?string $owner = null,
@@ -63,7 +64,8 @@ final readonly class GetDecksQuery extends CriteriaQuery
             ->that($sets, 'set')->nullOr()->all()->inArray(KeyforgeSet::values())
             ->that($houseFilterType, 'houseFilterType')->nullOr()->inArray(['all', 'any'])
             ->that($houses, 'house')->nullOr()->all()->inArray(KeyforgeHouse::values())
-            ->that($deckTypes, 'house')->nullOr()->all()->inArray(KeyforgeDeckType::values())
+            ->that($housesExcluded, 'houseExcluded')->nullOr()->all()->inArray(KeyforgeHouse::values())
+            ->that($deckTypes, 'deckTypes')->nullOr()->all()->inArray(KeyforgeDeckType::values())
             ->that($deckId, 'deckId')->nullOr()->uuid()
             ->that($owner, 'owner')->nullOr()->uuid()
             ->that($owners, 'owners')->all()->uuid()
@@ -91,6 +93,7 @@ final readonly class GetDecksQuery extends CriteriaQuery
         $filters[] = $this->tagsPrivateIncludedFilter($tagPrivateFilterType, ...$tagsPrivate);
         $filters[] = $this->tagsPrivateExcludedFilter($tagPrivateFilterType, ...$tagsPrivateExcluded);
         $filters[] = $this->housesFilter($houseFilterType, ...$houses ?? []);
+        $filters[] = $this->housesExcludedFilter(...$housesExcluded ?? []);
         $filters[] = $this->deckTypeFilter(...$deckTypes ?? []);
         $filters[] = $this->ownersFilter(...$owners);
         $filters[] = $this->setsFilter(...$sets ?? []);
@@ -210,6 +213,21 @@ final readonly class GetDecksQuery extends CriteriaQuery
                 $filterType === 'any' ? FilterType::OR : FilterType::AND,
                 ...\array_map(
                     static fn (string $house): Filter => new Filter(new FilterField('houses'), new ArrayElementFilterValue($house), FilterOperator::IN_ARRAY),
+                    $houses,
+                ),
+            );
+        }
+
+        return null;
+    }
+
+    private function housesExcludedFilter(string ...$houses): ?FilterGroup
+    {
+        if (\count($houses) > 0) {
+            return new AndFilterGroup(
+                FilterType::AND,
+                ...\array_map(
+                    static fn (string $house): Filter => new Filter(new FilterField('houses'), new ArrayElementFilterValue($house), FilterOperator::NOT_IN_ARRAY),
                     $houses,
                 ),
             );

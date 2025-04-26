@@ -89,6 +89,17 @@
         return houses;
     }
 
+    function housesExcluded() {
+        const checkboxes = $('.houses_selector:indeterminate');
+        let houses = [];
+
+        checkboxes.each(function (index, check) {
+            houses.push(check.value);
+        });
+
+        return houses;
+    }
+
     function set() {
         const checkboxes = $('.set_selector:checked');
         let sets = [];
@@ -144,6 +155,7 @@
                     d.extraFilterTagsPrivate = tagsPrivate();
                     d.extraFilterTagsPrivateExcluded = tagsPrivateExcluded();
                     d.extraFilterHouses = houses();
+                    d.extraFilterHousesExcluded = housesExcluded();
                     d.extraFilterHouseFilterType = houseFilterType();
                     d.extraFilterSet = set();
                     d.extraFilterMaxSas = maxSas();

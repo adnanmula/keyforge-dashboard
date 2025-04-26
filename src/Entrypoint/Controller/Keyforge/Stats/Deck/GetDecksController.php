@@ -103,6 +103,31 @@ final class GetDecksController extends Controller
                     ]),
                 )
             ),
+            new OA\Parameter(
+                name: 'extraFilterHousesExcluded',
+                description: 'Filter by houses excluded',
+                in: 'query',
+                required: false,
+                schema: new OA\Schema(
+                    type: 'array',
+                    items: new OA\Items(type: 'string', enum: [
+                        KeyforgeHouse::BROBNAR,
+                        KeyforgeHouse::DIS,
+                        KeyforgeHouse::MARS,
+                        KeyforgeHouse::SHADOWS,
+                        KeyforgeHouse::UNTAMED,
+                        KeyforgeHouse::SANCTUM,
+                        KeyforgeHouse::LOGOS,
+                        KeyforgeHouse::SAURIAN,
+                        KeyforgeHouse::STAR_ALLIANCE,
+                        KeyforgeHouse::UNFATHOMABLE,
+                        KeyforgeHouse::EKWIDON,
+                        KeyforgeHouse::GEISTOID,
+                        KeyforgeHouse::SKYBORN,
+                        KeyforgeHouse::REDEMPTION,
+                    ]),
+                )
+            ),
             new OA\Parameter(name: 'start', description: 'Pagination start index', in: 'query', required: false, schema: new OA\Schema(type: 'integer')),
             new OA\Parameter(name: 'length', description: 'Number of records per page', in: 'query', required: false, schema: new OA\Schema(type: 'integer')),
             new OA\Parameter(
@@ -536,6 +561,7 @@ final class GetDecksController extends Controller
                     ? null
                     : (string) $request->query->get('extraFilterHouseFilterType'),
                 $request->query->all()['extraFilterHouses'] ?? null,
+                $request->query->all()['extraFilterHousesExcluded'] ?? null,
                 $request->query->all()['extraFilterDeckTypes'] ?? null,
                 $request->get('extraDeckId'),
                 $request->get('extraFilterOwner'),

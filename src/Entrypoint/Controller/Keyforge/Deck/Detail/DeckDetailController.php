@@ -95,7 +95,7 @@ final class DeckDetailController extends Controller
     private function deck(?Uuid $userId, string $deckId): KeyforgeDeck
     {
         $deck = $this->extractResult(
-            $this->bus->dispatch(new GetDecksQuery(0, 1, null, 'id', OrderType::ASC->value, null, null, null, null, $deckId, $userId?->value())),
+            $this->bus->dispatch(new GetDecksQuery(0, 1, null, 'id', OrderType::ASC->value, null, null, null, null, null, $deckId, $userId?->value())),
         );
 
         if (\count($deck['decks']) === 0) {
