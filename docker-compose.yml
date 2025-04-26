@@ -31,8 +31,14 @@ services:
   adminer:
     image: adminer:latest
     container_name: cards_adminer
+    environment:
+      - VIRTUAL_HOST=${ADMINER_HOST}
+      - LETSENCRYPT_HOST=${ADMINER_HOST}
+      - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}
     ports:
       - ${ADMINER_PORT}:8080
+    expose:
+      - "8080"
     networks:
       - network_cards
   postgres:
@@ -115,11 +121,16 @@ services:
       - ELASTICSEARCH_HOSTS=http://cards_elasticsearch:9200
       - ELASTICSEARCH_USERNAME=${ELASTIC_USER}
       - ELASTICSEARCH_PASSWORD=${ELASTIC_PASS}
+      - VIRTUAL_HOST=${KIBANA_HOST}
+      - LETSENCRYPT_HOST=${KIBANA_HOST}
+      - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}
     depends_on:
       - elasticsearch
       - init-kibana-user
     ports:
       - ${KIBANA_PORT}:5601
+    expose:
+      - "5601"
     networks:
       - network_cards
 networks:
