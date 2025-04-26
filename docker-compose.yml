@@ -16,10 +16,16 @@ services:
       context: .
       target: basic
     working_dir: /var/www/html
+    environment:
+      - VIRTUAL_HOST=${VIRTUAL_HOST}
+      - LETSENCRYPT_HOST=${LETSENCRYPT_HOST}
+      - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}
     volumes:
       - ./public:/var/www/html
     ports:
       - ${API_PORT}:80
+    expose:
+      - "80"
     networks:
       - network_cards
   adminer:
