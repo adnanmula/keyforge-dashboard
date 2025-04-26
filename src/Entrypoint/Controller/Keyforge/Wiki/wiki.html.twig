@@ -25,19 +25,7 @@
             <div class="divider py-1"></div>
 
             <a href="https://thecrucible.online/" target="_blank" class="list-group-item list-group-item-action">{{ 'wiki.the_crucible_online'|trans }}</a>
-            <a href="https://archonarcana.com/Main_Page" target="_blank" class="list-group-item list-group-item-action">{{ 'wiki.wiki_aa'|trans }}</a>
-            <a href="https://archonarcana.com/Errata" target="_blank" class="list-group-item list-group-item-action">{{ 'wiki.erratum'|trans }}</a>
-            <a href="https://archonarcana.com/Revised_Cards" target="_blank" class="list-group-item list-group-item-action">{{ 'wiki.revised_cards'|trans }}</a>
-            <a href="https://archonarcana.com/Rules" target="_blank" class="list-group-item list-group-item-action">{{ 'wiki.rules_summary_en'|trans }}</a>
-            <a href="{{ asset('assets/keyforge/doc/rules_es.pdf') }}" target="_blank" class="list-group-item list-group-item-action">{{ 'wiki.rulebook_es'|trans }}</a>
-            <a href="https://keyforging.com/wp-content/uploads/2023/04/KeyForge_Rulebook_v17_18Apr2023.pdf" target="_blank" class="list-group-item list-group-item-action">{{ 'wiki.rulebook_en'|trans }}</a>
-            <a href="https://archonarcana.com/Timing_Chart" target="_blank" class="list-group-item list-group-item-action">{{ 'wiki.timing_chart'|trans }}</a>
-            <a href="https://archonarcana.com/Tournament_Concepts" target="_blank" class="list-group-item list-group-item-action">{{ 'wiki.tournament_rules'|trans }}</a>
-            <a href="https://sites.google.com/view/keyforgeadventures" target="_blank" class="list-group-item list-group-item-action">{{ 'wiki.adventures'|trans }}</a>
-            <a href="https://nkfl.online/" target="_blank" class="list-group-item list-group-item-action">{{ 'wiki.nkfl_community'|trans }}</a>
-
             <a class="list-group-item list-group-item-action" data-bs-toggle="collapse" data-bs-target="#divTableHousesBySet">{{ 'wiki.houses_per_set'|trans }}</a>
-
             <div class="collapse" id="divTableHousesBySet" style="overflow-x: auto">
                 <table class="table" id="tableHousesBySet">
                     <tr>
@@ -47,130 +35,42 @@
                         <th><img width="35px" src="{{ asset('assets/keyforge/houses/LOGOS.png') }}" alt="LOGOS"/></th>
                         <th><img width="35px" src="{{ asset('assets/keyforge/houses/MARS.png') }}" alt="MARS"/></th>
                         <th><img width="35px" src="{{ asset('assets/keyforge/houses/SANCTUM.png') }}" alt="SANCTUM"/></th>
+                        <th><img width="35px" src="{{ asset('assets/keyforge/houses/REDEMPTION.png') }}" alt="REDEMPTION"/></th>
                         <th><img width="35px" src="{{ asset('assets/keyforge/houses/SAURIAN.png') }}" alt="SAURIAN"/></th>
                         <th><img width="35px" src="{{ asset('assets/keyforge/houses/SHADOWS.png') }}" alt="SHADOWS"/></th>
                         <th><img width="35px" src="{{ asset('assets/keyforge/houses/STAR_ALLIANCE.png') }}" alt="STAR_ALLIANCE"/></th>
                         <th><img width="35px" src="{{ asset('assets/keyforge/houses/UNFATHOMABLE.png') }}" alt="UNFATHOMABLE"/></th>
                         <th><img width="35px" src="{{ asset('assets/keyforge/houses/UNTAMED.png') }}" alt="UNTAMED"/></th>
                         <th><img width="35px" src="{{ asset('assets/keyforge/houses/EKWIDON.png') }}" alt="EKWIDON"/></th>
+                        <th><img width="35px" src="{{ asset('assets/keyforge/houses/GEISTOID.png') }}" alt="GEISTOID"/></th>
+                        <th><img width="35px" src="{{ asset('assets/keyforge/houses/SKYBORN.png') }}" alt="SKYBORN"/></th>
                     </tr>
                     <tbody>
+                    {% for set,houses in housesPerSet %}
                         <tr>
-                            <td style="text-align: right;">Call of the Archons</td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td></td>
-                            <td></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td></td>
+                            <td style="text-align: right;">{{ ('set.full.'~set)|trans }}</td>
+                            {% for house,isPresent in houses %}
+                                {% if isPresent %}
+                                    <td><i class="bi bi-check"></i></td>
+                                {% else %}
+                                    <td></td>
+                                {% endif %}
+                            {% endfor %}
                         </tr>
-                        <tr>
-                            <td style="text-align: right;">Age of Ascension</td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td></td>
-                            <td></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td style="text-align: right;">Worlds Collide</td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td></td>
-                            <td></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td style="text-align: right;">Mass Mutation</td>
-                            <td></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td style="text-align: right;">Dark Tidings</td>
-                            <td></td>
-                            <td></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td style="text-align: right;">Winds of Exchange</td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td></td>
-                            <td><i class="bi bi-check"></i></td>
-                        </tr>
-                        <tr>
-                            <td style="text-align: right;">Unchained 2022</td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td><i class="bi bi-check"></i></td>
-                        </tr>
-                        <tr>
-                            <td style="text-align: right;">Vault Masters 2023</td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td><i class="bi bi-check"></i></td>
-                            <td><i class="bi bi-check"></i></td>
-                        </tr>
+                    {% endfor %}
                     </tbody>
                 </table>
             </div>
-
+            <a href="https://archonarcana.com/Main_Page" target="_blank" class="list-group-item list-group-item-action">{{ 'wiki.wiki_aa'|trans }}</a>
+            <a href="https://archonarcana.com/Errata" target="_blank" class="list-group-item list-group-item-action">{{ 'wiki.erratum'|trans }}</a>
+            <a href="https://archonarcana.com/Revised_Cards" target="_blank" class="list-group-item list-group-item-action">{{ 'wiki.revised_cards'|trans }}</a>
+            <a href="https://archonarcana.com/Rulebooks" target="_blank" class="list-group-item list-group-item-action">{{ 'wiki.rulebooks'|trans }}</a>
+            <a href="https://archonarcana.com/Rules" target="_blank" class="list-group-item list-group-item-action">{{ 'wiki.rules_summary_en'|trans }}</a>
+            <a href="https://archonarcana.com/Timing_Chart" target="_blank" class="list-group-item list-group-item-action">{{ 'wiki.timing_chart'|trans }}</a>
+            <a href="https://archonarcana.com/Tournament_Concepts" target="_blank" class="list-group-item list-group-item-action">{{ 'wiki.tournament_rules'|trans }}</a>
+            <a href="https://sites.google.com/view/keyforgeadventures" target="_blank" class="list-group-item list-group-item-action">{{ 'wiki.adventures'|trans }}</a>
+            <a href="https://keyforgespain.com/" target="_blank" class="list-group-item list-group-item-action">Keyforge Spain</a>
+            <a href="https://nkfl.online/" target="_blank" class="list-group-item list-group-item-action">Nordic Keyforge League</a>
             <a class="list-group-item list-group-item-action" data-bs-toggle="collapse" data-bs-target="#divTableTagCriteria">{{ 'wiki.tag_assignation_criteria'|trans }}</a>
 
             <div class="collapse" id="divTableTagCriteria" style="overflow-x: auto">
@@ -184,7 +84,7 @@
                     <tr>
                         <td style="white-space: nowrap;">{{ 'wiki.tag_expected_amber_high'|trans }}</td>
                         <td>{{ 'wiki.score_greater_or_equal_than'|trans({'%score%': 25}) }}</td>
-                        <td>Cuanto ambar puedes esperar generar. No tiene en cuenta el cosechado de criaturas a no ser que tengan habilidades especiales como "Cosecha: Gana 1 Amber". El ambar base de algunas cartas dificiles de jugar se ha reducido, y se ha incrementado para otras cartas que permiten el uso inmediato de criaturas.</td>
+                        <td>{{ 'wiki.tag_criteria.high_expected_amber'|trans }}</td>
                     </tr>
                     <tr>
                         <td style="white-space: nowrap;">{{ 'wiki.tag_expected_amber_low'|trans }}</td>
@@ -204,12 +104,12 @@
                     <tr>
                         <td style="white-space: nowrap;">{{ 'wiki.tag_effective_power_high'|trans }}</td>
                         <td>{{ 'wiki.score_greater_or_equal_than'|trans({'%score%': 110}) }}</td>
-                        <td>Poder real usable de las criaturas de la baraja. Para criaturas que muchas veces no pueden ser jugadas o usadas se reduce. El poder efectivo tambien tiene en cuenta armadura y otras habilidades que afectan a la supervivencia como elusivo, escaramuza, dañino, asalto y curaciones</td>
+                        <td>{{ 'wiki.tag_criteria.high_effective_power'|trans }}</td>
                     </tr>
                     <tr>
                         <td style="white-space: nowrap;">{{ 'wiki.tag_efficiency_high'|trans }}</td>
                         <td>{{ 'wiki.score_greater_or_equal_than'|trans({'%score%': 15}) }}</td>
-                        <td>Mide los efectos que te permiten jugar cartas extra. Se reduce por cartas que impiden jugar o robar cartas, como cartas que dan cadenas o Bad Penny</td>
+                        <td>{{ 'wiki.tag_criteria.high_efficiency'|trans }}</td>
                     </tr>
                     <tr>
                         <td style="white-space: nowrap;">{{ 'wiki.tag_efficiency_low'|trans }}</td>
@@ -244,7 +144,7 @@
                     <tr>
                         <td style="white-space: nowrap;">{{ 'wiki.tag_amber_control_high'|trans }}</td>
                         <td>{{ 'wiki.score_greater_or_equal_than'|trans({'%score%': 15}) }}</td>
-                        <td>Representa la camtidad de ámbar que la baraja puede denegar a su oponente. El ámbar perdido o robado tiene mas valor que el capturado y los incrementos de coste de llave.</td>
+                        <td>{{ 'wiki.tag_criteria.high_amber_control'|trans }}</td>
                     </tr>
                     <tr>
                         <td style="white-space: nowrap;">{{ 'wiki.tag_amber_control_low'|trans }}</td>
@@ -254,7 +154,7 @@
                     <tr>
                         <td style="white-space: nowrap;">{{ 'wiki.tag_creature_control_high'|trans }}</td>
                         <td>{{ 'wiki.score_greater_or_equal_than'|trans({'%score%': 15}) }}</td>
-                        <td>Representa cartas que hacen daño, destruyen o inhabilitan criaturas enemigas.</td>
+                        <td>{{ 'wiki.tag_criteria.high_creature_control'|trans }}</td>
                     </tr>
                     <tr>
                         <td style="white-space: nowrap;">{{ 'wiki.tag_creature_control_low'|trans }}</td>
@@ -264,43 +164,43 @@
                     <tr>
                         <td style="white-space: nowrap;">{{ 'wiki.tag_artifact_control_high'|trans }}</td>
                         <td>{{ 'wiki.score_greater_or_equal_than'|trans({'%score%': 2}) }}</td>
-                        <td>Representa la destrucción de artefactos enemigos o el poder denegar su uso</td>
+                        <td>{{ 'wiki.tag_criteria.high_artifact_control'|trans }}</td>
                     </tr>
                     <tr>
                         <td style="white-space: nowrap;">{{ 'wiki.tag_artifact_control_low'|trans }}</td>
                         <td>{{ 'wiki.score_equal'|trans({'%score%': 0})}}</td>
-                        <td>Puntuación de 0, no tiene forma de destruir o denegar el uso de artefactos</td>
+                        <td>{{ 'wiki.tag_criteria.no_artifact_control'|trans }}</td>
                         <td></td>
                     </tr>
                     <tr>
                         <td style="white-space: nowrap;">{{ 'wiki.tag_creature_protection_high'|trans }}</td>
                         <td>{{ 'wiki.score_greater_or_equal_than'|trans({'%score%': 6}) }}</td>
-                        <td>Incluye cualquier carta con efectos que incrementan poder, protegen de luchas, daño o eliminación.</td>
+                        <td>{{ 'wiki.tag_criteria.creature_protection'|trans }}</td>
                     </tr>
                     <tr>
                         <td style="white-space: nowrap;">{{ 'wiki.recursion_high'|trans }}</td>
                         <td>{{ 'wiki.score_greater_or_equal_than'|trans({'%score%': 6}) }}</td>
-                        <td>Efectos que permiten jugar cartas que ya han sido jugadas.</td>
+                        <td>{{ 'wiki.tag_criteria.has_recursion'|trans }}</td>
                     </tr>
                     <tr>
                         <td style="white-space: nowrap;">{{ 'wiki.disruption_high'|trans }}</td>
                         <td>{{ 'wiki.score_greater_or_equal_than'|trans({'%score%': 9}) }}</td>
-                        <td>Efectos que reducen el numero de cartas que tu oponente puede jugar.</td>
+                        <td>{{ 'wiki.tag_criteria.has_disruption'|trans }}</td>
                     </tr>
                     <tr>
                         <td style="white-space: nowrap;">{{ 'wiki.tag_has_scaling_amber_control'|trans }}</td>
-                        <td>Tiene cartas permiten denegar más ámbar cuanto más tiene el rival</td>
+                        <td>{{ 'wiki.tag_criteria.has_scaling_amber'|trans }}</td>
                         <td></td>
                     </tr>
                     <tr>
                         <td style="white-space: nowrap;">{{ 'wiki.tag_has_board_wipes'|trans }}</td>
-                        <td>Tiene cartas capacez de limpiar el tablero de criaturas en mayor o menor medida</td>
+                        <td>{{ 'wiki.tag_criteria.has_board_wipes'|trans }}</td>
                         <td></td>
                     </tr>
                     <tr>
                         <td style="white-space: nowrap;">{{ 'wiki.tag_synergistic'|trans }}</td>
                         <td>{{ 'wiki.score_greater_or_equal_than'|trans({'%score%': 15}) }}</td>
-                        <td>Aproximación de la calidad de una baraja, puede ayudar a detectar sinérgias y antisinérgias.</td>
+                        <td>{{ 'wiki.tag_criteria.synergistic'|trans }}</td>
                     </tr>
                     <tr>
                         <td style="white-space: nowrap;">{{ 'wiki.tag_antisynergistic'|trans }}</td>

@@ -96,19 +96,23 @@ deck.sets: Sets
 deck.synergy: Sinergia
 deck.upgrades: Mejoras
 deck.token-creature: Criatura ficha
-deck_comparison.AS: AS
-deck_comparison.AoA: AoA
-deck_comparison.CotA: CotA
-deck_comparison.DT: DT
-deck_comparison.GR: GR
-deck_comparison.M24: M24
-deck_comparison.MM: MM
-deck_comparison.U22: U22
-deck_comparison.VM23: VM23
-deck_comparison.VM24: VM24
-deck_comparison.VM25: VM25
-deck_comparison.WC: WC
-deck_comparison.WoE: WoE
+set.full.CotA: Llamada de los Arcontes
+set.full.AoA: Edad de la Ascensión
+set.full.WC: Mundos en colisión
+set.full.MM: Mutación Masiva
+set.full.DT: Mareas Oscuras
+set.full.WoE: Vientos de Intercambio
+set.full.GR: Recordatorios Sombrios
+set.full.AS: Cielos de Ámbar
+set.full.PV: Visiones Proféticas
+set.full.U22: Unchained
+set.full.M24: Menagerie
+set.full.VM23: Vault Masters 23
+set.full.VM24: Vault Masters 24
+set.full.VM25: Vault Masters 25
+set.full.MoM: More Mutation
+set.full.ToC: Tokens of Change
+set.full.DIS: Discovery
 deck_comparison.aerc: Aerc
 deck_comparison.all: Todos
 deck_comparison.amberControl: Control de ámbar
@@ -305,11 +309,9 @@ wiki.criteria: Criterio
 wiki.disruption_high: 'Disrupción alta'
 wiki.erratum: Erratas
 wiki.houses_per_set: 'Casas en cada set'
-wiki.nkfl_community: 'NKFL community'
+wiki.rulebooks: 'Libros de reglas'
 wiki.recursion_high: 'Recursion alta'
 wiki.revised_cards: 'Cartas revisadas'
-wiki.rulebook_en: 'Reglamento EN (v17 Abril 2023)'
-wiki.rulebook_es: 'Reglamento ES (v1.6 Marzo 2021)'
 wiki.rules_summary_en: 'Resumen de reglas (EN)'
 wiki.score_equal: 'Puntuación igual a %score%'
 wiki.score_greater_or_equal_than: 'Puntuación mayor o igual a %score%'
@@ -406,3 +408,16 @@ menu.filters: Filtros
 menu.predefined: Predefinidas
 menu.show: Mostrar
 menu.other_filters: Otros filtros
+wiki.tag_criteria.has_scaling_amber: Tiene cartas permiten denegar más ámbar cuanto más tiene el rival
+wiki.tag_criteria.has_board_wipes: Tiene cartas capacez de limpiar el tablero de criaturas en mayor o menor medida
+wiki.tag_criteria.synergistic: Aproximación de la calidad de una baraja, puede ayudar a detectar sinérgias y antisinérgias.
+wiki.tag_criteria.has_disruption: Efectos que reducen el numero de cartas que tu oponente puede jugar.
+wiki.tag_criteria.has_recursion: Efectos que permiten jugar cartas que ya han sido jugadas.
+wiki.tag_criteria.creature_protection: Incluye cualquier carta con efectos que incrementan poder, protegen de luchas, daño o eliminación.
+wiki.tag_criteria.no_artifact_control: Puntuación de 0, no tiene forma de destruir o denegar el uso de artefactos
+wiki.tag_criteria.high_artifact_control: Representa la destrucción de artefactos enemigos o el poder denegar su uso
+wiki.tag_criteria.high_creature_control: Representa cartas que hacen daño, destruyen o inhabilitan criaturas enemigas.
+wiki.tag_criteria.high_amber_control: Representa la camtidad de ámbar que la baraja puede denegar a su oponente. El ámbar perdido o robado tiene mas valor que el capturado y los incrementos de coste de llave.
+wiki.tag_criteria.high_efficiency: Mide los efectos que te permiten jugar cartas extra. Se reduce por cartas que impiden jugar o robar cartas, como cartas que dan cadenas o Bad Penny
+wiki.tag_criteria.high_effective_power: Poder real usable de las criaturas de la baraja. Para criaturas que muchas veces no pueden ser jugadas o usadas se reduce. El poder efectivo tambien tiene en cuenta armadura y otras habilidades que afectan a la supervivencia como elusivo, escaramuza, dañino, asalto y curaciones
+wiki.tag_criteria.high_expected_amber: 'Cuanto ambar puedes esperar generar. No tiene en cuenta el cosechado de criaturas a no ser que tengan habilidades especiales como "Cosecha: Gana 1 Amber". El ambar base de algunas cartas dificiles de jugar se ha reducido, y se ha incrementado para otras cartas que permiten el uso inmediato de criaturas.'

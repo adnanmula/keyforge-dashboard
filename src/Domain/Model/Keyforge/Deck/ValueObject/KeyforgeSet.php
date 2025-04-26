@@ -16,6 +16,7 @@ enum KeyforgeSet: string
     case WoE = 'WoE';
     case GR = 'GR';
     case AS = 'AS';
+    case PV = 'PV';
 
     case U22 = 'U22';
     case VM23 = 'VM23';
@@ -39,7 +40,8 @@ enum KeyforgeSet: string
             self::DT => 'Dark Tidings',
             self::WoE => 'Winds of Exchange',
             self::GR => 'Grim Remainders',
-            self::AS => 'Aember skies',
+            self::AS => 'Aember Skies',
+            self::PV => 'Prophetic Visions',
             self::U22 => 'Unchained',
             self::M24 => 'Menagerie',
             self::VM23 => 'Vault Masters 2023',
@@ -64,6 +66,7 @@ enum KeyforgeSet: string
             'WINDS_OF_EXCHANGE' => self::WoE,
             'GRIM_REMINDERS' => self::GR,
             'AEMBER_SKIES' => self::AS,
+            'PROPHETIC_VISIONS' => self::PV,
             'UNCHAINED_2022' => self::U22,
             'VAULT_MASTERS_2023' => self::VM23,
             'VAULT_MASTERS_2024' => self::VM24,
@@ -89,7 +92,7 @@ enum KeyforgeSet: string
     public function isEnabled(): bool
     {
         return match ($this) {
-            self::ANOMALY_EXPANSION, self::MARTIAN_CIVIL_WAR => false,
+            self::ANOMALY_EXPANSION, self::MARTIAN_CIVIL_WAR, self::PV => false,
             default => true,
         };
     }

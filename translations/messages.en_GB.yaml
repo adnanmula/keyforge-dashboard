@@ -96,19 +96,23 @@ deck.sets: Sets
 deck.synergy: Sinergy
 deck.upgrades: Upgrades
 deck.token-creature: Token creature
-deck_comparison.AS: AS
-deck_comparison.AoA: AoA
-deck_comparison.CotA: CotA
-deck_comparison.DT: DT
-deck_comparison.GR: GR
-deck_comparison.M24: M24
-deck_comparison.MM: MM
-deck_comparison.U22: U22
-deck_comparison.VM23: VM23
-deck_comparison.VM24: VM24
-deck_comparison.VM25: VM25
-deck_comparison.WC: WC
-deck_comparison.WoE: WoE
+set.full.CotA: Call of the Archons
+set.full.AoA: Age of Ascension
+set.full.WC: Worlds Collide
+set.full.MM: Mass Mutation
+set.full.DT: Dark Tidings
+set.full.WoE: Winds of Exchange
+set.full.GR: Grim Reminders
+set.full.AS: Amber Skies
+set.full.PV: Prophetic Visions
+set.full.U22: Unchained
+set.full.M24: Menagerie
+set.full.VM23: Vault Masters 23
+set.full.VM24: Vault Masters 24
+set.full.VM25: Vault Masters 25
+set.full.MoM: More Mutation
+set.full.ToC: Tokens of Change
+set.full.DIS: Discovery
 deck_comparison.aerc: Aerc
 deck_comparison.all: All
 deck_comparison.amberControl: Amber control
@@ -305,11 +309,9 @@ wiki.criteria: Criteria
 wiki.disruption_high: 'High disruption'
 wiki.erratum: Erratum
 wiki.houses_per_set: 'Houses per set'
-wiki.nkfl_community: 'NKFL community'
+wiki.rulebooks: 'Rulebooks'
 wiki.recursion_high: 'High recursion'
 wiki.revised_cards: 'Revised cards'
-wiki.rulebook_en: 'Rulebook EN (v17 April 2023)'
-wiki.rulebook_es: 'Rulebook ES (v1.6 March 2021)'
 wiki.rules_summary_en: 'Rules summary (EN)'
 wiki.score_equal: 'Score equal %score%'
 wiki.score_greater_or_equal_than: 'Score greater or equal than %score%'
@@ -406,3 +408,16 @@ menu.filters: Filters
 menu.predefined: Predefined
 menu.show: Show
 menu.other_filters: Other filters
+wiki.tag_criteria.has_scaling_amber: Has cards that deny more Amber the more Amber the opponent has.
+wiki.tag_criteria.has_board_wipes: Has cards capable of clearing the board of creatures to varying degrees.
+wiki.tag_criteria.synergistic: An estimation of a deck’s overall quality; can help detect synergies and anti-synergies.
+wiki.tag_criteria.has_disruption: Effects that reduce the number of cards your opponent can play.
+wiki.tag_criteria.has_recursion: Effects that allow you to replay cards that have already been played.
+wiki.tag_criteria.creature_protection: Includes any card with effects that increase power, prevent fights, prevent damage, or prevent creature removal.
+wiki.tag_criteria.no_artifact_control: Score of 0, meaning the deck has no way to destroy or deny the use of artifacts.
+wiki.tag_criteria.high_artifact_control: Represents the ability to destroy or prevent the use of enemy artifacts.
+wiki.tag_criteria.high_creature_control: Represents cards that deal damage to, destroy, or disable enemy creatures.
+wiki.tag_criteria.high_amber_control: Represents the amount of Amber the deck can deny the opponent. Lost or stolen Amber is valued more highly than captured Amber and key cost increases.
+wiki.tag_criteria.high_efficiency: Measures effects that allow you to play extra cards. Penalized by cards that prevent playing or drawing, such as cards that give chains or cards like Bad Penny.
+wiki.tag_criteria.high_effective_power: Usable real power of the deck’s creatures. Reduced for creatures that are often unplayable or unusable. Effective power also factors in armor and survival abilities like elusive, skirmish, hazardous, assault, and healing.
+wiki.tag_criteria.high_expected_amber: 'Measures how much Amber you can expect to generate. Does not account for creature reaping unless they have special reap abilities like "Reap: Gain 1 Amber". Base Amber values are lowered for cards that are hard to play and increased for cards that enable immediate use of creatures.'

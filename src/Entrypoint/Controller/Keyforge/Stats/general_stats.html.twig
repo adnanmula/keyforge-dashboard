@@ -97,18 +97,23 @@
                                 <span>{{ 'menu.set'|trans }}</span>
                                 <select id="collection_comparison_set_{{ i }}" class="form-select compare_collection_select" data-index="{{ i }}">
                                     <option value="all" selected>{{ 'menu.all'|trans }}</option>
-                                    <option value="CotA">CotA</option>
-                                    <option value="AoA">AoA</option>
-                                    <option value="WC">WC</option>
-                                    <option value="MM">MM</option>
-                                    <option value="DT">DT</option>
-                                    <option value="WoE">WoE</option>
-                                    <option value="GR">GR</option>
-                                    <option value="AS">AS</option>
-                                    <option value="U22">U22</option>
-                                    <option value="M24">M24</option>
-                                    <option value="VM23">VM23</option>
-                                    <option value="VM24">VM24</option>
+                                    <option value="CotA">{{ 'set.full.CotA'|trans }}</option>
+                                    <option value="AoA">{{ 'set.full.AoA'|trans }}</option>
+                                    <option value="WC">{{ 'set.full.WC'|trans }}</option>
+                                    <option value="MM">{{ 'set.full.MM'|trans }}</option>
+                                    <option value="DT">{{ 'set.full.DT'|trans }}</option>
+                                    <option value="WoE">{{ 'set.full.WoE'|trans }}</option>
+                                    <option value="GR">{{ 'set.full.GR'|trans }}</option>
+                                    <option value="AS">{{ 'set.full.AS'|trans }}</option>
+                                    <option value="PV">{{ 'set.full.PV'|trans }}</option>
+                                    <option value="U22">{{ 'set.full.U22'|trans }}</option>
+                                    <option value="M24">{{ 'set.full.M24'|trans }}</option>
+                                    <option value="VM23">{{ 'set.full.VM23'|trans }}</option>
+                                    <option value="VM24">{{ 'set.full.VM24'|trans }}</option>
+                                    <option value="VM25">{{ 'set.full.VM25'|trans }}</option>
+                                    <option value="MoM">{{ 'set.full.MoM'|trans }}</option>
+                                    <option value="ToC">{{ 'set.full.ToC'|trans }}</option>
+                                    <option value="DIS">{{ 'set.full.DIS'|trans }}</option>
                                 </select>
                             </div>
 
@@ -399,6 +404,11 @@
 
         {% if is_granted('ROLE_KEYFORGE') %}
         initDecks();
+
+        $('.compare_collection_select').select2({
+            theme: 'bootstrap-5',
+            minimumResultsForSearch: Infinity,
+        });
 
         $('.compare_collection_select').change(function (e) {
             const index = $(e.currentTarget).data('index');
