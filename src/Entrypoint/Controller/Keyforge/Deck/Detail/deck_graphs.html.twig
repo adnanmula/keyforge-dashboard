@@ -143,6 +143,11 @@
             }
         });
 
+        $('#deck_compare_stats').select2({
+            theme: 'bootstrap-5',
+            minimumResultsForSearch: Infinity,
+        });
+
         let cachedDecks = [];
 
         $('#deck_compare_to').select2({

@@ -421,3 +421,4 @@ wiki.tag_criteria.high_amber_control: Represents the amount of Amber the deck ca
 wiki.tag_criteria.high_efficiency: Measures effects that allow you to play extra cards. Penalized by cards that prevent playing or drawing, such as cards that give chains or cards like Bad Penny.
 wiki.tag_criteria.high_effective_power: Usable real power of the deck’s creatures. Reduced for creatures that are often unplayable or unusable. Effective power also factors in armor and survival abilities like elusive, skirmish, hazardous, assault, and healing.
 wiki.tag_criteria.high_expected_amber: 'Measures how much Amber you can expect to generate. Does not account for creature reaping unless they have special reap abilities like "Reap: Gain 1 Amber". Base Amber values are lowered for cards that are hard to play and increased for cards that enable immediate use of creatures.'
+menu.avg_stats_by_house: Average stats by set
