@@ -15,7 +15,7 @@
     {% set winner = game.log.winner %}
     {% set loser = game.log.loser %}
 
-    {% include 'Keyforge/Game/Detail/game_stat_comparison_row.html.twig' with {label: 'menu.amber_obtained'|trans, left: winner.amberObtained.total, right: loser.amberObtained.total, extraLeft: '(+'~winner.amberObtained.totalPositive~winner.amberObtained.totalNegative~')', extraRight: '(+'~loser.amberObtained.totalPositive~'-'~loser.amberObtained.totalNegative|abs~')' } %}
+    {% include 'Keyforge/Game/Detail/game_stat_comparison_row.html.twig' with {label: 'menu.amber_obtained'|trans, left: winner.amberObtained.total, right: loser.amberObtained.total, extraLeft: '(+'~winner.amberObtained.totalPositive~'-'~winner.amberObtained.totalNegative|abs~')', extraRight: '(+'~loser.amberObtained.totalPositive~'-'~loser.amberObtained.totalNegative|abs~')' } %}
     {% include 'Keyforge/Game/Detail/game_stat_comparison_row.html.twig' with {label: 'menu.amber_stolen'|trans, left: winner.amberStolen.total, right: loser.amberStolen.total, extraLeft: '', extraRight: '' } %}
     {% include 'Keyforge/Game/Detail/game_stat_comparison_row.html.twig' with {label: 'menu.cards_played'|trans, left: winner.cardsPlayed.total, right: loser.cardsPlayed.total, extraLeft: '', extraRight: '' } %}
     {% include 'Keyforge/Game/Detail/game_stat_comparison_row.html.twig' with {label: 'menu.cards_drawn'|trans, left: winner.cardsDrawn.total, right: loser.cardsDrawn.total, extraLeft: '', extraRight: '' } %}
