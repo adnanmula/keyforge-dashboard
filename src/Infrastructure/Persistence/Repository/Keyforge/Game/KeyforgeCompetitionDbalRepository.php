@@ -8,6 +8,7 @@ use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeCompetitionFixture;
 use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeCompetitionRepository;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\CompetitionFixtureType;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\CompetitionType;
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\CompetitionVisibility;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Infrastructure\Persistence\Repository\DbalRepository;
 use AdnanMula\Criteria\Criteria;
@@ -22,7 +23,7 @@ final class KeyforgeCompetitionDbalRepository extends DbalRepository implements 
     {
         $builder = $this->connection->createQueryBuilder();
 
-        $query = $builder->select('a.id, a.reference, a.name, a.competition_type, a.users, a.description, a.created_at, a.started_at, a.finished_at, a.winner')
+        $query = $builder->select('a.id, a.name, a.competition_type, a.admins, a.users, a.description, a.visibility, a.created_at, a.started_at, a.finished_at, a.winner')
             ->from(self::TABLE, 'a');
 
         (new DbalCriteriaAdapter($builder))->execute($criteria);
@@ -30,6 +31,15 @@ final class KeyforgeCompetitionDbalRepository extends DbalRepository implements 
         $result = $query->executeQuery()->fetchAllAssociative();
 
         return \array_map(fn (array $row) => $this->map($row), $result);
+    }
+
+    public function searchOne(Criteria $criteria): ?KeyforgeCompetition
+    {
+        $result = $this->search(
+            new Criteria($criteria->offset(), 1, $criteria->sorting(), ...$criteria->filterGroups())
+        );
+
+        return $result[0] ?? null;
     }
 
     public function count(Criteria $criteria): int
@@ -43,57 +53,21 @@ final class KeyforgeCompetitionDbalRepository extends DbalRepository implements 
         return $query->executeQuery()->fetchOne();
     }
 
-    public function byId(Uuid $id): ?KeyforgeCompetition
-    {
-        $result = $this->connection->createQueryBuilder()
-            ->select('a.id, a.reference, a.name, a.competition_type, a.users, a.description, a.created_at, a.started_at, a.finished_at, a.winner')
-            ->from(self::TABLE, 'a')
-            ->where('a.id = :id')
-            ->setParameter('id', $id->value())
-            ->setMaxResults(1)
-            ->executeQuery()
-            ->fetchAssociative();
-
-        if ([] === $result || false === $result) {
-            return null;
-        }
-
-        return $this->map($result);
-    }
-
-    public function byReference(string $reference): ?KeyforgeCompetition
-    {
-        $result = $this->connection->createQueryBuilder()
-            ->select('a.id, a.reference, a.name, a.competition_type, a.users, a.description, a.created_at, a.started_at, a.finished_at, a.winner')
-            ->from(self::TABLE, 'a')
-            ->where('a.reference = :ref')
-            ->setParameter('ref', $reference)
-            ->setMaxResults(1)
-            ->executeQuery()
-            ->fetchAssociative();
-
-        if ([] === $result || false === $result) {
-            return null;
-        }
-
-        return $this->map($result);
-    }
-
-
     public function save(KeyforgeCompetition $competition): void
     {
         $stmt = $this->connection->prepare(
             \sprintf(
                 '
-                    INSERT INTO %s (id, reference, name, competition_type, users, description, created_at, started_at, finished_at, winner)
-                    VALUES (:id, :reference, :name, :competition_type, :users, :description, :created_at, :started_at, :finished_at, :winner)
+                    INSERT INTO %s (id, name, competition_type, admins, users, description, visibility, created_at, started_at, finished_at, winner)
+                    VALUES (:id, :name, :competition_type, :admins, :users, :description, :visibility, :created_at, :started_at, :finished_at, :winner)
                     ON CONFLICT (id) DO UPDATE SET
                         id = :id,
-                        reference = :reference,
                         name = :name,
                         competition_type = :competition_type,
+                        admins = :admins,
                         users = :users,
                         description = :description,
+                        visibility = :visibility,
                         created_at = :created_at,
                         started_at = :started_at,
                         finished_at = :finished_at,
@@ -104,11 +78,12 @@ final class KeyforgeCompetitionDbalRepository extends DbalRepository implements 
         );
 
         $stmt->bindValue(':id', $competition->id()->value());
-        $stmt->bindValue(':reference', $competition->reference());
         $stmt->bindValue(':name', $competition->name());
         $stmt->bindValue(':competition_type', $competition->type()->name);
+        $stmt->bindValue(':admins', Json::encode($competition->admins()));
         $stmt->bindValue(':users', Json::encode($competition->users()));
         $stmt->bindValue(':description', $competition->description());
+        $stmt->bindValue(':visibility', $competition->visibility()->name);
         $stmt->bindValue(':created_at', $competition->createdAt()->format(\DateTimeInterface::ATOM));
         $stmt->bindValue(':started_at', $competition->startedAt()?->format(\DateTimeInterface::ATOM));
         $stmt->bindValue(':finished_at', $competition->finishedAt()?->format(\DateTimeInterface::ATOM));
@@ -192,11 +167,12 @@ final class KeyforgeCompetitionDbalRepository extends DbalRepository implements 
     {
         return new KeyforgeCompetition(
             Uuid::from($row['id']),
-            $row['reference'],
             $row['name'],
             CompetitionType::from($row['competition_type']),
+            \array_map(static fn (string $id): Uuid => Uuid::from($id), Json::decode($row['admins'])),
             \array_map(static fn (string $id): Uuid => Uuid::from($id), Json::decode($row['users'])),
             $row['description'],
+            CompetitionVisibility::from($row['visibility']),
             null === $row['created_at']
                 ? null
                 : new \DateTimeImmutable($row['created_at']),
@@ -206,9 +182,7 @@ final class KeyforgeCompetitionDbalRepository extends DbalRepository implements 
             null === $row['finished_at']
                 ? null
                 : new \DateTimeImmutable($row['finished_at']),
-            null === $row['winner']
-                ? null
-                : Uuid::from($row['winner']),
+            Uuid::fromNullable($row['winner']),
         );
     }
 

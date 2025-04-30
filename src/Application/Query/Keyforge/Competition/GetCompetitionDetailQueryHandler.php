@@ -12,6 +12,7 @@ use AdnanMula\Criteria\FilterField\FilterField;
 use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
 use AdnanMula\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Criteria\FilterValue\StringArrayFilterValue;
+use AdnanMula\Criteria\FilterValue\StringFilterValue;
 
 final readonly class GetCompetitionDetailQueryHandler
 {
@@ -30,7 +31,21 @@ final readonly class GetCompetitionDetailQueryHandler
             $indexedUsers[$user->id()->value()] = $user;
         }
 
-        $competition = $this->repository->byReference($query->reference);
+        $competition = $this->repository->searchOne(
+            new Criteria(
+                null,
+                null,
+                null,
+                new AndFilterGroup(
+                    FilterType::AND,
+                    new Filter(
+                        new FilterField('id'),
+                        new StringFilterValue($query->id->value()),
+                        FilterOperator::EQUAL,
+                    ),
+                ),
+            ),
+        );
 
         if (null === $competition) {
             throw new \Exception('Competition not found');

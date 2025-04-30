@@ -53,11 +53,11 @@
                 for (var i = 0; i < 5; i++) {
                     setTimeout(function () {
                         confetti.addConfetti();
-                        confetti.addConfetti({
-                            emojis: ['🥚'],
-                            emojiSize: 50,
-                            confettiNumber: 5,
-                        });
+                        // confetti.addConfetti({
+                        //     emojis: ['🥚'],
+                        //     emojiSize: 50,
+                        //     confettiNumber: 5,
+                        // });
                     }, i * 1500)
                 }
             </script>
@@ -266,15 +266,15 @@
 
                         <div>
                             <datalist id="winnerDeckOptions">
-                                {% for winnerDeck in winnerDecks %}
-                                    <option data-value="{{ winnerDeck.id }}" value="{{ winnerDeck.name }}"> {{ winnerDeck.id }} </option>
-                                {% endfor %}
+{#                                {% for winnerDeck in winnerDecks %}#}
+{#                                    <option data-value="{{ winnerDeck.id }}" value="{{ winnerDeck.name }}"> {{ winnerDeck.id }} </option>#}
+{#                                {% endfor %}#}
                             </datalist>
 
                             <datalist id="loserDeckOptions">
-                                {% for loserDeck in loserDecks %}
-                                    <option data-value="{{ loserDeck.id }}" value="{{ loserDeck.name }}"> {{ loserDeck.id }} </option>
-                                {% endfor %}
+{#                                {% for loserDeck in loserDecks %}#}
+{#                                    <option data-value="{{ loserDeck.id }}" value="{{ loserDeck.name }}"> {{ loserDeck.id }} </option>#}
+{#                                {% endfor %}#}
                             </datalist>
 
                             <datalist id="firstTurnOptions"></datalist>

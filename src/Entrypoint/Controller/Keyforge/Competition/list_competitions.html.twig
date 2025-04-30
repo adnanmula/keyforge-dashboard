@@ -28,11 +28,12 @@
                 <thead>
                 <tr>
                     <th scope="col">{{ 'competition.id'|trans }}</th>
-                    <th scope="col">{{ 'competition.ref'|trans }}</th>
                     <th scope="col">{{ 'competition.name'|trans }}</th>
                     <th scope="col">{{ 'competition.type'|trans }}</th>
+                    <th scope="col">{{ 'competition.admins'|trans }}</th>
                     <th scope="col">{{ 'competition.players'|trans }}</th>
                     <th scope="col">{{ 'competition.description'|trans }}</th>
+                    <th scope="col">{{ 'competition.visibility'|trans }}</th>
                     <th scope="col">{{ 'competition.created'|trans }}</th>
                     <th scope="col">{{ 'competition.start'|trans }}</th>
                     <th scope="col">{{ 'competition.end'|trans }}</th>
@@ -58,17 +59,18 @@
                 responsive: true,
                 processing: true,
                 serverSide: true,
-                order: [[6, 'desc']],
+                order: [[8, 'desc']],
                 lengthMenu: [10, 25, 50, 100],
                 iDisplayLength: 25,
                 ajax: '{{ path('keyforge_competitions_json') }}',
                 columns: [
                     { data: "id" },
-                    { data: "reference" },
                     { data: "name" },
                     { data: "type" },
+                    { data: "admins" },
                     { data: "users" },
                     { data: "description" },
+                    { data: "visibility" },
                     { data: "createdAt" },
                     { data: "startedAt" },
                     { data: "finishedAt" },
@@ -77,9 +79,9 @@
                 columnDefs: [
                     {
                         render: function (data, type, row) {
-                            return '<a href="/competitions/' + row.reference + '">' + data + '</a>';
+                            return '<a href="/competitions/' + row.id + '">' + data + '</a>';
                         },
-                        targets: 2, //Name
+                        targets: 1, //Name
                     },
                     {
                         render: function (data, type, row) {
@@ -101,7 +103,7 @@
 
                             return data;
                         },
-                        targets: 3, //Type
+                        targets: 2, //Type
                     },
                     {
                         render: function (data, type, row) {
@@ -110,7 +112,7 @@
                             data.forEach(function (userId) {
                                 users.forEach(function (user) {
                                     if (user.id === userId) {
-                                        userNames.push(user.name);
+                                        userNames.push('<span class="text-nowrap">'+user.name+'</span>');
                                     }
                                 });
                             });
@@ -142,7 +144,7 @@
 
                             return data;
                         },
-                        targets: 7, //Started At
+                        targets: 8, //Started At
                     },
                     {
                         render: function (data, type, row) {
@@ -152,7 +154,7 @@
 
                             return data;
                         },
-                        targets: 8, //Finished At
+                        targets: 9, //Finished At
                     },
                     {
                         render: function (data, type, row) {
@@ -170,24 +172,24 @@
 
                             return userName;
                         },
-                        targets: 9, //Winner
+                        targets: 10, //Winner
                     },
                     {
-                        targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+                        targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
                         orderable: false,
                         searchable: false,
                     },
                     {
-                        targets: [0, 1, 6],
+                        targets: [0, 3, 6, 7],
                         visible: false,
                     },
-                    { width: 300, targets: 2 },
-                    { width: 200, targets: 3 },
+                    { width: 200, targets: 1 },
+                    { width: 150, targets: 2 },
                     { width: 400, targets: 4 },
-                    { width: 50, targets: 5 },
-                    { width: 100, targets: 7 },
+                    { width: 40, targets: 5 },
                     { width: 100, targets: 8 },
                     { width: 100, targets: 9 },
+                    { width: 100, targets: 10 },
                 ],
             });
         });

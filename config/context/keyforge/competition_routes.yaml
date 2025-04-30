@@ -1,0 +1,34 @@
+keyforge_competition_list:
+  path: /competitions
+  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Competition\ListCompetitionsController
+  methods: [GET,POST]
+
+keyforge_competitions_json:
+  path: /competitions/json
+  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Competition\GetCompetitionsController
+  methods: [GET]
+
+keyforge_competition_create:
+  path: /competitions/new
+  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Competition\CompetitionController::create
+  methods: [GET,POST]
+
+keyforge_competition_start:
+  path: /competition/start
+  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Competition\CompetitionController::start
+  methods: [POST]
+
+keyforge_competition_game_finish:
+  path: /competition/finish
+  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Competition\CompetitionController::finish
+  methods: [POST]
+
+keyforge_competition_view:
+  path: /competitions/{id}
+  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Competition\CompetitionDetailController
+  methods: [GET,POST]
+
+keyforge_competition_game_create:
+  path: /competition/{fixtureId}/game/new
+  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Competition\CreateCompetitionGameController
+  methods: [POST]

@@ -60,7 +60,7 @@
             <div class="row">
                 {% for win in competition_wins %}
                     <div class="col-12 col-sm-4 col-md-3 col-xl-2">
-                        <a class="text-decoration-none" href="/competitions/{{ win.reference }}" style="color: white">
+                        <a class="text-decoration-none" href="/competitions/{{ win.id }}" style="color: white">
                             <div class="row"><i class="bi bi-trophy" style="font-size: 3em;"></i></div>
                             <div class="row"><span>{{ win.name }}</span></div>
                             <div class="row"><span>{{ win.finishedAt|date('Y-m-d') }}</span></div>

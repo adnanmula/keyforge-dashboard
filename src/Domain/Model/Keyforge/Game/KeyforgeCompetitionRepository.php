@@ -10,11 +10,9 @@ interface KeyforgeCompetitionRepository
     /** @return array<KeyforgeCompetition> */
     public function search(Criteria $criteria): array;
 
+    public function searchOne(Criteria $criteria): ?KeyforgeCompetition;
+
     public function count(Criteria $criteria): int;
-
-    public function byId(Uuid $id): ?KeyforgeCompetition;
-
-    public function byReference(string $reference): ?KeyforgeCompetition;
 
     public function save(KeyforgeCompetition $competition): void;
 

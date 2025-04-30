@@ -2,18 +2,19 @@
 
 namespace AdnanMula\Cards\Application\Query\Keyforge\Competition;
 
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use Assert\Assert;
 
 final readonly class GetCompetitionDetailQuery
 {
-    private(set) string $reference;
+    private(set) Uuid $id;
 
-    public function __construct($reference)
+    public function __construct($id)
     {
         Assert::lazy()
-            ->that($reference, 'reference')->string()->notBlank()
+            ->that($id, 'id')->uuid()
             ->verifyNow();
 
-        $this->reference = $reference;
+        $this->id = Uuid::from($id);
     }
 }

@@ -31,16 +31,16 @@ final readonly class GetDecksQuery extends CriteriaQuery
     private(set) ?Uuid $onlyFriends;
 
     public function __construct(
-        $start,
-        $length,
-        ?string $deck,
-        ?string $orderField,
-        ?string $orderDirection,
-        ?array $sets,
-        ?string $houseFilterType,
-        ?array $houses,
-        ?array $housesExcluded,
-        ?array $deckTypes,
+        $start = null,
+        $length = null,
+        ?string $deck = null,
+        ?string $orderField = null,
+        ?string $orderDirection = null,
+        ?array $sets = null,
+        ?string $houseFilterType = null,
+        ?array $houses = null,
+        ?array $housesExcluded = null,
+        ?array $deckTypes = null,
         ?string $deckId = null,
         ?string $owner = null,
         array $owners = [],
@@ -54,6 +54,7 @@ final readonly class GetDecksQuery extends CriteriaQuery
         ?string $tagPrivateFilterType = null,
         array $tagsPrivate = [],
         array $tagsPrivateExcluded = [],
+        array $deckIds = [],
     ) {
         Assert::lazy()
             ->that($start, 'start')->nullOr()->integerish()->greaterOrEqualThan(0)
@@ -79,6 +80,7 @@ final readonly class GetDecksQuery extends CriteriaQuery
             ->that($tagPrivateFilterType, 'tagPrivateFilterType')->nullOr()->inArray(['all', 'any'])
             ->that($tagsPrivate, 'tagsPrivate')->all()->uuid()
             ->that($tagsPrivateExcluded, 'tagsPrivateExcluded')->all()->uuid()
+            ->that($deckIds, 'deckIds')->all()->uuid()
             ->verifyNow();
 
         $this->deckId = null !== $deckId ? Uuid::from($deckId) : null;
@@ -97,6 +99,7 @@ final readonly class GetDecksQuery extends CriteriaQuery
         $filters[] = $this->deckTypeFilter(...$deckTypes ?? []);
         $filters[] = $this->ownersFilter(...$owners);
         $filters[] = $this->setsFilter(...$sets ?? []);
+        $filters[] = $this->deckIdsFilters(...$deckIds);
 
         $criteria = new Criteria(
             null === $start ? null : (int) $start,
@@ -276,6 +279,18 @@ final readonly class GetDecksQuery extends CriteriaQuery
             }
 
             return new AndFilterGroup(FilterType::OR, ...$setFilterExpressions);
+        }
+
+        return null;
+    }
+
+    private function deckIdsFilters(string ...$deckIds): ?FilterGroup
+    {
+        if (\count($deckIds) > 0) {
+            return new AndFilterGroup(
+                FilterType::AND,
+                new Filter(new FilterField('id'), new StringArrayFilterValue(...$deckIds), FilterOperator::IN),
+            );
         }
 
         return null;

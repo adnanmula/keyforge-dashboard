@@ -3,34 +3,24 @@
 namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\Competition;
 
 use AdnanMula\Cards\Application\Command\Keyforge\Competition\Create\CreateCompetitionCommand;
-use AdnanMula\Cards\Application\Query\Keyforge\User\GetUsersQuery;
-use AdnanMula\Cards\Domain\Model\Keyforge\User\KeyforgeUser;
+use AdnanMula\Cards\Application\Command\Keyforge\Competition\Finish\FinishCompetitionCommand;
+use AdnanMula\Cards\Application\Command\Keyforge\Competition\Start\StartCompetitionCommand;
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\UserRole;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Routing\Exception\MethodNotAllowedException;
 
-class CreateCompetitionController extends Controller
+class CompetitionController extends Controller
 {
-    public function __invoke(Request $request): Response
+    public function create(Request $request): Response
     {
-        $this->assertIsLogged();
-
-        if (false === $this->security->isGranted('ROLE_KEYFORGE')) {
-            throw new AccessDeniedException();
-        }
-
-        $users = $this->extractResult(
-            $this->bus->dispatch(new GetUsersQuery(null, null, false, false)),
-        );
-
-        $users = \array_map(static fn (KeyforgeUser $user) => ['id' => $user->id()->value(), 'name' => $user->name()], $users);
+        $user = $this->getUserWithRole(UserRole::ROLE_KEYFORGE);
 
         if ($request->getMethod() === Request::METHOD_GET) {
             return $this->render(
                 'Keyforge/Competition/create_competition.html.twig',
                 [
-                    'users' => $users,
                     'result' => false,
                     'success' => null,
                 ],
@@ -40,18 +30,17 @@ class CreateCompetitionController extends Controller
         if ($request->getMethod() === Request::METHOD_POST) {
             try {
                 $this->bus->dispatch(new CreateCompetitionCommand(
-                    \strtolower(\preg_replace("/[\W_]+/u", '_', $request->request->get('name'))),
                     $request->request->get('name'),
                     $request->request->get('type'),
                     $request->request->get('fixtures_type'),
-                    $request->request->all()['users'] ?? [],
+                    [$user->id()->value()],
                     $request->request->get('description'),
+                    $request->request->get('visibility'),
                 ));
             } catch (\Throwable $exception) {
                 return $this->render(
                     'Keyforge/Competition/create_competition.html.twig',
                     [
-                        'users' => $users,
                         'result' => $exception->getMessage(),
                         'success' => false,
                     ],
@@ -61,13 +50,37 @@ class CreateCompetitionController extends Controller
             return $this->render(
                 'Keyforge/Competition/list_competitions.html.twig',
                 [
-                    'users' => $users,
                     'result' => 'Torneo creado',
                     'success' => true,
                 ],
             );
         }
 
-        throw new \InvalidArgumentException('Error');
+        throw new MethodNotAllowedException([]);
+    }
+
+    public function start(Request $request): Response
+    {
+        $this->getUserWithRole(UserRole::ROLE_KEYFORGE);
+
+        $this->bus->dispatch(new StartCompetitionCommand(
+            $request->get('competitionId'),
+            $request->get('date', new \DateTimeImmutable()->format('Y-m-d')),
+        ));
+
+        return new Response('', Response::HTTP_OK);
+    }
+
+    public function finish(Request $request): Response
+    {
+        $this->getUserWithRole(UserRole::ROLE_KEYFORGE);
+
+        $this->bus->dispatch(new FinishCompetitionCommand(
+            $request->get('competitionId'),
+            $request->get('winnerId'),
+            $request->get('date'),
+        ));
+
+        return new Response('', Response::HTTP_OK);
     }
 }
