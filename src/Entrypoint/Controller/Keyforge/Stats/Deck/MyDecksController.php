@@ -55,7 +55,9 @@ final class MyDecksController extends Controller
         $privateTags = [];
 
         foreach ($tags['tags'] as $tag) {
-            $publicTags[] = $tag->jsonSerialize();
+            if (TagVisibility::PUBLIC === $tag->visibility) {
+                $publicTags[] = $tag->jsonSerialize();
+            }
 
             if (TagVisibility::PRIVATE === $tag->visibility) {
                 $privateTags[] = $tag->jsonSerialize();
