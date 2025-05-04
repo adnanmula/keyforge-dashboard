@@ -19,6 +19,7 @@ use AdnanMula\Criteria\FilterField\FilterField;
 use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
 use AdnanMula\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
+use AdnanMula\Tournament\Fixture\FixtureType;
 use Symfony\Bundle\SecurityBundle\Security;
 
 final readonly class CreateCompetitionGameCommandHandler
@@ -120,7 +121,7 @@ final readonly class CreateCompetitionGameCommandHandler
 
     private function fixtureWinner(KeyforgeCompetitionFixture $fixture, KeyforgeGame $game): ?Uuid
     {
-        if ($fixture->type() === CompetitionFixtureType::BEST_OF_1) {
+        if ($fixture->type === FixtureType::BEST_OF_1) {
             return $game->winner();
         }
 
@@ -138,25 +139,25 @@ final readonly class CreateCompetitionGameCommandHandler
         ));
 
         $winners = [
-            $fixture->users()[0]->value() => 0,
-            $fixture->users()[1]->value() => 0,
+            $fixture->players[0]->value() => 0,
+            $fixture->players[1]->value() => 0,
         ];
 
         foreach ($games as $game) {
             $winners[$game->winner()->value()] += 1;
         }
 
-        if ($fixture->type() === CompetitionFixtureType::BEST_OF_3) {
+        if ($fixture->type === FixtureType::BEST_OF_3) {
             return $this->checkWins($fixture, $winners, 2);
         }
 
-        if ($fixture->type() === CompetitionFixtureType::BEST_OF_5) {
+        if ($fixture->type === FixtureType::BEST_OF_5) {
             return $this->checkWins($fixture, $winners, 3);
         }
 
-        $gamesCount = $winners[$fixture->users()[0]->value()] + $winners[$fixture->users()[1]->value()];
+        $gamesCount = $winners[$fixture->players[0]->value()] + $winners[$fixture->players[1]->value()];
 
-        if ($fixture->type() === CompetitionFixtureType::GAMES_3) {
+        if ($fixture->type === FixtureType::GAMES_3) {
             if ($gamesCount === 3) {
                 return $this->checkWins($fixture, $winners, 2);
             }
@@ -164,7 +165,7 @@ final readonly class CreateCompetitionGameCommandHandler
             return null;
         }
 
-        if ($fixture->type() === CompetitionFixtureType::GAMES_5) {
+        if ($fixture->type === FixtureType::GAMES_5) {
             if ($gamesCount === 5) {
                 return $this->checkWins($fixture, $winners, 3);
             }
@@ -177,12 +178,12 @@ final readonly class CreateCompetitionGameCommandHandler
 
     private function checkWins(KeyforgeCompetitionFixture $fixture, array $winners, int $expectedWins): ?Uuid
     {
-        if ($winners[$fixture->users()[0]->value()] >= $expectedWins) {
-            return $fixture->users()[0];
+        if ($winners[$fixture->players[0]->value()] >= $expectedWins) {
+            return $fixture->players[0];
         }
 
-        if ($winners[$fixture->users()[1]->value()] >= $expectedWins) {
-            return $fixture->users()[1];
+        if ($winners[$fixture->players[1]->value()] >= $expectedWins) {
+            return $fixture->players[1];
         }
 
         return null;

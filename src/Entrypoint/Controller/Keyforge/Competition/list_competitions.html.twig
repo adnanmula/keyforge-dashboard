@@ -62,7 +62,9 @@
                 order: [[8, 'desc']],
                 lengthMenu: [10, 25, 50, 100],
                 iDisplayLength: 25,
-                ajax: '{{ path('keyforge_competitions_json') }}',
+                ajax: {
+                    url: '{{ path('keyforge_competitions_json') }}',
+                },
                 columns: [
                     { data: "id" },
                     { data: "name" },

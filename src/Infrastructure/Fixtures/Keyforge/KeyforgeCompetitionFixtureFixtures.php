@@ -2,7 +2,6 @@
 
 namespace AdnanMula\Cards\Infrastructure\Fixtures\Keyforge;
 
-use AdnanMula\Cards\Application\Service\Json;
 use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeCompetitionFixture;
 use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeCompetitionRepository;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
@@ -19,8 +18,6 @@ final class KeyforgeCompetitionFixtureFixtures extends DbalFixture implements Fi
     public const string FIXTURE_KEYFORGE_COMPETITION_FIXTURE_4_ID = '54b1c40a-3ef4-4aad-9b67-a23a64fc5e16';
     public const string FIXTURE_KEYFORGE_COMPETITION_FIXTURE_5_ID = '38c9f964-c2c4-4116-909c-55ee9bfd0052';
     public const string FIXTURE_KEYFORGE_COMPETITION_FIXTURE_6_ID = '2229c2fb-e520-4b98-ab1d-ce493064c40d';
-
-    private const string TABLE = 'keyforge_competition_fixtures';
 
     private bool $loaded = false;
 

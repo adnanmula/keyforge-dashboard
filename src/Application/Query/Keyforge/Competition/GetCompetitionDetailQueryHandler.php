@@ -3,9 +3,7 @@
 namespace AdnanMula\Cards\Application\Query\Keyforge\Competition;
 
 use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeCompetitionRepository;
-use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeGameRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\User\KeyforgeUserRepository;
-use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Criteria\Criteria;
 use AdnanMula\Criteria\Filter\Filter;
 use AdnanMula\Criteria\Filter\FilterType;
@@ -20,7 +18,6 @@ final readonly class GetCompetitionDetailQueryHandler
     public function __construct(
         private KeyforgeCompetitionRepository $repository,
         private KeyforgeUserRepository $userRepository,
-        private KeyforgeGameRepository $gameRepository,
     ) {}
 
     public function __invoke(GetCompetitionDetailQuery $query): array
@@ -55,8 +52,8 @@ final readonly class GetCompetitionDetailQueryHandler
                     new FilterField('id'),
                     new StringArrayFilterValue(...$competition->players),
                     FilterOperator::IN,
-                )
-            )
+                ),
+            ),
         ));
 
         $indexedUsers = [];
@@ -228,24 +225,5 @@ final readonly class GetCompetitionDetailQueryHandler
 //            'fixtures' => $indexedFixtures,
 //            'classification' => $classification,
         ];
-    }
-
-    private function order(array $indexedFixtures): array
-    {
-        foreach ($indexedFixtures as &$fixturesToSort) {
-            \usort($fixturesToSort, static function (array $a, array $b) {
-                return $a['position'] <=> $b['position'];
-            });
-        }
-
-        $keys = \array_keys($indexedFixtures);
-
-        \array_multisort(
-            $keys,
-            \SORT_NATURAL,
-            $indexedFixtures,
-        );
-
-        return $indexedFixtures;
     }
 }
