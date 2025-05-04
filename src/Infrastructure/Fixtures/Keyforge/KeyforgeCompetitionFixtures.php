@@ -9,6 +9,10 @@ use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Domain\Service\Persistence\Fixture;
 use AdnanMula\Cards\Infrastructure\Fixtures\DbalFixture;
 use AdnanMula\Cards\Infrastructure\Persistence\Repository\Keyforge\Game\KeyforgeCompetitionDbalRepository;
+use AdnanMula\Tournament\Classification\Classification;
+use AdnanMula\Tournament\Fixture\Fixtures;
+use AdnanMula\Tournament\Fixture\FixtureType;
+use AdnanMula\Tournament\TournamentType;
 use Doctrine\DBAL\Connection;
 
 final class KeyforgeCompetitionFixtures extends DbalFixture implements Fixture
@@ -29,7 +33,8 @@ final class KeyforgeCompetitionFixtures extends DbalFixture implements Fixture
             new KeyforgeCompetition(
                 Uuid::from(self::FIXTURE_KEYFORGE_COMPETITION_1_ID),
                 'Torneo1',
-                CompetitionType::ROUND_ROBIN_1,
+                'Description',
+                TournamentType::ROUND_ROBIN_1,
                 [
                     Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_1_ID),
                 ],
@@ -38,12 +43,13 @@ final class KeyforgeCompetitionFixtures extends DbalFixture implements Fixture
                     Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID),
                     Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_3_ID),
                 ],
-                'Description',
-                CompetitionVisibility::FRIENDS,
                 new \DateTimeImmutable('2022-12-03'),
                 null,
                 null,
+                CompetitionVisibility::FRIENDS,
                 null,
+                new Fixtures(FixtureType::BEST_OF_1, 'Jornada'),
+                new Classification(false),
             ),
         );
 
@@ -51,7 +57,8 @@ final class KeyforgeCompetitionFixtures extends DbalFixture implements Fixture
             new KeyforgeCompetition(
                 Uuid::from(self::FIXTURE_KEYFORGE_COMPETITION_2_ID),
                 'Torneo2',
-                CompetitionType::ROUND_ROBIN_1,
+                'Description 2',
+                TournamentType::ROUND_ROBIN_1,
                 [
                     Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_1_ID),
                 ],
@@ -60,12 +67,13 @@ final class KeyforgeCompetitionFixtures extends DbalFixture implements Fixture
                     Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID),
                     Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_3_ID),
                 ],
-                'Description 2',
-                CompetitionVisibility::FRIENDS,
                 new \DateTimeImmutable('2022-12-03'),
                 new \DateTimeImmutable('2022-12-14'),
                 new \DateTimeImmutable('2022-12-23'),
+                CompetitionVisibility::FRIENDS,
                 Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_1_ID),
+                new Fixtures(FixtureType::BEST_OF_1, 'Jornada'),
+                new Classification(true),
             ),
         );
 

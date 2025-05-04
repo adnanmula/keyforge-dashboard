@@ -4,6 +4,13 @@ namespace AdnanMula\Cards\Application\Command\Keyforge\Competition\Finish;
 
 use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeCompetition;
 use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeCompetitionRepository;
+use AdnanMula\Criteria\Criteria;
+use AdnanMula\Criteria\Filter\Filter;
+use AdnanMula\Criteria\Filter\FilterType;
+use AdnanMula\Criteria\FilterField\FilterField;
+use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
+use AdnanMula\Criteria\FilterValue\FilterOperator;
+use AdnanMula\Criteria\FilterValue\StringFilterValue;
 
 final readonly class FinishCompetitionCommandHandler
 {
@@ -13,7 +20,21 @@ final readonly class FinishCompetitionCommandHandler
 
     public function __invoke(FinishCompetitionCommand $command): void
     {
-        $competition = $this->repository->byId($command->competitionId);
+        $competition = $this->repository->searchOne(
+            new Criteria(
+                null,
+                null,
+                null,
+                new AndFilterGroup(
+                    FilterType::AND,
+                    new Filter(
+                        new FilterField('id'),
+                        new StringFilterValue($command->competitionId->value()),
+                        FilterOperator::EQUAL,
+                    ),
+                ),
+            ),
+        );
 
         $this->assert($competition);
 

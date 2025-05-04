@@ -34,6 +34,7 @@ class CompetitionController extends Controller
                     $request->request->get('type'),
                     $request->request->get('fixtures_type'),
                     [$user->id()->value()],
+                    [$user->id()->value()],
                     $request->request->get('description'),
                     $request->request->get('visibility'),
                 ));

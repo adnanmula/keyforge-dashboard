@@ -425,3 +425,4 @@ competition.visibility: Visibility
 competition.visibility.public: Public
 competition.visibility.friends: Only friends
 competition.visibility.private: Private
+competition.round: Round

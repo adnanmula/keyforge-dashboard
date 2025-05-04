@@ -32,20 +32,24 @@ final class CompetitionDetailController extends Controller
             $this->bus->dispatch(new GetCompetitionDetailQuery($id)),
         );
 
-        $indexedDecks = $this->decks($detail['fixtures']);
+        $indexedDecks = $this->decks($detail['fixtures'] ?? null);
 
         return $this->render('Keyforge/Competition/competition_detail.html.twig', [
             'users' => \array_map(static fn (KeyforgeUser $user) => $user->jsonSerialize(), $users),
             'competition' => $detail['competition'],
-            'fixtures' => $detail['fixtures'],
-            'classification' => $detail['classification'],
+            'fixtures' => $detail['fixtures'] ?? null,
+            'classification' => $detail['classification'] ?? null,
             'indexedUsers' => $indexedUsers,
             'indexedDecks' => $indexedDecks,
         ]);
     }
 
-    private function decks(array $fixtures): array
+    private function decks(?array $fixtures): array
     {
+        if (null === $fixtures) {
+            return [];
+        }
+
         $ids = [];
 
         foreach ($fixtures as $round) {

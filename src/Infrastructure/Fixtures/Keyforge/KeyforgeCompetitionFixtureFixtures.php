@@ -4,10 +4,12 @@ namespace AdnanMula\Cards\Infrastructure\Fixtures\Keyforge;
 
 use AdnanMula\Cards\Application\Service\Json;
 use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeCompetitionFixture;
-use AdnanMula\Cards\Domain\Model\Shared\ValueObject\CompetitionFixtureType;
+use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeCompetitionRepository;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Domain\Service\Persistence\Fixture;
 use AdnanMula\Cards\Infrastructure\Fixtures\DbalFixture;
+use AdnanMula\Tournament\Fixture\FixtureType;
+use Doctrine\DBAL\Connection;
 
 final class KeyforgeCompetitionFixtureFixtures extends DbalFixture implements Fixture
 {
@@ -22,119 +24,124 @@ final class KeyforgeCompetitionFixtureFixtures extends DbalFixture implements Fi
 
     private bool $loaded = false;
 
+    public function __construct(Connection $connection, private KeyforgeCompetitionRepository $competitionRepository)
+    {
+        parent::__construct($connection);
+    }
+
     public function load(): void
     {
-        $this->save(
+        $this->competitionRepository->saveFixture(
             new KeyforgeCompetitionFixture(
                 Uuid::from(self::FIXTURE_KEYFORGE_COMPETITION_FIXTURE_1_ID),
                 Uuid::from(KeyforgeCompetitionFixtures::FIXTURE_KEYFORGE_COMPETITION_2_ID),
-                'Jornada 1',
-                [
-                    Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_1_ID),
-                    Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID),
-                ],
-                CompetitionFixtureType::BEST_OF_1,
-                0,
-                new \DateTimeImmutable('2022-12-05'),
-                new \DateTimeImmutable('2022-12-05'),
                 Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID),
                 [
                     KeyforgeGamesFixtures::FIXTURE_KEYFORGE_GAME_14_ID,
                 ],
-            ),
-        );
-
-        $this->save(
-            new KeyforgeCompetitionFixture(
-                Uuid::from(self::FIXTURE_KEYFORGE_COMPETITION_FIXTURE_2_ID),
-                Uuid::from(KeyforgeCompetitionFixtures::FIXTURE_KEYFORGE_COMPETITION_2_ID),
                 'Jornada 1',
                 [
                     Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_1_ID),
-                    Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_3_ID),
+                    Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID),
                 ],
-                CompetitionFixtureType::BEST_OF_1,
-                1,
+                FixtureType::BEST_OF_1,
+                0,
                 new \DateTimeImmutable('2022-12-05'),
                 new \DateTimeImmutable('2022-12-05'),
+            ),
+        );
+
+        $this->competitionRepository->saveFixture(
+            new KeyforgeCompetitionFixture(
+                Uuid::from(self::FIXTURE_KEYFORGE_COMPETITION_FIXTURE_2_ID),
+                Uuid::from(KeyforgeCompetitionFixtures::FIXTURE_KEYFORGE_COMPETITION_2_ID),
                 Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_3_ID),
                 [
                     KeyforgeGamesFixtures::FIXTURE_KEYFORGE_GAME_15_ID,
                 ],
+                'Jornada 1',
+                [
+                    Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_1_ID),
+                    Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_3_ID),
+                ],
+                FixtureType::BEST_OF_1,
+                1,
+                new \DateTimeImmutable('2022-12-05'),
+                new \DateTimeImmutable('2022-12-05'),
             ),
         );
 
-        $this->save(
+        $this->competitionRepository->saveFixture(
             new KeyforgeCompetitionFixture(
                 Uuid::from(self::FIXTURE_KEYFORGE_COMPETITION_FIXTURE_3_ID),
                 Uuid::from(KeyforgeCompetitionFixtures::FIXTURE_KEYFORGE_COMPETITION_2_ID),
-                'Jornada 1',
-                [
-                    Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID),
-                    Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_3_ID),
-                ],
-                CompetitionFixtureType::BEST_OF_1,
-                2,
-                new \DateTimeImmutable('2022-12-05'),
-                new \DateTimeImmutable('2022-12-05'),
                 Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_3_ID),
                 [
                     KeyforgeGamesFixtures::FIXTURE_KEYFORGE_GAME_16_ID,
                 ],
-            ),
-        );
-
-        $this->save(
-            new KeyforgeCompetitionFixture(
-                Uuid::from(self::FIXTURE_KEYFORGE_COMPETITION_FIXTURE_4_ID),
-                Uuid::from(KeyforgeCompetitionFixtures::FIXTURE_KEYFORGE_COMPETITION_1_ID),
-                'Jornada 1',
-                [
-                    Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_1_ID),
-                    Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID),
-                ],
-                CompetitionFixtureType::BEST_OF_1,
-                0,
-                new \DateTimeImmutable('2022-12-05'),
-                new \DateTimeImmutable('2022-12-05'),
-                null,
-                [],
-            ),
-        );
-
-        $this->save(
-            new KeyforgeCompetitionFixture(
-                Uuid::from(self::FIXTURE_KEYFORGE_COMPETITION_FIXTURE_5_ID),
-                Uuid::from(KeyforgeCompetitionFixtures::FIXTURE_KEYFORGE_COMPETITION_1_ID),
-                'Jornada 1',
-                [
-                    Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_1_ID),
-                    Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_3_ID),
-                ],
-                CompetitionFixtureType::BEST_OF_1,
-                1,
-                new \DateTimeImmutable('2022-12-05'),
-                new \DateTimeImmutable('2022-12-05'),
-                null,
-                [],
-            ),
-        );
-
-        $this->save(
-            new KeyforgeCompetitionFixture(
-                Uuid::from(self::FIXTURE_KEYFORGE_COMPETITION_FIXTURE_6_ID),
-                Uuid::from(KeyforgeCompetitionFixtures::FIXTURE_KEYFORGE_COMPETITION_1_ID),
                 'Jornada 1',
                 [
                     Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID),
                     Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_3_ID),
                 ],
-                CompetitionFixtureType::BEST_OF_1,
+                FixtureType::BEST_OF_1,
                 2,
                 new \DateTimeImmutable('2022-12-05'),
                 new \DateTimeImmutable('2022-12-05'),
+            ),
+        );
+
+        $this->competitionRepository->saveFixture(
+            new KeyforgeCompetitionFixture(
+                Uuid::from(self::FIXTURE_KEYFORGE_COMPETITION_FIXTURE_4_ID),
+                Uuid::from(KeyforgeCompetitionFixtures::FIXTURE_KEYFORGE_COMPETITION_1_ID),
                 null,
                 [],
+                'Jornada 1',
+                [
+                    Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_1_ID),
+                    Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID),
+                ],
+                FixtureType::BEST_OF_1,
+                0,
+                new \DateTimeImmutable('2022-12-05'),
+                new \DateTimeImmutable('2022-12-05'),
+            ),
+        );
+
+        $this->competitionRepository->saveFixture(
+            new KeyforgeCompetitionFixture(
+                Uuid::from(self::FIXTURE_KEYFORGE_COMPETITION_FIXTURE_5_ID),
+                Uuid::from(KeyforgeCompetitionFixtures::FIXTURE_KEYFORGE_COMPETITION_1_ID),
+                null,
+                [],
+                'Jornada 1',
+                [
+                    Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_1_ID),
+                    Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_3_ID),
+                ],
+                FixtureType::BEST_OF_1,
+                1,
+                new \DateTimeImmutable('2022-12-05'),
+                new \DateTimeImmutable('2022-12-05'),
+            ),
+        );
+
+        $this->competitionRepository->saveFixture(
+            new KeyforgeCompetitionFixture(
+                Uuid::from(self::FIXTURE_KEYFORGE_COMPETITION_FIXTURE_6_ID),
+                Uuid::from(KeyforgeCompetitionFixtures::FIXTURE_KEYFORGE_COMPETITION_1_ID),
+                null,
+                [],
+                'Jornada 1',
+                [
+                    Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID),
+                    Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_3_ID),
+                ],
+                FixtureType::BEST_OF_1,
+                2,
+                new \DateTimeImmutable('2022-12-05'),
+                new \DateTimeImmutable('2022-12-05'),
             ),
         );
 
@@ -154,41 +161,5 @@ final class KeyforgeCompetitionFixtureFixtures extends DbalFixture implements Fi
             KeyforgeDecksFixtures::class,
             KeyforgeGamesFixtures::class,
         ];
-    }
-
-    public function save(KeyforgeCompetitionFixture $fixture): void
-    {
-        $stmt = $this->connection->prepare(
-            \sprintf(
-                '
-                    INSERT INTO %s (id, competition_id, reference, users, fixture_type, position, created_at, played_at, winner, games)
-                    VALUES (:id, :competition_id, :reference, :users, :fixture_type, :position, :created_at, :played_at, :winner, :games)
-                    ON CONFLICT (id) DO UPDATE SET
-                        competition_id = :competition_id,
-                        reference = :reference,
-                        users = :users,
-                        fixture_type = :fixture_type,
-                        position = :position,
-                        created_at = :created_at,
-                        played_at = :played_at,
-                        winner = :winner,
-                        games = :games
-                    ',
-                self::TABLE,
-            ),
-        );
-
-        $stmt->bindValue(':id', $fixture->id()->value());
-        $stmt->bindValue(':competition_id', $fixture->competitionId()->value());
-        $stmt->bindValue(':reference', $fixture->reference());
-        $stmt->bindValue(':users', Json::encode($fixture->users()));
-        $stmt->bindValue(':fixture_type', $fixture->type()->name);
-        $stmt->bindValue(':position', $fixture->position());
-        $stmt->bindValue(':created_at', $fixture->createdAt()->format(\DateTimeInterface::ATOM));
-        $stmt->bindValue(':played_at', $fixture->playedAt()?->format('Y-m-d'));
-        $stmt->bindValue(':winner', $fixture->winner()?->value());
-        $stmt->bindValue(':games', Json::encode($fixture->games()));
-
-        $stmt->executeStatement();
     }
 }

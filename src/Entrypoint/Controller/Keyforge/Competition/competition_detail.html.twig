@@ -319,7 +319,7 @@
                         </div>
 
                         <datalist id="competitionWinnerOptions">
-                            {% for userId in competition.users %}
+                            {% for userId in competition.players %}
                                 <option data-value="{{ indexedUsers[userId].id }}" value="{{ indexedUsers[userId].name }}"> {{ indexedUsers[userId].id }}</option>
                             {% endfor %}
                         </datalist>
