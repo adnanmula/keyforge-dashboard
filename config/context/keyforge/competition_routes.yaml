@@ -1,6 +1,6 @@
 keyforge_competition_list:
   path: /competitions
-  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Competition\ListCompetitionsController
+  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Competition\CompetitionController::list
   methods: [GET,POST]
 
 keyforge_competitions_json:

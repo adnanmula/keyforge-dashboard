@@ -34,7 +34,7 @@
         "behat/behat": "^3.13",
         "friends-of-behat/symfony-extension": "^2.4",
         "phpro/grumphp": "^2.9",
-        "phpstan/phpstan": "^2.0",
+        "phpstan/phpstan": "^2.1",
         "phpunit/phpunit": "^9.6"
     },
     "config": {

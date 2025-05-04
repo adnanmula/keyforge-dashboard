@@ -5,6 +5,8 @@ namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\Competition;
 use AdnanMula\Cards\Application\Command\Keyforge\Competition\Create\CreateCompetitionCommand;
 use AdnanMula\Cards\Application\Command\Keyforge\Competition\Finish\FinishCompetitionCommand;
 use AdnanMula\Cards\Application\Command\Keyforge\Competition\Start\StartCompetitionCommand;
+use AdnanMula\Cards\Application\Query\Keyforge\User\GetUsersQuery;
+use AdnanMula\Cards\Domain\Model\Keyforge\User\KeyforgeUser;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\UserRole;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,16 +50,25 @@ class CompetitionController extends Controller
                 );
             }
 
-            return $this->render(
-                'Keyforge/Competition/list_competitions.html.twig',
-                [
-                    'result' => 'Torneo creado',
-                    'success' => true,
-                ],
-            );
+            return $this->redirectToRoute('keyforge_competition_list', ['success' => true]);
         }
 
         throw new MethodNotAllowedException([]);
+    }
+
+    public function list(Request $request): Response
+    {
+        $this->assertIsLogged();
+
+        $users = $this->extractResult(
+            $this->bus->dispatch(new GetUsersQuery(null, null, false, false)),
+        );
+
+        return $this->render('Keyforge/Competition/list_competitions.html.twig', [
+            'users' => \array_map(static fn (KeyforgeUser $user) => $user->jsonSerialize(), $users),
+            'success' => $request->get('success', false),
+            'result' => $request->get('success') ? 'Torneo creado' : false,
+        ]);
     }
 
     public function start(Request $request): Response

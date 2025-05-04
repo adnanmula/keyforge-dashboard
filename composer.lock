@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0799bdd06d8a3da9970b6aa0de5a55c9",
+    "content-hash": "db94af6215ffda357e506332c910af48",
     "packages": [
         {
             "name": "adnanmula/criteria",
@@ -107,21 +107,21 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/adnanmula/tournament.git",
-                "reference": "8f2f90a72ece243892211a55040f90719ae364ad"
+                "reference": "44b02a031b56550c336d24094f556b1ca6cc8ea2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/adnanmula/tournament/zipball/8f2f90a72ece243892211a55040f90719ae364ad",
-                "reference": "8f2f90a72ece243892211a55040f90719ae364ad",
+                "url": "https://api.github.com/repos/adnanmula/tournament/zipball/44b02a031b56550c336d24094f556b1ca6cc8ea2",
+                "reference": "44b02a031b56550c336d24094f556b1ca6cc8ea2",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.4"
             },
             "require-dev": {
-                "adnanmula/coding-standard": "^0.0.10",
+                "adnanmula/coding-standard": "^0.0.12",
                 "phpro/grumphp": "^2.5",
-                "phpstan/phpstan": "^1.10",
+                "phpstan/phpstan": "^2.1",
                 "phpunit/phpunit": "^11.0",
                 "symfony/var-dumper": "^7.0"
             },
@@ -146,7 +146,7 @@
                 "issues": "https://github.com/adnanmula/tournament/issues",
                 "source": "https://github.com/adnanmula/tournament/tree/master"
             },
-            "time": "2025-05-04T13:23:10+00:00"
+            "time": "2025-05-04T18:01:09+00:00"
         },
         {
             "name": "beberlei/assert",

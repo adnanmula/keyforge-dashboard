@@ -12,6 +12,7 @@ use AdnanMula\Cards\Infrastructure\Persistence\Repository\DbalRepository;
 use AdnanMula\Criteria\Criteria;
 use AdnanMula\Criteria\DbalCriteriaAdapter;
 use AdnanMula\Tournament\Classification\Classification;
+use AdnanMula\Tournament\Fixture\Fixtures;
 use AdnanMula\Tournament\Fixture\FixtureType;
 use AdnanMula\Tournament\TournamentType;
 
@@ -58,12 +59,13 @@ final class KeyforgeCompetitionDbalRepository extends DbalRepository implements 
         $stmt = $this->connection->prepare(
             \sprintf(
                 '
-                    INSERT INTO %s (id, name, competition_type, admins, players, description, visibility, created_at, started_at, finished_at, winner)
-                    VALUES (:id, :name, :competition_type, :admins, :players, :description, :visibility, :created_at, :started_at, :finished_at, :winner)
+                    INSERT INTO %s (id, name, competition_type, fixtures_type, admins, players, description, visibility, created_at, started_at, finished_at, winner)
+                    VALUES (:id, :name, :competition_type, :fixtures_type, :admins, :players, :description, :visibility, :created_at, :started_at, :finished_at, :winner)
                     ON CONFLICT (id) DO UPDATE SET
                         id = :id,
                         name = :name,
                         competition_type = :competition_type,
+                        fixtures_type = :fixtures_type,
                         admins = :admins,
                         players = :players,
                         description = :description,
@@ -80,6 +82,7 @@ final class KeyforgeCompetitionDbalRepository extends DbalRepository implements 
         $stmt->bindValue(':id', $competition->id->value());
         $stmt->bindValue(':name', $competition->name);
         $stmt->bindValue(':competition_type', $competition->type->name);
+        $stmt->bindValue(':fixtures_type', $competition->fixtures->type->name);
         $stmt->bindValue(':admins', Json::encode($competition->admins));
         $stmt->bindValue(':players', Json::encode($competition->players));
         $stmt->bindValue(':description', $competition->description);
@@ -183,7 +186,7 @@ final class KeyforgeCompetitionDbalRepository extends DbalRepository implements 
                 : new \DateTimeImmutable($row['finished_at']),
             CompetitionVisibility::from($row['visibility']),
             Uuid::fromNullable($row['winner']),
-            null,
+            new Fixtures(FixtureType::from($row['fixtures_type']), ''),
             new Classification(null !== $row['finished_at']),
         );
     }

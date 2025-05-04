@@ -33,6 +33,7 @@ final class Games extends AbstractMigration
                 id uuid NOT NULL,
                 name character varying(64) NOT NULL CONSTRAINT competition_name_unique UNIQUE,
                 competition_type character varying(64) NOT NULL,
+                fixtures_type character varying(64) NOT NULL,
                 admins jsonb NOT NULL,
                 players jsonb NOT NULL,
                 description character varying(512) NOT NULL,

@@ -11,11 +11,13 @@ use AdnanMula\Criteria\FilterField\FilterField;
 use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
 use AdnanMula\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 final readonly class FinishCompetitionCommandHandler
 {
     public function __construct(
         private KeyforgeCompetitionRepository $repository,
+        private TranslatorInterface $translator,
     ) {}
 
     public function __invoke(FinishCompetitionCommand $command): void
@@ -38,7 +40,7 @@ final readonly class FinishCompetitionCommandHandler
 
         $this->assert($competition);
 
-        $competition->updateFinishDate($command->date);
+        $competition->updateFinishedAt($command->date);
         $competition->updateWinner($command->winnerId);
 
         $this->repository->save($competition);
@@ -47,15 +49,15 @@ final readonly class FinishCompetitionCommandHandler
     private function assert(?KeyforgeCompetition $competition): void
     {
         if (null === $competition) {
-            throw new \Exception('Competition not found');
+            throw new \Exception($this->translator->trans('competition.error.not_found'));
         }
 
-        if (null === $competition->startedAt()) {
-            throw new \Exception('Competition not started');
+        if (null === $competition->startedAt) {
+            throw new \Exception($this->translator->trans('competition.error.not_started'));
         }
 
-        if (null !== $competition->finishedAt()) {
-            throw new \Exception('Competition already finished');
+        if (null !== $competition->finishedAt) {
+            throw new \Exception($this->translator->trans('competition.error.already_finished'));
         }
     }
 }
