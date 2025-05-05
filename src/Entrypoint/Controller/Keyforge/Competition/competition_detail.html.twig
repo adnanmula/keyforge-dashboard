@@ -27,7 +27,7 @@
                 <h2>{{ competition.name }}</h2>
             </div>
             <div class="col-4">
-                {% if is_granted('ROLE_KEYFORGE') %}
+                {% if app.user.id.value in competition.admins %}
                     {% if competition.startedAt is null %}
                         <div class="float-end">
                             <button type="button" class="btn btn-dark" id="startCompetition">{{ 'competition_detail.start'|trans }}</button>
@@ -35,6 +35,20 @@
                     {% elseif competition.finishedAt is null %}
                         <div class="float-end">
                             <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#finishCompetition">{{ 'competition_detail.end'|trans }}</button>
+                        </div>
+                    {% endif %}
+                {% endif %}
+
+                {% if competition.finishedAt is null %}
+                    {% if app.user.id.value in competition.players and competition.startedAt is null %}
+                        <div class="float-end me-1">
+                            <button type="button" class="btn btn-dark" id="leaveCompetition">{{ 'menu.leave'|trans }}</button>
+                        </div>
+                    {% endif %}
+
+                    {% if app.user.id.value not in competition.players and competition.startedAt is null %}
+                        <div class="float-end me-1">
+                            <button type="button" class="btn btn-dark" id="joinCompetition">{{ 'menu.join'|trans }}</button>
                         </div>
                     {% endif %}
                 {% endif %}
@@ -102,15 +116,15 @@
                 </tr>
                 </thead>
                 <tbody>
-                {% for player in classification%}
+                {% for player in competition.classification.players %}
                     <tr>
                         <td>{{ player.position }}</td>
-                        <td>{{ player.username }}</td>
+                        <td>{{ player.user.name }}</td>
                         <td>{{ player.wins }}</td>
                         <td>{{ player.losses }}</td>
-                        <td>{{ player.keys_forged - player.keys_opponent_forged }}</td>
-                        <td>{{ player.keys_forged }}</td>
-                        <td>{{ player.keys_opponent_forged }}</td>
+                        <td>{{ player.pointsPositive - player.pointsNegative }}</td>
+                        <td>{{ player.pointsPositive }}</td>
+                        <td>{{ player.pointsNegative }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -393,6 +407,30 @@
                 method: 'POST',
                 data: {
                     'competitionId': $('#hiddenCompetitionId')[0].value,
+                },
+            }).done(function() {
+                location.reload();
+            });
+        });
+
+        $('#joinCompetition').click(function () {
+            $.post({
+                url: '{{ path('keyforge_competition_join') }}',
+                method: 'POST',
+                data: {
+                    'id': '{{ competition.id }}',
+                },
+            }).done(function() {
+                location.reload();
+            });
+        });
+
+        $('#leaveCompetition').click(function () {
+            $.post({
+                url: '{{ path('keyforge_competition_leave') }}',
+                method: 'POST',
+                data: {
+                    'id': '{{ competition.id }}',
                 },
             }).done(function() {
                 location.reload();

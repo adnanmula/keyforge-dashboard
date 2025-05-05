@@ -431,3 +431,5 @@ competition.error.not_found: Competición no encontrada
 competition.error.not_started: Competición no iniciada
 competition.error.already_started: Competición ya iniciada
 competition.error.already_finished: Competición ya finalizada
+menu.join: Unirse
+menu.leave: Salir

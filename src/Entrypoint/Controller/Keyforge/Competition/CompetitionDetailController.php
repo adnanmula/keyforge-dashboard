@@ -7,6 +7,7 @@ use AdnanMula\Cards\Application\Query\Keyforge\Deck\GetDecksQuery;
 use AdnanMula\Cards\Application\Query\Keyforge\User\GetUsersQuery;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeck;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckType;
+use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeCompetition;
 use AdnanMula\Cards\Domain\Model\Keyforge\User\KeyforgeUser;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
 use AdnanMula\Criteria\Sorting\OrderType;
@@ -34,11 +35,13 @@ final class CompetitionDetailController extends Controller
 
         $indexedDecks = $this->decks($detail['fixtures'] ?? null);
 
+        /** @var KeyforgeCompetition $competition */
+        $competition = $detail['competition'];
+
         return $this->render('Keyforge/Competition/competition_detail.html.twig', [
             'users' => \array_map(static fn (KeyforgeUser $user) => $user->jsonSerialize(), $users),
-            'competition' => $detail['competition'],
+            'competition' => $competition,
             'fixtures' => $detail['fixtures'] ?? null,
-            'classification' => $detail['classification'] ?? null,
             'indexedUsers' => $indexedUsers,
             'indexedDecks' => $indexedDecks,
         ]);

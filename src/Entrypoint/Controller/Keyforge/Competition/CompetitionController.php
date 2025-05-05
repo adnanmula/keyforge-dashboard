@@ -4,6 +4,8 @@ namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\Competition;
 
 use AdnanMula\Cards\Application\Command\Keyforge\Competition\Create\CreateCompetitionCommand;
 use AdnanMula\Cards\Application\Command\Keyforge\Competition\Finish\FinishCompetitionCommand;
+use AdnanMula\Cards\Application\Command\Keyforge\Competition\Join\JoinCompetitionCommand;
+use AdnanMula\Cards\Application\Command\Keyforge\Competition\Leave\LeaveCompetitionCommand;
 use AdnanMula\Cards\Application\Command\Keyforge\Competition\Start\StartCompetitionCommand;
 use AdnanMula\Cards\Application\Query\Keyforge\User\GetUsersQuery;
 use AdnanMula\Cards\Domain\Model\Keyforge\User\KeyforgeUser;
@@ -91,6 +93,28 @@ class CompetitionController extends Controller
             $request->get('competitionId'),
             $request->get('winnerId'),
             $request->get('date'),
+        ));
+
+        return new Response('', Response::HTTP_OK);
+    }
+
+    public function join(Request $request): Response
+    {
+        $this->getUserWithRole(UserRole::ROLE_KEYFORGE);
+
+        $this->bus->dispatch(new JoinCompetitionCommand(
+            $request->get('id'),
+        ));
+
+        return new Response('', Response::HTTP_OK);
+    }
+
+    public function leave(Request $request): Response
+    {
+        $this->getUserWithRole(UserRole::ROLE_KEYFORGE);
+
+        $this->bus->dispatch(new LeaveCompetitionCommand(
+            $request->get('id'),
         ));
 
         return new Response('', Response::HTTP_OK);

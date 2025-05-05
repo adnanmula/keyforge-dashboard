@@ -64,7 +64,7 @@ final readonly class StartCompetitionCommandHandler
                 $competition->id,
                 null,
                 [],
-                $this->translator->trans('competition.round'),
+                $fixture->reference,
                 $fixture->players,
                 $fixture->type,
                 $fixture->position,

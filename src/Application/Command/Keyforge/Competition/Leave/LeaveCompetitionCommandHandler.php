@@ -29,7 +29,7 @@ final readonly class LeaveCompetitionCommandHandler
 
     public function __invoke(LeaveCompetitionCommand $command): void
     {
-        /** @var User $user */
+        /** @var ?User $user */
         $user = $this->security->getUser();
 
         if (null === $user) {
@@ -52,13 +52,12 @@ final readonly class LeaveCompetitionCommandHandler
             ),
         );
 
-
         $this->assert($user, $competition);
 
-        if (false === \in_array($user->id()->value(), $competition->players, true)) {
-            $competition->updatePlayers(...\array_merge(
+        if (\in_array($user->id()->value(), $competition->players, true)) {
+            $competition->updatePlayers(...\array_filter(
                 $competition->players,
-                [$user->id()->value()],
+                static fn (string $playerId) => $playerId !== $user->id()->value(),
             ));
 
             $this->repository->save($competition);

@@ -25,7 +25,7 @@ final class KeyforgeCompetition extends Tournament
         \DateTimeImmutable $createdAt,
         ?\DateTimeImmutable $startedAt,
         ?\DateTimeImmutable $finishedAt,
-        private(set) CompetitionVisibility $visibility,
+        private(set) readonly CompetitionVisibility $visibility,
         private(set) ?Uuid $winner,
         ?Fixtures $fixtures,
         Classification $classification,

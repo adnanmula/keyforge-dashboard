@@ -2,8 +2,13 @@
 
 namespace AdnanMula\Cards\Application\Query\Keyforge\Competition;
 
+use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeCompetition;
 use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeCompetitionRepository;
+use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeGame;
+use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeGameRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\User\KeyforgeUserRepository;
+use AdnanMula\Cards\Domain\Model\Shared\User;
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Criteria\Criteria;
 use AdnanMula\Criteria\Filter\Filter;
 use AdnanMula\Criteria\Filter\FilterType;
@@ -12,15 +17,59 @@ use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
 use AdnanMula\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Criteria\FilterValue\StringArrayFilterValue;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
+use AdnanMula\Tournament\Classification\Player;
+use AdnanMula\Tournament\Classification\User as TournamentUser;
 
 final readonly class GetCompetitionDetailQueryHandler
 {
     public function __construct(
         private KeyforgeCompetitionRepository $repository,
+        private KeyforgeGameRepository $gameRepository,
         private KeyforgeUserRepository $userRepository,
     ) {}
 
     public function __invoke(GetCompetitionDetailQuery $query): array
+    {
+        $competition = $this->competition($query->id);
+        $users = $this->users($competition);
+        $fixtures = $this->repository->fixtures($competition->id);
+
+        foreach ($competition->players as $index => $player) {
+            $competition->classification->addPlayer(new Player(
+                $index + 1,
+                new TournamentUser($player, $users[$player]->name()),
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+            ));
+        }
+
+        if (null !== $competition->startedAt) {
+            $gameIds = [];
+
+            foreach ($fixtures as $fixture) {
+                $competition->fixtures->add($fixture);
+
+                $gameIds[] = array_merge($gameIds, $fixture->games);
+            }
+
+            $games = $this->games(...$gameIds);
+
+
+            foreach ($games as $game) {
+
+            }
+        }
+
+        return [
+            'competition' => $competition,
+        ];
+    }
+
+    private function competition(Uuid $id): KeyforgeCompetition
     {
         $competition = $this->repository->searchOne(
             new Criteria(
@@ -31,7 +80,7 @@ final readonly class GetCompetitionDetailQueryHandler
                     FilterType::AND,
                     new Filter(
                         new FilterField('id'),
-                        new StringFilterValue($query->id->value()),
+                        new StringFilterValue($id->value()),
                         FilterOperator::EQUAL,
                     ),
                 ),
@@ -42,6 +91,12 @@ final readonly class GetCompetitionDetailQueryHandler
             throw new \Exception('Competition not found');
         }
 
+        return $competition;
+    }
+
+    /** @return array<string, User> */
+    private function users(KeyforgeCompetition $competition): array
+    {
         $users = $this->userRepository->search(new Criteria(
             null,
             null,
@@ -57,173 +112,33 @@ final readonly class GetCompetitionDetailQueryHandler
         ));
 
         $indexedUsers = [];
+
         foreach ($users as $user) {
             $indexedUsers[$user->id()->value()] = $user;
         }
 
-//        $indexedFixtures = [];
-//        $classification = [];
+        return $indexedUsers;
+    }
 
-//        foreach ($competition->users() as $user) {
-//            $classification[] = [
-//                'position' => 1,
-//                'user' => $user->value(),
-//                'username' => $indexedUsers[$user->value()]->name(),
-//                'wins' => 0,
-//                'losses' => 0,
-//                'keys_forged' => 0,
-//                'keys_opponent_forged' => 0,
-//                'game_wins' => 0,
-//                'game_losses' => 0,
-//            ];
-//        }
+    /** @return array<string, KeyforgeGame> */
+    private function games(string ...$ids): array
+    {
+        $games = $this->gameRepository->search(new Criteria(
+            null,
+            null,
+            null,
+            new AndFilterGroup(
+                FilterType::AND,
+                new Filter(new FilterField('id'), new StringArrayFilterValue(...$ids), FilterOperator::IN),
+            ),
+        ));
 
-//        if (null !== $competition->startedAt()) {
-//            $fixtures = $this->repository->fixtures($competition->id());
-//
-//            $gameIds = [];
-//
-//            foreach ($fixtures as $fixture) {
-//                foreach ($fixture->games() as $gameId) {
-//                    $gameIds[] = $gameId->value();
-//                }
-//            }
-//
-//            $games = $this->gameRepository->search(new Criteria(
-//                null,
-//                null,
-//                null,
-//                new AndFilterGroup(
-//                    FilterType::AND,
-//                    new Filter(new FilterField('id'), new StringArrayFilterValue(...$gameIds), FilterOperator::IN),
-//                ),
-//            ));
-//
-//            $indexedGames = [];
-//            foreach ($games as $game) {
-//                $indexedGames[$game->id()->value()] = $game;
-//            }
-//
-//            $indexedFixtures = [];
-//            $fixturesIsMatch = false;
-//
-//            foreach ($fixtures as $fixture) {
-//                $fixturesIsMatch = $fixture->type()->isBestOf();
-//
-//                $users = [];
-//
-//                foreach ($fixture->users() as $user) {
-//                    $users[] = [
-//                        'id' => $user->value(),
-//                        'name' => $indexedUsers[$user->value()]->name(),
-//                    ];
-//                }
-//
-//                $fixtureArray = $fixture->jsonSerialize();
-//                $fixtureArray['users'] = $users;
-//                $fixtureArray['games'] = [];
-//                if (\count($fixture->games()) > 0) {
-//                    foreach ($fixture->games() as $gameId) {
-//                        $fixtureArray['games'][] = $indexedGames[$gameId->value()]->jsonSerialize();
-//                    }
-//                }
-//
-//                $indexedFixtures[$fixture->reference()][] = $fixtureArray;
-//            }
-//
-//            foreach ($competition->users() as $user) {
-//                $player = [
-//                    'position' => 0,
-//                    'user' => $user->value(),
-//                    'username' => $indexedUsers[$user->value()]->name(),
-//                    'wins' => 0,
-//                    'losses' => 0,
-//                    'keys_forged' => 0,
-//                    'keys_opponent_forged' => 0,
-//                    'game_wins' => 0,
-//                    'game_losses' => 0,
-//                ];
-//
-//                foreach ($indexedFixtures as $fixtures) {
-//                    foreach ($fixtures as $fixture) {
-//                        if (null === $fixture['winner']) {
-//                            continue;
-//                        }
-//
-//                        if (false === \in_array($user->value(), \array_map(static fn (array $user): string => $user['id'], $fixture['users']), true)) {
-//                            continue;
-//                        }
-//
-//                        if (\count($fixture['games']) === 0) {
-//                            continue;
-//                        }
-//
-//                        if ($user->value() === $fixture['winner']) {
-//                            $player['wins']++;
-//                        } else {
-//                            $player['losses']++;
-//                        }
-//
-//                        foreach ($fixture['games'] as $game) {
-//                            if ($user->value() === $game['winner']) {
-//                                $player['game_wins']++;
-//                                $player['keys_forged'] += $game['score']['winner_score'];
-//                                $player['keys_opponent_forged'] += $game['score']['loser_score'];
-//                            }
-//
-//                            if ($user->value() === $game['loser']) {
-//                                $player['game_losses']++;
-//                                $player['keys_forged'] += $game['score']['loser_score'];
-//                                $player['keys_opponent_forged'] += $game['score']['winner_score'];
-//                            }
-//                        }
-//                    }
-//                }
-//
-//                $classification[] = $player;
-//            }
-//
-//            if (false === $fixturesIsMatch) {
-//                foreach ($classification as &$position) {
-//                    $position['wins'] = $position['game_wins'];
-//                    $position['losses'] = $position['game_losses'];
-//                }
-//            }
-//
-//            \usort($classification, static function (array $a, array $b) {
-//                if ($b['wins'] === $a['wins'] && $a['losses'] === $b['losses']) {
-//                    $aDiff = $a['keys_forged'] - $a['keys_opponent_forged'];
-//                    $bDiff = $b['keys_forged'] - $b['keys_opponent_forged'];
-//
-//                    if ($aDiff === $bDiff) {
-//                        if ($a['keys_forged'] === $b['keys_forged']) {
-//                            return $a['keys_opponent_forged'] <=> $b['keys_opponent_forged'];
-//                        }
-//
-//                        return $b['keys_forged'] <=> $a['keys_forged'];
-//                    }
-//
-//                    return $bDiff <=> $aDiff;
-//                }
-//
-//                if ($b['wins'] === $a['wins']) {
-//                    return $a['losses'] <=> $b['losses'];
-//                }
-//
-//                return $b['wins'] <=> $a['wins'];
-//            });
-//
-//            foreach ($classification as $position => &$player) {
-//                $player['position'] = $position + 1;
-//            }
-//
-//            $indexedFixtures = $this->order($indexedFixtures);
-//        }
+        $indexedGames = [];
 
-        return [
-            'competition' => $competition,
-//            'fixtures' => $indexedFixtures,
-//            'classification' => $classification,
-        ];
+        foreach ($games as $game) {
+            $indexedGames[$game->id()->value()] = $game;
+        }
+
+        return $indexedGames;
     }
 }

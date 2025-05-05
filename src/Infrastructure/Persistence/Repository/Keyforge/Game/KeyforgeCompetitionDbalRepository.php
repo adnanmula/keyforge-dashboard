@@ -15,11 +15,18 @@ use AdnanMula\Tournament\Classification\Classification;
 use AdnanMula\Tournament\Fixture\Fixtures;
 use AdnanMula\Tournament\Fixture\FixtureType;
 use AdnanMula\Tournament\TournamentType;
+use Doctrine\DBAL\Connection;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class KeyforgeCompetitionDbalRepository extends DbalRepository implements KeyforgeCompetitionRepository
 {
     private const string TABLE = 'keyforge_competitions';
     private const string TABLE_FIXTURES = 'keyforge_competition_fixtures';
+
+    public function __construct(Connection $connection, private TranslatorInterface $translator)
+    {
+        parent::__construct($connection);
+    }
 
     public function search(Criteria $criteria): array
     {
@@ -186,7 +193,7 @@ final class KeyforgeCompetitionDbalRepository extends DbalRepository implements 
                 : new \DateTimeImmutable($row['finished_at']),
             CompetitionVisibility::from($row['visibility']),
             Uuid::fromNullable($row['winner']),
-            new Fixtures(FixtureType::from($row['fixtures_type']), ''),
+            new Fixtures(FixtureType::from($row['fixtures_type']), $this->translator->trans('competition.round')),
             new Classification(null !== $row['finished_at']),
         );
     }

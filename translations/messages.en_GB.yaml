@@ -430,3 +430,5 @@ competition.error.not_found: Competition not found
 competition.error.not_started: Competition not started
 competition.error.already_started: Competition already started
 competition.error.already_finished: Competition already finished
+menu.join: Join
+menu.leave: Leave
