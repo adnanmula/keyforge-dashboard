@@ -107,12 +107,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/adnanmula/tournament.git",
-                "reference": "b50815b3ef587edb103126436f4d2ea7cb81c0f7"
+                "reference": "e3609d2786918818188af23ecf87a6e1b0cc8fde"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/adnanmula/tournament/zipball/b50815b3ef587edb103126436f4d2ea7cb81c0f7",
-                "reference": "b50815b3ef587edb103126436f4d2ea7cb81c0f7",
+                "url": "https://api.github.com/repos/adnanmula/tournament/zipball/e3609d2786918818188af23ecf87a6e1b0cc8fde",
+                "reference": "e3609d2786918818188af23ecf87a6e1b0cc8fde",
                 "shasum": ""
             },
             "require": {
@@ -146,7 +146,7 @@
                 "issues": "https://github.com/adnanmula/tournament/issues",
                 "source": "https://github.com/adnanmula/tournament/tree/master"
             },
-            "time": "2025-05-07T19:45:11+00:00"
+            "time": "2025-05-07T20:13:55+00:00"
         },
         {
             "name": "beberlei/assert",
