@@ -27,6 +27,7 @@ final class CreateCompetitionGameController extends Controller
             $request->request->get('competition'),
             $request->request->get('notes'),
             $fixtureId,
+            $request->request->get('log'),
         ));
 
         return new JsonResponse();

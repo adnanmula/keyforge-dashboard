@@ -19,6 +19,7 @@ use AdnanMula\Criteria\FilterField\FilterField;
 use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
 use AdnanMula\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
+use AdnanMula\KeyforgeGameLogParser\GameLogParser;
 use AdnanMula\Tournament\Fixture\FixtureType;
 use Symfony\Bundle\SecurityBundle\Security;
 
@@ -43,6 +44,16 @@ final readonly class CreateCompetitionGameCommandHandler
 
         [$winnerDeck, $loserDeck] = $this->getDecks($command->winnerDeck, $command->loserDeck);
 
+        $log = null;
+
+        if (null !== $command->log) {
+            try {
+                $parser = new GameLogParser();
+                $log = $parser->execute($command->log)->rawLog;
+            } catch (\Throwable) {
+            }
+        }
+
         $game = new KeyforgeGame(
             Uuid::v4(),
             $command->winner,
@@ -59,7 +70,7 @@ final readonly class CreateCompetitionGameCommandHandler
             $command->notes,
             false,
             $user->id(),
-            null,
+            $log,
         );
 
         $this->gameRepository->save($game);
