@@ -8,13 +8,10 @@ use AdnanMula\Tournament\Classification\Classification;
 use AdnanMula\Tournament\Fixture\Fixtures;
 use AdnanMula\Tournament\Tournament;
 use AdnanMula\Tournament\TournamentType;
+use AdnanMula\Tournament\User;
 
 final class KeyforgeCompetition extends Tournament
 {
-    /**
-     * @param array<Uuid> $admins
-     * @param array<Uuid> $players
-     */
     public function __construct(
         private(set) readonly Uuid $id,
         string $name,
@@ -30,8 +27,11 @@ final class KeyforgeCompetition extends Tournament
         ?Fixtures $fixtures,
         Classification $classification,
     ) {
-        $admins = array_map(static fn (Uuid $id): string => $id->value(), $admins);
-        $players = array_map(static fn (Uuid $id): string => $id->value(), $players);
+        foreach (array_merge($admins, $players) as $user) {
+            if (false === $user instanceof User) {
+                throw new \InvalidArgumentException('Admins and players must be an instance of ' . User::class);
+            }
+        }
 
         parent::__construct($name, $description, $type, $admins, $players, $createdAt, $startedAt, $finishedAt, $fixtures, $classification);
     }

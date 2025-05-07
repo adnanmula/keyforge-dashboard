@@ -1,5 +1,6 @@
 parameters:
     level: 6
+    treatPhpDocTypesAsCertain: false
     paths:
         -   src
         -   tests
@@ -9,10 +10,6 @@ parameters:
         -   config/bootstrap.php
     ignoreErrors:
         - identifier: missingType.iterableValue
-        -
-            message: '#Strict comparison using === between false and non-empty-list<array<string, mixed>> will always evaluate to false#'
-            paths:
-                - src/Infrastructure/Persistence/Repository/*/*Repository.php
         -
             identifier: missingType.parameter
             paths:

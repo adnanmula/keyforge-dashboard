@@ -111,12 +111,8 @@
                         render: function (data, type, row) {
                             let userNames = [];
 
-                            data.forEach(function (userId) {
-                                users.forEach(function (user) {
-                                    if (user.id === userId) {
-                                        userNames.push('<span class="text-nowrap">'+user.name+'</span>');
-                                    }
-                                });
+                            data.forEach(function (user) {
+                                userNames.push('<span class="text-nowrap">'+user.name+'</span>');
                             });
 
                             return userNames.join(', ');

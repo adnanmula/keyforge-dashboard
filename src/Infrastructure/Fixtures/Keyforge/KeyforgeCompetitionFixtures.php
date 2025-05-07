@@ -12,6 +12,7 @@ use AdnanMula\Tournament\Classification\Classification;
 use AdnanMula\Tournament\Fixture\Fixtures;
 use AdnanMula\Tournament\Fixture\FixtureType;
 use AdnanMula\Tournament\TournamentType;
+use AdnanMula\Tournament\User;
 use Doctrine\DBAL\Connection;
 
 final class KeyforgeCompetitionFixtures extends DbalFixture implements Fixture
@@ -35,12 +36,12 @@ final class KeyforgeCompetitionFixtures extends DbalFixture implements Fixture
                 'Description',
                 TournamentType::ROUND_ROBIN_1,
                 [
-                    Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_1_ID),
+                    new User(KeyforgeUsersFixtures::FIXTURE_KF_USER_1_ID, '1'),
                 ],
                 [
-                    Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_1_ID),
-                    Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID),
-                    Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_3_ID),
+                    new User(KeyforgeUsersFixtures::FIXTURE_KF_USER_1_ID, '1'),
+                    new User(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID, '2'),
+                    new User(KeyforgeUsersFixtures::FIXTURE_KF_USER_3_ID, '3'),
                 ],
                 new \DateTimeImmutable('2022-12-03'),
                 null,
@@ -59,12 +60,12 @@ final class KeyforgeCompetitionFixtures extends DbalFixture implements Fixture
                 'Description 2',
                 TournamentType::ROUND_ROBIN_1,
                 [
-                    Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_1_ID),
+                    new User(KeyforgeUsersFixtures::FIXTURE_KF_USER_1_ID, '1'),
                 ],
                 [
-                    Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_1_ID),
-                    Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID),
-                    Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_3_ID),
+                    new User(KeyforgeUsersFixtures::FIXTURE_KF_USER_1_ID, '1'),
+                    new User(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID, '2'),
+                    new User(KeyforgeUsersFixtures::FIXTURE_KF_USER_3_ID, '3'),
                 ],
                 new \DateTimeImmutable('2022-12-03'),
                 new \DateTimeImmutable('2022-12-14'),

@@ -8,6 +8,7 @@ use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Domain\Service\Persistence\Fixture;
 use AdnanMula\Cards\Infrastructure\Fixtures\DbalFixture;
 use AdnanMula\Tournament\Fixture\FixtureType;
+use AdnanMula\Tournament\User;
 use Doctrine\DBAL\Connection;
 
 final class KeyforgeCompetitionFixtureFixtures extends DbalFixture implements Fixture
@@ -38,8 +39,8 @@ final class KeyforgeCompetitionFixtureFixtures extends DbalFixture implements Fi
                 ],
                 'Jornada 1',
                 [
-                    Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_1_ID),
-                    Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID),
+                    new User(KeyforgeUsersFixtures::FIXTURE_KF_USER_1_ID, 'name1'),
+                    new User(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID, 'name2'),
                 ],
                 FixtureType::BEST_OF_1,
                 0,
@@ -58,8 +59,8 @@ final class KeyforgeCompetitionFixtureFixtures extends DbalFixture implements Fi
                 ],
                 'Jornada 1',
                 [
-                    Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_1_ID),
-                    Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_3_ID),
+                    new User(KeyforgeUsersFixtures::FIXTURE_KF_USER_1_ID, 'name1'),
+                    new User(KeyforgeUsersFixtures::FIXTURE_KF_USER_3_ID, 'name3'),
                 ],
                 FixtureType::BEST_OF_1,
                 1,
@@ -78,8 +79,8 @@ final class KeyforgeCompetitionFixtureFixtures extends DbalFixture implements Fi
                 ],
                 'Jornada 1',
                 [
-                    Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID),
-                    Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_3_ID),
+                    new User(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID, 'name2'),
+                    new User(KeyforgeUsersFixtures::FIXTURE_KF_USER_3_ID, 'name3'),
                 ],
                 FixtureType::BEST_OF_1,
                 2,
@@ -96,8 +97,8 @@ final class KeyforgeCompetitionFixtureFixtures extends DbalFixture implements Fi
                 [],
                 'Jornada 1',
                 [
-                    Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_1_ID),
-                    Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID),
+                    new User(KeyforgeUsersFixtures::FIXTURE_KF_USER_1_ID, 'name1'),
+                    new User(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID, 'name2'),
                 ],
                 FixtureType::BEST_OF_1,
                 0,
@@ -114,8 +115,8 @@ final class KeyforgeCompetitionFixtureFixtures extends DbalFixture implements Fi
                 [],
                 'Jornada 1',
                 [
-                    Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_1_ID),
-                    Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_3_ID),
+                    new User(KeyforgeUsersFixtures::FIXTURE_KF_USER_1_ID, 'name1'),
+                    new User(KeyforgeUsersFixtures::FIXTURE_KF_USER_3_ID, 'name3'),
                 ],
                 FixtureType::BEST_OF_1,
                 1,
@@ -132,8 +133,8 @@ final class KeyforgeCompetitionFixtureFixtures extends DbalFixture implements Fi
                 [],
                 'Jornada 1',
                 [
-                    Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID),
-                    Uuid::from(KeyforgeUsersFixtures::FIXTURE_KF_USER_3_ID),
+                    new User(KeyforgeUsersFixtures::FIXTURE_KF_USER_2_ID, 'name2'),
+                    new User(KeyforgeUsersFixtures::FIXTURE_KF_USER_3_ID, 'name3'),
                 ],
                 FixtureType::BEST_OF_1,
                 2,

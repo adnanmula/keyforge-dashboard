@@ -4,11 +4,14 @@ namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\Competition;
 
 use AdnanMula\Cards\Application\Query\Keyforge\Competition\GetCompetitionDetailQuery;
 use AdnanMula\Cards\Application\Query\Keyforge\Deck\GetDecksQuery;
+use AdnanMula\Cards\Application\Query\Keyforge\Game\GetGamesQuery;
 use AdnanMula\Cards\Application\Query\Keyforge\User\GetUsersQuery;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeck;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckType;
 use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeCompetition;
+use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeCompetitionFixture;
 use AdnanMula\Cards\Domain\Model\Keyforge\User\KeyforgeUser;
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
 use AdnanMula\Criteria\Sorting\OrderType;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,37 +32,43 @@ final class CompetitionDetailController extends Controller
             $indexedUsers[$user->id()->value()] = $user->jsonSerialize();
         }
 
-        $detail = $this->extractResult(
+        $competition = $this->extractResult(
             $this->bus->dispatch(new GetCompetitionDetailQuery($id)),
         );
 
-        $indexedDecks = $this->decks($detail['fixtures'] ?? null);
-
-        /** @var KeyforgeCompetition $competition */
-        $competition = $detail['competition'];
+        $indexedGames = $this->games($competition);
+        $indexedDecks = $this->decks($competition, $indexedGames);
 
         return $this->render('Keyforge/Competition/competition_detail.html.twig', [
             'users' => \array_map(static fn (KeyforgeUser $user) => $user->jsonSerialize(), $users),
             'competition' => $competition,
-            'fixtures' => $detail['fixtures'] ?? null,
             'indexedUsers' => $indexedUsers,
             'indexedDecks' => $indexedDecks,
+            'indexedGames' => $indexedGames,
         ]);
     }
 
-    private function decks(?array $fixtures): array
+    private function decks(KeyforgeCompetition $competition, array $games): array
     {
-        if (null === $fixtures) {
+        $fixtures = $competition->fixtures->groupedByReference();
+
+        if (0 === count($fixtures)) {
             return [];
         }
 
         $ids = [];
 
         foreach ($fixtures as $round) {
+            /** @var KeyforgeCompetitionFixture $fixture */
             foreach ($round as $fixture) {
-                foreach ($fixture['games'] as $game) {
-                    $ids[] = $game['winnerDeck'];
-                    $ids[] = $game['loserDeck'];
+                foreach ($fixture->games as $gameId) {
+                    $game = $games[$gameId->value()] ?? null;
+                    if (null === $game) {
+                        continue;
+                    }
+
+                    $ids[] = $game['winner_deck'];
+                    $ids[] = $game['loser_deck'];
                 }
             }
         }
@@ -86,5 +95,41 @@ final class CompetitionDetailController extends Controller
         }
 
         return $indexedDecks;
+    }
+
+    /** @return array<string, array> */
+    private function games(KeyforgeCompetition $competition): array
+    {
+        $games = [];
+
+        if (null !== $competition->startedAt) {
+            $gameIds = [];
+
+            /** @var KeyforgeCompetitionFixture $fixture */
+            foreach ($competition->fixtures->fixtures as $fixture) {
+                $gameIds = array_merge($gameIds, $fixture->games);
+            }
+
+            if (count($gameIds) > 0) {
+                $games = $this->searchGames(...$gameIds);
+            }
+        }
+
+        return $games;
+    }
+
+    /** @return array<string, array> */
+    private function searchGames(Uuid ...$ids): array
+    {
+        $query = new GetGamesQuery(ids: \array_map(static fn ($id) => $id->value(), $ids));
+        $result = $this->extractResult($this->bus->dispatch($query));
+
+        $indexedGames = [];
+
+        foreach ($result['games'] as $game) {
+            $indexedGames[$game['id']] = $game;
+        }
+
+        return $indexedGames;
     }
 }

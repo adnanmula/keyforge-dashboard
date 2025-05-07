@@ -5,9 +5,11 @@ namespace AdnanMula\Cards\Domain\Model\Keyforge\Game;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Tournament\Fixture\Fixture;
 use AdnanMula\Tournament\Fixture\FixtureType;
+use AdnanMula\Tournament\User;
 
 final class KeyforgeCompetitionFixture extends Fixture
 {
+    /** @param array<User> $players */
     public function __construct(
         private(set) Uuid $id,
         private(set) Uuid $competitionId,

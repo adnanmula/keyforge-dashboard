@@ -7,6 +7,7 @@ use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeCompetitionRepository;
 use AdnanMula\Cards\Domain\Model\Shared\User;
 use AdnanMula\Cards\Domain\Model\Shared\UserRepository;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\CompetitionVisibility;
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Criteria\Criteria;
 use AdnanMula\Criteria\Filter\Filter;
 use AdnanMula\Criteria\Filter\FilterType;
@@ -14,6 +15,7 @@ use AdnanMula\Criteria\FilterField\FilterField;
 use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
 use AdnanMula\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
+use AdnanMula\Tournament\User as TournamentUser;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -52,13 +54,12 @@ final readonly class JoinCompetitionCommandHandler
             ),
         );
 
-
         $this->assert($user, $competition);
 
         if (false === \in_array($user->id()->value(), $competition->players, true)) {
             $competition->updatePlayers(...\array_merge(
                 $competition->players,
-                [$user->id()->value()],
+                [new TournamentUser($user->id()->value(), $user->name())],
             ));
 
             $this->repository->save($competition);
@@ -87,7 +88,7 @@ final readonly class JoinCompetitionCommandHandler
                     $friends,
                     \array_map(
                         static fn (array $u) => $u['id'],
-                        $this->userRepository->friends($admin),
+                        $this->userRepository->friends(Uuid::from($admin->id)),
                     ),
                 );
             }

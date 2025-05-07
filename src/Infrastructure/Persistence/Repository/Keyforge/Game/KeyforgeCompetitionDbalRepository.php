@@ -15,6 +15,8 @@ use AdnanMula\Tournament\Classification\Classification;
 use AdnanMula\Tournament\Fixture\Fixtures;
 use AdnanMula\Tournament\Fixture\FixtureType;
 use AdnanMula\Tournament\TournamentType;
+use AdnanMula\Tournament\User;
+use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -22,6 +24,7 @@ final class KeyforgeCompetitionDbalRepository extends DbalRepository implements 
 {
     private const string TABLE = 'keyforge_competitions';
     private const string TABLE_FIXTURES = 'keyforge_competition_fixtures';
+    private const string TABLE_USERS = 'keyforge_users';
 
     public function __construct(Connection $connection, private TranslatorInterface $translator)
     {
@@ -38,7 +41,34 @@ final class KeyforgeCompetitionDbalRepository extends DbalRepository implements 
 
         $result = $query->executeQuery()->fetchAllAssociative();
 
-        return \array_map(fn (array $row) => $this->map($row), $result);
+        $userIds = [];
+
+        foreach ($result as $row) {
+            $userIds = array_merge($userIds, Json::decode($row['admins']), Json::decode($row['players']));
+        }
+
+        $users = $this->searchUsers(...\array_unique($userIds));
+
+        return \array_map(fn (array $row) => $this->map($row, $users), $result);
+    }
+
+    /** @return array<User> */
+    private function searchUsers(string ...$ids): array
+    {
+        $users = $this->connection->createQueryBuilder()->select('a.*')
+            ->from(self::TABLE_USERS, 'a')
+            ->where('a.id IN (:ids)')
+            ->setParameter('ids', $ids, ArrayParameterType::STRING)
+            ->executeQuery()
+            ->fetchAllAssociative();
+
+        $indexedUsers = [];
+
+        foreach ($users as $user) {
+            $indexedUsers[$user['id']] = new User($user['id'], $user['name']);
+        }
+
+        return $indexedUsers;
     }
 
     public function searchOne(Criteria $criteria): ?KeyforgeCompetition
@@ -90,8 +120,8 @@ final class KeyforgeCompetitionDbalRepository extends DbalRepository implements 
         $stmt->bindValue(':name', $competition->name);
         $stmt->bindValue(':competition_type', $competition->type->name);
         $stmt->bindValue(':fixtures_type', $competition->fixtures->type->name);
-        $stmt->bindValue(':admins', Json::encode($competition->admins));
-        $stmt->bindValue(':players', Json::encode($competition->players));
+        $stmt->bindValue(':admins', Json::encode($competition->adminIds()));
+        $stmt->bindValue(':players', Json::encode($competition->playerIds()));
         $stmt->bindValue(':description', $competition->description);
         $stmt->bindValue(':visibility', $competition->visibility->name);
         $stmt->bindValue(':created_at', $competition->createdAt->format(\DateTimeInterface::ATOM));
@@ -117,7 +147,15 @@ final class KeyforgeCompetitionDbalRepository extends DbalRepository implements 
             return [];
         }
 
-        return \array_map(fn (array $row) => $this->mapFixture($row), $result);
+        $userIds = [];
+
+        foreach ($result as $row) {
+            $userIds = array_merge($userIds, Json::decode($row['players']));
+        }
+
+        $users = $this->searchUsers(...\array_unique($userIds));
+
+        return \array_map(fn (array $row) => $this->mapFixture($row, $users), $result);
     }
 
     public function fixtureById(Uuid $id): ?KeyforgeCompetitionFixture
@@ -134,7 +172,10 @@ final class KeyforgeCompetitionDbalRepository extends DbalRepository implements 
             return null;
         }
 
-        return $this->mapFixture($result);
+        return $this->mapFixture(
+            $result,
+            $this->searchUsers(...Json::decode($result['players'])),
+        );
     }
 
     public function saveFixture(KeyforgeCompetitionFixture $fixture): void
@@ -162,7 +203,7 @@ final class KeyforgeCompetitionDbalRepository extends DbalRepository implements 
         $stmt->bindValue(':id', $fixture->id->value());
         $stmt->bindValue(':competition_id', $fixture->competitionId->value());
         $stmt->bindValue(':reference', $fixture->reference);
-        $stmt->bindValue(':players', Json::encode($fixture->players));
+        $stmt->bindValue(':players', Json::encode($fixture->playerIds()));
         $stmt->bindValue(':fixture_type', $fixture->type->name);
         $stmt->bindValue(':position', $fixture->position);
         $stmt->bindValue(':created_at', $fixture->createdAt->format(\DateTimeInterface::ATOM));
@@ -173,15 +214,15 @@ final class KeyforgeCompetitionDbalRepository extends DbalRepository implements 
         $stmt->executeStatement();
     }
 
-    private function map(array $row): KeyforgeCompetition
+    private function map(array $row, array $users): KeyforgeCompetition
     {
         return new KeyforgeCompetition(
             Uuid::from($row['id']),
             $row['name'],
             $row['description'],
             TournamentType::from($row['competition_type']),
-            \array_map(static fn (string $id): Uuid => Uuid::from($id), Json::decode($row['admins'])),
-            \array_map(static fn (string $id): Uuid => Uuid::from($id), Json::decode($row['players'])),
+            \array_map(static fn (string $id): User => $users[$id] ?? new User($id, 'Unknown'), Json::decode($row['admins'])),
+            \array_map(static fn (string $id): User => $users[$id] ?? new User($id, 'Unknown'), Json::decode($row['players'])),
             null === $row['created_at']
                 ? null
                 : new \DateTimeImmutable($row['created_at']),
@@ -198,7 +239,7 @@ final class KeyforgeCompetitionDbalRepository extends DbalRepository implements 
         );
     }
 
-    private function mapFixture(array $row): KeyforgeCompetitionFixture
+    private function mapFixture(array $row, array $users): KeyforgeCompetitionFixture
     {
         return new KeyforgeCompetitionFixture(
             Uuid::from($row['id']),
@@ -206,7 +247,7 @@ final class KeyforgeCompetitionDbalRepository extends DbalRepository implements 
             Uuid::fromNullable($row['winner']),
             \array_map(static fn (string $id) => Uuid::from($id), Json::decode($row['games'])),
             $row['reference'],
-            \array_map(static fn (string $id): Uuid => Uuid::from($id), Json::decode($row['players'])),
+            \array_map(static fn (string $id): User => $users[$id] ?? new User($id, 'Unknown'), Json::decode($row['players'])),
             FixtureType::from($row['fixture_type']),
             $row['position'],
             new \DateTimeImmutable($row['created_at']),
