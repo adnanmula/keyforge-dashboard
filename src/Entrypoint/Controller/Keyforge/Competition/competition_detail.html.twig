@@ -27,7 +27,7 @@
                 <h2>{{ competition.name }}</h2>
             </div>
             <div class="col-4">
-                {% if is_granted('ROLE_KEYFORGE') %}
+                {% if app.user.id.value in competition.admins %}
                     {% if competition.startedAt is null %}
                         <div class="float-end">
                             <button type="button" class="btn btn-dark" id="startCompetition">{{ 'competition_detail.start'|trans }}</button>
@@ -35,6 +35,20 @@
                     {% elseif competition.finishedAt is null %}
                         <div class="float-end">
                             <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#finishCompetition">{{ 'competition_detail.end'|trans }}</button>
+                        </div>
+                    {% endif %}
+                {% endif %}
+
+                {% if competition.finishedAt is null %}
+                    {% if app.user.id.value in competition.players and competition.startedAt is null %}
+                        <div class="float-end me-1">
+                            <button type="button" class="btn btn-dark" id="leaveCompetition">{{ 'menu.leave'|trans }}</button>
+                        </div>
+                    {% endif %}
+
+                    {% if app.user.id.value not in competition.players and competition.startedAt is null %}
+                        <div class="float-end me-1">
+                            <button type="button" class="btn btn-dark" id="joinCompetition">{{ 'menu.join'|trans }}</button>
                         </div>
                     {% endif %}
                 {% endif %}
@@ -53,11 +67,6 @@
                 for (var i = 0; i < 5; i++) {
                     setTimeout(function () {
                         confetti.addConfetti();
-                        confetti.addConfetti({
-                            emojis: ['🥚'],
-                            emojiSize: 50,
-                            confettiNumber: 5,
-                        });
                     }, i * 1500)
                 }
             </script>
@@ -102,15 +111,15 @@
                 </tr>
                 </thead>
                 <tbody>
-                {% for player in classification%}
+                {% for player in competition.classification.players %}
                     <tr>
                         <td>{{ player.position }}</td>
-                        <td>{{ player.username }}</td>
+                        <td>{{ player.user.name }}</td>
                         <td>{{ player.wins }}</td>
                         <td>{{ player.losses }}</td>
-                        <td>{{ player.keys_forged - player.keys_opponent_forged }}</td>
-                        <td>{{ player.keys_forged }}</td>
-                        <td>{{ player.keys_opponent_forged }}</td>
+                        <td>{{ player.pointsPositive - player.pointsNegative }}</td>
+                        <td>{{ player.pointsPositive }}</td>
+                        <td>{{ player.pointsNegative }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -121,40 +130,41 @@
         <div class="divider py-2"></div>
 
         <div class="row" style="margin: auto;">
-            {% for fixtureGroup in fixtures %}
+            {% for round,fixtureGroup in competition.fixtures.groupedByReference %}
                 <div class="divider py-2"></div>
-                <h6>{{ fixtureGroup.0.reference }}</h6>
+                <h6>{{ round }}</h6>
                 {% for fixture in fixtureGroup %}
                     <a class="btn btn-clear border col-12 col-sm-12 col-md-6 col-lg-6 overflow-wrap inline-block">
                         {% if fixture.games|length > 0 %}
                             <p>
-                                {% for game in fixture.games %}
-                                    {% if game.winner is same as fixture.users.0.id %}
+                                {% for gameId in fixture.games %}
+                                    {% set game = indexedGames[gameId.value] %}
+                                    {% if game.winner is same as fixture.players.0.id %}
                                         <div class="row">
-                                            <div class="col-4" data-toggle="tooltip" title="{{ indexedDecks[game.winnerDeck] }}">{{ fixture.users.0.name }}</div>
-                                            <div class="col-4">{{ game.score.winner_score }} - {{ game.score.loser_score }}</div>
-                                            <div class="col-4" data-toggle="tooltip" title="{{ indexedDecks[game.loserDeck] }}">{{ fixture.users.1.name }}</div>
+                                            <div class="col-4" data-toggle="tooltip" title="{{ indexedDecks[game.winner_deck] }}">{{ fixture.players.0.name }}</div>
+                                            <div class="col-4">{{ game.score }}</div>
+                                            <div class="col-4" data-toggle="tooltip" title="{{ indexedDecks[game.loser_deck] }}">{{ fixture.players.1.name }}</div>
                                         </div>
                                     {% else %}
                                         <div class="row">
-                                            <div class="col-4" data-toggle="tooltip" title="{{ indexedDecks[game.loserDeck] }}">{{ fixture.users.0.name }}</div>
-                                            <div class="col-4">{{ game.score.loser_score }} - {{ game.score.winner_score }}</div>
-                                            <div class="col-4" data-toggle="tooltip" title="{{ indexedDecks[game.winnerDeck] }}">{{ fixture.users.1.name }}</div>
+                                            <div class="col-4" data-toggle="tooltip" title="{{ indexedDecks[game.loser_deck] }}">{{ fixture.players.0.name }}</div>
+                                            <div class="col-4">{{ game.score }}</div>
+                                            <div class="col-4" data-toggle="tooltip" title="{{ indexedDecks[game.winner_deck] }}">{{ fixture.players.1.name }}</div>
                                         </div>
                                     {% endif %}
                                 {% endfor %}
                             </p>
                             <p>
                                 <div class="row">
-                                    <div class="col-12">{{ fixture.playedAt }}</div>
+                                    <div class="col-12">{{ fixture.playedAt|date('Y-m-d') }}</div>
                                 </div>
                             </p>
                         {% else %}
                             <p>
                                 <div class="row">
-                                    <div class="col-4">{{ fixture.users.0.name }}</div>
+                                    <div class="col-4">{{ fixture.players.0.name }}</div>
                                     <div class="col-4"> 0 - 0 </div>
-                                    <div class="col-4">{{ fixture.users.1.name }}</div>
+                                    <div class="col-4">{{ fixture.players.1.name }}</div>
                                 </div>
                             </p>
                         {% endif %}
@@ -163,10 +173,10 @@
                             {% if is_granted('ROLE_KEYFORGE') %}
                                 <p>
                                     <button type="button" class="btn btn-dark btn-xs" data-bs-toggle="modal" data-bs-target="#registerCompetitionGame"
-                                            data-player-one-name="{{ fixture.users.0.name }}"
-                                            data-player-two-name="{{ fixture.users.1.name }}"
-                                            data-player-one-id="{{ fixture.users.0.id }}"
-                                            data-player-two-id="{{ fixture.users.1.id }}"
+                                            data-player-one-name="{{ fixture.players.0.name }}"
+                                            data-player-two-name="{{ fixture.players.1.name }}"
+                                            data-player-one-id="{{ fixture.players.0.id }}"
+                                            data-player-two-id="{{ fixture.players.1.id }}"
                                             data-competition-name="{{ competition.name }}"
                                             data-fixture-ref="{{ fixture.reference }}"
                                             data-fixture-id="{{ fixture.id }}"
@@ -194,7 +204,7 @@
                         <div class="row">
                             <label for="winnerScore" class="form-label">{{ 'competition_detail.winner'|trans }}</label>
                             <div class="col-12">
-                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                <div class="btn-group btn-group-toggle w-100" data-toggle="buttons">
                                     <label class="btn btn-dark">
                                         <input class="form-check-input" type="radio" id="registerGameWinnerOption1" name="registerGameWinner" value="" autocomplete="off" checked>
                                         <label for="registerGameWinnerOption1" id="registerGameWinnerOption1Label"></label>
@@ -211,14 +221,12 @@
 
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="winnerDeck" class="form-label">{{ 'competition_detail.winner_deck'|trans }}</label>
-                                    <input class="form-control selector" list="winnerDeckOptions" id="winnerDeck" placeholder="{{ 'menu.type_to_search'|trans }}" name="winnerDeck" autocomplete="off" required>
-                                </div>
+                                <label for="winnerDeck" class="form-label">{{ 'competition_detail.winner_deck'|trans }}</label>
+                                <select id="winnerDeck" name="winnerDeck" class="form-select deckSelector"></select>
                             </div>
                             <div class="col-md-6">
                                 <label for="loserDeck" class="form-label">{{ 'competition_detail.loser_deck'|trans }}</label>
-                                <input class="form-control selector" list="loserDeckOptions" id="loserDeck" placeholder="{{ 'menu.type_to_search'|trans }}" name="loserDeck"  autocomplete="off" required>
+                                <select id="loserDeck" name="loserDeck" class="form-select deckSelector"></select>
                             </div>
                         </div>
 
@@ -262,34 +270,28 @@
                             </div>
                         </div>
 
+                        <div class="row mt-3">
+                            <div class="col-12">
+                                <label for="log" class="form-label">{{ 'game.log'|trans }}</label>
+                                <i class="bi bi-info-circle" data-toggle="tooltip" title="{{ 'menu.game_log_tooltip'|trans }}"></i>
+                                <textarea class="form-control" name="log" id="log" rows="3"></textarea>
+                            </div>
+                        </div>
+
                         <div class="divider py-1"></div>
 
                         <div>
-                            <datalist id="winnerDeckOptions">
-                                {% for winnerDeck in winnerDecks %}
-                                    <option data-value="{{ winnerDeck.id }}" value="{{ winnerDeck.name }}"> {{ winnerDeck.id }} </option>
-                                {% endfor %}
-                            </datalist>
-
-                            <datalist id="loserDeckOptions">
-                                {% for loserDeck in loserDecks %}
-                                    <option data-value="{{ loserDeck.id }}" value="{{ loserDeck.name }}"> {{ loserDeck.id }} </option>
-                                {% endfor %}
-                            </datalist>
-
                             <datalist id="firstTurnOptions"></datalist>
 
                             <input type="hidden" id="registerGameCompetitionName" value="">
                             <input type="hidden" id="registerGameFixtureRef" value="">
                             <input type="hidden" id="registerGameFixtureId" value="">
-                            <input type="hidden" id="hidden-winnerDeck" name="winnerId" value="">
-                            <input type="hidden" id="hidden-loserDeck" name="loserId" value="">
                             <input type="hidden" id="hidden-firstTurn" name="firstTurnId" value="">
                         </div>
 
                         <div class="divider py-1"></div>
 
-                        <button type="submit" id="registerGameSubmit" class="btn btn-block btn-dark" style="width: 100%">{{ 'competition_detail.save'|trans }}</button>
+                        <button type="submit" id="registerGameSubmit" class="btn btn-block btn-dark w-100">{{ 'competition_detail.save'|trans }}</button>
                     </form>
                 </div>
             </div>
@@ -319,8 +321,8 @@
                         </div>
 
                         <datalist id="competitionWinnerOptions">
-                            {% for userId in competition.users %}
-                                <option data-value="{{ indexedUsers[userId].id }}" value="{{ indexedUsers[userId].name }}"> {{ indexedUsers[userId].id }}</option>
+                            {% for user in competition.players %}
+                                <option data-value="{{ user.id }}" value="{{ user.name }}"> {{ user.id }}</option>
                             {% endfor %}
                         </datalist>
 
@@ -353,14 +355,15 @@
 
             let winnerId = $('input[name=registerGameWinner]:checked')[0].value;
             let loserId = $('input[name=registerGameWinner]:not(:checked)')[0].value;
-            let winnerDeck = $('#hidden-winnerDeck')[0].value;
-            let loserDeck = $('#hidden-loserDeck')[0].value;
+            let winnerDeck = $('#winnerDeck').val();
+            let loserDeck = $('#loserDeck').val();
             let firstTurn = $('#hidden-firstTurn')[0].value;
             let loserScore = $('input[name=loserScore]:checked')[0].value;
             let date = $('#datepicker')[0].value;
             let competitionName = $('#registerGameCompetitionName')[0].value;
             let fixtureRef = $('#registerGameFixtureRef')[0].value;
             let fixtureId = $('#registerGameFixtureId')[0].value;
+            let log = $('#log')[0].value;
 
             let url = '{{ path('keyforge_competition_game_create', {'fixtureId': '-fixtureId-'}) }}';
             url = url.replace('-fixtureId-', fixtureId);
@@ -380,6 +383,7 @@
                     'date': date,
                     'competition': 'LOCAL_LEAGUE',
                     'notes': competitionName + ' ' + fixtureRef,
+                    'log': log,
                 },
             }).done(function() {
                 $('#registerCompetitionGame').modal('hide');
@@ -393,6 +397,30 @@
                 method: 'POST',
                 data: {
                     'competitionId': $('#hiddenCompetitionId')[0].value,
+                },
+            }).done(function() {
+                location.reload();
+            });
+        });
+
+        $('#joinCompetition').click(function () {
+            $.post({
+                url: '{{ path('keyforge_competition_join') }}',
+                method: 'POST',
+                data: {
+                    'id': '{{ competition.id }}',
+                },
+            }).done(function() {
+                location.reload();
+            });
+        });
+
+        $('#leaveCompetition').click(function () {
+            $.post({
+                url: '{{ path('keyforge_competition_leave') }}',
+                method: 'POST',
+                data: {
+                    'id': '{{ competition.id }}',
                 },
             }).done(function() {
                 location.reload();
@@ -420,6 +448,51 @@
             });
         });
 
+        $('select').on('select2:open', function(e) {
+            const select2 = $(e.target).data('select2');
+
+            $('.select2-search--dropdown .select2-search__field').attr('placeholder', '{{ 'menu.type_to_search'|trans }}');
+
+            if (!select2.options.get('multiple')) {
+                select2.dropdown.$search.get(0).focus();
+            }
+        });
+
+        $('.deckSelector').select2({
+            theme: 'bootstrap-5',
+            dropdownParent: $('#registerCompetitionGame'),
+            ajax: {
+                url: '{{ path('keyforge_decks_json') }}',
+                minimumInputLength: 3,
+                data: function (params) {
+                    let query = {
+                        search: {
+                            'value': params.term,
+                        },
+                        'extraFilterDeckTypes': ['STANDARD'],
+                        'length': 20,
+                    };
+
+                    if ('' === params.term || undefined === params.term) {
+                        query.extraFilterOnlyOwned = true;
+                        query.extraFilterOnlyFriends = true;
+                        query.extraFilterOwner = '{{ app.user.id }}';
+                    }
+
+                    return query;
+                },
+                processResults: function (data) {
+                    $.each(data.data, function(i, d) {
+                        data.data[i]['text'] = d.name;
+                    });
+
+                    return {
+                        results: data.data
+                    };
+                }
+            }
+        });
+
         $('#registerCompetitionGame').on('show.bs.modal', function (event) {
             const button = $(event.relatedTarget);
             const playerOneName = button.data('player-one-name');
@@ -429,6 +502,11 @@
             const competitionName = button.data('competition-name');
             const fixtureRef = button.data('fixture-ref');
             const fixtureId = button.data('fixture-id');
+
+            $('#winnerDeck').val('');
+            $('#winnerDeck').trigger('change');
+            $('#loserDeck').val('');
+            $('#loserDeck').trigger('change');
 
             $('#registerGameWinnerOption1')[0].value = playerOneId;
             $('#registerGameWinnerOption2')[0].value = playerTwoId;

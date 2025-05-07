@@ -5,7 +5,6 @@
 
 <script>
     const forgeEvents = JSON.parse('{{ game.log.keysForged|json_encode|raw }}');
-
     const playerMap = {};
     let playerIndex = 0;
 
@@ -15,23 +14,7 @@
         }
     });
 
-    const keyColors = {
-        red: 'rgba(188,31,31,0.8)',
-        blue: 'rgba(0, 0, 255, 0.8)',
-        yellow: 'rgba(189,189,32,0.8)',
-    };
-
-    const dataPoints = forgeEvents.map(e => ({
-        x: e.turn.value,
-        y: playerMap[e.player],
-        borderWidth: 0,
-        player: e.player,
-        key: e.value,
-        keyColor: keyColors[e.value],
-        turn: '{{ 'menu.turn'|trans }}: ' + e.turn.value,
-        amberCost: '{{ 'menu.amber_cost'|trans }}: ' + e.amber_cost,
-        amberRemaining: '{{ 'menu.amber_remaining'|trans }}: ' + e.amber_remaining,
-    }));
+    const dataPoints = forgeDataPoints(forgeEvents, playerMap);
 
     const ctx = document.getElementById('timelineChart').getContext('2d');
 
@@ -40,7 +23,7 @@
         data: {
             datasets: [{
                 data: dataPoints,
-                pointRadius: 20,
+                pointRadius: 15,
                 pointStyle: 'circle',
                 backgroundColor: dataPoints.map(k => k.keyColor),
                 showLine: false,
@@ -64,27 +47,30 @@
             },
             scales: {
                 x: {
+                    title: {
+                        display: true,
+                        text: '{{ 'menu.turn'|trans }}',
+                    },
                     ticks: {
                         stepSize: 1,
-                        suggestedMin: 1,
-                        min: 1,
                     },
                     grid: {
-                        drawOnChartArea: false,
+                        drawOnChartArea: true,
                     },
                 },
                 y: {
                     ticks: {
                         callback: value => {
-                            const name = Object.entries(playerMap).find(([_, idx]) => idx === value);
+                            const name = Object.entries(playerMap).find(([_, idx]) => idx === value-0.5);
                             return name ? name[0] : '';
                         },
                         font: {
                             size: 14,
                             weight: 'bold',
+                            lineHeight: 2,
                         },
-                        stepSize: 0,
-                        padding: 10,
+                        stepSize: 1,
+                        padding: 15,
                     },
                     min: -0.5,
                     max: Object.keys(playerMap).length - 0.5,
@@ -95,4 +81,37 @@
             },
         },
     });
+
+    function forgeDataPoints(forgeEvents, playerMap) {
+        const keyColors = {
+            red: 'rgba(188, 31, 31, 0.8)',
+            blue: 'rgba(0, 0, 255, 0.8)',
+            yellow: 'rgba(189, 189, 32, 0.8)',
+        };
+
+        const dataPoints = forgeEvents.map(e => ({
+            x: e.turn.value,
+            y: playerMap[e.player],
+            borderWidth: 0,
+            player: e.player,
+            key: e.value,
+            keyColor: keyColors[e.value],
+            turn: '{{ 'menu.turn'|trans }}: ' + e.turn.value,
+            amberCost: '{{ 'menu.amber_cost'|trans }}: ' + e.amber_cost,
+            amberRemaining: '{{ 'menu.amber_remaining'|trans }}: ' + e.amber_remaining,
+        }));
+
+        const pointCount = {};
+
+        return dataPoints.map(p => {
+            const key = `${p.x}_${p.y}`;
+            if (!pointCount[key]) {
+                pointCount[key] = 0;
+            }
+            return {
+                ...p,
+                x: p.x + (pointCount[key]++) * 0.15,
+            };
+        });
+    }
 </script>

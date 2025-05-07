@@ -2,9 +2,9 @@ competition.best_of: 'Mejor de %count%'
 competition.competitions: Torneos
 competition.create: Crear
 competition.created: Creada
-competition.description: Description
+competition.description: Descripción
 competition.elimination: Eliminación
-competition.end: Terminar
+competition.end: Fin
 competition.games_count: '%count% partida|%count% partidas'
 competition.id: Id
 competition.name: Nombre
@@ -15,7 +15,7 @@ competition.ref: Ref
 competition.round_robin: 'Round robin (%count% ronda)|Round robin (%count% rondas)'
 competition.round_robin_elimination: 'Round robin (%count% ronda) y eliminación|Round robin (%count% rondas) y eliminación'
 competition.save: Guardar
-competition.start: Empezar
+competition.start: Inicio
 competition.type: Tipo
 competition.winner: Ganador
 competition_detail.champion: 'Campeón %player% oleee!'
@@ -422,3 +422,14 @@ wiki.tag_criteria.high_efficiency: Mide los efectos que te permiten jugar cartas
 wiki.tag_criteria.high_effective_power: Poder real usable de las criaturas de la baraja. Para criaturas que muchas veces no pueden ser jugadas o usadas se reduce. El poder efectivo tambien tiene en cuenta armadura y otras habilidades que afectan a la supervivencia como elusivo, escaramuza, dañino, asalto y curaciones
 wiki.tag_criteria.high_expected_amber: 'Cuanto ambar puedes esperar generar. No tiene en cuenta el cosechado de criaturas a no ser que tengan habilidades especiales como "Cosecha: Gana 1 Amber". El ambar base de algunas cartas dificiles de jugar se ha reducido, y se ha incrementado para otras cartas que permiten el uso inmediato de criaturas.'
 menu.avg_stats_by_house: Media de estadísticas por set
+competition.visibility: Visibilidad
+competition.visibility.public: Pública
+competition.visibility.friends: Solo amigos
+competition.visibility.private: Privada
+competition.round: Jornada
+competition.error.not_found: Competición no encontrada
+competition.error.not_started: Competición no iniciada
+competition.error.already_started: Competición ya iniciada
+competition.error.already_finished: Competición ya finalizada
+menu.join: Unirse
+menu.leave: Salir

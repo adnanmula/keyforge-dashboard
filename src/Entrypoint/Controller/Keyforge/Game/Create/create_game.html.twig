@@ -16,12 +16,6 @@
         })
     </script>
 
-{#    <div class="row">#}
-{#        <div>#}
-{#            <a id="importGame" style="position: fixed; bottom: 20px; left: 20px; z-index: 99999" class="btn btn-dark"><i class="bi bi-clipboard-plus"></i></a>#}
-{#        </div>#}
-{#    </div>#}
-
     <div class="shadow-lg p-3 mb-5 bg-white rounded">
         <form id="createGame" action="{{ path('keyforge_game_create') }}" method="post">
             <div class="row">
@@ -284,53 +278,6 @@
             $('#competition').trigger('change');
         }
 
-        {#$('#importGame').click(function(event) {#}
-        {#    const data = window.prompt('{{ 'menu.import_game'|trans }}').split('|');#}
-
-        {#    if (data.length !== 7) {#}
-        {#        alert('{{ 'error.invalid_format'|trans }}');#}
-        {#    }#}
-
-        {#    const playerName = data[0];#}
-        {#    const deckId = data[1];#}
-        {#    const opponentName = data[2];#}
-        {#    const opponentDeckId = data[3];#}
-        {#    const score = parseInt(data[4]);#}
-        {#    const opponentScore = parseInt(data[5]);#}
-        {#    const firstPlayer = data[6];#}
-
-        {#    if (score > 3 || score < 0 || opponentScore > 3 || opponentScore < 0 || (score !== 3 && opponentScore !== 3)) {#}
-        {#        alert('{{ 'error.invalid_result'|trans }}');#}
-        {#        return;#}
-        {#    }#}
-
-        {#    if (score === 3) {#}
-        {#        $('#winner')[0].value = playerName;#}
-        {#        $('#winnerDeck')[0].value = deckId;#}
-        {#        $('#loser')[0].value = opponentName;#}
-        {#        $('#loserDeck')[0].value = opponentDeckId;#}
-
-        {#        $('input[name="loserScore"][value="0"]')[0].checked = false;#}
-        {#        $('input[name="loserScore"][value="1"]')[0].checked = false;#}
-        {#        $('input[name="loserScore"][value="2"]')[0].checked = false;#}
-        {#        $('input[name="loserScore"][value="' + opponentScore + '"]')[0].checked = true;#}
-        {#    } else {#}
-        {#        $('#winner')[0].value = opponentName;#}
-        {#        $('#winnerDeck')[0].value = opponentDeckId;#}
-        {#        $('#loser')[0].value = playerName;#}
-        {#        $('#loserDeck')[0].value = deckId;#}
-
-        {#        $('input[name="loserScore"][value="0"]')[0].checked = false;#}
-        {#        $('input[name="loserScore"][value="1"]')[0].checked = false;#}
-        {#        $('input[name="loserScore"][value="2"]')[0].checked = false;#}
-        {#        $('input[name="loserScore"][value="' + score + '"]')[0].checked = true;#}
-        {#    }#}
-
-        {#    $('#firstTurn')[0].value = firstPlayer;#}
-
-        {#    refreshFirstPlayerInput();#}
-        {#});#}
-
         $('select').on('select2:open', function(e) {
             const select2 = $(e.target).data('select2');
 
@@ -395,6 +342,7 @@
                         search: {
                             'value': params.term,
                         },
+                        'extraFilterDeckTypes': ['STANDARD'],
                         'length': 20,
                     };
 

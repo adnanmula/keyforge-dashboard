@@ -20,6 +20,7 @@ final readonly class CreateCompetitionGameCommand
     private(set) KeyforgeCompetition $competition;
     private(set) string $notes;
     private(set) Uuid $fixtureId;
+    private(set) ?string $log;
 
     public function __construct(
         $winner,
@@ -34,6 +35,7 @@ final readonly class CreateCompetitionGameCommand
         $competition,
         $notes,
         $fixtureId,
+        $log,
     ) {
         Assert::lazy()
             ->that($winner, 'winner')->uuid()
@@ -48,6 +50,7 @@ final readonly class CreateCompetitionGameCommand
             ->that($competition, 'competition')->inArray(KeyforgeCompetition::values())
             ->that($notes, 'notes')->string()->maxLength(512)
             ->that($fixtureId, 'competitionId')->uuid()
+            ->that($log, 'log')->nullOr()->string()
             ->verifyNow();
 
         if (null !== $firstTurn && $firstTurn !== $winner && $firstTurn !== $loser) {
@@ -66,5 +69,6 @@ final readonly class CreateCompetitionGameCommand
         $this->competition = KeyforgeCompetition::fromName($competition);
         $this->notes = $notes;
         $this->fixtureId = Uuid::from($fixtureId);
+        $this->log = $log;
     }
 }

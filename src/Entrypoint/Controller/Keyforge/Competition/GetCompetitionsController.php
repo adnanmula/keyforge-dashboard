@@ -3,6 +3,7 @@
 namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\Competition;
 
 use AdnanMula\Cards\Application\Query\Keyforge\Competition\GetCompetitionsQuery;
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\UserRole;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,7 +12,7 @@ final class GetCompetitionsController extends Controller
 {
     public function __invoke(Request $request): JsonResponse
     {
-        $this->assertIsLogged();
+        $this->getUserWithRole(UserRole::ROLE_KEYFORGE);
 
         $result = $this->extractResult(
             $this->bus->dispatch(new GetCompetitionsQuery(

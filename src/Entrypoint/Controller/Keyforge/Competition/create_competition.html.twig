@@ -10,10 +10,10 @@
     <div class="shadow-lg p-3 mb-5 bg-white rounded">
         <form action="{{ path('keyforge_competition_create') }}" method="post">
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-12 col-md-6">
                     <div class="form-group">
                         <label for="type" class="form-label">{{ 'competition.type'|trans }}</label>
-                        <select class="form-select" name="type" id="type">
+                        <select class="form-select competitionSelect" name="type" id="type">
                             <option value="ROUND_ROBIN_1" selected>{{ 'competition.round_robin'|trans({'%count%': 1}) }}</option>
                             <option value="ROUND_ROBIN_2">{{ 'competition.round_robin'|trans({'%count%': 2}) }}</option>
                             <option value="ROUND_ROBIN_3">{{ 'competition.round_robin'|trans({'%count%': 3}) }}</option>
@@ -24,15 +24,10 @@
                         </select>
                     </div>
                 </div>
-            </div>
-
-            <div class="divider py-1"></div>
-
-            <div class="row">
-                <div class="col-md-12">
+                <div class="col-12 col-md-6">
                     <div class="form-group">
                         <label for="type" class="form-label">{{ 'competition.pairings'|trans }}</label>
-                        <select class="form-select" name="fixtures_type" id="fixtures_type">
+                        <select class="form-select competitionSelect" name="fixtures_type" id="fixtures_type">
                             <option value="BEST_OF_1" selected>{{ 'competition.best_of'|trans({'%count%': 1}) }}</option>
                             <option value="BEST_OF_3">{{ 'competition.best_of'|trans({'%count%': 3}) }}</option>
                             <option value="BEST_OF_5">{{ 'competition.best_of'|trans({'%count%': 5}) }}</option>
@@ -43,27 +38,23 @@
                 </div>
             </div>
 
-            <div class="divider py-1"></div>
-
-            <div class="row">
-                <div class="col-md-12">
+            <div class="row mt-3">
+                <div class="col-12">
                     <div class="form-group">
                         <label for="name" class="form-label">{{ 'competition.name'|trans }}</label>
-                        <input type="text" class="form-control" id="name" name="name">
+                        <input type="text" class="form-control" id="name" name="name" required>
                     </div>
                 </div>
             </div>
 
-            <div class="divider py-1"></div>
-
-            <div class="row">
+            <div class="row mt-3">
                 <div class="col-12">
                     <div class="form-group">
-                        <label for="users" class="form-label">{{ 'competition.players'|trans }}</label>
-                        <select id="users" name="users[]">
-                            {% for user in users %}
-                                <option value="{{ user.id }}"> {{ user.name }} </option>
-                            {% endfor %}
+                        <label for="type" class="form-label">{{ 'competition.visibility'|trans }}</label>
+                        <select class="form-select competitionSelect" name="visibility" id="visibility">
+                            <option value="PUBLIC" disabled>{{ 'competition.visibility.public'|trans }}</option>
+                            <option value="FRIENDS" disabled>{{ 'competition.visibility.friends'|trans }}</option>
+                            <option value="PRIVATE" selected>{{ 'competition.visibility.private'|trans }}</option>
                         </select>
                     </div>
                 </div>
@@ -76,11 +67,9 @@
                 </div>
             </div>
 
-            <div class="divider py-1"></div>
-
             <div class="row mt-3">
                 <div class="col-md-12">
-                    <button type="submit" class="btn btn-block btn-dark w-100">{{ 'competition.save'|trans }}</button>
+                    <button type="submit" class="btn btn-block btn-dark w-100">{{ 'competition.create'|trans }}</button>
                 </div>
             </div>
         </form>
@@ -88,17 +77,10 @@
 
     <script>
         $(document).ready(function(){
-            $('#users').select2({
-                multiple: true,
-                closeOnSelect: false,
-                allowClear: true,
-                placeholder: '',
+            $('.competitionSelect').select2({
                 theme: 'bootstrap-5',
-                width: '100%'
+                minimumResultsForSearch: Infinity,
             });
-
-            $("#users").val("")
-            $("#users").trigger("change");
         });
     </script>
 {% endblock %}

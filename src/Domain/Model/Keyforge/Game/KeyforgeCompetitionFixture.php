@@ -2,78 +2,33 @@
 
 namespace AdnanMula\Cards\Domain\Model\Keyforge\Game;
 
-use AdnanMula\Cards\Domain\Model\Shared\ValueObject\CompetitionFixtureType;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
+use AdnanMula\Tournament\Fixture\Fixture;
+use AdnanMula\Tournament\Fixture\FixtureType;
+use AdnanMula\Tournament\User;
 
-final class KeyforgeCompetitionFixture implements \JsonSerializable
+final class KeyforgeCompetitionFixture extends Fixture
 {
+    /** @param array<User> $players */
     public function __construct(
-        private Uuid $id,
-        private Uuid $competitionId,
-        private string $reference,
-        private array $users,
-        private CompetitionFixtureType $type,
-        private int $position,
-        private \DateTimeImmutable $createdAt,
-        private ?\DateTimeImmutable $playedAt,
-        private ?Uuid $winner,
-        private array $games,
-    ) {}
-
-    public function id(): Uuid
-    {
-        return $this->id;
-    }
-
-    public function competitionId(): Uuid
-    {
-        return $this->competitionId;
-    }
-
-    public function reference(): string
-    {
-        return $this->reference;
-    }
-
-    public function users(): array
-    {
-        return $this->users;
-    }
-
-    public function type(): CompetitionFixtureType
-    {
-        return $this->type;
-    }
-
-    public function position(): int
-    {
-        return $this->position;
-    }
-
-    public function createdAt(): \DateTimeImmutable
-    {
-        return $this->createdAt;
-    }
-
-    public function playedAt(): ?\DateTimeImmutable
-    {
-        return $this->playedAt;
-    }
-
-    public function winner(): ?Uuid
-    {
-        return $this->winner;
+        private(set) Uuid $id,
+        private(set) Uuid $competitionId,
+        private(set) ?Uuid $winner,
+        private(set) array $games,
+        string $reference,
+        array $players,
+        FixtureType $type,
+        int $position,
+        \DateTimeImmutable $createdAt,
+        ?\DateTimeImmutable $playedAt,
+    ) {
+        parent::__construct($reference, $players, $type, $position, $createdAt, $playedAt);
     }
 
     /** @return array<Uuid> */
     public function games(): array
     {
         return $this->games;
-    }
-
-    public function updatePlayedAt(\DateTimeImmutable $at): void
-    {
-        $this->playedAt = $at;
     }
 
     public function updateWinner(?Uuid $id): void
@@ -93,17 +48,14 @@ final class KeyforgeCompetitionFixture implements \JsonSerializable
 
     public function jsonSerialize(): array
     {
-        return [
-            'id' => $this->id()->value(),
-            'competition_id' => $this->competitionId()->value(),
-            'reference' => $this->reference(),
-            'users' => \array_map(static fn (Uuid $id): string => $id->value(), $this->users()),
-            'type' => $this->type()->name,
-            'position' => $this->position(),
-            'createdAt' => $this->createdAt()->format(\DateTimeInterface::ATOM),
-            'playedAt' => $this->playedAt()?->format('Y-m-d'),
-            'winner' => $this->winner()?->value(),
-            'games' => \array_map(static fn (Uuid $id): string => $id->value(), $this->games),
-        ];
+        return array_merge(
+            parent::jsonSerialize(),
+            [
+                'id' => $this->id,
+                'competitionId' => $this->competitionId,
+                'winner' => $this->winner,
+                'games' => $this->games,
+            ],
+        );
     }
 }

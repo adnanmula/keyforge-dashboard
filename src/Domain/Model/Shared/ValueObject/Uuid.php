@@ -22,6 +22,12 @@ class Uuid extends StringValueObject
         return new static(VendorUuid::fromString($value)->toString());
     }
 
+    /** @return array<self> */
+    public static function fromArray(string ...$strings): array
+    {
+        return array_map(static fn (string $v): self => self::from($v), $strings);
+    }
+
     public static function v4(): static
     {
         return new static(VendorUuid::uuid4()->toString());
@@ -29,7 +35,7 @@ class Uuid extends StringValueObject
 
     public static function null(): static
     {
-        return new static(VendorUuid::fromString(self::NULL_UUID)->toString());
+        return new static(self::NULL_UUID);
     }
 
     public static function isValid(string $uuid): bool
