@@ -432,3 +432,5 @@ competition.error.already_started: Competition already started
 competition.error.already_finished: Competition already finished
 menu.join: Join
 menu.leave: Leave
+menu.extra_turns: Extra turns
+game.timeline.extra_turn: To take an extra turn after this one

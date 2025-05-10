@@ -173,6 +173,9 @@
                         actions.push('{{ 'game.timeline.used'|trans }} ' + event.trigger + ' {{ 'game.timeline.to_reap_with'|trans|lower }} ' + event.value);
                     }
                     break;
+                case 'EXTRA_TURN':
+                    actions.push('{{ 'game.timeline.used'|trans }} ' + event.trigger + ' {{ 'game.timeline.extra_turn'|trans|lower }}');
+                    break;
             }
         })
 

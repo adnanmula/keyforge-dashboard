@@ -23,4 +23,5 @@
     {% include 'Keyforge/Game/Detail/game_stat_comparison_row.html.twig' with {label: 'menu.fights'|trans, left: winner.fights.count, right: loser.fights.count, extraLeft: '', extraRight: '' } %}
     {% include 'Keyforge/Game/Detail/game_stat_comparison_row.html.twig' with {label: 'menu.reaps'|trans, left: winner.reaps.count, right: loser.reaps.count, extraLeft: '', extraRight: '' } %}
     {% include 'Keyforge/Game/Detail/game_stat_comparison_row.html.twig' with {label: 'menu.keys_forged'|trans, left: winner.keysForged.count, right: loser.keysForged.count, extraLeft: '', extraRight: '' } %}
+    {% include 'Keyforge/Game/Detail/game_stat_comparison_row.html.twig' with {label: 'menu.extra_turns'|trans, left: winner.extraTurns.total, right: loser.extraTurns.total, extraLeft: '', extraRight: '' } %}
 </div>

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "db94af6215ffda357e506332c910af48",
+    "content-hash": "b9834375a5185ce86b1ea291b1d6fc96",
     "packages": [
         {
             "name": "adnanmula/criteria",
@@ -55,16 +55,16 @@
         },
         {
             "name": "adnanmula/keyforge-game-log-parser",
-            "version": "0.1.2",
+            "version": "0.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/adnanmula/keyforge-game-log-parser.git",
-                "reference": "933454c6203edb7fb1734a9561a6f618016b06f8"
+                "reference": "2e02881a5c509445503d2957c50878d027a30f61"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/adnanmula/keyforge-game-log-parser/zipball/933454c6203edb7fb1734a9561a6f618016b06f8",
-                "reference": "933454c6203edb7fb1734a9561a6f618016b06f8",
+                "url": "https://api.github.com/repos/adnanmula/keyforge-game-log-parser/zipball/2e02881a5c509445503d2957c50878d027a30f61",
+                "reference": "2e02881a5c509445503d2957c50878d027a30f61",
                 "shasum": ""
             },
             "require": {
@@ -75,7 +75,7 @@
             "require-dev": {
                 "adnanmula/coding-standard": "^0.0.10",
                 "phpro/grumphp": "^2.5",
-                "phpstan/phpstan": "^1.10",
+                "phpstan/phpstan": "^2",
                 "phpunit/phpunit": "^11.0",
                 "symfony/var-dumper": "^7.0"
             },
@@ -97,9 +97,9 @@
             ],
             "support": {
                 "issues": "https://github.com/adnanmula/keyforge-game-log-parser/issues",
-                "source": "https://github.com/adnanmula/keyforge-game-log-parser/tree/0.1.2"
+                "source": "https://github.com/adnanmula/keyforge-game-log-parser/tree/0.1.3"
             },
-            "time": "2025-04-25T18:45:33+00:00"
+            "time": "2025-05-10T08:26:34+00:00"
         },
         {
             "name": "adnanmula/tournament",
