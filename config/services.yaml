@@ -11,6 +11,7 @@ services:
       Doctrine\DBAL\Connection $defaultConnection: '@repository.dbal.connection_default'
       Doctrine\DBAL\Connection $connection: '@repository.dbal.connection'
       Psr\Log\LoggerInterface $userActivityLogger: '@monolog.logger.user_activity'
+      bool $registrationClosed: '%env(REGISTRATION_CLOSED)%'
 
   AdnanMula\Cards\Application\Command\:
     resource: '../src/Application/Command/*/*/*/*Handler.php'
