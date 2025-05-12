@@ -186,6 +186,7 @@
                     render: function (data, type, row) {
                         const locale = '{{ app.locale }}';
                         let tagsJson = JSON.parse('{{ tags|json_encode|raw }}');
+                        let privateTagsJson = JSON.parse('{{ privateTags|json_encode|raw }}');
 
                         let tags = [];
 
@@ -206,7 +207,7 @@
                         });
 
                         row.user_tags.forEach(function (tagId) {
-                            tagsJson.forEach(function (item) {
+                            privateTagsJson.forEach(function (item) {
                                 if (tagId === item.id) {
                                     const tag = '<button type="button" class="btn btn-xs customTag" data-type="' + item.type + '" data-value="' + item.name
                                         + '" style="margin: 1px; background-color: ' + item.style.color_bg + '; color: ' + item.style.color_text + '; border-color: ' + item.style.color_outline + showCustom + '">'
