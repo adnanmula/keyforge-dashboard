@@ -53,24 +53,28 @@ final readonly class UpdateDeckWinRateService
                 if ($game->winner()->value() === $userId && $game->winnerDeck()->value() === $deck->id()->value()) {
                     $winStats[$userId]['wins']++;
 
-                    if (\in_array($game->loser()->value(), $players, true)) {
-                        $winStats[$userId]['winsVsUser']++;
-                    }
+                    if (false === $game->isSoloPlay()) {
+                        if (\in_array($game->loser()->value(), $players, true)) {
+                            $winStats[$userId]['winsVsUser']++;
+                        }
 
-                    if (\in_array($game->loser()->value(), $hisFriends, true)) {
-                        $winStats[$userId]['winsVsFriends']++;
+                        if (\in_array($game->loser()->value(), $hisFriends, true)) {
+                            $winStats[$userId]['winsVsFriends']++;
+                        }
                     }
                 }
 
                 if ($game->loser()->value() === $userId && $game->loserDeck()->value() === $deck->id()->value()) {
                     $winStats[$userId]['losses']++;
 
-                    if (\in_array($game->winner()->value(), $players, true)) {
-                        $winStats[$userId]['lossesVsUser']++;
-                    }
+                    if (false === $game->isSoloPlay()) {
+                        if (\in_array($game->winner()->value(), $players, true)) {
+                            $winStats[$userId]['lossesVsUser']++;
+                        }
 
-                    if (\in_array($game->winner()->value(), $hisFriends, true)) {
-                        $winStats[$userId]['lossesVsFriends']++;
+                        if (\in_array($game->winner()->value(), $hisFriends, true)) {
+                            $winStats[$userId]['lossesVsFriends']++;
+                        }
                     }
                 }
             }
