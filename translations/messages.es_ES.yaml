@@ -421,7 +421,7 @@ wiki.tag_criteria.high_amber_control: Representa la camtidad de ámbar que la ba
 wiki.tag_criteria.high_efficiency: Mide los efectos que te permiten jugar cartas extra. Se reduce por cartas que impiden jugar o robar cartas, como cartas que dan cadenas o Bad Penny
 wiki.tag_criteria.high_effective_power: Poder real usable de las criaturas de la baraja. Para criaturas que muchas veces no pueden ser jugadas o usadas se reduce. El poder efectivo tambien tiene en cuenta armadura y otras habilidades que afectan a la supervivencia como elusivo, escaramuza, dañino, asalto y curaciones
 wiki.tag_criteria.high_expected_amber: 'Cuanto ambar puedes esperar generar. No tiene en cuenta el cosechado de criaturas a no ser que tengan habilidades especiales como "Cosecha: Gana 1 Amber". El ambar base de algunas cartas dificiles de jugar se ha reducido, y se ha incrementado para otras cartas que permiten el uso inmediato de criaturas.'
-menu.avg_stats_by_house: Media de estadísticas por set
+menu.avg_stats_by_set: Media de estadísticas por set
 competition.visibility: Visibilidad
 competition.visibility.public: Pública
 competition.visibility.friends: Solo amigos

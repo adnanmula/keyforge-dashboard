@@ -44,7 +44,7 @@ final readonly class UpdateDeckWinRateService
 
         foreach (\array_keys($winStats) as $userId) {
             foreach ($games as $game) {
-                if (false === $game->approved() || $game->isSoloPlay()|| $game->isMirror()) {
+                if (false === $game->approved() || $game->isMirror()) {
                     continue;
                 }
 
