@@ -13,4 +13,6 @@ enum KeyforgeCardType: string implements \JsonSerializable
     case ARTIFACT = 'ARTIFACT';
     case UPGRADE = 'UPGRADE';
     case TOKENCREATURE = 'TOKENCREATURE';
+    case PROPHECY = 'PROPHECY';
+    case ARCHONPOWER = 'ARCHONPOWER';
 }
