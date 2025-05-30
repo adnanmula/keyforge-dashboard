@@ -39,14 +39,39 @@ final readonly class KeyforgeCards implements \JsonSerializable
         $extraCards = [];
 
         if (\array_key_exists('tokenInfo', $deck)) {
-            $urlPieces = explode('/', $deck['tokenInfo']['nameUrl']);
-            $serializedName = explode('.', end($urlPieces))[0];
+            $serializedName = self::nameFromUrl($deck['tokenInfo']['nameUrl']);
 
             $extraCards[] = [
                 'name' => $deck['tokenInfo']['name'],
                 'serializedName' => $serializedName,
                 'type' => 'token-creature',
                 'imageUrl' => $deck['tokenInfo']['nameUrl'],
+            ];
+        }
+
+        if (\array_key_exists('prophecies', $deck)) {
+            foreach ($deck['prophecies'] as $prophecy) {
+                $serializedName = self::nameFromUrl($prophecy['cardTitleUrl']);
+
+                $extraCards[] = [
+                    'name' => $prophecy['cardTitle'],
+                    'serializedName' => $serializedName,
+                    'type' => 'prophecy',
+                    'imageUrl' => $prophecy['cardTitleUrl'],
+                ];
+            }
+        }
+
+        if (\array_key_exists('archonPower', $deck)) {
+            $archonPowerCard = $deck['archonPower'];
+
+            $serializedName = self::nameFromUrl($archonPowerCard['cardTitleUrl']);
+
+            $extraCards[] = [
+                'name' => $archonPowerCard['cardTitle'],
+                'serializedName' => $serializedName,
+                'type' => 'archon-power',
+                'imageUrl' => $archonPowerCard['cardTitleUrl'],
             ];
         }
 
@@ -103,5 +128,12 @@ final readonly class KeyforgeCards implements \JsonSerializable
         }
 
         return null;
+    }
+
+    private static function nameFromUrl(string $url): string
+    {
+        $urlPieces = explode('/', $url);
+
+        return explode('.', end($urlPieces))[0];
     }
 }

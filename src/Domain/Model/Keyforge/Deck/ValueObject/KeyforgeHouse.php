@@ -25,6 +25,8 @@ enum KeyforgeHouse: string implements \JsonSerializable
     case KEYRAKEN = 'KEYRAKEN';
     case IRONIX_REBELS = 'IRONIX_REBELS';
     case ELDERS = 'ELDERS';
+    case PROPHECY = 'PROPHECY';
+    case ARCHON_POWER = 'ARCHON_POWER';
 
     public static function fromDokName(string $house): self
     {
@@ -38,6 +40,10 @@ enum KeyforgeHouse: string implements \JsonSerializable
 
         if ($house === 'IronyxRebels') {
             return self::IRONIX_REBELS;
+        }
+
+        if ($house === 'ArchonPower') {
+            return self::ARCHON_POWER;
         }
 
         throw new \InvalidArgumentException($house);
@@ -63,6 +69,8 @@ enum KeyforgeHouse: string implements \JsonSerializable
             self::KEYRAKEN => 'Keyraken',
             self::IRONIX_REBELS => 'Ironix Rebels',
             self::ELDERS => 'Elders',
+            self::PROPHECY => 'Prophecy',
+            self::ARCHON_POWER => 'Archon power',
         };
     }
 
@@ -86,13 +94,15 @@ enum KeyforgeHouse: string implements \JsonSerializable
             self::KEYRAKEN => 'Keyraken',
             self::IRONIX_REBELS => 'IronixRebels',
             self::ELDERS => 'Elders',
+            self::PROPHECY => 'Prophecy',
+            self::ARCHON_POWER => 'ArchonPower',
         };
     }
 
     public function isEnabled(): bool
     {
         return match ($this) {
-            self::KEYRAKEN, self::IRONIX_REBELS, self::ELDERS => false,
+            self::KEYRAKEN, self::IRONIX_REBELS, self::ELDERS, self::PROPHECY, self::ARCHON_POWER => false,
             default => true,
         };
     }

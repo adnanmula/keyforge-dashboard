@@ -113,6 +113,7 @@ set.full.VM25: Vault Masters 25
 set.full.MoM: More Mutation
 set.full.ToC: Tokens of Change
 set.full.DIS: Discovery
+set.full.CC: Crucible Clash
 deck_comparison.aerc: Aerc
 deck_comparison.all: All
 deck_comparison.amberControl: Amber control
@@ -191,6 +192,8 @@ keyforge.set_vm25: VM25
 keyforge.set_wc: WC
 keyforge.set_woe: WoE
 keyforge.set_dis: DIS
+keyforge.set_pv: PV
+keyforge.set_cc: CC
 locale.en: English
 locale.es: Spanish
 menu.deck_type: 'Deck type'
@@ -435,3 +438,6 @@ menu.join: Join
 menu.leave: Leave
 menu.extra_turns: Extra turns
 game.timeline.extra_turn: To take an extra turn after this one
+deck.archon-power: Archon Power
+deck.prophecy: Prophecy
+deck.prophecies: Prophecies

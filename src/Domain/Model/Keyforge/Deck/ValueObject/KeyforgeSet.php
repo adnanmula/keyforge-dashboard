@@ -26,6 +26,7 @@ enum KeyforgeSet: string
     case MoM = 'MoM';
     case ToC = 'ToC';
     case DIS = 'DIS';
+    case CC = 'CC';
 
     case ANOMALY_EXPANSION = 'ANOMALY_EXPANSION';
     case MARTIAN_CIVIL_WAR = 'MARTIAN_CIVIL_WAR';
@@ -52,6 +53,7 @@ enum KeyforgeSet: string
             self::ToC => 'Tokens of change',
             self::MoM => 'More Mutation',
             self::DIS => 'Discovery',
+            self::CC => 'Crucible Clash',
         };
     }
 
@@ -77,6 +79,7 @@ enum KeyforgeSet: string
             'TOKENS_OF_CHANGE' => self::ToC,
             'MORE_MUTATION' => self::MoM,
             'DISCOVERY' => self::DIS,
+            'CRUCIBLE_CLASH' => self::CC,
             default => throw new \InvalidArgumentException($set),
         };
     }
@@ -84,7 +87,7 @@ enum KeyforgeSet: string
     public function isMain(): bool
     {
         return match ($this) {
-            self::U22, self::VM23, self::VM24, self::VM25, self::M24, self::MARTIAN_CIVIL_WAR, self::ToC, self::MoM, self::DIS => false,
+            self::U22, self::VM23, self::VM24, self::VM25, self::M24, self::MARTIAN_CIVIL_WAR, self::ToC, self::MoM, self::DIS, self::CC => false,
             default => true,
         };
     }
@@ -92,7 +95,7 @@ enum KeyforgeSet: string
     public function isEnabled(): bool
     {
         return match ($this) {
-            self::ANOMALY_EXPANSION, self::MARTIAN_CIVIL_WAR, self::PV => false,
+            self::ANOMALY_EXPANSION, self::MARTIAN_CIVIL_WAR => false,
             default => true,
         };
     }

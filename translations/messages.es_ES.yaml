@@ -113,6 +113,7 @@ set.full.VM25: Vault Masters 25
 set.full.MoM: More Mutation
 set.full.ToC: Tokens of Change
 set.full.DIS: Discovery
+set.full.CC: Crucible Clash
 deck_comparison.aerc: Aerc
 deck_comparison.all: Todos
 deck_comparison.amberControl: Control de ámbar
@@ -191,6 +192,8 @@ keyforge.set_vm25: VM25
 keyforge.set_wc: WC
 keyforge.set_woe: WoE
 keyforge.set_dis: DIS
+keyforge.set_pv: PV
+keyforge.set_cc: CC
 locale.en: Inglés
 locale.es: Español
 menu.deck_type: 'Tipo de baraja'
@@ -435,3 +438,6 @@ menu.join: Unirse
 menu.leave: Salir
 menu.extra_turns: Turnos extra
 game.timeline.extra_turn: Para tomar un turno adicional después de este
+deck.archon-power: Archon Power
+deck.prophecy: Profecía
+deck.prophecies: Profecías
