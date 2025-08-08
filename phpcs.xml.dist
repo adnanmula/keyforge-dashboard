@@ -10,7 +10,7 @@
   <exclude-pattern>/phinx.php</exclude-pattern>
 
   <rule ref="vendor/adnanmula/coding-standard/src/ruleset.xml">
-      <exclude name="SlevomatCodingStandard.TypeHints.UnionTypeHintFormat" />
+      <exclude name="SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter" />
   </rule>
 
   <rule ref="PSR1.Methods.CamelCapsMethodName.NotCamelCaps">

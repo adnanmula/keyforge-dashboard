@@ -10,9 +10,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 final class FeatureContext implements Context
 {
-    private KernelInterface $kernel;
-
-    public function __construct(KernelInterface $kernel)
+    public function __construct(private KernelInterface $kernel)
     {
         $this->kernel = $kernel;
     }

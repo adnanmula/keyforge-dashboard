@@ -27,7 +27,6 @@ use Assert\Assert;
 final readonly class GetDecksQuery extends CriteriaQuery
 {
     private(set) ?Uuid $deckId;
-    private(set) ?string $owner;
     private(set) ?Uuid $onlyFriends;
 
     public function __construct(
@@ -42,7 +41,7 @@ final readonly class GetDecksQuery extends CriteriaQuery
         ?array $housesExcluded = null,
         ?array $deckTypes = null,
         ?string $deckId = null,
-        ?string $owner = null,
+        private(set) ?string $owner = null,
         array $owners = [],
         bool $onlyOwned = false,
         ?string $tagFilterType = null,
@@ -84,7 +83,6 @@ final readonly class GetDecksQuery extends CriteriaQuery
             ->verifyNow();
 
         $this->deckId = null !== $deckId ? Uuid::from($deckId) : null;
-        $this->owner = $owner;
         $this->onlyFriends = null === $onlyFriends ? null : Uuid::from($onlyFriends);
 
         $filters = [];

@@ -142,9 +142,9 @@ readonly class GenerateDeckAlliancesCommandHandler
 
         $combinations = [];
 
-        for ($i = 0; $i < $count - 2; $i++) {
-            for ($j = $i + 1; $j < $count - 1; $j++) {
-                for ($k = $j + 1; $k < $count; $k++) {
+        for ($i = 0; $i < $count - 2; ++$i) {
+            for ($j = $i + 1; $j < $count - 1; ++$j) {
+                for ($k = $j + 1; $k < $count; ++$k) {
                     $house1 = $data[$i]['house'];
                     $house2 = $data[$j]['house'];
                     $house3 = $data[$k]['house'];

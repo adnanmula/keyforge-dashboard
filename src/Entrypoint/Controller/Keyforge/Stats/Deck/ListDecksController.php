@@ -26,21 +26,15 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class ListDecksController extends Controller
 {
-    private UserRepository $userRepository;
-    private KeyforgeUserRepository $kfUserRepository;
-
     public function __construct(
         MessageBusInterface $bus,
         Security $security,
         LocaleSwitcher $localeSwitcher,
         TranslatorInterface $translator,
         LoggerInterface $logger,
-        UserRepository $userRepository,
-        KeyforgeUserRepository $kfUserRepository,
+        private UserRepository $userRepository,
+        private KeyforgeUserRepository $kfUserRepository,
     ) {
-        $this->userRepository = $userRepository;
-        $this->kfUserRepository = $kfUserRepository;
-
         parent::__construct($bus, $security, $localeSwitcher, $translator, $logger);
     }
 

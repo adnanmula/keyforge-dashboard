@@ -144,15 +144,15 @@ final readonly class DeckApplyPredefinedTagsService
 
         foreach ($cards as $card) {
             if ($card->isLegacy) {
-                $legacyCount++;
+                ++$legacyCount;
             }
 
             if ($card->isMaverick) {
-                $maverickCount++;
+                ++$maverickCount;
             }
 
             if ($card->isAnomaly) {
-                $anomalyCount++;
+                ++$anomalyCount;
             }
         }
 

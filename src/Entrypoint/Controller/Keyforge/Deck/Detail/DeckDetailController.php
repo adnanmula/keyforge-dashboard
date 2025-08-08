@@ -264,7 +264,7 @@ final class DeckDetailController extends Controller
         ];
 
         foreach ($cardNames as $cardName) {
-            $cardTypes[$indexedCards[$cardName]->type->value]++;
+            ++$cardTypes[$indexedCards[$cardName]->type->value];
         }
 
         return $cardTypes;

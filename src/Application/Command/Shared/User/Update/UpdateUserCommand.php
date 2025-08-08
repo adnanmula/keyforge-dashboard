@@ -8,10 +8,11 @@ use Assert\Assert;
 
 final readonly class UpdateUserCommand
 {
-    private(set) Uuid $id;
-    private(set) ?Locale $locale;
+    public Uuid $id;
+    public ?string $password;
+    public ?Locale $locale;
 
-    public function __construct($id, public ?string $password, $locale)
+    public function __construct(mixed $id, mixed $password, mixed $locale)
     {
         Assert::lazy()
             ->that($id, 'id')->uuid()
@@ -20,6 +21,7 @@ final readonly class UpdateUserCommand
             ->verifyNow();
 
         $this->id = Uuid::from($id);
+        $this->password = $password;
         $this->locale = null === $locale ? null : Locale::from($locale);
     }
 }

@@ -69,8 +69,8 @@ final class GetGamesController extends Controller
                             KeyforgeCompetition::LGS,
                             KeyforgeCompetition::NKFL,
                         ],
-                    )
-                )
+                    ),
+                ),
             ),
             new OA\Parameter(name: 'start', description: 'Pagination start index', in: 'query', required: false, schema: new OA\Schema(type: 'integer')),
             new OA\Parameter(name: 'length', description: 'Number of records per page', in: 'query', required: false, schema: new OA\Schema(type: 'integer')),
@@ -84,11 +84,11 @@ final class GetGamesController extends Controller
                     items: new OA\Items(
                         properties: [
                             new OA\Property(property: 'column', description: 'Field to sort by', type: 'string'),
-                            new OA\Property(property: 'dir', description: 'Sort direction', type: 'string', enum: ['asc', 'desc'])
+                            new OA\Property(property: 'dir', description: 'Sort direction', type: 'string', enum: ['asc', 'desc']),
                         ],
-                        type: 'object'
-                    )
-                )
+                        type: 'object',
+                    ),
+                ),
             ),
             new OA\Parameter(name: 'draw', description: 'Draw counter for DataTables', in: 'query', required: false, schema: new OA\Schema(type: 'integer')),
         ],
@@ -160,12 +160,12 @@ final class GetGamesController extends Controller
                                 "first_turn" => "username2",
                                 "date" => "2022-07-12",
                                 "competition" => "With friends",
-                                "notes" => ""
+                                "notes" => "",
                             ],
                         ],
                         "draw" => 1,
                     ],
-                )
+                ),
             ),
             new OA\Response(
                 response: 400,
@@ -177,7 +177,7 @@ final class GetGamesController extends Controller
                     example: [
                         'error' => 'The following 1 assertions failed:\n1) loserScores: Value \u0022A\u0022 is not an integer or a number castable to integer.\n',
                     ],
-                )
+                ),
             ),
             new OA\Response(
                 response: 403,
@@ -189,7 +189,7 @@ final class GetGamesController extends Controller
                     example: [
                         'error' => 'Access denied',
                     ],
-                )
+                ),
             ),
             new OA\Response(
                 response: 409,
@@ -201,7 +201,7 @@ final class GetGamesController extends Controller
                     example: [
                         'error' => 'Whatever error',
                     ],
-                )
+                ),
             ),
         ],
     )]

@@ -15,8 +15,8 @@ use AdnanMula\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Criteria\FilterValue\StringArrayFilterValue;
 use AdnanMula\Tournament\Classification\Classification;
 use AdnanMula\Tournament\Classification\Player;
-use AdnanMula\Tournament\User;
 use AdnanMula\Tournament\Fixture\Fixtures;
+use AdnanMula\Tournament\User;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 final readonly class CreateCompetitionCommandHandler

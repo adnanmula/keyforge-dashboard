@@ -42,11 +42,13 @@ final class GetDecksController extends Controller
                 in: 'query',
                 required: false,
                 schema: new OA\Schema(
-                type: 'array', items: new OA\Items(type: 'string', enum: [
+                    type: 'array',
+                    items: new OA\Items(type: 'string', enum: [
                     KeyforgeDeckType::STANDARD,
                     KeyforgeDeckType::ALLIANCE,
                     KeyforgeDeckType::THEORETICAL,
-                ])),
+                    ]),
+                ),
             ),
             new OA\Parameter(name: 'extraFilterOnlyFriends', description: 'Filter only friends', in: 'query', required: false, schema: new OA\Schema(type: 'boolean')),
             new OA\Parameter(name: 'extraFilterOnlyOwned', description: 'Filter only owned decks', in: 'query', required: false, schema: new OA\Schema(type: 'boolean')),
@@ -62,7 +64,7 @@ final class GetDecksController extends Controller
                 description: 'Filter by tags',
                 in: 'query',
                 required: false,
-                schema: new OA\Schema(type: 'array', items: new OA\Items(type: 'string', format: 'uuid'))
+                schema: new OA\Schema(type: 'array', items: new OA\Items(type: 'string', format: 'uuid')),
             ),
             new OA\Parameter(
                 name: 'extraFilterTagsExcluded',
@@ -101,7 +103,7 @@ final class GetDecksController extends Controller
                         KeyforgeHouse::SKYBORN,
                         KeyforgeHouse::REDEMPTION,
                     ]),
-                )
+                ),
             ),
             new OA\Parameter(
                 name: 'extraFilterHousesExcluded',
@@ -126,7 +128,7 @@ final class GetDecksController extends Controller
                         KeyforgeHouse::SKYBORN,
                         KeyforgeHouse::REDEMPTION,
                     ]),
-                )
+                ),
             ),
             new OA\Parameter(name: 'start', description: 'Pagination start index', in: 'query', required: false, schema: new OA\Schema(type: 'integer')),
             new OA\Parameter(name: 'length', description: 'Number of records per page', in: 'query', required: false, schema: new OA\Schema(type: 'integer')),
@@ -140,11 +142,11 @@ final class GetDecksController extends Controller
                     items: new OA\Items(
                         properties: [
                             new OA\Property(property: 'column', description: 'Field to sort by', type: 'string'),
-                            new OA\Property(property: 'dir', description: 'Sort direction', type: 'string', enum: ['asc', 'desc'])
+                            new OA\Property(property: 'dir', description: 'Sort direction', type: 'string', enum: ['asc', 'desc']),
                         ],
-                        type: 'object'
-                    )
-                )
+                        type: 'object',
+                    ),
+                ),
             ),
             new OA\Parameter(name: 'draw', description: 'Draw counter for DataTables', in: 'query', required: false, schema: new OA\Schema(type: 'integer')),
         ],
@@ -211,7 +213,7 @@ final class GetDecksController extends Controller
                                 type: 'array',
                                 items: new OA\Items(
                                     type: 'string',
-                                    format: 'uuid'
+                                    format: 'uuid',
                                 ),
                             ),
                             new OA\Property(
@@ -220,7 +222,7 @@ final class GetDecksController extends Controller
                                 type: 'array',
                                 items: new OA\Items(
                                     type: 'string',
-                                    format: 'uuid'
+                                    format: 'uuid',
                                 ),
                             ),
                             new OA\Property(
@@ -260,20 +262,20 @@ final class GetDecksController extends Controller
                                         property: 'boardClearCards',
                                         type: 'array',
                                         items: new OA\Items(type: 'string'),
-                                        example: ["Poison Wave"]
+                                        example: ["Poison Wave"],
                                     ),
                                     new OA\Property(property: 'scalingAmberControlCount', type: 'integer', example: 1),
                                     new OA\Property(
                                         property: 'scalingAmberControlCards',
                                         type: 'array',
                                         items: new OA\Items(type: 'string'),
-                                        example: ["Interdimensional Graft"]
+                                        example: ["Interdimensional Graft"],
                                     ),
                                     new OA\Property(property: 'synergyRating', type: 'integer', example: 15),
                                     new OA\Property(property: 'antiSynergyRating', type: 'integer', example: 1),
                                     new OA\Property(property: 'lastSasUpdate', type: 'string', format: 'date', example: "2023-07-21"),
                                 ],
-                                type: 'object'
+                                type: 'object',
                             ),
                             new OA\Property(
                                 property: 'alliance_composition',
@@ -283,9 +285,9 @@ final class GetDecksController extends Controller
                                     properties: [
                                         new OA\Property(property: 'name', type: 'string', example: 'Bishop el Sereno'),
                                         new OA\Property(property: 'house', type: 'string', example: 'Dis'),
-                                        new OA\Property(property: 'keyforgeId', type: 'string', format: 'uuid', example: '4ba628c1-15e4-463d-a29c-c6827b6d9e75')
+                                        new OA\Property(property: 'keyforgeId', type: 'string', format: 'uuid', example: '4ba628c1-15e4-463d-a29c-c6827b6d9e75'),
                                     ],
-                                    type: 'object'
+                                    type: 'object',
                                 ),
                                 maxItems: 3,
                                 minItems: 3,
@@ -293,20 +295,20 @@ final class GetDecksController extends Controller
                                     [
                                         "name" => "Bishop el Sereno",
                                         "house" => "Dis",
-                                        "keyforgeId" => "4ba628c1-15e4-463d-a29c-c6827b6d9e75"
+                                        "keyforgeId" => "4ba628c1-15e4-463d-a29c-c6827b6d9e75",
                                     ],
                                     [
                                         "name" => "“Vampiro”, Carroñero de Shrikesswan",
                                         "house" => "Shadows",
-                                        "keyforgeId" => "7c686603-adb8-4c76-8128-8656a551b67e"
+                                        "keyforgeId" => "7c686603-adb8-4c76-8128-8656a551b67e",
                                     ],
                                     [
                                         "name" => "Bjorn, Anciano de la Prisión Piadosa",
                                         "house" => "Untamed",
-                                        "keyforgeId" => "e950b681-e729-427c-bb3b-f7739469a975"
-                                    ]
+                                        "keyforgeId" => "e950b681-e729-427c-bb3b-f7739469a975",
+                                    ],
                                 ],
-                                nullable: true
+                                nullable: true,
                             ),
                             new OA\Property(
                                 property: 'userData',
@@ -319,9 +321,9 @@ final class GetDecksController extends Controller
                                     new OA\Property(property: 'wins_vs_friends', type: 'integer', example: 6),
                                     new OA\Property(property: 'losses_vs_friends', type: 'integer', example: 12),
                                     new OA\Property(property: 'wins_vs_users', type: 'integer', example: 6),
-                                    new OA\Property(property: 'losses_vs_users', type: 'integer', example: 12)
+                                    new OA\Property(property: 'losses_vs_users', type: 'integer', example: 12),
                                 ],
-                                type: 'object'
+                                type: 'object',
                             ),
                             new OA\Property(
                                 property: 'cards',
@@ -337,7 +339,7 @@ final class GetDecksController extends Controller
                                                 new OA\Property(property: 'imageUrl', type: 'string', format: 'url', example: 'https://...'),
                                                 new OA\Property(property: 'type', type: 'string', example: 'token-creature'),
                                             ],
-                                            type: 'object'
+                                            type: 'object',
                                         ),
                                     ),
                                     new OA\Property(
@@ -387,12 +389,12 @@ final class GetDecksController extends Controller
                                                 new OA\Property(property: 'bonusCapture', type: 'integer', example: 0),
                                                 new OA\Property(property: 'bonusDamage', type: 'integer', example: 0),
                                                 new OA\Property(property: 'bonusDraw', type: 'integer', example: 0),
-                                                new OA\Property(property: 'bonusDiscard', type: 'integer', example: 0)
+                                                new OA\Property(property: 'bonusDiscard', type: 'integer', example: 0),
                                             ],
-                                            type: 'object'
+                                            type: 'object',
                                         ),
                                         maxItems: 12,
-                                        minItems: 12
+                                        minItems: 12,
                                     ),
                                     new OA\Property(
                                         property: 'secondPodHouse',
@@ -441,12 +443,12 @@ final class GetDecksController extends Controller
                                                 new OA\Property(property: 'bonusCapture', type: 'integer', example: 0),
                                                 new OA\Property(property: 'bonusDamage', type: 'integer', example: 0),
                                                 new OA\Property(property: 'bonusDraw', type: 'integer', example: 0),
-                                                new OA\Property(property: 'bonusDiscard', type: 'integer', example: 0)
+                                                new OA\Property(property: 'bonusDiscard', type: 'integer', example: 0),
                                             ],
-                                            type: 'object'
+                                            type: 'object',
                                         ),
                                         maxItems: 12,
-                                        minItems: 12
+                                        minItems: 12,
                                     ),
                                     new OA\Property(
                                         property: 'thirdPodHouse',
@@ -495,21 +497,21 @@ final class GetDecksController extends Controller
                                                 new OA\Property(property: 'bonusCapture', type: 'integer', example: 0),
                                                 new OA\Property(property: 'bonusDamage', type: 'integer', example: 0),
                                                 new OA\Property(property: 'bonusDraw', type: 'integer', example: 0),
-                                                new OA\Property(property: 'bonusDiscard', type: 'integer', example: 0)
+                                                new OA\Property(property: 'bonusDiscard', type: 'integer', example: 0),
                                             ],
-                                            type: 'object'
+                                            type: 'object',
                                         ),
                                         maxItems: 12,
-                                        minItems: 12
+                                        minItems: 12,
                                     ),
                                 ],
-                                type: 'object'
+                                type: 'object',
                             ),
                         ], type: 'object')),
                         new OA\Property(property: 'draw', description: 'Draw counter for DataTables', type: 'integer'),
                     ],
-                    type: 'object'
-                )
+                    type: 'object',
+                ),
             ),
             new OA\Response(
                 response: 400,
@@ -521,7 +523,7 @@ final class GetDecksController extends Controller
                     example: [
                         'error' => 'The following 1 assertions failed:\n1) loserScores: Value \u0022A\u0022 is not an integer or a number castable to integer.\n',
                     ],
-                )
+                ),
             ),
             new OA\Response(
                 response: 409,
@@ -533,7 +535,7 @@ final class GetDecksController extends Controller
                     example: [
                         'error' => 'Whatever error',
                     ],
-                )
+                ),
             ),
         ],
     )]

@@ -106,7 +106,7 @@ final readonly class KeyforgeCards implements \JsonSerializable
 
         foreach ($deckCards as $deckCard) {
             if ($deckCard->name === $card) {
-                $count++;
+                ++$count;
             }
 
             if ($count >= $times) {

@@ -44,6 +44,15 @@
     "doctrine/dbal": {
         "version": "2.10.2"
     },
+    "doctrine/deprecations": {
+        "version": "1.1",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "1.0",
+            "ref": "87424683adc81d7dc305eefec1fced883084aab9"
+        }
+    },
     "doctrine/event-manager": {
         "version": "1.1.0"
     },
