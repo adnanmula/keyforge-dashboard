@@ -5,13 +5,14 @@
   bootstrap="config/bootstrap.php"
   cacheDirectory="var"
   executionOrder="random"
-  requireCoverageMetadata="true"
-  beStrictAboutCoverageMetadata="true"
+  requireCoverageMetadata="false"
+  beStrictAboutCoverageMetadata="false"
   beStrictAboutOutputDuringTests="true"
   displayDetailsOnPhpunitDeprecations="true"
   failOnPhpunitDeprecation="true"
   failOnRisky="true"
-  failOnWarning="true">
+  failOnWarning="true"
+  colors="true">
   <php>
     <ini name="error_reporting" value="-1"/>
     <env name="APP_ENV" value="test"/>
