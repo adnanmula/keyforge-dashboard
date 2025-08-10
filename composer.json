@@ -35,7 +35,7 @@
         "friends-of-behat/symfony-extension": "^2.4",
         "phpro/grumphp": "^2.9",
         "phpstan/phpstan": "^2.1",
-        "phpunit/phpunit": "^9.6"
+        "phpunit/phpunit": "^12"
     },
     "config": {
         "optimize-autoloader": true,
