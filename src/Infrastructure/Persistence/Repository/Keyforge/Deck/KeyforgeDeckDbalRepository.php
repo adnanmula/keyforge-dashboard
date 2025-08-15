@@ -16,6 +16,7 @@ use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Infrastructure\Persistence\Repository\DbalRepository;
 use AdnanMula\Criteria\Criteria;
 use AdnanMula\Criteria\DbalCriteriaAdapter;
+use AdnanMula\Criteria\FilterField\FieldMapping;
 
 final class KeyforgeDeckDbalRepository extends DbalRepository implements KeyforgeDeckRepository
 {
@@ -53,7 +54,7 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
             ->leftJoin('a', self::TABLE_USER_DATA, 'c', $condition)
             ->groupBy('a.id');
 
-        (new DbalCriteriaAdapter($builder, self::FIELD_MAPPING))->execute($criteria);
+        new DbalCriteriaAdapter($builder, new FieldMapping(self::FIELD_MAPPING))->execute($criteria);
 
         $result = $query->executeQuery()->fetchAllAssociative();
 
@@ -63,7 +64,12 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
     public function searchOne(Criteria $criteria): ?KeyforgeDeck
     {
         $result = $this->search(
-            new Criteria($criteria->offset(), 1, $criteria->sorting(), ...$criteria->filterGroups())
+            new Criteria(
+                $criteria->filters(),
+                $criteria->offset(),
+                1,
+                $criteria->sorting(),
+            ),
         );
 
         return $result[0] ?? null;

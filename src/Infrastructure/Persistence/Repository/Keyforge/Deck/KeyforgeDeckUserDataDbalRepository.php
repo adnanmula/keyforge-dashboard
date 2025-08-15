@@ -29,10 +29,10 @@ final class KeyforgeDeckUserDataDbalRepository extends DbalRepository implements
     public function searchOne(Criteria $criteria): ?KeyforgeDeckUserData
     {
         $criteria = new Criteria(
+            $criteria->filters(),
             $criteria->offset(),
             1,
             $criteria->sorting(),
-            ...$criteria->filterGroups(),
         );
 
         $result = $this->search($criteria);

@@ -15,11 +15,11 @@ use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Domain\Service\Keyforge\Deck\DeckApplyPredefinedTagsService;
 use AdnanMula\Criteria\Criteria;
 use AdnanMula\Criteria\Filter\Filter;
+use AdnanMula\Criteria\Filter\FilterOperator;
+use AdnanMula\Criteria\Filter\Filters;
 use AdnanMula\Criteria\Filter\FilterType;
 use AdnanMula\Criteria\FilterField\FilterField;
-use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
 use AdnanMula\Criteria\FilterValue\ArrayElementFilterValue;
-use AdnanMula\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Criteria\FilterValue\StringArrayFilterValue;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -49,10 +49,7 @@ final readonly class ImportMyDecksFromDokService
 
         $storedDecks = $this->repository->search(
             new Criteria(
-                null,
-                null,
-                null,
-                new AndFilterGroup(
+                new Filters(
                     FilterType::AND,
                     new Filter(new FilterField('id'), new StringArrayFilterValue(...$deckIds), FilterOperator::IN),
                 ),
@@ -94,10 +91,7 @@ final readonly class ImportMyDecksFromDokService
     {
         $scalingAmberCards = $this->cardRepository->search(
             new Criteria(
-                null,
-                null,
-                null,
-                new AndFilterGroup(
+                new Filters(
                     FilterType::AND,
                     new Filter(
                         new FilterField('tags'),
@@ -110,10 +104,7 @@ final readonly class ImportMyDecksFromDokService
 
         $boardClearsCards = $this->cardRepository->search(
             new Criteria(
-                null,
-                null,
-                null,
-                new AndFilterGroup(
+                new Filters(
                     FilterType::AND,
                     new Filter(
                         new FilterField('tags'),

@@ -5,13 +5,13 @@ namespace AdnanMula\Cards\Application\Query\Keyforge\Game;
 use AdnanMula\Cards\Domain\Model\Keyforge\Game\ValueObject\KeyforgeCompetition;
 use AdnanMula\Cards\Shared\CriteriaQuery;
 use AdnanMula\Criteria\Criteria;
+use AdnanMula\Criteria\Filter\CompositeFilter;
 use AdnanMula\Criteria\Filter\Filter;
+use AdnanMula\Criteria\Filter\FilterOperator;
+use AdnanMula\Criteria\Filter\Filters;
 use AdnanMula\Criteria\Filter\FilterType;
 use AdnanMula\Criteria\FilterField\FilterField;
 use AdnanMula\Criteria\FilterField\JsonKeyFilterField;
-use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
-use AdnanMula\Criteria\FilterGroup\FilterGroup;
-use AdnanMula\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Criteria\FilterValue\IntFilterValue;
 use AdnanMula\Criteria\FilterValue\StringArrayFilterValue;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
@@ -61,31 +61,28 @@ final readonly class GetGamesQuery extends CriteriaQuery
         $filters[] = $this->approvedFilter($approved);
 
         $criteria = new Criteria(
+            new Filters(FilterType::AND, ...\array_filter($filters)),
             null === $start ? null : (int) $start,
             null === $length ? null : (int) $length,
             $this->sorting($orderField, $orderDirection),
-            ...\array_filter($filters),
         );
 
         parent::__construct($criteria);
     }
 
-    private function idFilter(string ...$ids): ?FilterGroup
+    private function idFilter(string ...$ids): ?Filter
     {
         if (0 === count($ids)) {
             return null;
         }
 
-        return new AndFilterGroup(
-            FilterType::OR,
-            new Filter(new FilterField('id'), new StringArrayFilterValue(...$ids), FilterOperator::IN),
-        );
+        return new Filter(new FilterField('id'), new StringArrayFilterValue(...$ids), FilterOperator::IN);
     }
 
-    private function deckFilter(?string $userId, ?string $deckId): ?FilterGroup
+    private function deckFilter(?string $userId, ?string $deckId): ?CompositeFilter
     {
         if (null !== $deckId && null === $userId) {
-            return new AndFilterGroup(
+            return new CompositeFilter(
                 FilterType::OR,
                 new Filter(new FilterField('winner_deck'), new StringFilterValue($deckId), FilterOperator::EQUAL),
                 new Filter(new FilterField('loser_deck'), new StringFilterValue($deckId), FilterOperator::EQUAL),
@@ -93,7 +90,7 @@ final readonly class GetGamesQuery extends CriteriaQuery
         }
 
         if (null !== $userId && null === $deckId) {
-            return new AndFilterGroup(
+            return new CompositeFilter(
                 FilterType::OR,
                 new Filter(new FilterField('winner'), new StringFilterValue($userId), FilterOperator::EQUAL),
                 new Filter(new FilterField('loser'), new StringFilterValue($userId), FilterOperator::EQUAL),
@@ -101,7 +98,7 @@ final readonly class GetGamesQuery extends CriteriaQuery
         }
 
         if (null !== $userId && null !== $deckId) {
-            return new AndFilterGroup(
+            return new CompositeFilter(
                 FilterType::OR,
                 new Filter(new FilterField('winner'), new StringFilterValue($userId), FilterOperator::EQUAL),
                 new Filter(new FilterField('winner_deck'), new StringFilterValue($deckId), FilterOperator::EQUAL),
@@ -113,34 +110,28 @@ final readonly class GetGamesQuery extends CriteriaQuery
         return null;
     }
 
-    private function winnerFilter(string ...$winners): ?FilterGroup
+    private function winnerFilter(string ...$winners): ?Filter
     {
         if (\count($winners) > 0) {
-            return new AndFilterGroup(
-                FilterType::AND,
-                new Filter(new FilterField('winner'), new StringArrayFilterValue(...$winners), FilterOperator::IN),
-            );
+            return new Filter(new FilterField('winner'), new StringArrayFilterValue(...$winners), FilterOperator::IN);
         }
 
         return null;
     }
 
-    private function loserFilter(string ...$losers): ?FilterGroup
+    private function loserFilter(string ...$losers): ?Filter
     {
         if (\count($losers) > 0) {
-            return new AndFilterGroup(
-                FilterType::AND,
-                new Filter(new FilterField('loser'), new StringArrayFilterValue(...$losers), FilterOperator::IN),
-            );
+            return new Filter(new FilterField('loser'), new StringArrayFilterValue(...$losers), FilterOperator::IN);
         }
 
         return null;
     }
 
-    private function scoreFilter(string ...$scores): ?FilterGroup
+    private function scoreFilter(string ...$scores): ?CompositeFilter
     {
         if (\count($scores) > 0) {
-            return new AndFilterGroup(
+            return new CompositeFilter(
                 FilterType::AND,
                 new Filter(
                     new JsonKeyFilterField('score', 'loser_score'),
@@ -153,35 +144,26 @@ final readonly class GetGamesQuery extends CriteriaQuery
         return null;
     }
 
-    private function competitionFilter(string ...$competitions): ?FilterGroup
+    private function competitionFilter(string ...$competitions): ?Filter
     {
         if (\count($competitions) > 0) {
-            return new AndFilterGroup(
-                FilterType::AND,
-                new Filter(new FilterField('competition'), new StringArrayFilterValue(...$competitions), FilterOperator::IN),
-            );
+            return new Filter(new FilterField('competition'), new StringArrayFilterValue(...$competitions), FilterOperator::IN);
         }
 
         return null;
     }
 
-    private function approvedFilter(?bool $approved): ?FilterGroup
+    private function approvedFilter(?bool $approved): ?Filter
     {
         if (null === $approved) {
             return null;
         }
 
         if (true === $approved) {
-            return new AndFilterGroup(
-                FilterType::AND,
-                new Filter(new FilterField('approved'), new IntFilterValue(1), FilterOperator::EQUAL),
-            );
+            return new Filter(new FilterField('approved'), new IntFilterValue(1), FilterOperator::EQUAL);
         }
 
-        return new AndFilterGroup(
-            FilterType::AND,
-            new Filter(new FilterField('approved'), new IntFilterValue(0), FilterOperator::EQUAL),
-        );
+        return new Filter(new FilterField('approved'), new IntFilterValue(0), FilterOperator::EQUAL);
     }
 
     private function sorting(?string $field, ?string $dir): ?Sorting
@@ -189,7 +171,7 @@ final readonly class GetGamesQuery extends CriteriaQuery
         if (null !== $field && null !== $dir) {
             $orderBy = new Order(new FilterField($field), OrderType::from($dir));
 
-            if ($orderBy->field()->value() === 'date') {
+            if ($field === 'date') {
                 return new Sorting($orderBy, new Order(new FilterField('created_at'), $orderBy->type()));
             }
 

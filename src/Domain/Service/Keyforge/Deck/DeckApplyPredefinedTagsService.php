@@ -41,11 +41,11 @@ use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeCards;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Criteria\Criteria;
 use AdnanMula\Criteria\Filter\Filter;
+use AdnanMula\Criteria\Filter\FilterOperator;
+use AdnanMula\Criteria\Filter\Filters;
 use AdnanMula\Criteria\Filter\FilterType;
 use AdnanMula\Criteria\FilterField\FilterField;
-use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
 use AdnanMula\Criteria\FilterValue\ArrayElementFilterValue;
-use AdnanMula\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Criteria\FilterValue\IntFilterValue;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
 
@@ -60,10 +60,7 @@ final readonly class DeckApplyPredefinedTagsService
     {
         $deck = $this->repository->searchOne(
             new Criteria(
-                null,
-                null,
-                null,
-                new AndFilterGroup(
+                new Filters(
                     FilterType::AND,
                     new Filter(
                         new FilterField('id'),
@@ -394,10 +391,7 @@ final readonly class DeckApplyPredefinedTagsService
 
         $scalingAmberCards = $this->cardRepository->search(
             new Criteria(
-                null,
-                null,
-                null,
-                new AndFilterGroup(
+                new Filters(
                     FilterType::AND,
                     new Filter(
                         new FilterField('tags'),
@@ -429,10 +423,7 @@ final readonly class DeckApplyPredefinedTagsService
 
         $boardClearsCards = $this->cardRepository->search(
             new Criteria(
-                null,
-                null,
-                null,
-                new AndFilterGroup(
+                new Filters(
                     FilterType::AND,
                     new Filter(
                         new FilterField('tags'),
@@ -486,10 +477,7 @@ final readonly class DeckApplyPredefinedTagsService
 
         $giganticCards = $this->cardRepository->search(
             new Criteria(
-                null,
-                null,
-                null,
-                new AndFilterGroup(
+                new Filters(
                     FilterType::AND,
                     new Filter(
                         new FilterField('is_big'),

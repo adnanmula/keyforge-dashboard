@@ -18,11 +18,11 @@ use AdnanMula\Cards\Domain\Service\Keyforge\Deck\DeckApplyPredefinedTagsService;
 use AdnanMula\Cards\Domain\Service\Keyforge\ImportDeckAllianceService;
 use AdnanMula\Criteria\Criteria;
 use AdnanMula\Criteria\Filter\Filter;
+use AdnanMula\Criteria\Filter\FilterOperator;
+use AdnanMula\Criteria\Filter\Filters;
 use AdnanMula\Criteria\Filter\FilterType;
 use AdnanMula\Criteria\FilterField\FilterField;
-use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
 use AdnanMula\Criteria\FilterValue\ArrayElementFilterValue;
-use AdnanMula\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -40,10 +40,7 @@ final readonly class ImportDeckAllianceFromDokService implements ImportDeckAllia
     public function execute(Uuid $uuid, ?Uuid $owner = null, bool $forceUpdate = false): KeyforgeDeck
     {
         $deck = $this->repository->searchOne(new Criteria(
-            null,
-            null,
-            null,
-            new AndFilterGroup(
+            new Filters(
                 FilterType::AND,
                 new Filter(new FilterField('id'), new StringFilterValue($uuid->value()), FilterOperator::EQUAL),
                 new Filter(new FilterField('deck_type'), new StringFilterValue(KeyforgeDeckType::ALLIANCE->value), FilterOperator::EQUAL),
@@ -96,10 +93,7 @@ final readonly class ImportDeckAllianceFromDokService implements ImportDeckAllia
     {
         $scalingAmberCards = $this->cardRepository->search(
             new Criteria(
-                null,
-                null,
-                null,
-                new AndFilterGroup(
+                new Filters(
                     FilterType::AND,
                     new Filter(
                         new FilterField('tags'),
@@ -112,10 +106,7 @@ final readonly class ImportDeckAllianceFromDokService implements ImportDeckAllia
 
         $boardClearsCards = $this->cardRepository->search(
             new Criteria(
-                null,
-                null,
-                null,
-                new AndFilterGroup(
+                new Filters(
                     FilterType::AND,
                     new Filter(
                         new FilterField('tags'),
