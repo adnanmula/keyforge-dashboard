@@ -15,11 +15,12 @@ use AdnanMula\Cards\Domain\Model\Shared\User;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Domain\Service\Keyforge\ImportDeckService;
 use AdnanMula\Criteria\Criteria;
+use AdnanMula\Criteria\Filter\CompositeFilter;
 use AdnanMula\Criteria\Filter\Filter;
+use AdnanMula\Criteria\Filter\Filters;
 use AdnanMula\Criteria\Filter\FilterType;
 use AdnanMula\Criteria\FilterField\FilterField;
-use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
-use AdnanMula\Criteria\FilterValue\FilterOperator;
+use AdnanMula\Criteria\Filter\FilterOperator;
 use AdnanMula\Criteria\FilterValue\NullFilterValue;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
 use AdnanMula\KeyforgeGameLogParser\GameLogParser;
@@ -135,33 +136,20 @@ final readonly class CreateGameCommandHandler
     private function fetchUserOrCreate(string $name, User $user, bool $create, bool $checkFirstLevel = false): KeyforgeUser
     {
         $filterGroups = [
-            new AndFilterGroup(
-                FilterType::AND,
-                new Filter(new FilterField('name'), new StringFilterValue($name), FilterOperator::EQUAL),
-            ),
+            new Filter(new FilterField('name'), new StringFilterValue($name), FilterOperator::EQUAL),
         ];
 
         if ($checkFirstLevel) {
-            $filterGroups[] = new AndFilterGroup(
+            $filterGroups[] = new CompositeFilter(
                 FilterType::OR,
                 new Filter(new FilterField('owner'), new StringFilterValue($user->id()->value()), FilterOperator::EQUAL),
                 new Filter(new FilterField('owner'), new NullFilterValue(), FilterOperator::IS_NULL),
             );
         } else {
-            $filterGroups[] = new AndFilterGroup(
-                FilterType::AND,
-                new Filter(new FilterField('owner'), new StringFilterValue($user->id()->value()), FilterOperator::EQUAL),
-            );
+            $filterGroups[] = new Filter(new FilterField('owner'), new StringFilterValue($user->id()->value()), FilterOperator::EQUAL);
         }
 
-        $userToCreate = $this->userRepository->search(
-            new Criteria(
-                null,
-                null,
-                null,
-                ...$filterGroups,
-            ),
-        )[0] ?? null;
+        $userToCreate = $this->userRepository->searchOne(new Criteria(new Filters(FilterType::AND, ...$filterGroups)));
 
         if (null === $userToCreate && true === $create) {
             $userToCreate = KeyforgeUser::create(Uuid::v4(), $name, $user->id());
@@ -200,10 +188,7 @@ final readonly class CreateGameCommandHandler
     {
         return $this->deckRepository->searchOne(
             new Criteria(
-                null,
-                null,
-                null,
-                new AndFilterGroup(
+                new Filters(
                     FilterType::AND,
                     new Filter(new FilterField('name'), new StringFilterValue($name), FilterOperator::EQUAL),
                 ),

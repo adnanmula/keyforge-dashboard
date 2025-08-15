@@ -7,11 +7,12 @@ use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Infrastructure\Service\Keyforge\DoK\ImportDeckStatHistoryFromDokService;
 use AdnanMula\Criteria\Criteria;
+use AdnanMula\Criteria\Filter\CompositeFilter;
 use AdnanMula\Criteria\Filter\Filter;
+use AdnanMula\Criteria\Filter\Filters;
 use AdnanMula\Criteria\Filter\FilterType;
 use AdnanMula\Criteria\FilterField\FilterField;
-use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
-use AdnanMula\Criteria\FilterValue\FilterOperator;
+use AdnanMula\Criteria\Filter\FilterOperator;
 use AdnanMula\Criteria\FilterValue\StringArrayFilterValue;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
 use Symfony\Component\Console\Command\Command;
@@ -87,10 +88,7 @@ final class ImportDeckStatHistoryCommand extends Command
 
         return $this->deckRepository->search(
             new Criteria(
-                null,
-                $batch,
-                null,
-                new AndFilterGroup(
+                new Filters(
                     FilterType::AND,
                     new Filter(
                         new FilterField('id'),
@@ -102,8 +100,11 @@ final class ImportDeckStatHistoryCommand extends Command
                         ),
                         FilterOperator::NOT_IN,
                     ),
+                    new CompositeFilter(FilterType::OR, ...$filters),
                 ),
-                new AndFilterGroup(FilterType::OR, ...$filters),
+                null,
+                $batch,
+                null,
             ),
         );
     }

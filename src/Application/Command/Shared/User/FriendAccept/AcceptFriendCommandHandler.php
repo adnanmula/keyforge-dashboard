@@ -8,10 +8,10 @@ use AdnanMula\Cards\Domain\Model\Shared\Exception\UserNotExistsException;
 use AdnanMula\Cards\Domain\Model\Shared\UserRepository;
 use AdnanMula\Criteria\Criteria;
 use AdnanMula\Criteria\Filter\Filter;
+use AdnanMula\Criteria\Filter\Filters;
 use AdnanMula\Criteria\Filter\FilterType;
 use AdnanMula\Criteria\FilterField\FilterField;
-use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
-use AdnanMula\Criteria\FilterValue\FilterOperator;
+use AdnanMula\Criteria\Filter\FilterOperator;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
 
 final readonly class AcceptFriendCommandHandler
@@ -42,10 +42,7 @@ final readonly class AcceptFriendCommandHandler
 
         $decks = $this->deckRepository->search(
             new Criteria(
-                null,
-                null,
-                null,
-                new AndFilterGroup(
+                new Filters(
                     FilterType::OR,
                     new Filter(new FilterField('owner'), new StringFilterValue($user->id()->value()), FilterOperator::EQUAL),
                     new Filter(new FilterField('owner'), new StringFilterValue($friend->id()->value()), FilterOperator::EQUAL),

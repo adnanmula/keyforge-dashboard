@@ -74,7 +74,7 @@ final class KeyforgeCompetitionDbalRepository extends DbalRepository implements 
     public function searchOne(Criteria $criteria): ?KeyforgeCompetition
     {
         $result = $this->search(
-            new Criteria($criteria->offset(), 1, $criteria->sorting(), ...$criteria->filterGroups())
+            new Criteria($criteria->filters(), $criteria->offset(), 1, $criteria->sorting()),
         );
 
         return $result[0] ?? null;

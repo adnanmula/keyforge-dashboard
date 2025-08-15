@@ -20,10 +20,10 @@ use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
 use AdnanMula\Criteria\Criteria;
 use AdnanMula\Criteria\Filter\Filter;
+use AdnanMula\Criteria\Filter\Filters;
 use AdnanMula\Criteria\Filter\FilterType;
 use AdnanMula\Criteria\FilterField\FilterField;
-use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
-use AdnanMula\Criteria\FilterValue\FilterOperator;
+use AdnanMula\Criteria\Filter\FilterOperator;
 use AdnanMula\Criteria\FilterValue\StringArrayFilterValue;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
 use AdnanMula\Criteria\Sorting\OrderType;
@@ -104,10 +104,7 @@ final class DeckDetailController extends Controller
 
         $deck = $this->deckRepository->searchOne(
             new Criteria(
-                null,
-                null,
-                null,
-                new AndFilterGroup(
+                new Filters(
                     FilterType::AND,
                     new Filter(new FilterField('id'), new StringFilterValue($deckId), FilterOperator::EQUAL),
                 ),
@@ -241,10 +238,7 @@ final class DeckDetailController extends Controller
 
         $cards = $this->cardRepository->search(
             new Criteria(
-                null,
-                null,
-                null,
-                new AndFilterGroup(
+                new Filters(
                     FilterType::AND,
                     new Filter(new FilterField('name_url'), new StringArrayFilterValue(...$cardNames), FilterOperator::IN),
                 ),

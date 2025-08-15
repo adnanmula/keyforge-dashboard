@@ -11,10 +11,10 @@ use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Domain\Service\Keyforge\ImportDeckAllianceService;
 use AdnanMula\Criteria\Criteria;
 use AdnanMula\Criteria\Filter\Filter;
+use AdnanMula\Criteria\Filter\Filters;
 use AdnanMula\Criteria\Filter\FilterType;
 use AdnanMula\Criteria\FilterField\FilterField;
-use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
-use AdnanMula\Criteria\FilterValue\FilterOperator;
+use AdnanMula\Criteria\Filter\FilterOperator;
 use AdnanMula\Criteria\FilterValue\StringArrayFilterValue;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -40,10 +40,7 @@ readonly class GenerateDeckAlliancesCommandHandler
         $user = $this->security->getUser();
 
         $decks = $this->deckRepository->search(new Criteria(
-            null,
-            null,
-            null,
-            new AndFilterGroup(
+            new Filters(
                 FilterType::AND,
                 new Filter(new FilterField('id'), new StringArrayFilterValue(...$command->deckIds), FilterOperator::IN),
             ),

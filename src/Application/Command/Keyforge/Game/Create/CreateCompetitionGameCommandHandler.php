@@ -14,10 +14,10 @@ use AdnanMula\Cards\Domain\Model\Shared\User;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Criteria\Criteria;
 use AdnanMula\Criteria\Filter\Filter;
+use AdnanMula\Criteria\Filter\Filters;
 use AdnanMula\Criteria\Filter\FilterType;
 use AdnanMula\Criteria\FilterField\FilterField;
-use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
-use AdnanMula\Criteria\FilterValue\FilterOperator;
+use AdnanMula\Criteria\Filter\FilterOperator;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
 use AdnanMula\KeyforgeGameLogParser\GameLogParser;
 use AdnanMula\Tournament\Fixture\FixtureType;
@@ -101,10 +101,7 @@ final readonly class CreateCompetitionGameCommandHandler
     {
         $winnerDeck = $this->deckRepository->searchOne(
             new Criteria(
-                null,
-                null,
-                null,
-                new AndFilterGroup(
+                new Filters(
                     FilterType::AND,
                     new Filter(new FilterField('id'), new StringFilterValue($winnerDeck), FilterOperator::EQUAL),
                 ),
@@ -113,10 +110,7 @@ final readonly class CreateCompetitionGameCommandHandler
 
         $loserDeck = $this->deckRepository->searchOne(
             new Criteria(
-                null,
-                null,
-                null,
-                new AndFilterGroup(
+                new Filters(
                     FilterType::AND,
                     new Filter(new FilterField('id'), new StringFilterValue($loserDeck), FilterOperator::EQUAL),
                 ),
@@ -143,10 +137,7 @@ final readonly class CreateCompetitionGameCommandHandler
         }
 
         $games = $this->gameRepository->search(new Criteria(
-            null,
-            null,
-            null,
-            new AndFilterGroup(FilterType::OR, ...$filters),
+            new Filters(FilterType::OR, ...$filters),
         ));
 
         $winners = [

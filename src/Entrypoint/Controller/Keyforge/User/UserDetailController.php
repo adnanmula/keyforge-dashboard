@@ -12,10 +12,10 @@ use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
 use AdnanMula\Criteria\Criteria;
 use AdnanMula\Criteria\Filter\Filter;
+use AdnanMula\Criteria\Filter\Filters;
 use AdnanMula\Criteria\Filter\FilterType;
 use AdnanMula\Criteria\FilterField\FilterField;
-use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
-use AdnanMula\Criteria\FilterValue\FilterOperator;
+use AdnanMula\Criteria\Filter\FilterOperator;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
 use AdnanMula\Criteria\Sorting\Order;
 use AdnanMula\Criteria\Sorting\OrderType;
@@ -106,14 +106,14 @@ final class UserDetailController extends Controller
 
         return $this->competitionRepository->search(
             new Criteria(
+                new Filters(
+                    FilterType::AND,
+                    new Filter(new FilterField('winner'), new StringFilterValue($user->id()->value()), FilterOperator::EQUAL),
+                ),
                 null,
                 null,
                 new Sorting(
                     new Order(new FilterField('finished_at'), OrderType::ASC),
-                ),
-                new AndFilterGroup(
-                    FilterType::AND,
-                    new Filter(new FilterField('winner'), new StringFilterValue($user->id()->value()), FilterOperator::EQUAL),
                 ),
             ),
         );
