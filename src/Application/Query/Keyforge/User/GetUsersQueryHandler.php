@@ -7,12 +7,11 @@ use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckUserData;
 use AdnanMula\Cards\Domain\Model\Keyforge\User\KeyforgeUserRepository;
 use AdnanMula\Cards\Domain\Model\Shared\UserRepository;
 use AdnanMula\Criteria\Criteria;
-use AdnanMula\Criteria\Filter\CompositeFilter;
 use AdnanMula\Criteria\Filter\Filter;
+use AdnanMula\Criteria\Filter\FilterOperator;
 use AdnanMula\Criteria\Filter\Filters;
 use AdnanMula\Criteria\Filter\FilterType;
 use AdnanMula\Criteria\FilterField\FilterField;
-use AdnanMula\Criteria\Filter\FilterOperator;
 use AdnanMula\Criteria\FilterValue\NullFilterValue;
 use AdnanMula\Criteria\FilterValue\StringArrayFilterValue;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
@@ -51,7 +50,8 @@ final readonly class GetUsersQueryHandler
             $filters[] = new Filter(new FilterField('id'), new StringArrayFilterValue(...$friendIds), FilterOperator::IN);
         }
 
-        $users = $this->repository->search(new Criteria(new Filters(FilterType::AND, ...$filters)));;
+        $users = $this->repository->search(new Criteria(new Filters(FilterType::AND, ...$filters)));
+
 
         if (false === $query->withGames) {
             return $users;
