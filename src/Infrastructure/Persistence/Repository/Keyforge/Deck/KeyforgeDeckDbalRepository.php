@@ -82,7 +82,7 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
             ->from(self::TABLE, 'a')
             ->leftJoin('a', self::TABLE_OWNERSHIP, 'b', 'a.id = b.deck_id');
 
-        (new DbalCriteriaAdapter($builder))->execute($criteria);
+        new DbalCriteriaAdapter($builder, new FieldMapping(self::FIELD_MAPPING))->execute($criteria);
 
         $result = $query->executeQuery()->fetchOne();
 
