@@ -7,11 +7,11 @@ use AdnanMula\Cards\Domain\Model\Shared\User;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\CompetitionVisibility;
 use AdnanMula\Criteria\Criteria;
 use AdnanMula\Criteria\Filter\Filter;
+use AdnanMula\Criteria\Filter\FilterOperator;
+use AdnanMula\Criteria\Filter\Filters;
 use AdnanMula\Criteria\Filter\FilterType;
 use AdnanMula\Criteria\FilterField\FilterField;
-use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
 use AdnanMula\Criteria\FilterValue\ArrayElementFilterValue;
-use AdnanMula\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
 use AdnanMula\Criteria\Sorting\Order;
 use AdnanMula\Criteria\Sorting\OrderType;
@@ -36,15 +36,7 @@ final readonly class GetCompetitionsQueryHandler
         }
 
         $criteria = new Criteria(
-            $query->start,
-            $query->length,
-            new Sorting(
-                new Order(
-                    new FilterField('created_at'),
-                    OrderType::DESC,
-                ),
-            ),
-            new AndFilterGroup(
+            new Filters(
                 FilterType::OR,
                 new Filter(
                     new FilterField('visibility'),
@@ -60,6 +52,14 @@ final readonly class GetCompetitionsQueryHandler
                     new FilterField('players'),
                     new ArrayElementFilterValue($user->id()->value()),
                     FilterOperator::IN_ARRAY,
+                ),
+            ),
+            $query->start,
+            $query->length,
+            new Sorting(
+                new Order(
+                    new FilterField('created_at'),
+                    OrderType::DESC,
                 ),
             ),
         );

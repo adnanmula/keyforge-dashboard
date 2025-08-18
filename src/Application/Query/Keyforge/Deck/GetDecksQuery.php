@@ -8,13 +8,13 @@ use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeSet;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Shared\CriteriaQuery;
 use AdnanMula\Criteria\Criteria;
+use AdnanMula\Criteria\Filter\CompositeFilter;
 use AdnanMula\Criteria\Filter\Filter;
+use AdnanMula\Criteria\Filter\FilterOperator;
+use AdnanMula\Criteria\Filter\Filters;
 use AdnanMula\Criteria\Filter\FilterType;
 use AdnanMula\Criteria\FilterField\FilterField;
-use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
-use AdnanMula\Criteria\FilterGroup\FilterGroup;
 use AdnanMula\Criteria\FilterValue\ArrayElementFilterValue;
-use AdnanMula\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Criteria\FilterValue\IntFilterValue;
 use AdnanMula\Criteria\FilterValue\NullFilterValue;
 use AdnanMula\Criteria\FilterValue\StringArrayFilterValue;
@@ -100,6 +100,7 @@ final readonly class GetDecksQuery extends CriteriaQuery
         $filters[] = $this->deckIdsFilters(...$deckIds);
 
         $criteria = new Criteria(
+            new Filters(FilterType::AND, ...\array_filter($filters)),
             null === $start ? null : (int) $start,
             null === $length ? null : (int) $length,
             $this->sorting(
@@ -107,13 +108,12 @@ final readonly class GetDecksQuery extends CriteriaQuery
                 $orderDirection,
                 $owner,
             ),
-            ...\array_filter($filters),
         );
 
         parent::__construct($criteria);
     }
 
-    private function miscFilter(?string $owner, ?string $deck, bool $onlyOwned, int $minSas, int $maxSas): FilterGroup
+    private function miscFilter(?string $owner, ?string $deck, bool $onlyOwned, int $minSas, int $maxSas): CompositeFilter
     {
         $expressions = [];
 
@@ -132,10 +132,10 @@ final readonly class GetDecksQuery extends CriteriaQuery
         $expressions[] = new Filter(new FilterField('sas'), new IntFilterValue($maxSas), FilterOperator::LESS_OR_EQUAL);
         $expressions[] = new Filter(new FilterField('sas'), new IntFilterValue($minSas), FilterOperator::GREATER_OR_EQUAL);
 
-        return new AndFilterGroup(FilterType::AND, ...$expressions);
+        return new CompositeFilter(FilterType::AND, ...$expressions);
     }
 
-    private function tagsIncludedFilter(?string $filterType, string ...$tags): ?FilterGroup
+    private function tagsIncludedFilter(?string $filterType, string ...$tags): ?CompositeFilter
     {
         if (null !== $filterType && \count($tags) > 0) {
             $tagsExpressions = [];
@@ -144,7 +144,7 @@ final readonly class GetDecksQuery extends CriteriaQuery
                 $tagsExpressions[] = new Filter(new FilterField('tags'), new ArrayElementFilterValue($tag), FilterOperator::IN_ARRAY);
             }
 
-            return new AndFilterGroup(
+            return new CompositeFilter(
                 $filterType === 'any' ? FilterType::OR : FilterType::AND,
                 ...$tagsExpressions,
             );
@@ -153,7 +153,7 @@ final readonly class GetDecksQuery extends CriteriaQuery
         return null;
     }
 
-    private function tagsExcludedFilter(?string $filterType, string ...$tags): ?FilterGroup
+    private function tagsExcludedFilter(?string $filterType, string ...$tags): ?CompositeFilter
     {
         if (null !== $filterType && \count($tags) > 0) {
             $tagsExpressions = [];
@@ -162,7 +162,7 @@ final readonly class GetDecksQuery extends CriteriaQuery
                 $tagsExpressions[] = new Filter(new FilterField('tags'), new ArrayElementFilterValue($tag), FilterOperator::NOT_IN_ARRAY);
             }
 
-            return new AndFilterGroup(
+            return new CompositeFilter(
                 $filterType === 'any' ? FilterType::OR : FilterType::AND,
                 ...$tagsExpressions,
             );
@@ -171,7 +171,7 @@ final readonly class GetDecksQuery extends CriteriaQuery
         return null;
     }
 
-    private function tagsPrivateIncludedFilter(?string $filterType, string ...$tags): ?FilterGroup
+    private function tagsPrivateIncludedFilter(?string $filterType, string ...$tags): ?CompositeFilter
     {
         if (null !== $filterType && \count($tags) > 0) {
             $tagsExpressions = [];
@@ -180,7 +180,7 @@ final readonly class GetDecksQuery extends CriteriaQuery
                 $tagsExpressions[] = new Filter(new FilterField('user_tags'), new ArrayElementFilterValue($tag), FilterOperator::IN_ARRAY);
             }
 
-            return new AndFilterGroup(
+            return new CompositeFilter(
                 $filterType === 'any' ? FilterType::OR : FilterType::AND,
                 ...$tagsExpressions,
             );
@@ -189,7 +189,7 @@ final readonly class GetDecksQuery extends CriteriaQuery
         return null;
     }
 
-    private function tagsPrivateExcludedFilter(?string $filterType, string ...$tags): ?FilterGroup
+    private function tagsPrivateExcludedFilter(?string $filterType, string ...$tags): ?CompositeFilter
     {
         if (null !== $filterType && \count($tags) > 0) {
             $tagsExpressions = [];
@@ -198,7 +198,7 @@ final readonly class GetDecksQuery extends CriteriaQuery
                 $tagsExpressions[] = new Filter(new FilterField('user_tags'), new ArrayElementFilterValue($tag), FilterOperator::NOT_IN_ARRAY);
             }
 
-            return new AndFilterGroup(
+            return new CompositeFilter(
                 $filterType === 'any' ? FilterType::OR : FilterType::AND,
                 ...$tagsExpressions,
             );
@@ -207,10 +207,10 @@ final readonly class GetDecksQuery extends CriteriaQuery
         return null;
     }
 
-    private function housesFilter(?string $filterType, string ...$houses): ?FilterGroup
+    private function housesFilter(?string $filterType, string ...$houses): ?CompositeFilter
     {
         if (null !== $filterType && \count($houses) > 0) {
-            return new AndFilterGroup(
+            return new CompositeFilter(
                 $filterType === 'any' ? FilterType::OR : FilterType::AND,
                 ...\array_map(
                     static fn (string $house): Filter => new Filter(new FilterField('houses'), new ArrayElementFilterValue($house), FilterOperator::IN_ARRAY),
@@ -222,10 +222,10 @@ final readonly class GetDecksQuery extends CriteriaQuery
         return null;
     }
 
-    private function housesExcludedFilter(string ...$houses): ?FilterGroup
+    private function housesExcludedFilter(string ...$houses): ?CompositeFilter
     {
         if (\count($houses) > 0) {
-            return new AndFilterGroup(
+            return new CompositeFilter(
                 FilterType::AND,
                 ...\array_map(
                     static fn (string $house): Filter => new Filter(new FilterField('houses'), new ArrayElementFilterValue($house), FilterOperator::NOT_IN_ARRAY),
@@ -237,10 +237,10 @@ final readonly class GetDecksQuery extends CriteriaQuery
         return null;
     }
 
-    private function deckTypeFilter(string ...$types): ?FilterGroup
+    private function deckTypeFilter(string ...$types): ?CompositeFilter
     {
         if (\count($types) > 0) {
-            return new AndFilterGroup(
+            return new CompositeFilter(
                 FilterType::OR,
                 ...\array_map(
                     static fn (string $type): Filter => new Filter(new FilterField('deck_type'), new StringArrayFilterValue($type), FilterOperator::IN),
@@ -252,10 +252,10 @@ final readonly class GetDecksQuery extends CriteriaQuery
         return null;
     }
 
-    private function ownersFilter(string ...$owners): ?FilterGroup
+    private function ownersFilter(string ...$owners): ?CompositeFilter
     {
         if (\count($owners) > 0) {
-            return new AndFilterGroup(
+            return new CompositeFilter(
                 FilterType::OR,
                 ...\array_map(
                     static fn (string $owner): Filter => new Filter(new FilterField('owner'), new StringFilterValue($owner), FilterOperator::EQUAL),
@@ -267,7 +267,7 @@ final readonly class GetDecksQuery extends CriteriaQuery
         return null;
     }
 
-    private function setsFilter(string ...$sets): ?FilterGroup
+    private function setsFilter(string ...$sets): ?CompositeFilter
     {
         if (\count($sets) > 0) {
             $setFilterExpressions = [];
@@ -276,16 +276,16 @@ final readonly class GetDecksQuery extends CriteriaQuery
                 $setFilterExpressions[] = new Filter(new FilterField('set'), new StringFilterValue($set), FilterOperator::EQUAL);
             }
 
-            return new AndFilterGroup(FilterType::OR, ...$setFilterExpressions);
+            return new CompositeFilter(FilterType::OR, ...$setFilterExpressions);
         }
 
         return null;
     }
 
-    private function deckIdsFilters(string ...$deckIds): ?FilterGroup
+    private function deckIdsFilters(string ...$deckIds): ?CompositeFilter
     {
         if (\count($deckIds) > 0) {
-            return new AndFilterGroup(
+            return new CompositeFilter(
                 FilterType::AND,
                 new Filter(new FilterField('id'), new StringArrayFilterValue(...$deckIds), FilterOperator::IN),
             );

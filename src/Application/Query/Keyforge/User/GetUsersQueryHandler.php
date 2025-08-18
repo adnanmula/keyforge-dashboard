@@ -8,10 +8,10 @@ use AdnanMula\Cards\Domain\Model\Keyforge\User\KeyforgeUserRepository;
 use AdnanMula\Cards\Domain\Model\Shared\UserRepository;
 use AdnanMula\Criteria\Criteria;
 use AdnanMula\Criteria\Filter\Filter;
+use AdnanMula\Criteria\Filter\FilterOperator;
+use AdnanMula\Criteria\Filter\Filters;
 use AdnanMula\Criteria\Filter\FilterType;
 use AdnanMula\Criteria\FilterField\FilterField;
-use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
-use AdnanMula\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Criteria\FilterValue\NullFilterValue;
 use AdnanMula\Criteria\FilterValue\StringArrayFilterValue;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
@@ -29,17 +29,11 @@ final readonly class GetUsersQueryHandler
         $filters = [];
 
         if (null !== $query->name) {
-            $filters[] = new AndFilterGroup(
-                FilterType::AND,
-                new Filter(new FilterField('name'), new StringFilterValue($query->name), FilterOperator::CONTAINS_INSENSITIVE),
-            );
+            $filters[] = new Filter(new FilterField('name'), new StringFilterValue($query->name), FilterOperator::CONTAINS_INSENSITIVE);
         }
 
         if (false === $query->withExternal) {
-            $filters[] = new AndFilterGroup(
-                FilterType::AND,
-                new Filter(new FilterField('owner'), new NullFilterValue(), FilterOperator::IS_NULL),
-            );
+            $filters[] = new Filter(new FilterField('owner'), new NullFilterValue(), FilterOperator::IS_NULL);
         }
 
         if ($query->onlyFriends) {
@@ -53,13 +47,11 @@ final readonly class GetUsersQueryHandler
 
             $friendIds = array_unique($friendIds);
 
-            $filters[] = new AndFilterGroup(
-                FilterType::AND,
-                new Filter(new FilterField('id'), new StringArrayFilterValue(...$friendIds), FilterOperator::IN),
-            );
+            $filters[] = new Filter(new FilterField('id'), new StringArrayFilterValue(...$friendIds), FilterOperator::IN);
         }
 
-        $users = $this->repository->search(new Criteria(null, null, null, ...$filters));
+        $users = $this->repository->search(new Criteria(new Filters(FilterType::AND, ...$filters)));
+
 
         if (false === $query->withGames) {
             return $users;
@@ -75,10 +67,7 @@ final readonly class GetUsersQueryHandler
 
         $userData = $this->userDataRepository->search(
             new Criteria(
-                null,
-                null,
-                null,
-                new AndFilterGroup(
+                new Filters(
                     FilterType::AND,
                     new Filter(new FilterField('user_id'), new StringArrayFilterValue(...$userIds), FilterOperator::IN),
                 ),

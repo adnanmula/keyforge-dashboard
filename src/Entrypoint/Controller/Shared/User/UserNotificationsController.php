@@ -12,11 +12,12 @@ use AdnanMula\Cards\Domain\Model\Shared\ValueObject\UserRole;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
 use AdnanMula\Criteria\Criteria;
+use AdnanMula\Criteria\Filter\CompositeFilter;
 use AdnanMula\Criteria\Filter\Filter;
+use AdnanMula\Criteria\Filter\FilterOperator;
+use AdnanMula\Criteria\Filter\Filters;
 use AdnanMula\Criteria\Filter\FilterType;
 use AdnanMula\Criteria\FilterField\FilterField;
-use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
-use AdnanMula\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Criteria\FilterValue\IntFilterValue;
 use AdnanMula\Criteria\FilterValue\StringArrayFilterValue;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
@@ -62,18 +63,18 @@ final class UserNotificationsController extends Controller
 
         $gamesPending = $this->gameRepository->count(
             new Criteria(
-                null,
-                null,
-                null,
-                new AndFilterGroup(
+                new Filters(
                     FilterType::AND,
                     new Filter(new FilterField('approved'), new IntFilterValue(0), FilterOperator::EQUAL),
+                    new CompositeFilter(
+                        FilterType::OR,
+                        new Filter(new FilterField('winner'), new StringFilterValue($user->id()->value()), FilterOperator::EQUAL),
+                        new Filter(new FilterField('loser'), new StringFilterValue($user->id()->value()), FilterOperator::EQUAL),
+                    ),
                 ),
-                new AndFilterGroup(
-                    FilterType::OR,
-                    new Filter(new FilterField('winner'), new StringFilterValue($user->id()->value()), FilterOperator::EQUAL),
-                    new Filter(new FilterField('loser'), new StringFilterValue($user->id()->value()), FilterOperator::EQUAL),
-                ),
+                null,
+                null,
+                null,
             ),
         );
 
@@ -102,20 +103,17 @@ final class UserNotificationsController extends Controller
         try {
             $filters = [];
 
-            $filters[] = new AndFilterGroup(
-                FilterType::AND,
-                new Filter(new FilterField('approved'), new IntFilterValue(0), FilterOperator::EQUAL),
-            );
+            $filters[] = new Filter(new FilterField('approved'), new IntFilterValue(0), FilterOperator::EQUAL);
 
             if (false === $this->isGranted(UserRole::ROLE_ADMIN->value)) {
-                $filters[] = new AndFilterGroup(
+                $filters[] = new CompositeFilter(
                     FilterType::OR,
                     new Filter(new FilterField('winner'), new StringFilterValue($user->id()->value()), FilterOperator::EQUAL),
                     new Filter(new FilterField('loser'), new StringFilterValue($user->id()->value()), FilterOperator::EQUAL),
                 );
             }
 
-            $gamesPending = $this->gameRepository->search(new Criteria(null, null, null, ...$filters));
+            $gamesPending = $this->gameRepository->search(new Criteria(new Filters(FilterType::AND, ...$filters)));
 
             $deckIds = \array_values(\array_unique(\array_merge(
                 \array_map(static fn (KeyforgeGame $g) => $g->winnerDeck()->value(), $gamesPending),
@@ -124,10 +122,7 @@ final class UserNotificationsController extends Controller
 
             $decks = $this->deckRepository->search(
                 new Criteria(
-                    null,
-                    null,
-                    null,
-                    new AndFilterGroup(
+                    new Filters(
                         FilterType::AND,
                         new Filter(new FilterField('id'), new StringArrayFilterValue(...$deckIds), FilterOperator::IN),
                     ),
@@ -148,10 +143,7 @@ final class UserNotificationsController extends Controller
 
             $users = $this->keyforgeUserRepository->search(
                 new Criteria(
-                    null,
-                    null,
-                    null,
-                    new AndFilterGroup(
+                    new Filters(
                         FilterType::AND,
                         new Filter(new FilterField('id'), new StringArrayFilterValue(...$userIds), FilterOperator::IN),
                     ),
@@ -215,10 +207,7 @@ final class UserNotificationsController extends Controller
 
         $game = $this->gameRepository->searchOne(
             new Criteria(
-                null,
-                null,
-                null,
-                new AndFilterGroup(
+                new Filters(
                     FilterType::AND,
                     new Filter(new FilterField('id'), new StringFilterValue($gameId), FilterOperator::EQUAL),
                 ),
@@ -269,10 +258,7 @@ final class UserNotificationsController extends Controller
 
         $game = $this->gameRepository->searchOne(
             new Criteria(
-                null,
-                null,
-                null,
-                new AndFilterGroup(
+                new Filters(
                     FilterType::AND,
                     new Filter(new FilterField('id'), new StringFilterValue($gameId), FilterOperator::EQUAL),
                 ),

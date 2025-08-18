@@ -8,10 +8,10 @@ use AdnanMula\Cards\Domain\Model\Keyforge\User\KeyforgeUserRepository;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Criteria\Criteria;
 use AdnanMula\Criteria\Filter\Filter;
+use AdnanMula\Criteria\Filter\FilterOperator;
+use AdnanMula\Criteria\Filter\Filters;
 use AdnanMula\Criteria\Filter\FilterType;
 use AdnanMula\Criteria\FilterField\FilterField;
-use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
-use AdnanMula\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Criteria\FilterValue\StringArrayFilterValue;
 
 final readonly class GetGamesQueryHandler
@@ -41,20 +41,14 @@ final readonly class GetGamesQueryHandler
         $userIds = \array_values(\array_unique(\array_filter($userIds)));
 
         $decks = $this->deckRepository->search(new Criteria(
-            null,
-            null,
-            null,
-            new AndFilterGroup(
+            new Filters(
                 FilterType::AND,
                 new Filter(new FilterField('id'), new StringArrayFilterValue(...\array_map(static fn (Uuid $id): string => $id->value(), $decksIds)), FilterOperator::IN),
             ),
         ));
 
         $users = $this->userRepository->search(new Criteria(
-            null,
-            null,
-            null,
-            new AndFilterGroup(
+            new Filters(
                 FilterType::AND,
                 new Filter(new FilterField('id'), new StringArrayFilterValue(...\array_map(static fn (Uuid $id): string => $id->value(), $userIds)), FilterOperator::IN),
             ),

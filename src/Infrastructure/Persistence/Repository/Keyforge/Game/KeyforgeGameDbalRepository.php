@@ -38,10 +38,10 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
     public function searchOne(Criteria $criteria): ?KeyforgeGame
     {
         $criteria = new Criteria(
+            $criteria->filters(),
             $criteria->offset(),
             1,
             $criteria->sorting(),
-            ...$criteria->filterGroups(),
         );
 
         $result = $this->search($criteria);

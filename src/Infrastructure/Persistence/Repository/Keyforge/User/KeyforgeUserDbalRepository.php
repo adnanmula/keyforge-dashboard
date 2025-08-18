@@ -8,6 +8,7 @@ use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Infrastructure\Persistence\Repository\DbalRepository;
 use AdnanMula\Criteria\Criteria;
 use AdnanMula\Criteria\DbalCriteriaAdapter;
+use AdnanMula\Criteria\FilterField\FieldMapping;
 use Doctrine\DBAL\Result;
 
 final class KeyforgeUserDbalRepository extends DbalRepository implements KeyforgeUserRepository
@@ -25,11 +26,25 @@ final class KeyforgeUserDbalRepository extends DbalRepository implements Keyforg
 
         $query = $builder->select('a.*')->from(self::TABLE, 'a');
 
-        new DbalCriteriaAdapter($builder, self::FIELD_MAPPING)->execute($criteria);
+        new DbalCriteriaAdapter($builder, new FieldMapping(self::FIELD_MAPPING))->execute($criteria);
 
         $result = $query->executeQuery()->fetchAllAssociative();
 
         return \array_map(fn (array $row) => $this->map($row), $result);
+    }
+
+    public function searchOne(Criteria $criteria): ?KeyforgeUser
+    {
+        $result = $this->search(
+            new Criteria(
+                $criteria->filters(),
+                $criteria->offset(),
+                1,
+                $criteria->sorting(),
+            ),
+        );
+
+        return $result[0] ?? null;
     }
 
     public function save(KeyforgeUser $user): void

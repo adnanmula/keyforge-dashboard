@@ -6,10 +6,10 @@ use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Shared\User;
 use AdnanMula\Criteria\Criteria;
 use AdnanMula\Criteria\Filter\Filter;
+use AdnanMula\Criteria\Filter\FilterOperator;
+use AdnanMula\Criteria\Filter\Filters;
 use AdnanMula\Criteria\Filter\FilterType;
 use AdnanMula\Criteria\FilterField\FilterField;
-use AdnanMula\Criteria\FilterGroup\AndFilterGroup;
-use AdnanMula\Criteria\FilterValue\FilterOperator;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
 use Symfony\Bundle\SecurityBundle\Security;
 
@@ -31,10 +31,7 @@ final readonly class AssignTagToDeckCommandHandler
 
         $deck = $this->repository->searchOne(
             new Criteria(
-                null,
-                null,
-                null,
-                new AndFilterGroup(
+                new Filters(
                     FilterType::AND,
                     new Filter(new FilterField('id'), new StringFilterValue($command->deckId->value()), FilterOperator::EQUAL),
                 ),
