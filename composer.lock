@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9d8b9634ddcb6c5bbca94dddd3382e53",
+    "content-hash": "de94c5e7286b1084048a4e7c39335b0f",
     "packages": [
         {
             "name": "adnanmula/criteria",
-            "version": "dev-support-nested-composite-expresions",
+            "version": "0.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/adnanmula/criteria.git",
-                "reference": "1b73a46fd61421d5b4297e9646d5d9458ec9df25"
+                "reference": "e9be7e1fc8d599fb700dcb04cf43c516973b3951"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/adnanmula/criteria/zipball/1b73a46fd61421d5b4297e9646d5d9458ec9df25",
-                "reference": "1b73a46fd61421d5b4297e9646d5d9458ec9df25",
+                "url": "https://api.github.com/repos/adnanmula/criteria/zipball/e9be7e1fc8d599fb700dcb04cf43c516973b3951",
+                "reference": "e9be7e1fc8d599fb700dcb04cf43c516973b3951",
                 "shasum": ""
             },
             "require": {
@@ -50,9 +50,9 @@
             ],
             "support": {
                 "issues": "https://github.com/adnanmula/criteria/issues",
-                "source": "https://github.com/adnanmula/criteria/tree/support-nested-composite-expresions"
+                "source": "https://github.com/adnanmula/criteria/tree/0.4.0"
             },
-            "time": "2025-08-15T21:14:42+00:00"
+            "time": "2025-08-18T22:39:08+00:00"
         },
         {
             "name": "adnanmula/keyforge-game-log-parser",
@@ -10555,7 +10555,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "adnanmula/criteria": 20,
         "adnanmula/tournament": 20
     },
     "prefer-stable": false,
