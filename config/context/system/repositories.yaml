@@ -9,8 +9,7 @@ services:
     class: Doctrine\DBAL\Connection
     factory: 'AdnanMula\Cards\Infrastructure\Persistence\Repository\ConnectionFactory::create'
     arguments:
-      -
-        '%db_url_default%'
+      - '%db_url_default%'
 
   Doctrine\DBAL\Connection:
     alias: repository.dbal.connection

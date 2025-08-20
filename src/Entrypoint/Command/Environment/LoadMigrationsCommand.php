@@ -3,19 +3,16 @@
 namespace AdnanMula\Cards\Entrypoint\Command\Environment;
 
 use Phinx\Console\PhinxApplication;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[AsCommand(name: self::NAME, description: 'Execute migrations')]
 final class LoadMigrationsCommand extends Command
 {
     public const string NAME = 'environment:migrations';
-
-    protected function configure(): void
-    {
-        $this->setName(self::NAME)->setDescription('Execute migrations');
-    }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {

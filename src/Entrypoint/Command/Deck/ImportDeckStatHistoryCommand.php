@@ -15,49 +15,71 @@ use AdnanMula\Criteria\Filter\FilterType;
 use AdnanMula\Criteria\FilterField\FilterField;
 use AdnanMula\Criteria\FilterValue\StringArrayFilterValue;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
+#[AsCommand(name: 'import:deck:history', description: 'Import sas history')]
 final class ImportDeckStatHistoryCommand extends Command
 {
-    public const string NAME = 'import:deck:history';
-
     public function __construct(
         private readonly KeyforgeDeckRepository $deckRepository,
         private readonly ImportDeckStatHistoryFromDokService $service,
     ) {
-        parent::__construct(self::NAME);
+        parent::__construct();
     }
 
     protected function configure(): void
     {
-        $this->setDescription('Import sas history')
-            ->addArgument('batch', InputArgument::OPTIONAL, 'Amount of decks to process', 10)
+        $this->addArgument('batch', InputArgument::OPTIONAL, 'Amount of decks to process', 10)
             ->addOption('decks', 'd', InputOption::VALUE_REQUIRED);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $io = new SymfonyStyle($input, $output);
+
         [$batch, $deckIds] = $this->params($input);
 
         $decks = $this->decks($batch, $deckIds);
 
+        $total = \count($decks);
+        $progressBar = new ProgressBar($output, $total);
+        $progressBar->start();
+
         foreach ($decks as $index => $deck) {
             try {
                 $this->service->execute($deck->id());
-                $output->writeln($deck->data()->name);
+
+                if ($io->isVerbose()) {
+                    $io->writeln(' | ' . $deck->id()->value() . ' ' . $deck->name());
+                }
             } catch (DeckNotExistsException) {
-                $output->writeln('<error>NOT FOUND: '. $deck->data()->name .'</error>');
+                if ($io->isVerbose()) {
+                    $io->error(' | NOT FOUND: '. $deck->id()->value() . ' ' . $deck->name());
+                }
             }
 
+            $progressBar->advance();
+
             if ($index > 0 && ($index+1) % 25 === 0) {
-                $output->writeln('Reached request limit sleeping for 70 seconds');
-                \sleep(70);
+                if ($io->isVerbose()) {
+                    $io->error(' | Reached request limit sleeping for 65 seconds');
+                }
+
+                \sleep(65);
             }
         }
+
+        $progressBar->finish();
+        $output->writeln('');
+
+        $io->success(sprintf('Imported %d', $total));
 
         return self::SUCCESS;
     }
@@ -88,7 +110,7 @@ final class ImportDeckStatHistoryCommand extends Command
 
         return $this->deckRepository->search(
             new Criteria(
-                new Filters(
+                filters: new Filters(
                     FilterType::AND,
                     new Filter(
                         new FilterField('id'),
@@ -102,9 +124,7 @@ final class ImportDeckStatHistoryCommand extends Command
                     ),
                     new CompositeFilter(FilterType::OR, ...$filters),
                 ),
-                null,
-                $batch,
-                null,
+                limit: $batch,
             ),
         );
     }
