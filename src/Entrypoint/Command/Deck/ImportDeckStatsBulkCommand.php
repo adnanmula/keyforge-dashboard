@@ -9,54 +9,76 @@ use AdnanMula\Cards\Domain\Service\Keyforge\ImportDeckService;
 use AdnanMula\Cards\Infrastructure\Persistence\Repository\Keyforge\Deck\KeyforgeDeckUpdateDbalRepository;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
+#[AsCommand(name: 'import:deck', description: 'Import decks')]
 final class ImportDeckStatsBulkCommand extends Command
 {
-    public const string NAME = 'import:deck';
-
     public function __construct(
         private readonly Connection $connection,
         private readonly KeyforgeDeckUpdateDbalRepository $updateRepository,
         private readonly ImportDeckService $service,
     ) {
-        parent::__construct(self::NAME);
+        parent::__construct();
     }
 
     protected function configure(): void
     {
-        $this->setDescription('Import decks')
-            ->addArgument('batch', InputArgument::OPTIONAL, 'Amount of decks to process', 10)
+        $this->addArgument('batch', InputArgument::OPTIONAL, 'Amount of decks to process', 10)
             ->addOption('with-history', null, InputOption::VALUE_NONE, 'Import stats history')
             ->addOption('decks', 'd', InputOption::VALUE_REQUIRED);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $io = new SymfonyStyle($input, $output);
+
         [$batch, $withHistory, $deckIds] = $this->params($input);
 
         $alreadyImported = $this->updateRepository->all();
         $decks = $this->decks($batch, $deckIds, $alreadyImported);
 
+        $total = \count($decks);
+        $progressBar = new ProgressBar($output, $total);
+        $progressBar->start();
+
         foreach ($decks as $index => $deck) {
             try {
                 $this->service->execute(Uuid::from($deck), null, true, $withHistory);
-                $output->writeln($deck);
+
+                if ($io->isVerbose()) {
+                    $io->writeln(' | ' . $deck);
+                }
             } catch (DeckNotExistsException) {
-                $output->writeln('<error>NOT FOUND: '. $deck .'</error>');
+                if ($io->isVerbose()) {
+                    $io->error(' | NOT FOUND: '. $deck);
+                }
             }
 
             $this->updateRepository->add(Uuid::from($deck));
 
+            $progressBar->advance();
+
             if ($index*2 > 0 && ($index*2+2) % 25 === 0) {
-                $output->writeln('Reached request limit sleeping for 70 seconds');
-                \sleep(70);
+                if ($io->isVerbose()) {
+                    $io->error(' | Reached request limit sleeping for 65 seconds');
+                }
+
+                \sleep(65);
             }
         }
+
+        $progressBar->finish();
+        $output->writeln('');
+
+        $io->success(sprintf('Imported %d deck(s)', $total));
 
         return self::SUCCESS;
     }

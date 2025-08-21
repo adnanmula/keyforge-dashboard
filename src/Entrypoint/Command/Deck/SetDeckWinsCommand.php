@@ -11,31 +11,35 @@ use AdnanMula\Criteria\Filter\Filters;
 use AdnanMula\Criteria\Filter\FilterType;
 use AdnanMula\Criteria\FilterField\FilterField;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
+#[AsCommand(name: 'deck:wins:set', description: 'Set wins and losses on user data')]
 final class SetDeckWinsCommand extends Command
 {
-    public const string NAME = 'deck:wins:set';
-
     public function __construct(
         private readonly KeyforgeDeckRepository $deckRepository,
         private readonly UpdateDeckWinRateService $updateDeckWinRateService,
     ) {
-        parent::__construct(self::NAME);
+        parent::__construct();
     }
 
     protected function configure(): void
     {
-        $this->setDescription('Set wins and losses on user data')
-            ->addOption('deck', 'd', InputOption::VALUE_REQUIRED);
+        $this->addOption('deck', 'd', InputOption::VALUE_REQUIRED);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $io = new SymfonyStyle($input, $output);
+
         $deck = $input->getOption('deck');
+
         $filters = [];
 
         if (null !== $deck) {
@@ -48,10 +52,24 @@ final class SetDeckWinsCommand extends Command
 
         $decks = $this->deckRepository->search(new Criteria(new Filters(FilterType::AND, ...$filters)));
 
+        $total = \count($decks);
+        $progressBar = new ProgressBar($output, $total);
+        $progressBar->start();
+
         foreach ($decks as $deck) {
             $this->updateDeckWinRateService->execute($deck->id());
-            $output->writeln($deck->name());
+
+            $progressBar->advance();
+
+            if ($output->isVerbose()) {
+                $output->writeln(' | ' . $deck->id() . ' ' . $deck->name());
+            }
         }
+
+        $progressBar->finish();
+        $output->writeln('');
+
+        $io->success(sprintf('Calculated winrate for %d deck(s)', $total));
 
         return self::SUCCESS;
     }

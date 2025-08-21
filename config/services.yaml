@@ -12,6 +12,7 @@ services:
       Doctrine\DBAL\Connection $connection: '@repository.dbal.connection'
       Psr\Log\LoggerInterface $userActivityLogger: '@monolog.logger.user_activity'
       bool $registrationClosed: '%env(REGISTRATION_CLOSED)%'
+      string $dbUrl: '%db_url%'
 
   AdnanMula\Cards\Application\Command\:
     resource: '../src/Application/Command/*/*/*/*Handler.php'
@@ -43,6 +44,9 @@ services:
   AdnanMula\Cards\Infrastructure\Service\:
     resource: '../src/Infrastructure/Service'
 
+  AdnanMula\Cards\Entrypoint\Command\:
+    resource: '../src/Entrypoint/Command'
+
   AdnanMula\Cards\Infrastructure\Fixtures\:
       autoconfigure: true
       autowire: true
@@ -51,12 +55,6 @@ services:
 
   AdnanMula\Cards\Infrastructure\Fixtures\FixturesRegistry:
     class: AdnanMula\Cards\Infrastructure\Fixtures\FixturesRegistry
-
-  AdnanMula\Cards\Entrypoint\Command\:
-    autowire: true
-    autoconfigure: true
-    resource: '../src/Entrypoint/Command'
-    tags: [ 'console.command' ]
 
 imports:
     - { resource: context/system/buses.yaml }
