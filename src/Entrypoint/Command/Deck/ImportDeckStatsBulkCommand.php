@@ -7,6 +7,7 @@ use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckType;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Domain\Service\Keyforge\ImportDeckService;
 use AdnanMula\Cards\Infrastructure\Persistence\Repository\Keyforge\Deck\KeyforgeDeckUpdateDbalRepository;
+use AdnanMula\Cards\Infrastructure\Service\Keyforge\DoK\ImportDeckAllianceFromDokService;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -25,6 +26,7 @@ final class ImportDeckStatsBulkCommand extends Command
         private readonly Connection $connection,
         private readonly KeyforgeDeckUpdateDbalRepository $updateRepository,
         private readonly ImportDeckService $service,
+        private readonly ImportDeckAllianceFromDokService $allianceService,
     ) {
         parent::__construct();
     }
@@ -33,17 +35,18 @@ final class ImportDeckStatsBulkCommand extends Command
     {
         $this->addArgument('batch', InputArgument::OPTIONAL, 'Amount of decks to process', 10)
             ->addOption('with-history', null, InputOption::VALUE_NONE, 'Import stats history')
-            ->addOption('decks', 'd', InputOption::VALUE_REQUIRED);
+            ->addOption('decks', 'd', InputOption::VALUE_REQUIRED, 'Filter by deck ids, comma separated')
+            ->addOption('type', 't', InputOption::VALUE_REQUIRED, 'Filter by deck type', KeyforgeDeckType::STANDARD->value);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
 
-        [$batch, $withHistory, $deckIds] = $this->params($input);
+        [$batch, $withHistory, $deckIds, $type] = $this->params($input);
 
         $alreadyImported = $this->updateRepository->all();
-        $decks = $this->decks($batch, $deckIds, $alreadyImported);
+        $decks = $this->decks($batch, $deckIds, $alreadyImported, $type);
 
         $total = \count($decks);
         $progressBar = new ProgressBar($output, $total);
@@ -51,7 +54,11 @@ final class ImportDeckStatsBulkCommand extends Command
 
         foreach ($decks as $index => $deck) {
             try {
-                $this->service->execute(Uuid::from($deck), null, true, $withHistory);
+                if (KeyforgeDeckType::ALLIANCE === $type) {
+                    $this->allianceService->execute(Uuid::from($deck), null, true);
+                } else {
+                    $this->service->execute(Uuid::from($deck), null, true, $withHistory);
+                }
 
                 if ($io->isVerbose()) {
                     $io->writeln(' | ' . $deck);
@@ -88,15 +95,16 @@ final class ImportDeckStatsBulkCommand extends Command
         $batch = (int) $input->getArgument('batch');
         $withHistory = $input->getOption('with-history') ?? false;
         $deckIds = $input->getOption('decks') ?? [];
+        $type = KeyforgeDeckType::from($input->getOption('type'));
 
         if ([] !== $deckIds) {
             $deckIds = \explode(',', $input->getOption('decks'));
         }
 
-        return [$batch, $withHistory, $deckIds];
+        return [$batch, $withHistory, $deckIds, $type];
     }
 
-    private function decks(int $batch, array $deckIds, array $alreadyImported): array
+    private function decks(int $batch, array $deckIds, array $alreadyImported, KeyforgeDeckType $type): array
     {
         $draftDecks = [
             '37259b93-1cdd-4ea8-8206-767b071b2643',
@@ -113,7 +121,7 @@ final class ImportDeckStatsBulkCommand extends Command
             ->where('a.id not in (:already_imported)')
             ->andWhere('a.deck_type = :type')
             ->setParameter('already_imported', $alreadyImported, ArrayParameterType::STRING)
-            ->setParameter('type', KeyforgeDeckType::STANDARD->value);
+            ->setParameter('type', $type->value);
 
         if (\count($deckIds) > 0) {
             $query->andWhere('a.id in (:decks)')
