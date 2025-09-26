@@ -85,6 +85,7 @@ final readonly class GetGamesQueryHandler
                 'competition' => $game->competition()->value,
                 'notes' => $game->notes(),
                 'log' => $game->log(),
+                'logId' => $game->logId()?->value(),
             ];
         }
 

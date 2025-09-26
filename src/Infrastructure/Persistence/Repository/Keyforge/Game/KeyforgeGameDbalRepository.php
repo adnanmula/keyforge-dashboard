@@ -12,6 +12,7 @@ use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Infrastructure\Persistence\Repository\DbalRepository;
 use AdnanMula\Criteria\Criteria;
 use AdnanMula\Criteria\DbalCriteriaAdapter;
+use AdnanMula\Criteria\FilterField\FieldMapping;
 use Doctrine\DBAL\ParameterType;
 
 final class KeyforgeGameDbalRepository extends DbalRepository implements KeyforgeGameRepository
@@ -19,14 +20,20 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
     private const string TABLE = 'keyforge_games';
     private const string TABLE_GAME_LOG = 'keyforge_game_logs';
 
+    private const array fieldMapping = [
+        'id' => 'a.id',
+        'log_id' => 'b.id',
+    ];
+
     public function search(Criteria $criteria): array
     {
         $builder = $this->connection->createQueryBuilder();
 
-        $query = $builder->select('a.*')
-            ->from(self::TABLE, 'a');
+        $query = $builder->select('a.*, b.log, b.id as log_id')
+            ->from(self::TABLE, 'a')
+            ->leftJoin('a', self::TABLE_GAME_LOG, 'b', 'a.id = b.game_id');
 
-        (new DbalCriteriaAdapter($query))->execute($criteria);
+        new DbalCriteriaAdapter($query, new FieldMapping(self::fieldMapping))->execute($criteria);
 
         $result = $query->executeQuery()->fetchAllAssociative();
 
@@ -212,6 +219,7 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
             $game['approved'],
             Uuid::fromNullable($game['created_by']),
             Json::decodeNullable($game['log']),
+            Uuid::fromNullable($game['log_id']),
         );
     }
 

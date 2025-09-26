@@ -93,13 +93,8 @@ keyforge_game_analyze:
   controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Game\Detail\GameAnalyzeController
   methods: [GET, POST]
 
-keyforge_game_detail:
+keyforge_game_log:
   path: /game/{id}
-  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Game\Detail\GameDetailController
-  methods: [GET]
-
-keyforge_gamelog:
-  path: /gamelog/{id}
   controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Game\Detail\GameLogDetailController
   methods: [GET]
 

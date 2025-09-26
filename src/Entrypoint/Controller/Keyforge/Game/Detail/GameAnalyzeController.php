@@ -64,6 +64,6 @@ final class GameAnalyzeController extends Controller
 
         $this->userActivityLogger->info('Game analyzed', ['user' => $this->getUser()?->id()->value()]);
 
-        return $this->redirectToRoute('keyforge_gamelog', ['id' => $logId->value()]);
+        return $this->redirectToRoute('keyforge_game_log', ['id' => $logId->value()]);
     }
 }

@@ -25,6 +25,7 @@ final class KeyforgeGame implements \JsonSerializable
         private bool $approved,
         private ?Uuid $createdBy,
         private ?array $log,
+        private ?Uuid $logId = null,
     ) {}
 
     public function id(): Uuid
@@ -112,6 +113,11 @@ final class KeyforgeGame implements \JsonSerializable
         return $this->log;
     }
 
+    public function logId(): ?Uuid
+    {
+        return $this->logId;
+    }
+
     public function isSoloPlay(): bool
     {
         return $this->winner->equalTo($this->loser);
@@ -141,6 +147,7 @@ final class KeyforgeGame implements \JsonSerializable
             'approved' => $this->approved(),
             'created_by' => $this->createdBy()?->value(),
             'log' => $this->log,
+            'logId' => $this->logId?->value(),
         ];
     }
 }
