@@ -93,7 +93,6 @@ final readonly class CreateGameCommandHandler
             $command->notes,
             $approved,
             $user->id(),
-            $log,
         );
 
         $this->gameRepository->save($game);
