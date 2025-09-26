@@ -33,6 +33,7 @@
                <option value="TCO_COMPETITIVE">{{ 'game.tco_competitive'|trans }}</option>
                <option value="LGS">{{ 'game.lgs'|trans }}</option>
                <option value="VT">{{ 'game.vt'|trans }}</option>
+               <option value="NATIONAL">{{ 'game.national'|trans }}</option>
                <option value="NKFL">{{ 'game.nkfl'|trans }}</option>
                <option value="LOCAL_LEAGUE">{{ 'game.local_league'|trans }}</option>
            </select>
@@ -216,9 +217,9 @@
                             cell += '<i class="bi bi-journal-text" data-toggle="tooltip" title="' + row.notes + '"></i>'
                         }
 
-                        if (null !== row.log) {
-                            let url = '{{ path('keyforge_game_detail', {'id': '-replace-'}) }}';
-                            url = url.replace('-replace-', row.id);
+                        if (null !== row.logId) {
+                            let url = '{{ path('keyforge_game_log', {'id': '-replace-'}) }}';
+                            url = url.replace('-replace-', row.logId);
 
                             cell += '<a href="'+url+'" target="_blank"><i class="bi bi-graph-up" data-toggle="tooltip" title="{{ 'game.log'|trans }}"></i></a>';
                         }

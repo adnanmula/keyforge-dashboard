@@ -22,8 +22,18 @@ final class Games extends AbstractMigration
                 competition character varying(64) NOT NULL,
                 notes character varying(512) NOT NULL,
                 approved bool NOT NULL,
-                created_by uuid NULL,
-                log jsonb NULL,
+                created_by uuid NULL
+                PRIMARY KEY(id)
+            )',
+        );
+
+        $this->execute(
+            'CREATE TABLE keyforge_game_logs (
+                id uuid NOT NULL,
+                game_id uuid NULL,
+                log jsonb NOT NULL,
+                created_by character varying(64) NULL,
+                created_at TIMESTAMP WITH TIME ZONE NOT NULL,
                 PRIMARY KEY(id)
             )',
         );

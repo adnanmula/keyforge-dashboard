@@ -157,6 +157,7 @@ game.tco_casual: 'TCO Casual'
 game.tco_competitive: 'TCO Competitivo'
 game.type: Tipo
 game.vt: 'Vault Tour'
+game.national: 'National'
 game.winner: Ganador
 game.winner_chains: 'Llaves del ganador'
 game.winner_deck: 'Baraja ganadora'

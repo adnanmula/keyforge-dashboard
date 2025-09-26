@@ -8,6 +8,7 @@ use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeCompetitionFixture;
 use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeCompetitionRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeGame;
+use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeGameLog;
 use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeGameRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\Game\ValueObject\KeyforgeGameScore;
 use AdnanMula\Cards\Domain\Model\Shared\User;
@@ -70,10 +71,19 @@ final readonly class CreateCompetitionGameCommandHandler
             $command->notes,
             false,
             $user->id(),
-            $log,
         );
 
         $this->gameRepository->save($game);
+
+        if (null !== $log) {
+            $this->gameRepository->saveLog(new KeyforgeGameLog(
+                Uuid::v4(),
+                $game->id(),
+                $log,
+                $user->id(),
+                new \DateTimeImmutable(),
+            ));
+        }
 
         $this->updateDeckWinRateService->execute($winnerDeck->id());
         $this->updateDeckWinRateService->execute($loserDeck->id());

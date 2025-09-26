@@ -20,4 +20,8 @@ interface KeyforgeGameRepository
     public function save(KeyforgeGame $game): void;
 
     public function remove(Uuid $id): void;
+
+    public function saveLog(KeyforgeGameLog $gameLog): void;
+
+    public function gameLog(Uuid $id): ?KeyforgeGameLog;
 }

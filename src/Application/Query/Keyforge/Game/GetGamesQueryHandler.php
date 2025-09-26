@@ -84,7 +84,7 @@ final readonly class GetGamesQueryHandler
                 'date' => $game->date()->format('Y-m-d'),
                 'competition' => $game->competition()->value,
                 'notes' => $game->notes(),
-                'log' => $game->log(),
+                'logId' => $game->logId()?->value(),
             ];
         }
 

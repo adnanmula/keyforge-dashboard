@@ -15,6 +15,7 @@ enum KeyforgeCompetition: string
     case LOCAL_LEAGUE = 'Local League';
     case FRIENDS_LEAGUE = 'League with friends';
     case VT = 'VT';
+    case NATIONAL = 'NATIONAL';
     case LGS = 'LGS';
     case NKFL = 'NKFL';
 
@@ -28,6 +29,7 @@ enum KeyforgeCompetition: string
             self::LOCAL_LEAGUE->name => self::LOCAL_LEAGUE,
             self::FRIENDS_LEAGUE->name => self::FRIENDS_LEAGUE,
             self::VT->name => self::VT,
+            self::NATIONAL->name => self::NATIONAL,
             self::LGS->name => self::LGS,
             self::NKFL->name => self::NKFL,
             default => self::FRIENDS,
