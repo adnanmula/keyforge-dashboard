@@ -98,6 +98,11 @@ keyforge_game_detail:
   controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Game\Detail\GameDetailController
   methods: [GET]
 
+keyforge_gamelog:
+  path: /gamelog/{id}
+  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Game\Detail\GameLogDetailController
+  methods: [GET]
+
 competitions:
   resource: competition_routes.yaml
   prefix: /

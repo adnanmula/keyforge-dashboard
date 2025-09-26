@@ -4,6 +4,7 @@ namespace AdnanMula\Cards\Infrastructure\Persistence\Repository\Keyforge\Game;
 
 use AdnanMula\Cards\Application\Service\Json;
 use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeGame;
+use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeGameLog;
 use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeGameRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\Game\ValueObject\KeyforgeCompetition;
 use AdnanMula\Cards\Domain\Model\Keyforge\Game\ValueObject\KeyforgeGameScore;
@@ -16,6 +17,7 @@ use Doctrine\DBAL\ParameterType;
 final class KeyforgeGameDbalRepository extends DbalRepository implements KeyforgeGameRepository
 {
     private const string TABLE = 'keyforge_games';
+    private const string TABLE_GAME_LOG = 'keyforge_game_logs';
 
     public function search(Criteria $criteria): array
     {
@@ -145,6 +147,50 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
             ->executeStatement();
     }
 
+    public function saveLog(KeyforgeGameLog $gameLog): void
+    {
+        $stmt = $this->connection->prepare(
+            \sprintf(
+                '
+                    INSERT INTO %s (id, game_id, log, created_by, created_at)
+                    VALUES (:id, :game_id, :log, :created_by, :created_at)
+                    ON CONFLICT (id) DO UPDATE SET
+                        id = :id,
+                        game_id = :game_id,
+                        log = :log,
+                        created_by = :created_by,
+                        created_at = :created_at
+                    ',
+                self::TABLE_GAME_LOG,
+            ),
+        );
+
+        $stmt->bindValue(':id', $gameLog->id->value());
+        $stmt->bindValue(':game_id', $gameLog->gameId?->value());
+        $stmt->bindValue(':log', Json::encode($gameLog->log));
+        $stmt->bindValue(':created_by', $gameLog->createdBy?->value());
+        $stmt->bindValue(':created_at', $gameLog->createdAt->format(\DateTimeInterface::ATOM));
+
+        $stmt->executeStatement();
+    }
+
+    public function gameLog(Uuid $id): ?KeyforgeGameLog
+    {
+        $log = $this->connection->createQueryBuilder()
+            ->select('a.*')
+            ->from(self::TABLE_GAME_LOG, 'a')
+            ->where('a.id = :id')
+            ->setParameter('id', $id->value())
+            ->executeQuery()
+            ->fetchAssociative();;
+
+        if (null === $log || false === $log) {
+            return null;
+        }
+
+        return $this->mapGameLog($log);
+    }
+
     private function map(array $game): KeyforgeGame
     {
         $score = Json::decode($game['score']);
@@ -166,6 +212,17 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
             $game['approved'],
             Uuid::fromNullable($game['created_by']),
             Json::decodeNullable($game['log']),
+        );
+    }
+
+    private function mapGameLog(array $log): KeyforgeGameLog
+    {
+        return new KeyforgeGameLog(
+            Uuid::from($log['id']),
+            Uuid::fromNullable($log['game_id']),
+            Json::decode($log['log']),
+            Uuid::fromNullable($log['created_by']),
+            new \DateTimeImmutable($log['created_at']),
         );
     }
 }

@@ -2,6 +2,8 @@
 
 namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\Game\Detail;
 
+use AdnanMula\Cards\Application\Command\Keyforge\Game\Analyze\AnalyzeGameCommand;
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
 use AdnanMula\KeyforgeGameLogParser\GameLogParser;
 use Psr\Log\LoggerInterface;
@@ -45,6 +47,10 @@ final class GameAnalyzeController extends Controller
             if (null === $parsedLog->winner()) {
                 throw new \Exception('Incomplete or malformed log');
             }
+
+            $logId = Uuid::v4();
+
+            $this->bus->dispatch(new AnalyzeGameCommand($logId->value(), null, $log));
         } catch (\Throwable $e) {
             $this->logger->error($e->getMessage());
 
@@ -58,14 +64,6 @@ final class GameAnalyzeController extends Controller
 
         $this->userActivityLogger->info('Game analyzed', ['user' => $this->getUser()?->id()->value()]);
 
-        return $this->render(
-            'Keyforge/Game/Detail/game.html.twig',
-            [
-                'game' => [
-                    'date' => new \DateTimeImmutable()->format('Y-m-d'),
-                    'log' => $parsedLog,
-                ],
-            ],
-        );
+        return $this->redirectToRoute('keyforge_gamelog', ['id' => $logId->value()]);
     }
 }

@@ -29,6 +29,17 @@ final class Games extends AbstractMigration
         );
 
         $this->execute(
+            'CREATE TABLE keyforge_game_logs (
+                id uuid NOT NULL,
+                game_id uuid NULL,
+                log jsonb NOT NULL,
+                created_by character varying(64) NULL,
+                created_at TIMESTAMP WITH TIME ZONE NOT NULL,
+                PRIMARY KEY(id)
+            )',
+        );
+
+        $this->execute(
             'CREATE TABLE keyforge_competitions (
                 id uuid NOT NULL,
                 name character varying(64) NOT NULL CONSTRAINT competition_name_unique UNIQUE,

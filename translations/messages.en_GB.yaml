@@ -157,6 +157,7 @@ game.tco_casual: 'TCO Casual'
 game.tco_competitive: 'TCO Competitive'
 game.type: Type
 game.vt: 'Vault Tour'
+game.national: 'National'
 game.winner: Winner
 game.winner_chains: 'Winner chains'
 game.winner_deck: 'Winner deck'
