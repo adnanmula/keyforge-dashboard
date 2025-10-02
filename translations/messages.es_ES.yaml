@@ -397,11 +397,20 @@ menu.use_id: Usar id
 game.timeline.versus: Contra
 game.timeline.fought_with: Lucho con
 game.timeline.reaped_with: Cosecho con
-game.timeline.used: Uso a
+game.timeline.used: Usó a
+game.timeline.activates: Activó
+game.timeline.fulfilled: Cumplió
+game.timeline.resolved: Resolvió
+game.timeline.reduced_chains: 'Las cadenas se redujeron en %by% a %to%'
+game.timeline.the_fate_of: El destino de
+game.timeline.the_prophecy: La profecía
 game.timeline.to_fight_with: Para luchar con
 game.timeline.to_reap_with: Para cosechar con
 game.timeline.to_steal: Para robar
 game.timeline.amber: Ámbar
+game.timeline.manually_raised_tide: Subio la marea manualmente
+game.timeline.to_raise_tide: Para subir la marea
+game.timeline.to_make_token: Para crear una criatura token
 menu.fights: Luchas
 menu.reaps: Cosechas
 menu.amber_stolen: Ámbar robado
@@ -438,6 +447,11 @@ competition.error.already_finished: Competición ya finalizada
 menu.join: Unirse
 menu.leave: Salir
 menu.extra_turns: Turnos extra
+menu.tokens_created: Tokens creados
+menu.tides_risen: Mareas subidas
+menu.prophecies_activated: Profecias activadas
+menu.prophecies_fulfilled: Profecias cumplidas
+menu.fates_resolved: Destinos resueltos
 game.timeline.extra_turn: Para tomar un turno adicional después de este
 deck.archon-power: Archon Power
 deck.prophecy: Profecía

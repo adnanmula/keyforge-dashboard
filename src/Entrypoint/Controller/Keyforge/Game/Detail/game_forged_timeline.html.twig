@@ -4,7 +4,7 @@
 </div>
 
 <script>
-    const forgeEvents = JSON.parse('{{ game.log.keysForged|json_encode|raw }}');
+    const forgeEvents = JSON.parse('{{ log.timeline.filter(eventTypes.KEY_FORGED).items|json_encode|raw }}');
     const playerMap = {};
     let playerIndex = 0;
 
@@ -97,8 +97,8 @@
             key: e.value,
             keyColor: keyColors[e.value],
             turn: '{{ 'menu.turn'|trans }}: ' + e.turn.value,
-            amberCost: '{{ 'menu.amber_cost'|trans }}: ' + e.amber_cost,
-            amberRemaining: '{{ 'menu.amber_remaining'|trans }}: ' + e.amber_remaining,
+            amberCost: '{{ 'menu.amber_cost'|trans }}: ' + e.payload.amberCost,
+            amberRemaining: '{{ 'menu.amber_remaining'|trans }}: ' + e.payload.amberRemaining,
         }));
 
         const pointCount = {};

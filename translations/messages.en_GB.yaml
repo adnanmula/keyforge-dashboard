@@ -398,10 +398,19 @@ game.timeline.versus: Versus
 game.timeline.fought_with: Fought with
 game.timeline.reaped_with: Reaped with
 game.timeline.used: Used
+game.timeline.activates: Activates
+game.timeline.fulfilled: Fulfilled
+game.timeline.resolved: Resolved
+game.timeline.reduced_chains: 'Chains were reduced by %by% to %to%'
+game.timeline.the_fate_of: The fate of
+game.timeline.the_prophecy: The prophecy
 game.timeline.to_fight_with: To fight with
 game.timeline.to_reap_with: To reap with
 game.timeline.to_steal: To steal
 game.timeline.amber: Amber
+game.timeline.manually_raised_tide: Manually raised the tide
+game.timeline.to_raise_tide: To raise the tide
+game.timeline.to_make_token: To make a token creature
 menu.fights: Fights
 menu.reaps: Reaps
 menu.amber_stolen: Amber stolen
@@ -438,6 +447,11 @@ competition.error.already_finished: Competition already finished
 menu.join: Join
 menu.leave: Leave
 menu.extra_turns: Extra turns
+menu.tokens_created: Tokens created
+menu.tides_risen: Tides risen
+menu.prophecies_activated: Prophecies activated
+menu.prophecies_fulfilled: Prophecies fulfilled
+menu.fates_resolved: Fates resolved
 game.timeline.extra_turn: To take an extra turn after this one
 deck.archon-power: Archon Power
 deck.prophecy: Prophecy

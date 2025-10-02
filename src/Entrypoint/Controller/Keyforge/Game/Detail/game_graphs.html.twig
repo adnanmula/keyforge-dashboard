@@ -11,12 +11,12 @@
 
 
     <div class="col-12 col-md-3 mt-3">
-        <h5>{{ 'menu.houses_chosen'|trans }} {{ game.log.winner.name }} </h5>
+        <h5>{{ 'menu.houses_chosen'|trans }} {{ log.winner.name }} </h5>
         <canvas id="winnerHousesByTurnChart"></canvas>
     </div>
 
     <div class="col-12 col-md-3 mt-3">
-        <h5>{{ 'menu.houses_chosen'|trans }} {{ game.log.loser.name }}</h5>
+        <h5>{{ 'menu.houses_chosen'|trans }} {{ log.loser.name }}</h5>
         <canvas id="loserHousesByTurnChart"></canvas>
     </div>
 
@@ -39,19 +39,19 @@
 <script>
     const playerData = {
         winner: {
-            raw: JSON.parse('{{ game.log.winner.amberObtained|json_encode|raw }}'),
-            amberStolen: JSON.parse('{{ game.log.winner.amberStolen.amountToArrayByTurn(game.log.length)|json_encode|raw }}'),
-            fights: JSON.parse('{{ game.log.winner.fights.amountToArrayByTurn(game.log.length)|json_encode|raw }}'),
-            reaps: JSON.parse('{{ game.log.winner.reaps.amountToArrayByTurn(game.log.length)|json_encode|raw }}'),
+            raw: JSON.parse('{{ log.winner.timeline.filter(eventTypes.AMBER_OBTAINED).items|json_encode|raw }}'),
+            amberStolen: JSON.parse('{{ log.winner.timeline.aggEventsByTurn(log.length, eventTypes.AMBER_STOLEN)|json_encode|raw }}'),
+            fights: JSON.parse('{{ log.winner.timeline.eventsByTurn(log.length, eventTypes.FIGHT)|json_encode|raw }}'),
+            reaps: JSON.parse('{{ log.winner.timeline.eventsByTurn(log.length, eventTypes.REAP)|json_encode|raw }}'),
             byTurn: [],
             accumulative: [],
             color: 'rgba(25, 135, 84, 0.7)',
         },
         loser: {
-            raw: JSON.parse('{{ game.log.loser.amberObtained|json_encode|raw }}'),
-            amberStolen: JSON.parse('{{ game.log.loser.amberStolen.amountToArrayByTurn(game.log.length)|json_encode|raw }}'),
-            fights: JSON.parse('{{ game.log.loser.fights.amountToArrayByTurn(game.log.length)|json_encode|raw }}'),
-            reaps: JSON.parse('{{ game.log.loser.reaps.amountToArrayByTurn(game.log.length)|json_encode|raw }}'),
+            raw: JSON.parse('{{ log.loser.timeline.filter(eventTypes.AMBER_OBTAINED).items|json_encode|raw }}'),
+            amberStolen: JSON.parse('{{ log.loser.timeline.aggEventsByTurn(log.length, eventTypes.AMBER_STOLEN)|json_encode|raw }}'),
+            fights: JSON.parse('{{ log.loser.timeline.eventsByTurn(log.length, eventTypes.FIGHT)|json_encode|raw }}'),
+            reaps: JSON.parse('{{ log.loser.timeline.eventsByTurn(log.length, eventTypes.REAP)|json_encode|raw }}'),
             byTurn: [],
             accumulative: [],
             color: 'rgba(220, 53, 69, 0.7)',
@@ -66,16 +66,16 @@
         const accumulative = playerData.winner.accumulative;
         const last = accumulative.length ? accumulative[accumulative.length - 1] : 0;
 
-        playerData.winner.byTurn.push(entry.delta);
-        playerData.winner.accumulative.push(last + entry.delta);
+        playerData.winner.byTurn.push(entry.payload.delta);
+        playerData.winner.accumulative.push(last + entry.payload.delta);
     });
 
     playerData.loser.raw.forEach(entry => {
         const accumulative = playerData.loser.accumulative;
         const last = accumulative.length ? accumulative[accumulative.length - 1] : 0;
 
-        playerData.loser.byTurn.push(entry.delta);
-        playerData.loser.accumulative.push(last + entry.delta);
+        playerData.loser.byTurn.push(entry.payload.delta);
+        playerData.loser.accumulative.push(last + entry.payload.delta);
     });
 
     playerData.total.accumulative = playerData.winner.accumulative.map((value, index) => value + playerData.loser.accumulative[index]);
@@ -91,12 +91,12 @@
             labels: labels,
             datasets: [
                 {
-                    label: '{{ game.log.winner.name }}',
+                    label: '{{ log.winner.name }}',
                     data: playerData.winner.byTurn,
                     backgroundColor: playerData.winner.color,
                 },
                 {
-                    label: '{{ game.log.loser.name }}',
+                    label: '{{ log.loser.name }}',
                     data: playerData.loser.byTurn,
                     backgroundColor: playerData.loser.color,
                 },
@@ -110,14 +110,14 @@
             labels: labels,
             datasets: [
                 {
-                    label: '{{ game.log.winner.name }}',
+                    label: '{{ log.winner.name }}',
                     data: playerData.winner.accumulative,
                     borderColor: playerData.winner.color.replace('0.7', '1'),
                     backgroundColor: playerData.winner.color,
                     fill: false
                 },
                 {
-                    label: '{{ game.log.loser.name }}',
+                    label: '{{ log.loser.name }}',
                     data: playerData.loser.accumulative,
                     borderColor: playerData.loser.color.replace('0.7', '1'),
                     backgroundColor: playerData.loser.color,
@@ -142,12 +142,12 @@
             labels: Object.keys(playerData.winner.amberStolen),
             datasets: [
                 {
-                    label: '{{ game.log.winner.name }}',
+                    label: '{{ log.winner.name }}',
                     data: playerData.winner.amberStolen,
                     backgroundColor: playerData.winner.color,
                 },
                 {
-                    label: '{{ game.log.loser.name }}',
+                    label: '{{ log.loser.name }}',
                     data: playerData.loser.amberStolen,
                     backgroundColor: playerData.loser.color,
                 },
@@ -171,12 +171,12 @@
             labels: Object.keys(playerData.winner.fights),
             datasets: [
                 {
-                    label: '{{ game.log.winner.name }}',
+                    label: '{{ log.winner.name }}',
                     data: playerData.winner.fights,
                     backgroundColor: playerData.winner.color,
                 },
                 {
-                    label: '{{ game.log.loser.name }}',
+                    label: '{{ log.loser.name }}',
                     data: playerData.loser.fights,
                     backgroundColor: playerData.loser.color,
                 },
@@ -200,12 +200,12 @@
             labels: Object.keys(playerData.winner.reaps),
             datasets: [
                 {
-                    label: '{{ game.log.winner.name }}',
+                    label: '{{ log.winner.name }}',
                     data: playerData.winner.reaps,
                     backgroundColor: playerData.winner.color,
                 },
                 {
-                    label: '{{ game.log.loser.name }}',
+                    label: '{{ log.loser.name }}',
                     data: playerData.loser.reaps,
                     backgroundColor: playerData.loser.color,
                 },
@@ -242,13 +242,13 @@
 
     const houseChosenEvent = {
         winner: {
-            events: JSON.parse('{{ game.log.winner.housesChosen|json_encode|raw }}'),
+            events: JSON.parse('{{ log.winner.timeline.filter(eventTypes.HOUSE_CHOSEN).items|json_encode|raw }}'),
             aggregated: [],
             labels: [],
             bgColors: [],
         },
         loser: {
-            events: JSON.parse('{{ game.log.loser.housesChosen|json_encode|raw }}'),
+            events: JSON.parse('{{ log.loser.timeline.filter(eventTypes.HOUSE_CHOSEN).items|json_encode|raw }}'),
             aggregated: [],
             labels: [],
             bgColors: [],

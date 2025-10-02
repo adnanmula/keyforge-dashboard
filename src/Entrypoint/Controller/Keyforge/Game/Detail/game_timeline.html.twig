@@ -99,14 +99,14 @@
 {% endblock %}
 
 <div class="row">
-    <div class="col-6"><h5 style="text-align:right;" id="fullTimelinePlayer1">{{ game.log.player1.name }}</h5></div>
-    <div class="col-6"><h5 style="text-align:left;" id="fullTimelinePlayer2">{{ game.log.player2.name }}</h5></div>
+    <div class="col-6"><h5 style="text-align:right;" id="fullTimelinePlayer1">{{ log.player1.name }}</h5></div>
+    <div class="col-6"><h5 style="text-align:left;" id="fullTimelinePlayer2">{{ log.player2.name }}</h5></div>
     <div class="timeline" id="timeline"></div>
 </div>
 
 <script>
-    const cardsPlayedData = JSON.parse('{{ game.log.cardsPlayed|json_encode|raw }}');
-    const fullTimelineEvents = JSON.parse('{{ game.log.timeline|json_encode|raw }}');
+    const cardsPlayedData = JSON.parse('{{ log.timeline.filter(eventTypes.CARDS_PLAYED).items|json_encode|raw }}');
+    const fullTimelineEvents = JSON.parse('{{ log.timeline|json_encode|raw }}');
 
     const fullTimelineEventsGrouped = [];
 
@@ -135,7 +135,7 @@
                     break;
 
                 case 'KEY_FORGED':
-                    actions.push('{{ 'menu.key_forged'|trans }}: ' + event.value + ' {{ 'menu.cost'|trans }}: ' + event.amber_cost + ' {{ 'menu.remaining'|trans }}: ' + event.amber_remaining);
+                    actions.push('{{ 'menu.key_forged'|trans }}: ' + event.value + ' {{ 'menu.cost'|trans }}: ' + event.payload.amberCost + ' {{ 'menu.remaining'|trans }}: ' + event.payload.amberRemaining);
                     break;
 
                 case 'CARDS_DISCARDED':
@@ -147,7 +147,7 @@
                     break;
 
                 case 'AMBER_OBTAINED':
-                    actions.push('{{ 'menu.current_amber'|trans }}: ' + event.value + ' (delta: ' + event.delta + ')');
+                    actions.push('{{ 'menu.current_amber'|trans }}: ' + event.value + ' (delta: ' + event.payload.delta + ')');
                     break;
 
                 case 'HOUSE_CHOSEN':
@@ -155,33 +155,62 @@
                     break;
 
                 case 'AMBER_STOLEN':
-                    actions.push('{{ 'game.timeline.used'|trans }} ' + event.trigger + ' {{ 'game.timeline.to_steal'|trans|lower }} ' + event.value + ' {{ 'game.timeline.amber'|trans|lower }}');
+                    actions.push('{{ 'game.timeline.used'|trans }} ' + event.payload.trigger + ' {{ 'game.timeline.to_steal'|trans|lower }} ' + event.value + ' {{ 'game.timeline.amber'|trans|lower }}');
                     break;
 
                 case 'FIGHT':
-                    if (event.trigger === event.value) {
-                        actions.push('{{ 'game.timeline.fought_with'|trans }} ' + event.value + ' {{ 'game.timeline.versus'|trans|lower }} ' + event.target);
+                    if (event.payload.trigger === event.value) {
+                        actions.push('{{ 'game.timeline.fought_with'|trans }} ' + event.value + ' {{ 'game.timeline.versus'|trans|lower }} ' + event.payload.target);
                     } else {
-                        actions.push('{{ 'game.timeline.used'|trans }} ' + event.trigger + ' {{ 'game.timeline.to_fight_with'|trans|lower }} ' + event.value + ' {{ 'game.timeline.versus'|trans|lower }} ' + event.target);
+                        actions.push('{{ 'game.timeline.used'|trans }} ' + event.payload.trigger + ' {{ 'game.timeline.to_fight_with'|trans|lower }} ' + event.value + ' {{ 'game.timeline.versus'|trans|lower }} ' + event.payload.target);
                     }
                     break;
 
                 case 'REAP':
-                    if (event.trigger === event.value) {
+                    if (event.payload.trigger === event.value) {
                         actions.push('{{ 'game.timeline.reaped_with'|trans }} ' + event.value);
                     } else {
-                        actions.push('{{ 'game.timeline.used'|trans }} ' + event.trigger + ' {{ 'game.timeline.to_reap_with'|trans|lower }} ' + event.value);
+                        actions.push('{{ 'game.timeline.used'|trans }} ' + event.payload.trigger + ' {{ 'game.timeline.to_reap_with'|trans|lower }} ' + event.value);
                     }
                     break;
+
                 case 'EXTRA_TURN':
-                    actions.push('{{ 'game.timeline.used'|trans }} ' + event.trigger + ' {{ 'game.timeline.extra_turn'|trans|lower }}');
+                    actions.push('{{ 'game.timeline.used'|trans }} ' + event.payload.trigger + ' {{ 'game.timeline.extra_turn'|trans|lower }}');
+                    break;
+
+                case 'TIDE_RAISED':
+                    if ('manual' === event.value) {
+                        actions.push('{{ 'game.timeline.manually_raised_tide'|trans }}');
+                    } else {
+                        actions.push('{{ 'game.timeline.used'|trans }} ' + event.value + ' {{ 'game.timeline.to_raise_tide'|trans|lower }}');
+                    }
+                    break;
+
+                case 'TOKEN_CREATED':
+                    actions.push('{{ 'game.timeline.used'|trans }} ' + event.value + ' {{ 'game.timeline.to_make_token'|trans|lower }}');
+                    break;
+
+                case 'PROPHECY_ACTIVATED':
+                    actions.push('{{ 'game.timeline.activates'|trans }} {{ 'game.timeline.the_prophecy'|trans|lower }} ' + event.value);
+                    break;
+
+                case 'PROPHECY_FULFILLED':
+                    actions.push('{{ 'game.timeline.fulfilled'|trans }} {{ 'game.timeline.the_prophecy'|trans|lower }} ' + event.value);
+                    break;
+
+                case 'FATE_RESOLVED':
+                    actions.push('{{ 'game.timeline.resolved'|trans }} {{ 'game.timeline.the_fate_of'|trans|lower }} ' + event.value);
+                    break;
+
+                case 'CHAINS_REDUCED':
+                    actions.push('{{ 'game.timeline.reduced_chains'|trans({'%by%': '-replace1-', '%to%': '-replace2-'}) }}'.replace('-replace1-', event.value).replace('-replace2-', event.payload.currentChains));
                     break;
             }
         })
 
         const player = key.split('|')[0];
         const turn = key.split('|')[1];
-        const side = player === '{{ game.log.player1.name }}' ? 'left' : 'right';
+        const side = player === '{{ log.player1.name }}' ? 'left' : 'right';
         const turnLabel = '{{ 'menu.turn'|trans }} ' + turn;
 
         const item = document.createElement('div');

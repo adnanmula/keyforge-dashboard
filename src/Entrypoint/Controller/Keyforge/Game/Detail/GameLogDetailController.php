@@ -5,6 +5,7 @@ namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\Game\Detail;
 use AdnanMula\Cards\Application\Query\Keyforge\Game\GetGameLogQuery;
 use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeGameLog;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
+use AdnanMula\KeyforgeGameLogParser\Event\EventType;
 use AdnanMula\KeyforgeGameLogParser\GameLogParser;
 use AdnanMula\KeyforgeGameLogParser\ParseType;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,13 +22,34 @@ final class GameLogDetailController extends Controller
             throw new \RuntimeException('Gamelog not found');
         }
 
+        $eventTypes = [
+            EventType::AMBER_OBTAINED->value => EventType::AMBER_OBTAINED,
+            EventType::CARDS_DISCARDED->value => EventType::CARDS_DISCARDED,
+            EventType::CARDS_DRAWN->value => EventType::CARDS_DRAWN,
+            EventType::CARDS_PLAYED->value => EventType::CARDS_PLAYED,
+            EventType::HOUSE_CHOSEN->value => EventType::HOUSE_CHOSEN,
+            EventType::KEY_FORGED->value => EventType::KEY_FORGED,
+            EventType::FIGHT->value => EventType::FIGHT,
+            EventType::REAP->value => EventType::REAP,
+            EventType::CARD_USED->value => EventType::CARD_USED,
+            EventType::AMBER_STOLEN->value => EventType::AMBER_STOLEN,
+            EventType::EXTRA_TURN->value => EventType::EXTRA_TURN,
+            EventType::TOKEN_CREATED->value => EventType::TOKEN_CREATED,
+            EventType::PROPHECY_ACTIVATED->value => EventType::PROPHECY_ACTIVATED,
+            EventType::PROPHECY_FULFILLED->value => EventType::PROPHECY_FULFILLED,
+            EventType::FATE_RESOLVED->value => EventType::FATE_RESOLVED,
+            EventType::TIDE_RAISED->value => EventType::TIDE_RAISED,
+            EventType::CHAINS_ADDED->value => EventType::CHAINS_ADDED,
+            EventType::CHAINS_REDUCED->value => EventType::CHAINS_REDUCED,
+        ];
+
         return $this->render(
             'Keyforge/Game/Detail/game.html.twig',
             [
-                'game' => [
-                    'date' => $log->createdAt->format('Y-m-d'),
-                    'log' => new GameLogParser()->execute($log->log, ParseType::ARRAY),
-                ],
+                'gameId' => $log->gameId?->value(),
+                'date' => $log->createdAt->format('Y-m-d'),
+                'log' => new GameLogParser()->execute($log->log, ParseType::ARRAY),
+                'eventTypes' => $eventTypes,
             ],
         );
     }
