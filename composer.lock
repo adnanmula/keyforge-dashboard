@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1c4101e47e825fba3781bac4a0dfc6ea",
+    "content-hash": "fdc7bc49ef80ec90c5be333633b9d9b5",
     "packages": [
         {
             "name": "adnanmula/criteria",
@@ -56,16 +56,16 @@
         },
         {
             "name": "adnanmula/keyforge-game-log-parser",
-            "version": "0.1.5.x-dev",
+            "version": "0.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/adnanmula/keyforge-game-log-parser.git",
-                "reference": "09be5fcb495cd54ac8920465d3ca118071d2924b"
+                "reference": "5dd61fb340b60e0479d0bf6aff465a61f8d2197e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/adnanmula/keyforge-game-log-parser/zipball/09be5fcb495cd54ac8920465d3ca118071d2924b",
-                "reference": "09be5fcb495cd54ac8920465d3ca118071d2924b",
+                "url": "https://api.github.com/repos/adnanmula/keyforge-game-log-parser/zipball/5dd61fb340b60e0479d0bf6aff465a61f8d2197e",
+                "reference": "5dd61fb340b60e0479d0bf6aff465a61f8d2197e",
                 "shasum": ""
             },
             "require": {
@@ -100,7 +100,7 @@
                 "issues": "https://github.com/adnanmula/keyforge-game-log-parser/issues",
                 "source": "https://github.com/adnanmula/keyforge-game-log-parser/tree/0.1.5"
             },
-            "time": "2025-10-02T16:00:46+00:00"
+            "time": "2025-10-02T19:19:27+00:00"
         },
         {
             "name": "adnanmula/tournament",
@@ -8508,16 +8508,11 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "2.1.29",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/phpstan/phpstan-phar-composer-source.git",
-                "reference": "git"
-            },
+            "version": "2.1.30",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/d618573eed4a1b6b75e37b2e0b65ac65c885d88e",
-                "reference": "d618573eed4a1b6b75e37b2e0b65ac65c885d88e",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/a4a7f159927983dd4f7c8020ed227d80b7f39d7d",
+                "reference": "a4a7f159927983dd4f7c8020ed227d80b7f39d7d",
                 "shasum": ""
             },
             "require": {
@@ -8562,7 +8557,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-09-25T06:58:18+00:00"
+            "time": "2025-10-02T16:07:52+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -10607,7 +10602,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "adnanmula/keyforge-game-log-parser": 20,
         "adnanmula/tournament": 20
     },
     "prefer-stable": false,
