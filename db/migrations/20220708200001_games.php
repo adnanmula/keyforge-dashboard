@@ -10,7 +10,7 @@ final class Games extends AbstractMigration
             'CREATE TABLE keyforge_games (
                 id uuid NOT NULL,
                 winner uuid NOT NULL,
-                loser uuid NOT NULL,            
+                loser uuid NOT NULL,
                 winner_deck uuid NOT NULL,
                 loser_deck uuid NOT NULL,
                 first_turn uuid NULL,
@@ -22,7 +22,7 @@ final class Games extends AbstractMigration
                 competition character varying(64) NOT NULL,
                 notes character varying(512) NOT NULL,
                 approved bool NOT NULL,
-                created_by uuid NULL
+                created_by uuid NULL,
                 PRIMARY KEY(id)
             )',
         );

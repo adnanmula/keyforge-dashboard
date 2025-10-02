@@ -1,58 +1,84 @@
 <div class="card-body">
     <div class="row align-items-center mb-3">
         <div class="col-md-5 text-center">
-            <h5 class="fw-bold text-success">{{ game.log.winner.name }}</h5>
-            <p class="text-muted">{{ game.log.winner.deck }}</p>
+            <h5 class="fw-bold text-success">{{ log.winner.name }}</h5>
+            <p class="text-muted">{{ log.winner.deck }}</p>
         </div>
         <div class="col-md-2 text-center">
             <div class="display-6 fw-bold text-secondary">VS</div>
         </div>
         <div class="col-md-5 text-center">
-            <h5 class="fw-bold text-danger">{{ game.log.loser.name }}</h5>
-            <p class="text-muted">{{ game.log.loser.deck }}</p>
+            <h5 class="fw-bold text-danger">{{ log.loser.name }}</h5>
+            <p class="text-muted">{{ log.loser.deck }}</p>
         </div>
     </div>
 
     <div class="row text-center">
         <div class="col-6 col-md-2 mb-3">
             <h6 class="fw-bold">{{ 'menu.turns'|trans }}</h6>
-            <p class="text">{{ game.log.length }}</p>
+            <p class="text">{{ log.length }}</p>
         </div>
         <div class="col-6 col-md-2 mb-3">
             <h6 class="fw-bold">{{ 'menu.amber_obtained'|trans }}</h6>
-            <p class="text">{{ game.log.amberObtained.total }} (+{{ game.log.amberObtained.totalPositive }}-{{ game.log.amberObtained.totalNegative|abs }})</p>
+            <p class="text">{{ log.timeline.totalAmberObtained }} (+{{ log.timeline.totalAmberObtainedPositive }}-{{ log.timeline.totalAmberObtainedNegative|abs }})</p>
         </div>
         <div class="col-6 col-md-2 mb-3">
             <h6 class="fw-bold">{{ 'menu.amber_stolen'|trans }}</h6>
-            <p class="text">{{ game.log.amberStolen.total }}</p>
+            <p class="text">{{ log.timeline.totalAmberStolen }}</p>
         </div>
         <div class="col-6 col-md-2 mb-3">
             <h6 class="fw-bold">{{ 'menu.cards_played'|trans }}</h6>
-            <p class="text">{{ game.log.cardsPlayed.total }}</p>
+            <p class="text">{{ log.timeline.totalCardsPlayed }}</p>
         </div>
         <div class="col-6 col-md-2 mb-3">
             <h6 class="fw-bold">{{ 'menu.cards_drawn'|trans }}</h6>
-            <p class="text">{{ game.log.cardsDrawn.total }}</p>
+            <p class="text">{{ log.timeline.totalCardsDrawn }}</p>
         </div>
         <div class="col-6 col-md-2 mb-3">
             <h6 class="fw-bold">{{ 'menu.cards_discarded'|trans }}</h6>
-            <p class="text">{{ game.log.cardsDiscarded.total }}</p>
+            <p class="text">{{ log.timeline.totalCardsDiscarded }}</p>
         </div>
         <div class="col-6 col-md-2 mb-3">
             <h6 class="fw-bold">{{ 'menu.fights'|trans }}</h6>
-            <p class="text">{{ game.log.fights.count }}</p>
+            <p class="text">{{ log.timeline.filter(eventTypes.FIGHT).count }}</p>
         </div>
         <div class="col-6 col-md-2 mb-3">
             <h6 class="fw-bold">{{ 'menu.reaps'|trans }}</h6>
-            <p class="text">{{ game.log.reaps.count }}</p>
+            <p class="text">{{ log.timeline.filter(eventTypes.REAP).count }}</p>
         </div>
         <div class="col-6 col-md-2 mb-3">
             <h6 class="fw-bold">{{ 'menu.keys_forged'|trans }}</h6>
-            <p class="text">{{ game.log.keysForged.count }}</p>
+            <p class="text">{{ log.timeline.filter(eventTypes.KEY_FORGED).count }}</p>
         </div>
-        <div class="col-6 col-md-2 mb-3">
-            <h6 class="fw-bold">{{ 'menu.extra_turns'|trans }}</h6>
-            <p class="text">{{ game.log.extraTurns.total }}</p>
-        </div>
+        {% if log.timeline.totalExtraTurns > 0 %}
+            <div class="col-6 col-md-2 mb-3">
+                <h6 class="fw-bold">{{ 'menu.extra_turns'|trans }}</h6>
+                <p class="text">{{ log.timeline.totalExtraTurns }}</p>
+            </div>
+        {% endif %}
+        {% if log.timeline.filter(eventTypes.TOKEN_CREATED).count > 0 %}
+            <div class="col-6 col-md-2 mb-3">
+                <h6 class="fw-bold">{{ 'menu.tokens_created'|trans }}</h6>
+                <p class="text">{{ log.timeline.filter(eventTypes.TOKEN_CREATED).count }}</p>
+            </div>
+        {% endif %}
+        {% if log.timeline.filter(eventTypes.TIDE_RAISED).count > 0 %}
+            <div class="col-6 col-md-2 mb-3">
+                <h6 class="fw-bold">{{ 'menu.tides_raised'|trans }}</h6>
+                <p class="text">{{ log.timeline.filter(eventTypes.TIDE_RAISED).count }}</p>
+            </div>
+        {% endif %}
+        {% if log.timeline.filter(eventTypes.PROPHECY_ACTIVATED).count > 0 %}
+            <div class="col-6 col-md-2 mb-3">
+                <h6 class="fw-bold">{{ 'menu.prophecies_activated'|trans }}</h6>
+                <p class="text">{{ log.timeline.filter(eventTypes.PROPHECY_ACTIVATED).count }}</p>
+            </div>
+        {% endif %}
+        {% if log.timeline.filter(eventTypes.PROPHECY_FULFILLED).count > 0 %}
+            <div class="col-6 col-md-2 mb-3">
+                <h6 class="fw-bold">{{ 'menu.prophecies_fulfilled'|trans }}</h6>
+                <p class="text">{{ log.timeline.filter(eventTypes.PROPHECY_FULFILLED).count }}</p>
+            </div>
+        {% endif %}
     </div>
 </div>

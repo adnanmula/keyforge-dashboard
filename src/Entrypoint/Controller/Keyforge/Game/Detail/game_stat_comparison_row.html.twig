@@ -6,7 +6,7 @@
         {% set textLeftColor = 'text-danger' %}
     {% endif %}
 
-    <div class="col-5 fw-bold {{ textLeftColor }}">{{ left }} {{ extraLeft }}</div>
+    <div class="col-5 fw-bold {{ textLeftColor }}">{{ left }} {{ extraLeft|default('') }}</div>
 
     <div class="col-2 text-muted small">
         {{ label }}
@@ -29,5 +29,5 @@
         {% set textRightColor = 'text-danger' %}
     {% endif %}
 
-    <div class="col-5 fw-bold {{ textRightColor }}">{{ right }} {{ extraRight }}</div>
+    <div class="col-5 fw-bold {{ textRightColor }}">{{ right }} {{ extraRight|default('') }}</div>
 </div>
