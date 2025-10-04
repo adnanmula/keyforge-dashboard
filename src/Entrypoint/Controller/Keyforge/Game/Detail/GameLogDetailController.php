@@ -6,8 +6,8 @@ use AdnanMula\Cards\Application\Query\Keyforge\Game\GetGameLogQuery;
 use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeGameLog;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
 use AdnanMula\KeyforgeGameLogParser\Event\EventType;
-use AdnanMula\KeyforgeGameLogParser\GameLogParser;
-use AdnanMula\KeyforgeGameLogParser\ParseType;
+use AdnanMula\KeyforgeGameLogParser\Parser\GameLogParser;
+use AdnanMula\KeyforgeGameLogParser\Parser\ParseType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -41,6 +41,8 @@ final class GameLogDetailController extends Controller
             EventType::TIDE_RAISED->value => EventType::TIDE_RAISED,
             EventType::CHAINS_ADDED->value => EventType::CHAINS_ADDED,
             EventType::CHAINS_REDUCED->value => EventType::CHAINS_REDUCED,
+            EventType::CHECK_DECLARED->value => EventType::CHECK_DECLARED,
+            EventType::PLAYER_CONCEDED->value => EventType::PLAYER_CONCEDED,
         ];
 
         return $this->render(

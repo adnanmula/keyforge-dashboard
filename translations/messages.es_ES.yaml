@@ -398,10 +398,14 @@ game.timeline.versus: Contra
 game.timeline.fought_with: Lucho con
 game.timeline.reaped_with: Cosecho con
 game.timeline.used: Usó a
+game.timeline.to: Para
 game.timeline.activates: Activó
 game.timeline.fulfilled: Cumplió
 game.timeline.resolved: Resolvió
 game.timeline.reduced_chains: 'Las cadenas se redujeron en %by% a %to%'
+game.timeline.added_chains: 'Las cadenas aumentaron en %by% (%reason%)'
+game.timeline.check: Check declarado
+game.timeline.conceded: Se rindió
 game.timeline.the_fate_of: El destino de
 game.timeline.the_prophecy: La profecía
 game.timeline.to_fight_with: Para luchar con
@@ -411,6 +415,27 @@ game.timeline.amber: Ámbar
 game.timeline.manually_raised_tide: Subio la marea manualmente
 game.timeline.to_raise_tide: Para subir la marea
 game.timeline.to_make_token: Para crear una criatura token
+game.timeline.AMBER_OBTAINED: Ámbar obtenido
+game.timeline.CARDS_DISCARDED: Cartas descartadas
+game.timeline.CARDS_DRAWN: Cartas robadas
+game.timeline.CARDS_PLAYED: Cartas jugadas
+game.timeline.HOUSE_CHOSEN: Casa elegida
+game.timeline.KEY_FORGED: Llave forjada
+game.timeline.FIGHT: Lucha
+game.timeline.REAP: Cosecha
+game.timeline.CARD_USED: Carta usada
+game.timeline.AMBER_STOLEN: Ámbar robado
+game.timeline.EXTRA_TURN: Turno extra
+game.timeline.TOKEN_CREATED: Token creado
+game.timeline.PROPHECY_ACTIVATED: profecía activada
+game.timeline.PROPHECY_FULFILLED: profecía cumplida
+game.timeline.FATE_RESOLVED: Destino resuelto
+game.timeline.TIDE_RAISED: Marea subida
+game.timeline.CHAINS_ADDED: Cadenas añadidas
+game.timeline.CHAINS_REDUCED: Cadenas reducidas
+game.timeline.CHECK_DECLARED: Check declarado
+game.timeline.PLAYER_CONCEDED: Jugador se rindió
+menu.filter_event_type: Filtra por tipos de evento
 menu.fights: Luchas
 menu.reaps: Cosechas
 menu.amber_stolen: Ámbar robado
@@ -451,6 +476,7 @@ menu.tokens_created: Tokens creados
 menu.tides_risen: Mareas subidas
 menu.prophecies_activated: Profecias activadas
 menu.prophecies_fulfilled: Profecias cumplidas
+menu.chains_obtained: Cadenas obtenidas
 menu.fates_resolved: Destinos resueltos
 game.timeline.extra_turn: Para tomar un turno adicional después de este
 deck.archon-power: Archon Power

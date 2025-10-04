@@ -24,7 +24,7 @@ use AdnanMula\Criteria\Filter\FilterType;
 use AdnanMula\Criteria\FilterField\FilterField;
 use AdnanMula\Criteria\FilterValue\NullFilterValue;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
-use AdnanMula\KeyforgeGameLogParser\GameLogParser;
+use AdnanMula\KeyforgeGameLogParser\Parser\GameLogParser;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 

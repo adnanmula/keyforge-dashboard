@@ -5,7 +5,7 @@ namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\Game\Detail;
 use AdnanMula\Cards\Application\Command\Keyforge\Game\Analyze\AnalyzeGameCommand;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
-use AdnanMula\KeyforgeGameLogParser\GameLogParser;
+use AdnanMula\KeyforgeGameLogParser\Parser\GameLogParser;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
