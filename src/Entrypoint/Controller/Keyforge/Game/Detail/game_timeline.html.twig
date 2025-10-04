@@ -101,6 +101,30 @@
 <div class="row">
     <div class="col-6"><h5 style="text-align:right;" id="fullTimelinePlayer1">{{ log.player1.name }}</h5></div>
     <div class="col-6"><h5 style="text-align:left;" id="fullTimelinePlayer2">{{ log.player2.name }}</h5></div>
+    <div class="col-12 mt-2 mb-3">
+        <select class="form-select" name="eventType" id="timelineEventTypeSelect" multiple>
+            <option value="AMBER_OBTAINED">{{ 'game.timeline.AMBER_OBTAINED'|trans }}</option>
+            <option value="CARDS_DISCARDED">{{ 'game.timeline.CARDS_DISCARDED'|trans }}</option>
+            <option value="CARDS_DRAWN">{{ 'game.timeline.CARDS_DRAWN'|trans }}</option>
+            <option value="CARDS_PLAYED">{{ 'game.timeline.CARDS_PLAYED'|trans }}</option>
+            <option value="HOUSE_CHOSEN">{{ 'game.timeline.HOUSE_CHOSEN'|trans }}</option>
+            <option value="KEY_FORGED">{{ 'game.timeline.KEY_FORGED'|trans }}</option>
+            <option value="FIGHT">{{ 'game.timeline.FIGHT'|trans }}</option>
+            <option value="REAP">{{ 'game.timeline.REAP'|trans }}</option>
+            <option value="CARD_USED">{{ 'game.timeline.CARD_USED'|trans }}</option>
+            <option value="AMBER_STOLEN">{{ 'game.timeline.AMBER_STOLEN'|trans }}</option>
+            <option value="EXTRA_TURN">{{ 'game.timeline.EXTRA_TURN'|trans }}</option>
+            <option value="TOKEN_CREATED">{{ 'game.timeline.TOKEN_CREATED'|trans }}</option>
+            <option value="PROPHECY_ACTIVATED">{{ 'game.timeline.PROPHECY_ACTIVATED'|trans }}</option>
+            <option value="PROPHECY_FULFILLED">{{ 'game.timeline.PROPHECY_FULFILLED'|trans }}</option>
+            <option value="FATE_RESOLVED">{{ 'game.timeline.FATE_RESOLVED'|trans }}</option>
+            <option value="TIDE_RAISED">{{ 'game.timeline.TIDE_RAISED'|trans }}</option>
+            <option value="CHAINS_ADDED">{{ 'game.timeline.CHAINS_ADDED'|trans }}</option>
+            <option value="CHAINS_REDUCED">{{ 'game.timeline.CHAINS_REDUCED'|trans }}</option>
+            <option value="CHECK_DECLARED">{{ 'game.timeline.CHECK_DECLARED'|trans }}</option>
+            <option value="PLAYER_CONCEDED">{{ 'game.timeline.PLAYER_CONCEDED'|trans }}</option>
+        </select>
+    </div>
     <div class="timeline" id="timeline"></div>
 </div>
 
@@ -246,5 +270,43 @@
 
         item.appendChild(content);
         timeline.appendChild(item);
+    });
+
+    $(document).ready(function() {
+        $('#timelineEventTypeSelect').select2({
+            minimumResultsForSearch: 0,
+            minimumInputLength: 0,
+            multiple: true,
+            closeOnSelect: true,
+            allowClear: true,
+            placeholder: '{{ 'menu.filter_event_type'|trans }}',
+            theme: 'bootstrap-5',
+        });
+
+        $('#timelineEventTypeSelect').on('change', function() {
+            var selected = ($(this).val() || []).filter(function(v) { return v !== ""; });
+
+            if (selected.length === 0) {
+                $('.timeline-content span[data-type]').each(function() {
+                    $(this).show();
+                    var $prevHr = $(this).prev('hr');
+                    if ($prevHr.length) $prevHr.show();
+                });
+                return;
+            }
+
+            $('.timeline-content span[data-type]').each(function() {
+                var type = $(this).attr('data-type');
+                var $prevHr = $(this).prev('hr');
+
+                if (selected.includes(type)) {
+                    $(this).show();
+                    if ($prevHr.length) $prevHr.show();
+                } else {
+                    $(this).hide();
+                    if ($prevHr.length) $prevHr.hide();
+                }
+            });
+        });
     });
 </script>

@@ -415,6 +415,27 @@ game.timeline.amber: Amber
 game.timeline.manually_raised_tide: Manually raised the tide
 game.timeline.to_raise_tide: To raise the tide
 game.timeline.to_make_token: To make a token creature
+game.timeline.AMBER_OBTAINED: Amber obtained
+game.timeline.CARDS_DISCARDED: Cards discarded
+game.timeline.CARDS_DRAWN: Cards drawn
+game.timeline.CARDS_PLAYED: Cards played
+game.timeline.HOUSE_CHOSEN: House chosen
+game.timeline.KEY_FORGED: Key forged
+game.timeline.FIGHT: Fight
+game.timeline.REAP: Reap
+game.timeline.CARD_USED: Card used
+game.timeline.AMBER_STOLEN: Amber stolen
+game.timeline.EXTRA_TURN: Extra turn
+game.timeline.TOKEN_CREATED: Token created
+game.timeline.PROPHECY_ACTIVATED: Prophecy activated
+game.timeline.PROPHECY_FULFILLED: Prophecy fulfilled
+game.timeline.FATE_RESOLVED: Fate resolved
+game.timeline.TIDE_RAISED: Tide raised
+game.timeline.CHAINS_ADDED: Chains added
+game.timeline.CHAINS_REDUCED: Chains reduced
+game.timeline.CHECK_DECLARED: Check declared
+game.timeline.PLAYER_CONCEDED: Player conceded
+menu.filter_event_type: Filter by event types
 menu.fights: Fights
 menu.reaps: Reaps
 menu.amber_stolen: Amber stolen
