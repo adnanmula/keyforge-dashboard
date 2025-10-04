@@ -20,7 +20,7 @@ use AdnanMula\Criteria\Filter\Filters;
 use AdnanMula\Criteria\Filter\FilterType;
 use AdnanMula\Criteria\FilterField\FilterField;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
-use AdnanMula\KeyforgeGameLogParser\GameLogParser;
+use AdnanMula\KeyforgeGameLogParser\Parser\GameLogParser;
 use AdnanMula\Tournament\Fixture\FixtureType;
 use Symfony\Bundle\SecurityBundle\Security;
 

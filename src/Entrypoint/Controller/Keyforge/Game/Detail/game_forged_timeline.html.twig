@@ -5,16 +5,19 @@
 
 <script>
     const forgeEvents = JSON.parse('{{ log.timeline.filter(eventTypes.KEY_FORGED).items|json_encode|raw }}');
+    const checkEvents = JSON.parse('{{ log.timeline.filter(eventTypes.CHECK_DECLARED).items|json_encode|raw }}');
+    const events = checkEvents.concat(forgeEvents);
+
     const playerMap = {};
     let playerIndex = 0;
 
-    forgeEvents.forEach(e => {
+    events.forEach(e => {
         if (!(e.player in playerMap)) {
             playerMap[e.player] = playerIndex++;
         }
     });
 
-    const dataPoints = forgeDataPoints(forgeEvents, playerMap);
+    const dataPoints = forgeDataPoints(events, playerMap);
 
     const ctx = document.getElementById('timelineChart').getContext('2d');
 
@@ -35,11 +38,18 @@
                 tooltip: {
                     callbacks: {
                         label: ctx => {
-                            return [
-                                `${ctx.raw.turn}`,
-                                `${ctx.raw.amberCost}`,
-                                `${ctx.raw.amberRemaining}`
-                            ];
+                            if ('CHECK_DECLARED' === ctx.raw.type) {
+                                return [
+                                    `${ctx.raw.turn}`,
+                                    `{{ 'game.timeline.check'|trans }}`,
+                                ];
+                            } else {
+                                return [
+                                    `${ctx.raw.turn}`,
+                                    `${ctx.raw.amberCost}`,
+                                    `${ctx.raw.amberRemaining}`,
+                                ];
+                            }
                         },
                     },
                 },
@@ -82,14 +92,15 @@
         },
     });
 
-    function forgeDataPoints(forgeEvents, playerMap) {
+    function forgeDataPoints(events, playerMap) {
         const keyColors = {
             red: 'rgba(188, 31, 31, 0.8)',
             blue: 'rgba(0, 0, 255, 0.8)',
             yellow: 'rgba(189, 189, 32, 0.8)',
+            '': 'rgb(172,172,172)',
         };
 
-        const dataPoints = forgeEvents.map(e => ({
+        const dataPoints = events.map(e => ({
             x: e.turn.value,
             y: playerMap[e.player],
             borderWidth: 0,
@@ -99,6 +110,7 @@
             turn: '{{ 'menu.turn'|trans }}: ' + e.turn.value,
             amberCost: '{{ 'menu.amber_cost'|trans }}: ' + e.payload.amberCost,
             amberRemaining: '{{ 'menu.amber_remaining'|trans }}: ' + e.payload.amberRemaining,
+            type: e.type,
         }));
 
         const pointCount = {};

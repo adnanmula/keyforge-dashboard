@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fdc7bc49ef80ec90c5be333633b9d9b5",
+    "content-hash": "60aee91fa77d1e92b7449d8af417a3b7",
     "packages": [
         {
             "name": "adnanmula/criteria",
@@ -56,16 +56,16 @@
         },
         {
             "name": "adnanmula/keyforge-game-log-parser",
-            "version": "0.1.5",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/adnanmula/keyforge-game-log-parser.git",
-                "reference": "5dd61fb340b60e0479d0bf6aff465a61f8d2197e"
+                "reference": "1ccabab98d316335e0c7af5f777d84ba677f37fa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/adnanmula/keyforge-game-log-parser/zipball/5dd61fb340b60e0479d0bf6aff465a61f8d2197e",
-                "reference": "5dd61fb340b60e0479d0bf6aff465a61f8d2197e",
+                "url": "https://api.github.com/repos/adnanmula/keyforge-game-log-parser/zipball/1ccabab98d316335e0c7af5f777d84ba677f37fa",
+                "reference": "1ccabab98d316335e0c7af5f777d84ba677f37fa",
                 "shasum": ""
             },
             "require": {
@@ -80,6 +80,7 @@
                 "phpunit/phpunit": "^11.0",
                 "symfony/var-dumper": "^7.0"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -98,9 +99,9 @@
             ],
             "support": {
                 "issues": "https://github.com/adnanmula/keyforge-game-log-parser/issues",
-                "source": "https://github.com/adnanmula/keyforge-game-log-parser/tree/0.1.5"
+                "source": "https://github.com/adnanmula/keyforge-game-log-parser/tree/master"
             },
-            "time": "2025-10-02T19:19:27+00:00"
+            "time": "2025-10-04T00:55:49+00:00"
         },
         {
             "name": "adnanmula/tournament",
@@ -7168,16 +7169,16 @@
         },
         {
             "name": "behat/behat",
-            "version": "v3.24.1",
+            "version": "v3.25.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Behat/Behat.git",
-                "reference": "1b67565a55283b6c0d050a0e4c4e44025c791a67"
+                "reference": "bc7f149dde1cd0da82616e6b280e1c9be2ee53e1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Behat/Behat/zipball/1b67565a55283b6c0d050a0e4c4e44025c791a67",
-                "reference": "1b67565a55283b6c0d050a0e4c4e44025c791a67",
+                "url": "https://api.github.com/repos/Behat/Behat/zipball/bc7f149dde1cd0da82616e6b280e1c9be2ee53e1",
+                "reference": "bc7f149dde1cd0da82616e6b280e1c9be2ee53e1",
                 "shasum": ""
             },
             "require": {
@@ -7199,7 +7200,7 @@
                 "friendsofphp/php-cs-fixer": "^3.68",
                 "phpstan/phpstan": "^2.0",
                 "phpunit/phpunit": "^9.6",
-                "rector/rector": "2.1.4",
+                "rector/rector": "2.1.7",
                 "sebastian/diff": "^4.0",
                 "symfony/filesystem": "^5.4 || ^6.4 || ^7.0",
                 "symfony/polyfill-php84": "^1.31",
@@ -7256,9 +7257,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Behat/Behat/issues",
-                "source": "https://github.com/Behat/Behat/tree/v3.24.1"
+                "source": "https://github.com/Behat/Behat/tree/v3.25.0"
             },
-            "time": "2025-09-15T09:09:06+00:00"
+            "time": "2025-10-03T20:14:49+00:00"
         },
         {
             "name": "behat/gherkin",
@@ -8895,16 +8896,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "12.3.15",
+            "version": "12.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "b035ee2cd8ecad4091885b61017ebb1d80eb0e57"
+                "reference": "f62aab5794e36ccd26860db2d1bbf89ac19028d9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/b035ee2cd8ecad4091885b61017ebb1d80eb0e57",
-                "reference": "b035ee2cd8ecad4091885b61017ebb1d80eb0e57",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/f62aab5794e36ccd26860db2d1bbf89ac19028d9",
+                "reference": "f62aab5794e36ccd26860db2d1bbf89ac19028d9",
                 "shasum": ""
             },
             "require": {
@@ -8940,7 +8941,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "12.3-dev"
+                    "dev-main": "12.4-dev"
                 }
             },
             "autoload": {
@@ -8972,7 +8973,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/12.3.15"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/12.4.0"
             },
             "funding": [
                 {
@@ -8996,7 +8997,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-09-28T12:10:54+00:00"
+            "time": "2025-10-03T04:28:03+00:00"
         },
         {
             "name": "psr/http-factory",
@@ -10602,6 +10603,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "adnanmula/keyforge-game-log-parser": 20,
         "adnanmula/tournament": 20
     },
     "prefer-stable": false,

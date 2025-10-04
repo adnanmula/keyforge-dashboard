@@ -402,6 +402,9 @@ game.timeline.activates: Activó
 game.timeline.fulfilled: Cumplió
 game.timeline.resolved: Resolvió
 game.timeline.reduced_chains: 'Las cadenas se redujeron en %by% a %to%'
+game.timeline.added_chains: 'Las cadenas aumentaron en %by% (%reason%)'
+game.timeline.check: Check declarado
+game.timeline.conceded: Se rindió
 game.timeline.the_fate_of: El destino de
 game.timeline.the_prophecy: La profecía
 game.timeline.to_fight_with: Para luchar con
@@ -451,6 +454,7 @@ menu.tokens_created: Tokens creados
 menu.tides_risen: Mareas subidas
 menu.prophecies_activated: Profecias activadas
 menu.prophecies_fulfilled: Profecias cumplidas
+menu.chains_obtained: Cadenas obtenidas
 menu.fates_resolved: Destinos resueltos
 game.timeline.extra_turn: Para tomar un turno adicional después de este
 deck.archon-power: Archon Power

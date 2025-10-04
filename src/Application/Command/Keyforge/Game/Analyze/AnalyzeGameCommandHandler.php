@@ -5,7 +5,7 @@ namespace AdnanMula\Cards\Application\Command\Keyforge\Game\Analyze;
 use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeGameLog;
 use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeGameRepository;
 use AdnanMula\Cards\Domain\Model\Shared\User;
-use AdnanMula\KeyforgeGameLogParser\GameLogParser;
+use AdnanMula\KeyforgeGameLogParser\Parser\GameLogParser;
 use Symfony\Bundle\SecurityBundle\Security;
 
 final readonly class AnalyzeGameCommandHandler

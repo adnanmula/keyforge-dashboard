@@ -202,8 +202,24 @@
                     actions.push('{{ 'game.timeline.resolved'|trans }} {{ 'game.timeline.the_fate_of'|trans|lower }} ' + event.value);
                     break;
 
+                case 'CHAINS_ADDED':
+                    actions.push('{{ 'game.timeline.added_chains'|trans({'%by%': '-replace1-', '%reason%': '-replace2-'}) }}'
+                        .replace('-replace1-', event.value)
+                        .replace('-replace2-', event.payload.trigger));
+                    break;
+
                 case 'CHAINS_REDUCED':
-                    actions.push('{{ 'game.timeline.reduced_chains'|trans({'%by%': '-replace1-', '%to%': '-replace2-'}) }}'.replace('-replace1-', event.value).replace('-replace2-', event.payload.currentChains));
+                    actions.push('{{ 'game.timeline.reduced_chains'|trans({'%by%': '-replace1-', '%to%': '-replace2-'}) }}'
+                        .replace('-replace1-', event.value)
+                        .replace('-replace2-', event.payload.currentChains));
+                    break;
+
+                case 'CHECK_DECLARED':
+                    actions.push('{{ 'game.timeline.check'|trans }}');
+                    break;
+
+                case 'PLAYER_CONCEDED':
+                    actions.push('{{ 'game.timeline.conceded'|trans }}');
                     break;
             }
         })
