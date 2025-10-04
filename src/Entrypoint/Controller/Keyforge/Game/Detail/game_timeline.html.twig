@@ -105,8 +105,8 @@
 </div>
 
 <script>
-    const cardsPlayedData = JSON.parse('{{ log.timeline.filter(eventTypes.CARDS_PLAYED).items|json_encode|raw }}');
-    const fullTimelineEvents = JSON.parse('{{ log.timeline|json_encode|raw }}');
+    const cardsPlayedData = {{ log.timeline.filter(eventTypes.CARDS_PLAYED).items|json_encode|raw }};
+    const fullTimelineEvents = {{ log.timeline|json_encode|raw }};
 
     const fullTimelineEventsGrouped = [];
 
@@ -130,96 +130,100 @@
             switch (event.type) {
                 case 'CARDS_PLAYED':
                     event.value.forEach(card => {
-                        actions.push('{{ 'menu.played'|trans }} ' + card);
+                        actions.push('<span data-type="'+event.type+'">{{ 'menu.played'|trans }} ' + card + '</span>');
                     });
                     break;
 
                 case 'KEY_FORGED':
-                    actions.push('{{ 'menu.key_forged'|trans }}: ' + event.value + ' {{ 'menu.cost'|trans }}: ' + event.payload.amberCost + ' {{ 'menu.remaining'|trans }}: ' + event.payload.amberRemaining);
+                    actions.push('<span data-type="'+event.type+'">{{ 'menu.key_forged'|trans }}: ' + event.value + ' {{ 'menu.cost'|trans }}: ' + event.payload.amberCost + ' {{ 'menu.remaining'|trans }}: ' + event.payload.amberRemaining + '</span>');
                     break;
 
                 case 'CARDS_DISCARDED':
-                    actions.push('{{ 'menu.cards_discarded'|trans }}: ' + event.value);
+                    actions.push('<span data-type="'+event.type+'">{{ 'menu.cards_discarded'|trans }}: ' + event.value + '</span>');
                     break;
 
                 case 'CARDS_DRAWN':
-                    actions.push('{{ 'menu.cards_drawn'|trans }}: ' + event.value);
+                    actions.push('<span data-type="'+event.type+'">{{ 'menu.cards_drawn'|trans }}: ' + event.value + '</span>');
                     break;
 
                 case 'AMBER_OBTAINED':
-                    actions.push('{{ 'menu.current_amber'|trans }}: ' + event.value + ' (delta: ' + event.payload.delta + ')');
+                    actions.push('<span data-type="'+event.type+'">{{ 'menu.current_amber'|trans }}: ' + event.value + ' (delta: ' + event.payload.delta + ')</span>');
                     break;
 
                 case 'HOUSE_CHOSEN':
-                    actions.push('{{ 'menu.house_chosen'|trans }}: ' + event.value);
+                    actions.push('<span data-type="'+event.type+'">{{ 'menu.house_chosen'|trans }}: ' + event.value + '</span>');
                     break;
 
                 case 'AMBER_STOLEN':
-                    actions.push('{{ 'game.timeline.used'|trans }} ' + event.payload.trigger + ' {{ 'game.timeline.to_steal'|trans|lower }} ' + event.value + ' {{ 'game.timeline.amber'|trans|lower }}');
+                    actions.push('<span data-type="'+event.type+'">{{ 'game.timeline.used'|trans }} ' + event.payload.trigger + ' {{ 'game.timeline.to_steal'|trans|lower }} ' + event.value + ' {{ 'game.timeline.amber'|trans|lower }}' + '</span>');
                     break;
 
                 case 'FIGHT':
                     if (event.payload.trigger === event.value) {
-                        actions.push('{{ 'game.timeline.fought_with'|trans }} ' + event.value + ' {{ 'game.timeline.versus'|trans|lower }} ' + event.payload.target);
+                        actions.push('<span data-type="'+event.type+'">{{ 'game.timeline.fought_with'|trans }} ' + event.value + ' {{ 'game.timeline.versus'|trans|lower }} ' + event.payload.target + '</span>');
                     } else {
-                        actions.push('{{ 'game.timeline.used'|trans }} ' + event.payload.trigger + ' {{ 'game.timeline.to_fight_with'|trans|lower }} ' + event.value + ' {{ 'game.timeline.versus'|trans|lower }} ' + event.payload.target);
+                        actions.push('<span data-type="'+event.type+'">{{ 'game.timeline.used'|trans }} ' + event.payload.trigger + ' {{ 'game.timeline.to_fight_with'|trans|lower }} ' + event.value + ' {{ 'game.timeline.versus'|trans|lower }} ' + event.payload.target + '</span>');
                     }
                     break;
 
                 case 'REAP':
                     if (event.payload.trigger === event.value) {
-                        actions.push('{{ 'game.timeline.reaped_with'|trans }} ' + event.value);
+                        actions.push('<span data-type="'+event.type+'">{{ 'game.timeline.reaped_with'|trans }} ' + event.value + '</span>');
                     } else {
-                        actions.push('{{ 'game.timeline.used'|trans }} ' + event.payload.trigger + ' {{ 'game.timeline.to_reap_with'|trans|lower }} ' + event.value);
+                        actions.push('<span data-type="'+event.type+'">{{ 'game.timeline.used'|trans }} ' + event.payload.trigger + ' {{ 'game.timeline.to_reap_with'|trans|lower }} ' + event.value + '</span>');
                     }
                     break;
 
                 case 'EXTRA_TURN':
-                    actions.push('{{ 'game.timeline.used'|trans }} ' + event.payload.trigger + ' {{ 'game.timeline.extra_turn'|trans|lower }}');
+                    actions.push('<span data-type="'+event.type+'">{{ 'game.timeline.used'|trans }} ' + event.payload.trigger + ' {{ 'game.timeline.extra_turn'|trans|lower }}' + '</span>');
                     break;
 
                 case 'TIDE_RAISED':
                     if ('manual' === event.value) {
-                        actions.push('{{ 'game.timeline.manually_raised_tide'|trans }}');
+                        actions.push('<span data-type="'+event.type+'">{{ 'game.timeline.manually_raised_tide'|trans }}' + '</span>');
                     } else {
-                        actions.push('{{ 'game.timeline.used'|trans }} ' + event.value + ' {{ 'game.timeline.to_raise_tide'|trans|lower }}');
+                        actions.push('<span data-type="'+event.type+'">{{ 'game.timeline.used'|trans }} ' + event.value + ' {{ 'game.timeline.to_raise_tide'|trans|lower }}' + '</span>');
                     }
                     break;
 
                 case 'TOKEN_CREATED':
-                    actions.push('{{ 'game.timeline.used'|trans }} ' + event.value + ' {{ 'game.timeline.to_make_token'|trans|lower }}');
+                    actions.push('<span data-type="'+event.type+'">{{ 'game.timeline.used'|trans }} ' + event.value + ' {{ 'game.timeline.to_make_token'|trans|lower }}' + '</span>');
                     break;
 
                 case 'PROPHECY_ACTIVATED':
-                    actions.push('{{ 'game.timeline.activates'|trans }} {{ 'game.timeline.the_prophecy'|trans|lower }} ' + event.value);
+                    actions.push('<span data-type="'+event.type+'">{{ 'game.timeline.activates'|trans }} {{ 'game.timeline.the_prophecy'|trans|lower }} ' + event.value + '</span>');
                     break;
 
                 case 'PROPHECY_FULFILLED':
-                    actions.push('{{ 'game.timeline.fulfilled'|trans }} {{ 'game.timeline.the_prophecy'|trans|lower }} ' + event.value);
+                    actions.push('<span data-type="'+event.type+'">{{ 'game.timeline.fulfilled'|trans }} {{ 'game.timeline.the_prophecy'|trans|lower }} ' + event.value + '</span>');
                     break;
 
                 case 'FATE_RESOLVED':
-                    actions.push('{{ 'game.timeline.resolved'|trans }} {{ 'game.timeline.the_fate_of'|trans|lower }} ' + event.value);
+                    actions.push('<span data-type="'+event.type+'">{{ 'game.timeline.resolved'|trans }} {{ 'game.timeline.the_fate_of'|trans|lower }} ' + event.value + '</span>');
                     break;
 
                 case 'CHAINS_ADDED':
-                    actions.push('{{ 'game.timeline.added_chains'|trans({'%by%': '-replace1-', '%reason%': '-replace2-'}) }}'
+                    actions.push('<span data-type="'+event.type+'">{{ 'game.timeline.added_chains'|trans({'%by%': '-replace1-', '%reason%': '-replace2-'}) }}' + '</span>'
                         .replace('-replace1-', event.value)
                         .replace('-replace2-', event.payload.trigger));
                     break;
 
                 case 'CHAINS_REDUCED':
-                    actions.push('{{ 'game.timeline.reduced_chains'|trans({'%by%': '-replace1-', '%to%': '-replace2-'}) }}'
+                    actions.push('<span data-type="'+event.type+'">{{ 'game.timeline.reduced_chains'|trans({'%by%': '-replace1-', '%to%': '-replace2-'}) }}' + '</span>'
                         .replace('-replace1-', event.value)
                         .replace('-replace2-', event.payload.currentChains));
                     break;
 
                 case 'CHECK_DECLARED':
-                    actions.push('{{ 'game.timeline.check'|trans }}');
+                    actions.push('<span data-type="'+event.type+'">{{ 'game.timeline.check'|trans }}' + '</span>');
                     break;
 
                 case 'PLAYER_CONCEDED':
-                    actions.push('{{ 'game.timeline.conceded'|trans }}');
+                    actions.push('<span data-type="'+event.type+'">{{ 'game.timeline.conceded'|trans }}' + '</span>');
+                    break;
+
+                case 'CARD_USED':
+                    actions.push('<span data-type="'+event.type+'">{{ 'game.timeline.used'|trans }} ' + event.value + ' {{ 'game.timeline.to'|trans|lower }} ' + event.payload.effect + '</span>');
                     break;
             }
         })
