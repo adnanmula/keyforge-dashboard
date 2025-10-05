@@ -129,9 +129,7 @@
 </div>
 
 <script>
-    const cardsPlayedData = {{ log.timeline.filter(eventTypes.CARDS_PLAYED).items|json_encode|raw }};
     const fullTimelineEvents = {{ log.timeline|json_encode|raw }};
-
     const fullTimelineEventsGrouped = [];
 
     fullTimelineEvents.forEach(entry => {

@@ -6,6 +6,10 @@
         {% set textLeftColor = 'text-danger' %}
     {% endif %}
 
+    {% if color is defined and color == false %}
+        {% set textLeftColor = '' %}
+    {% endif %}
+
     <div class="col-5 fw-bold {{ textLeftColor }}">{{ left }} {{ extraLeft|default('') }}</div>
 
     <div class="col-2 text-muted small">
@@ -27,6 +31,10 @@
         {% set textRightColor = 'text-success' %}
     {% elseif left > right %}
         {% set textRightColor = 'text-danger' %}
+    {% endif %}
+
+    {% if color is defined and color == false %}
+        {% set textRightColor = '' %}
     {% endif %}
 
     <div class="col-5 fw-bold {{ textRightColor }}">{{ right }} {{ extraRight|default('') }}</div>
