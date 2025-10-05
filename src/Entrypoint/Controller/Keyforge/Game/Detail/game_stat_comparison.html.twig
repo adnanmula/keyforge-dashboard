@@ -73,19 +73,19 @@
         } %}
     {% endif %}
 
-    {% if log.timeline.filter(eventTypes.TOKEN_CREATED).count > 0 %}
-        {% include 'Keyforge/Game/Detail/game_stat_comparison_row.html.twig' with {
-            label: 'menu.tokens_created'|trans,
-            left: winner.timeline.filter(eventTypes.TOKEN_CREATED).count,
-            right: loser.timeline.filter(eventTypes.TOKEN_CREATED).count,
-        } %}
-    {% endif %}
-
     {% if log.timeline.filter(eventTypes.TIDE_RAISED).count > 0 %}
         {% include 'Keyforge/Game/Detail/game_stat_comparison_row.html.twig' with {
             label: 'menu.tides_raised'|trans,
             left: winner.timeline.filter(eventTypes.TIDE_RAISED).count,
             right: loser.timeline.filter(eventTypes.TIDE_RAISED).count,
+        } %}
+    {% endif %}
+
+    {% if log.timeline.filter(eventTypes.TOKEN_CREATED).count > 0 %}
+        {% include 'Keyforge/Game/Detail/game_stat_comparison_row.html.twig' with {
+            label: 'menu.tokens_created'|trans,
+            left: winner.timeline.filter(eventTypes.TOKEN_CREATED).count,
+            right: loser.timeline.filter(eventTypes.TOKEN_CREATED).count,
         } %}
     {% endif %}
 
@@ -102,6 +102,15 @@
             label: 'menu.prophecies_fulfilled'|trans,
             left: winner.timeline.filter(eventTypes.PROPHECY_FULFILLED).count,
             right: loser.timeline.filter(eventTypes.PROPHECY_FULFILLED).count,
+        } %}
+    {% endif %}
+
+    {% if log.timeline.filter(eventTypes.CHAINS_ADDED).count > 0 %}
+        {% include 'Keyforge/Game/Detail/game_stat_comparison_row.html.twig' with {
+            label: 'menu.chains_obtained'|trans,
+            left: winner.timeline.totalByValue(eventTypes.CHAINS_ADDED),
+            right: loser.timeline.totalByValue(eventTypes.CHAINS_ADDED),
+            color: false,
         } %}
     {% endif %}
 </div>

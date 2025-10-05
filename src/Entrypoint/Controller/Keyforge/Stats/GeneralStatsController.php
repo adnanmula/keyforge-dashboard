@@ -102,7 +102,9 @@ final class GeneralStatsController extends Controller
             KeyforgeSet::DT->value => 0,
             KeyforgeSet::WoE->value => 0,
             KeyforgeSet::GR->value => 0,
+            KeyforgeSet::ToC->value => 0,
             KeyforgeSet::AS->value => 0,
+            KeyforgeSet::PV->value => 0,
         ];
 
         foreach ($wrBySet as $key => $value) {
@@ -126,7 +128,9 @@ final class GeneralStatsController extends Controller
             KeyforgeSet::DT->value => 0,
             KeyforgeSet::WoE->value => 0,
             KeyforgeSet::GR->value => 0,
+            KeyforgeSet::ToC->value => 0,
             KeyforgeSet::AS->value => 0,
+            KeyforgeSet::PV->value => 0,
         ];
 
         foreach ($avgStatsBySet as $key => $value) {

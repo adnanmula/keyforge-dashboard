@@ -473,7 +473,7 @@ menu.join: Join
 menu.leave: Leave
 menu.extra_turns: Extra turns
 menu.tokens_created: Tokens created
-menu.tides_risen: Tides risen
+menu.tides_raised: Tides raised
 menu.prophecies_activated: Prophecies activated
 menu.prophecies_fulfilled: Prophecies fulfilled
 menu.chains_obtained: Chains obtained

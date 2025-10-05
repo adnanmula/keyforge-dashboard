@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c3a232bd3d6a761eb616a37a7631a164",
+    "content-hash": "897e688086b1a74635caacb05c7e36fc",
     "packages": [
         {
             "name": "adnanmula/criteria",
@@ -56,16 +56,16 @@
         },
         {
             "name": "adnanmula/keyforge-game-log-parser",
-            "version": "0.2.0",
+            "version": "0.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/adnanmula/keyforge-game-log-parser.git",
-                "reference": "0509cdf5b6cf24f22bb530c7d7b8abcbffa52439"
+                "reference": "f13e77b0da8d722fb1d7077a70d40a4e77f1271f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/adnanmula/keyforge-game-log-parser/zipball/0509cdf5b6cf24f22bb530c7d7b8abcbffa52439",
-                "reference": "0509cdf5b6cf24f22bb530c7d7b8abcbffa52439",
+                "url": "https://api.github.com/repos/adnanmula/keyforge-game-log-parser/zipball/f13e77b0da8d722fb1d7077a70d40a4e77f1271f",
+                "reference": "f13e77b0da8d722fb1d7077a70d40a4e77f1271f",
                 "shasum": ""
             },
             "require": {
@@ -98,9 +98,9 @@
             ],
             "support": {
                 "issues": "https://github.com/adnanmula/keyforge-game-log-parser/issues",
-                "source": "https://github.com/adnanmula/keyforge-game-log-parser/tree/0.2.0"
+                "source": "https://github.com/adnanmula/keyforge-game-log-parser/tree/0.2.1"
             },
-            "time": "2025-10-04T09:35:53+00:00"
+            "time": "2025-10-05T13:41:53+00:00"
         },
         {
             "name": "adnanmula/tournament",
