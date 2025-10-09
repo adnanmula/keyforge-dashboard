@@ -79,15 +79,16 @@ readonly class GenerateDeckAlliancesCommandHandler
                     'json' => $combination,
                 ]);
 
-                $importedDeck = Uuid::from(\str_replace('"', '', $response->getContent()));
-                $importedDecks[] = [
-                    'id' => $importedDeck->value(),
-                    'url' => Link::dokDeckFromId(KeyforgeDeckType::ALLIANCE, $importedDeck),
-                ];
-
-                $this->importDeckAllianceService->execute($importedDeck, $command->addToMyDecks ? $user->id() : null);
+                $importedDeckId = Uuid::from(\str_replace('"', '', $response->getContent()));
+                $importedDeck = $this->importDeckAllianceService->execute($importedDeckId, $command->addToMyDecks ? $user->id() : null);
                 $this->deckRepository->commit();
                 $this->deckRepository->beginTransaction();
+
+                $importedDecks[] = [
+                    'id' => $importedDeckId->value(),
+                    'url' => Link::dokDeckFromId(KeyforgeDeckType::ALLIANCE, $importedDeckId),
+                    'deck' => $importedDeck,
+                ];
             } catch (\Throwable) {
                 throw new \Exception('Error desconocido');
             }

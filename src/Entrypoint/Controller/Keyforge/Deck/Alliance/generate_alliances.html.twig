@@ -156,22 +156,24 @@
                     addToOwnedDok: $('#addToOwnedDok').is(':checked'),
                 }),
             }).done(function(data) {
-                console.log(data);
                 if (data.success && data.result.decks.length > 0) {
                     const $block = $('#resultBlock');
                     $block.empty();
 
                     const $container = $('<div class="d-flex flex-wrap gap-3"></div>');
 
-                    data.result.decks.forEach(deck => {
+                    data.result.decks.forEach(deckData => {
                         const $card = $(`
                             <div class="card shadow-sm p-3" style="min-width: 250px;">
-                                <h5 class="card-title mb-2">${deck.id}</h5>
+                                <h5 class="card-title mb-2">${deckData.deck.name}</h5>
+                                ${deckData.deck.houses[0]}
+                                ${deckData.deck.houses[1]}
+                                ${deckData.deck.houses[2]}
                                 <p class="mb-0">
-                                    <a href="/deck/${deck.id}" class="text-decoration-none">{{ 'menu.view_deck'|trans }}</a>
+                                    <a href="/deck/${deckData.id}" class="text-decoration-none">{{ 'menu.view_deck'|trans }}</a>
                                 </p>
                                 <p class="mb-1">
-                                    <a href="${deck.url}" target="_blank" class="text-decoration-none">{{ 'menu.dok'|trans }}</a>
+                                    <a href="${deckData.url}" target="_blank" class="text-decoration-none">{{ 'menu.dok'|trans }}</a>
                                 </p>
                             </div>
                         `);
