@@ -52,6 +52,7 @@ data.winrate: 'Win rate'
 data.wins: Wins
 deck.actions: Actions
 deck.add_to_my_decks: 'Add to my decks'
+deck.add_to_owned_dok: 'Add to owned on DoK'
 deck.aerc: Aerc
 deck.amber_control: Amber control
 deck.antisynergy: Antisinergy
@@ -209,9 +210,6 @@ menu.add_friends: 'Add friends'
 menu.add_my_deck: 'Add to my decks'
 menu.addgame: 'Register game'
 menu.admin: Admin
-menu.admin_action_generate_home_projection: Regenerate home projection
-menu.admin_action_generate_user_projection: Regenerate user projection
-menu.admin_actions: Admin actions
 menu.admin_no_new_accounts: No pending accounts
 menu.all: All
 menu.any: Any
@@ -446,6 +444,9 @@ menu.filters: Filters
 menu.predefined: Predefined
 menu.show: Show
 menu.other_filters: Other filters
+menu.generate_alliances: Generate alliances
+menu.view_deck: View deck
+menu.dok: DoK
 wiki.tag_criteria.has_scaling_amber: Has cards that deny more Amber the more Amber the opponent has.
 wiki.tag_criteria.has_board_wipes: Has cards capable of clearing the board of creatures to varying degrees.
 wiki.tag_criteria.synergistic: An estimation of a deck’s overall quality; can help detect synergies and anti-synergies.

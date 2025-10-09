@@ -52,6 +52,7 @@ data.winrate: 'Win rate'
 data.wins: Victorias
 deck.actions: Acciones
 deck.add_to_my_decks: 'Añadir a mis barajas'
+deck.add_to_owned_dok: 'Añadir a owned en DoK'
 deck.aerc: Aerc
 deck.amber_control: Control de ámbar
 deck.antisynergy: Antisinergia
@@ -209,9 +210,6 @@ menu.add_friends: 'Añadir amigos'
 menu.add_my_deck: 'Añadir a mis barajas'
 menu.addgame: 'Registrar partida'
 menu.admin: Admin
-menu.admin_action_generate_home_projection: Regenerar proyección de página principal
-menu.admin_action_generate_user_projection: Regenerar proyección de usuario
-menu.admin_actions: Acciones de admin
 menu.admin_no_new_accounts: Ninguna cuenta pendiente
 menu.all: Todas
 menu.any: Cualquiera
@@ -446,6 +444,9 @@ menu.filters: Filtros
 menu.predefined: Predefinidas
 menu.show: Mostrar
 menu.other_filters: Otros filtros
+menu.generate_alliances: Generar alianzas
+menu.view_deck: Ver baraja
+menu.dok: DoK
 wiki.tag_criteria.has_scaling_amber: Tiene cartas permiten denegar más ámbar cuanto más tiene el rival
 wiki.tag_criteria.has_board_wipes: Tiene cartas capacez de limpiar el tablero de criaturas en mayor o menor medida
 wiki.tag_criteria.synergistic: Aproximación de la calidad de una baraja, puede ayudar a detectar sinérgias y antisinérgias.

@@ -5,7 +5,9 @@ namespace AdnanMula\Cards\Application\Command\Keyforge\Deck\GenerateAlliances;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeck;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckAllianceRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckRepository;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckType;
 use AdnanMula\Cards\Domain\Model\Shared\User;
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Link;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\UserRole;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Domain\Service\Keyforge\ImportDeckAllianceService;
@@ -42,18 +44,16 @@ readonly class GenerateDeckAlliancesCommandHandler
         $decks = $this->deckRepository->search(new Criteria(
             new Filters(
                 FilterType::AND,
-                new Filter(new FilterField('id'), new StringArrayFilterValue(...$command->deckIds), FilterOperator::IN),
+                new Filter(new FilterField('id'), new StringArrayFilterValue(...$command->deckIds()), FilterOperator::IN),
             ),
         ));
 
-        if (\count($decks) !== \count(array_unique($command->deckIds))) {
-            throw new \Exception('Missing deck');
-        }
+        $this->validations($command, ...$decks);
 
-        $this->validations(...$decks);
+        $pods = $this->pods($command, ...$decks);
+        $combinations = $this->combinations($pods, $command->addToOwnedDok);
 
-        $pods = $this->pods($command->deckHouses, ...$decks);
-        $combinations = $this->combinations($pods);
+        $importedDecks = [];
 
         $authToken = $this->login();
 
@@ -79,7 +79,13 @@ readonly class GenerateDeckAlliancesCommandHandler
                     'json' => $combination,
                 ]);
 
-                $this->importDeckAllianceService->execute(Uuid::from(\str_replace('"', '', $response->getContent())), $user->id());
+                $importedDeck = Uuid::from(\str_replace('"', '', $response->getContent()));
+                $importedDecks[] = [
+                    'id' => $importedDeck->value(),
+                    'url' => Link::dokDeckFromId(KeyforgeDeckType::ALLIANCE, $importedDeck),
+                ];
+
+                $this->importDeckAllianceService->execute($importedDeck, $command->addToMyDecks ? $user->id() : null);
                 $this->deckRepository->commit();
                 $this->deckRepository->beginTransaction();
             } catch (\Throwable) {
@@ -89,33 +95,34 @@ readonly class GenerateDeckAlliancesCommandHandler
 
         return [
             'combinations' => \count($combinations),
+            'decks' => $importedDecks,
         ];
     }
 
-    private function validations(?KeyforgeDeck ...$decks): void
+    private function validations(GenerateDeckAlliancesCommand $command, ?KeyforgeDeck ...$decks): void
     {
+        if (\count($decks) !== \count($command->deckIds())) {
+            throw new \Exception('Missing deck');
+        }
+
         if (0 === \count($decks)) {
             throw new \Exception('Deck error');
         }
 
         foreach ($decks as $deck) {
-            if (null === $deck) {
-                throw new \Exception('Deck error');
-            }
-
             if ($deck->set() !== $decks[0]->set()) {
                 throw new \Exception('Set error');
             }
         }
     }
 
-    private function pods(array $houses, KeyforgeDeck ...$decks): array
+    private function pods(GenerateDeckAlliancesCommand $command, KeyforgeDeck ...$decks): array
     {
         $pods = [];
 
         foreach ($decks as $deck) {
             foreach ($deck->houses()->value() as $house) {
-                if (false === \in_array($house->value, $houses[$deck->id()->value()] ?? [], true)) {
+                if (false === \in_array($house->value, $command->housesOf($deck->id()->value()), true)) {
                     continue;
                 }
 
@@ -129,7 +136,7 @@ readonly class GenerateDeckAlliancesCommandHandler
         return $pods;
     }
 
-    private function combinations(array $data): array
+    private function combinations(array $data, bool $addToOwned): array
     {
         $count = \count($data);
 
@@ -160,7 +167,7 @@ readonly class GenerateDeckAlliancesCommandHandler
                             'houseTwoDeckId' => $data[$j]['id'],
                             'houseThree' => $data[$k]['house'],
                             'houseThreeDeckId' => $data[$k]['id'],
-                            'owned' => true,
+                            'owned' => $addToOwned,
                         ];
                     }
                 }

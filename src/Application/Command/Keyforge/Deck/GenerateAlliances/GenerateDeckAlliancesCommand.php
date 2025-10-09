@@ -7,24 +7,41 @@ use Assert\Assert;
 
 final readonly class GenerateDeckAlliancesCommand
 {
-    private(set) array $deckIds;
-    private(set) array $deckHouses;
+    private(set) array $decks;
+    private(set) bool $addToMyDecks;
+    private(set) bool $addToOwnedDok;
 
-    public function __construct($deckIds, $deckHouses)
+    public function __construct($decks, $addToMyDecks, $addToOwnedDok)
     {
         Assert::lazy()
-            ->that($deckIds, 'deckIds')->all()->uuid()
-            ->that($deckHouses, 'deckHouses')->isArray()
+            ->that($decks, 'decks')->all()->isArray()
+            ->that($addToMyDecks, 'addToMyDecks')->boolean()
+            ->that($addToOwnedDok, 'addToOwnedDok')->boolean()
             ->verifyNow();
 
-        foreach ($deckHouses as $index => $item) {
+        foreach ($decks as $id => $houses) {
             Assert::lazy()
-                ->that($index)->uuid()
-                ->that($item)->all()->inArray(KeyforgeHouse::values())
+                ->that($id)->uuid()
+                ->that($houses)->all()->inArray(KeyforgeHouse::values())
                 ->verifyNow();
+
+            if (0 === count($houses)) {
+                unset($decks[$id]);
+            }
         }
 
-        $this->deckIds = $deckIds;
-        $this->deckHouses = $deckHouses;
+        $this->decks = $decks;
+        $this->addToMyDecks = $addToMyDecks;
+        $this->addToOwnedDok = $addToOwnedDok;
+    }
+
+    public function deckIds(): array
+    {
+        return array_keys($this->decks);
+    }
+
+    public function housesOf(string $deckId): array
+    {
+        return $this->decks[$deckId] ?? [];
     }
 }

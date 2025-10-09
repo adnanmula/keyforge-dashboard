@@ -24,9 +24,14 @@ final class GenerateAlliancesController extends Controller
             try {
                 $payload = Json::decode($request->getContent());
 
-                $this->bus->dispatch(new GenerateDeckAlliancesCommand($payload['decks'], $payload['houses']));
+                $result = $this->extractResult(
+                    $this->bus->dispatch(new GenerateDeckAlliancesCommand($payload['decks'], $payload['addToMyDecks'], $payload['addToOwnedDok'])),
+                );
 
-                return new JsonResponse(['success' => true]);
+                return new JsonResponse([
+                    'success' => true,
+                    'result' => $result,
+                ]);
             } catch (InvalidUuidStringException) {
                 return new JsonResponse(['error' => 'Invalid uuid']);
             } catch (\Throwable $e) {
