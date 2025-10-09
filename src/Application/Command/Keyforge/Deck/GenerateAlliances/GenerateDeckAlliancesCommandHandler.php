@@ -51,7 +51,7 @@ readonly class GenerateDeckAlliancesCommandHandler
         $this->validations($command, ...$decks);
 
         $pods = $this->pods($command, ...$decks);
-        $combinations = $this->combinations($pods, $command->addToOwnedDok);
+        $combinations = $this->combinations($command, $pods, $command->addToOwnedDok);
 
         $importedDecks = [];
 
@@ -65,6 +65,8 @@ readonly class GenerateDeckAlliancesCommandHandler
                 $combination['houseTwo'],
                 $combination['houseThreeDeckId'],
                 $combination['houseThree'],
+                $command->extraCardType,
+                $command->extraCards,
             );
 
             if ($isAlreadyImported) {
@@ -137,7 +139,7 @@ readonly class GenerateDeckAlliancesCommandHandler
         return $pods;
     }
 
-    private function combinations(array $data, bool $addToOwned): array
+    private function combinations(GenerateDeckAlliancesCommand $command, array $data, bool $addToOwned): array
     {
         $count = \count($data);
 
@@ -161,7 +163,7 @@ readonly class GenerateDeckAlliancesCommandHandler
                     $isNotSameDeck = $id1 !== $id2 || $id1 !== $id3 || $id2 !== $id3;
 
                     if ($isNotDuplicate && $isNotSameDeck) {
-                        $combinations[] = [
+                        $combination = [
                             'houseOne' => $data[$i]['house'],
                             'houseOneDeckId' => $data[$i]['id'],
                             'houseTwo' => $data[$j]['house'],
@@ -170,6 +172,16 @@ readonly class GenerateDeckAlliancesCommandHandler
                             'houseThreeDeckId' => $data[$k]['id'],
                             'owned' => $addToOwned,
                         ];
+
+                        if ('Token' === $command->extraCardType) {
+                            $combination['tokenName'] = $command->extraCards;
+                        }
+
+                        if ('Prophecies' === $command->extraCardType) {
+                            $combination['propheciesDeckId'] = $command->extraCards;
+                        }
+
+                        $combinations[] = $combination;
                     }
                 }
             }

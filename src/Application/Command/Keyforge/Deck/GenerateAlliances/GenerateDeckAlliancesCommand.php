@@ -8,13 +8,17 @@ use Assert\Assert;
 final readonly class GenerateDeckAlliancesCommand
 {
     private(set) array $decks;
+    private(set) ?string $extraCardType;
+    private(set) ?string $extraCards;
     private(set) bool $addToMyDecks;
     private(set) bool $addToOwnedDok;
 
-    public function __construct($decks, $addToMyDecks, $addToOwnedDok)
+    public function __construct($decks, $extraCardType, $extraCards, $addToMyDecks, $addToOwnedDok)
     {
         Assert::lazy()
             ->that($decks, 'decks')->all()->isArray()
+            ->that($extraCardType, 'extraCardType')->nullOr()->inArray(['Token', 'Prophecies'])
+            ->that($extraCards, 'extraCards')->nullOr()->string()->notBlank()
             ->that($addToMyDecks, 'addToMyDecks')->boolean()
             ->that($addToOwnedDok, 'addToOwnedDok')->boolean()
             ->verifyNow();
@@ -31,6 +35,8 @@ final readonly class GenerateDeckAlliancesCommand
         }
 
         $this->decks = $decks;
+        $this->extraCardType = $extraCardType;
+        $this->extraCards = $extraCards;
         $this->addToMyDecks = $addToMyDecks;
         $this->addToOwnedDok = $addToOwnedDok;
     }

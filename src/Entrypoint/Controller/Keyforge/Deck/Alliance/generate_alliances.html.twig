@@ -42,6 +42,15 @@
         </select>
         <form id="generateAlliancesForm">
             <div id="decksBlock"></div>
+            <div id="tokensBlock" class="d-none">
+                <label class="form-check-label fw-semibold" for="tokensSelect">{{ 'menu.select_token'|trans }}</label>
+                <select id="tokensSelect" name="tokensSelect" class="form-select mb-3"></select>
+            </div>
+
+            <div id="propheciesBlock" class="d-none">
+                <label class="form-check-label fw-semibold" for="propheciesSelect">{{ 'menu.select_prophecies'|trans }}</label>
+                <select id="propheciesSelect" name="propheciesSelect" class="form-select mb-3"></select>
+            </div>
             <div class="d-flex align-items-center gap-4 mb-3 ms-1">
                 <div class="form-check form-switch m-0">
                     <input class="form-check-input" type="checkbox" role="switch" id="addToMyDecks">
@@ -62,12 +71,27 @@
     </div>
 
     <script>
+        let tokens = [];
+        let prophecies = [];
+
         $(document).on('change', '.deck_selector', function(e) {
             const deck = cachedDecks[e.target.value] ?? null;
             const subselector = e.target.getAttribute('data-subselector');
 
             const prev = $(this).data('previous') || '';
             const current = $(this).val();
+
+            if (deck.set === 'WoE' || deck.set === 'ToC') {
+                if (false === tokens.includes(deck.cards.extraCards[0].name)) {
+                    tokens.push(deck.cards.extraCards[0].name);
+                }
+            }
+
+            if (deck.set === 'PV') {
+                if (false === prophecies.includes(deck.id)) {
+                    prophecies.push(deck.id);
+                }
+            }
 
             ['A', 'B', 'C'].forEach((suffix, index) => {
                 const baseSelector = `#${subselector}${suffix}`;
@@ -89,11 +113,35 @@
                 addDeck();
             }
 
+            if (tokens.length > 0) {
+                $('#tokensSelect').empty();
+
+                tokens.forEach(token => {
+                    $('#tokensSelect').append(`<option value="${token}">${token}</option>`);
+                });
+
+                $('#tokensBlock').removeClass('d-none');
+            }
+
+            if (prophecies.length > 0) {
+                $('#propheciesSelect').empty();
+
+                prophecies.forEach(deckId => {
+                    $('#propheciesSelect').append(`<option value="${deckId}">${cachedDecks[deckId].name}</option>`);
+                });
+
+                $('#propheciesBlock').removeClass('d-none');
+            }
+
             $(this).data('previous', current);
         });
 
         $(document).on('change', '#set', function(e) {
+            tokens = [];
+            prophecies = [];
             $('#decksBlock').empty();
+            $('#tokensBlock').addClass('d-none');
+            $('#propheciesBlock').addClass('d-none');
             addDeck();
         });
 
@@ -147,11 +195,27 @@
                 }
             });
 
+            const set = $('#set').val();
+            let extraCardType = null;
+            let extraCard = null;
+
+            if (set === 'WoE' || set === 'ToC') {
+                extraCardType = 'Token';
+                extraCard = $('#tokensSelect').val();
+            }
+
+            if (set === 'PV') {
+                extraCardType = 'Prophecies';
+                extraCard = $('#propheciesSelect').val();
+            }
+
             $.post({
                 url: '{{ path('keyforge_alliance_generate') }}',
                 contentType: 'application/json',
                 data: JSON.stringify({
                     decks: decks,
+                    extraCardType: extraCardType,
+                    extraCard: extraCard,
                     addToMyDecks: $('#addToMyDecks').is(':checked'),
                     addToOwnedDok: $('#addToOwnedDok').is(':checked'),
                 }),
@@ -163,12 +227,26 @@
                     const $container = $('<div class="d-flex flex-wrap gap-3"></div>');
 
                     data.result.decks.forEach(deckData => {
+                        let extraData = '';
+
+                        if ('WoE' === deckData.deck.set || 'ToC' === deckData.deck.set) {
+                            extraData = '<p class="mb-0">{{ 'deck.token-creature'|trans }}: ' + deckData.deck.cards.extraCards[0].name + '</p>';
+                        }
+
+                        if ('PV' === deckData.deck.set) {
+                            extraData = '<p class="mb-0">{{ 'deck.prophecy'|trans }}: ' + deckData.deck.cards.extraCards[0].name + '</p>' +
+                                '<p class="mb-0">{{ 'deck.prophecy'|trans }}: ' + deckData.deck.cards.extraCards[1].name + '</p>' +
+                                '<p class="mb-0">{{ 'deck.prophecy'|trans }}: ' + deckData.deck.cards.extraCards[2].name + '</p>' +
+                                '<p class="mb-0">{{ 'deck.prophecy'|trans }}: ' + deckData.deck.cards.extraCards[3].name + '</p>';
+                        }
+
                         const $card = $(`
                             <div class="card shadow-sm p-3" style="min-width: 250px;">
                                 <h5 class="card-title mb-2">${deckData.deck.name}</h5>
                                 ${deckData.deck.houses[0]}
                                 ${deckData.deck.houses[1]}
                                 ${deckData.deck.houses[2]}
+                                ${extraData}
                                 <p class="mb-0">
                                     <a href="/deck/${deckData.id}" class="text-decoration-none">{{ 'menu.view_deck'|trans }}</a>
                                 </p>

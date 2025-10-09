@@ -25,7 +25,13 @@ final class GenerateAlliancesController extends Controller
                 $payload = Json::decode($request->getContent());
 
                 $result = $this->extractResult(
-                    $this->bus->dispatch(new GenerateDeckAlliancesCommand($payload['decks'], $payload['addToMyDecks'], $payload['addToOwnedDok'])),
+                    $this->bus->dispatch(new GenerateDeckAlliancesCommand(
+                        $payload['decks'],
+                        $payload['extraCardType'],
+                        $payload['extraCard'],
+                        $payload['addToMyDecks'],
+                        $payload['addToOwnedDok'],
+                    )),
                 );
 
                 return new JsonResponse([

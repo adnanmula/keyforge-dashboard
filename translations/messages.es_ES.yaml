@@ -475,10 +475,12 @@ menu.leave: Salir
 menu.extra_turns: Turnos extra
 menu.tokens_created: Tokens creados
 menu.tides_raised: Mareas subidas
-menu.prophecies_activated: Profecias activadas
-menu.prophecies_fulfilled: Profecias cumplidas
+menu.prophecies_activated: Profecías activadas
+menu.prophecies_fulfilled: Profecías cumplidas
 menu.chains_obtained: Cadenas obtenidas
 menu.fates_resolved: Destinos resueltos
+menu.select_token: Selecciona un token
+menu.select_prophecies: Selecciona profecías
 game.timeline.extra_turn: Para tomar un turno adicional después de este
 deck.archon-power: Archon Power
 deck.prophecy: Profecía

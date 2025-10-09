@@ -479,6 +479,8 @@ menu.prophecies_activated: Prophecies activated
 menu.prophecies_fulfilled: Prophecies fulfilled
 menu.chains_obtained: Chains obtained
 menu.fates_resolved: Fates resolved
+menu.select_token: Select a token
+menu.select_prophecies: Select prophecies
 game.timeline.extra_turn: To take an extra turn after this one
 deck.archon-power: Archon Power
 deck.prophecy: Prophecy
