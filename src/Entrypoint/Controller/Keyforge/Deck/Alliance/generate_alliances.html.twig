@@ -18,54 +18,133 @@
 
     <div class="divider py-1"></div>
 
-    <form id="generateAlliancesForm">
-        <div class="row">
-            <div class="col-1 col-sm-4 col-lg-3"></div>
-            <div class="col-12 col-sm-12 col-lg-6">
-                <div class="shadow-lg p-3 mb-5 bg-white rounded">
-                    <select id="deck1" name="deck1" class="form-select deck_selector" data-subselector="subselector1"></select>
-                    <div>
-                        <input class="form-check-input" type="checkbox" id="subselector1A" data-deck="" data-house="">
-                        <span id="subselector1A-label"></span>
-                        <input class="form-check-input" type="checkbox" id="subselector1B" data-deck="" data-house="">
-                        <span id="subselector1B-label"></span>
-                        <input class="form-check-input" type="checkbox" id="subselector1C" data-deck="" data-house="">
-                        <span id="subselector1C-label"></span>
-                    </div>
+    <div class="shadow-lg p-3 mb-5 bg-white rounded d-none" id="resultBlock"></div>
 
-                    <div class="divider py-2"></div>
+    <div class="shadow-lg p-3 mb-5 bg-white rounded">
+        <select id="set" name="set" class="form-select mb-3">
+            <option value="CotA">{{ 'set.full.CotA'|trans }}</option>
+            <option value="AoA">{{ 'set.full.AoA'|trans }}</option>
+            <option value="WC">{{ 'set.full.WC'|trans }}</option>
+            <option value="MM">{{ 'set.full.MM'|trans }}</option>
+            <option value="DT">{{ 'set.full.DT'|trans }}</option>
+            <option value="WoE">{{ 'set.full.WoE'|trans }}</option>
+            <option value="GR">{{ 'set.full.GR'|trans }}</option>
+            <option value="AS">{{ 'set.full.AS'|trans }}</option>
+            <option value="PV">{{ 'set.full.PV'|trans }}</option>
+            <option value="U22">{{ 'set.full.U22'|trans }}</option>
+            <option value="M24">{{ 'set.full.M24'|trans }}</option>
+            <option value="VM23">{{ 'set.full.VM23'|trans }}</option>
+            <option value="VM24">{{ 'set.full.VM24'|trans }}</option>
+            <option value="VM25">{{ 'set.full.VM25'|trans }}</option>
+            <option value="MoM">{{ 'set.full.MoM'|trans }}</option>
+            <option value="ToC">{{ 'set.full.ToC'|trans }}</option>
+            <option value="DIS">{{ 'set.full.DIS'|trans }}</option>
+        </select>
+        <form id="generateAlliancesForm">
+            <div id="decksBlock"></div>
+            <div id="tokensBlock" class="d-none">
+                <label class="form-check-label fw-semibold" for="tokensSelect">{{ 'menu.select_token'|trans }}</label>
+                <select id="tokensSelect" name="tokensSelect" class="form-select mb-3"></select>
+            </div>
 
-                    <select id="deck2" name="deck2" class="form-select deck_selector" data-subselector="subselector2"></select>
-                    <div>
-                        <input class="form-check-input" type="checkbox" id="subselector2A" data-deck="" data-house="">
-                        <span id="subselector2A-label"></span>
-                        <input class="form-check-input" type="checkbox" id="subselector2B" data-deck="" data-house="">
-                        <span id="subselector2B-label"></span>
-                        <input class="form-check-input" type="checkbox" id="subselector2C" data-deck="" data-house="">
-                        <span id="subselector2C-label"></span>
-                    </div>
+            <div id="propheciesBlock" class="d-none">
+                <label class="form-check-label fw-semibold" for="propheciesSelect">{{ 'menu.select_prophecies'|trans }}</label>
+                <select id="propheciesSelect" name="propheciesSelect" class="form-select mb-3"></select>
+            </div>
+            <div class="d-flex align-items-center gap-4 mb-3 ms-1">
+                <div class="form-check form-switch m-0">
+                    <input class="form-check-input" type="checkbox" role="switch" id="addToMyDecks">
+                    <label class="form-check-label fw-semibold" for="addToMyDecks">
+                        {{ 'deck.add_to_my_decks'|trans }}
+                    </label>
+                </div>
 
-                    <div class="divider py-2"></div>
-
-                    <select id="deck3" name="deck3" class="form-select deck_selector" data-subselector="subselector3"></select>
-                    <div>
-                        <input class="form-check-input" type="checkbox" id="subselector3A" data-deck="" data-house="">
-                        <span id="subselector3A-label"></span>
-                        <input class="form-check-input" type="checkbox" id="subselector3B" data-deck="" data-house="">
-                        <span id="subselector3B-label"></span>
-                        <input class="form-check-input" type="checkbox" id="subselector3C" data-deck="" data-house="">
-                        <span id="subselector3C-label"></span>
-                    </div>
-
-                    <div class="divider py-2"></div>
-
-                    <button type="submit" class="col-4 btn btn-block btn-dark w-100">{{ 'menu.generate'|trans }}</button>
+                <div class="form-check form-switch m-0">
+                    <input class="form-check-input" type="checkbox" role="switch" id="addToOwnedDok">
+                    <label class="form-check-label fw-semibold" for="addToOwnedDok">
+                        {{ 'deck.add_to_owned_dok'|trans }}
+                    </label>
                 </div>
             </div>
-        </div>
-    </form>
+            <button type="submit" class="btn btn-block btn-dark w-100">{{ 'menu.generate_alliances'|trans }}</button>
+        </form>
+    </div>
 
     <script>
+        let tokens = [];
+        let prophecies = [];
+
+        $(document).on('change', '.deck_selector', function(e) {
+            const deck = cachedDecks[e.target.value] ?? null;
+            const subselector = e.target.getAttribute('data-subselector');
+
+            const prev = $(this).data('previous') || '';
+            const current = $(this).val();
+
+            if (deck.set === 'WoE' || deck.set === 'ToC') {
+                if (false === tokens.includes(deck.cards.extraCards[0].name)) {
+                    tokens.push(deck.cards.extraCards[0].name);
+                }
+            }
+
+            if (deck.set === 'PV') {
+                if (false === prophecies.includes(deck.id)) {
+                    prophecies.push(deck.id);
+                }
+            }
+
+            ['A', 'B', 'C'].forEach((suffix, index) => {
+                const baseSelector = `#${subselector}${suffix}`;
+                const $element = $(baseSelector);
+                const $label = $(`${baseSelector}-label`);
+
+                $element.attr({
+                    'data-house': deck.houses[index],
+                    'data-deck': deck.id
+                })
+                .prop('disabled', false);
+
+                $label.text(deck.houses[index]);
+            });
+
+            $(`#${subselector}-Inputs`).removeClass('d-none');
+
+            if (!prev && current) {
+                addDeck();
+            }
+
+            if (tokens.length > 0) {
+                $('#tokensSelect').empty();
+
+                tokens.forEach(token => {
+                    $('#tokensSelect').append(`<option value="${token}">${token}</option>`);
+                });
+
+                $('#tokensBlock').removeClass('d-none');
+            }
+
+            if (prophecies.length > 0) {
+                $('#propheciesSelect').empty();
+
+                prophecies.forEach(deckId => {
+                    $('#propheciesSelect').append(`<option value="${deckId}">${cachedDecks[deckId].name}</option>`);
+                });
+
+                $('#propheciesBlock').removeClass('d-none');
+            }
+
+            $(this).data('previous', current);
+        });
+
+        $(document).on('change', '#set', function(e) {
+            tokens = [];
+            prophecies = [];
+            $('#decksBlock').empty();
+            $('#tokensBlock').addClass('d-none');
+            $('#propheciesBlock').addClass('d-none');
+            addDeck();
+        });
+
         $('select').on('select2:open', function(e) {
             const select2 = $(e.target).data('select2');
 
@@ -77,92 +156,188 @@
         });
 
         let cachedDecks = [];
+        let deckCount = 0;
 
-        $('.deck_selector').select2({
-            ajax: {
-                url: '{{ path('keyforge_decks_json') }}',
-                minimumInputLength: 3,
-                data: function (params) {
-                    let query = {
-                        search: {
-                            'value': params.term,
-                        },
-                        'length': 20,
-                    };
-
-                    if ('' === params.term || undefined === params.term) {
-                        query.extraFilterOnlyOwned = true;
-                        query.extraFilterOnlyFriends = true;
-
-                        {% if is_granted('ROLE_KEYFORGE') %}
-                        query.extraFilterOwner = '{{ app.user.id }}';
-                        {% endif %}
-                    }
-
-                    return query;
-                },
-                processResults: function (data) {
-                    $.each(data.data, function(i, d) {
-                        data.data[i]['text'] = d.name;
-                        cachedDecks[d.id] = d;
-                    });
-
-                    return {
-                        results: data.data
-                    };
-                }
-            }
-        });
-
-        $('.deck_selector').change(function (e) {
-            const deck = cachedDecks[e.target.value] ?? null;
-            const subselector = e.target.getAttribute('data-subselector');
-
-            $('#'+subselector+'A')[0].setAttribute('data-house', deck.houses[0]);
-            $('#'+subselector+'B')[0].setAttribute('data-house', deck.houses[1]);
-            $('#'+subselector+'C')[0].setAttribute('data-house', deck.houses[2]);
-            $('#'+subselector+'A')[0].setAttribute('data-deck', deck.id);
-            $('#'+subselector+'B')[0].setAttribute('data-deck', deck.id);
-            $('#'+subselector+'C')[0].setAttribute('data-deck', deck.id);
-
-            $('#'+subselector+'A-label')[0].innerText = deck.houses[0];
-            $('#'+subselector+'B-label')[0].innerText = deck.houses[1];
-            $('#'+subselector+'C-label')[0].innerText = deck.houses[2];
+        $(document).ready(function() {
+            addDeck();
         });
 
         $('#generateAlliancesForm').submit(function (e) {
             e.preventDefault();
 
-            const deck1 = $('#deck1')[0].value;
-            const deck2 = $('#deck2')[0].value;
-            const deck3 = $('#deck3')[0].value;
+            const decks = {};
 
-            const decks = [deck1, deck2, deck3];
+            $('.deck_selector').each(function() {
+                const $select = $(this);
+                const selectedDeckId = $select.val();
+                const subselectorBase = $select.data('subselector');
 
-            let houses = {};
+                if (!selectedDeckId) {
+                    return;
+                }
 
-            ['1', '2', '3'].forEach(function (a) {
-                ['A', 'B', 'C'].forEach(function (b) {
-                    if ($('#subselector'+a+b)[0].checked) {
-                        let deckId = $('#subselector'+a+b)[0].getAttribute('data-deck');
-                        let house = $('#subselector'+a+b)[0].getAttribute('data-house');
+                const houses = [];
 
-                        houses[deckId] = houses[deckId] || [];
-                        houses[deckId].push(house);
+                $(`#${subselectorBase}A, #${subselectorBase}B, #${subselectorBase}C`).each(function() {
+                    if ($(this).is(':checked')) {
+                        houses.push($(this).data('house'));
                     }
-                })
+                });
+
+                if (houses.length > 0) {
+                    if (decks[selectedDeckId]) {
+                        const existing = new Set(decks[selectedDeckId]);
+                        houses.forEach(h => existing.add(h));
+                        decks[selectedDeckId] = Array.from(existing);
+                    } else {
+                        decks[selectedDeckId] = houses;
+                    }
+                }
             });
+
+            const set = $('#set').val();
+            let extraCardType = null;
+            let extraCard = null;
+
+            if (set === 'WoE' || set === 'ToC') {
+                extraCardType = 'Token';
+                extraCard = $('#tokensSelect').val();
+            }
+
+            if (set === 'PV') {
+                extraCardType = 'Prophecies';
+                extraCard = $('#propheciesSelect').val();
+            }
 
             $.post({
                 url: '{{ path('keyforge_alliance_generate') }}',
                 contentType: 'application/json',
                 data: JSON.stringify({
-                    'decks': decks,
-                    'houses': houses,
+                    decks: decks,
+                    extraCardType: extraCardType,
+                    extraCard: extraCard,
+                    addToMyDecks: $('#addToMyDecks').is(':checked'),
+                    addToOwnedDok: $('#addToOwnedDok').is(':checked'),
                 }),
-            }).done(function() {
-                alert('OK');
+            }).done(function(data) {
+                if (data.success && data.result.decks.length > 0) {
+                    const $block = $('#resultBlock');
+                    $block.empty();
+
+                    const $container = $('<div class="d-flex flex-wrap gap-3"></div>');
+
+                    data.result.decks.forEach(deckData => {
+                        let extraData = '';
+
+                        if ('WoE' === deckData.deck.set || 'ToC' === deckData.deck.set) {
+                            extraData = '<p class="mb-0">{{ 'deck.token-creature'|trans }}: ' + deckData.deck.cards.extraCards[0].name + '</p>';
+                        }
+
+                        if ('PV' === deckData.deck.set) {
+                            extraData = '<p class="mb-0">{{ 'deck.prophecy'|trans }}: ' + deckData.deck.cards.extraCards[0].name + '</p>' +
+                                '<p class="mb-0">{{ 'deck.prophecy'|trans }}: ' + deckData.deck.cards.extraCards[1].name + '</p>' +
+                                '<p class="mb-0">{{ 'deck.prophecy'|trans }}: ' + deckData.deck.cards.extraCards[2].name + '</p>' +
+                                '<p class="mb-0">{{ 'deck.prophecy'|trans }}: ' + deckData.deck.cards.extraCards[3].name + '</p>';
+                        }
+
+                        const $card = $(`
+                            <div class="card shadow-sm p-3" style="min-width: 250px;">
+                                <h5 class="card-title mb-2">${deckData.deck.name}</h5>
+                                ${deckData.deck.houses[0]}
+                                ${deckData.deck.houses[1]}
+                                ${deckData.deck.houses[2]}
+                                ${extraData}
+                                <p class="mb-0">
+                                    <a href="/deck/${deckData.id}" class="text-decoration-none">{{ 'menu.view_deck'|trans }}</a>
+                                </p>
+                                <p class="mb-1">
+                                    <a href="${deckData.url}" target="_blank" class="text-decoration-none">{{ 'menu.dok'|trans }}</a>
+                                </p>
+                            </div>
+                        `);
+
+                        $container.append($card);
+                    });
+
+                    $block.append($container);
+                    $block.removeClass('d-none');
+                } else {
+                    alert('Error');
+                }
             });
         });
+
+        function addDeck() {
+            deckCount++;
+
+            const deckId = `deck${deckCount}`;
+            const subselectorBase = `subselector${deckCount}`;
+
+            const $block = $(`
+              <div class="deck-block mb-3 p-3 border rounded">
+                <div class="mb-2">
+                  <select id="${deckId}" name="${deckId}" class="form-select deck_selector" data-subselector="${subselectorBase}">
+                  </select>
+                </div>
+
+                <div class="d-flex flex-wrap gap-3 align-items-center d-none" id="${subselectorBase}-Inputs">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="${subselectorBase}A" data-deck="" data-house="" disabled>
+                    <label class="form-check-label ms-1" for="${subselectorBase}A" id="${subselectorBase}A-label"></label>
+                  </div>
+
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="${subselectorBase}B" data-deck="" data-house="" disabled>
+                    <label class="form-check-label ms-1" for="${subselectorBase}B" id="${subselectorBase}B-label"></label>
+                  </div>
+
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="${subselectorBase}C" data-deck="" data-house="" disabled>
+                    <label class="form-check-label ms-1" for="${subselectorBase}C" id="${subselectorBase}C-label"></label>
+                  </div>
+                </div>
+              </div>
+            `);
+
+            $('#decksBlock').append($block);
+            initDeckSelector($block.find('.deck_selector'));
+        }
+
+        function initDeckSelector($select) {
+            $select.select2({
+                ajax: {
+                    url: '{{ path('keyforge_decks_json') }}',
+                    minimumInputLength: 3,
+                    data: function (params) {
+                        let query = {
+                            search: { 'value': params.term },
+                            extraFilterDeckTypes: ['STANDARD'],
+                            extraFilterSet: [$('#set')[0].value],
+                            length: 20
+                        };
+
+                        if ('' === params.term || undefined === params.term) {
+                            query.extraFilterOnlyOwned = true;
+                            query.extraFilterOnlyFriends = true;
+
+                            {% if is_granted('ROLE_KEYFORGE') %}
+                            query.extraFilterOwner = '{{ app.user.id }}';
+                            {% endif %}
+                        }
+
+                        return query;
+                    },
+                    processResults: function (data) {
+                        $.each(data.data, function(i, d) {
+                            data.data[i]['text'] = d.name;
+                            cachedDecks[d.id] = d;
+                        });
+
+                        return { results: data.data };
+                    }
+                },
+                placeholder: '{{ 'menu.type_to_search'|trans }}'
+            });
+        }
     </script>
 {% endblock %}

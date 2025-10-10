@@ -76,7 +76,7 @@
                         <div class="row">
                             {% if deck.type == 'ALLIANCE' %}
                                 <div class="col-6 col-lg-12">
-                                    <a href="{{ path('keyforge_deck_detail', {'deckId': deck.alliance_composition[pod].keyforgeId}) }}">{{ deck.alliance_composition[pod].name }}</a>
+                                    <a href="{{ path('keyforge_deck_detail', {'deckId': deck.alliance_composition.pods[pod].keyforgeId}) }}">{{ deck.alliance_composition.pods[pod].name }}</a>
                                 </div>
                             {% endif %}
 

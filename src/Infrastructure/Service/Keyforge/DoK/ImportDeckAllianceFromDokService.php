@@ -78,7 +78,10 @@ final readonly class ImportDeckAllianceFromDokService implements ImportDeckAllia
 
         $this->repository->save($newDeck);
 
-        $this->allianceRepository->saveComposition($newDeck->id(), $deckResponse['deck']['allianceHouses']);
+        $this->allianceRepository->saveComposition($newDeck->id(), [
+            'pods' => $deckResponse['deck']['allianceHouses'],
+            'extraCards' => $newDeck->cards()->extraCards,
+        ]);
 
         if (null !== $owner) {
             $this->repository->addOwner($newDeck->id(), $owner);

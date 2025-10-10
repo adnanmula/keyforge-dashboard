@@ -26,32 +26,60 @@ final class KeyforgeDeckAllianceDbalRepository extends DbalRepository implements
         $stmt->executeStatement();
     }
 
-    public function isAlreadyImported(string $id1, string $house1, string $id2, string $house2, string $id3, string $house3): bool
+    public function isAlreadyImported(string $id1, string $house1, string $id2, string $house2, string $id3, string $house3, ?string $extraCardType, ?string $extraCard): ?string
     {
-        $stmt = $this->connection->prepare(
-            \sprintf(
-                "SELECT id FROM %s
+        $query = \sprintf(
+            "SELECT id FROM %s
                 WHERE EXISTS (
                     SELECT 1
-                    FROM jsonb_array_elements(alliance_composition) AS elem
+                    FROM jsonb_array_elements(alliance_composition->'pods') AS elem
                     WHERE elem->>'keyforgeId' = :id1
                       AND elem->>'house' = :house1
                 )
                 AND EXISTS (
                     SELECT 1
-                    FROM jsonb_array_elements(alliance_composition) AS elem
+                    FROM jsonb_array_elements(alliance_composition->'pods') AS elem
                     WHERE elem->>'keyforgeId' = :id2
                       AND elem->>'house' = :house2
                 )
                 AND EXISTS (
                     SELECT 1
-                    FROM jsonb_array_elements(alliance_composition) AS elem
+                    FROM jsonb_array_elements(alliance_composition->'pods') AS elem
                     WHERE elem->>'keyforgeId' = :id3
                       AND elem->>'house' = :house3
-                );",
-                self::TABLE,
-            ),
+                )",
+            self::TABLE,
         );
+
+        if ($extraCardType === 'Token' && $extraCard !== null) {
+            $query .= " AND EXISTS (
+                SELECT 1
+                FROM jsonb_array_elements(alliance_composition->'extraCards') AS elem
+                WHERE elem->>'name' = :extraCard
+            )";
+        }
+
+        if ($extraCardType === 'Prophecies' && $extraCard !== null) {
+            $query .= " AND EXISTS (
+                SELECT 1
+                FROM jsonb_array_elements(alliance_composition->'extraCards') AS elem
+                WHERE elem->>'name' = :prophecy1
+            ) AND EXISTS (
+                SELECT 1
+                FROM jsonb_array_elements(alliance_composition->'extraCards') AS elem
+                WHERE elem->>'name' = :prophecy2
+            ) AND EXISTS (
+                SELECT 1
+                FROM jsonb_array_elements(alliance_composition->'extraCards') AS elem
+                WHERE elem->>'name' = :prophecy3
+            ) AND EXISTS (
+                SELECT 1
+                FROM jsonb_array_elements(alliance_composition->'extraCards') AS elem
+                WHERE elem->>'name' = :prophecy4
+            )";
+        }
+
+        $stmt = $this->connection->prepare($query);
 
         $stmt->bindValue('id1', $id1);
         $stmt->bindValue('house1', $house1);
@@ -60,6 +88,25 @@ final class KeyforgeDeckAllianceDbalRepository extends DbalRepository implements
         $stmt->bindValue('id3', $id3);
         $stmt->bindValue('house3', $house3);
 
-        return false !== $stmt->executeQuery()->fetchOne();
+        if ($extraCardType === 'Token' && $extraCard !== null) {
+            $stmt->bindValue('extraCard', $extraCard);
+        }
+
+        if ($extraCardType === 'Prophecies' && $extraCard !== null) {
+            $propheciesStmt = $this->connection->prepare("SELECT cards FROM keyforge_decks WHERE id = :id");
+            $propheciesStmt->bindValue('id', $extraCard);
+            $prophecies = json_decode($propheciesStmt->executeQuery()->fetchOne(), true)['extraCards'];
+
+            $stmt->bindValue('prophecy1', $prophecies[0]['name']);;
+            $stmt->bindValue('prophecy2', $prophecies[0]['name']);;
+            $stmt->bindValue('prophecy3', $prophecies[0]['name']);;
+            $stmt->bindValue('prophecy4', $prophecies[0]['name']);;
+        }
+
+        $result = $stmt->executeQuery()->fetchOne();
+
+        return false === $result
+            ? null
+            : $result;
     }
 }
