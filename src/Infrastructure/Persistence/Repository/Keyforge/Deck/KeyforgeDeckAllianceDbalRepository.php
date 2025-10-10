@@ -26,7 +26,7 @@ final class KeyforgeDeckAllianceDbalRepository extends DbalRepository implements
         $stmt->executeStatement();
     }
 
-    public function isAlreadyImported(string $id1, string $house1, string $id2, string $house2, string $id3, string $house3, ?string $extraCardType, ?string $extraCard): bool
+    public function isAlreadyImported(string $id1, string $house1, string $id2, string $house2, string $id3, string $house3, ?string $extraCardType, ?string $extraCard): ?string
     {
         $query = \sprintf(
             "SELECT id FROM %s
@@ -103,6 +103,10 @@ final class KeyforgeDeckAllianceDbalRepository extends DbalRepository implements
             $stmt->bindValue('prophecy4', $prophecies[0]['name']);;
         }
 
-        return false !== $stmt->executeQuery()->fetchOne();
+        $result = $stmt->executeQuery()->fetchOne();
+
+        return false === $result
+            ? null
+            : $result;
     }
 }

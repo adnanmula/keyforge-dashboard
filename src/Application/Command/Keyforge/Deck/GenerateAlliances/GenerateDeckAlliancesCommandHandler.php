@@ -18,6 +18,7 @@ use AdnanMula\Criteria\Filter\Filters;
 use AdnanMula\Criteria\Filter\FilterType;
 use AdnanMula\Criteria\FilterField\FilterField;
 use AdnanMula\Criteria\FilterValue\StringArrayFilterValue;
+use AdnanMula\Criteria\FilterValue\StringFilterValue;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -69,7 +70,20 @@ readonly class GenerateDeckAlliancesCommandHandler
                 $command->extraCards,
             );
 
-            if ($isAlreadyImported) {
+            if (null !== $isAlreadyImported) {
+                $deck = $this->deckRepository->searchOne(new Criteria(
+                    new Filters(
+                        FilterType::AND,
+                        new Filter(new FilterField('id'), new StringFilterValue($isAlreadyImported), FilterOperator::EQUAL),
+                    ),
+                ));
+
+                $importedDecks[] = [
+                    'id' => $isAlreadyImported,
+                    'url' => Link::dokDeckFromId(KeyforgeDeckType::ALLIANCE, Uuid::from($isAlreadyImported)),
+                    'deck' => $deck,
+                ];
+
                 continue;
             }
 
