@@ -164,7 +164,10 @@
         addList('houses_exclude', housesExcluded());
         addList('set', set());
         addList('owners', owners());
-        addList('deck_types', deckTypes());
+
+        if (deckTypes().length !== 1 || deckTypes()[0] !== 'STANDARD') {
+            addList('deck_types', deckTypes());
+        }
 
         const base = window.location.pathname + (params.toString() ? ('?' + params.toString()) : '');
         window.history.replaceState({}, '', base);
@@ -176,6 +179,7 @@
 
         if ($('#only_friends').length && params.has('only_friends')) {
             $('#only_friends').prop('checked', parseInt(params.get('only_friends')));
+            $('#collapseOtherFilters').collapse('show');
         }
 
         if (params.has('tag_type')) {
@@ -199,7 +203,12 @@
         setSelect2('#tag-private-selector', csv(params.get('tags_private')));
         setSelect2('#tag-private-selector-exclude', csv(params.get('tags_private_exclude')));
         setSelect2('#owner-selector', csv(params.get('owners')));
-        setSelect2('#deck-type-selector', csv(params.get('deck_types')));
+
+        if (0 === csv(params.get('deck_types')).length) {
+            setSelect2('#deck-type-selector', ['STANDARD']);
+        } else {
+            setSelect2('#deck-type-selector', csv(params.get('deck_types')));
+        }
 
         if (0 === csv(params.get('tags_shown')).length) {
             setSelect2('#tags-shown-selector', ['predetermined', 'custom']);
@@ -207,8 +216,20 @@
             setSelect2('#tags-shown-selector', csv(params.get('tags_shown')));
         }
 
+        if (csv(params.get('tags')).length > 0
+            || csv(params.get('tags_exclude')).length > 0
+            || csv(params.get('tags_private')).length > 0
+            || csv(params.get('tags_private_exclude')).length > 0) {
+            $('#collapseTags').collapse('show');
+        }
+
+        if (csv(params.get('owners')).length || csv(params.get('deck_types')).length) {
+            $('#collapseOtherFilters').collapse('show');
+        }
+
         const includeHouses = new Set(csv(params.get('houses')));
         const excludeHouses = new Set(csv(params.get('houses_exclude')));
+
         if ($('.houses_selector').length) {
             $('.houses_selector').each(function () {
                 const val = this.value;
@@ -227,6 +248,9 @@
             });
         }
 
+        if (includeHouses.size > 0 || excludeHouses.size > 0) {
+            $('#collapseHouses').collapse('show');
+        }
 
         const includeSets = new Set(csv(params.get('set')));
 
@@ -236,6 +260,10 @@
             });
         }
 
+        if (includeSets.size > 0) {
+            $('#collapseSets').collapse('show');
+        }
+
         if (params.has('houses_type')) {
             const val = params.get('houses_type');
             $(".house_type_selector[value='" + val + "']").prop('checked', true);
@@ -243,10 +271,12 @@
 
         if (params.has('max_sas')) {
             $('#filter_max_sas').val(params.get('max_sas'));
+            $('#collapseOtherFilters').collapse('show');
         }
 
         if (params.has('min_sas')) {
             $('#filter_min_sas').val(params.get('min_sas'));
+            $('#collapseOtherFilters').collapse('show');
         }
     }
 
