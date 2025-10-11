@@ -28,6 +28,9 @@ final readonly class UpdateUserCommandHandler
             $user->setLocale($command->locale);
         }
 
+        $user->setDokName($command->dokName);
+        $user->setTcoName($command->tcoName);
+
         $this->repository->save($user);
     }
 }

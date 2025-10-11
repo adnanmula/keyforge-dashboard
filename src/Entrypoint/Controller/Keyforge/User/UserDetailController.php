@@ -90,6 +90,8 @@ final class UserDetailController extends Controller
                 'reference' => $userId,
                 'userId' => $userId,
                 'username' => $user?->name(),
+                'dokName' => $user?->dokName(),
+                'tcoName' => $user?->tcoName(),
                 'indexed_friends' => $indexedFriends,
                 'wr_by_competition' => $winrateIndexed,
                 'deck_stats' => $deckStats,

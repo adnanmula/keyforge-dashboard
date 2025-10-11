@@ -14,6 +14,8 @@ final class Users extends AbstractMigration
                 password character varying(64) NOT NULL,
                 locale character varying(5) NOT NULL,
                 roles jsonb NOT NULL,
+                dok_name character varying(32) NULL,
+                tco_name character varying(32) NULL,
                 PRIMARY KEY (id)
             )',
         );

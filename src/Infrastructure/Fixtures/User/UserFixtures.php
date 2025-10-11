@@ -24,6 +24,8 @@ final class UserFixtures extends DbalFixture implements Fixture
         $this->save(new User(
             Uuid::from(self::FIXTURE_USER_1_ID),
             'a',
+            'dokName',
+            null,
             '$2y$13$sn3JyhOwj1wsvfQQ.0TwZeXVISv8fpFo8v09sa9cSfm0C2Psh49mO',
             Locale::es_ES,
             ['ROLE_ADMIN'],
@@ -32,6 +34,8 @@ final class UserFixtures extends DbalFixture implements Fixture
         $this->save(new User(
             Uuid::from(self::FIXTURE_USER_2_ID),
             'b',
+            null,
+            'tcoName',
             '$2y$13$K8M5NdlCkAQUrOCh0cr.CuM.nX4DVeGxbeZBrUi.FTAY/gW/7NpJm',
             Locale::en_GB,
             ['ROLE_KEYFORGE'],
@@ -40,6 +44,8 @@ final class UserFixtures extends DbalFixture implements Fixture
         $this->save(new User(
             Uuid::from(self::FIXTURE_USER_3_ID),
             'c',
+            null,
+            null,
             '$2y$13$rWCZ1rvDCKLrjfTOGWkDMeL9uiAWt7T6ly6mIID38.fx780eNHV9S',
             Locale::en_GB,
             ['ROLE_BASIC'],
@@ -63,8 +69,8 @@ final class UserFixtures extends DbalFixture implements Fixture
         $stmt = $this->connection->prepare(
             \sprintf(
                 '
-                    INSERT INTO %s (id, name, password, locale, roles)
-                    VALUES (:id, :name, :password, :locale, :roles)
+                    INSERT INTO %s (id, name, password, locale, roles, dok_name, tco_name)
+                    VALUES (:id, :name, :password, :locale, :roles, :dok_name, :tco_name)
                 ',
                 self::TABLE,
             ),
@@ -72,6 +78,8 @@ final class UserFixtures extends DbalFixture implements Fixture
 
         $stmt->bindValue(':id', $user->id()->value());
         $stmt->bindValue(':name', $user->name());
+        $stmt->bindValue(':dok_name', $user->dokName());
+        $stmt->bindValue(':tco_name', $user->tcoName());
         $stmt->bindValue(':password', $user->getPassword());
         $stmt->bindValue(':locale', $user->locale()->value);
         $stmt->bindValue(':roles', Json::encode($user->getRoles()));

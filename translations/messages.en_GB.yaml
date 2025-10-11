@@ -218,6 +218,10 @@ menu.archenemy: Archenemy
 menu.best_performance: 'Best performance'
 menu.best_win_streak: 'Best win streak'
 menu.change_password: 'Change password'
+menu.change_dok_name: 'Change name in dok'
+menu.change_tco_name: 'Change name in tco'
+menu.dok_name: 'Name in dok'
+menu.tco_name: 'Name in tco'
 menu.clear_filters: Clear
 menu.compare_to: 'Compare to'
 menu.create: Create

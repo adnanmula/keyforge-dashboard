@@ -22,13 +22,15 @@ final class UserDbalRepository extends DbalRepository implements UserRepository
         $stmt = $this->connection->prepare(
             \sprintf(
                 '
-                    INSERT INTO %s (id, name, password, locale, roles)
-                    VALUES (:id, :name, :password, :locale, :roles)
+                    INSERT INTO %s (id, name, password, locale, roles, dok_name, tco_name)
+                    VALUES (:id, :name, :password, :locale, :roles, :dok_name, :tco_name)
                     ON CONFLICT (id) DO UPDATE SET
                         name = :name,
                         password = :password,
                         locale = :locale,
-                        roles = :roles
+                        roles = :roles,
+                        dok_name = :dok_name,
+                        tco_name = :tco_name
                 ',
                 self::TABLE,
             ),
@@ -36,6 +38,8 @@ final class UserDbalRepository extends DbalRepository implements UserRepository
 
         $stmt->bindValue(':id', $user->id()->value());
         $stmt->bindValue(':name', $user->name());
+        $stmt->bindValue(':dok_name', $user->dokName());
+        $stmt->bindValue(':tco_name', $user->tcoName());
         $stmt->bindValue(':password', $user->getPassword());
         $stmt->bindValue(':locale', $user->locale()->value);
         $stmt->bindValue(':roles', Json::encode($user->getRoles()));
@@ -46,7 +50,7 @@ final class UserDbalRepository extends DbalRepository implements UserRepository
     public function byId(Uuid $id): ?User
     {
         $result = $this->connection->createQueryBuilder()
-            ->select('a.id, a.name, a.password, a.locale, a.roles')
+            ->select('a.id, a.name, a.password, a.locale, a.roles, a.dok_name, a.tco_name')
             ->from(self::TABLE, 'a')
             ->where('a.id = :id')
             ->setParameter('id', $id->value())
@@ -64,7 +68,7 @@ final class UserDbalRepository extends DbalRepository implements UserRepository
     public function byIds(Uuid ...$ids): array
     {
         $result = $this->connection->createQueryBuilder()
-            ->select('a.id, a.name, a.password, a.locale, a.roles')
+            ->select('a.id, a.name, a.password, a.locale, a.roles, a.dok_name, a.tco_name')
             ->from(self::TABLE, 'a')
             ->where('a.id in (:ids)')
             ->setParameter('ids', \array_map(static fn (Uuid $id): string => $id->value(), $ids), ArrayParameterType::STRING)
@@ -78,7 +82,7 @@ final class UserDbalRepository extends DbalRepository implements UserRepository
     public function byName(string $name): ?User
     {
         $result = $this->connection->createQueryBuilder()
-            ->select('a.id, a.name, a.password, a.locale, a.roles')
+            ->select('a.id, a.name, a.password, a.locale, a.roles, a.dok_name, a.tco_name')
             ->from(self::TABLE, 'a')
             ->where('a.name = :name')
             ->setParameter('name', $name)
@@ -96,7 +100,7 @@ final class UserDbalRepository extends DbalRepository implements UserRepository
     public function byRoles(UserRole ...$roles): array
     {
         $query = $this->connection->createQueryBuilder()
-            ->select('a.id, a.name, a.password, a.locale, a.roles')
+            ->select('a.id, a.name, a.password, a.locale, a.roles, a.dok_name, a.tco_name')
             ->from(self::TABLE, 'a');
 
         foreach ($roles as $role) {
@@ -188,6 +192,8 @@ final class UserDbalRepository extends DbalRepository implements UserRepository
         return new User(
             Uuid::from($result['id']),
             $result['name'],
+            $result['dok_name'],
+            $result['tco_name'],
             $mapPassword ? $result['password'] : '',
             Locale::from($result['locale']),
             Json::decode($result['roles']),

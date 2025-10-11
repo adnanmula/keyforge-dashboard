@@ -13,6 +13,8 @@ final class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct(
         private Uuid $id,
         private string $name,
+        private ?string $dokName,
+        private ?string $tcoName,
         private ?string $password,
         private Locale $locale,
         private array $roles,
@@ -48,6 +50,30 @@ final class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setRole(UserRole $role): self
     {
         $this->roles = [$role->value];
+
+        return $this;
+    }
+
+    public function dokName(): ?string
+    {
+        return $this->dokName;
+    }
+
+    public function setDokName(?string $dokName): self
+    {
+        $this->dokName = $dokName;
+
+        return $this;
+    }
+
+    public function tcoName(): ?string
+    {
+        return $this->tcoName;
+    }
+
+    public function setTcoName(?string $tcoName): self
+    {
+        $this->tcoName = $tcoName;
 
         return $this;
     }
