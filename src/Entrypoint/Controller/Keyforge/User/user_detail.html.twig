@@ -14,6 +14,18 @@
         </div>
         {% endif %}
 
+        {% if dokName is not null %}
+            <div class="row">
+                <div class="col-10 d-flex justify-content-start"><h6>{{ 'menu.dok_name'|trans }}: {{ dokName }}</h6></div>
+            </div>
+        {% endif %}
+
+        {% if tcoName is not null %}
+            <div class="row">
+                <div class="col-10 d-flex justify-content-start"><h6>{{ 'menu.tco_name'|trans }}: {{ tcoName }}</h6></div>
+            </div>
+        {% endif %}
+
         <div class="divider py-2"></div>
 
         <div class="row">

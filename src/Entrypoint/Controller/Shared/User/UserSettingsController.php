@@ -22,12 +22,16 @@ final class UserSettingsController extends Controller
             $user = $this->security->getUser();
             $newPassword = $request->request->get('settingsPassword');
             $locale = (string) $request->request->get('settingsLocale');
+            $dokName = $request->request->get('settingsDokName');
+            $tcoName = $request->request->get('settingsTcoName');
 
             try {
                 $this->bus->dispatch(new UpdateUserCommand(
                     $user->id()->value(),
                     '' === $newPassword ? null : (string) $newPassword,
                     $locale,
+                    '' === $dokName ? null : (string) $dokName,
+                    '' === $tcoName ? null : (string) $tcoName,
                 ));
 
                 $this->setLocale(Locale::from($locale));
@@ -38,6 +42,8 @@ final class UserSettingsController extends Controller
             if (null === $error && '' !== $newPassword && null !== $newPassword) {
                 return $this->render('Shared/Login/login.html.twig', ['last_username' => $user->getUserIdentifier(), 'error' => null]);
             }
+
+            return $this->redirectToRoute('user_settings');
         }
 
         return $this->render('Shared/User/user_settings.html.twig', ['error' => $error]);

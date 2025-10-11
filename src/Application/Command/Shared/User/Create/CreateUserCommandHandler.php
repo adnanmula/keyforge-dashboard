@@ -25,6 +25,8 @@ final readonly class CreateUserCommandHandler
         $newUser = new User(
             Uuid::v4(),
             $command->name,
+            null,
+            null,
             '',
             $command->locale,
             $command->roles,
