@@ -119,8 +119,142 @@
         return $('#deck-type-selector').val();
     }
 
+    function updateUrlFromFilters() {
+        const params = new URLSearchParams();
+
+        if ($('#only_friends').length && false === $('#only_friends').prop('checked')) {
+            params.set('only_friends', '0');
+        }
+
+        if ($('.tag_type_selector').length && tagFilterType() !== 'all') {
+            params.set('tag_type', tagFilterType());
+        }
+
+        if ($('.tag_private_type_selector').length && tagPrivateFilterType() !== 'all') {
+            params.set('tag_private_type', tagPrivateFilterType());
+        }
+
+        if ($('.house_type_selector').length && houseFilterType() !== 'all') {
+            params.set('houses_type', houseFilterType());
+        }
+
+        if ($('#filter_max_sas').length && 200 !== parseInt($('#filter_max_sas').val())) {
+            params.set('max_sas', $('#filter_max_sas').val());
+        }
+
+        if ($('#filter_min_sas').length && 30 !== parseInt($('#filter_min_sas').val())) {
+            params.set('min_sas', $('#filter_min_sas').val());
+        }
+
+        if ($('#tags-shown-selector').length && 2 !== $('#tags-shown-selector').val().length) {
+            params.set('tags_shown', $('#tags-shown-selector').val().join(','));
+        }
+
+        const addList = (key, values) => {
+            if (values && values.length) {
+                params.set(key, values.join(','));
+            }
+        }
+
+        addList('tags', tags());
+        addList('tags_exclude', tagsExcluded());
+        addList('tags_private', tagsPrivate());
+        addList('tags_private_exclude', tagsPrivateExcluded());
+        addList('houses', houses());
+        addList('houses_exclude', housesExcluded());
+        addList('set', set());
+        addList('owners', owners());
+        addList('deck_types', deckTypes());
+
+        const base = window.location.pathname + (params.toString() ? ('?' + params.toString()) : '');
+        window.history.replaceState({}, '', base);
+    }
+
+    function setFiltersFromUrl() {
+        const params = new URLSearchParams(window.location.search);
+        const csv = (v) => (v ? v.split(',').filter(Boolean) : []);
+
+        if ($('#only_friends').length && params.has('only_friends')) {
+            $('#only_friends').prop('checked', parseInt(params.get('only_friends')));
+        }
+
+        if (params.has('tag_type')) {
+            const val = params.get('tag_type');
+            $(".tag_type_selector[value='" + val + "']").prop('checked', true);
+        }
+
+        if ($('.tag_private_type_selector').length && params.has('tag_private_type')) {
+            const val = params.get('tag_private_type');
+            $(".tag_private_type_selector[value='" + val + "']").prop('checked', true);
+        }
+
+        const setSelect2 = (selector, values) => {
+            if ($(selector).length) {
+                $(selector).val(values).trigger('change');
+            }
+        }
+
+        setSelect2('#tag-selector', csv(params.get('tags')));
+        setSelect2('#tag-selector-exclude', csv(params.get('tags_exclude')));
+        setSelect2('#tag-private-selector', csv(params.get('tags_private')));
+        setSelect2('#tag-private-selector-exclude', csv(params.get('tags_private_exclude')));
+        setSelect2('#owner-selector', csv(params.get('owners')));
+        setSelect2('#deck-type-selector', csv(params.get('deck_types')));
+
+        if (0 === csv(params.get('tags_shown')).length) {
+            setSelect2('#tags-shown-selector', ['predetermined', 'custom']);
+        } else {
+            setSelect2('#tags-shown-selector', csv(params.get('tags_shown')));
+        }
+
+        const includeHouses = new Set(csv(params.get('houses')));
+        const excludeHouses = new Set(csv(params.get('houses_exclude')));
+        if ($('.houses_selector').length) {
+            $('.houses_selector').each(function () {
+                const val = this.value;
+                this.checked = includeHouses.has(val);
+                if (excludeHouses.has(val)) {
+                    this.checked = false;
+                    this.indeterminate = true;
+                    this.dataset.state = 'indeterminate';
+                } else if (includeHouses.has(val)) {
+                    this.indeterminate = false;
+                    this.dataset.state = 'checked';
+                } else {
+                    this.indeterminate = false;
+                    this.dataset.state = 'unchecked';
+                }
+            });
+        }
+
+
+        const includeSets = new Set(csv(params.get('set')));
+
+        if ($('.set_selector').length) {
+            $('.set_selector').each(function () {
+                this.checked = includeSets.has(this.value);
+            });
+        }
+
+        if (params.has('houses_type')) {
+            const val = params.get('houses_type');
+            $(".house_type_selector[value='" + val + "']").prop('checked', true);
+        }
+
+        if (params.has('max_sas')) {
+            $('#filter_max_sas').val(params.get('max_sas'));
+        }
+
+        if (params.has('min_sas')) {
+            $('#filter_min_sas').val(params.get('min_sas'));
+        }
+    }
+
     $(document).ready(function () {
+        setFiltersFromUrl();
+
         $("#applyFilters").click(function(event) {
+            updateUrlFromFilters();
             $('#deckList').DataTable().ajax.reload();
         });
 
@@ -129,6 +263,7 @@
         });
 
         $("#clearFilters").click(function(event) {
+            window.history.replaceState({}, '', window.location.pathname);
             location.reload();
         });
 
