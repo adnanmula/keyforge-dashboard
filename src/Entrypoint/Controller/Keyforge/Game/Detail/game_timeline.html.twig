@@ -225,13 +225,13 @@
                     break;
 
                 case 'CHAINS_ADDED':
-                    actions.push('<span data-type="'+event.type+'">{{ 'game.timeline.added_chains'|trans({'%by%': '-replace1-', '%reason%': '-replace2-'}) }}' + '</span>'
+                    actions.push(('<span data-type="'+event.type+'">{{ 'game.timeline.added_chains'|trans({'%by%': '-replace1-', '%reason%': '-replace2-'}) }}' + '</span>')
                         .replace('-replace1-', event.value)
                         .replace('-replace2-', event.payload.trigger));
                     break;
 
                 case 'CHAINS_REDUCED':
-                    actions.push('<span data-type="'+event.type+'">{{ 'game.timeline.reduced_chains'|trans({'%by%': '-replace1-', '%to%': '-replace2-'}) }}' + '</span>'
+                    actions.push(('<span data-type="'+event.type+'">{{ 'game.timeline.reduced_chains'|trans({'%by%': '-replace1-', '%to%': '-replace2-'}) }}' + '</span>')
                         .replace('-replace1-', event.value)
                         .replace('-replace2-', event.payload.currentChains));
                     break;
