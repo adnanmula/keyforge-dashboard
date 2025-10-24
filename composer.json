@@ -9,7 +9,7 @@
         "ext-iconv": "*",
         "ext-json": "*",
         "adnanmula/criteria": "^0.4",
-        "adnanmula/keyforge-game-log-parser": "^0.2.1",
+        "adnanmula/keyforge-game-log-parser": "^0.2.2",
         "adnanmula/tournament": "dev-master",
         "beberlei/assert": "^3.3",
         "doctrine/dbal": "^3.6",

@@ -213,6 +213,8 @@ menu.admin: Admin
 menu.admin_no_new_accounts: Ninguna cuenta pendiente
 menu.all: Todas
 menu.any: Cualquiera
+menu.prophecies_stats: Estadísticas de profecías
+menu.fates_stats: Estadísticas de destinos
 menu.approval_pending_by: 'Pendiente de aceptar por:'
 menu.archenemy: Archenemy
 menu.best_performance: 'Mejor rendimiento'
@@ -404,6 +406,7 @@ game.timeline.to: Para
 game.timeline.activates: Activó
 game.timeline.fulfilled: Cumplió
 game.timeline.resolved: Resolvió
+game.timeline.resolved2: Resueltas
 game.timeline.reduced_chains: 'Las cadenas se redujeron en %by% a %to%'
 game.timeline.added_chains: 'Las cadenas aumentaron en %by% (%reason%)'
 game.timeline.check: Check declarado
@@ -480,6 +483,7 @@ menu.extra_turns: Turnos extra
 menu.tokens_created: Tokens creados
 menu.tides_raised: Mareas subidas
 menu.prophecies_activated: Profecías activadas
+menu.activated: Activada
 menu.prophecies_fulfilled: Profecías cumplidas
 menu.chains_obtained: Cadenas obtenidas
 menu.fates_resolved: Destinos resueltos

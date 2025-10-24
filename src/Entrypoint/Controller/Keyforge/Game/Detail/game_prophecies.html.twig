@@ -1,0 +1,97 @@
+<h5>{{ 'menu.prophecies_stats'|trans }}</h5>
+
+<div class="row">
+    <div class="col-md-6">
+        <table class="table table-sm table-borderless">
+            <thead>
+            <tr>
+                <th>{{ log.winner.name }}</th>
+                <th>{{ 'menu.activated'|trans }}</th>
+                <th>{{ 'game.timeline.fulfilled'|trans }}</th>
+                <th>%</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for prophecy, data in log.winner.timeline.propheciesSummary.prophecies %}
+                <tr>
+                    <td>{{ prophecy }}</td>
+                    <td>{{ data.activated }}</td>
+                    <td>{{ data.fulfilled }}</td>
+                    <td>{{ data.percent }}%</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-md-6">
+        <table class="table table-sm table-borderless">
+            <thead>
+            <tr>
+                <th>{{ log.loser.name }}</th>
+                <th>{{ 'menu.activated'|trans }}</th>
+                <th>{{ 'game.timeline.fulfilled'|trans }}</th>
+                <th>%</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for prophecy, data in log.loser.timeline.propheciesSummary.prophecies %}
+                <tr>
+                    <td>{{ prophecy }}</td>
+                    <td>{{ data.activated }}</td>
+                    <td>{{ data.fulfilled }}</td>
+                    <td>{{ data.percent }}%</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="divider py-1"></div><hr><div class="divider py-1"></div>
+
+<h5>{{ 'menu.fates_stats'|trans }}</h5>
+
+<div class="row">
+    <div class="col-md-6">
+        <table class="table table-sm table-borderless">
+            <thead>
+            <tr>
+                <th>{{ log.winner.name }}</th>
+                <th>{{ 'game.timeline.resolved2'|trans }}</th>
+                <th>%</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for fate, data in log.winner.timeline.propheciesSummary.fates %}
+                <tr>
+                    <td>{{ fate }}</td>
+                    <td>{{ data.resolved }}</td>
+                    <td>{{ data.percent }}%</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-md-6">
+        <table class="table table-sm table-borderless">
+            <thead>
+            <tr>
+                <th>{{ log.loser.name }}</th>
+                <th>{{ 'game.timeline.resolved2'|trans }}</th>
+                <th>%</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for fate, data in log.loser.timeline.propheciesSummary.fates %}
+                <tr>
+                    <td>{{ fate }}</td>
+                    <td>{{ data.resolved }}</td>
+                    <td>{{ data.percent }}%</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>

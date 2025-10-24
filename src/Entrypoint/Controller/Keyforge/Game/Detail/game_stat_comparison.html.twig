@@ -89,14 +89,6 @@
         } %}
     {% endif %}
 
-    {% if log.timeline.filter(eventTypes.PROPHECY_ACTIVATED).count > 0 %}
-        {% include 'Keyforge/Game/Detail/game_stat_comparison_row.html.twig' with {
-            label: 'menu.prophecies_activated'|trans,
-            left: winner.timeline.filter(eventTypes.PROPHECY_ACTIVATED).count,
-            right: loser.timeline.filter(eventTypes.PROPHECY_ACTIVATED).count,
-        } %}
-    {% endif %}
-
     {% if log.timeline.filter(eventTypes.PROPHECY_FULFILLED).count > 0 %}
         {% include 'Keyforge/Game/Detail/game_stat_comparison_row.html.twig' with {
             label: 'menu.prophecies_fulfilled'|trans,

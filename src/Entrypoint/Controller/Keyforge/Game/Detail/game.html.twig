@@ -18,6 +18,12 @@
 
         {% include 'Keyforge/Game/Detail/game_graphs.html.twig' %}
 
+        {% if log.winner.timeline.propheciesSummary.prophecies|length > 0 or log.loser.timeline.propheciesSummary.prophecies|length > 0 %}
+            <div class="divider py-1"></div><hr><div class="divider py-1"></div>
+
+            {% include 'Keyforge/Game/Detail/game_prophecies.html.twig' %}
+        {% endif %}
+
         <div class="divider py-1"></div><hr><div class="divider py-1"></div>
 
         {% include 'Keyforge/Game/Detail/game_timeline.html.twig' %}

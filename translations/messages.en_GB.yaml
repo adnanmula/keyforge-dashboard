@@ -213,6 +213,8 @@ menu.admin: Admin
 menu.admin_no_new_accounts: No pending accounts
 menu.all: All
 menu.any: Any
+menu.prophecies_stats: Prophecy stats
+menu.fates_stats: Fate stats
 menu.approval_pending_by: 'Approval pending by:'
 menu.archenemy: Archenemy
 menu.best_performance: 'Best performance'
@@ -404,6 +406,7 @@ game.timeline.to: To
 game.timeline.activates: Activates
 game.timeline.fulfilled: Fulfilled
 game.timeline.resolved: Resolved
+game.timeline.resolved2: Resolved
 game.timeline.reduced_chains: 'Chains were reduced by %by% to %to%'
 game.timeline.added_chains: 'Chains were increased by %by% (%reason%)'
 game.timeline.check: Check declared
@@ -480,6 +483,7 @@ menu.extra_turns: Extra turns
 menu.tokens_created: Tokens created
 menu.tides_raised: Tides raised
 menu.prophecies_activated: Prophecies activated
+menu.activated: Activated
 menu.prophecies_fulfilled: Prophecies fulfilled
 menu.chains_obtained: Chains obtained
 menu.fates_resolved: Fates resolved

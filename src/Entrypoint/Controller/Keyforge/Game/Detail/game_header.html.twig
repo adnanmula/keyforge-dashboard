@@ -68,12 +68,6 @@
                 <p class="text">{{ log.timeline.filter(eventTypes.TIDE_RAISED).count }}</p>
             </div>
         {% endif %}
-        {% if log.timeline.filter(eventTypes.PROPHECY_ACTIVATED).count > 0 %}
-            <div class="col-6 col-md-2 mb-3">
-                <h6 class="fw-bold">{{ 'menu.prophecies_activated'|trans }}</h6>
-                <p class="text">{{ log.timeline.filter(eventTypes.PROPHECY_ACTIVATED).count }}</p>
-            </div>
-        {% endif %}
         {% if log.timeline.filter(eventTypes.PROPHECY_FULFILLED).count > 0 %}
             <div class="col-6 col-md-2 mb-3">
                 <h6 class="fw-bold">{{ 'menu.prophecies_fulfilled'|trans }}</h6>
