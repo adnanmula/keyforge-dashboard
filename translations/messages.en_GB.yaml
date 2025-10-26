@@ -310,6 +310,10 @@ menu.you: You
 menu.your_stats: Your stats
 menu.tag_predefined: Predefined tags
 menu.tag_yours: Your tags
+menu.yes: Yes
+menu.no: No
+menu.has_fate: Has fate
+menu.hide_without_fate: Hide without fate
 wiki.adventures: Adventures
 wiki.count_greater_or_equal_than: 'Has %count% or more'
 wiki.count_lower_or_equal_than: 'Has %count% or less'

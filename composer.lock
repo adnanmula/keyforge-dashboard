@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "afaabe4dadc26508be9a9955b9b100d7",
+    "content-hash": "0fa3e34b1410548a1935798f2699a8e1",
     "packages": [
         {
             "name": "adnanmula/criteria",
@@ -56,16 +56,16 @@
         },
         {
             "name": "adnanmula/keyforge-game-log-parser",
-            "version": "0.2.2",
+            "version": "0.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/adnanmula/keyforge-game-log-parser.git",
-                "reference": "4270f0f3edf054d4147b9330f5462dcc467c0873"
+                "reference": "de0547be7a6e304e805f8219aa5d56b0b23691d2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/adnanmula/keyforge-game-log-parser/zipball/4270f0f3edf054d4147b9330f5462dcc467c0873",
-                "reference": "4270f0f3edf054d4147b9330f5462dcc467c0873",
+                "url": "https://api.github.com/repos/adnanmula/keyforge-game-log-parser/zipball/de0547be7a6e304e805f8219aa5d56b0b23691d2",
+                "reference": "de0547be7a6e304e805f8219aa5d56b0b23691d2",
                 "shasum": ""
             },
             "require": {
@@ -98,9 +98,9 @@
             ],
             "support": {
                 "issues": "https://github.com/adnanmula/keyforge-game-log-parser/issues",
-                "source": "https://github.com/adnanmula/keyforge-game-log-parser/tree/0.2.2"
+                "source": "https://github.com/adnanmula/keyforge-game-log-parser/tree/0.3.0"
             },
-            "time": "2025-10-24T13:02:05+00:00"
+            "time": "2025-10-26T11:41:55+00:00"
         },
         {
             "name": "adnanmula/tournament",
@@ -7618,16 +7618,16 @@
         },
         {
             "name": "doctrine/collections",
-            "version": "2.3.0",
+            "version": "2.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/collections.git",
-                "reference": "2eb07e5953eed811ce1b309a7478a3b236f2273d"
+                "reference": "9acfeea2e8666536edff3d77c531261c63680160"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/collections/zipball/2eb07e5953eed811ce1b309a7478a3b236f2273d",
-                "reference": "2eb07e5953eed811ce1b309a7478a3b236f2273d",
+                "url": "https://api.github.com/repos/doctrine/collections/zipball/9acfeea2e8666536edff3d77c531261c63680160",
+                "reference": "9acfeea2e8666536edff3d77c531261c63680160",
                 "shasum": ""
             },
             "require": {
@@ -7636,11 +7636,11 @@
                 "symfony/polyfill-php84": "^1.30"
             },
             "require-dev": {
-                "doctrine/coding-standard": "^12",
+                "doctrine/coding-standard": "^14",
                 "ext-json": "*",
-                "phpstan/phpstan": "^1.8",
-                "phpstan/phpstan-phpunit": "^1.0",
-                "phpunit/phpunit": "^10.5"
+                "phpstan/phpstan": "^2.1.30",
+                "phpstan/phpstan-phpunit": "^2.0.7",
+                "phpunit/phpunit": "^10.5.58 || ^11.5.42 || ^12.4"
             },
             "type": "library",
             "autoload": {
@@ -7684,7 +7684,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/collections/issues",
-                "source": "https://github.com/doctrine/collections/tree/2.3.0"
+                "source": "https://github.com/doctrine/collections/tree/2.4.0"
             },
             "funding": [
                 {
@@ -7700,7 +7700,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-03-22T10:17:19+00:00"
+            "time": "2025-10-25T09:18:13+00:00"
         },
         {
             "name": "friends-of-behat/symfony-extension",
