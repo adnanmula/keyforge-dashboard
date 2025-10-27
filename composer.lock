@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0fa3e34b1410548a1935798f2699a8e1",
+    "content-hash": "60aee91fa77d1e92b7449d8af417a3b7",
     "packages": [
         {
             "name": "adnanmula/criteria",
@@ -56,16 +56,16 @@
         },
         {
             "name": "adnanmula/keyforge-game-log-parser",
-            "version": "0.3.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/adnanmula/keyforge-game-log-parser.git",
-                "reference": "de0547be7a6e304e805f8219aa5d56b0b23691d2"
+                "reference": "92597436e70685d6ad135417bcf7b0928bd79a00"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/adnanmula/keyforge-game-log-parser/zipball/de0547be7a6e304e805f8219aa5d56b0b23691d2",
-                "reference": "de0547be7a6e304e805f8219aa5d56b0b23691d2",
+                "url": "https://api.github.com/repos/adnanmula/keyforge-game-log-parser/zipball/92597436e70685d6ad135417bcf7b0928bd79a00",
+                "reference": "92597436e70685d6ad135417bcf7b0928bd79a00",
                 "shasum": ""
             },
             "require": {
@@ -80,6 +80,7 @@
                 "phpunit/phpunit": "^11.0",
                 "symfony/var-dumper": "^7.0"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -98,9 +99,9 @@
             ],
             "support": {
                 "issues": "https://github.com/adnanmula/keyforge-game-log-parser/issues",
-                "source": "https://github.com/adnanmula/keyforge-game-log-parser/tree/0.3.0"
+                "source": "https://github.com/adnanmula/keyforge-game-log-parser/tree/master"
             },
-            "time": "2025-10-26T11:41:55+00:00"
+            "time": "2025-10-27T16:50:15+00:00"
         },
         {
             "name": "adnanmula/tournament",
@@ -10606,6 +10607,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "adnanmula/keyforge-game-log-parser": 20,
         "adnanmula/tournament": 20
     },
     "prefer-stable": false,
