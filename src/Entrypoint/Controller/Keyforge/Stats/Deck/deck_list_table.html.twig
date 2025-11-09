@@ -116,7 +116,9 @@
     }
 
     function deckTypes() {
-        return $('#deck-type-selector').val();
+        const $selector = $('#deck-type-selector');
+
+        return $selector.length ? $selector.val() : [];
     }
 
     function updateUrlFromFilters() {
