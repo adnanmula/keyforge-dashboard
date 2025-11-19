@@ -8,7 +8,7 @@ use Symfony\Component\HttpKernel\Event\ResponseEvent;
 #[AsEventListener(event: 'kernel.response', method: 'onKernelResponse')]
 class SecurityHeadersListener
 {
-    public function onKernelResponse(ResponseEvent $event)
+    public function onKernelResponse(ResponseEvent $event): void
     {
         $response = $event->getResponse();
 
