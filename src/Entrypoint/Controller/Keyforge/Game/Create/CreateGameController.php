@@ -25,6 +25,10 @@ final class CreateGameController extends Controller
         }
 
         if ($request->getMethod() === Request::METHOD_POST) {
+            if (false === $this->isCsrfTokenValid('keyforge_game_create', $request->get('_csrf_token'))) {
+                throw new \Exception('Invalid CSRF token');
+            }
+
             try {
                 $this->bus->dispatch(new CreateGameCommand(
                     $request->request->get('winner'),

@@ -199,6 +199,10 @@ final class UserNotificationsController extends Controller
     {
         $user = $this->getUserWithRole(UserRole::ROLE_KEYFORGE);
 
+        if (false === $this->isCsrfTokenValid('keyforge_game_accept', $request->get('_csrf_token'))) {
+            throw new \Exception('Invalid CSRF token');
+        }
+
         $gameId = $request->get('game');
 
         if (false === Uuid::isValid($gameId)) {
@@ -249,6 +253,10 @@ final class UserNotificationsController extends Controller
     public function rejectGame(Request $request): Response
     {
         $user = $this->getUserWithRole(UserRole::ROLE_KEYFORGE);
+
+        if (false === $this->isCsrfTokenValid('keyforge_game_reject', $request->get('_csrf_token'))) {
+            throw new \Exception('Invalid CSRF token');
+        }
 
         $gameId = $request->get('game');
 

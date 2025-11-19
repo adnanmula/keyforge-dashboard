@@ -57,6 +57,7 @@
                 url: '{{ path('user_accept_game') }}',
                 data: {
                     'game': $(event.target).data('game'),
+                    '_csrf_token': '{{ csrf_token('keyforge_game_accept') }}',
                 },
             }).done(function( ) {
                 location.reload();
@@ -71,6 +72,7 @@
                 url: '{{ path('user_reject_game') }}',
                 data: {
                     'game': $(event.target).data('game'),
+                    '_csrf_token': '{{ csrf_token('keyforge_game_reject') }}',
                 },
             }).done(function( ) {
                 location.reload();

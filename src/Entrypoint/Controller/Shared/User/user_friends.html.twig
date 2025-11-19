@@ -83,6 +83,7 @@
 
                 <form action="{{ path('user_friends') }}" method="post">
                     <input type="text" name="friendName" class="form-control" placeholder="{{ 'menu.friend_name'|trans }}">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('user_friends') }}">
                     <button type="submit" class="btn btn-block btn-dark mt-2" style="width: 100%">{{ 'menu.add'|trans }}</button>
                 </form>
 
@@ -96,6 +97,7 @@
                 url: '{{ path('user_friends') }}',
                 data: {
                     'friendId': $(event.target).data('friend'),
+                    '_csrf_token': '{{ csrf_token('user_friends') }}',
                 },
             }).done(function( ) {
                 location.reload();
@@ -110,6 +112,7 @@
                 url: '{{ path('user_friends') }}',
                 data: {
                     'friendId': $(event.target).data('friend'),
+                    '_csrf_token': '{{ csrf_token('user_friends') }}',
                 },
             }).done(function( ) {
                 location.reload();

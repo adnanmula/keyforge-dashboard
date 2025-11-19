@@ -10,7 +10,7 @@ login:
 
 logout:
   path: /logout
-  methods: [GET]
+  methods: [POST]
 
 user_friends:
   path: /user/friends

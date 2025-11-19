@@ -14,6 +14,10 @@ final class RemoveTagController extends Controller
     {
         $this->getUserWithRole(UserRole::ROLE_KEYFORGE);
 
+        if (false === $this->isCsrfTokenValid('keyforge_deck_tag_remove', $request->get('_csrf_token'))) {
+            throw new \Exception('Invalid CSRF token');
+        }
+
         $this->bus->dispatch(new RemoveTagCommand($request->get('id')));
 
         return new Response('', Response::HTTP_OK);

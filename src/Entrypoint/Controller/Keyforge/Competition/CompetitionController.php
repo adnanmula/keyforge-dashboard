@@ -32,6 +32,10 @@ class CompetitionController extends Controller
         }
 
         if ($request->getMethod() === Request::METHOD_POST) {
+            if (false === $this->isCsrfTokenValid('keyforge_competition_create', $request->get('_csrf_token'))) {
+                throw new \Exception('Invalid CSRF token');
+            }
+
             try {
                 $this->bus->dispatch(new CreateCompetitionCommand(
                     $request->request->get('name'),
@@ -77,6 +81,10 @@ class CompetitionController extends Controller
     {
         $this->getUserWithRole(UserRole::ROLE_KEYFORGE);
 
+        if (false === $this->isCsrfTokenValid('keyforge_competition_start', $request->get('_csrf_token'))) {
+            throw new \Exception('Invalid CSRF token');
+        }
+
         $this->bus->dispatch(new StartCompetitionCommand(
             $request->get('competitionId'),
             $request->get('date', new \DateTimeImmutable()->format('Y-m-d')),
@@ -88,6 +96,10 @@ class CompetitionController extends Controller
     public function finish(Request $request): Response
     {
         $this->getUserWithRole(UserRole::ROLE_KEYFORGE);
+
+        if (false === $this->isCsrfTokenValid('keyforge_competition_game_finish', $request->get('_csrf_token'))) {
+            throw new \Exception('Invalid CSRF token');
+        }
 
         $this->bus->dispatch(new FinishCompetitionCommand(
             $request->get('competitionId'),
@@ -102,6 +114,10 @@ class CompetitionController extends Controller
     {
         $this->getUserWithRole(UserRole::ROLE_KEYFORGE);
 
+        if (false === $this->isCsrfTokenValid('keyforge_competition_join', $request->get('_csrf_token'))) {
+            throw new \Exception('Invalid CSRF token');
+        }
+
         $this->bus->dispatch(new JoinCompetitionCommand(
             $request->get('id'),
         ));
@@ -112,6 +128,10 @@ class CompetitionController extends Controller
     public function leave(Request $request): Response
     {
         $this->getUserWithRole(UserRole::ROLE_KEYFORGE);
+
+        if (false === $this->isCsrfTokenValid('keyforge_competition_leave', $request->get('_csrf_token'))) {
+            throw new \Exception('Invalid CSRF token');
+        }
 
         $this->bus->dispatch(new LeaveCompetitionCommand(
             $request->get('id'),

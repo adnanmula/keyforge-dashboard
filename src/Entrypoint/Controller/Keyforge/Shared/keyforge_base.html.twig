@@ -127,7 +127,13 @@
                                             </li>
 
                                             <li><a class="dropdown-item" href="{{ path('user_settings') }}">{{ 'menu.settings'|trans }}</a></li>
-                                            <li><a class="dropdown-item" href="{{ path('logout') }}">{{ 'menu.logout'|trans }}<span class="sr-only"></span></a></li>
+
+                                            <form id="logout" action="{{ path('logout') }}" method="post">
+                                                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate_logout') }}">
+                                                <button class="dropdown-item" type="submit">
+                                                    {{ 'menu.logout'|trans }}
+                                                </button>
+                                            </form>
                                         </ul>
                                     </li>
                                 </ul>
