@@ -21,9 +21,7 @@ final class UserFriendsController extends Controller
         $error = null;
 
         if ($request->getMethod() !== Request::METHOD_GET) {
-            if (false === $this->isCsrfTokenValid('user_friends', $request->get('_csrf_token'))) {
-                throw new \Exception('Invalid CSRF token');
-            }
+            $this->validateCsrfToken('user_friends', $request->get('_csrf_token'));
         }
 
         if ($request->getMethod() === Request::METHOD_PATCH) {

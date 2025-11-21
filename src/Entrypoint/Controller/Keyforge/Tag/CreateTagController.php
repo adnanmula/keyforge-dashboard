@@ -15,10 +15,7 @@ final class CreateTagController extends Controller
     public function __invoke(Request $request): Response
     {
         $this->assertIsLogged();
-
-        if (false === $this->isCsrfTokenValid('keyforge_deck_tag_create', $request->get('_csrf_token'))) {
-            throw new \Exception('Invalid CSRF token');
-        }
+        $this->validateCsrfToken('keyforge_deck_tag_create', $request->get('_csrf_token'));
 
         $this->bus->dispatch(new CreateTagCommand(
             Uuid::v4()->value(),

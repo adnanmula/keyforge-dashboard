@@ -39,17 +39,13 @@ final class UpdateDeckOwnershipController extends Controller
         }
 
         if ($request->getMethod() === Request::METHOD_POST) {
-            if (false === $this->isCsrfTokenValid('keyforge_ownership_update_add', $request->get('_csrf_token'))) {
-                throw new \Exception('Invalid CSRF token');
-            }
+            $this->validateCsrfToken('keyforge_ownership_update_add', $request->get('_csrf_token'));
 
             $this->deckRepository->addOwner(Uuid::from($id), $user->id());
         }
 
         if ($request->getMethod() === Request::METHOD_DELETE) {
-            if (false === $this->isCsrfTokenValid('keyforge_ownership_update_remove', $request->get('_csrf_token'))) {
-                throw new \Exception('Invalid CSRF token');
-            }
+            $this->validateCsrfToken('keyforge_ownership_update_remove', $request->get('_csrf_token'));
 
             $this->deckRepository->removeOwner(Uuid::from($id), $user->id());
         }
