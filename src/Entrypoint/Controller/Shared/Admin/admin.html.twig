@@ -48,6 +48,7 @@
                 url: '{{ path('admin_accounts') }}',
                 data: {
                     'id': $(event.target).data('account'),
+                    '_csrf_token': '{{ csrf_token('admin_manage_accounts') }}',
                 },
             }).done(function( ) {
                 location.reload();
@@ -62,6 +63,7 @@
                 url: '{{ path('admin_accounts') }}',
                 data: {
                     'id': $(event.target).data('account'),
+                    '_csrf_token': '{{ csrf_token('admin_manage_accounts') }}',
                 },
             }).done(function( ) {
                 location.reload();

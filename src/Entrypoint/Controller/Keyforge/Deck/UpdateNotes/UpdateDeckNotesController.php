@@ -13,6 +13,7 @@ final class UpdateDeckNotesController extends Controller
     public function __invoke(Request $request): Response
     {
         $this->assertIsLogged();
+        $this->validateCsrfToken('keyforge_deck_update_notes', $request->get('_csrf_token'));
 
         /** @var User $user */
         $user = $this->security->getUser();

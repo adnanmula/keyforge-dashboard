@@ -198,6 +198,7 @@ final class UserNotificationsController extends Controller
     public function acceptGame(Request $request): Response
     {
         $user = $this->getUserWithRole(UserRole::ROLE_KEYFORGE);
+        $this->validateCsrfToken('keyforge_game_accept', $request->get('_csrf_token'));
 
         $gameId = $request->get('game');
 
@@ -249,6 +250,7 @@ final class UserNotificationsController extends Controller
     public function rejectGame(Request $request): Response
     {
         $user = $this->getUserWithRole(UserRole::ROLE_KEYFORGE);
+        $this->validateCsrfToken('keyforge_game_reject', $request->get('_csrf_token'));
 
         $gameId = $request->get('game');
 

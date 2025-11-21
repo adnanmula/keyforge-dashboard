@@ -20,6 +20,10 @@ final class UserFriendsController extends Controller
         $user = $this->getUserWithRole(UserRole::ROLE_BASIC);
         $error = null;
 
+        if ($request->getMethod() !== Request::METHOD_GET) {
+            $this->validateCsrfToken('user_friends', $request->get('_csrf_token'));
+        }
+
         if ($request->getMethod() === Request::METHOD_PATCH) {
             $error = $this->acceptFriend($request, $user);
         }

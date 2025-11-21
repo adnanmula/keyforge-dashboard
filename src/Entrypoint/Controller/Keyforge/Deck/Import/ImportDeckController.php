@@ -21,6 +21,8 @@ final class ImportDeckController extends Controller
         }
 
         if ($request->getMethod() === Request::METHOD_POST) {
+            $this->validateCsrfToken('keyforge_deck_import', $request->get('_csrf_token'));
+
             try {
                 $deckId = $this->parseDeck($request->request->getString('deck'));
                 $deckType = $request->request->get('deckType');

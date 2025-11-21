@@ -395,6 +395,7 @@
             data: {
                 'deckId': deckId,
                 'notes': notes,
+                '_csrf_token': '{{ csrf_token('keyforge_deck_update_notes') }}',
             },
         }).done(function() {
             $('#deckNotesInput')[0].innerHTML = notes;
@@ -412,6 +413,9 @@
         $.post({
             url: url,
             method: 'POST',
+            data: {
+                '_csrf_token': '{{ csrf_token('keyforge_ownership_update_add') }}',
+            },
         }).done(function( ) {
             location.reload();
         }).fail(function() {
@@ -428,6 +432,9 @@
         $.post({
             url: url,
             method: 'DELETE',
+            data: {
+                '_csrf_token': '{{ csrf_token('keyforge_ownership_update_remove') }}',
+            },
         }).done(function( ) {
             location.reload();
         }).fail(function() {
@@ -445,6 +452,7 @@
             method: 'DELETE',
             data: {
                 'id': $(this).data('tag'),
+                '_csrf_token': '{{ csrf_token('keyforge_deck_tag_remove') }}',
             },
         }).done(function( ) {
             location.reload();
@@ -499,6 +507,7 @@
                 'styleText': $('#colorPickerText').val(),
                 'styleOutline': $('#colorPickerOutline').val(),
                 'deckId': $('#hiddenDeckId2').val(),
+                '_csrf_token': '{{ csrf_token('keyforge_deck_tag_create') }}',
             },
         }).done(function() {
             location.reload();
@@ -514,6 +523,7 @@
             data: {
                 'deckId': $('#hiddenDeckId2').val(),
                 'tagId': $('#assignTagSelector').val(),
+                '_csrf_token': '{{ csrf_token('keyforge_deck_tag_add') }}',
             },
         }).done(function() {
             location.reload();

@@ -41,6 +41,8 @@ final class GameAnalyzeController extends Controller
         }
 
         try {
+            $this->validateCsrfToken('keyforge_game_analyze', $request->get('_csrf_token'));
+
             $p = new GameLogParser();
             $parsedLog = $p->execute($log);
 

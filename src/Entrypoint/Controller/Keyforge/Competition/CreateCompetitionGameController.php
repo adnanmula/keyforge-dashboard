@@ -14,6 +14,8 @@ final class CreateCompetitionGameController extends Controller
     {
         $this->assertIsLogged();
 
+        $this->validateCsrfToken('keyforge_competition_game_create', $request->get('_csrf_token'));
+
         $this->bus->dispatch(new CreateCompetitionGameCommand(
             $request->request->get('winner'),
             $request->request->get('winnerDeck'),

@@ -332,7 +332,7 @@
                         <div class="divider py-1"></div>
                         <div class="divider py-1"></div>
 
-                        <button type="submit" id="registerGameSubmit" class="btn btn-block btn-dark" style="width: 100%">{{ 'competition_detail.save'|trans }}</button>
+                        <button type="submit" id="finishCompetitionSubmit" class="btn btn-block btn-dark" style="width: 100%">{{ 'competition_detail.save'|trans }}</button>
                     </form>
                 </div>
             </div>
@@ -384,6 +384,7 @@
                     'competition': 'LOCAL_LEAGUE',
                     'notes': competitionName + ' ' + fixtureRef,
                     'log': log,
+                    '_csrf_token': '{{ csrf_token('keyforge_competition_game_create') }}',
                 },
             }).done(function() {
                 $('#registerCompetitionGame').modal('hide');
@@ -397,6 +398,7 @@
                 method: 'POST',
                 data: {
                     'competitionId': $('#hiddenCompetitionId')[0].value,
+                    '_csrf_token': '{{ csrf_token('keyforge_competition_start') }}',
                 },
             }).done(function() {
                 location.reload();
@@ -409,6 +411,7 @@
                 method: 'POST',
                 data: {
                     'id': '{{ competition.id }}',
+                    '_csrf_token': '{{ csrf_token('keyforge_competition_join') }}',
                 },
             }).done(function() {
                 location.reload();
@@ -421,6 +424,7 @@
                 method: 'POST',
                 data: {
                     'id': '{{ competition.id }}',
+                    '_csrf_token': '{{ csrf_token('keyforge_competition_leave') }}',
                 },
             }).done(function() {
                 location.reload();
@@ -438,6 +442,7 @@
                 url: '{{ path('keyforge_competition_game_finish') }}',
                 method: 'POST',
                 data: {
+                    '_csrf_token': '{{ csrf_token('keyforge_competition_game_finish') }}',
                     'competitionId': competitionId,
                     'winnerId': winnerId,
                     'date': date,

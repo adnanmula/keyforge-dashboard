@@ -56,6 +56,9 @@ services:
   AdnanMula\Cards\Infrastructure\Fixtures\FixturesRegistry:
     class: AdnanMula\Cards\Infrastructure\Fixtures\FixturesRegistry
 
+  Symfony\Component\RateLimiter\RateLimiterFactory:
+    alias: 'limiter.global_limit'
+
 imports:
     - { resource: context/system/buses.yaml }
     - { resource: context/system/repositories.yaml }

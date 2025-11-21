@@ -21,9 +21,11 @@ final class GenerateAlliancesController extends Controller
         }
 
         if ($request->getMethod() === Request::METHOD_POST) {
-            try {
-                $payload = Json::decode($request->getContent());
+            $payload = Json::decode($request->getContent());
 
+            $this->validateCsrfToken('keyforge_alliance_generate', $request->get('_csrf_token'));
+
+            try {
                 $result = $this->extractResult(
                     $this->bus->dispatch(new GenerateDeckAlliancesCommand(
                         $payload['decks'],

@@ -46,6 +46,8 @@
 
                         <div class="divider py-1"></div>
 
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate_register') }}">
+
                         <div class="row mt-3">
                             <div class="col-12">
                                 <button type="submit" class="btn btn-block btn-dark w-100" {% if registrationClosed %}disabled{% endif %}>{{ 'menu.register'|trans }}</button>

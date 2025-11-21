@@ -218,6 +218,7 @@
                     extraCard: extraCard,
                     addToMyDecks: $('#addToMyDecks').is(':checked'),
                     addToOwnedDok: $('#addToOwnedDok').is(':checked'),
+                    _csrf_token: '{{ csrf_token('keyforge_alliance_generate') }}',
                 }),
             }).done(function(data) {
                 if (data.success && data.result.decks.length > 0) {

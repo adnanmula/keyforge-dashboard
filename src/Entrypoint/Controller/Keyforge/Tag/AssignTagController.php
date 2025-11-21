@@ -13,6 +13,8 @@ final class AssignTagController extends Controller
     {
         $this->assertIsLogged();
 
+        $this->validateCsrfToken('keyforge_deck_tag_add', $request->get('_csrf_token'));
+
         $this->bus->dispatch(new AssignTagToDeckCommand(
             $request->get('deckId'),
             $request->get('tagId', []),

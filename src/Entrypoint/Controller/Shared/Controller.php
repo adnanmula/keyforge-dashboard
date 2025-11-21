@@ -80,4 +80,11 @@ class Controller extends AbstractController
 
         $this->localeSwitcher->setLocale($user->locale()->value);
     }
+
+    final protected function validateCsrfToken(string $id, ?string $token): void
+    {
+        if (false === $this->isCsrfTokenValid($id, $token)) {
+            throw new \Exception('Invalid CSRF token');
+        }
+    }
 }

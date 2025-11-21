@@ -18,6 +18,8 @@ final class UserSettingsController extends Controller
         $error = null;
 
         if ($request->getMethod() === Request::METHOD_POST) {
+            $this->validateCsrfToken('user_settings_update', $request->get('_csrf_token'));
+
             /** @var User $user */
             $user = $this->security->getUser();
             $newPassword = $request->request->get('settingsPassword');

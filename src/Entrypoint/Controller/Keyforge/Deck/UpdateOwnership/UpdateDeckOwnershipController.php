@@ -39,10 +39,14 @@ final class UpdateDeckOwnershipController extends Controller
         }
 
         if ($request->getMethod() === Request::METHOD_POST) {
+            $this->validateCsrfToken('keyforge_ownership_update_add', $request->get('_csrf_token'));
+
             $this->deckRepository->addOwner(Uuid::from($id), $user->id());
         }
 
         if ($request->getMethod() === Request::METHOD_DELETE) {
+            $this->validateCsrfToken('keyforge_ownership_update_remove', $request->get('_csrf_token'));
+
             $this->deckRepository->removeOwner(Uuid::from($id), $user->id());
         }
 
