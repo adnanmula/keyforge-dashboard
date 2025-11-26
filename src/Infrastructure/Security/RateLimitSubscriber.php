@@ -6,6 +6,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
+use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\RateLimiter\RateLimiterFactory;
 
 readonly final class RateLimitSubscriber implements EventSubscriberInterface
@@ -17,14 +18,14 @@ readonly final class RateLimitSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            'kernel.request' => ['onKernelRequest', 50],
-            'kernel.response' => ['onKernelResponse', -50],
+            KernelEvents::REQUEST => ['onKernelRequest', 50],
+            KernelEvents::RESPONSE => ['onKernelResponse', -50],
         ];
     }
 
     public function onKernelRequest(RequestEvent $event): void
     {
-        if (!$event->isMainRequest()) {
+        if (false === $event->isMainRequest()) {
             return;
         }
 
@@ -40,9 +41,9 @@ readonly final class RateLimitSubscriber implements EventSubscriberInterface
         if (false === $limit->isAccepted()) {
             $response = new Response(
                 'Too Many Requests',
-                429,
+                Response::HTTP_TOO_MANY_REQUESTS,
                 [
-                    'Retry-After' => $limit->getRetryAfter()->format('U'),
+                    'Retry-After' => $limit->getRetryAfter()->format('Y-m-d H:i:s'),
                 ],
             );
 
