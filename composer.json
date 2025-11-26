@@ -37,7 +37,9 @@
         "friends-of-behat/symfony-extension": "^2.4",
         "phpro/grumphp": "^2.9",
         "phpstan/phpstan": "^2.1",
-        "phpunit/phpunit": "^12"
+        "phpunit/phpunit": "^12",
+        "symfony/stopwatch": "7.3.*",
+        "symfony/web-profiler-bundle": "7.3.*"
     },
     "config": {
         "optimize-autoloader": true,
