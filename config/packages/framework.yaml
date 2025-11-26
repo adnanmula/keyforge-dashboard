@@ -19,8 +19,6 @@ framework:
 
 #    error_controller: AdnanMula\Cards\Infrastructure\Security\ErrorHandler
 
-    #esi: true
-    #fragments: true
     php_errors:
         log: true
 
