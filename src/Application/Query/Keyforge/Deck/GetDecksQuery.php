@@ -58,7 +58,7 @@ final readonly class GetDecksQuery extends CriteriaQuery
         Assert::lazy()
             ->that($start, 'start')->nullOr()->integerish()->greaterOrEqualThan(0)
             ->that($length, 'length')->nullOr()->integerish()->greaterThan(0)
-            ->that($deck, 'deck')->nullOr()->string()->notBlank()
+            ->that($deck, 'deck')->nullOr()->string()
             ->that($orderField, 'orderField')->nullOr()->string()->notBlank()
             ->that($orderDirection, 'orderDirection')->nullOr()->inArray([OrderType::ASC->value, OrderType::DESC->value])
             ->that($sets, 'set')->nullOr()->all()->inArray(KeyforgeSet::values())
@@ -121,7 +121,7 @@ final readonly class GetDecksQuery extends CriteriaQuery
             $expressions[] = new Filter(new FilterField('owner'), new StringFilterValue($owner), FilterOperator::EQUAL);
         }
 
-        if (null !== $deck) {
+        if (null !== $deck && '' !== $deck) {
             $expressions[] = new Filter(new FilterField('name'), new StringFilterValue($deck), FilterOperator::CONTAINS_INSENSITIVE);
         }
 

@@ -25,6 +25,7 @@ final class GetDecksController extends Controller
         tags: ['Decks'],
         parameters: [
             new OA\Parameter(name: 'extraDeckId', description: 'Filter by deck ID', in: 'query', required: false, schema: new OA\Schema(type: 'string', format: 'uuid')),
+            new OA\Parameter(name: 'extraFilterName', description: 'Filter by deck name', in: 'query', required: false, schema: new OA\Schema(type: 'string')),
             new OA\Parameter(name: 'extraFilterOwner', description: 'Filter by deck owner', in: 'query', required: false, schema: new OA\Schema(type: 'string', format: 'uuid')),
             new OA\Parameter(
                 name: 'extraFilterOwners',
@@ -543,19 +544,13 @@ final class GetDecksController extends Controller
     {
         $user = $this->getUser();
 
-        $searchDeck = null;
-
-        if (null !== $request->get('search') && '' !== $request->get('search')['value']) {
-            $searchDeck = $request->get('search')['value'];
-        }
-
         [$orderField, $orderDirection] = $this->orderBy($request->get('order'));
 
         try {
             $deckResult = $this->bus->dispatch(new GetDecksQuery(
                 $request->get('start'),
                 $request->get('length'),
-                $searchDeck,
+                $request->get('extraFilterName'),
                 $orderField,
                 $orderDirection,
                 $request->query->all()['extraFilterSet'] ?? null,

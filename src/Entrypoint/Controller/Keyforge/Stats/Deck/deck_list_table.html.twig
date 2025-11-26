@@ -124,6 +124,10 @@
     function updateUrlFromFilters() {
         const params = new URLSearchParams();
 
+        if ($('#search_name').length && '' !== $('#search_name').val()) {
+            params.set('name', $('#search_name').val());
+        }
+
         if ($('#only_friends').length && false === $('#only_friends').prop('checked')) {
             params.set('only_friends', '0');
         }
@@ -178,6 +182,10 @@
     function setFiltersFromUrl() {
         const params = new URLSearchParams(window.location.search);
         const csv = (v) => (v ? v.split(',').filter(Boolean) : []);
+
+        if (params.has('name')) {
+            $('#search_name').val(params.get('name'));
+        }
 
         if ($('#only_friends').length && params.has('only_friends')) {
             $('#only_friends').prop('checked', parseInt(params.get('only_friends')));
@@ -301,7 +309,7 @@
 
         $('#deckList').DataTable({
             initComplete: function () {},
-            searching: true,
+            searching: false,
             paging: true,
             info: true,
             responsive: true,
@@ -313,6 +321,7 @@
             ajax: {
                 url: '{{ path('keyforge_decks_json') }}',
                 data: function(d){
+                    d.extraFilterName = $('#search_name').val();
                     d.extraFilterOnlyOwned = false;
                     d.extraFilterOnlyFriends = onlyFriends();
                     d.extraFilterTagType = tagFilterType();
