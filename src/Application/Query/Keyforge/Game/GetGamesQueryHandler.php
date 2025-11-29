@@ -5,6 +5,7 @@ namespace AdnanMula\Cards\Application\Query\Keyforge\Game;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeGameRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\User\KeyforgeUserRepository;
+use AdnanMula\Cards\Domain\Model\Shared\User;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Criteria\Criteria;
 use AdnanMula\Criteria\Filter\Filter;
@@ -13,6 +14,7 @@ use AdnanMula\Criteria\Filter\Filters;
 use AdnanMula\Criteria\Filter\FilterType;
 use AdnanMula\Criteria\FilterField\FilterField;
 use AdnanMula\Criteria\FilterValue\StringArrayFilterValue;
+use Symfony\Bundle\SecurityBundle\Security;
 
 final readonly class GetGamesQueryHandler
 {
@@ -20,10 +22,14 @@ final readonly class GetGamesQueryHandler
         private KeyforgeGameRepository $gameRepository,
         private KeyforgeDeckRepository $deckRepository,
         private KeyforgeUserRepository $userRepository,
+        private Security $security,
     ) {}
 
     public function __invoke(GetGamesQuery $query): array
     {
+        /** @var ?User $currentUser */
+        $currentUser = $this->security->getUser();
+
         $games = $this->gameRepository->search($query->criteria);
         $total = $this->gameRepository->count($query->criteria->withoutPaginationAndSorting());
 
@@ -62,8 +68,12 @@ final readonly class GetGamesQueryHandler
 
         $indexedUsers = [];
 
-        foreach ($users as $user) {
-            $indexedUsers[$user->id()->value()] = $user->name();
+        if (null !== $currentUser) {
+            foreach ($users as $user) {
+                if (null === $user->owner() || $user->owner()->equalTo($currentUser->id())) {
+                    $indexedUsers[$user->id()->value()] = $user->name();
+                }
+            }
         }
 
         $result = [];
@@ -71,19 +81,27 @@ final readonly class GetGamesQueryHandler
         foreach ($games as $game) {
             $result[] = [
                 'id' => $game->id()->value(),
-                'winner' => $game->winner()->value(),
-                'winner_name' => $indexedUsers[$game->winner()->value()],
+                'winner' => array_key_exists($game->winner()->value(), $indexedUsers)
+                    ? $game->winner()->value()
+                    : null,
+                'winner_name' => $indexedUsers[$game->winner()->value()] ?? 'Anonymous',
                 'winner_deck' => $game->winnerDeck()->value(),
                 'winner_deck_name' => $indexedDecks[$game->winnerDeck()->value()],
-                'loser' => $game->loser()->value(),
-                'loser_name' => $indexedUsers[$game->loser()->value()],
+                'loser' => array_key_exists($game->loser()->value(), $indexedUsers)
+                    ? $game->loser()->value()
+                    : null,
+                'loser_name' => $indexedUsers[$game->loser()->value()] ?? 'Anonymous',
                 'loser_deck' => $game->loserDeck()->value(),
                 'loser_deck_name' => $indexedDecks[$game->loserDeck()->value()],
                 'score' => $game->score()->winnerScore() . '/' . $game->score()->loserScore(),
-                'first_turn' => null === $game->firstTurn() ? null : $indexedUsers[$game->firstTurn()->value()],
+                'first_turn' => null === $game->firstTurn()
+                    ? null
+                    : $indexedUsers[$game->firstTurn()->value()] ?? null,
                 'date' => $game->date()->format('Y-m-d'),
                 'competition' => $game->competition()->value,
-                'notes' => $game->notes(),
+                'notes' => null !== $currentUser
+                    ? $game->notes()
+                    : '',
                 'logId' => $game->logId()?->value(),
             ];
         }

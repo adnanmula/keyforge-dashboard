@@ -298,14 +298,6 @@ final readonly class GetDecksQuery extends CriteriaQuery
     {
         if (null !== $orderField && null !== $orderDirection) {
             if ($orderField === 'win_rate') {
-                if (null === $owner) {
-                    return new Sorting(
-                        new Order(new FilterField('wins_vs_users'), OrderType::from($orderDirection)),
-                        new Order(new FilterField('losses_vs_users'), OrderType::from($orderDirection) === OrderType::ASC ? OrderType::DESC : OrderType::ASC),
-                        new Order(new FilterField('id'), OrderType::ASC),
-                    );
-                }
-
                 return new Sorting(
                     new Order(new FilterField('wins'), OrderType::from($orderDirection)),
                     new Order(new FilterField('losses'), OrderType::from($orderDirection) === OrderType::ASC ? OrderType::DESC : OrderType::ASC),

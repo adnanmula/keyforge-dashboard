@@ -150,6 +150,10 @@
             columnDefs: [
                 {
                     render: function (data, type, row) {
+                        if (null === row.winner) {
+                            return data;
+                        }
+
                         return '<a href="/user/' + row.winner + '">' + data + '</a>';
                     },
                     targets: 0, //Winner
@@ -173,6 +177,10 @@
                 },
                 {
                     render: function (data, type, row) {
+                        if (null === row.loser) {
+                            return data;
+                        }
+
                         return '<a href="/user/' + row.loser + '">' + data + '</a>';
                     },
                     targets: 2, //Loser
@@ -209,7 +217,7 @@
                             cell += '<span data-toggle="tooltip" title="{{ 'game.mirror'|trans }}"> M </span>'
                         }
 
-                        if (row.loser === row.winner) {
+                        if (null !== row.winner && null !== row.loser && row.loser === row.winner) {
                             cell += '<span data-toggle="tooltip" title="{{ 'game.solo'|trans }}"> S </span>'
                         }
 

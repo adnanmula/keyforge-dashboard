@@ -221,8 +221,8 @@ final class DeckDetailController extends Controller
         }
 
         return [
-            'wins' => $deck->userData()?->winsVsUsers(),
-            'losses' => $deck->userData()?->lossesVsUsers(),
+            'wins' => $deck->userData()?->wins(),
+            'losses' => $deck->userData()?->losses(),
             'rival' => $currentRival,
             'nemesis' => $currentNemesis,
         ];

@@ -457,17 +457,8 @@
                 },
                 {
                     render: function (data, type, row) {
-                        let wins = 0;
-                        let losses = 0;
-
-                        {% if owner is null %}
-                        wins = row.userData.wins_vs_users;
-                        losses = row.userData.losses_vs_users;
-                        {% else %}
-                        wins = row.userData.wins;
-                        losses = row.userData.losses;
-                        {% endif %}
-
+                        let wins = row.userData.wins;
+                        let losses = row.userData.losses;
                         let win_rate = 0;
 
                         if (wins + losses > 0) {

@@ -163,7 +163,7 @@ game.winner: Ganador
 game.winner_chains: 'Llaves del ganador'
 game.winner_deck: 'Baraja ganadora'
 game.winner_score: 'Puntuación del ganador'
-game.with_friends: 'Con amigos'
+game.with_friends: 'Amistoso'
 keyforge.house_brobnar: Brobnar
 keyforge.house_dis: Dis
 keyforge.house_ekwidon: Ekwidon

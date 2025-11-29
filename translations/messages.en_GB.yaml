@@ -142,7 +142,7 @@ game.date: Date
 game.first_turn: 'First turn'
 game.keys: Keys
 game.lgs: 'LGS'
-game.local_league: 'League with friends'
+game.local_league: 'Local League'
 game.loser: Loser
 game.loser_chains: 'Loser chains'
 game.loser_deck: 'Loser deck'
@@ -153,7 +153,7 @@ game.notes: Notes
 game.register_game: 'Register game'
 game.save: Save
 game.solo: 'Solo play'
-game.friends: 'With friends'
+game.friends: 'Friendly'
 game.tco_casual: 'TCO Casual'
 game.tco_competitive: 'TCO Competitive'
 game.type: Type
@@ -163,7 +163,7 @@ game.winner: Winner
 game.winner_chains: 'Winner chains'
 game.winner_deck: 'Winner deck'
 game.winner_score: 'Winner score'
-game.with_friends: 'With friends'
+game.with_friends: 'Friendly'
 keyforge.house_brobnar: Brobnar
 keyforge.house_dis: Dis
 keyforge.house_ekwidon: Ekwidon

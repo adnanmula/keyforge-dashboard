@@ -9,11 +9,11 @@ enum KeyforgeCompetition: string
     use EnumHelper;
 
     case SOLO = 'Solo';
-    case FRIENDS = 'With friends';
+    case FRIENDS = 'Friendly';
     case TCO_CASUAL = 'TCO Casual';
     case TCO_COMPETITIVE = 'TCO Competitive';
     case LOCAL_LEAGUE = 'Local League';
-    case FRIENDS_LEAGUE = 'League with friends';
+    case FRIENDS_LEAGUE = 'Friendly League';
     case VT = 'VT';
     case NATIONAL = 'NATIONAL';
     case LGS = 'LGS';

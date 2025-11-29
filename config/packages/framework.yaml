@@ -14,7 +14,7 @@ framework:
     rate_limiter:
       global_limit:
         policy: sliding_window
-        limit: 20
+        limit: 30
         interval: '1 minute'
 
 #    error_controller: AdnanMula\Cards\Infrastructure\Security\ErrorHandler

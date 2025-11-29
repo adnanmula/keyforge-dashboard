@@ -340,11 +340,10 @@
             ajax: {
                 url: '{{ path('keyforge_decks_json') }}',
                 minimumInputLength: 3,
+                delay: 500,
                 data: function (params) {
                     let query = {
-                        search: {
-                            'value': params.term,
-                        },
+                        'extraFilterName': params.term,
                         'extraFilterDeckTypes': ['STANDARD', 'ALLIANCE'],
                         'length': 20,
                     };

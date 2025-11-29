@@ -10,7 +10,6 @@ use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 final class GetGamesController extends Controller
 {
@@ -144,7 +143,7 @@ final class GetGamesController extends Controller
                                 "score" => "3/2",
                                 "first_turn" => "username2",
                                 "date" => "2022-07-23",
-                                "competition" => "With friends",
+                                "competition" => "Friendly",
                                 "notes" => "",
                             ],
                             [
@@ -159,7 +158,7 @@ final class GetGamesController extends Controller
                                 "score" => "3/2",
                                 "first_turn" => "username2",
                                 "date" => "2022-07-12",
-                                "competition" => "With friends",
+                                "competition" => "Friendly",
                                 "notes" => "",
                             ],
                         ],
@@ -207,12 +206,6 @@ final class GetGamesController extends Controller
     )]
     public function __invoke(Request $request): JsonResponse
     {
-        try {
-            $this->assertIsLogged();
-        } catch (AccessDeniedException) {
-            return new JsonResponse(['error' => 'Access denied'], Response::HTTP_FORBIDDEN);
-        }
-
         $queryFilters = $request->query->all();
         [$orderField, $orderDirection] = $this->getOrder($request);
 
