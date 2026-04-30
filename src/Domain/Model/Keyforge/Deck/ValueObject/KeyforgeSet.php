@@ -17,6 +17,7 @@ enum KeyforgeSet: string
     case GR = 'GR';
     case AS = 'AS';
     case PV = 'PV';
+    case DM = 'DM';
 
     case U22 = 'U22';
     case VM23 = 'VM23';
@@ -43,6 +44,7 @@ enum KeyforgeSet: string
             self::GR => 'Grim Remainders',
             self::AS => 'Aember Skies',
             self::PV => 'Prophetic Visions',
+            self::DM => 'Draconian Measures',
             self::U22 => 'Unchained',
             self::M24 => 'Menagerie',
             self::VM23 => 'Vault Masters 2023',
@@ -69,6 +71,7 @@ enum KeyforgeSet: string
             'GRIM_REMINDERS' => self::GR,
             'AEMBER_SKIES' => self::AS,
             'PROPHETIC_VISIONS' => self::PV,
+            'DRACONIAN_MEASURES' => self::DM,
             'UNCHAINED_2022' => self::U22,
             'VAULT_MASTERS_2023' => self::VM23,
             'VAULT_MASTERS_2024' => self::VM24,

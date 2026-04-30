@@ -9,7 +9,7 @@ use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\RateLimiter\RateLimiterFactory;
 
-readonly final class RateLimitSubscriber implements EventSubscriberInterface
+final readonly class RateLimitSubscriber implements EventSubscriberInterface
 {
     public function __construct(
         private RateLimiterFactory $globalLimiter,
