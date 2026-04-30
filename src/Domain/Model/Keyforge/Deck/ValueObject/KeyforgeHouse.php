@@ -22,6 +22,7 @@ enum KeyforgeHouse: string implements \JsonSerializable
     case GEISTOID = 'GEISTOID';
     case SKYBORN = 'SKYBORN';
     case REDEMPTION = 'REDEMPTION';
+    case OUBOROS = 'OUBOROS';
     case KEYRAKEN = 'KEYRAKEN';
     case IRONIX_REBELS = 'IRONIX_REBELS';
     case ELDERS = 'ELDERS';
@@ -52,50 +53,20 @@ enum KeyforgeHouse: string implements \JsonSerializable
     public function fullName(): string
     {
         return match ($this) {
-            self::BROBNAR => 'Brobnar',
-            self::DIS => 'Dis',
-            self::MARS => 'Mars',
-            self::SHADOWS => 'Shadows',
-            self::UNTAMED => 'Untamed',
-            self::SANCTUM => 'Sanctum',
-            self::LOGOS => 'Logos',
-            self::SAURIAN => 'Saurian',
             self::STAR_ALLIANCE => 'Star Alliance',
-            self::UNFATHOMABLE => 'Unfathomable',
-            self::EKWIDON => 'Ekwidon',
-            self::GEISTOID => 'Geistoid',
-            self::SKYBORN => 'Skyborn',
-            self::REDEMPTION => 'Redemption',
-            self::KEYRAKEN => 'Keyraken',
             self::IRONIX_REBELS => 'Ironix Rebels',
-            self::ELDERS => 'Elders',
-            self::PROPHECY => 'Prophecy',
             self::ARCHON_POWER => 'Archon power',
+            default => ucfirst($this->name),
         };
     }
 
     public function dokName(): string
     {
         return match ($this) {
-            self::BROBNAR => 'Brobnar',
-            self::DIS => 'Dis',
-            self::MARS => 'Mars',
-            self::SHADOWS => 'Shadows',
-            self::UNTAMED => 'Untamed',
-            self::SANCTUM => 'Sanctum',
-            self::LOGOS => 'Logos',
-            self::SAURIAN => 'Saurian',
             self::STAR_ALLIANCE => 'StarAlliance',
-            self::UNFATHOMABLE => 'Unfathomable',
-            self::EKWIDON => 'Ekwidon',
-            self::GEISTOID => 'Geistoid',
-            self::SKYBORN => 'Skyborn',
-            self::REDEMPTION => 'Redemption',
-            self::KEYRAKEN => 'Keyraken',
             self::IRONIX_REBELS => 'IronixRebels',
-            self::ELDERS => 'Elders',
-            self::PROPHECY => 'Prophecy',
             self::ARCHON_POWER => 'ArchonPower',
+            default => ucfirst($this->name),
         };
     }
 

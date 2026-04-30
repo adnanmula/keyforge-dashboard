@@ -51,7 +51,7 @@
         "platform-check": false,
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true,
-            "phpro/grumphp": true,
+            "phpro/grumphp": false,
             "symfony/flex": true
         },
         "platform": {
@@ -84,12 +84,14 @@
             "assets:install %PUBLIC_DIR%": "symfony-cmd"
         },
         "post-install-cmd": [
-            "@auto-scripts",
-            "rm -rf .git/hooks",
-            "cp -r scripts/git-hooks .git/hooks"
+            "@auto-scripts"
         ],
         "post-update-cmd": [
             "@auto-scripts"
+        ],
+        "post-autoload-dump": [
+            "rm -rf .git/hooks",
+            "cp -r scripts/git-hooks .git/hooks"
         ]
     },
     "conflict": {

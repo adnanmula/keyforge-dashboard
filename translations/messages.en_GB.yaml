@@ -178,6 +178,7 @@ keyforge.house_redemption: Redemption
 keyforge.house_star_alliance: 'Star alliance'
 keyforge.house_unfathomable: Unfathomable
 keyforge.house_untamed: Untamed
+keyforge.house_ouboros: Ouboros
 keyforge.set_aoa: AoA
 keyforge.set_toc: ToC
 keyforge.set_mom: MoM
@@ -195,6 +196,7 @@ keyforge.set_wc: WC
 keyforge.set_woe: WoE
 keyforge.set_dis: DIS
 keyforge.set_pv: PV
+keyforge.set_dm: DM
 keyforge.set_cc: CC
 locale.en: English
 locale.es: Spanish

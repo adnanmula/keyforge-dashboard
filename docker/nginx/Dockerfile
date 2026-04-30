@@ -1,4 +1,4 @@
-FROM nginx:1.23.0-alpine as basic
+FROM nginx:1.30.0-alpine as basic
 
 RUN adduser -u 1000 -D -S -G www-data www-data
 
