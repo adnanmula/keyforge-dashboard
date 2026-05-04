@@ -66,7 +66,7 @@ enum KeyforgeHouse: string implements \JsonSerializable
             self::STAR_ALLIANCE => 'StarAlliance',
             self::IRONIX_REBELS => 'IronixRebels',
             self::ARCHON_POWER => 'ArchonPower',
-            default => ucfirst($this->name),
+            default => ucfirst(strtolower($this->name)),
         };
     }
 

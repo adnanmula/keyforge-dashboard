@@ -18,6 +18,7 @@ final readonly class KeyforgeCard implements \JsonSerializable
         public int $bonusDamage,
         public int $bonusDraw,
         public int $bonusDiscard,
+        public int $bonusPower,
         public bool $bonusBrobnar,
         public bool $bonusDis,
         public bool $bonusEkwidon,
@@ -25,6 +26,7 @@ final readonly class KeyforgeCard implements \JsonSerializable
         public bool $bonusLogos,
         public bool $bonusMars,
         public bool $bonusSkyborn,
+        public bool $bonusOuboros,
     ) {}
 
     public static function fromArray(array $data): self
@@ -43,6 +45,7 @@ final readonly class KeyforgeCard implements \JsonSerializable
             $data['bonusDamage'],
             $data['bonusDraw'],
             $data['bonusDiscard'],
+            $data['bonusPower'],
             $data['bonusBrobnar'] ?? false,
             $data['bonusDis'] ?? false,
             $data['bonusEkwidon'] ?? false,
@@ -50,6 +53,7 @@ final readonly class KeyforgeCard implements \JsonSerializable
             $data['bonusLogos'] ?? false,
             $data['bonusMars'] ?? false,
             $data['bonusSkyborn'] ?? false,
+            $data['bonusOuboros'] ?? false,
         );
     }
 
@@ -72,13 +76,15 @@ final readonly class KeyforgeCard implements \JsonSerializable
             $data['bonusDamage'] ?? 0,
             $data['bonusDraw'] ?? 0,
             $data['bonusDiscard'] ?? 0,
-            $data['bonusBobnar'] ?? false,
-            $data['bonusDis'] ?? false,
-            $data['bonusEkwidon'] ?? false,
-            $data['bonusGeistoid'] ?? false,
-            $data['bonusLogos'] ?? false,
-            $data['bonusMars'] ?? false,
-            $data['bonusSkyborn'] ?? false,
+            $data['bonusPower'] ?? 0,
+            in_array(KeyforgeHouse::BROBNAR->dokName(), $data['bonusHouses'] ?? [], true),
+            in_array(KeyforgeHouse::DIS->dokName(), $data['bonusHouses'] ?? [], true),
+            in_array(KeyforgeHouse::EKWIDON->dokName(), $data['bonusHouses'] ?? [], true),
+            in_array(KeyforgeHouse::GEISTOID->dokName(), $data['bonusHouses'] ?? [], true),
+            in_array(KeyforgeHouse::LOGOS->dokName(), $data['bonusHouses'] ?? [], true),
+            in_array(KeyforgeHouse::MARS->dokName(), $data['bonusHouses'] ?? [], true),
+            in_array(KeyforgeHouse::SKYBORN->dokName(), $data['bonusHouses'] ?? [], true),
+            in_array(KeyforgeHouse::OUBOROS->dokName(), $data['bonusHouses'] ?? [], true),
         );
     }
 
@@ -98,6 +104,7 @@ final readonly class KeyforgeCard implements \JsonSerializable
             'bonusDamage' => $this->bonusDamage,
             'bonusDraw' => $this->bonusDraw,
             'bonusDiscard' => $this->bonusDiscard,
+            'bonusPower' => $this->bonusPower,
             'bonusBrobnar' => $this->bonusBrobnar,
             'bonusDis' => $this->bonusDis,
             'bonusEkwidon' => $this->bonusEkwidon,
@@ -105,6 +112,7 @@ final readonly class KeyforgeCard implements \JsonSerializable
             'bonusLogos' => $this->bonusLogos,
             'bonusMars' => $this->bonusMars,
             'bonusSkyborn' => $this->bonusSkyborn,
+            'bonusOuboros' => $this->bonusOuboros,
         ];
     }
 }
