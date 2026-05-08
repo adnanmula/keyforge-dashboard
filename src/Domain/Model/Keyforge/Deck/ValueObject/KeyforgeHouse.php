@@ -73,7 +73,7 @@ enum KeyforgeHouse: string implements \JsonSerializable
     public function isEnabled(): bool
     {
         return match ($this) {
-            self::KEYRAKEN, self::IRONIX_REBELS, self::ELDERS, self::PROPHECY, self::ARCHON_POWER => false,
+            self::IRONIX_REBELS, self::ELDERS, self::PROPHECY, self::ARCHON_POWER => false,
             default => true,
         };
     }
