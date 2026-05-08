@@ -27,6 +27,13 @@ final readonly class KeyforgeCard implements \JsonSerializable
         public bool $bonusMars,
         public bool $bonusSkyborn,
         public bool $bonusOuboros,
+        public bool $bonusUntamed,
+        public bool $bonusRedemption,
+        public bool $bonusSanctum,
+        public bool $bonusShadows,
+        public bool $bonusSaurian,
+        public bool $bonusStarAlliance,
+        public bool $bonusUnfathomable,
     ) {}
 
     public static function fromArray(array $data): self
@@ -54,6 +61,13 @@ final readonly class KeyforgeCard implements \JsonSerializable
             $data['bonusMars'] ?? false,
             $data['bonusSkyborn'] ?? false,
             $data['bonusOuboros'] ?? false,
+            $data['bonusUntamed'] ?? false,
+            $data['bonusRedemption'] ?? false,
+            $data['bonusSanctum'] ?? false,
+            $data['bonusShadows'] ?? false,
+            $data['bonusSaurian'] ?? false,
+            $data['bonusStarAlliance'] ?? false,
+            $data['bonusUnfathomable'] ?? false,
         );
     }
 
@@ -85,6 +99,13 @@ final readonly class KeyforgeCard implements \JsonSerializable
             in_array(KeyforgeHouse::MARS->dokName(), $data['bonusHouses'] ?? [], true),
             in_array(KeyforgeHouse::SKYBORN->dokName(), $data['bonusHouses'] ?? [], true),
             in_array(KeyforgeHouse::OUBOROS->dokName(), $data['bonusHouses'] ?? [], true),
+            in_array(KeyforgeHouse::UNTAMED->dokName(), $data['bonusHouses'] ?? [], true),
+            in_array(KeyforgeHouse::REDEMPTION->dokName(), $data['bonusHouses'] ?? [], true),
+            in_array(KeyforgeHouse::SANCTUM->dokName(), $data['bonusHouses'] ?? [], true),
+            in_array(KeyforgeHouse::SHADOWS->dokName(), $data['bonusHouses'] ?? [], true),
+            in_array(KeyforgeHouse::SAURIAN->dokName(), $data['bonusHouses'] ?? [], true),
+            in_array(KeyforgeHouse::STAR_ALLIANCE->dokName(), $data['bonusHouses'] ?? [], true),
+            in_array(KeyforgeHouse::UNFATHOMABLE->dokName(), $data['bonusHouses'] ?? [], true),
         );
     }
 
@@ -113,6 +134,13 @@ final readonly class KeyforgeCard implements \JsonSerializable
             'bonusMars' => $this->bonusMars,
             'bonusSkyborn' => $this->bonusSkyborn,
             'bonusOuboros' => $this->bonusOuboros,
+            'bonusUntamed' => $this->bonusUntamed,
+            'bonusRedemption' => $this->bonusRedemption,
+            'bonusSanctum' => $this->bonusSanctum,
+            'bonusShadows' => $this->bonusShadows,
+            'bonusSaurian' => $this->bonusSaurian,
+            'bonusStarAlliance' => $this->bonusStarAlliance,
+            'bonusUnfathomable' => $this->bonusUnfathomable,
         ];
     }
 }
