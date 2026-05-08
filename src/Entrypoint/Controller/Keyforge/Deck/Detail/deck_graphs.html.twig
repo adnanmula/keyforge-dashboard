@@ -156,9 +156,7 @@
                 minimumInputLength: 3,
                 data: function (params) {
                     let query = {
-                        search: {
-                            'value': params.term,
-                        },
+                        'extraFilterName': params.term,
                         'length': 20,
                     };
 
