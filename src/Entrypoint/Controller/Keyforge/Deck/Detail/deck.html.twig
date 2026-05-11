@@ -89,7 +89,6 @@
 
                                     {% if card.isEnhanced %}
                                         {% set bonuses = ['Aember','Capture','Damage','Draw','Discard','Power'] %}
-                                        {% set houseBonuses = ['Mars','Dis','Geistoid','Skyborn','Ekwidon','Brobnar','Logos','Ouboros', 'Unfathomable', 'Shadows', 'Untamed', 'Sanctum', 'Redemption', 'Saurian', 'StarAlliance'] %}
 
                                         {% for bonus in bonuses %}
                                             {% set bonusCount = card["bonus" ~ bonus] %}
@@ -99,11 +98,9 @@
                                                 {% endfor %}
                                             {% endif %}
                                         {% endfor %}
-                                        {% for bonusHouse in houseBonuses %}
-                                            {% set isBonus = card["bonus" ~ bonusHouse] %}
-                                            {% if isBonus %}
-                                                <img width="22px" src="/assets/keyforge/logos/bonus/house/{{ bonusHouse|lower }}.svg" alt="{{ bonusHouse }}" class="img-fluid"/>
-                                            {% endif %}
+
+                                        {% for bonusHouse in card.bonusHouses %}
+                                            <img width="22px" src="/assets/keyforge/logos/bonus/house/{{ bonusHouse|lower }}.svg" alt="{{ bonusHouse }}" class="img-fluid"/>
                                         {% endfor %}
                                     {% endif %}
 
