@@ -101,3 +101,8 @@ keyforge_game_log:
 competitions:
   resource: competition_routes.yaml
   prefix: /
+
+inserts:
+  path: /
+  host: 'inserts.%web_host%'
+  schemes: [https]

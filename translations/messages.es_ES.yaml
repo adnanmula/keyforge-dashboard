@@ -112,6 +112,7 @@ set.full.M24: Menagerie
 set.full.VM23: Vault Masters 23
 set.full.VM24: Vault Masters 24
 set.full.VM25: Vault Masters 25
+set.full.VM26: Vault Masters 26
 set.full.MoM: More Mutation
 set.full.ToC: Tokens of Change
 set.full.DIS: Discovery
@@ -194,6 +195,7 @@ keyforge.set_u22: U22
 keyforge.set_vm23: VM23
 keyforge.set_vm24: VM24
 keyforge.set_vm25: VM25
+keyforge.set_vm26: VM26
 keyforge.set_wc: WC
 keyforge.set_woe: WoE
 keyforge.set_dis: DIS
@@ -258,6 +260,7 @@ menu.import_theoretical: Importar teórica
 menu.import_game: 'Importar partida'
 menu.import_token: 'Api token de DoK, para importar ''my decks'''
 menu.include: Incluir
+menu.inserts: Inserts
 menu.link_deck: 'Id de baraja, link de dok o vault'
 menu.locale: Idioma
 menu.login: Login

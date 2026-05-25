@@ -19,13 +19,14 @@ enum KeyforgeSet: string
     case PV = 'PV';
     case DM = 'DM';
 
-    case U22 = 'U22';
+    case MoM = 'MoM';
+    case ToC = 'ToC';
     case VM23 = 'VM23';
     case VM24 = 'VM24';
     case VM25 = 'VM25';
+    case VM26 = 'VM26';
+    case U22 = 'U22';
     case M24 = 'M24';
-    case MoM = 'MoM';
-    case ToC = 'ToC';
     case DIS = 'DIS';
     case CC = 'CC';
 
@@ -50,6 +51,7 @@ enum KeyforgeSet: string
             self::VM23 => 'Vault Masters 2023',
             self::VM24 => 'Vault Masters 2024',
             self::VM25 => 'Vault Masters 2025',
+            self::VM26 => 'Vault Masters 2026',
             self::ANOMALY_EXPANSION => 'Anomaly',
             self::MARTIAN_CIVIL_WAR => 'Martian Civil War',
             self::ToC => 'Tokens of change',
@@ -76,6 +78,7 @@ enum KeyforgeSet: string
             'VAULT_MASTERS_2023' => self::VM23,
             'VAULT_MASTERS_2024' => self::VM24,
             'VAULT_MASTERS_2025' => self::VM25,
+            'VAULT_MASTERS_2026' => self::VM26,
             'MENAGERIE_2024' => self::M24,
             'ANOMALY_EXPANSION' => self::ANOMALY_EXPANSION,
             'MARTIAN_CIVIL_WAR' => self::MARTIAN_CIVIL_WAR,
@@ -90,7 +93,7 @@ enum KeyforgeSet: string
     public function isMain(): bool
     {
         return match ($this) {
-            self::U22, self::VM23, self::VM24, self::VM25, self::M24, self::MARTIAN_CIVIL_WAR, self::ToC, self::MoM, self::DIS, self::CC => false,
+            self::U22, self::VM23, self::VM24, self::VM25, self::VM26, self::M24, self::MARTIAN_CIVIL_WAR, self::ToC, self::MoM, self::DIS, self::CC => false,
             default => true,
         };
     }

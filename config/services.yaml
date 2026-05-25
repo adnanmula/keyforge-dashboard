@@ -1,4 +1,5 @@
 parameters:
+  web_host: '%env(resolve:VIRTUAL_HOST)%'
   db_url: '%env(resolve:DATABASE_URL)%'
   db_url_default: '%env(resolve:DATABASE_URL_DEFAULT)%'
 
