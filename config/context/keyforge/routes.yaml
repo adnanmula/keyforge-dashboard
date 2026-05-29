@@ -38,6 +38,11 @@ keyforge_decks_json:
   controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Stats\Deck\GetDecksController
   methods: [GET]
 
+keyforge_games:
+  path: /games
+  controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Game\List\ListGamesController
+  methods: [GET]
+
 keyforge_games_json:
   path: /games/json
   controller: AdnanMula\Cards\Entrypoint\Controller\Keyforge\Game\List\GetGamesController

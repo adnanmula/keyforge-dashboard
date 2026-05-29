@@ -145,6 +145,7 @@ game.first_turn: 'Primer turno'
 game.keys: Llaves
 game.lgs: 'LGS'
 game.local_league: 'Liga con amigos'
+game.friends_league: 'Liga amistosa'
 game.loser: Perdedor
 game.loser_chains: 'Llaves del perdedor'
 game.loser_deck: 'Baraja perdedora'

@@ -1,3 +1,4 @@
+{% if show_inline_filters|default(true) %}
 <div class="form-group">
    <div class="row">
        <div class="col-12 col-sm-6 col-md-3">
@@ -41,6 +42,7 @@
    </div>
 </div>
 <div class="divider py-2"></div>
+{% endif %}
 <div class="" style="display: flex; overflow-x: auto">
     <table id="gamesList" class="table table-responsive-sm table-hover" style="width:100%;">
         <thead>

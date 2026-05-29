@@ -64,6 +64,11 @@
                             <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdownGames">
                                 {% if is_granted('ROLE_KEYFORGE') %}
                                 <li>
+                                    <a class="dropdown-item" href="{{ path('keyforge_games') }}">
+                                        {{ 'menu.games'|trans }}
+                                    </a>
+                                </li>
+                                <li>
                                     <a class="dropdown-item" href="{{ path('keyforge_game_create') }}">
                                         {{ 'menu.register'|trans }}
                                     </a>

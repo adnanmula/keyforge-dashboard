@@ -145,6 +145,7 @@ game.first_turn: 'First turn'
 game.keys: Keys
 game.lgs: 'LGS'
 game.local_league: 'Local League'
+game.friends_league: 'Friendly League'
 game.loser: Loser
 game.loser_chains: 'Loser chains'
 game.loser_deck: 'Loser deck'

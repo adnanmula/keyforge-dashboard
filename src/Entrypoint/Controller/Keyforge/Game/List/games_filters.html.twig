@@ -1,0 +1,87 @@
+<div class="row">
+    <div>
+        <a style="position: fixed; bottom: 20px; right: 20px; z-index: 99999" class="btn btn-dark" data-bs-toggle="offcanvas" href="#games-filters" role="button" aria-expanded="false"><i class="bi bi-filter"></i></a>
+    </div>
+</div>
+<div class="offcanvas offcanvas-start filters-margin" tabindex="-1" id="games-filters" data-bs-scroll="true" data-bs-backdrop="false" style="z-index: 1000">
+    <div class="offcanvas-header">
+        <h5>{{ 'menu.filters'|trans }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+    </div>
+    <div class="offcanvas-body" style="overflow-x: hidden">
+
+        <div class="mb-3">
+            <label for="winner-selector" class="form-label fw-bold">{{ 'game.winner'|trans }}</label>
+            <select id="winner-selector" class="form-select">
+                {% for id, name in friends %}
+                    <option value="{{ id }}">{{ name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="loser-selector" class="form-label fw-bold">{{ 'game.loser'|trans }}</label>
+            <select id="loser-selector" class="form-select">
+                {% for id, name in friends %}
+                    <option value="{{ id }}">{{ name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="score-selector" class="form-label fw-bold">{{ 'game.keys'|trans }}</label>
+            <select id="score-selector" class="form-select">
+                <option value="2">3/2</option>
+                <option value="1">3/1</option>
+                <option value="0">3/0</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="competition-selector" class="form-label fw-bold">{{ 'game.competition'|trans }}</label>
+            <select id="competition-selector" class="form-select">
+                <option value="SOLO">{{ 'game.solo'|trans }}</option>
+                <option value="FRIENDS">{{ 'game.with_friends'|trans }}</option>
+                <option value="TCO_CASUAL">{{ 'game.tco_casual'|trans }}</option>
+                <option value="TCO_COMPETITIVE">{{ 'game.tco_competitive'|trans }}</option>
+                <option value="LGS">{{ 'game.lgs'|trans }}</option>
+                <option value="VT">{{ 'game.vt'|trans }}</option>
+                <option value="NATIONAL">{{ 'game.national'|trans }}</option>
+                <option value="NKFL">{{ 'game.nkfl'|trans }}</option>
+                <option value="LOCAL_LEAGUE">{{ 'game.local_league'|trans }}</option>
+                <option value="FRIENDS_LEAGUE">{{ 'game.friends_league'|trans }}</option>
+            </select>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-12 col-md-3 mb-3 mb-md-0">
+                <button class="btn btn-dark w-100 text-nowrap" id="clearGamesFilters">
+                    <i class="bi bi-arrow-repeat fs-8"></i>
+                </button>
+            </div>
+            <div class="col-12 col-md-9">
+                <button class="btn btn-dark w-100" id="applyGamesFilters">{{ 'menu.search'|trans }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        if (window.innerWidth >= 768) {
+            document.getElementById('games-filters').classList.add('show');
+        }
+
+        $('#clearGamesFilters').on('click', function () {
+            $('#winner-selector').val('').trigger('change');
+            $('#loser-selector').val('').trigger('change');
+            $('#score-selector').val('').trigger('change');
+            $('#competition-selector').val('').trigger('change');
+            $('#gamesList').DataTable().ajax.reload();
+        });
+
+        $('#applyGamesFilters').on('click', function () {
+            $('#gamesList').DataTable().ajax.reload();
+        });
+    });
+</script>
