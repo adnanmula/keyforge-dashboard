@@ -157,14 +157,37 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
         $stmt = $this->connection->prepare(
             \sprintf(
                 '
-                    INSERT INTO %s (id, game_id, log, created_by, created_at)
-                    VALUES (:id, :game_id, :log, :created_by, :created_at)
+                    INSERT INTO %s (id, game_id, log, created_by, created_at,
+                        turns, winner_amber_obtained, winner_amber_stolen, winner_cards_played, winner_cards_drawn, winner_cards_discarded, winner_keys_forged, winner_fights, winner_reaps, winner_extra_turns,
+                        loser_amber_obtained, loser_amber_stolen, loser_cards_played, loser_cards_drawn, loser_cards_discarded, loser_keys_forged, loser_fights, loser_reaps, loser_extra_turns)
+                    VALUES (:id, :game_id, :log, :created_by, :created_at,
+                        :turns, :winner_amber_obtained, :winner_amber_stolen, :winner_cards_played, :winner_cards_drawn, :winner_cards_discarded, :winner_keys_forged, :winner_fights, :winner_reaps, :winner_extra_turns,
+                        :loser_amber_obtained, :loser_amber_stolen, :loser_cards_played, :loser_cards_drawn, :loser_cards_discarded, :loser_keys_forged, :loser_fights, :loser_reaps, :loser_extra_turns)
                     ON CONFLICT (id) DO UPDATE SET
                         id = :id,
                         game_id = :game_id,
                         log = :log,
                         created_by = :created_by,
-                        created_at = :created_at
+                        created_at = :created_at,
+                        turns = :turns,
+                        winner_amber_obtained = :winner_amber_obtained,
+                        winner_amber_stolen = :winner_amber_stolen,
+                        winner_cards_played = :winner_cards_played,
+                        winner_cards_drawn = :winner_cards_drawn,
+                        winner_cards_discarded = :winner_cards_discarded,
+                        winner_keys_forged = :winner_keys_forged,
+                        winner_fights = :winner_fights,
+                        winner_reaps = :winner_reaps,
+                        winner_extra_turns = :winner_extra_turns,
+                        loser_amber_obtained = :loser_amber_obtained,
+                        loser_amber_stolen = :loser_amber_stolen,
+                        loser_cards_played = :loser_cards_played,
+                        loser_cards_drawn = :loser_cards_drawn,
+                        loser_cards_discarded = :loser_cards_discarded,
+                        loser_keys_forged = :loser_keys_forged,
+                        loser_fights = :loser_fights,
+                        loser_reaps = :loser_reaps,
+                        loser_extra_turns = :loser_extra_turns
                     ',
                 self::TABLE_GAME_LOG,
             ),
@@ -175,6 +198,25 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
         $stmt->bindValue(':log', Json::encode($gameLog->log));
         $stmt->bindValue(':created_by', $gameLog->createdBy?->value());
         $stmt->bindValue(':created_at', $gameLog->createdAt->format(\DateTimeInterface::ATOM));
+        $stmt->bindValue(':turns', $gameLog->turns);
+        $stmt->bindValue(':winner_amber_obtained', $gameLog->winnerAmberObtained);
+        $stmt->bindValue(':winner_amber_stolen', $gameLog->winnerAmberStolen);
+        $stmt->bindValue(':winner_cards_played', $gameLog->winnerCardsPlayed);
+        $stmt->bindValue(':winner_cards_drawn', $gameLog->winnerCardsDrawn);
+        $stmt->bindValue(':winner_cards_discarded', $gameLog->winnerCardsDiscarded);
+        $stmt->bindValue(':winner_keys_forged', $gameLog->winnerKeysForged);
+        $stmt->bindValue(':winner_fights', $gameLog->winnerFights);
+        $stmt->bindValue(':winner_reaps', $gameLog->winnerReaps);
+        $stmt->bindValue(':winner_extra_turns', $gameLog->winnerExtraTurns);
+        $stmt->bindValue(':loser_amber_obtained', $gameLog->loserAmberObtained);
+        $stmt->bindValue(':loser_amber_stolen', $gameLog->loserAmberStolen);
+        $stmt->bindValue(':loser_cards_played', $gameLog->loserCardsPlayed);
+        $stmt->bindValue(':loser_cards_drawn', $gameLog->loserCardsDrawn);
+        $stmt->bindValue(':loser_cards_discarded', $gameLog->loserCardsDiscarded);
+        $stmt->bindValue(':loser_keys_forged', $gameLog->loserKeysForged);
+        $stmt->bindValue(':loser_fights', $gameLog->loserFights);
+        $stmt->bindValue(':loser_reaps', $gameLog->loserReaps);
+        $stmt->bindValue(':loser_extra_turns', $gameLog->loserExtraTurns);
 
         $stmt->executeStatement();
     }
@@ -228,6 +270,25 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
             Json::decode($log['log']),
             Uuid::fromNullable($log['created_by']),
             new \DateTimeImmutable($log['created_at']),
+            isset($log['turns']) ? (int) $log['turns'] : null,
+            isset($log['winner_amber_obtained']) ? (int) $log['winner_amber_obtained'] : null,
+            isset($log['winner_amber_stolen']) ? (int) $log['winner_amber_stolen'] : null,
+            isset($log['winner_cards_played']) ? (int) $log['winner_cards_played'] : null,
+            isset($log['winner_cards_drawn']) ? (int) $log['winner_cards_drawn'] : null,
+            isset($log['winner_cards_discarded']) ? (int) $log['winner_cards_discarded'] : null,
+            isset($log['winner_keys_forged']) ? (int) $log['winner_keys_forged'] : null,
+            isset($log['winner_fights']) ? (int) $log['winner_fights'] : null,
+            isset($log['winner_reaps']) ? (int) $log['winner_reaps'] : null,
+            isset($log['winner_extra_turns']) ? (int) $log['winner_extra_turns'] : null,
+            isset($log['loser_amber_obtained']) ? (int) $log['loser_amber_obtained'] : null,
+            isset($log['loser_amber_stolen']) ? (int) $log['loser_amber_stolen'] : null,
+            isset($log['loser_cards_played']) ? (int) $log['loser_cards_played'] : null,
+            isset($log['loser_cards_drawn']) ? (int) $log['loser_cards_drawn'] : null,
+            isset($log['loser_cards_discarded']) ? (int) $log['loser_cards_discarded'] : null,
+            isset($log['loser_keys_forged']) ? (int) $log['loser_keys_forged'] : null,
+            isset($log['loser_fights']) ? (int) $log['loser_fights'] : null,
+            isset($log['loser_reaps']) ? (int) $log['loser_reaps'] : null,
+            isset($log['loser_extra_turns']) ? (int) $log['loser_extra_turns'] : null,
         );
     }
 }

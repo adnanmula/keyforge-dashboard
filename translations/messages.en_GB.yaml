@@ -237,6 +237,7 @@ menu.create: Create
 menu.created_by: 'Created by'
 menu.deck: Deck
 menu.deck_wl: 'Wins/Losses by deck'
+menu.decks: Decks
 menu.date_from: 'From'
 menu.date_to: 'To'
 menu.decks_of: Decks of
