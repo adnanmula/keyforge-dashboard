@@ -31,6 +31,8 @@ final readonly class GetGamesQuery extends CriteriaQuery
         $loserScores = null,
         $competitions = null,
         $approved = null,
+        $dateFrom = null,
+        $dateTo = null,
         $start = null,
         $length = null,
         $orderField = null,
@@ -45,6 +47,8 @@ final readonly class GetGamesQuery extends CriteriaQuery
             ->that($loserScores, 'loserScores')->nullOr()->all()->integerish()->between(0, 2)
             ->that($competitions, 'competitions')->nullOr()->all()->inArray(KeyforgeCompetition::values())
             ->that($approved, 'approved')->nullOr()->boolean()
+            ->that($dateFrom, 'dateFrom')->nullOr()->date('Y-m-d')
+            ->that($dateTo, 'dateTo')->nullOr()->date('Y-m-d')
             ->that($start, 'start')->nullOr()->integerish()->min(0)
             ->that($length, 'length')->nullOr()->integerish()->min(0)
             ->that($orderField, 'orderField')->nullOr()->string()->notBlank()
@@ -59,6 +63,8 @@ final readonly class GetGamesQuery extends CriteriaQuery
         $filters[] = $this->scoreFilter(...$loserScores ?? []);
         $filters[] = $this->competitionFilter(...$competitions ?? []);
         $filters[] = $this->approvedFilter($approved);
+        $filters[] = $this->dateFromFilter($dateFrom);
+        $filters[] = $this->dateToFilter($dateTo);
 
         $criteria = new Criteria(
             new Filters(FilterType::AND, ...\array_filter($filters)),
@@ -164,6 +170,24 @@ final readonly class GetGamesQuery extends CriteriaQuery
         }
 
         return new Filter(new FilterField('approved'), new IntFilterValue(0), FilterOperator::EQUAL);
+    }
+
+    private function dateFromFilter(?string $dateFrom): ?Filter
+    {
+        if (null === $dateFrom) {
+            return null;
+        }
+
+        return new Filter(new FilterField('date'), new StringFilterValue($dateFrom), FilterOperator::GREATER_OR_EQUAL);
+    }
+
+    private function dateToFilter(?string $dateTo): ?Filter
+    {
+        if (null === $dateTo) {
+            return null;
+        }
+
+        return new Filter(new FilterField('date'), new StringFilterValue($dateTo), FilterOperator::LESS_OR_EQUAL);
     }
 
     private function sorting(?string $field, ?string $dir): ?Sorting

@@ -218,6 +218,8 @@ final class GetGamesController extends Controller
                 loserScores: $queryFilters['extraFilterScore'] ?? [],
                 competitions: $queryFilters['extraFilterCompetition'] ?? [],
                 approved: true,
+                dateFrom: $request->get('extraFilterDateFrom') ?: null,
+                dateTo: $request->get('extraFilterDateTo') ?: null,
                 start: $request->get('start'),
                 length: $request->get('length'),
                 orderField: $orderField,

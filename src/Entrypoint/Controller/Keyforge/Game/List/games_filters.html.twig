@@ -53,6 +53,16 @@
             </select>
         </div>
 
+        <div class="mb-3">
+            <label for="date-from-selector" class="form-label fw-bold">{{ 'menu.date_from'|trans }}</label>
+            <input type="date" id="date-from-selector" class="form-control">
+        </div>
+
+        <div class="mb-3">
+            <label for="date-to-selector" class="form-label fw-bold">{{ 'menu.date_to'|trans }}</label>
+            <input type="date" id="date-to-selector" class="form-control">
+        </div>
+
         <div class="row mt-3">
             <div class="col-12 col-md-3 mb-3 mb-md-0">
                 <button class="btn btn-dark w-100 text-nowrap" id="clearGamesFilters">
@@ -67,21 +77,51 @@
 </div>
 
 <script>
+    function updateGamesUrlFromFilters() {
+        const params = new URLSearchParams();
+        const addList = (key, values) => { if (values && values.length) params.set(key, values.join(',')); };
+
+        addList('winner', $('#winner-selector').val());
+        addList('loser', $('#loser-selector').val());
+        addList('score', $('#score-selector').val());
+        addList('competition', $('#competition-selector').val());
+
+        if ($('#date-from-selector').val()) params.set('date_from', $('#date-from-selector').val());
+        if ($('#date-to-selector').val()) params.set('date_to', $('#date-to-selector').val());
+
+        const base = window.location.pathname + (params.toString() ? ('?' + params.toString()) : '');
+        window.history.replaceState({}, '', base);
+    }
+
+    function setGamesFiltersFromUrl() {
+        const params = new URLSearchParams(window.location.search);
+        const csv = (v) => (v ? v.split(',').filter(Boolean) : []);
+        const setSelect2 = (selector, values) => { if ($(selector).length) $(selector).val(values).trigger('change'); };
+
+        setSelect2('#winner-selector', csv(params.get('winner')));
+        setSelect2('#loser-selector', csv(params.get('loser')));
+        setSelect2('#score-selector', csv(params.get('score')));
+        setSelect2('#competition-selector', csv(params.get('competition')));
+
+        if (params.has('date_from')) $('#date-from-selector').val(params.get('date_from'));
+        if (params.has('date_to')) $('#date-to-selector').val(params.get('date_to'));
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
         if (window.innerWidth >= 768) {
             document.getElementById('games-filters').classList.add('show');
         }
 
-        $('#clearGamesFilters').on('click', function () {
-            $('#winner-selector').val('').trigger('change');
-            $('#loser-selector').val('').trigger('change');
-            $('#score-selector').val('').trigger('change');
-            $('#competition-selector').val('').trigger('change');
+        setGamesFiltersFromUrl();
+
+        $('#applyGamesFilters').on('click', function () {
+            updateGamesUrlFromFilters();
             $('#gamesList').DataTable().ajax.reload();
         });
 
-        $('#applyGamesFilters').on('click', function () {
-            $('#gamesList').DataTable().ajax.reload();
+        $('#clearGamesFilters').on('click', function () {
+            window.history.replaceState({}, '', window.location.pathname);
+            location.reload();
         });
     });
 </script>

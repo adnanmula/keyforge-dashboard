@@ -91,11 +91,23 @@
         return $('#competition-selector').val();
     }
 
+    function dateFromFilter() {
+        return $('#date-from-selector').val();
+    }
+
+    function dateToFilter() {
+        return $('#date-to-selector').val();
+    }
+
     $(document).ready(function () {
         prepareSelectors('winner-selector');
         prepareSelectors('loser-selector');
         prepareSelectors('score-selector');
         prepareSelectors('competition-selector');
+
+        if (typeof setGamesFiltersFromUrl === 'function') {
+            setGamesFiltersFromUrl();
+        }
 
         $('.game_list_filter').change(function (e) {
             $('#gamesList').DataTable().ajax.reload();
@@ -126,6 +138,8 @@
                     d.extraFilterLoser = loserFilter();
                     d.extraFilterScore = scoreFilter();
                     d.extraFilterCompetition = competitionFilter();
+                    d.extraFilterDateFrom = dateFromFilter();
+                    d.extraFilterDateTo = dateToFilter();
                 }
             },
             createdRow: function(row, data) {

@@ -237,6 +237,8 @@ menu.create: Crear
 menu.created_by: 'Creado por'
 menu.deck: Baraja
 menu.deck_wl: 'Victorias/Derrotas por baraja'
+menu.date_from: 'Desde'
+menu.date_to: 'Hasta'
 menu.decks: Barajas
 menu.decks_of: Barajas de
 menu.exclude: Excluir
