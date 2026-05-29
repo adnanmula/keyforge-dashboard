@@ -24,4 +24,7 @@ interface KeyforgeGameRepository
     public function saveLog(KeyforgeGameLog $gameLog): void;
 
     public function gameLog(Uuid $id): ?KeyforgeGameLog;
+
+    /** @return array<KeyforgeGameLog> */
+    public function allLogs(?int $offset = null, ?int $limit = null): array;
 }

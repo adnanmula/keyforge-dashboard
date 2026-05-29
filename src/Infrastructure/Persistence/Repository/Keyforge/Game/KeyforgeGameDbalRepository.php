@@ -238,6 +238,31 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
         return $this->mapGameLog($log);
     }
 
+    public function allLogs(?int $offset = null, ?int $limit = null): array
+    {
+        $builder = $this->connection->createQueryBuilder();
+
+        $query = $builder->select('a.*')
+            ->from(self::TABLE_GAME_LOG, 'a')
+            ->orderBy('a.created_at', 'ASC');
+
+        if (null !== $offset) {
+            $query->setFirstResult($offset);
+        }
+
+        if (null !== $limit) {
+            $query->setMaxResults($limit);
+        }
+
+        $result = $query->executeQuery()->fetchAllAssociative();
+
+        if ([] === $result || false === $result) {
+            return [];
+        }
+
+        return \array_map(fn (array $log) => $this->mapGameLog($log), $result);
+    }
+
     private function map(array $game): KeyforgeGame
     {
         $score = Json::decode($game['score']);
