@@ -1,4 +1,4 @@
-{% if show_inline_filters|default(true) %}
+{% if show_inline_filters %}
 <div class="form-group">
    <div class="row">
        <div class="col-12 col-sm-6 col-md-3">
@@ -55,7 +55,7 @@
             <th scope="col">{{ 'game.first_turn'|trans }}</th>
             <th scope="col">{{ 'game.date'|trans }}</th>
             <th scope="col">{{ 'game.competition'|trans }}</th>
-            <th scope="col">{{ 'game.notes'|trans }}</th>
+            <th scope="col"></th>
         </tr>
         </thead>
     </table>
@@ -166,7 +166,7 @@
 
                         let firstIcon = '';
                         if (row.first_turn === row.winner_name) {
-                            firstIcon = '<i class="bi bi-lightning" data-toggle="tooltip" title="Primer turno"></i>';
+                            firstIcon = ' <i class="bi bi-lightning-fill text-primary" data-toggle="tooltip" title="Primer turno"></i>';
                         }
 
                         if (reference === row.winner_deck) {
@@ -193,7 +193,7 @@
 
                         let firstIcon = '';
                         if (row.first_turn === row.loser_name) {
-                            firstIcon = '<i class="bi bi-lightning" data-toggle="tooltip" title="Primer turno"></i>';
+                            firstIcon = ' <i class="bi bi-lightning-fill text-primary" data-toggle="tooltip" title="Primer turno"></i>';
                         }
 
                         if (reference === row.loser_deck) {
@@ -206,7 +206,33 @@
                 },
                 {
                     render: function (data, type, row) {
-                        let cell = '';
+                        return '<span class="badge bg-secondary fs-6">' + data + '</span>';
+                    },
+                    targets: 4, //Score
+                },
+                {
+                    render: function (data, type, row) {
+                        const competitionColors = {
+                            'Solo':             'bg-secondary',
+                            'Friendly':         'bg-success',
+                            'Friendly League':  'bg-success',
+                            'TCO Casual':       'bg-info text-dark',
+                            'TCO Competitive':  'bg-primary',
+                            'Local League':     'bg-warning text-dark',
+                            'LGS':              'bg-dark',
+                            'VT':               'bg-dark',
+                            'NATIONAL':         'bg-dark',
+                            'NKFL':             'bg-dark',
+                        };
+
+                        const colorClass = competitionColors[data] || 'bg-secondary';
+                        return '<span class="badge ' + colorClass + '">' + data + '</span>';
+                    },
+                    targets: 7, //Competition
+                },
+                {
+                    render: function (data, type, row) {
+                        let items = [];
 
                         $(function () {
                             $('[data-toggle="tooltip"]').tooltip({
@@ -216,25 +242,26 @@
                         })
 
                         if (row.loser_deck === row.winner_deck) {
-                            cell += '<span data-toggle="tooltip" title="{{ 'game.mirror'|trans }}"> M </span>'
+                            items.push('<span class="btn btn-sm btn-outline-dark" data-toggle="tooltip" title="{{ 'game.mirror'|trans }}">M</span>');
                         }
 
                         if (null !== row.winner && null !== row.loser && row.loser === row.winner) {
-                            cell += '<span data-toggle="tooltip" title="{{ 'game.solo'|trans }}"> S </span>'
+                            items.push('<span class="btn btn-sm btn-outline-dark" data-toggle="tooltip" title="{{ 'game.solo'|trans }}">S</span>');
                         }
 
                         if ('' !== row.notes) {
-                            cell += '<i class="bi bi-journal-text" data-toggle="tooltip" title="' + row.notes + '"></i>'
+                            items.push('<span class="btn btn-sm btn-outline-dark" data-toggle="tooltip" title="' + row.notes + '"><i class="bi bi-journal-text"></i></span>');
                         }
 
                         if (null !== row.logId) {
                             let url = '{{ path('keyforge_game_log', {'id': '-replace-'}) }}';
                             url = url.replace('-replace-', row.logId);
 
-                            cell += '<a href="'+url+'" target="_blank"><i class="bi bi-graph-up" data-toggle="tooltip" title="{{ 'game.log'|trans }}"></i></a>';
+                            items.push('<a href="' + url + '" target="_blank" class="btn btn-sm btn-outline-dark" data-toggle="tooltip" title="{{ 'menu.game_log_tooltip'|trans }}">'
+                                + '<i class="bi bi-bar-chart-line-fill me-1"></i></a>');
                         }
 
-                        return cell;
+                        return '<div style="display: inline-flex; gap: 0.25rem; align-items: center; white-space: nowrap">' + items.join('') + '</div>';
                     },
                     targets: 8, //Notes
                 },
@@ -261,6 +288,7 @@
                 { width: 300, targets: 3 },
                 { width: 100, targets: 6 },
                 { width: 250, targets: 7 },
+                { targets: [8], className: 'text-nowrap' },
             ],
         });
     });
