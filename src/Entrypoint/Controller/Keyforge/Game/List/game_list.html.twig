@@ -128,15 +128,21 @@
                     d.extraFilterCompetition = competitionFilter();
                 }
             },
-            createdRow: function(row, data, dataIndex) {
+            createdRow: function(row, data) {
                 let deck = '{{ deck_reference }}';
                 let user = '{{ user_reference }}';
 
-                if (deck === data.{{ reference_type }} || user === data.{{ reference_type }}) {
-                    $(row).addClass('table-success');
-                } else {
-                    $(row).addClass('table-danger');
-                }
+                const isWin = deck === data.{{ reference_type }} || user === data.{{ reference_type }};
+                $(row).css('background-color', isWin
+                    ? 'rgba(25, 135, 84, 0.25)'
+                    : 'rgba(220, 53, 69, 0.25)'
+                );
+            },
+            drawCallback: function () {
+                $('[data-toggle="tooltip"]').tooltip({
+                    container: 'body',
+                    placement: 'top',
+                });
             },
             columns: [
                 { data: "winner_name" },
@@ -233,13 +239,6 @@
                 {
                     render: function (data, type, row) {
                         let items = [];
-
-                        $(function () {
-                            $('[data-toggle="tooltip"]').tooltip({
-                                'container': 'body',
-                                'placement': 'top'
-                            })
-                        })
 
                         if (row.loser_deck === row.winner_deck) {
                             items.push('<span class="btn btn-sm btn-outline-dark" data-toggle="tooltip" title="{{ 'game.mirror'|trans }}">M</span>');
