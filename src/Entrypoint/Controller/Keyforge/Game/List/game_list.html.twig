@@ -86,17 +86,18 @@
     }
 
     /* sticky columns — left values set dynamically by JS */
+    #gamesList thead th { position: relative; z-index: 1; }
     #gamesList thead th.col-sticky,
     #gamesList tbody td.col-sticky { position: sticky; z-index: 2; }
-    #gamesList thead th.col-sticky { z-index: 3; background-color: var(--bs-table-bg, #fff) !important; }
+    #gamesList thead th.col-sticky { z-index: 4; background-color: var(--bs-body-bg, #fff) !important; }
     #gamesList thead th.col-sticky-right,
     #gamesList tbody td.col-sticky-right { position: sticky; right: 0; z-index: 2; }
-    #gamesList thead th.col-sticky-right { z-index: 3; background-color: var(--bs-table-bg, #fff) !important; }
+    #gamesList thead th.col-sticky-right { z-index: 4; background-color: var(--bs-body-bg, #fff) !important; }
 
     /* default sticky cell background */
     #gamesList tbody tr:not(.row-win):not(.row-loss) td.col-sticky,
     #gamesList tbody tr:not(.row-win):not(.row-loss) td.col-sticky-right {
-        background-color: var(--bs-table-bg, #fff) !important;
+        background-color: var(--bs-body-bg, #fff) !important;
     }
     /* win/loss sticky cell backgrounds */
     #gamesList tbody tr.row-win  td.col-sticky,
