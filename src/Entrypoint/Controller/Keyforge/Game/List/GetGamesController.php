@@ -5,6 +5,7 @@ namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\Game\List;
 use AdnanMula\Cards\Application\Query\Keyforge\Game\GetGamesQuery;
 use AdnanMula\Cards\Domain\Model\Keyforge\Game\ValueObject\KeyforgeCompetition;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
+use AdnanMula\Criteria\Sorting\OrderType;
 use Assert\LazyAssertionException;
 use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -320,8 +321,19 @@ final class GetGamesController extends Controller
                 35 => 'total_extra_turns',
             ];
 
-            $orderField = $orderColumns[(int)$queryOrder[0]['column']] ?? null;
+            $column = (int) $queryOrder[0]['column'];
+            $orderField = $orderColumns[$column] ?? null;
             $orderType = $queryOrder[0]['dir'] ?? null;
+
+            if ($column >= 8) {
+                if ($orderType === 'asc') {
+                    $orderType = OrderType::ASC_NULLS_LAST->value;
+                }
+
+                if ($orderType === 'desc') {
+                    $orderType = OrderType::DESC_NULLS_LAST->value;
+                }
+            }
 
             return [$orderField, $orderType];
         }

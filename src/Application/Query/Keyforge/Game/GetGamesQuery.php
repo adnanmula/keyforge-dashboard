@@ -53,7 +53,7 @@ final readonly class GetGamesQuery extends CriteriaQuery
             ->that($start, 'start')->nullOr()->integerish()->min(0)
             ->that($length, 'length')->nullOr()->integerish()->min(0)
             ->that($orderField, 'orderField')->nullOr()->string()->notBlank()
-            ->that($orderDirection, 'orderDirection')->nullOr()->inArray([OrderType::ASC->value, OrderType::DESC->value]);
+            ->that($orderDirection, 'orderDirection')->nullOr()->inArray([OrderType::ASC->value, OrderType::DESC->value, OrderType::ASC_NULLS_LAST->value, OrderType::DESC_NULLS_LAST->value]);
 
         foreach ($logStats ?? [] as $key => $value) {
             $lazy->that($value, "logStats.$key")->nullOr()->integerish()->min(0);
