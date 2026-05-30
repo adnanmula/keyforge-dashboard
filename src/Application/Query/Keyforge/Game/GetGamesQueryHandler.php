@@ -103,6 +103,7 @@ final readonly class GetGamesQueryHandler
                     ? $game->notes()
                     : '',
                 'logId' => $game->logId()?->value(),
+                'logStats' => $game->logStats(),
             ];
         }
 

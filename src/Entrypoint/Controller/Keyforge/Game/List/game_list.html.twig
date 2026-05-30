@@ -55,6 +55,34 @@
             <th scope="col">{{ 'game.first_turn'|trans }}</th>
             <th scope="col">{{ 'game.date'|trans }}</th>
             <th scope="col">{{ 'game.competition'|trans }}</th>
+            <th scope="col" data-toggle="tooltip" title="{{ 'menu.turns'|trans }}">T</th>
+            <th scope="col" data-toggle="tooltip" title="{{ 'game.winner_amber'|trans }}">W.Amb</th>
+            <th scope="col" data-toggle="tooltip" title="{{ 'game.winner_amber_stolen'|trans }}">W.Stl</th>
+            <th scope="col" data-toggle="tooltip" title="{{ 'game.winner_cards_played'|trans }}">W.Cp</th>
+            <th scope="col" data-toggle="tooltip" title="{{ 'game.winner_cards_drawn'|trans }}">W.Cd</th>
+            <th scope="col" data-toggle="tooltip" title="{{ 'game.winner_cards_discarded'|trans }}">W.Cx</th>
+            <th scope="col" data-toggle="tooltip" title="{{ 'game.winner_keys_forged'|trans }}">W.K</th>
+            <th scope="col" data-toggle="tooltip" title="{{ 'game.winner_fights'|trans }}">W.F</th>
+            <th scope="col" data-toggle="tooltip" title="{{ 'game.winner_reaps'|trans }}">W.R</th>
+            <th scope="col" data-toggle="tooltip" title="{{ 'game.winner_extra_turns'|trans }}">W.+T</th>
+            <th scope="col" data-toggle="tooltip" title="{{ 'game.loser_amber'|trans }}">L.Amb</th>
+            <th scope="col" data-toggle="tooltip" title="{{ 'game.loser_amber_stolen'|trans }}">L.Stl</th>
+            <th scope="col" data-toggle="tooltip" title="{{ 'game.loser_cards_played'|trans }}">L.Cp</th>
+            <th scope="col" data-toggle="tooltip" title="{{ 'game.loser_cards_drawn'|trans }}">L.Cd</th>
+            <th scope="col" data-toggle="tooltip" title="{{ 'game.loser_cards_discarded'|trans }}">L.Cx</th>
+            <th scope="col" data-toggle="tooltip" title="{{ 'game.loser_keys_forged'|trans }}">L.K</th>
+            <th scope="col" data-toggle="tooltip" title="{{ 'game.loser_fights'|trans }}">L.F</th>
+            <th scope="col" data-toggle="tooltip" title="{{ 'game.loser_reaps'|trans }}">L.R</th>
+            <th scope="col" data-toggle="tooltip" title="{{ 'game.loser_extra_turns'|trans }}">L.+T</th>
+            <th scope="col" data-toggle="tooltip" title="{{ 'game.total_amber'|trans }}">∑.Amb</th>
+            <th scope="col" data-toggle="tooltip" title="{{ 'game.total_amber_stolen'|trans }}">∑.Stl</th>
+            <th scope="col" data-toggle="tooltip" title="{{ 'game.total_cards_played'|trans }}">∑.Cp</th>
+            <th scope="col" data-toggle="tooltip" title="{{ 'game.total_cards_drawn'|trans }}">∑.Cd</th>
+            <th scope="col" data-toggle="tooltip" title="{{ 'game.total_cards_discarded'|trans }}">∑.Cx</th>
+            <th scope="col" data-toggle="tooltip" title="{{ 'game.total_keys_forged'|trans }}">∑.K</th>
+            <th scope="col" data-toggle="tooltip" title="{{ 'game.total_fights'|trans }}">∑.F</th>
+            <th scope="col" data-toggle="tooltip" title="{{ 'game.total_reaps'|trans }}">∑.R</th>
+            <th scope="col" data-toggle="tooltip" title="{{ 'game.total_extra_turns'|trans }}">∑.+T</th>
             <th scope="col"></th>
         </tr>
         </thead>
@@ -104,6 +132,12 @@
         return v !== '' ? v : null;
     }
 
+    function renderStatVal(data, key) {
+        if (!data) { return '<span class="text-muted">—</span>'; }
+        const v = data[key];
+        return (v !== null && v !== undefined) ? v : '<span class="text-muted">—</span>';
+    }
+
     $(document).ready(function () {
         prepareSelectors('winner-selector');
         prepareSelectors('loser-selector');
@@ -122,11 +156,35 @@
             $('#gamesList.dataTable').resize;
         });
 
+        const statColumns = [
+            { key: 'turns' },
+            { key: 'winner_amber_obtained' }, { key: 'winner_amber_stolen' },
+            { key: 'winner_cards_played' }, { key: 'winner_cards_drawn' }, { key: 'winner_cards_discarded' },
+            { key: 'winner_keys_forged' }, { key: 'winner_fights' }, { key: 'winner_reaps' }, { key: 'winner_extra_turns' },
+            { key: 'loser_amber_obtained' }, { key: 'loser_amber_stolen' },
+            { key: 'loser_cards_played' }, { key: 'loser_cards_drawn' }, { key: 'loser_cards_discarded' },
+            { key: 'loser_keys_forged' }, { key: 'loser_fights' }, { key: 'loser_reaps' }, { key: 'loser_extra_turns' },
+            { key: 'total_amber_obtained' }, { key: 'total_amber_stolen' },
+            { key: 'total_cards_played' }, { key: 'total_cards_drawn' }, { key: 'total_cards_discarded' },
+            { key: 'total_keys_forged' }, { key: 'total_fights' }, { key: 'total_reaps' }, { key: 'total_extra_turns' },
+        ];
+        const statStartIdx = 8;
+        const actionsIdx = statStartIdx + statColumns.length; // 36
+
+        const statColumnDefs = statColumns.map(({ key }, i) => ({
+            targets: statStartIdx + i,
+            data: 'logStats',
+            orderable: true,
+            searchable: false,
+            render: (d) => renderStatVal(d, key),
+            width: 45,
+        }));
+
         $('#gamesList').DataTable({
             searching: false,
             paging: true,
             info: true,
-            responsive: true,
+            responsive: false,
             processing: true,
             serverSide: true,
             order: [[6, 'desc']],
@@ -138,6 +196,7 @@
                 {% else %}
                     url: '{{ path('keyforge_games_json', {'deckId': deck_reference}) }}',
                 {% endif %}
+                type: 'POST',
                 data: function(d){
                     d.extraFilterWinner = winnerFilter();
                     d.extraFilterLoser = loserFilter();
@@ -195,79 +254,66 @@
                 });
             },
             columns: [
-                { data: "winner_name" },
-                { data: "winner_deck_name" },
-                { data: "loser_name" },
-                { data: "loser_deck_name" },
-                { data: "score" },
-                { data: "first_turn" },
-                { data: "date" },
-                { data: "competition" },
-                { data: "notes" },
+                { data: 'winner_name' },
+                { data: 'winner_deck_name' },
+                { data: 'loser_name' },
+                { data: 'loser_deck_name' },
+                { data: 'score' },
+                { data: 'first_turn' },
+                { data: 'date' },
+                { data: 'competition' },
+                ...statColumns.map(() => ({ data: 'logStats' })),
+                { data: 'notes' },
             ],
             columnDefs: [
                 {
                     render: function (data, type, row) {
-                        if (null === row.winner) {
-                            return data;
-                        }
-
+                        if (null === row.winner) { return data; }
                         return '<a href="/user/' + row.winner + '">' + data + '</a>';
                     },
-                    targets: 0, //Winner
+                    targets: 0,
                 },
                 {
                     render: function (data, type, row) {
                         let reference = '{{ deck_reference }}';
-
                         let firstIcon = '';
                         if (row.first_turn === row.winner_name) {
                             firstIcon = ' <i class="bi bi-lightning-fill text-primary" data-toggle="tooltip" title="Primer turno"></i>';
                         }
-
-                        if (reference === row.winner_deck) {
-                            return data + firstIcon;
-                        } else {
-                            return '<a href="/deck/' + row.winner_deck + '">' + data + '</a>' + firstIcon;
-                        }
+                        return reference === row.winner_deck
+                            ? data + firstIcon
+                            : '<a href="/deck/' + row.winner_deck + '">' + data + '</a>' + firstIcon;
                     },
-                    targets: 1, //Winner deck
+                    targets: 1,
                 },
                 {
                     render: function (data, type, row) {
-                        if (null === row.loser) {
-                            return data;
-                        }
-
+                        if (null === row.loser) { return data; }
                         return '<a href="/user/' + row.loser + '">' + data + '</a>';
                     },
-                    targets: 2, //Loser
+                    targets: 2,
                 },
                 {
                     render: function (data, type, row) {
                         let reference = '{{ deck_reference }}';
-
                         let firstIcon = '';
                         if (row.first_turn === row.loser_name) {
                             firstIcon = ' <i class="bi bi-lightning-fill text-primary" data-toggle="tooltip" title="Primer turno"></i>';
                         }
-
-                        if (reference === row.loser_deck) {
-                            return data + firstIcon;
-                        } else {
-                            return '<a href="/deck/' + row.loser_deck + '">' + data + '</a>' + firstIcon;
-                        }
+                        return reference === row.loser_deck
+                            ? data + firstIcon
+                            : '<a href="/deck/' + row.loser_deck + '">' + data + '</a>' + firstIcon;
                     },
-                    targets: 3, //Loser deck
+                    targets: 3,
                 },
                 {
-                    render: function (data, type, row) {
+                    render: function (data) {
                         return '<span class="badge bg-secondary fs-6">' + data + '</span>';
                     },
-                    targets: 4, //Score
+                    targets: 4,
                 },
                 {
-                    render: function (data, type, row) {
+                    render: function (data) {
                         const competitionColors = {
                             'Solo':             'bg-secondary',
                             'Friendly':         'bg-success',
@@ -280,64 +326,47 @@
                             'NATIONAL':         'bg-dark',
                             'NKFL':             'bg-dark',
                         };
-
                         const colorClass = competitionColors[data] || 'bg-secondary';
                         return '<span class="badge ' + colorClass + '">' + data + '</span>';
                     },
-                    targets: 7, //Competition
+                    targets: 7,
                 },
+                ...statColumnDefs,
                 {
                     render: function (data, type, row) {
                         let items = [];
-
                         if (row.loser_deck === row.winner_deck) {
                             items.push('<span class="btn btn-sm btn-outline-dark" data-toggle="tooltip" title="{{ 'game.mirror'|trans }}">M</span>');
                         }
-
                         if (null !== row.winner && null !== row.loser && row.loser === row.winner) {
                             items.push('<span class="btn btn-sm btn-outline-dark" data-toggle="tooltip" title="{{ 'game.solo'|trans }}">S</span>');
                         }
-
                         if ('' !== row.notes) {
                             items.push('<span class="btn btn-sm btn-outline-dark" data-toggle="tooltip" title="' + row.notes + '"><i class="bi bi-journal-text"></i></span>');
                         }
-
                         if (null !== row.logId) {
                             let url = '{{ path('keyforge_game_log', {'id': '-replace-'}) }}';
                             url = url.replace('-replace-', row.logId);
-
                             items.push('<a href="' + url + '" target="_blank" class="btn btn-sm btn-outline-dark" data-toggle="tooltip" title="{{ 'menu.game_log_tooltip'|trans }}">'
                                 + '<i class="bi bi-bar-chart-line-fill me-1"></i></a>');
                         }
-
-                        return '<div style="display: inline-flex; gap: 0.25rem; align-items: center; white-space: nowrap">' + items.join('') + '</div>';
+                        return '<div style="display:inline-flex;gap:0.25rem;align-items:center;white-space:nowrap">' + items.join('') + '</div>';
                     },
-                    targets: 8, //Notes
-                },
-                {
-                    targets: [0, 1, 2, 3, 4, 6, 7, 8],
-                    searchable: false,
-                    visible: true,
-                },
-                {
-                    targets: [5],
-                    visible: false,
-                },
-                {
-                    targets: [0, 1, 2, 3, 4, 5, 7, 8],
                     orderable: false,
+                    searchable: false,
+                    targets: actionsIdx,
+                    className: 'text-nowrap',
                 },
-                {
-                    targets: [6],
-                    orderable: true,
-                },
-                { width: 150, targets: 0 },
-                { width: 300, targets: 1 },
-                { width: 150, targets: 2 },
-                { width: 300, targets: 3 },
-                { width: 100, targets: 6 },
-                { width: 250, targets: 7 },
-                { targets: [8], className: 'text-nowrap' },
+                { targets: [0, 1, 2, 3, 4, 6, 7], searchable: false, orderable: false },
+                { targets: [6], orderable: true },
+                { targets: [5], visible: false },
+                { width: 120, targets: 0 },
+                { width: 200, targets: 1 },
+                { width: 120, targets: 2 },
+                { width: 200, targets: 3 },
+                { width: 60,  targets: 4 },
+                { width: 90,  targets: 6 },
+                { width: 150, targets: 7 },
             ],
         });
     });

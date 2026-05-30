@@ -57,11 +57,31 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
     {
         $builder = $this->connection->createQueryBuilder();
 
-        $query = $builder->select('a.*, b.log, b.id as log_id')
+        $query = $builder->select(
+            'a.*, b.log, b.id as log_id,
+            b.turns, b.winner_amber_obtained, b.winner_amber_stolen, b.winner_cards_played, b.winner_cards_drawn, b.winner_cards_discarded, b.winner_keys_forged, b.winner_fights, b.winner_reaps, b.winner_extra_turns,
+            b.loser_amber_obtained, b.loser_amber_stolen, b.loser_cards_played, b.loser_cards_drawn, b.loser_cards_discarded, b.loser_keys_forged, b.loser_fights, b.loser_reaps, b.loser_extra_turns,
+            b.total_amber_obtained, b.total_amber_stolen, b.total_cards_played, b.total_cards_drawn, b.total_cards_discarded, b.total_keys_forged, b.total_fights, b.total_reaps, b.total_extra_turns'
+        )
             ->from(self::TABLE, 'a')
             ->leftJoin('a', self::TABLE_GAME_LOG, 'b', 'a.id = b.game_id');
 
         new DbalCriteriaAdapter($query, new FieldMapping(self::fieldMapping))->execute($criteria);
+
+//      TODO add nulls last to criteria library
+        $orderByParts = $query->getQueryPart('orderBy');
+        if (!empty($orderByParts)) {
+            $query->resetQueryPart('orderBy');
+            foreach ($orderByParts as $part) {
+                $pieces = \explode(' ', $part, 2);
+                $field = $pieces[0];
+                $dir   = $pieces[1] ?? 'ASC';
+                if (\str_starts_with($field, 'b.')) {
+                    $dir .= ' NULLS LAST';
+                }
+                $query->addOrderBy($field, $dir);
+            }
+        }
 
         $result = $query->executeQuery()->fetchAllAssociative();
 
@@ -316,6 +336,21 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
     {
         $score = Json::decode($game['score']);
 
+        $statKeys = [
+            'turns',
+            'winner_amber_obtained', 'winner_amber_stolen', 'winner_cards_played', 'winner_cards_drawn', 'winner_cards_discarded', 'winner_keys_forged', 'winner_fights', 'winner_reaps', 'winner_extra_turns',
+            'loser_amber_obtained', 'loser_amber_stolen', 'loser_cards_played', 'loser_cards_drawn', 'loser_cards_discarded', 'loser_keys_forged', 'loser_fights', 'loser_reaps', 'loser_extra_turns',
+            'total_amber_obtained', 'total_amber_stolen', 'total_cards_played', 'total_cards_drawn', 'total_cards_discarded', 'total_keys_forged', 'total_fights', 'total_reaps', 'total_extra_turns',
+        ];
+
+        $logStats = null;
+        if (isset($game['turns']) || isset($game['winner_amber_obtained'])) {
+            $logStats = [];
+            foreach ($statKeys as $k) {
+                $logStats[$k] = isset($game[$k]) ? (int) $game[$k] : null;
+            }
+        }
+
         return new KeyforgeGame(
             Uuid::from($game['id']),
             Uuid::from($game['winner']),
@@ -333,6 +368,7 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
             $game['approved'],
             Uuid::fromNullable($game['created_by']),
             Uuid::fromNullable($game['log_id']),
+            $logStats,
         );
     }
 
