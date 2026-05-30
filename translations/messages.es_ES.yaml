@@ -538,3 +538,7 @@ game.total_keys_forged: Llaves forjadas total
 game.total_fights: Combates total
 game.total_reaps: Cosechas total
 game.total_extra_turns: Turnos extra total
+menu.winner_single_char: G
+menu.loser_single_char: P
+menu.total_single_char: ∑
+menu.key: ⚷

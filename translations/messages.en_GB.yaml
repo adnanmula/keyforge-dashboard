@@ -538,3 +538,7 @@ game.total_keys_forged: Total keys forged
 game.total_fights: Total fights
 game.total_reaps: Total reaps
 game.total_extra_turns: Total extra turns
+menu.winner_single_char: W
+menu.loser_single_char: L
+menu.total_single_char: ∑
+menu.key: ⚷
