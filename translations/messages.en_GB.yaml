@@ -507,3 +507,33 @@ game.timeline.extra_turn: To take an extra turn after this one
 deck.archon-power: Archon Power
 deck.prophecy: Prophecy
 deck.prophecies: Prophecies
+menu.min: Min
+menu.max: Max
+menu.log_stats_filters_note: "Log stats (only applies to games with logs)"
+game.winner_amber: Winner amber
+game.winner_amber_stolen: Winner amber stolen
+game.winner_cards_played: Winner cards played
+game.winner_cards_drawn: Winner cards drawn
+game.winner_cards_discarded: Winner cards discarded
+game.winner_keys_forged: Winner keys forged
+game.winner_fights: Winner fights
+game.winner_reaps: Winner reaps
+game.winner_extra_turns: Winner extra turns
+game.loser_amber: Loser amber
+game.loser_amber_stolen: Loser amber stolen
+game.loser_cards_played: Loser cards played
+game.loser_cards_drawn: Loser cards drawn
+game.loser_cards_discarded: Loser cards discarded
+game.loser_keys_forged: Loser keys forged
+game.loser_fights: Loser fights
+game.loser_reaps: Loser reaps
+game.loser_extra_turns: Loser extra turns
+game.total_amber: Total amber
+game.total_amber_stolen: Total amber stolen
+game.total_cards_played: Total cards played
+game.total_cards_drawn: Total cards drawn
+game.total_cards_discarded: Total cards discarded
+game.total_keys_forged: Total keys forged
+game.total_fights: Total fights
+game.total_reaps: Total reaps
+game.total_extra_turns: Total extra turns

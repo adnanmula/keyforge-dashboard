@@ -31,6 +31,15 @@ final readonly class KeyforgeGameLog implements \JsonSerializable
         public ?int $loserFights = null,
         public ?int $loserReaps = null,
         public ?int $loserExtraTurns = null,
+        public ?int $totalAmberObtained = null,
+        public ?int $totalAmberStolen = null,
+        public ?int $totalCardsPlayed = null,
+        public ?int $totalCardsDrawn = null,
+        public ?int $totalCardsDiscarded = null,
+        public ?int $totalKeysForged = null,
+        public ?int $totalFights = null,
+        public ?int $totalReaps = null,
+        public ?int $totalExtraTurns = null,
     ) {}
 
     public function jsonSerialize(): array
@@ -60,6 +69,15 @@ final readonly class KeyforgeGameLog implements \JsonSerializable
             'loserFights' => $this->loserFights,
             'loserReaps' => $this->loserReaps,
             'loserExtraTurns' => $this->loserExtraTurns,
+            'totalAmberObtained' => $this->totalAmberObtained,
+            'totalAmberStolen' => $this->totalAmberStolen,
+            'totalCardsPlayed' => $this->totalCardsPlayed,
+            'totalCardsDrawn' => $this->totalCardsDrawn,
+            'totalCardsDiscarded' => $this->totalCardsDiscarded,
+            'totalKeysForged' => $this->totalKeysForged,
+            'totalFights' => $this->totalFights,
+            'totalReaps' => $this->totalReaps,
+            'totalExtraTurns' => $this->totalExtraTurns,
         ];
     }
 }

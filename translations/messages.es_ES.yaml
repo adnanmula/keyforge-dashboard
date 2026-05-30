@@ -507,3 +507,33 @@ game.timeline.extra_turn: Para tomar un turno adicional después de este
 deck.archon-power: Archon Power
 deck.prophecy: Profecía
 deck.prophecies: Profecías
+menu.min: Mín
+menu.max: Máx
+menu.log_stats_filters_note: "Stats del log (solo aplica a partidas con log)"
+game.winner_amber: Æmbar ganador
+game.winner_amber_stolen: Æmbar robado ganador
+game.winner_cards_played: Cartas jugadas ganador
+game.winner_cards_drawn: Cartas robadas ganador
+game.winner_cards_discarded: Cartas descartadas ganador
+game.winner_keys_forged: Llaves forjadas ganador
+game.winner_fights: Combates ganador
+game.winner_reaps: Cosechas ganador
+game.winner_extra_turns: Turnos extra ganador
+game.loser_amber: Æmbar perdedor
+game.loser_amber_stolen: Æmbar robado perdedor
+game.loser_cards_played: Cartas jugadas perdedor
+game.loser_cards_drawn: Cartas robadas perdedor
+game.loser_cards_discarded: Cartas descartadas perdedor
+game.loser_keys_forged: Llaves forjadas perdedor
+game.loser_fights: Combates perdedor
+game.loser_reaps: Cosechas perdedor
+game.loser_extra_turns: Turnos extra perdedor
+game.total_amber: Æmbar total
+game.total_amber_stolen: Æmbar robado total
+game.total_cards_played: Cartas jugadas total
+game.total_cards_drawn: Cartas robadas total
+game.total_cards_discarded: Cartas descartadas total
+game.total_keys_forged: Llaves forjadas total
+game.total_fights: Combates total
+game.total_reaps: Cosechas total
+game.total_extra_turns: Turnos extra total

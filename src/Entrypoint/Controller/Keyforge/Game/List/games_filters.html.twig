@@ -63,6 +63,221 @@
             <input type="date" id="date-to-selector" class="form-control">
         </div>
 
+        <hr>
+        <p class="text-muted small mb-2">{{ 'menu.log_stats_filters_note'|trans }}</p>
+
+        {% set statGroups = [
+            {
+                label: 'menu.turns',
+                stats: [
+                    {key: 'turnsMin', label: 'menu.min'},
+                    {key: 'turnsMax', label: 'menu.max'},
+                ]
+            },
+            {
+                label: 'game.winner_amber',
+                stats: [
+                    {key: 'winnerAmberObtainedMin', label: 'menu.min'},
+                    {key: 'winnerAmberObtainedMax', label: 'menu.max'},
+                ]
+            },
+            {
+                label: 'game.winner_amber_stolen',
+                stats: [
+                    {key: 'winnerAmberStolenMin', label: 'menu.min'},
+                    {key: 'winnerAmberStolenMax', label: 'menu.max'},
+                ]
+            },
+            {
+                label: 'game.winner_cards_played',
+                stats: [
+                    {key: 'winnerCardsPlayedMin', label: 'menu.min'},
+                    {key: 'winnerCardsPlayedMax', label: 'menu.max'},
+                ]
+            },
+            {
+                label: 'game.winner_cards_drawn',
+                stats: [
+                    {key: 'winnerCardsDrawnMin', label: 'menu.min'},
+                    {key: 'winnerCardsDrawnMax', label: 'menu.max'},
+                ]
+            },
+            {
+                label: 'game.winner_cards_discarded',
+                stats: [
+                    {key: 'winnerCardsDiscardedMin', label: 'menu.min'},
+                    {key: 'winnerCardsDiscardedMax', label: 'menu.max'},
+                ]
+            },
+            {
+                label: 'game.winner_keys_forged',
+                stats: [
+                    {key: 'winnerKeysForgedMin', label: 'menu.min'},
+                    {key: 'winnerKeysForgedMax', label: 'menu.max'},
+                ]
+            },
+            {
+                label: 'game.winner_fights',
+                stats: [
+                    {key: 'winnerFightsMin', label: 'menu.min'},
+                    {key: 'winnerFightsMax', label: 'menu.max'},
+                ]
+            },
+            {
+                label: 'game.winner_reaps',
+                stats: [
+                    {key: 'winnerReapsMin', label: 'menu.min'},
+                    {key: 'winnerReapsMax', label: 'menu.max'},
+                ]
+            },
+            {
+                label: 'game.winner_extra_turns',
+                stats: [
+                    {key: 'winnerExtraTurnsMin', label: 'menu.min'},
+                    {key: 'winnerExtraTurnsMax', label: 'menu.max'},
+                ]
+            },
+            {
+                label: 'game.loser_amber',
+                stats: [
+                    {key: 'loserAmberObtainedMin', label: 'menu.min'},
+                    {key: 'loserAmberObtainedMax', label: 'menu.max'},
+                ]
+            },
+            {
+                label: 'game.loser_amber_stolen',
+                stats: [
+                    {key: 'loserAmberStolenMin', label: 'menu.min'},
+                    {key: 'loserAmberStolenMax', label: 'menu.max'},
+                ]
+            },
+            {
+                label: 'game.loser_cards_played',
+                stats: [
+                    {key: 'loserCardsPlayedMin', label: 'menu.min'},
+                    {key: 'loserCardsPlayedMax', label: 'menu.max'},
+                ]
+            },
+            {
+                label: 'game.loser_cards_drawn',
+                stats: [
+                    {key: 'loserCardsDrawnMin', label: 'menu.min'},
+                    {key: 'loserCardsDrawnMax', label: 'menu.max'},
+                ]
+            },
+            {
+                label: 'game.loser_cards_discarded',
+                stats: [
+                    {key: 'loserCardsDiscardedMin', label: 'menu.min'},
+                    {key: 'loserCardsDiscardedMax', label: 'menu.max'},
+                ]
+            },
+            {
+                label: 'game.loser_keys_forged',
+                stats: [
+                    {key: 'loserKeysForgedMin', label: 'menu.min'},
+                    {key: 'loserKeysForgedMax', label: 'menu.max'},
+                ]
+            },
+            {
+                label: 'game.loser_fights',
+                stats: [
+                    {key: 'loserFightsMin', label: 'menu.min'},
+                    {key: 'loserFightsMax', label: 'menu.max'},
+                ]
+            },
+            {
+                label: 'game.loser_reaps',
+                stats: [
+                    {key: 'loserReapsMin', label: 'menu.min'},
+                    {key: 'loserReapsMax', label: 'menu.max'},
+                ]
+            },
+            {
+                label: 'game.loser_extra_turns',
+                stats: [
+                    {key: 'loserExtraTurnsMin', label: 'menu.min'},
+                    {key: 'loserExtraTurnsMax', label: 'menu.max'},
+                ]
+            },
+            {
+                label: 'game.total_amber',
+                stats: [
+                    {key: 'totalAmberObtainedMin', label: 'menu.min'},
+                    {key: 'totalAmberObtainedMax', label: 'menu.max'},
+                ]
+            },
+            {
+                label: 'game.total_amber_stolen',
+                stats: [
+                    {key: 'totalAmberStolenMin', label: 'menu.min'},
+                    {key: 'totalAmberStolenMax', label: 'menu.max'},
+                ]
+            },
+            {
+                label: 'game.total_cards_played',
+                stats: [
+                    {key: 'totalCardsPlayedMin', label: 'menu.min'},
+                    {key: 'totalCardsPlayedMax', label: 'menu.max'},
+                ]
+            },
+            {
+                label: 'game.total_cards_drawn',
+                stats: [
+                    {key: 'totalCardsDrawnMin', label: 'menu.min'},
+                    {key: 'totalCardsDrawnMax', label: 'menu.max'},
+                ]
+            },
+            {
+                label: 'game.total_cards_discarded',
+                stats: [
+                    {key: 'totalCardsDiscardedMin', label: 'menu.min'},
+                    {key: 'totalCardsDiscardedMax', label: 'menu.max'},
+                ]
+            },
+            {
+                label: 'game.total_keys_forged',
+                stats: [
+                    {key: 'totalKeysForgedMin', label: 'menu.min'},
+                    {key: 'totalKeysForgedMax', label: 'menu.max'},
+                ]
+            },
+            {
+                label: 'game.total_fights',
+                stats: [
+                    {key: 'totalFightsMin', label: 'menu.min'},
+                    {key: 'totalFightsMax', label: 'menu.max'},
+                ]
+            },
+            {
+                label: 'game.total_reaps',
+                stats: [
+                    {key: 'totalReapsMin', label: 'menu.min'},
+                    {key: 'totalReapsMax', label: 'menu.max'},
+                ]
+            },
+            {
+                label: 'game.total_extra_turns',
+                stats: [
+                    {key: 'totalExtraTurnsMin', label: 'menu.min'},
+                    {key: 'totalExtraTurnsMax', label: 'menu.max'},
+                ]
+            },
+        ] %}
+
+        {% for group in statGroups %}
+            <div class="mb-2">
+                <label class="form-label fw-bold mb-1">{{ group.label|trans }}</label>
+                <div class="row g-1">
+                    {% for stat in group.stats %}
+                        <div class="col-6">
+                            <input type="number" id="stat-{{ stat.key }}" class="form-control form-control-sm" placeholder="{{ stat.label|trans }}" min="0">
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+
         <div class="row mt-3">
             <div class="col-12 col-md-3 mb-3 mb-md-0">
                 <button class="btn btn-dark w-100 text-nowrap" id="clearGamesFilters">
@@ -77,6 +292,37 @@
 </div>
 
 <script>
+    const statKeys = [
+        'turnsMin','turnsMax',
+        'winnerAmberObtainedMin','winnerAmberObtainedMax',
+        'winnerAmberStolenMin','winnerAmberStolenMax',
+        'winnerCardsPlayedMin','winnerCardsPlayedMax',
+        'winnerCardsDrawnMin','winnerCardsDrawnMax',
+        'winnerCardsDiscardedMin','winnerCardsDiscardedMax',
+        'winnerKeysForgedMin','winnerKeysForgedMax',
+        'winnerFightsMin','winnerFightsMax',
+        'winnerReapsMin','winnerReapsMax',
+        'winnerExtraTurnsMin','winnerExtraTurnsMax',
+        'loserAmberObtainedMin','loserAmberObtainedMax',
+        'loserAmberStolenMin','loserAmberStolenMax',
+        'loserCardsPlayedMin','loserCardsPlayedMax',
+        'loserCardsDrawnMin','loserCardsDrawnMax',
+        'loserCardsDiscardedMin','loserCardsDiscardedMax',
+        'loserKeysForgedMin','loserKeysForgedMax',
+        'loserFightsMin','loserFightsMax',
+        'loserReapsMin','loserReapsMax',
+        'loserExtraTurnsMin','loserExtraTurnsMax',
+        'totalAmberObtainedMin','totalAmberObtainedMax',
+        'totalAmberStolenMin','totalAmberStolenMax',
+        'totalCardsPlayedMin','totalCardsPlayedMax',
+        'totalCardsDrawnMin','totalCardsDrawnMax',
+        'totalCardsDiscardedMin','totalCardsDiscardedMax',
+        'totalKeysForgedMin','totalKeysForgedMax',
+        'totalFightsMin','totalFightsMax',
+        'totalReapsMin','totalReapsMax',
+        'totalExtraTurnsMin','totalExtraTurnsMax',
+    ];
+
     function updateGamesUrlFromFilters() {
         const params = new URLSearchParams();
         const addList = (key, values) => { if (values && values.length) params.set(key, values.join(',')); };
@@ -88,6 +334,11 @@
 
         if ($('#date-from-selector').val()) params.set('date_from', $('#date-from-selector').val());
         if ($('#date-to-selector').val()) params.set('date_to', $('#date-to-selector').val());
+
+        statKeys.forEach(k => {
+            const v = $('#stat-' + k).val();
+            if (v !== '') params.set(k, v);
+        });
 
         const base = window.location.pathname + (params.toString() ? ('?' + params.toString()) : '');
         window.history.replaceState({}, '', base);
@@ -105,6 +356,8 @@
 
         if (params.has('date_from')) $('#date-from-selector').val(params.get('date_from'));
         if (params.has('date_to')) $('#date-to-selector').val(params.get('date_to'));
+
+        statKeys.forEach(k => { if (params.has(k)) $('#stat-' + k).val(params.get(k)); });
     }
 
     document.addEventListener('DOMContentLoaded', function () {

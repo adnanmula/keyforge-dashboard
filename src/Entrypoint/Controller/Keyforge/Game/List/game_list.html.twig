@@ -99,6 +99,11 @@
         return $('#date-to-selector').val();
     }
 
+    function statVal(id) {
+        const v = $('#' + id).val();
+        return v !== '' ? v : null;
+    }
+
     $(document).ready(function () {
         prepareSelectors('winner-selector');
         prepareSelectors('loser-selector');
@@ -140,6 +145,37 @@
                     d.extraFilterCompetition = competitionFilter();
                     d.extraFilterDateFrom = dateFromFilter();
                     d.extraFilterDateTo = dateToFilter();
+                    const statIds = [
+                        'turnsMin','turnsMax',
+                        'winnerAmberObtainedMin','winnerAmberObtainedMax',
+                        'winnerAmberStolenMin','winnerAmberStolenMax',
+                        'winnerCardsPlayedMin','winnerCardsPlayedMax',
+                        'winnerCardsDrawnMin','winnerCardsDrawnMax',
+                        'winnerCardsDiscardedMin','winnerCardsDiscardedMax',
+                        'winnerKeysForgedMin','winnerKeysForgedMax',
+                        'winnerFightsMin','winnerFightsMax',
+                        'winnerReapsMin','winnerReapsMax',
+                        'winnerExtraTurnsMin','winnerExtraTurnsMax',
+                        'loserAmberObtainedMin','loserAmberObtainedMax',
+                        'loserAmberStolenMin','loserAmberStolenMax',
+                        'loserCardsPlayedMin','loserCardsPlayedMax',
+                        'loserCardsDrawnMin','loserCardsDrawnMax',
+                        'loserCardsDiscardedMin','loserCardsDiscardedMax',
+                        'loserKeysForgedMin','loserKeysForgedMax',
+                        'loserFightsMin','loserFightsMax',
+                        'loserReapsMin','loserReapsMax',
+                        'loserExtraTurnsMin','loserExtraTurnsMax',
+                        'totalAmberObtainedMin','totalAmberObtainedMax',
+                        'totalAmberStolenMin','totalAmberStolenMax',
+                        'totalCardsPlayedMin','totalCardsPlayedMax',
+                        'totalCardsDrawnMin','totalCardsDrawnMax',
+                        'totalCardsDiscardedMin','totalCardsDiscardedMax',
+                        'totalKeysForgedMin','totalKeysForgedMax',
+                        'totalFightsMin','totalFightsMax',
+                        'totalReapsMin','totalReapsMax',
+                        'totalExtraTurnsMin','totalExtraTurnsMax',
+                    ];
+                    statIds.forEach(k => { const v = statVal('stat-' + k); if (v !== null) d[k] = v; });
                 }
             },
             createdRow: function(row, data) {

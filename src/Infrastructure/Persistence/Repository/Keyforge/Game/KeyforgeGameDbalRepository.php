@@ -23,6 +23,34 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
     private const array fieldMapping = [
         'id' => 'a.id',
         'log_id' => 'b.id',
+        'turns' => 'b.turns',
+        'winner_amber_obtained' => 'b.winner_amber_obtained',
+        'winner_amber_stolen' => 'b.winner_amber_stolen',
+        'winner_cards_played' => 'b.winner_cards_played',
+        'winner_cards_drawn' => 'b.winner_cards_drawn',
+        'winner_cards_discarded' => 'b.winner_cards_discarded',
+        'winner_keys_forged' => 'b.winner_keys_forged',
+        'winner_fights' => 'b.winner_fights',
+        'winner_reaps' => 'b.winner_reaps',
+        'winner_extra_turns' => 'b.winner_extra_turns',
+        'loser_amber_obtained' => 'b.loser_amber_obtained',
+        'loser_amber_stolen' => 'b.loser_amber_stolen',
+        'loser_cards_played' => 'b.loser_cards_played',
+        'loser_cards_drawn' => 'b.loser_cards_drawn',
+        'loser_cards_discarded' => 'b.loser_cards_discarded',
+        'loser_keys_forged' => 'b.loser_keys_forged',
+        'loser_fights' => 'b.loser_fights',
+        'loser_reaps' => 'b.loser_reaps',
+        'loser_extra_turns' => 'b.loser_extra_turns',
+        'total_amber_obtained' => 'b.total_amber_obtained',
+        'total_amber_stolen' => 'b.total_amber_stolen',
+        'total_cards_played' => 'b.total_cards_played',
+        'total_cards_drawn' => 'b.total_cards_drawn',
+        'total_cards_discarded' => 'b.total_cards_discarded',
+        'total_keys_forged' => 'b.total_keys_forged',
+        'total_fights' => 'b.total_fights',
+        'total_reaps' => 'b.total_reaps',
+        'total_extra_turns' => 'b.total_extra_turns',
     ];
 
     public function search(Criteria $criteria): array
@@ -89,9 +117,10 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
         $builder = $this->connection->createQueryBuilder();
 
         $query = $builder->select('count(a.*)')
-            ->from(self::TABLE, 'a');
+            ->from(self::TABLE, 'a')
+            ->leftJoin('a', self::TABLE_GAME_LOG, 'b', 'a.id = b.game_id');
 
-        (new DbalCriteriaAdapter($query))->execute($criteria);
+        new DbalCriteriaAdapter($query, new FieldMapping(self::fieldMapping))->execute($criteria);
 
         return $query->executeQuery()->fetchOne();
     }
@@ -159,10 +188,12 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
                 '
                     INSERT INTO %s (id, game_id, log, created_by, created_at,
                         turns, winner_amber_obtained, winner_amber_stolen, winner_cards_played, winner_cards_drawn, winner_cards_discarded, winner_keys_forged, winner_fights, winner_reaps, winner_extra_turns,
-                        loser_amber_obtained, loser_amber_stolen, loser_cards_played, loser_cards_drawn, loser_cards_discarded, loser_keys_forged, loser_fights, loser_reaps, loser_extra_turns)
+                        loser_amber_obtained, loser_amber_stolen, loser_cards_played, loser_cards_drawn, loser_cards_discarded, loser_keys_forged, loser_fights, loser_reaps, loser_extra_turns,
+                        total_amber_obtained, total_amber_stolen, total_cards_played, total_cards_drawn, total_cards_discarded, total_keys_forged, total_fights, total_reaps, total_extra_turns)
                     VALUES (:id, :game_id, :log, :created_by, :created_at,
                         :turns, :winner_amber_obtained, :winner_amber_stolen, :winner_cards_played, :winner_cards_drawn, :winner_cards_discarded, :winner_keys_forged, :winner_fights, :winner_reaps, :winner_extra_turns,
-                        :loser_amber_obtained, :loser_amber_stolen, :loser_cards_played, :loser_cards_drawn, :loser_cards_discarded, :loser_keys_forged, :loser_fights, :loser_reaps, :loser_extra_turns)
+                        :loser_amber_obtained, :loser_amber_stolen, :loser_cards_played, :loser_cards_drawn, :loser_cards_discarded, :loser_keys_forged, :loser_fights, :loser_reaps, :loser_extra_turns,
+                        :total_amber_obtained, :total_amber_stolen, :total_cards_played, :total_cards_drawn, :total_cards_discarded, :total_keys_forged, :total_fights, :total_reaps, :total_extra_turns)
                     ON CONFLICT (id) DO UPDATE SET
                         id = :id,
                         game_id = :game_id,
@@ -187,7 +218,16 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
                         loser_keys_forged = :loser_keys_forged,
                         loser_fights = :loser_fights,
                         loser_reaps = :loser_reaps,
-                        loser_extra_turns = :loser_extra_turns
+                        loser_extra_turns = :loser_extra_turns,
+                        total_amber_obtained = :total_amber_obtained,
+                        total_amber_stolen = :total_amber_stolen,
+                        total_cards_played = :total_cards_played,
+                        total_cards_drawn = :total_cards_drawn,
+                        total_cards_discarded = :total_cards_discarded,
+                        total_keys_forged = :total_keys_forged,
+                        total_fights = :total_fights,
+                        total_reaps = :total_reaps,
+                        total_extra_turns = :total_extra_turns
                     ',
                 self::TABLE_GAME_LOG,
             ),
@@ -217,6 +257,15 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
         $stmt->bindValue(':loser_fights', $gameLog->loserFights);
         $stmt->bindValue(':loser_reaps', $gameLog->loserReaps);
         $stmt->bindValue(':loser_extra_turns', $gameLog->loserExtraTurns);
+        $stmt->bindValue(':total_amber_obtained', $gameLog->totalAmberObtained);
+        $stmt->bindValue(':total_amber_stolen', $gameLog->totalAmberStolen);
+        $stmt->bindValue(':total_cards_played', $gameLog->totalCardsPlayed);
+        $stmt->bindValue(':total_cards_drawn', $gameLog->totalCardsDrawn);
+        $stmt->bindValue(':total_cards_discarded', $gameLog->totalCardsDiscarded);
+        $stmt->bindValue(':total_keys_forged', $gameLog->totalKeysForged);
+        $stmt->bindValue(':total_fights', $gameLog->totalFights);
+        $stmt->bindValue(':total_reaps', $gameLog->totalReaps);
+        $stmt->bindValue(':total_extra_turns', $gameLog->totalExtraTurns);
 
         $stmt->executeStatement();
     }
@@ -314,6 +363,15 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
             isset($log['loser_fights']) ? (int) $log['loser_fights'] : null,
             isset($log['loser_reaps']) ? (int) $log['loser_reaps'] : null,
             isset($log['loser_extra_turns']) ? (int) $log['loser_extra_turns'] : null,
+            isset($log['total_amber_obtained']) ? (int) $log['total_amber_obtained'] : null,
+            isset($log['total_amber_stolen']) ? (int) $log['total_amber_stolen'] : null,
+            isset($log['total_cards_played']) ? (int) $log['total_cards_played'] : null,
+            isset($log['total_cards_drawn']) ? (int) $log['total_cards_drawn'] : null,
+            isset($log['total_cards_discarded']) ? (int) $log['total_cards_discarded'] : null,
+            isset($log['total_keys_forged']) ? (int) $log['total_keys_forged'] : null,
+            isset($log['total_fights']) ? (int) $log['total_fights'] : null,
+            isset($log['total_reaps']) ? (int) $log['total_reaps'] : null,
+            isset($log['total_extra_turns']) ? (int) $log['total_extra_turns'] : null,
         );
     }
 }

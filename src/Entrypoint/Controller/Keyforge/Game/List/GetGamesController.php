@@ -209,6 +209,45 @@ final class GetGamesController extends Controller
         $queryFilters = $request->query->all();
         [$orderField, $orderDirection] = $this->getOrder($request);
 
+        $logStatKeys = [
+            'turnsMin', 'turnsMax',
+            'winnerAmberObtainedMin', 'winnerAmberObtainedMax',
+            'winnerAmberStolenMin', 'winnerAmberStolenMax',
+            'winnerCardsPlayedMin', 'winnerCardsPlayedMax',
+            'winnerCardsDrawnMin', 'winnerCardsDrawnMax',
+            'winnerCardsDiscardedMin', 'winnerCardsDiscardedMax',
+            'winnerKeysForgedMin', 'winnerKeysForgedMax',
+            'winnerFightsMin', 'winnerFightsMax',
+            'winnerReapsMin', 'winnerReapsMax',
+            'winnerExtraTurnsMin', 'winnerExtraTurnsMax',
+            'loserAmberObtainedMin', 'loserAmberObtainedMax',
+            'loserAmberStolenMin', 'loserAmberStolenMax',
+            'loserCardsPlayedMin', 'loserCardsPlayedMax',
+            'loserCardsDrawnMin', 'loserCardsDrawnMax',
+            'loserCardsDiscardedMin', 'loserCardsDiscardedMax',
+            'loserKeysForgedMin', 'loserKeysForgedMax',
+            'loserFightsMin', 'loserFightsMax',
+            'loserReapsMin', 'loserReapsMax',
+            'loserExtraTurnsMin', 'loserExtraTurnsMax',
+            'totalAmberObtainedMin', 'totalAmberObtainedMax',
+            'totalAmberStolenMin', 'totalAmberStolenMax',
+            'totalCardsPlayedMin', 'totalCardsPlayedMax',
+            'totalCardsDrawnMin', 'totalCardsDrawnMax',
+            'totalCardsDiscardedMin', 'totalCardsDiscardedMax',
+            'totalKeysForgedMin', 'totalKeysForgedMax',
+            'totalFightsMin', 'totalFightsMax',
+            'totalReapsMin', 'totalReapsMax',
+            'totalExtraTurnsMin', 'totalExtraTurnsMax',
+        ];
+
+        $logStats = [];
+        foreach ($logStatKeys as $key) {
+            $value = $request->get($key);
+            if ($value !== null && $value !== '') {
+                $logStats[$key] = $value;
+            }
+        }
+
         try {
             $games = $this->bus->dispatch(new GetGamesQuery(
                 deckId: $request->get('deckId'),
@@ -220,6 +259,7 @@ final class GetGamesController extends Controller
                 approved: true,
                 dateFrom: $request->get('extraFilterDateFrom') ?: null,
                 dateTo: $request->get('extraFilterDateTo') ?: null,
+                logStats: $logStats ?: null,
                 start: $request->get('start'),
                 length: $request->get('length'),
                 orderField: $orderField,

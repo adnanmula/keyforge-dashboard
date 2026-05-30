@@ -54,6 +54,15 @@ final readonly class AnalyzeGameCommandHandler
             loserFights: $lt?->filter(EventType::FIGHT)->count(),
             loserReaps: $lt?->filter(EventType::REAP)->count(),
             loserExtraTurns: $lt?->totalExtraTurns(),
+            totalAmberObtained: $wt !== null && $lt !== null ? $wt->totalAmberObtained() + $lt->totalAmberObtained() : null,
+            totalAmberStolen: $wt !== null && $lt !== null ? $wt->totalAmberStolen() + $lt->totalAmberStolen() : null,
+            totalCardsPlayed: $wt !== null && $lt !== null ? $wt->totalCardsPlayed() + $lt->totalCardsPlayed() : null,
+            totalCardsDrawn: $wt !== null && $lt !== null ? $wt->totalCardsDrawn() + $lt->totalCardsDrawn() : null,
+            totalCardsDiscarded: $wt !== null && $lt !== null ? $wt->totalCardsDiscarded() + $lt->totalCardsDiscarded() : null,
+            totalKeysForged: $wt !== null && $lt !== null ? $wt->filter(EventType::KEY_FORGED)->count() + $lt->filter(EventType::KEY_FORGED)->count() : null,
+            totalFights: $wt !== null && $lt !== null ? $wt->filter(EventType::FIGHT)->count() + $lt->filter(EventType::FIGHT)->count() : null,
+            totalReaps: $wt !== null && $lt !== null ? $wt->filter(EventType::REAP)->count() + $lt->filter(EventType::REAP)->count() : null,
+            totalExtraTurns: $wt !== null && $lt !== null ? $wt->totalExtraTurns() + $lt->totalExtraTurns() : null,
         );
 
         $this->repository->saveLog($gameLog);

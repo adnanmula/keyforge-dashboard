@@ -33,12 +33,13 @@ final readonly class GetGamesQuery extends CriteriaQuery
         $approved = null,
         $dateFrom = null,
         $dateTo = null,
+        $logStats = null,
         $start = null,
         $length = null,
         $orderField = null,
         $orderDirection = null,
     ) {
-        Assert::lazy()
+        $lazy = Assert::lazy()
             ->that($ids, 'ids')->nullOr()->all()->uuid()
             ->that($deckId, 'deckId')->nullOr()->uuid()
             ->that($userId, 'userId')->nullOr()->uuid()
@@ -52,8 +53,13 @@ final readonly class GetGamesQuery extends CriteriaQuery
             ->that($start, 'start')->nullOr()->integerish()->min(0)
             ->that($length, 'length')->nullOr()->integerish()->min(0)
             ->that($orderField, 'orderField')->nullOr()->string()->notBlank()
-            ->that($orderDirection, 'orderDirection')->nullOr()->inArray([OrderType::ASC->value, OrderType::DESC->value])
-            ->verifyNow();
+            ->that($orderDirection, 'orderDirection')->nullOr()->inArray([OrderType::ASC->value, OrderType::DESC->value]);
+
+        foreach ($logStats ?? [] as $key => $value) {
+            $lazy->that($value, "logStats.$key")->nullOr()->integerish()->min(0);
+        }
+
+        $lazy->verifyNow();
 
         $filters = [];
         $filters[] = $this->idFilter(...$ids ?? []);
@@ -65,6 +71,10 @@ final readonly class GetGamesQuery extends CriteriaQuery
         $filters[] = $this->approvedFilter($approved);
         $filters[] = $this->dateFromFilter($dateFrom);
         $filters[] = $this->dateToFilter($dateTo);
+
+        foreach ($this->statFilters($logStats ?? []) as $filter) {
+            $filters[] = $filter;
+        }
 
         $criteria = new Criteria(
             new Filters(FilterType::AND, ...\array_filter($filters)),
@@ -188,6 +198,79 @@ final readonly class GetGamesQuery extends CriteriaQuery
         }
 
         return new Filter(new FilterField('date'), new StringFilterValue($dateTo), FilterOperator::LESS_OR_EQUAL);
+    }
+
+    /** @return array<Filter> */
+    private function statFilters(array $logStats): array
+    {
+        $fields = [
+            'turnsMin' => ['turns', FilterOperator::GREATER_OR_EQUAL],
+            'turnsMax' => ['turns', FilterOperator::LESS_OR_EQUAL],
+            'winnerAmberObtainedMin' => ['winner_amber_obtained', FilterOperator::GREATER_OR_EQUAL],
+            'winnerAmberObtainedMax' => ['winner_amber_obtained', FilterOperator::LESS_OR_EQUAL],
+            'winnerAmberStolenMin' => ['winner_amber_stolen', FilterOperator::GREATER_OR_EQUAL],
+            'winnerAmberStolenMax' => ['winner_amber_stolen', FilterOperator::LESS_OR_EQUAL],
+            'winnerCardsPlayedMin' => ['winner_cards_played', FilterOperator::GREATER_OR_EQUAL],
+            'winnerCardsPlayedMax' => ['winner_cards_played', FilterOperator::LESS_OR_EQUAL],
+            'winnerCardsDrawnMin' => ['winner_cards_drawn', FilterOperator::GREATER_OR_EQUAL],
+            'winnerCardsDrawnMax' => ['winner_cards_drawn', FilterOperator::LESS_OR_EQUAL],
+            'winnerCardsDiscardedMin' => ['winner_cards_discarded', FilterOperator::GREATER_OR_EQUAL],
+            'winnerCardsDiscardedMax' => ['winner_cards_discarded', FilterOperator::LESS_OR_EQUAL],
+            'winnerKeysForgedMin' => ['winner_keys_forged', FilterOperator::GREATER_OR_EQUAL],
+            'winnerKeysForgedMax' => ['winner_keys_forged', FilterOperator::LESS_OR_EQUAL],
+            'winnerFightsMin' => ['winner_fights', FilterOperator::GREATER_OR_EQUAL],
+            'winnerFightsMax' => ['winner_fights', FilterOperator::LESS_OR_EQUAL],
+            'winnerReapsMin' => ['winner_reaps', FilterOperator::GREATER_OR_EQUAL],
+            'winnerReapsMax' => ['winner_reaps', FilterOperator::LESS_OR_EQUAL],
+            'winnerExtraTurnsMin' => ['winner_extra_turns', FilterOperator::GREATER_OR_EQUAL],
+            'winnerExtraTurnsMax' => ['winner_extra_turns', FilterOperator::LESS_OR_EQUAL],
+            'loserAmberObtainedMin' => ['loser_amber_obtained', FilterOperator::GREATER_OR_EQUAL],
+            'loserAmberObtainedMax' => ['loser_amber_obtained', FilterOperator::LESS_OR_EQUAL],
+            'loserAmberStolenMin' => ['loser_amber_stolen', FilterOperator::GREATER_OR_EQUAL],
+            'loserAmberStolenMax' => ['loser_amber_stolen', FilterOperator::LESS_OR_EQUAL],
+            'loserCardsPlayedMin' => ['loser_cards_played', FilterOperator::GREATER_OR_EQUAL],
+            'loserCardsPlayedMax' => ['loser_cards_played', FilterOperator::LESS_OR_EQUAL],
+            'loserCardsDrawnMin' => ['loser_cards_drawn', FilterOperator::GREATER_OR_EQUAL],
+            'loserCardsDrawnMax' => ['loser_cards_drawn', FilterOperator::LESS_OR_EQUAL],
+            'loserCardsDiscardedMin' => ['loser_cards_discarded', FilterOperator::GREATER_OR_EQUAL],
+            'loserCardsDiscardedMax' => ['loser_cards_discarded', FilterOperator::LESS_OR_EQUAL],
+            'loserKeysForgedMin' => ['loser_keys_forged', FilterOperator::GREATER_OR_EQUAL],
+            'loserKeysForgedMax' => ['loser_keys_forged', FilterOperator::LESS_OR_EQUAL],
+            'loserFightsMin' => ['loser_fights', FilterOperator::GREATER_OR_EQUAL],
+            'loserFightsMax' => ['loser_fights', FilterOperator::LESS_OR_EQUAL],
+            'loserReapsMin' => ['loser_reaps', FilterOperator::GREATER_OR_EQUAL],
+            'loserReapsMax' => ['loser_reaps', FilterOperator::LESS_OR_EQUAL],
+            'loserExtraTurnsMin' => ['loser_extra_turns', FilterOperator::GREATER_OR_EQUAL],
+            'loserExtraTurnsMax' => ['loser_extra_turns', FilterOperator::LESS_OR_EQUAL],
+            'totalAmberObtainedMin' => ['total_amber_obtained', FilterOperator::GREATER_OR_EQUAL],
+            'totalAmberObtainedMax' => ['total_amber_obtained', FilterOperator::LESS_OR_EQUAL],
+            'totalAmberStolenMin' => ['total_amber_stolen', FilterOperator::GREATER_OR_EQUAL],
+            'totalAmberStolenMax' => ['total_amber_stolen', FilterOperator::LESS_OR_EQUAL],
+            'totalCardsPlayedMin' => ['total_cards_played', FilterOperator::GREATER_OR_EQUAL],
+            'totalCardsPlayedMax' => ['total_cards_played', FilterOperator::LESS_OR_EQUAL],
+            'totalCardsDrawnMin' => ['total_cards_drawn', FilterOperator::GREATER_OR_EQUAL],
+            'totalCardsDrawnMax' => ['total_cards_drawn', FilterOperator::LESS_OR_EQUAL],
+            'totalCardsDiscardedMin' => ['total_cards_discarded', FilterOperator::GREATER_OR_EQUAL],
+            'totalCardsDiscardedMax' => ['total_cards_discarded', FilterOperator::LESS_OR_EQUAL],
+            'totalKeysForgedMin' => ['total_keys_forged', FilterOperator::GREATER_OR_EQUAL],
+            'totalKeysForgedMax' => ['total_keys_forged', FilterOperator::LESS_OR_EQUAL],
+            'totalFightsMin' => ['total_fights', FilterOperator::GREATER_OR_EQUAL],
+            'totalFightsMax' => ['total_fights', FilterOperator::LESS_OR_EQUAL],
+            'totalReapsMin' => ['total_reaps', FilterOperator::GREATER_OR_EQUAL],
+            'totalReapsMax' => ['total_reaps', FilterOperator::LESS_OR_EQUAL],
+            'totalExtraTurnsMin' => ['total_extra_turns', FilterOperator::GREATER_OR_EQUAL],
+            'totalExtraTurnsMax' => ['total_extra_turns', FilterOperator::LESS_OR_EQUAL],
+        ];
+
+        $filters = [];
+
+        foreach ($fields as $key => [$field, $operator]) {
+            if (isset($logStats[$key]) && $logStats[$key] !== '') {
+                $filters[] = new Filter(new FilterField($field), new IntFilterValue((int) $logStats[$key]), $operator);
+            }
+        }
+
+        return $filters;
     }
 
     private function sorting(?string $field, ?string $dir): ?Sorting
