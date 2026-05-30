@@ -249,6 +249,7 @@ menu.friend_requests: 'Friend requests'
 menu.friends: Friends
 menu.game: Game
 menu.games: Games
+menu.my_games: My games
 menu.games_lost: 'Games lost'
 menu.general_stats: General stats
 menu.house_pr: 'House pick rate'

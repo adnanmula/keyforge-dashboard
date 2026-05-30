@@ -249,6 +249,7 @@ menu.friend_requests: 'Solicitudes de amistad'
 menu.friends: Amigos
 menu.game: Partida
 menu.games: Partidas
+menu.my_games: Mis artidas
 menu.games_lost: 'Partidas perdidas'
 menu.general_stats: Estadísticas generales
 menu.house_pr: 'Pick rate por casa'
