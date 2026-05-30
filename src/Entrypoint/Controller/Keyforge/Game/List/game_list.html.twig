@@ -43,7 +43,67 @@
 </div>
 <div class="divider py-2"></div>
 {% endif %}
-<div class="" style="display: flex; overflow-x: auto">
+<style>
+    .games-scroll-mirror {
+        overflow-x: auto;
+        overflow-y: hidden;
+        scrollbar-width: thin;
+        scrollbar-color: #6c757d transparent;
+        margin-bottom: 4px;
+    }
+    .games-scroll-mirror::-webkit-scrollbar { height: 6px; }
+    .games-scroll-mirror::-webkit-scrollbar-track { background: transparent; }
+    .games-scroll-mirror::-webkit-scrollbar-thumb { background-color: #6c757d; border-radius: 3px; }
+    .games-scroll-mirror-inner { height: 1px; }
+
+    .games-table-wrap {
+        position: relative;
+        overflow-x: auto;
+        border-radius: 0.375rem;
+        scrollbar-width: thin;
+        scrollbar-color: #6c757d transparent;
+        cursor: grab;
+        user-select: none;
+    }
+    .games-table-wrap.is-dragging { cursor: grabbing; }
+    .games-table-wrap::-webkit-scrollbar { height: 6px; }
+    .games-table-wrap::-webkit-scrollbar-track { background: transparent; }
+    .games-table-wrap::-webkit-scrollbar-thumb { background-color: #6c757d; border-radius: 3px; }
+
+    /* scroll-shadow: fade left/right edges when content is cut off */
+    .games-table-wrap::before,
+    .games-table-wrap::after {
+        content: '';
+        position: absolute;
+        top: 0; bottom: 0;
+        width: 32px;
+        pointer-events: none;
+        z-index: 10;
+        transition: opacity .15s;
+    }
+    .games-table-wrap::before { left: 0;  background: linear-gradient(to right, rgba(var(--bs-body-bg-rgb, 255,255,255), .95), transparent); }
+    .games-table-wrap::after  { right: 0; background: linear-gradient(to left,  rgba(var(--bs-body-bg-rgb, 255,255,255), .95), transparent); }
+    .games-table-wrap.scroll-start::before { opacity: 0; }
+    .games-table-wrap.scroll-end::after   { opacity: 0; }
+
+    /* sticky columns */
+    #gamesList thead th:nth-child(1),
+    #gamesList tbody td:nth-child(1) { position: sticky; left: 0;   z-index: 2; background: inherit; }
+    #gamesList thead th:nth-child(2),
+    #gamesList tbody td:nth-child(2) { position: sticky; left: 120px; z-index: 2; background: inherit; }
+    #gamesList thead th:nth-child(3),
+    #gamesList tbody td:nth-child(3) { position: sticky; left: 320px; z-index: 2; background: inherit; }
+    #gamesList thead th:nth-child(4),
+    #gamesList tbody td:nth-child(4) { position: sticky; left: 440px; z-index: 2; background: inherit; }
+    #gamesList thead th:last-child,
+    #gamesList tbody td:last-child   { position: sticky; right: 0;  z-index: 2; background: inherit; }
+
+    #gamesList thead th { background: var(--bs-table-bg, #fff); }
+</style>
+<div class="games-scroll-mirror" id="gamesScrollMirror">
+    <div class="games-scroll-mirror-inner" id="gamesScrollInner"></div>
+</div>
+<div class="games-table-wrap" id="gamesTableWrap">
     <table id="gamesList" class="table table-responsive-sm table-hover" style="width:100%;">
         <thead>
         <tr>
@@ -138,6 +198,61 @@
         return (v !== null && v !== undefined) ? v : '<span class="text-muted">—</span>';
     }
 
+    function updateScrollShadows() {
+        const wrap = document.getElementById('gamesTableWrap');
+        if (!wrap) return;
+        const atStart = wrap.scrollLeft <= 2;
+        const atEnd   = wrap.scrollLeft + wrap.clientWidth >= wrap.scrollWidth - 2;
+        wrap.classList.toggle('scroll-start', atStart);
+        wrap.classList.toggle('scroll-end',   atEnd);
+    }
+
+    function initTableScroll() {
+        const wrap   = document.getElementById('gamesTableWrap');
+        const mirror = document.getElementById('gamesScrollMirror');
+        const inner  = document.getElementById('gamesScrollInner');
+        if (!wrap || !mirror || !inner) return;
+
+        // keep mirror width in sync with table
+        function syncInnerWidth() {
+            inner.style.width = document.getElementById('gamesList').scrollWidth + 'px';
+        }
+        syncInnerWidth();
+        new ResizeObserver(syncInnerWidth).observe(document.getElementById('gamesList'));
+
+        // bidirectional scroll sync (guard re-entrancy)
+        let syncing = false;
+        mirror.addEventListener('scroll', () => { if (!syncing) { syncing = true; wrap.scrollLeft = mirror.scrollLeft; syncing = false; } }, { passive: true });
+        wrap.addEventListener('scroll', () => {
+            if (!syncing) { syncing = true; mirror.scrollLeft = wrap.scrollLeft; syncing = false; }
+            updateScrollShadows();
+        }, { passive: true });
+
+        // drag to scroll
+        let dragging = false, startX = 0, startScroll = 0, moved = false;
+        wrap.addEventListener('mousedown', (e) => {
+            if (e.button !== 0 || e.target.closest('a, button, input, select, th')) return;
+            dragging = true; moved = false;
+            startX = e.pageX;
+            startScroll = wrap.scrollLeft;
+            wrap.classList.add('is-dragging');
+        });
+        document.addEventListener('mousemove', (e) => {
+            if (!dragging) return;
+            const dx = startX - e.pageX;
+            if (Math.abs(dx) > 3) { moved = true; wrap.scrollLeft = startScroll + dx; }
+        });
+        document.addEventListener('mouseup', () => {
+            if (!dragging) return;
+            dragging = false;
+            wrap.classList.remove('is-dragging');
+            // suppress click if it was a drag
+            if (moved) { wrap.addEventListener('click', (e) => e.stopPropagation(), { once: true, capture: true }); }
+        });
+
+        updateScrollShadows();
+    }
+
     $(document).ready(function () {
         prepareSelectors('winner-selector');
         prepareSelectors('loser-selector');
@@ -147,6 +262,8 @@
         if (typeof setGamesFiltersFromUrl === 'function') {
             setGamesFiltersFromUrl();
         }
+
+        initTableScroll();
 
         $('.game_list_filter').change(function (e) {
             $('#gamesList').DataTable().ajax.reload();
@@ -248,10 +365,10 @@
                 );
             },
             drawCallback: function () {
-                $('[data-toggle="tooltip"]').tooltip({
-                    container: 'body',
-                    placement: 'top',
-                });
+                $('[data-toggle="tooltip"]').tooltip({ container: 'body', placement: 'top' });
+                updateScrollShadows();
+                document.getElementById('gamesScrollInner').style.width =
+                    document.getElementById('gamesList').scrollWidth + 'px';
             },
             columns: [
                 { data: 'winner_name' },
