@@ -350,9 +350,11 @@
                     const statIds = ['AmberObtained','AmberStolen','CardsPlayed','CardsDrawn','CardsDiscarded','KeysForged','Fights','Reaps','ExtraTurns','AmberObtained','AmberStolen','CardsPlayed','CardsDrawn','CardsDiscarded','KeysForged','Fights','Reaps','ExtraTurns','AmberObtained','AmberStolen','CardsPlayed','CardsDrawn','CardsDiscarded','KeysForged','Fights','Reaps','ExtraTurns',];
                     const statGroups = ['winner', 'loser', 'total'];
 
-                    const turnsSlider = $('#slider-turns')[0].noUiSlider.get();
-                    d.turnsMin = turnsSlider[0];
-                    d.turnsMax = turnsSlider[1];
+                    if ($('#slider-turns').length > 0) {
+                        const turnsSlider = $('#slider-turns')[0].noUiSlider.get();
+                        d.turnsMin = turnsSlider[0];
+                        d.turnsMax = turnsSlider[1];
+                    }
 
                     statIds.forEach(k => {
                         statGroups.forEach(group => {
@@ -360,10 +362,12 @@
                                 return;
                             }
 
-                            const v = $('#slider-' + group + k)[0].noUiSlider.get();
+                            if ($('#slider-' + group + k).length > 0) {
+                                const v = $('#slider-' + group + k)[0].noUiSlider.get();
 
-                            d[group + k + 'Min'] = v[0];
-                            d[group + k + 'Max'] = v[1];
+                                d[group + k + 'Min'] = v[0];
+                                d[group + k + 'Max'] = v[1];
+                            }
                         })
                     });
                 }
