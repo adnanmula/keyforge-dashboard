@@ -128,44 +128,107 @@
         <hr>
         <p class="text-muted small mb-2">{{ 'menu.log_stats_filters_note'|trans }}</p>
 
-        {% set stats = {
-            turns: 'menu.turns',
-            winnerAmberObtained: 'game.winner_amber',
-            winnerAmberStolen: 'game.winner_amber_stolen',
-            winnerCardsPlayed: 'game.winner_cards_played',
-            winnerCardsDrawn: 'game.winner_cards_drawn',
-            winnerCardsDiscarded: 'game.winner_cards_discarded',
-            winnerFights: 'game.winner_fights',
-            winnerReaps: 'game.winner_reaps',
-            winnerExtraTurns: 'game.winner_extra_turns',
-            loserAmberObtained: 'game.loser_amber',
-            loserAmberStolen: 'game.loser_amber_stolen',
-            loserCardsPlayed: 'game.loser_cards_played',
-            loserCardsDrawn: 'game.loser_cards_drawn',
-            loserCardsDiscarded: 'game.loser_cards_discarded',
-            loserKeysForged: 'game.loser_keys_forged',
-            loserFights: 'game.loser_fights',
-            loserReaps: 'game.loser_reaps',
-            loserExtraTurns: 'game.loser_extra_turns',
-            totalAmberObtained: 'game.total_amber',
-            totalAmberStolen: 'game.total_amber_stolen',
-            totalCardsPlayed: 'game.total_cards_played',
-            totalCardsDrawn: 'game.total_cards_drawn',
-            totalCardsDiscarded: 'game.total_cards_discarded',
-            totalKeysForged: 'game.total_keys_forged',
-            totalFights: 'game.total_fights',
-            totalReaps: 'game.total_reaps',
-            totalExtraTurns: 'game.total_extra_turns'
+        {% set statGroups = {
+            turns: {
+                label: '',
+                stats: { turns: 'menu.turns' }
+            },
+            amberObtained: {
+                label: 'menu.amber_obtained',
+                stats: {
+                    winnerAmberObtained: 'game.winner',
+                    loserAmberObtained: 'game.loser',
+                    totalAmberObtained: 'menu.total'
+                }
+            },
+            amberStolen: {
+                label: 'menu.amber_stolen',
+                stats: {
+                    winnerAmberStolen: 'game.winner',
+                    loserAmberStolen: 'game.loser',
+                    totalAmberStolen: 'menu.total'
+                }
+            },
+            cardsPlayed: {
+                label: 'menu.cards_played',
+                stats: {
+                    winnerCardsPlayed: 'game.winner',
+                    loserCardsPlayed: 'game.loser',
+                    totalCardsPlayed: 'menu.total'
+                }
+            },
+            cardsDrawn: {
+                label: 'menu.cards_drawn',
+                stats: {
+                    winnerCardsDrawn: 'game.winner',
+                    loserCardsDrawn: 'game.loser',
+                    totalCardsDrawn: 'menu.total'
+                }
+            },
+            cardsDiscarded: {
+                label: 'menu.cards_discarded',
+                stats: {
+                    winnerCardsDiscarded: 'game.winner',
+                    loserCardsDiscarded: 'game.loser',
+                    totalCardsDiscarded: 'menu.total'
+                }
+            },
+            keysForged: {
+                label: 'menu.keys_forged',
+                stats: {
+                    loserKeysForged: 'game.loser',
+                    totalKeysForged: 'menu.total'
+                }
+            },
+            fights: {
+                label: 'menu.fights',
+                stats: {
+                    winnerFights: 'game.winner',
+                    loserFights: 'game.loser',
+                    totalFights: 'menu.total'
+                }
+            },
+            reaps: {
+                label: 'menu.reaps',
+                stats: {
+                    winnerReaps: 'game.winner',
+                    loserReaps: 'game.loser',
+                    totalReaps: 'menu.total'
+                }
+            },
+            extraTurns: {
+                label: 'menu.extra_turns',
+                stats: {
+                    winnerExtraTurns: 'game.winner',
+                    loserExtraTurns: 'game.loser',
+                    totalExtraTurns: 'menu.total'
+                }
+            }
         } %}
 
+        {% set allStatKeys = [] %}
+        {% for groupKey, group in statGroups %}
+            {% for key, label in group.stats %}
+                {% set allStatKeys = allStatKeys|merge([key]) %}
+            {% endfor %}
+        {% endfor %}
 
-        {% for statKey,statLabel in stats %}
-            <div class="ms-2 me-3">
-                <label class="form-label fw-semibold mb-3">{{ statLabel|trans }}</label>
+        {% for groupKey, group in statGroups %}
+            <div class="mt-3">
+                <p class="fw-bold mb-2 border-bottom pb-1">{{ group.label|trans }}</p>
+                {% for statKey, statLabel in group.stats %}
+                    <div class="ms-2 me-3">
+                        <div class="d-flex align-items-start mb-1">
+                            <label class="form-label fw-semibold mb-0" style="width: 80px;">
+                                {{ statLabel|trans }}
+                            </label>
 
-                <div class="row g-1">
-                    <div id="slider-{{ statKey }}" class="slider-stat"></div>
-                </div>
+                            <div class="flex-grow-1">
+                                <div id="slider-{{ statKey }}" class="slider-stat mt-3"></div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
             </div>
         {% endfor %}
     </div>
@@ -184,13 +247,22 @@
 </div>
 
 <script>
-    const statSliders = JSON.parse('{{ stats|keys|json_encode|raw }}');
+    const statSliders = JSON.parse('{{ allStatKeys|json_encode|raw }}');
 
     let statKeys = [];
     statSliders.forEach(function (key) {
         statKeys.push(key + 'Min');
         statKeys.push(key + 'Max');
     });
+
+    const statsMax = {
+        turns: 40,
+        loserKeysForged: 2,
+        totalKeysForged: 5,
+        winnerExtraTurns: 10,
+        loserExtraTurns: 10,
+        totalExtraTurns: 10,
+    }
 
     function updateGamesUrlFromFilters() {
         const params = new URLSearchParams();
@@ -211,7 +283,8 @@
                 params.set(k + 'Min', v[0])
             }
 
-            if ('' !== v[1] && 100 !== v[1]) {
+            let statMax = statsMax[k] ?? 100;
+            if ('' !== v[1] && statMax !== v[1]) {
                 params.set(k + 'Max', v[1])
             }
         });
@@ -262,15 +335,20 @@
         });
     });
 
-    statSliders.forEach(function (key, label) {
+    statSliders.forEach(function (key) {
         let slider = document.getElementById('slider-'+key);
 
+        let max = 100;
+        if (statsMax[key]) {
+            max = statsMax[key];
+        }
+
         noUiSlider.create(slider, {
-            start: [0, 100],
+            start: [0, max],
             tooltips: true,
             step: 1,
             connect: true,
-            range: { min: 0, max: 100 },
+            range: { min: 0, max: max },
             format: {
                 to: function (value) { return Number(value) },
                 from: function (value) { return Number(value) }
