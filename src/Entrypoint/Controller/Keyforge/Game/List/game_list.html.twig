@@ -295,10 +295,6 @@
         prepareSelectors('score-selector');
         prepareSelectors('competition-selector');
 
-        if (typeof setGamesFiltersFromUrl === 'function') {
-            setGamesFiltersFromUrl();
-        }
-
         $('.game_list_filter').change(function (e) {
             $('#gamesList').DataTable().ajax.reload();
         });

@@ -1,3 +1,66 @@
+{% block header %}
+    <style>
+        .slider-stat {
+            height: 6px;
+            margin: 0 10px 34px;
+            border: 0;
+            border-radius: 999px;
+            background: #e9ecef;
+            box-shadow: none;
+        }
+
+        .slider-stat .noUi-base,
+        .slider-stat .noUi-connects {
+            border-radius: 999px;
+        }
+
+        .slider-stat .noUi-connect {
+            background: #111;
+        }
+
+        .slider-stat .noUi-handle {
+            width: 18px;
+            height: 18px;
+            top: -6px;
+            right: -9px;
+            border: 2px solid #111;
+            border-radius: 50%;
+            background: #fff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .18);
+            cursor: grab;
+        }
+
+        .slider-stat .noUi-handle:active {
+            cursor: grabbing;
+            transform: scale(.96);
+        }
+
+        .slider-stat .noUi-handle::before,
+        .slider-stat .noUi-handle::after {
+            display: none;
+        }
+
+        .slider-stat .noUi-tooltip {
+            bottom: -30px;
+            padding: 2px 7px;
+            border: 0;
+            border-radius: 999px;
+            background: #111;
+            color: #fff;
+            font-size: 11px;
+            font-weight: 600;
+            line-height: 1.3;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .16);
+        }
+
+        .slider-stat .noUi-touch-area {
+            border-radius: 50%;
+        }
+
+
+    </style>
+{% endblock %}
+
 <div class="row">
     <div>
         <a style="position: fixed; bottom: 20px; right: 20px; z-index: 99999" class="btn btn-dark" data-bs-toggle="offcanvas" href="#games-filters" role="button" aria-expanded="false"><i class="bi bi-filter"></i></a>
@@ -65,214 +128,43 @@
         <hr>
         <p class="text-muted small mb-2">{{ 'menu.log_stats_filters_note'|trans }}</p>
 
-        {% set statGroups = [
-            {
-                label: 'menu.turns',
-                stats: [
-                    {key: 'turnsMin', label: 'menu.min'},
-                    {key: 'turnsMax', label: 'menu.max'},
-                ]
-            },
-            {
-                label: 'game.winner_amber',
-                stats: [
-                    {key: 'winnerAmberObtainedMin', label: 'menu.min'},
-                    {key: 'winnerAmberObtainedMax', label: 'menu.max'},
-                ]
-            },
-            {
-                label: 'game.winner_amber_stolen',
-                stats: [
-                    {key: 'winnerAmberStolenMin', label: 'menu.min'},
-                    {key: 'winnerAmberStolenMax', label: 'menu.max'},
-                ]
-            },
-            {
-                label: 'game.winner_cards_played',
-                stats: [
-                    {key: 'winnerCardsPlayedMin', label: 'menu.min'},
-                    {key: 'winnerCardsPlayedMax', label: 'menu.max'},
-                ]
-            },
-            {
-                label: 'game.winner_cards_drawn',
-                stats: [
-                    {key: 'winnerCardsDrawnMin', label: 'menu.min'},
-                    {key: 'winnerCardsDrawnMax', label: 'menu.max'},
-                ]
-            },
-            {
-                label: 'game.winner_cards_discarded',
-                stats: [
-                    {key: 'winnerCardsDiscardedMin', label: 'menu.min'},
-                    {key: 'winnerCardsDiscardedMax', label: 'menu.max'},
-                ]
-            },
-            {
-                label: 'game.winner_keys_forged',
-                stats: [
-                    {key: 'winnerKeysForgedMin', label: 'menu.min'},
-                    {key: 'winnerKeysForgedMax', label: 'menu.max'},
-                ]
-            },
-            {
-                label: 'game.winner_fights',
-                stats: [
-                    {key: 'winnerFightsMin', label: 'menu.min'},
-                    {key: 'winnerFightsMax', label: 'menu.max'},
-                ]
-            },
-            {
-                label: 'game.winner_reaps',
-                stats: [
-                    {key: 'winnerReapsMin', label: 'menu.min'},
-                    {key: 'winnerReapsMax', label: 'menu.max'},
-                ]
-            },
-            {
-                label: 'game.winner_extra_turns',
-                stats: [
-                    {key: 'winnerExtraTurnsMin', label: 'menu.min'},
-                    {key: 'winnerExtraTurnsMax', label: 'menu.max'},
-                ]
-            },
-            {
-                label: 'game.loser_amber',
-                stats: [
-                    {key: 'loserAmberObtainedMin', label: 'menu.min'},
-                    {key: 'loserAmberObtainedMax', label: 'menu.max'},
-                ]
-            },
-            {
-                label: 'game.loser_amber_stolen',
-                stats: [
-                    {key: 'loserAmberStolenMin', label: 'menu.min'},
-                    {key: 'loserAmberStolenMax', label: 'menu.max'},
-                ]
-            },
-            {
-                label: 'game.loser_cards_played',
-                stats: [
-                    {key: 'loserCardsPlayedMin', label: 'menu.min'},
-                    {key: 'loserCardsPlayedMax', label: 'menu.max'},
-                ]
-            },
-            {
-                label: 'game.loser_cards_drawn',
-                stats: [
-                    {key: 'loserCardsDrawnMin', label: 'menu.min'},
-                    {key: 'loserCardsDrawnMax', label: 'menu.max'},
-                ]
-            },
-            {
-                label: 'game.loser_cards_discarded',
-                stats: [
-                    {key: 'loserCardsDiscardedMin', label: 'menu.min'},
-                    {key: 'loserCardsDiscardedMax', label: 'menu.max'},
-                ]
-            },
-            {
-                label: 'game.loser_keys_forged',
-                stats: [
-                    {key: 'loserKeysForgedMin', label: 'menu.min'},
-                    {key: 'loserKeysForgedMax', label: 'menu.max'},
-                ]
-            },
-            {
-                label: 'game.loser_fights',
-                stats: [
-                    {key: 'loserFightsMin', label: 'menu.min'},
-                    {key: 'loserFightsMax', label: 'menu.max'},
-                ]
-            },
-            {
-                label: 'game.loser_reaps',
-                stats: [
-                    {key: 'loserReapsMin', label: 'menu.min'},
-                    {key: 'loserReapsMax', label: 'menu.max'},
-                ]
-            },
-            {
-                label: 'game.loser_extra_turns',
-                stats: [
-                    {key: 'loserExtraTurnsMin', label: 'menu.min'},
-                    {key: 'loserExtraTurnsMax', label: 'menu.max'},
-                ]
-            },
-            {
-                label: 'game.total_amber',
-                stats: [
-                    {key: 'totalAmberObtainedMin', label: 'menu.min'},
-                    {key: 'totalAmberObtainedMax', label: 'menu.max'},
-                ]
-            },
-            {
-                label: 'game.total_amber_stolen',
-                stats: [
-                    {key: 'totalAmberStolenMin', label: 'menu.min'},
-                    {key: 'totalAmberStolenMax', label: 'menu.max'},
-                ]
-            },
-            {
-                label: 'game.total_cards_played',
-                stats: [
-                    {key: 'totalCardsPlayedMin', label: 'menu.min'},
-                    {key: 'totalCardsPlayedMax', label: 'menu.max'},
-                ]
-            },
-            {
-                label: 'game.total_cards_drawn',
-                stats: [
-                    {key: 'totalCardsDrawnMin', label: 'menu.min'},
-                    {key: 'totalCardsDrawnMax', label: 'menu.max'},
-                ]
-            },
-            {
-                label: 'game.total_cards_discarded',
-                stats: [
-                    {key: 'totalCardsDiscardedMin', label: 'menu.min'},
-                    {key: 'totalCardsDiscardedMax', label: 'menu.max'},
-                ]
-            },
-            {
-                label: 'game.total_keys_forged',
-                stats: [
-                    {key: 'totalKeysForgedMin', label: 'menu.min'},
-                    {key: 'totalKeysForgedMax', label: 'menu.max'},
-                ]
-            },
-            {
-                label: 'game.total_fights',
-                stats: [
-                    {key: 'totalFightsMin', label: 'menu.min'},
-                    {key: 'totalFightsMax', label: 'menu.max'},
-                ]
-            },
-            {
-                label: 'game.total_reaps',
-                stats: [
-                    {key: 'totalReapsMin', label: 'menu.min'},
-                    {key: 'totalReapsMax', label: 'menu.max'},
-                ]
-            },
-            {
-                label: 'game.total_extra_turns',
-                stats: [
-                    {key: 'totalExtraTurnsMin', label: 'menu.min'},
-                    {key: 'totalExtraTurnsMax', label: 'menu.max'},
-                ]
-            },
-        ] %}
+        {% set stats = {
+            turns: 'menu.turns',
+            winnerAmberObtained: 'game.winner_amber',
+            winnerAmberStolen: 'game.winner_amber_stolen',
+            winnerCardsPlayed: 'game.winner_cards_played',
+            winnerCardsDrawn: 'game.winner_cards_drawn',
+            winnerCardsDiscarded: 'game.winner_cards_discarded',
+            winnerFights: 'game.winner_fights',
+            winnerReaps: 'game.winner_reaps',
+            winnerExtraTurns: 'game.winner_extra_turns',
+            loserAmberObtained: 'game.loser_amber',
+            loserAmberStolen: 'game.loser_amber_stolen',
+            loserCardsPlayed: 'game.loser_cards_played',
+            loserCardsDrawn: 'game.loser_cards_drawn',
+            loserCardsDiscarded: 'game.loser_cards_discarded',
+            loserKeysForged: 'game.loser_keys_forged',
+            loserFights: 'game.loser_fights',
+            loserReaps: 'game.loser_reaps',
+            loserExtraTurns: 'game.loser_extra_turns',
+            totalAmberObtained: 'game.total_amber',
+            totalAmberStolen: 'game.total_amber_stolen',
+            totalCardsPlayed: 'game.total_cards_played',
+            totalCardsDrawn: 'game.total_cards_drawn',
+            totalCardsDiscarded: 'game.total_cards_discarded',
+            totalKeysForged: 'game.total_keys_forged',
+            totalFights: 'game.total_fights',
+            totalReaps: 'game.total_reaps',
+            totalExtraTurns: 'game.total_extra_turns'
+        } %}
 
-        {% for group in statGroups %}
-            <div class="mb-2">
-                <label class="form-label fw-bold mb-1">{{ group.label|trans }}</label>
+
+        {% for statKey,statLabel in stats %}
+            <div class="ms-2 me-3">
+                <label class="form-label fw-semibold mb-3">{{ statLabel|trans }}</label>
+
                 <div class="row g-1">
-                    {% for stat in group.stats %}
-                        <div class="col-6">
-                            <input type="number" id="stat-{{ stat.key }}" class="form-control form-control-sm" placeholder="{{ stat.label|trans }}" min="0">
-                        </div>
-                    {% endfor %}
+                    <div id="slider-{{ statKey }}" class="slider-stat"></div>
                 </div>
             </div>
         {% endfor %}
@@ -292,36 +184,13 @@
 </div>
 
 <script>
-    const statKeys = [
-        'turnsMin','turnsMax',
-        'winnerAmberObtainedMin','winnerAmberObtainedMax',
-        'winnerAmberStolenMin','winnerAmberStolenMax',
-        'winnerCardsPlayedMin','winnerCardsPlayedMax',
-        'winnerCardsDrawnMin','winnerCardsDrawnMax',
-        'winnerCardsDiscardedMin','winnerCardsDiscardedMax',
-        'winnerKeysForgedMin','winnerKeysForgedMax',
-        'winnerFightsMin','winnerFightsMax',
-        'winnerReapsMin','winnerReapsMax',
-        'winnerExtraTurnsMin','winnerExtraTurnsMax',
-        'loserAmberObtainedMin','loserAmberObtainedMax',
-        'loserAmberStolenMin','loserAmberStolenMax',
-        'loserCardsPlayedMin','loserCardsPlayedMax',
-        'loserCardsDrawnMin','loserCardsDrawnMax',
-        'loserCardsDiscardedMin','loserCardsDiscardedMax',
-        'loserKeysForgedMin','loserKeysForgedMax',
-        'loserFightsMin','loserFightsMax',
-        'loserReapsMin','loserReapsMax',
-        'loserExtraTurnsMin','loserExtraTurnsMax',
-        'totalAmberObtainedMin','totalAmberObtainedMax',
-        'totalAmberStolenMin','totalAmberStolenMax',
-        'totalCardsPlayedMin','totalCardsPlayedMax',
-        'totalCardsDrawnMin','totalCardsDrawnMax',
-        'totalCardsDiscardedMin','totalCardsDiscardedMax',
-        'totalKeysForgedMin','totalKeysForgedMax',
-        'totalFightsMin','totalFightsMax',
-        'totalReapsMin','totalReapsMax',
-        'totalExtraTurnsMin','totalExtraTurnsMax',
-    ];
+    const statSliders = JSON.parse('{{ stats|keys|json_encode|raw }}');
+
+    let statKeys = [];
+    statSliders.forEach(function (key) {
+        statKeys.push(key + 'Min');
+        statKeys.push(key + 'Max');
+    });
 
     function updateGamesUrlFromFilters() {
         const params = new URLSearchParams();
@@ -335,9 +204,16 @@
         if ($('#date-from-selector').val()) params.set('date_from', $('#date-from-selector').val());
         if ($('#date-to-selector').val()) params.set('date_to', $('#date-to-selector').val());
 
-        statKeys.forEach(k => {
-            const v = $('#stat-' + k).val();
-            if (v !== '') params.set(k, v);
+        statSliders.forEach(k => {
+            const v = $('#slider-' + k)[0].noUiSlider.get();
+
+            if ('' !== v[0] && 0 !== v[0]) {
+                params.set(k + 'Min', v[0])
+            }
+
+            if ('' !== v[1] && 100 !== v[1]) {
+                params.set(k + 'Max', v[1])
+            }
         });
 
         const base = window.location.pathname + (params.toString() ? ('?' + params.toString()) : '');
@@ -357,7 +233,15 @@
         if (params.has('date_from')) $('#date-from-selector').val(params.get('date_from'));
         if (params.has('date_to')) $('#date-to-selector').val(params.get('date_to'));
 
-        statKeys.forEach(k => { if (params.has(k)) $('#stat-' + k).val(params.get(k)); });
+        statSliders.forEach(k => {
+            if (params.has(k+'Min')) {
+                $('#slider-' + k)[0].noUiSlider.set([params.get(k+'Min'), null]);
+            }
+
+            if (params.has(k+'Max')) {
+                $('#slider-' + k)[0].noUiSlider.set([null, params.get(k+'Max')]);
+            }
+        });
     }
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -377,4 +261,100 @@
             location.reload();
         });
     });
+
+    statSliders.forEach(function (key, label) {
+        let slider = document.getElementById('slider-'+key);
+
+        noUiSlider.create(slider, {
+            start: [0, 100],
+            tooltips: true,
+            step: 1,
+            connect: true,
+            range: { min: 0, max: 100 },
+            format: {
+                to: function (value) { return Number(value) },
+                from: function (value) { return Number(value) }
+            }
+        });
+
+        mergeTooltips(slider, 15, ' - ');
+    });
+
+    /**
+     * @param slider HtmlElement with an initialized slider
+     * @param threshold Minimum proximity (in percentages) to merge tooltips
+     * @param separator String joining tooltips
+     */
+    function mergeTooltips(slider, threshold, separator) {
+        var textIsRtl = getComputedStyle(slider).direction === 'rtl';
+        var isRtl = slider.noUiSlider.options.direction === 'rtl';
+        var isVertical = slider.noUiSlider.options.orientation === 'vertical';
+        var tooltips = slider.noUiSlider.getTooltips();
+        var origins = slider.noUiSlider.getOrigins();
+
+        // Move tooltips into the origin element. The default stylesheet handles this.
+        tooltips.forEach(function (tooltip, index) {
+            if (tooltip) {
+                origins[index].appendChild(tooltip);
+            }
+        });
+
+        slider.noUiSlider.on('update', function (values, handle, unencoded, tap, positions) {
+            var pools = [[]];
+            var poolPositions = [[]];
+            var poolValues = [[]];
+            var atPool = 0;
+
+            // Assign the first tooltip to the first pool, if the tooltip is configured
+            if (tooltips[0]) {
+                pools[0][0] = 0;
+                poolPositions[0][0] = positions[0];
+                poolValues[0][0] = values[0];
+            }
+
+            for (var i = 1; i < positions.length; i++) {
+                if (!tooltips[i] || (positions[i] - positions[i - 1]) > threshold) {
+                    atPool++;
+                    pools[atPool] = [];
+                    poolValues[atPool] = [];
+                    poolPositions[atPool] = [];
+                }
+
+                if (tooltips[i]) {
+                    pools[atPool].push(i);
+                    poolValues[atPool].push(values[i]);
+                    poolPositions[atPool].push(positions[i]);
+                }
+            }
+
+            pools.forEach(function (pool, poolIndex) {
+                var handlesInPool = pool.length;
+
+                for (var j = 0; j < handlesInPool; j++) {
+                    var handleNumber = pool[j];
+
+                    if (j === handlesInPool - 1) {
+                        var offset = 0;
+
+                        poolPositions[poolIndex].forEach(function (value) {
+                            offset += 1000 - value;
+                        });
+
+                        var direction = isVertical ? 'bottom' : 'right';
+                        var last = isRtl ? 0 : handlesInPool - 1;
+                        var lastOffset = 1000 - poolPositions[poolIndex][last];
+                        offset = (textIsRtl && !isVertical ? 100 : 0) + (offset / handlesInPool) - lastOffset;
+
+                        // Center this tooltip over the affected handles
+                        tooltips[handleNumber].innerHTML = poolValues[poolIndex].join(separator);
+                        tooltips[handleNumber].style.display = 'block';
+                        tooltips[handleNumber].style[direction] = offset + '%';
+                    } else {
+                        // Hide this tooltip
+                        tooltips[handleNumber].style.display = 'none';
+                    }
+                }
+            });
+        });
+    }
 </script>

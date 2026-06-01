@@ -34,6 +34,34 @@ final class Games extends AbstractMigration
                 log jsonb NOT NULL,
                 created_by character varying(64) NULL,
                 created_at TIMESTAMP WITH TIME ZONE NOT NULL,
+                turns INTEGER NULL,
+                winner_amber_obtained INTEGER NULL,
+                winner_amber_stolen INTEGER NULL,
+                winner_cards_played INTEGER NULL,
+                winner_cards_drawn INTEGER NULL,
+                winner_cards_discarded INTEGER NULL,
+                winner_keys_forged INTEGER NULL,
+                winner_fights INTEGER NULL,
+                winner_reaps INTEGER NULL,
+                winner_extra_turns INTEGER NULL,
+                loser_amber_obtained INTEGER NULL,
+                loser_amber_stolen INTEGER NULL,
+                loser_cards_played INTEGER NULL,
+                loser_cards_drawn INTEGER NULL,
+                loser_cards_discarded INTEGER NULL,
+                loser_keys_forged INTEGER NULL,
+                loser_fights INTEGER NULL,
+                loser_reaps INTEGER NULL,
+                loser_extra_turns INTEGER NULL,
+                total_amber_obtained INTEGER NULL,
+                total_amber_stolen INTEGER NULL,
+                total_cards_played INTEGER NULL,
+                total_cards_drawn INTEGER NULL,
+                total_cards_discarded INTEGER NULL,
+                total_keys_forged INTEGER NULL,
+                total_fights INTEGER NULL,
+                total_reaps INTEGER NULL,
+                total_extra_turns INTEGER NULL,
                 PRIMARY KEY(id)
             )',
         );
@@ -77,6 +105,7 @@ final class Games extends AbstractMigration
     {
         $this->execute('DROP TABLE IF EXISTS "keyforge_competition_fixtures"');
         $this->execute('DROP TABLE IF EXISTS "keyforge_competitions"');
+        $this->execute('DROP TABLE IF EXISTS "keyforge_game_logs"');
         $this->execute('DROP TABLE IF EXISTS "keyforge_games"');
     }
 }
