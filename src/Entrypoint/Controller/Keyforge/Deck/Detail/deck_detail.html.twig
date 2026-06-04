@@ -17,9 +17,33 @@
     {% include 'Keyforge/Deck/Detail/deck.html.twig' with {'owners': deck_owners} %}
     {% include 'Keyforge/Deck/Detail/deck_stats.html.twig' %}
     {% include 'Keyforge/Deck/Detail/deck_graphs.html.twig' with {'deck': deck, 'deck_card_types': deck_card_types} %}
-{#    {% include 'Keyforge/Deck/Detail/deck_analysis.html.twig' %}#}
     {% include 'Keyforge/Deck/Detail/deck_history.html.twig' with {'deck_history': deck_history} %}
     {% include 'Keyforge/Deck/Detail/deck_badges.html.twig' %}
+
+    {% set statsMax = {
+        turns: 30,
+        winnerAmberObtained: 50,
+        loserAmberObtained: 50,
+        totalAmberObtained: 100,
+        winnerAmberStolen: 30,
+        loserAmberStolen: 30,
+        totalAmberStolen: 50,
+        winnerCardsDiscarded: 40,
+        loserCardsDiscarded: 40,
+        totalCardsDiscarded: 50,
+        totalCardsDrawn: 120,
+        winnerReaps: 30,
+        loserReaps: 30,
+        totalReaps: 50,
+        winnerFights: 30,
+        loserFights: 30,
+        totalFights: 50,
+        loserKeysForged: 2,
+        totalKeysForged: 5,
+        winnerExtraTurns: 5,
+        loserExtraTurns: 5,
+        totalExtraTurns: 10,
+    } %}
 
     <div class="shadow-lg p-3 mb-5 bg-white rounded">
         {% include 'Keyforge/Game/List/game_list.html.twig' with {
@@ -28,6 +52,8 @@
             'userId': userId,
             'reference_type': 'winner_deck',
             'friends': indexed_friends,
+            'show_inline_filters': true,
+            'statsMax': statsMax,
         } %}
     </div>
 

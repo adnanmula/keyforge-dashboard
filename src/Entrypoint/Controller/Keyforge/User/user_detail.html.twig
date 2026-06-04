@@ -85,6 +85,31 @@
 
     <div class="divider py-2"></div>
 
+    {% set statsMax = {
+        turns: 30,
+        winnerAmberObtained: 50,
+        loserAmberObtained: 50,
+        totalAmberObtained: 100,
+        winnerAmberStolen: 30,
+        loserAmberStolen: 30,
+        totalAmberStolen: 50,
+        winnerCardsDiscarded: 40,
+        loserCardsDiscarded: 40,
+        totalCardsDiscarded: 50,
+        totalCardsDrawn: 120,
+        winnerReaps: 30,
+        loserReaps: 30,
+        totalReaps: 50,
+        winnerFights: 30,
+        loserFights: 30,
+        totalFights: 50,
+        loserKeysForged: 2,
+        totalKeysForged: 5,
+        winnerExtraTurns: 5,
+        loserExtraTurns: 5,
+        totalExtraTurns: 10,
+    } %}
+
     <div class="shadow-lg p-3 mb-5 bg-white rounded">
         {% include 'Keyforge/Game/List/game_list.html.twig' with {
             'deck_reference': null,
@@ -92,6 +117,8 @@
             'reference': reference,
             'reference_type': 'winner',
             'friends': indexed_friends,
+            'show_inline_filters': true,
+            'statsMax': statsMax,
         } %}
     </div>
 

@@ -1,0 +1,482 @@
+{% block header %}
+    <style>
+        .slider-stat {
+            height: 6px;
+            margin: 0 10px 34px;
+            border: 0;
+            border-radius: 999px;
+            background: #e9ecef;
+            box-shadow: none;
+        }
+
+        .slider-stat .noUi-base,
+        .slider-stat .noUi-connects {
+            border-radius: 999px;
+        }
+
+        .slider-stat .noUi-connect {
+            background: #111;
+        }
+
+        .slider-stat .noUi-handle {
+            width: 18px;
+            height: 18px;
+            top: -6px;
+            right: -9px;
+            border: 2px solid #111;
+            border-radius: 50%;
+            background: #fff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .18);
+            cursor: grab;
+        }
+
+        .slider-stat .noUi-handle:active {
+            cursor: grabbing;
+            transform: scale(.96);
+        }
+
+        .slider-stat .noUi-handle::before,
+        .slider-stat .noUi-handle::after {
+            display: none;
+        }
+
+        .slider-stat .noUi-tooltip {
+            bottom: -30px;
+            padding: 2px 7px;
+            border: 0;
+            border-radius: 999px;
+            background: #111;
+            color: #fff;
+            font-size: 11px;
+            font-weight: 600;
+            line-height: 1.3;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .16);
+        }
+
+        .slider-stat .noUi-touch-area {
+            border-radius: 50%;
+        }
+
+
+    </style>
+{% endblock %}
+
+<div class="row">
+    <div>
+        <a style="position: fixed; bottom: 20px; right: 20px; z-index: 99999" class="btn btn-dark" data-bs-toggle="offcanvas" href="#games-filters" role="button" aria-expanded="false"><i class="bi bi-filter"></i></a>
+    </div>
+</div>
+<div class="offcanvas offcanvas-start filters-margin" tabindex="-1" id="games-filters" data-bs-scroll="true" data-bs-backdrop="false" style="z-index: 1000">
+    <div class="offcanvas-header">
+        <h5>{{ 'menu.filters'|trans }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+    </div>
+    <div class="offcanvas-body" style="overflow-x: hidden">
+        <div class="mb-3">
+            <label for="winner-selector" class="form-label fw-bold">{{ 'game.winner'|trans }}</label>
+            <select id="winner-selector" class="form-select">
+                {% for id, name in friends %}
+                    <option value="{{ id }}">{{ name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="loser-selector" class="form-label fw-bold">{{ 'game.loser'|trans }}</label>
+            <select id="loser-selector" class="form-select">
+                {% for id, name in friends %}
+                    <option value="{{ id }}">{{ name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="score-selector" class="form-label fw-bold">{{ 'game.keys'|trans }}</label>
+            <select id="score-selector" class="form-select">
+                <option value="2">3/2</option>
+                <option value="1">3/1</option>
+                <option value="0">3/0</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="competition-selector" class="form-label fw-bold">{{ 'game.competition'|trans }}</label>
+            <select id="competition-selector" class="form-select">
+                <option value="SOLO">{{ 'game.solo'|trans }}</option>
+                <option value="FRIENDS">{{ 'game.with_friends'|trans }}</option>
+                <option value="TCO_CASUAL">{{ 'game.tco_casual'|trans }}</option>
+                <option value="TCO_COMPETITIVE">{{ 'game.tco_competitive'|trans }}</option>
+                <option value="LGS">{{ 'game.lgs'|trans }}</option>
+                <option value="VT">{{ 'game.vt'|trans }}</option>
+                <option value="NATIONAL">{{ 'game.national'|trans }}</option>
+                <option value="NKFL">{{ 'game.nkfl'|trans }}</option>
+                <option value="LOCAL_LEAGUE">{{ 'game.local_league'|trans }}</option>
+                <option value="FRIENDS_LEAGUE">{{ 'game.friends_league'|trans }}</option>
+            </select>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-6">
+                <label for="date-from-selector" class="form-label fw-bold">{{ 'menu.date_from'|trans }}</label>
+                <input type="date" id="date-from-selector" class="form-control">
+            </div>
+            <div class="col-6">
+                <label for="date-to-selector" class="form-label fw-bold">{{ 'menu.date_to'|trans }}</label>
+                <input type="date" id="date-to-selector" class="form-control">
+            </div>
+        </div>
+
+        <hr>
+
+        {% set statGroups = {
+            turns: {
+                label: '',
+                stats: { turns: 'menu.turns' }
+            },
+            amberObtained: {
+                label: 'menu.amber_obtained',
+                stats: {
+                    winnerAmberObtained: 'game.winner',
+                    loserAmberObtained: 'game.loser',
+                    totalAmberObtained: 'menu.total'
+                }
+            },
+            amberStolen: {
+                label: 'menu.amber_stolen',
+                stats: {
+                    winnerAmberStolen: 'game.winner',
+                    loserAmberStolen: 'game.loser',
+                    totalAmberStolen: 'menu.total'
+                }
+            },
+            cardsPlayed: {
+                label: 'menu.cards_played',
+                stats: {
+                    winnerCardsPlayed: 'game.winner',
+                    loserCardsPlayed: 'game.loser',
+                    totalCardsPlayed: 'menu.total'
+                }
+            },
+            cardsDrawn: {
+                label: 'menu.cards_drawn',
+                stats: {
+                    winnerCardsDrawn: 'game.winner',
+                    loserCardsDrawn: 'game.loser',
+                    totalCardsDrawn: 'menu.total'
+                }
+            },
+            cardsDiscarded: {
+                label: 'menu.cards_discarded',
+                stats: {
+                    winnerCardsDiscarded: 'game.winner',
+                    loserCardsDiscarded: 'game.loser',
+                    totalCardsDiscarded: 'menu.total'
+                }
+            },
+            keysForged: {
+                label: 'menu.keys_forged',
+                stats: {
+                    loserKeysForged: 'game.loser',
+                    totalKeysForged: 'menu.total'
+                }
+            },
+            fights: {
+                label: 'menu.fights',
+                stats: {
+                    winnerFights: 'game.winner',
+                    loserFights: 'game.loser',
+                    totalFights: 'menu.total'
+                }
+            },
+            reaps: {
+                label: 'menu.reaps',
+                stats: {
+                    winnerReaps: 'game.winner',
+                    loserReaps: 'game.loser',
+                    totalReaps: 'menu.total'
+                }
+            },
+            extraTurns: {
+                label: 'menu.extra_turns',
+                stats: {
+                    winnerExtraTurns: 'game.winner',
+                    loserExtraTurns: 'game.loser',
+                    totalExtraTurns: 'menu.total'
+                }
+            }
+        } %}
+
+        {% set allStatKeys = [] %}
+        {% for groupKey, group in statGroups %}
+            {% for key, label in group.stats %}
+                {% set allStatKeys = allStatKeys|merge([key]) %}
+            {% endfor %}
+        {% endfor %}
+
+        <button id="toggle-visibility-all"
+                type="button"
+                class="btn btn-outline-dark btn-sm me-1 toggle-visibility"
+                data-visibility-target="all"
+                data-visibility-status="show">
+            <i class="bi bi-eye-slash-fill pe-none">
+                <label class="form-label fw-semibold mb-0 mt-1">{{ 'menu.hide_all_columns'|trans }}</label>
+            </i>
+        </button>
+
+        {% for groupKey, group in statGroups %}
+            <div class="mt-3">
+                <p class="fw-bold mb-2 border-bottom pb-1">{{ group.label|trans }}</p>
+                {% for statKey, statLabel in group.stats %}
+                    <div class="ms-2 me-3">
+                        <div class="d-flex align-items-start mb-1">
+                            <button id="toggle-visibility-{{ statKey }}"
+                                    type="button"
+                                    class="btn btn-outline-dark btn-sm me-1 toggle-visibility"
+                                    data-visibility-target="{{ statKey }}"
+                                    data-visibility-status="show">
+                                <i class="bi bi-eye-fill pe-none" ></i>
+                            </button>
+
+                            <label class="form-label fw-semibold mb-0 mt-1" style="width: 70px;">{{ statLabel|trans }}</label>
+
+                            <div class="flex-grow-1">
+                                <div id="slider-{{ statKey }}" class="slider-stat mt-3"></div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
+    <div class="offcanvas-footer">
+        <div class="row mt-3 mb-3 ms-1 me-2">
+            <div class="col-12 col-md-3 mb-3 mb-md-0">
+                <button class="btn btn-dark w-100 text-nowrap" id="clearGamesFilters">
+                    <i class="bi bi-arrow-repeat fs-8"></i>
+                </button>
+            </div>
+            <div class="col-12 col-md-9">
+                <button class="btn btn-dark w-100" id="applyGamesFilters">{{ 'menu.search'|trans }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const statSliders = JSON.parse('{{ allStatKeys|json_encode|raw }}');
+    const statsMax = JSON.parse('{{ statsMax|json_encode|raw }}');
+
+    let statKeys = [];
+    statSliders.forEach(function (key) {
+        statKeys.push(key + 'Min');
+        statKeys.push(key + 'Max');
+    });
+
+    function prepareSelectors(id) {
+        const el = $('#' + id);
+
+        el.select2({
+            multiple: true,
+            closeOnSelect: true,
+            allowClear: false,
+            placeholder: '',
+            theme: 'bootstrap-5',
+        });
+
+        el.val("")
+        el.trigger("change");
+    }
+
+    function updateGamesUrlFromFilters() {
+        const params = new URLSearchParams();
+        const addList = (key, values) => { if (values && values.length) params.set(key, values.join(',')); };
+
+        addList('winner', $('#winner-selector').val());
+        addList('loser', $('#loser-selector').val());
+        addList('score', $('#score-selector').val());
+        addList('competition', $('#competition-selector').val());
+
+        if ($('#date-from-selector').val()) params.set('date_from', $('#date-from-selector').val());
+        if ($('#date-to-selector').val()) params.set('date_to', $('#date-to-selector').val());
+
+        statSliders.forEach(k => {
+            const v = $('#slider-' + k)[0].noUiSlider.get();
+
+            if ('' !== v[0] && 0 !== v[0]) {
+                params.set(k + 'Min', v[0])
+            }
+
+            let statMax = statsMax[k] ?? 100;
+            if ('' !== v[1] && statMax !== v[1]) {
+                params.set(k + 'Max', v[1])
+            }
+        });
+
+        const base = window.location.pathname + (params.toString() ? ('?' + params.toString()) : '');
+        window.history.replaceState({}, '', base);
+    }
+
+    function setGamesFiltersFromUrl() {
+        const params = new URLSearchParams(window.location.search);
+        const csv = (v) => (v ? v.split(',').filter(Boolean) : []);
+        const setSelect2 = (selector, values) => {
+            if ($(selector).length) {
+                $(selector).val(values).trigger('change');
+            }
+        };
+
+        setSelect2('#winner-selector', csv(params.get('winner')));
+        setSelect2('#loser-selector', csv(params.get('loser')));
+        setSelect2('#score-selector', csv(params.get('score')));
+        setSelect2('#competition-selector', csv(params.get('competition')));
+
+        if (params.has('date_from')) $('#date-from-selector').val(params.get('date_from'));
+        if (params.has('date_to')) $('#date-to-selector').val(params.get('date_to'));
+
+        statSliders.forEach(k => {
+            if (params.has(k+'Min')) {
+                $('#slider-' + k)[0].noUiSlider.set([params.get(k+'Min'), null]);
+            }
+
+            if (params.has(k+'Max')) {
+                $('#slider-' + k)[0].noUiSlider.set([null, params.get(k+'Max')]);
+            }
+        });
+    }
+
+    $(document).ready(function(){
+        if (window.innerWidth >= 768) {
+            document.getElementById('games-filters').classList.add('show');
+        }
+
+        $('#applyGamesFilters').on('click', function () {
+            updateGamesUrlFromFilters();
+            $('#gamesList').DataTable().ajax.reload();
+        });
+
+        $('#clearGamesFilters').on('click', function () {
+            window.history.replaceState({}, '', window.location.pathname);
+            location.reload();
+        });
+
+        $('.toggle-visibility').on('click', function (e) {
+            const el = e.target;
+            const target = el.getAttribute('data-visibility-target');
+            const visibility = el.getAttribute('data-visibility-status');
+
+            if ('all' === target) {
+                toggleColumnVisibilityAll(visibility);
+            } else {
+                toggleColumnVisibility(target, visibility, el.id);
+            }
+        });
+
+        prepareSelectors('winner-selector');
+        prepareSelectors('loser-selector');
+        prepareSelectors('score-selector');
+        prepareSelectors('competition-selector');
+
+        statSliders.forEach(function (key) {
+            let slider = document.getElementById('slider-'+key);
+
+            let max = 100;
+            if (statsMax[key]) {
+                max = statsMax[key];
+            }
+
+            noUiSlider.create(slider, {
+                start: [0, max],
+                tooltips: true,
+                step: 1,
+                connect: true,
+                range: { min: 0, max: max },
+                format: {
+                    to: function (value) { return Number(Math.trunc(value)) },
+                    from: function (value) { return Number(Math.trunc(value)) }
+                }
+            });
+
+            mergeTooltips(slider, 15, ' - ');
+        });
+
+        setGamesFiltersFromUrl();
+    });
+
+    /**
+     * @param slider HtmlElement with an initialized slider
+     * @param threshold Minimum proximity (in percentages) to merge tooltips
+     * @param separator String joining tooltips
+     */
+    function mergeTooltips(slider, threshold, separator) {
+        var textIsRtl = getComputedStyle(slider).direction === 'rtl';
+        var isRtl = slider.noUiSlider.options.direction === 'rtl';
+        var isVertical = slider.noUiSlider.options.orientation === 'vertical';
+        var tooltips = slider.noUiSlider.getTooltips();
+        var origins = slider.noUiSlider.getOrigins();
+
+        // Move tooltips into the origin element. The default stylesheet handles this.
+        tooltips.forEach(function (tooltip, index) {
+            if (tooltip) {
+                origins[index].appendChild(tooltip);
+            }
+        });
+
+        slider.noUiSlider.on('update', function (values, handle, unencoded, tap, positions) {
+            var pools = [[]];
+            var poolPositions = [[]];
+            var poolValues = [[]];
+            var atPool = 0;
+
+            // Assign the first tooltip to the first pool, if the tooltip is configured
+            if (tooltips[0]) {
+                pools[0][0] = 0;
+                poolPositions[0][0] = positions[0];
+                poolValues[0][0] = values[0];
+            }
+
+            for (var i = 1; i < positions.length; i++) {
+                if (!tooltips[i] || (positions[i] - positions[i - 1]) > threshold) {
+                    atPool++;
+                    pools[atPool] = [];
+                    poolValues[atPool] = [];
+                    poolPositions[atPool] = [];
+                }
+
+                if (tooltips[i]) {
+                    pools[atPool].push(i);
+                    poolValues[atPool].push(values[i]);
+                    poolPositions[atPool].push(positions[i]);
+                }
+            }
+
+            pools.forEach(function (pool, poolIndex) {
+                var handlesInPool = pool.length;
+
+                for (var j = 0; j < handlesInPool; j++) {
+                    var handleNumber = pool[j];
+
+                    if (j === handlesInPool - 1) {
+                        var offset = 0;
+
+                        poolPositions[poolIndex].forEach(function (value) {
+                            offset += 1000 - value;
+                        });
+
+                        var direction = isVertical ? 'bottom' : 'right';
+                        var last = isRtl ? 0 : handlesInPool - 1;
+                        var lastOffset = 1000 - poolPositions[poolIndex][last];
+                        offset = (textIsRtl && !isVertical ? 100 : 0) + (offset / handlesInPool) - lastOffset;
+
+                        // Center this tooltip over the affected handles
+                        tooltips[handleNumber].innerHTML = poolValues[poolIndex].join(separator);
+                        tooltips[handleNumber].style.display = 'block';
+                        tooltips[handleNumber].style[direction] = offset + '%';
+                    } else {
+                        // Hide this tooltip
+                        tooltips[handleNumber].style.display = 'none';
+                    }
+                }
+            });
+        });
+    }
+</script>

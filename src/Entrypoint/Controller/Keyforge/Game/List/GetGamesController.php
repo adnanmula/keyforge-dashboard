@@ -5,6 +5,7 @@ namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\Game\List;
 use AdnanMula\Cards\Application\Query\Keyforge\Game\GetGamesQuery;
 use AdnanMula\Cards\Domain\Model\Keyforge\Game\ValueObject\KeyforgeCompetition;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
+use AdnanMula\Criteria\Sorting\OrderType;
 use Assert\LazyAssertionException;
 use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -206,18 +207,60 @@ final class GetGamesController extends Controller
     )]
     public function __invoke(Request $request): JsonResponse
     {
-        $queryFilters = $request->query->all();
+        $allParams = \array_merge($request->query->all(), $request->request->all());
         [$orderField, $orderDirection] = $this->getOrder($request);
+
+        $logStatKeys = [
+            'turnsMin', 'turnsMax',
+            'winnerAmberObtainedMin', 'winnerAmberObtainedMax',
+            'winnerAmberStolenMin', 'winnerAmberStolenMax',
+            'winnerCardsPlayedMin', 'winnerCardsPlayedMax',
+            'winnerCardsDrawnMin', 'winnerCardsDrawnMax',
+            'winnerCardsDiscardedMin', 'winnerCardsDiscardedMax',
+            'winnerKeysForgedMin', 'winnerKeysForgedMax',
+            'winnerFightsMin', 'winnerFightsMax',
+            'winnerReapsMin', 'winnerReapsMax',
+            'winnerExtraTurnsMin', 'winnerExtraTurnsMax',
+            'loserAmberObtainedMin', 'loserAmberObtainedMax',
+            'loserAmberStolenMin', 'loserAmberStolenMax',
+            'loserCardsPlayedMin', 'loserCardsPlayedMax',
+            'loserCardsDrawnMin', 'loserCardsDrawnMax',
+            'loserCardsDiscardedMin', 'loserCardsDiscardedMax',
+            'loserKeysForgedMin', 'loserKeysForgedMax',
+            'loserFightsMin', 'loserFightsMax',
+            'loserReapsMin', 'loserReapsMax',
+            'loserExtraTurnsMin', 'loserExtraTurnsMax',
+            'totalAmberObtainedMin', 'totalAmberObtainedMax',
+            'totalAmberStolenMin', 'totalAmberStolenMax',
+            'totalCardsPlayedMin', 'totalCardsPlayedMax',
+            'totalCardsDrawnMin', 'totalCardsDrawnMax',
+            'totalCardsDiscardedMin', 'totalCardsDiscardedMax',
+            'totalKeysForgedMin', 'totalKeysForgedMax',
+            'totalFightsMin', 'totalFightsMax',
+            'totalReapsMin', 'totalReapsMax',
+            'totalExtraTurnsMin', 'totalExtraTurnsMax',
+        ];
+
+        $logStats = [];
+        foreach ($logStatKeys as $key) {
+            $value = $request->get($key);
+            if ($value !== null && $value !== '') {
+                $logStats[$key] = $value;
+            }
+        }
 
         try {
             $games = $this->bus->dispatch(new GetGamesQuery(
                 deckId: $request->get('deckId'),
                 userId: $request->get('userId'),
-                winners: $queryFilters['extraFilterWinner'] ?? [],
-                losers: $queryFilters['extraFilterLoser'] ?? [],
-                loserScores: $queryFilters['extraFilterScore'] ?? [],
-                competitions: $queryFilters['extraFilterCompetition'] ?? [],
+                winners: $allParams['extraFilterWinner'] ?? [],
+                losers: $allParams['extraFilterLoser'] ?? [],
+                loserScores: $allParams['extraFilterScore'] ?? [],
+                competitions: $allParams['extraFilterCompetition'] ?? [],
                 approved: true,
+                dateFrom: $request->get('extraFilterDateFrom') ?: null,
+                dateTo: $request->get('extraFilterDateTo') ?: null,
+                logStats: $logStats ?: null,
                 start: $request->get('start'),
                 length: $request->get('length'),
                 orderField: $orderField,
@@ -246,10 +289,49 @@ final class GetGamesController extends Controller
         $queryOrder = $request->get('order');
 
         if (\count($queryOrder) > 0) {
-            $orderColumns = [6 => 'date'];
+            $orderColumns = [
+                6 => 'date',
+                8 => 'turns',
+                9 => 'winner_amber_obtained',
+                10 => 'winner_amber_stolen',
+                11 => 'winner_cards_played',
+                12 => 'winner_cards_drawn',
+                13 => 'winner_cards_discarded',
+                14 => 'winner_fights',
+                15 => 'winner_reaps',
+                16 => 'winner_extra_turns',
+                17 => 'loser_amber_obtained',
+                18 => 'loser_amber_stolen',
+                19 => 'loser_cards_played',
+                20 => 'loser_cards_drawn',
+                21 => 'loser_cards_discarded',
+                22 => 'loser_fights',
+                23 => 'loser_reaps',
+                24 => 'loser_extra_turns',
+                25 => 'total_amber_obtained',
+                26 => 'total_amber_stolen',
+                27 => 'total_cards_played',
+                28 => 'total_cards_drawn',
+                29 => 'total_cards_discarded',
+                30 => 'total_keys_forged',
+                31 => 'total_fights',
+                32 => 'total_reaps',
+                33 => 'total_extra_turns',
+            ];
 
-            $orderField = $orderColumns[(int)$queryOrder[0]['column']] ?? null;
+            $column = (int) $queryOrder[0]['column'];
+            $orderField = $orderColumns[$column] ?? null;
             $orderType = $queryOrder[0]['dir'] ?? null;
+
+            if ($column >= 8) {
+                if ($orderType === 'asc') {
+                    $orderType = OrderType::ASC_NULLS_LAST->value;
+                }
+
+                if ($orderType === 'desc') {
+                    $orderType = OrderType::DESC_NULLS_LAST->value;
+                }
+            }
 
             return [$orderField, $orderType];
         }

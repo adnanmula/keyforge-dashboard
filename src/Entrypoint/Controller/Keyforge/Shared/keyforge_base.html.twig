@@ -16,6 +16,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
         <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider@15.8.1/dist/nouislider.min.css">
 
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -64,6 +65,11 @@
                             <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdownGames">
                                 {% if is_granted('ROLE_KEYFORGE') %}
                                 <li>
+                                    <a class="dropdown-item" href="{{ path('keyforge_games') }}">
+                                        {{ 'menu.my_games'|trans }}
+                                    </a>
+                                </li>
+                                <li>
                                     <a class="dropdown-item" href="{{ path('keyforge_game_create') }}">
                                         {{ 'menu.register'|trans }}
                                     </a>
@@ -78,9 +84,9 @@
                         </li>
 
                         {% if is_granted('ROLE_KEYFORGE') %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ path('keyforge_competition_list') }}">{{ 'menu.tournaments'|trans }}<span class="sr-only"></span></a>
-                        </li>
+{#                        <li class="nav-item">#}
+{#                            <a class="nav-link" href="{{ path('keyforge_competition_list') }}">{{ 'menu.tournaments'|trans }}<span class="sr-only"></span></a>#}
+{#                        </li>#}
 
                         <li class="nav-item">
                             <a class="nav-link" href="{{ path('keyforge_deck_import') }}">{{ 'menu.import'|trans }}<span class="sr-only"></span></a>
@@ -167,6 +173,7 @@
         <script src="https://unpkg.com/bootstrap-table@1.20.2/dist/bootstrap-table.min.js"></script>
         <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/nouislider@15.8.1/dist/nouislider.min.js"></script>
 
         <script>
             if (window.history.replaceState) {

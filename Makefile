@@ -70,6 +70,9 @@ tags: ## Apply predefined tags
 importcards:
 	docker compose -f ${FILE} exec --user=${UID} php-fpm sh -c "console import:card"
 
+updategamestats:
+	docker compose -f ${FILE} exec --user=${UID} php-fpm sh -c "console game:log:update"
+
 filebeat_lock_config:
 	sudo chmod go-w ./docker/filebeat/filebeat.yml
 

@@ -145,6 +145,7 @@ game.first_turn: 'First turn'
 game.keys: Keys
 game.lgs: 'LGS'
 game.local_league: 'Local League'
+game.friends_league: 'Friendly League'
 game.loser: Loser
 game.loser_chains: 'Loser chains'
 game.loser_deck: 'Loser deck'
@@ -237,6 +238,8 @@ menu.created_by: 'Created by'
 menu.deck: Deck
 menu.deck_wl: 'Wins/Losses by deck'
 menu.decks: Decks
+menu.date_from: 'From'
+menu.date_to: 'To'
 menu.decks_of: Decks of
 menu.exclude: Exclude
 menu.favorite: Favorite
@@ -246,6 +249,7 @@ menu.friend_requests: 'Friend requests'
 menu.friends: Friends
 menu.game: Game
 menu.games: Games
+menu.my_games: My games
 menu.games_lost: 'Games lost'
 menu.general_stats: General stats
 menu.house_pr: 'House pick rate'
@@ -461,6 +465,9 @@ menu.reaps_by_turn: Reaps by turn
 menu.filters: Filters
 menu.predefined: Predefined
 menu.show: Show
+menu.hide: Hide
+menu.show_all_columns: Show all columns
+menu.hide_all_columns: Hide all columns
 menu.other_filters: Other filters
 menu.generate_alliances: Generate alliances
 menu.view_deck: View deck
@@ -504,3 +511,36 @@ game.timeline.extra_turn: To take an extra turn after this one
 deck.archon-power: Archon Power
 deck.prophecy: Prophecy
 deck.prophecies: Prophecies
+menu.min: Min
+menu.max: Max
+game.winner_amber: Winner amber
+game.winner_amber_stolen: Winner amber stolen
+game.winner_cards_played: Winner cards played
+game.winner_cards_drawn: Winner cards drawn
+game.winner_cards_discarded: Winner cards discarded
+game.winner_keys_forged: Winner keys forged
+game.winner_fights: Winner fights
+game.winner_reaps: Winner reaps
+game.winner_extra_turns: Winner extra turns
+game.loser_amber: Loser amber
+game.loser_amber_stolen: Loser amber stolen
+game.loser_cards_played: Loser cards played
+game.loser_cards_drawn: Loser cards drawn
+game.loser_cards_discarded: Loser cards discarded
+game.loser_keys_forged: Loser keys forged
+game.loser_fights: Loser fights
+game.loser_reaps: Loser reaps
+game.loser_extra_turns: Loser extra turns
+game.total_amber: Total amber
+game.total_amber_stolen: Total amber stolen
+game.total_cards_played: Total cards played
+game.total_cards_drawn: Total cards drawn
+game.total_cards_discarded: Total cards discarded
+game.total_keys_forged: Total keys forged
+game.total_fights: Total fights
+game.total_reaps: Total reaps
+game.total_extra_turns: Total extra turns
+menu.winner_single_char: W
+menu.loser_single_char: L
+menu.total_single_char: ∑
+menu.key: ⚷

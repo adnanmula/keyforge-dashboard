@@ -145,6 +145,7 @@ game.first_turn: 'Primer turno'
 game.keys: Llaves
 game.lgs: 'LGS'
 game.local_league: 'Liga con amigos'
+game.friends_league: 'Liga amistosa'
 game.loser: Perdedor
 game.loser_chains: 'Llaves del perdedor'
 game.loser_deck: 'Baraja perdedora'
@@ -236,6 +237,8 @@ menu.create: Crear
 menu.created_by: 'Creado por'
 menu.deck: Baraja
 menu.deck_wl: 'Victorias/Derrotas por baraja'
+menu.date_from: 'Desde'
+menu.date_to: 'Hasta'
 menu.decks: Barajas
 menu.decks_of: Barajas de
 menu.exclude: Excluir
@@ -246,6 +249,7 @@ menu.friend_requests: 'Solicitudes de amistad'
 menu.friends: Amigos
 menu.game: Partida
 menu.games: Partidas
+menu.my_games: Mis artidas
 menu.games_lost: 'Partidas perdidas'
 menu.general_stats: Estadísticas generales
 menu.house_pr: 'Pick rate por casa'
@@ -461,6 +465,9 @@ menu.reaps_by_turn: Cosechas por turno
 menu.filters: Filtros
 menu.predefined: Predefinidas
 menu.show: Mostrar
+menu.hide: Ocultar
+menu.show_all_columns: Mostrar todas las columnas
+menu.hide_all_columns: Ocultar todas las columnas
 menu.other_filters: Otros filtros
 menu.generate_alliances: Generar alianzas
 menu.view_deck: Ver baraja
@@ -504,3 +511,36 @@ game.timeline.extra_turn: Para tomar un turno adicional después de este
 deck.archon-power: Archon Power
 deck.prophecy: Profecía
 deck.prophecies: Profecías
+menu.min: Mín
+menu.max: Máx
+game.winner_amber: Æmbar ganador
+game.winner_amber_stolen: Æmbar robado ganador
+game.winner_cards_played: Cartas jugadas ganador
+game.winner_cards_drawn: Cartas robadas ganador
+game.winner_cards_discarded: Cartas descartadas ganador
+game.winner_keys_forged: Llaves forjadas ganador
+game.winner_fights: Combates ganador
+game.winner_reaps: Cosechas ganador
+game.winner_extra_turns: Turnos extra ganador
+game.loser_amber: Æmbar perdedor
+game.loser_amber_stolen: Æmbar robado perdedor
+game.loser_cards_played: Cartas jugadas perdedor
+game.loser_cards_drawn: Cartas robadas perdedor
+game.loser_cards_discarded: Cartas descartadas perdedor
+game.loser_keys_forged: Llaves forjadas perdedor
+game.loser_fights: Combates perdedor
+game.loser_reaps: Cosechas perdedor
+game.loser_extra_turns: Turnos extra perdedor
+game.total_amber: Æmbar total
+game.total_amber_stolen: Æmbar robado total
+game.total_cards_played: Cartas jugadas total
+game.total_cards_drawn: Cartas robadas total
+game.total_cards_discarded: Cartas descartadas total
+game.total_keys_forged: Llaves forjadas total
+game.total_fights: Combates total
+game.total_reaps: Cosechas total
+game.total_extra_turns: Turnos extra total
+menu.winner_single_char: G
+menu.loser_single_char: P
+menu.total_single_char: ∑
+menu.key: ⚷

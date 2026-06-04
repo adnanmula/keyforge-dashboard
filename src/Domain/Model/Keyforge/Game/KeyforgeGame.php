@@ -25,6 +25,7 @@ final class KeyforgeGame implements \JsonSerializable
         private bool $approved,
         private ?Uuid $createdBy,
         private ?Uuid $logId = null,
+        private ?array $logStats = null,
     ) {}
 
     public function id(): Uuid
@@ -110,6 +111,11 @@ final class KeyforgeGame implements \JsonSerializable
     public function logId(): ?Uuid
     {
         return $this->logId;
+    }
+
+    public function logStats(): ?array
+    {
+        return $this->logStats;
     }
 
     public function isSoloPlay(): bool

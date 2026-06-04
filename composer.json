@@ -8,7 +8,7 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "ext-json": "*",
-        "adnanmula/criteria": "^0.4",
+        "adnanmula/criteria": "dev-support-order-null",
         "adnanmula/keyforge-game-log-parser": "dev-master",
         "adnanmula/tournament": "dev-master",
         "beberlei/assert": "^3.3",
