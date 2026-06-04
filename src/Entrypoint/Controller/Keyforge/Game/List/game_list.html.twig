@@ -230,13 +230,17 @@
         });
     }
 
-    const STICKY_LEFT_COLS = [0, 1, 2, 3, 4];
-
     function applyStickyColumns() {
         const table = document.getElementById('gamesList');
         if (!table) return;
         const headerCells = table.querySelectorAll('thead tr:first-child th');
         const totalCols = headerCells.length;
+
+        let STICKY_LEFT_COLS = [0, 1, 2, 3, 4];
+
+        if (window.screen.width <= 1200) {
+            STICKY_LEFT_COLS = [];
+        }
 
         // measure actual widths from header row
         let offset = 0;
