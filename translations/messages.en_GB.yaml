@@ -465,6 +465,9 @@ menu.reaps_by_turn: Reaps by turn
 menu.filters: Filters
 menu.predefined: Predefined
 menu.show: Show
+menu.hide: Hide
+menu.show_all_columns: Show all columns
+menu.hide_all_columns: Hide all columns
 menu.other_filters: Other filters
 menu.generate_alliances: Generate alliances
 menu.view_deck: View deck
@@ -510,7 +513,6 @@ deck.prophecy: Prophecy
 deck.prophecies: Prophecies
 menu.min: Min
 menu.max: Max
-menu.log_stats_filters_note: "Log stats (only applies to games with logs)"
 game.winner_amber: Winner amber
 game.winner_amber_stolen: Winner amber stolen
 game.winner_cards_played: Winner cards played

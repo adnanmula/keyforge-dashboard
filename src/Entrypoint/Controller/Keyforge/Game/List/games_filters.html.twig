@@ -115,18 +115,18 @@
             </select>
         </div>
 
-        <div class="mb-3">
-            <label for="date-from-selector" class="form-label fw-bold">{{ 'menu.date_from'|trans }}</label>
-            <input type="date" id="date-from-selector" class="form-control">
-        </div>
-
-        <div class="mb-3">
-            <label for="date-to-selector" class="form-label fw-bold">{{ 'menu.date_to'|trans }}</label>
-            <input type="date" id="date-to-selector" class="form-control">
+        <div class="row mb-3">
+            <div class="col-6">
+                <label for="date-from-selector" class="form-label fw-bold">{{ 'menu.date_from'|trans }}</label>
+                <input type="date" id="date-from-selector" class="form-control">
+            </div>
+            <div class="col-6">
+                <label for="date-to-selector" class="form-label fw-bold">{{ 'menu.date_to'|trans }}</label>
+                <input type="date" id="date-to-selector" class="form-control">
+            </div>
         </div>
 
         <hr>
-        <p class="text-muted small mb-2">{{ 'menu.log_stats_filters_note'|trans }}</p>
 
         {% set statGroups = {
             turns: {
@@ -213,15 +213,31 @@
             {% endfor %}
         {% endfor %}
 
+        <button id="toggle-visibility-all"
+                type="button"
+                class="btn btn-outline-dark btn-sm me-1 toggle-visibility"
+                data-visibility-target="all"
+                data-visibility-status="show">
+            <i class="bi bi-eye-slash-fill pe-none">
+                <label class="form-label fw-semibold mb-0 mt-1">{{ 'menu.hide_all_columns'|trans }}</label>
+            </i>
+        </button>
+
         {% for groupKey, group in statGroups %}
             <div class="mt-3">
                 <p class="fw-bold mb-2 border-bottom pb-1">{{ group.label|trans }}</p>
                 {% for statKey, statLabel in group.stats %}
                     <div class="ms-2 me-3">
                         <div class="d-flex align-items-start mb-1">
-                            <label class="form-label fw-semibold mb-0" style="width: 80px;">
-                                {{ statLabel|trans }}
-                            </label>
+                            <button id="toggle-visibility-{{ statKey }}"
+                                    type="button"
+                                    class="btn btn-outline-dark btn-sm me-1 toggle-visibility"
+                                    data-visibility-target="{{ statKey }}"
+                                    data-visibility-status="show">
+                                <i class="bi bi-eye-fill pe-none" ></i>
+                            </button>
+
+                            <label class="form-label fw-semibold mb-0 mt-1" style="width: 70px;">{{ statLabel|trans }}</label>
 
                             <div class="flex-grow-1">
                                 <div id="slider-{{ statKey }}" class="slider-stat mt-3"></div>
@@ -248,6 +264,7 @@
 
 <script>
     const statSliders = JSON.parse('{{ allStatKeys|json_encode|raw }}');
+    const statsMax = JSON.parse('{{ statsMax|json_encode|raw }}');
 
     let statKeys = [];
     statSliders.forEach(function (key) {
@@ -255,13 +272,19 @@
         statKeys.push(key + 'Max');
     });
 
-    const statsMax = {
-        turns: 40,
-        loserKeysForged: 2,
-        totalKeysForged: 5,
-        winnerExtraTurns: 10,
-        loserExtraTurns: 10,
-        totalExtraTurns: 10,
+    function prepareSelectors(id) {
+        const el = $('#' + id);
+
+        el.select2({
+            multiple: true,
+            closeOnSelect: true,
+            allowClear: false,
+            placeholder: '',
+            theme: 'bootstrap-5',
+        });
+
+        el.val("")
+        el.trigger("change");
     }
 
     function updateGamesUrlFromFilters() {
@@ -296,7 +319,11 @@
     function setGamesFiltersFromUrl() {
         const params = new URLSearchParams(window.location.search);
         const csv = (v) => (v ? v.split(',').filter(Boolean) : []);
-        const setSelect2 = (selector, values) => { if ($(selector).length) $(selector).val(values).trigger('change'); };
+        const setSelect2 = (selector, values) => {
+            if ($(selector).length) {
+                $(selector).val(values).trigger('change');
+            }
+        };
 
         setSelect2('#winner-selector', csv(params.get('winner')));
         setSelect2('#loser-selector', csv(params.get('loser')));
@@ -317,12 +344,10 @@
         });
     }
 
-    document.addEventListener('DOMContentLoaded', function () {
+    $(document).ready(function(){
         if (window.innerWidth >= 768) {
             document.getElementById('games-filters').classList.add('show');
         }
-
-        setGamesFiltersFromUrl();
 
         $('#applyGamesFilters').on('click', function () {
             updateGamesUrlFromFilters();
@@ -333,29 +358,48 @@
             window.history.replaceState({}, '', window.location.pathname);
             location.reload();
         });
-    });
 
-    statSliders.forEach(function (key) {
-        let slider = document.getElementById('slider-'+key);
+        $('.toggle-visibility').on('click', function (e) {
+            const el = e.target;
+            const target = el.getAttribute('data-visibility-target');
+            const visibility = el.getAttribute('data-visibility-status');
 
-        let max = 100;
-        if (statsMax[key]) {
-            max = statsMax[key];
-        }
-
-        noUiSlider.create(slider, {
-            start: [0, max],
-            tooltips: true,
-            step: 1,
-            connect: true,
-            range: { min: 0, max: max },
-            format: {
-                to: function (value) { return Number(value) },
-                from: function (value) { return Number(value) }
+            if ('all' === target) {
+                toggleColumnVisibilityAll(visibility);
+            } else {
+                toggleColumnVisibility(target, visibility, el.id);
             }
         });
 
-        mergeTooltips(slider, 15, ' - ');
+        prepareSelectors('winner-selector');
+        prepareSelectors('loser-selector');
+        prepareSelectors('score-selector');
+        prepareSelectors('competition-selector');
+
+        statSliders.forEach(function (key) {
+            let slider = document.getElementById('slider-'+key);
+
+            let max = 100;
+            if (statsMax[key]) {
+                max = statsMax[key];
+            }
+
+            noUiSlider.create(slider, {
+                start: [0, max],
+                tooltips: true,
+                step: 1,
+                connect: true,
+                range: { min: 0, max: max },
+                format: {
+                    to: function (value) { return Number(Math.trunc(value)) },
+                    from: function (value) { return Number(Math.trunc(value)) }
+                }
+            });
+
+            mergeTooltips(slider, 15, ' - ');
+        });
+
+        setGamesFiltersFromUrl();
     });
 
     /**

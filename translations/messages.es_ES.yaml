@@ -465,6 +465,9 @@ menu.reaps_by_turn: Cosechas por turno
 menu.filters: Filtros
 menu.predefined: Predefinidas
 menu.show: Mostrar
+menu.hide: Ocultar
+menu.show_all_columns: Mostrar todas las columnas
+menu.hide_all_columns: Ocultar todas las columnas
 menu.other_filters: Otros filtros
 menu.generate_alliances: Generar alianzas
 menu.view_deck: Ver baraja
@@ -510,7 +513,6 @@ deck.prophecy: Profecía
 deck.prophecies: Profecías
 menu.min: Mín
 menu.max: Máx
-menu.log_stats_filters_note: "Stats del log (solo aplica a partidas con log)"
 game.winner_amber: Æmbar ganador
 game.winner_amber_stolen: Æmbar robado ganador
 game.winner_cards_played: Cartas jugadas ganador

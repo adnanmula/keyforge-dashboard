@@ -157,19 +157,6 @@
     </table>
 
 <script>
-    function prepareSelectors(id) {
-        $('#' + id).select2({
-            multiple: true,
-            closeOnSelect: true,
-            allowClear: false,
-            placeholder: '',
-            theme: 'bootstrap-5',
-        });
-
-        $('#' + id).val("")
-        $('#' + id).trigger("change");
-    }
-
     function winnerFilter() {
         return $('#winner-selector').val();
     }
@@ -241,7 +228,6 @@
             // suppress click if it was a drag
             if (moved) { wrap.addEventListener('click', (e) => e.stopPropagation(), { once: true, capture: true }); }
         });
-
     }
 
     const STICKY_LEFT_COLS = [0, 1, 2, 3, 4];
@@ -284,11 +270,33 @@
         });
     }
 
+
+    const statColumns = [
+        'turns',
+        'winner_amber_obtained', 'winner_amber_stolen',
+        'winner_cards_played', 'winner_cards_drawn', 'winner_cards_discarded',
+        'winner_fights', 'winner_reaps',
+        'winner_extra_turns',
+        'loser_amber_obtained', 'loser_amber_stolen',
+        'loser_cards_played', 'loser_cards_drawn', 'loser_cards_discarded',
+        'loser_fights', 'loser_reaps',
+        'loser_extra_turns',
+        'total_amber_obtained', 'total_amber_stolen',
+        'total_cards_played', 'total_cards_drawn', 'total_cards_discarded',
+        'total_keys_forged',
+        'total_fights', 'total_reaps',
+        'total_extra_turns',
+    ];
+
+    const statStartIdx = 8;
+
     $(document).ready(function () {
+        {% if show_inline_filters %}
         prepareSelectors('winner-selector');
         prepareSelectors('loser-selector');
         prepareSelectors('score-selector');
         prepareSelectors('competition-selector');
+        {% endif %}
 
         $('.game_list_filter').change(function (e) {
             $('#gamesList').DataTable().ajax.reload();
@@ -298,22 +306,9 @@
             $('#gamesList.dataTable').resize;
         });
 
-        const statColumns = [
-            { key: 'turns' },
-            { key: 'winner_amber_obtained' }, { key: 'winner_amber_stolen' },
-            { key: 'winner_cards_played' }, { key: 'winner_cards_drawn' }, { key: 'winner_cards_discarded' },
-            { key: 'winner_fights' }, { key: 'winner_reaps' }, { key: 'winner_extra_turns' },
-            { key: 'loser_amber_obtained' }, { key: 'loser_amber_stolen' },
-            { key: 'loser_cards_played' }, { key: 'loser_cards_drawn' }, { key: 'loser_cards_discarded' },
-            { key: 'loser_fights' }, { key: 'loser_reaps' }, { key: 'loser_extra_turns' },
-            { key: 'total_amber_obtained' }, { key: 'total_amber_stolen' },
-            { key: 'total_cards_played' }, { key: 'total_cards_drawn' }, { key: 'total_cards_discarded' },
-            { key: 'total_keys_forged' }, { key: 'total_fights' }, { key: 'total_reaps' }, { key: 'total_extra_turns' },
-        ];
-        const statStartIdx = 8;
         const actionsIdx = statStartIdx + statColumns.length; // 36
 
-        const statColumnDefs = statColumns.map(({ key }, i) => ({
+        const statColumnDefs = statColumns.map((key, i) => ({
             targets: statStartIdx + i,
             data: 'logStats',
             orderable: true,
@@ -349,11 +344,19 @@
 
                     const statIds = ['AmberObtained','AmberStolen','CardsPlayed','CardsDrawn','CardsDiscarded','KeysForged','Fights','Reaps','ExtraTurns','AmberObtained','AmberStolen','CardsPlayed','CardsDrawn','CardsDiscarded','KeysForged','Fights','Reaps','ExtraTurns','AmberObtained','AmberStolen','CardsPlayed','CardsDrawn','CardsDiscarded','KeysForged','Fights','Reaps','ExtraTurns',];
                     const statGroups = ['winner', 'loser', 'total'];
+                    const statsMax = JSON.parse('{{ statsMax|json_encode|raw }}');
 
                     if ($('#slider-turns').length > 0) {
                         const turnsSlider = $('#slider-turns')[0].noUiSlider.get();
-                        d.turnsMin = turnsSlider[0];
-                        d.turnsMax = turnsSlider[1];
+
+                        if (turnsSlider[0] > 0) {
+                            d.turnsMin = turnsSlider[0];
+                        }
+
+                        let max = statsMax['turns'] ?? 100;
+                        if (turnsSlider[1] !== max) {
+                            d.turnsMax = turnsSlider[1];
+                        }
                     }
 
                     statIds.forEach(k => {
@@ -365,8 +368,14 @@
                             if ($('#slider-' + group + k).length > 0) {
                                 const v = $('#slider-' + group + k)[0].noUiSlider.get();
 
-                                d[group + k + 'Min'] = v[0];
-                                d[group + k + 'Max'] = v[1];
+                                if (v[0] > 0) {
+                                    d[group + k + 'Min'] = v[0];
+                                }
+
+                                let max = statsMax[group + k] ?? 100;
+                                if (v[1] !== max) {
+                                    d[group + k + 'Max'] = v[1];
+                                }
                             }
                         })
                     });
@@ -520,4 +529,54 @@
             ],
         });
     });
+
+    {% if show_inline_filters %}
+    function prepareSelectors(id) {
+        $('#' + id).select2({
+            multiple: true,
+            closeOnSelect: true,
+            allowClear: false,
+            placeholder: '',
+            theme: 'bootstrap-5',
+        });
+
+        $('#' + id).val("")
+        $('#' + id).trigger("change");
+    }
+    {% endif %}
+
+    function toggleColumnVisibility(column, visibility, buttonId) {
+        const snakeCase = str => str.replace(/[A-Z]/g, c => `_${c.toLowerCase()}`);
+        const columnKey = [statStartIdx + Number(Object.keys(statColumns).find(key => statColumns[key] === snakeCase(column)))];
+        const dt = $('#gamesList').DataTable();
+        const button = $('#' + buttonId)[0];
+        const icon = $('#' + buttonId + ' > i')[0];
+
+        if ('show' === visibility) {
+            dt.columns(columnKey).visible(false);
+            button.setAttribute('data-visibility-status', 'hide');
+            icon.classList = 'bi bi-eye-slash-fill pe-none';
+        } else {
+            dt.columns(columnKey).visible(true);
+            button.setAttribute('data-visibility-status', 'show');
+            icon.classList = 'bi bi-eye-fill pe-none';
+        }
+    }
+
+    function toggleColumnVisibilityAll(visibility) {
+        const columnKey = Object.keys(statColumns).map(key => Math.trunc(Number(key)) + statStartIdx);
+        const dt = $('#gamesList').DataTable();
+
+        if ('show' === visibility) {
+            dt.columns(columnKey).visible(false);
+            $('.toggle-visibility').attr('data-visibility-status', 'hide');
+            $('.toggle-visibility > i').prop('className', 'bi bi-eye-fill pe-none');
+            $('.toggle-visibility > i > label').text('{{ 'menu.show_all_columns'|trans }}');
+        } else {
+            dt.columns(columnKey).visible(true);
+            $('.toggle-visibility').attr('data-visibility-status', 'show');
+            $('.toggle-visibility > i').prop('className', 'bi bi-eye-slash-fill pe-none');
+            $('.toggle-visibility > i > label').text('{{ 'menu.hide_all_columns'|trans }}');
+        }
+    }
 </script>
