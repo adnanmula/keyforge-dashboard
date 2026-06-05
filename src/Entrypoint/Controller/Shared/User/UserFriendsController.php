@@ -21,7 +21,7 @@ final class UserFriendsController extends Controller
         $error = null;
 
         if ($request->getMethod() !== Request::METHOD_GET) {
-            $this->validateCsrfToken('user_friends', $request->get('_csrf_token'));
+            $this->validateCsrfToken('user_friends', $request->request->get('_csrf_token'));
         }
 
         if ($request->getMethod() === Request::METHOD_PATCH) {
@@ -52,7 +52,7 @@ final class UserFriendsController extends Controller
     private function addFriend(Request $request, User $user): ?string
     {
         try {
-            $this->bus->dispatch(new AddFriendCommand($user->id()->value(), $request->get('friendName')));
+            $this->bus->dispatch(new AddFriendCommand($user->id()->value(), $request->request->get('friendName')));
         } catch (UserNotExistsException) {
             return $this->translator->trans('exception.user_not_exists');
         } catch (\Throwable $e) {
@@ -65,7 +65,7 @@ final class UserFriendsController extends Controller
     private function acceptFriend(Request $request, User $user): ?string
     {
         try {
-            $this->bus->dispatch(new AcceptFriendCommand($user->id()->value(), $request->get('friendId')));
+            $this->bus->dispatch(new AcceptFriendCommand($user->id()->value(), $request->request->get('friendId')));
         } catch (UserNotExistsException) {
             return $this->translator->trans('exception.user_not_exists');
         } catch (\Throwable $e) {
@@ -77,6 +77,6 @@ final class UserFriendsController extends Controller
 
     private function removeFriend(Request $request, User $user): void
     {
-        $this->bus->dispatch(new RemoveFriendCommand($user->id()->value(), $request->get('friendId')));
+        $this->bus->dispatch(new RemoveFriendCommand($user->id()->value(), $request->request->get('friendId')));
     }
 }

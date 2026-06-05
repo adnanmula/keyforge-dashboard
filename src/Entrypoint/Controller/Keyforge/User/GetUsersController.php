@@ -17,18 +17,18 @@ class GetUsersController extends Controller
         $users = $this->extractResult(
             $this->bus->dispatch(new GetUsersQuery(
                 0,
-                $request->get('length', 20),
-                $request->get('withGames', false) === 'true',
-                $request->get('withExternal', false) === 'true',
-                $request->get('onlyFriends', false) === 'true',
-                $request->get('userId'),
-                $request->get('name'),
+                $request->query->get('length', 20),
+                $request->query->get('withGames', false) === 'true',
+                $request->query->get('withExternal', false) === 'true',
+                $request->query->get('onlyFriends', false) === 'true',
+                $request->query->get('userId'),
+                $request->query->get('name'),
             )),
         );
 
         $response = [
             'data' => $users,
-            'draw' => (int) $request->get('draw'),
+            'draw' => (int) $request->query->get('draw'),
             'recordsFiltered' => count($users),
             'recordsTotal' => count($users),
         ];

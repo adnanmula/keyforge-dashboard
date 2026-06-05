@@ -26,12 +26,6 @@
     "beberlei/assert": {
         "version": "v3.2.7"
     },
-    "behat/behat": {
-        "version": "v3.8.1"
-    },
-    "behat/gherkin": {
-        "version": "v4.6.2"
-    },
     "brick/math": {
         "version": "0.8.15"
     },
@@ -52,24 +46,6 @@
             "version": "1.0",
             "ref": "87424683adc81d7dc305eefec1fced883084aab9"
         }
-    },
-    "doctrine/event-manager": {
-        "version": "1.1.0"
-    },
-    "friends-of-behat/symfony-extension": {
-        "version": "2.3",
-        "recipe": {
-            "repo": "github.com/symfony/recipes-contrib",
-            "branch": "main",
-            "version": "2.0",
-            "ref": "1e012e04f573524ca83795cd19df9ea690adb604"
-        },
-        "files": [
-            "behat.yml.dist",
-            "config/services_test.yaml",
-            "features/demo.feature",
-            "tests/Behat/DemoContext.php"
-        ]
     },
     "gitonomy/gitlib": {
         "version": "v1.2.2"

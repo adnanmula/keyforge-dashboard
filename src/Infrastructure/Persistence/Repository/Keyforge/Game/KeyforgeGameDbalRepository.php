@@ -39,10 +39,6 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
 
         $result = $query->executeQuery()->fetchAllAssociative();
 
-        if ([] === $result || false === $result) {
-            return [];
-        }
-
         return \array_map(fn (array $game) => $this->map($game), $result);
     }
 
@@ -78,10 +74,6 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
         }
 
         $result = $query->executeQuery()->fetchAllAssociative();
-
-        if ([] === $result || false === $result) {
-            return [];
-        }
 
         return \array_map(fn (array $game) => $this->map($game), $result);
     }
@@ -149,8 +141,8 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
     public function remove(Uuid $id): void
     {
         $this->connection->createQueryBuilder()
-            ->delete(self::TABLE, 'a')
-            ->where('a.id = :id')
+            ->delete(self::TABLE)
+            ->where('id = :id')
             ->setParameter('id', $id->value())
             ->executeStatement();
     }
@@ -252,9 +244,9 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
             ->where('a.id = :id')
             ->setParameter('id', $id->value())
             ->executeQuery()
-            ->fetchAssociative();;
+            ->fetchAssociative();
 
-        if (null === $log || false === $log) {
+        if (false === $log) {
             return null;
         }
 
@@ -278,10 +270,6 @@ final class KeyforgeGameDbalRepository extends DbalRepository implements Keyforg
         }
 
         $result = $query->executeQuery()->fetchAllAssociative();
-
-        if ([] === $result || false === $result) {
-            return [];
-        }
 
         return \array_map(fn (array $log) => $this->mapGameLog($log), $result);
     }

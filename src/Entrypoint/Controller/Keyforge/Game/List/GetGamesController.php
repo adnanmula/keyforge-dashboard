@@ -8,6 +8,7 @@ use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
 use AdnanMula\Criteria\Sorting\OrderType;
 use Assert\LazyAssertionException;
 use OpenApi\Attributes as OA;
+use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -207,8 +208,8 @@ final class GetGamesController extends Controller
     )]
     public function __invoke(Request $request): JsonResponse
     {
-        $allParams = \array_merge($request->query->all(), $request->request->all());
-        [$orderField, $orderDirection] = $this->getOrder($request);
+        $allParams = new InputBag(\array_merge($request->query->all(), $request->request->all()));
+        [$orderField, $orderDirection] = $this->getOrder($allParams);
 
         $logStatKeys = [
             'turnsMin', 'turnsMax',
@@ -243,7 +244,7 @@ final class GetGamesController extends Controller
 
         $logStats = [];
         foreach ($logStatKeys as $key) {
-            $value = $request->get($key);
+            $value = $allParams->get($key);
             if ($value !== null && $value !== '') {
                 $logStats[$key] = $value;
             }
@@ -251,18 +252,18 @@ final class GetGamesController extends Controller
 
         try {
             $games = $this->bus->dispatch(new GetGamesQuery(
-                deckId: $request->get('deckId'),
-                userId: $request->get('userId'),
-                winners: $allParams['extraFilterWinner'] ?? [],
-                losers: $allParams['extraFilterLoser'] ?? [],
-                loserScores: $allParams['extraFilterScore'] ?? [],
-                competitions: $allParams['extraFilterCompetition'] ?? [],
+                deckId: $allParams->get('deckId'),
+                userId: $allParams->get('userId'),
+                winners: $allParams->all()['extraFilterWinner'] ?? [],
+                losers: $allParams->all()['extraFilterLoser'] ?? [],
+                loserScores: $allParams->all()['extraFilterScore'] ?? [],
+                competitions: $allParams->all()['extraFilterCompetition'] ?? [],
                 approved: true,
-                dateFrom: $request->get('extraFilterDateFrom') ?: null,
-                dateTo: $request->get('extraFilterDateTo') ?: null,
+                dateFrom: $allParams->get('extraFilterDateFrom') ?: null,
+                dateTo: $allParams->get('extraFilterDateTo') ?: null,
                 logStats: $logStats ?: null,
-                start: $request->get('start'),
-                length: $request->get('length'),
+                start: $allParams->get('start'),
+                length: $allParams->get('length'),
                 orderField: $orderField,
                 orderDirection: $orderDirection,
             ));
@@ -278,15 +279,15 @@ final class GetGamesController extends Controller
             'recordsTotal' => $result['total'],
             'recordsFiltered' => $result['totalFiltered'],
             'data' => $result['games'],
-            'draw' => (int) $request->get('draw'),
+            'draw' => (int) $allParams->get('draw'),
         ];
 
         return new JsonResponse($response);
     }
 
-    private function getOrder(Request $request): array
+    private function getOrder(InputBag $params): array
     {
-        $queryOrder = $request->get('order');
+        $queryOrder = $params->all()['order'];
 
         if (\count($queryOrder) > 0) {
             $orderColumns = [

@@ -143,7 +143,7 @@ final class KeyforgeCompetitionDbalRepository extends DbalRepository implements 
             ->executeQuery()
             ->fetchAllAssociative();
 
-        if ([] === $result || false === $result) {
+        if ([] === $result) {
             return [];
         }
 

@@ -113,7 +113,7 @@ final class KeyforgeDeckStatHistoryDbalRepository extends DbalRepository impleme
             ->executeQuery()
             ->fetchAllAssociative();
 
-        if ([] === $result || false === $result) {
+        if ([] === $result) {
             return [];
         }
 

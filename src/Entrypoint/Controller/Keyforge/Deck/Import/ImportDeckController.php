@@ -21,7 +21,7 @@ final class ImportDeckController extends Controller
         }
 
         if ($request->getMethod() === Request::METHOD_POST) {
-            $this->validateCsrfToken('keyforge_deck_import', $request->get('_csrf_token'));
+            $this->validateCsrfToken('keyforge_deck_import', $request->request->get('_csrf_token'));
 
             try {
                 $deckId = $this->parseDeck($request->request->getString('deck'));
@@ -29,7 +29,7 @@ final class ImportDeckController extends Controller
                 $token = $request->request->get('token');
                 $userId = null;
 
-                if (null !== $request->get('setUser') || null !== $token) {
+                if (null !== $request->request->get('setUser') || null !== $token) {
                     $user = $this->getUserWithRole(UserRole::ROLE_KEYFORGE);
                     $userId = $user->id()->value();
                 }

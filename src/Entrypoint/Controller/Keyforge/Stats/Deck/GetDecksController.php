@@ -544,13 +544,13 @@ final class GetDecksController extends Controller
     {
         $user = $this->getUser();
 
-        [$orderField, $orderDirection] = $this->orderBy($request->get('order'));
+        [$orderField, $orderDirection] = $this->orderBy($request->query->all()['order'] ?? null);
 
         try {
             $deckResult = $this->bus->dispatch(new GetDecksQuery(
-                $request->get('start'),
-                $request->get('length'),
-                $request->get('extraFilterName'),
+                $request->query->get('start'),
+                $request->query->get('length'),
+                $request->query->get('extraFilterName'),
                 $orderField,
                 $orderDirection,
                 $request->query->all()['extraFilterSet'] ?? null,
@@ -560,17 +560,17 @@ final class GetDecksController extends Controller
                 $request->query->all()['extraFilterHouses'] ?? null,
                 $request->query->all()['extraFilterHousesExcluded'] ?? null,
                 $request->query->all()['extraFilterDeckTypes'] ?? null,
-                $request->get('extraDeckId'),
-                $request->get('extraFilterOwner'),
+                $request->query->get('extraDeckId'),
+                $request->query->get('extraFilterOwner'),
                 $request->query->all()['extraFilterOwners'] ?? [],
                 false,
-                $request->get('extraFilterTagType'),
+                $request->query->get('extraFilterTagType'),
                 $request->query->all()['extraFilterTags'] ?? [],
                 $request->query->all()['extraFilterTagsExcluded'] ?? [],
-                $request->get('extraFilterMaxSas', 150),
-                $request->get('extraFilterMinSas', 0),
-                $request->get('extraFilterOnlyFriends') === 'true' ? $user?->id()->value() : null,
-                $request->get('extraFilterTagTypePrivate'),
+                $request->query->get('extraFilterMaxSas', 150),
+                $request->query->get('extraFilterMinSas', 0),
+                $request->query->get('extraFilterOnlyFriends') === 'true' ? $user?->id()->value() : null,
+                $request->query->get('extraFilterTagTypePrivate'),
                 $request->query->all()['extraFilterTagsPrivate'] ?? [],
                 $request->query->all()['extraFilterTagsPrivateExcluded'] ?? [],
             ));
@@ -601,7 +601,7 @@ final class GetDecksController extends Controller
 
         $response = [
             'data' => $decks['decks'],
-            'draw' => (int) $request->get('draw'),
+            'draw' => (int) $request->query->get('draw'),
             'recordsFiltered' => $decks['totalFiltered'],
             'recordsTotal' => $decks['total'],
         ];

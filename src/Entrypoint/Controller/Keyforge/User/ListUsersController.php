@@ -20,7 +20,7 @@ final class ListUsersController extends Controller
                 null,
                 true,
                 false,
-                $request->get('showAll') === null,
+                $request->query->get('showAll') === null,
                 $user->id()->value(),
             )),
         );
@@ -29,7 +29,7 @@ final class ListUsersController extends Controller
             'Keyforge/User/list_users.html.twig',
             [
                 'users' => $users,
-                'showAll' => $request->get('showAll') !== null,
+                'showAll' => $request->query->get('showAll') !== null,
             ],
         );
     }

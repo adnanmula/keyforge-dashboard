@@ -16,8 +16,8 @@ final class GetCompetitionsController extends Controller
 
         $result = $this->extractResult(
             $this->bus->dispatch(new GetCompetitionsQuery(
-                $request->get('start', 0),
-                $request->get('length', 10),
+                $request->query->get('start', 0),
+                $request->query->get('length', 10),
             )),
         );
 
@@ -25,7 +25,7 @@ final class GetCompetitionsController extends Controller
             'recordsTotal' => $result['total'],
             'recordsFiltered' => $result['totalFiltered'],
             'data' => $result['competitions'],
-            'draw' => (int) $request->get('draw'),
+            'draw' => (int) $request->query->get('draw'),
         ];
 
         return new JsonResponse($response);

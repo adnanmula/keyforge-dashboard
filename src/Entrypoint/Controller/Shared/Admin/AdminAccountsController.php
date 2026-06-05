@@ -18,7 +18,7 @@ final class AdminAccountsController extends Controller
             throw new \Exception('Operation not supported');
         }
 
-        $this->validateCsrfToken('admin_manage_accounts', $request->get('_csrf_token'));
+        $this->validateCsrfToken('admin_manage_accounts', $request->request->get('_csrf_token'));
 
         $this->bus->dispatch(new ApproveAccountCommand(
             $request->request->get('id'),

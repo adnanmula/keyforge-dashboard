@@ -32,7 +32,7 @@ class CompetitionController extends Controller
         }
 
         if ($request->getMethod() === Request::METHOD_POST) {
-            $this->validateCsrfToken('keyforge_competition_create', $request->get('_csrf_token'));
+            $this->validateCsrfToken('keyforge_competition_create', $request->request->get('_csrf_token'));
 
             try {
                 $this->bus->dispatch(new CreateCompetitionCommand(
@@ -70,19 +70,19 @@ class CompetitionController extends Controller
 
         return $this->render('Keyforge/Competition/list_competitions.html.twig', [
             'users' => \array_map(static fn (KeyforgeUser $user) => $user->jsonSerialize(), $users),
-            'success' => $request->get('success', false),
-            'result' => $request->get('success') ? 'Torneo creado' : false,
+            'success' => $request->request->get('success', false),
+            'result' => $request->request->get('success') ? 'Torneo creado' : false,
         ]);
     }
 
     public function start(Request $request): Response
     {
         $this->getUserWithRole(UserRole::ROLE_KEYFORGE);
-        $this->validateCsrfToken('keyforge_competition_start', $request->get('_csrf_token'));
+        $this->validateCsrfToken('keyforge_competition_start', $request->request->get('_csrf_token'));
 
         $this->bus->dispatch(new StartCompetitionCommand(
-            $request->get('competitionId'),
-            $request->get('date', new \DateTimeImmutable()->format('Y-m-d')),
+            $request->request->get('competitionId'),
+            $request->request->get('date', new \DateTimeImmutable()->format('Y-m-d')),
         ));
 
         return new Response('', Response::HTTP_OK);
@@ -91,12 +91,12 @@ class CompetitionController extends Controller
     public function finish(Request $request): Response
     {
         $this->getUserWithRole(UserRole::ROLE_KEYFORGE);
-        $this->validateCsrfToken('keyforge_competition_game_finish', $request->get('_csrf_token'));
+        $this->validateCsrfToken('keyforge_competition_game_finish', $request->request->get('_csrf_token'));
 
         $this->bus->dispatch(new FinishCompetitionCommand(
-            $request->get('competitionId'),
-            $request->get('winnerId'),
-            $request->get('date'),
+            $request->request->get('competitionId'),
+            $request->request->get('winnerId'),
+            $request->request->get('date'),
         ));
 
         return new Response('', Response::HTTP_OK);
@@ -105,10 +105,10 @@ class CompetitionController extends Controller
     public function join(Request $request): Response
     {
         $this->getUserWithRole(UserRole::ROLE_KEYFORGE);
-        $this->validateCsrfToken('keyforge_competition_join', $request->get('_csrf_token'));
+        $this->validateCsrfToken('keyforge_competition_join', $request->request->get('_csrf_token'));
 
         $this->bus->dispatch(new JoinCompetitionCommand(
-            $request->get('id'),
+            $request->request->get('id'),
         ));
 
         return new Response('', Response::HTTP_OK);
@@ -117,10 +117,10 @@ class CompetitionController extends Controller
     public function leave(Request $request): Response
     {
         $this->getUserWithRole(UserRole::ROLE_KEYFORGE);
-        $this->validateCsrfToken('keyforge_competition_leave', $request->get('_csrf_token'));
+        $this->validateCsrfToken('keyforge_competition_leave', $request->request->get('_csrf_token'));
 
         $this->bus->dispatch(new LeaveCompetitionCommand(
-            $request->get('id'),
+            $request->request->get('id'),
         ));
 
         return new Response('', Response::HTTP_OK);

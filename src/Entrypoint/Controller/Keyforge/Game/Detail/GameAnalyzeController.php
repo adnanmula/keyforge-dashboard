@@ -29,7 +29,7 @@ final class GameAnalyzeController extends Controller
 
     public function __invoke(Request $request): Response
     {
-        $log = $request->get('log');
+        $log = $request->request->get('log');
 
         if (null === $log) {
             return $this->render(
@@ -41,7 +41,7 @@ final class GameAnalyzeController extends Controller
         }
 
         try {
-            $this->validateCsrfToken('keyforge_game_analyze', $request->get('_csrf_token'));
+            $this->validateCsrfToken('keyforge_game_analyze', $request->request->get('_csrf_token'));
 
             $p = new GameLogParser();
             $parsedLog = $p->execute($log);

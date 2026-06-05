@@ -20,6 +20,7 @@ use AdnanMula\Criteria\Filter\Filters;
 use AdnanMula\Criteria\Filter\FilterType;
 use AdnanMula\Criteria\FilterField\FilterField;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
+use AdnanMula\KeyforgeGameLogParser\Event\EventType;
 use AdnanMula\KeyforgeGameLogParser\Parser\GameLogParser;
 use AdnanMula\Tournament\Fixture\FixtureType;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -45,12 +46,13 @@ final readonly class CreateCompetitionGameCommandHandler
 
         [$winnerDeck, $loserDeck] = $this->getDecks($command->winnerDeck, $command->loserDeck);
 
+        $parsedGame = null;
         $log = null;
-
         if (null !== $command->log) {
             try {
                 $parser = new GameLogParser();
-                $log = $parser->execute($command->log)->rawLog;
+                $parsedGame = $parser->execute($command->log);
+                $log = $parsedGame->rawLog;
             } catch (\Throwable) {
             }
         }
@@ -75,13 +77,46 @@ final readonly class CreateCompetitionGameCommandHandler
 
         $this->gameRepository->save($game);
 
-        if (null !== $log) {
+        if (null !== $parsedGame) {
+            $winner = $parsedGame->winner();
+            $loser = $parsedGame->loser();
+            $wt = $winner?->timeline;
+            $lt = $loser?->timeline;
+
             $this->gameRepository->saveLog(new KeyforgeGameLog(
                 Uuid::v4(),
                 $game->id(),
                 $log,
                 $user->id(),
                 new \DateTimeImmutable(),
+                turns: $winner !== null ? $parsedGame->length : null,
+                winnerAmberObtained: $wt?->totalAmberObtained(),
+                winnerAmberStolen: $wt?->totalAmberStolen(),
+                winnerCardsPlayed: $wt?->totalCardsPlayed(),
+                winnerCardsDrawn: $wt?->totalCardsDrawn(),
+                winnerCardsDiscarded: $wt?->totalCardsDiscarded(),
+                winnerKeysForged: $wt?->filter(EventType::KEY_FORGED)->count(),
+                winnerFights: $wt?->filter(EventType::FIGHT)->count(),
+                winnerReaps: $wt?->filter(EventType::REAP)->count(),
+                winnerExtraTurns: $wt?->totalExtraTurns(),
+                loserAmberObtained: $lt?->totalAmberObtained(),
+                loserAmberStolen: $lt?->totalAmberStolen(),
+                loserCardsPlayed: $lt?->totalCardsPlayed(),
+                loserCardsDrawn: $lt?->totalCardsDrawn(),
+                loserCardsDiscarded: $lt?->totalCardsDiscarded(),
+                loserKeysForged: $lt?->filter(EventType::KEY_FORGED)->count(),
+                loserFights: $lt?->filter(EventType::FIGHT)->count(),
+                loserReaps: $lt?->filter(EventType::REAP)->count(),
+                loserExtraTurns: $lt?->totalExtraTurns(),
+                totalAmberObtained: $wt !== null && $lt !== null ? $wt->totalAmberObtained() + $lt->totalAmberObtained() : null,
+                totalAmberStolen: $wt !== null && $lt !== null ? $wt->totalAmberStolen() + $lt->totalAmberStolen() : null,
+                totalCardsPlayed: $wt !== null && $lt !== null ? $wt->totalCardsPlayed() + $lt->totalCardsPlayed() : null,
+                totalCardsDrawn: $wt !== null && $lt !== null ? $wt->totalCardsDrawn() + $lt->totalCardsDrawn() : null,
+                totalCardsDiscarded: $wt !== null && $lt !== null ? $wt->totalCardsDiscarded() + $lt->totalCardsDiscarded() : null,
+                totalKeysForged: $wt !== null && $lt !== null ? $wt->filter(EventType::KEY_FORGED)->count() + $lt->filter(EventType::KEY_FORGED)->count() : null,
+                totalFights: $wt !== null && $lt !== null ? $wt->filter(EventType::FIGHT)->count() + $lt->filter(EventType::FIGHT)->count() : null,
+                totalReaps: $wt !== null && $lt !== null ? $wt->filter(EventType::REAP)->count() + $lt->filter(EventType::REAP)->count() : null,
+                totalExtraTurns: $wt !== null && $lt !== null ? $wt->totalExtraTurns() + $lt->totalExtraTurns() : null,
             ));
         }
 

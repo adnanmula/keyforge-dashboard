@@ -9,6 +9,7 @@ parameters:
         -   src/Kernel.php
         -   config/bootstrap.php
     ignoreErrors:
+        - identifier: missingType.generics
         - identifier: missingType.iterableValue
         -
             identifier: missingType.parameter

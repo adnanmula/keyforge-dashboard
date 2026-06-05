@@ -25,7 +25,7 @@ final class CreateGameController extends Controller
         }
 
         if ($request->getMethod() === Request::METHOD_POST) {
-            $this->validateCsrfToken('keyforge_game_create', $request->get('_csrf_token'));
+            $this->validateCsrfToken('keyforge_game_create', $request->request->get('_csrf_token'));
 
             try {
                 $this->bus->dispatch(new CreateGameCommand(

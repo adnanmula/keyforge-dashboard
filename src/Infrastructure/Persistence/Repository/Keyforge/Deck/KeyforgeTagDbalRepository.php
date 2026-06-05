@@ -79,8 +79,8 @@ final class KeyforgeTagDbalRepository extends DbalRepository implements Keyforge
     public function remove(Uuid $id): void
     {
         $this->connection->createQueryBuilder()
-            ->delete(self::TABLE, 'a')
-            ->where('a.id = :id')
+            ->delete(self::TABLE)
+            ->where('id = :id')
             ->setParameter('id', $id->value())
             ->executeStatement();
     }

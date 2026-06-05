@@ -13,9 +13,9 @@ final class RemoveTagController extends Controller
     public function __invoke(Request $request): Response
     {
         $this->getUserWithRole(UserRole::ROLE_KEYFORGE);
-        $this->validateCsrfToken('keyforge_deck_tag_remove', $request->get('_csrf_token'));
+        $this->validateCsrfToken('keyforge_deck_tag_remove', $request->request->get('_csrf_token'));
 
-        $this->bus->dispatch(new RemoveTagCommand($request->get('id')));
+        $this->bus->dispatch(new RemoveTagCommand($request->request->get('id')));
 
         return new Response('', Response::HTTP_OK);
     }

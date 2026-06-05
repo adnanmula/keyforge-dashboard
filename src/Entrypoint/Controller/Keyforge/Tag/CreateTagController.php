@@ -15,17 +15,17 @@ final class CreateTagController extends Controller
     public function __invoke(Request $request): Response
     {
         $this->assertIsLogged();
-        $this->validateCsrfToken('keyforge_deck_tag_create', $request->get('_csrf_token'));
+        $this->validateCsrfToken('keyforge_deck_tag_create', $request->request->get('_csrf_token'));
 
         $this->bus->dispatch(new CreateTagCommand(
             Uuid::v4()->value(),
-            $request->get('name'),
+            $request->request->get('name'),
             TagVisibility::PRIVATE->value,
             TagType::CUSTOM->value,
-            $request->get('styleBg'),
-            $request->get('styleText'),
-            $request->get('styleOutline'),
-            $request->get('deckId'),
+            $request->request->get('styleBg'),
+            $request->request->get('styleText'),
+            $request->request->get('styleOutline'),
+            $request->request->get('deckId'),
         ));
 
         return new Response('', Response::HTTP_OK);

@@ -4,42 +4,40 @@
     "type": "project",
     "license": "proprietary",
     "require": {
-        "php": "^8.4",
+        "php": "^8.4.1",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "ext-json": "*",
-        "adnanmula/criteria": "dev-support-order-null",
+        "adnanmula/criteria": "^0.5.0",
         "adnanmula/keyforge-game-log-parser": "dev-master",
         "adnanmula/tournament": "dev-master",
         "beberlei/assert": "^3.3",
-        "doctrine/dbal": "^3.6",
+        "doctrine/dbal": "^4.3",
         "nelmio/api-doc-bundle": "^5.0",
         "ramsey/uuid": "^4.7",
         "robmorgan/phinx": "^0.16",
-        "symfony/asset": "7.4.*",
-        "symfony/console": "7.4.*",
-        "symfony/dotenv": "7.4.*",
+        "symfony/asset": "8.1.*",
+        "symfony/console": "8.1.*",
+        "symfony/dotenv": "8.1.*",
         "symfony/flex": "^2",
-        "symfony/framework-bundle": "7.4.*",
-        "symfony/http-client": "7.4.*",
-        "symfony/lock": "7.4.*",
-        "symfony/messenger": "7.4.*",
-        "symfony/monolog-bundle": "^3.10",
-        "symfony/rate-limiter": "7.4.*",
-        "symfony/security-bundle": "7.4.*",
-        "symfony/translation": "7.4.*",
-        "symfony/twig-bundle": "7.4.*",
-        "symfony/yaml": "7.4.*"
+        "symfony/framework-bundle": "8.1.*",
+        "symfony/http-client": "8.1.*",
+        "symfony/lock": "8.1.*",
+        "symfony/messenger": "8.1.*",
+        "symfony/monolog-bundle": "^4",
+        "symfony/rate-limiter": "8.1.*",
+        "symfony/security-bundle": "8.1.*",
+        "symfony/translation": "8.1.*",
+        "symfony/twig-bundle": "8.1.*",
+        "symfony/yaml": "8.1.*"
     },
     "require-dev": {
         "adnanmula/coding-standard": "^0.0.13",
-        "behat/behat": "^3.13",
-        "friends-of-behat/symfony-extension": "^2.4",
         "phpro/grumphp": "^2.9",
         "phpstan/phpstan": "^2.1",
         "phpunit/phpunit": "^12",
-        "symfony/stopwatch": "7.4.*",
-        "symfony/web-profiler-bundle": "7.4.*"
+        "symfony/stopwatch": "8.1.*",
+        "symfony/web-profiler-bundle": "8.1.*"
     },
     "config": {
         "optimize-autoloader": true,
@@ -55,7 +53,7 @@
             "symfony/flex": true
         },
         "platform": {
-            "php": "8.4"
+            "php": "8.4.20"
         }
     },
     "autoload": {
@@ -100,7 +98,7 @@
     "extra": {
         "symfony": {
             "allow-contrib": false,
-            "require": "7.4.*"
+            "require": "8.1.*"
         }
     }
 }
