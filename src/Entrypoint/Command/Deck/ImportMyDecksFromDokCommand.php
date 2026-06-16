@@ -2,6 +2,7 @@
 
 namespace AdnanMula\Cards\Entrypoint\Command\Deck;
 
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Infrastructure\Service\Keyforge\DoK\ImportMyDecksFromDokService;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -32,7 +33,7 @@ final class ImportMyDecksFromDokCommand extends Command
         $owner = $input->getArgument('owner') ?? null;
         $forceUpdate = $input->getOption('force-update');
 
-        $this->service->execute($token, $owner, $forceUpdate);
+        $this->service->execute($token, Uuid::from($owner), $forceUpdate);
 
         return self::SUCCESS;
     }
