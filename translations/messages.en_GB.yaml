@@ -544,3 +544,14 @@ menu.winner_single_char: W
 menu.loser_single_char: L
 menu.total_single_char: ∑
 menu.key: ⚷
+menu.stats: Stats
+menu.streaks: 'Streaks'
+menu.current: 'Current'
+menu.best: 'Best'
+menu.current_win_streak: 'Current win streak'
+menu.current_loss_streak: 'Current loss streak'
+menu.best_loss_streak: 'Best loss streak'
+menu.winrate_over_time: 'Win rate over time'
+menu.winrate_by_set: 'Win rate by set'
+menu.winrate_by_sas: 'Win rate by SAS'
+menu.avg_stats: 'Average stats'

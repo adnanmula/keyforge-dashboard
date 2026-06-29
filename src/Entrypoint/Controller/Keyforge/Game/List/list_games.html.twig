@@ -47,6 +47,8 @@
         'statsMax': statsMax,
     } %}
 
+    {% include 'Keyforge/Game/List/games_stats.html.twig' with {'user_id': app.user.id} %}
+
     <div class="shadow-lg p-3 mb-5 bg-white rounded">
         {% include 'Keyforge/Game/List/game_list.html.twig' with {
             'deck_reference': null,

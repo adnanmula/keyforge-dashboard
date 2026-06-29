@@ -300,10 +300,12 @@
         prepareSelectors('loser-selector');
         prepareSelectors('score-selector');
         prepareSelectors('competition-selector');
+        $(document).trigger('gamesFiltersChanged');
         {% endif %}
 
         $('.game_list_filter').change(function (e) {
             $('#gamesList').DataTable().ajax.reload();
+            $(document).trigger('gamesFiltersChanged');
         });
 
         $(window).on('resize', function() {

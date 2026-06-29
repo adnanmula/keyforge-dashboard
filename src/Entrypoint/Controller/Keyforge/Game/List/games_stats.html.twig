@@ -1,0 +1,554 @@
+<div id="games-stats-section" class="shadow-lg p-3 mb-4 bg-white rounded" style="display:none">
+    <div class="row g-3 mb-3" id="stats-streaks">
+        <div class="col-12">
+            <div class="p-2">
+                <div class="d-flex flex-wrap align-items-center gap-3 justify-content-between">
+                    <div class="d-flex align-items-center gap-2">
+                        <h5 class="mb-0"><i class="bi bi-bar-chart-line-fill me-2"></i>{{ 'menu.stats'|trans }}</h5>
+                        <span id="stats-game-count" class="badge bg-secondary"></span>
+                    </div>
+                    <div class="d-flex align-items-center gap-3 small">
+                        <span class="text-muted">{{ 'menu.streaks'|trans }}</span>
+                        <span class="text-muted">{{ 'menu.current'|trans }}</span>
+                        <span id="stat-cur-streak" class="fw-bold">—</span>
+                        <span class="text-muted">·</span>
+                        <span class="text-muted">{{ 'menu.best'|trans }}</span>
+                        <span id="stat-best-win" class="fw-bold text-success">—</span>
+                        <span class="text-muted">/</span>
+                        <span id="stat-best-loss" class="fw-bold text-danger">—</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3 mb-3">
+        <div class="col-12">
+            <div class="border rounded p-3">
+                <h6 class="mb-2">{{ 'menu.winrate_over_time'|trans }}</h6>
+                <canvas id="chart-winrate-time" style="height:280px;max-height:280px"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3 mb-3">
+        <div class="col-12 col-md-6">
+            <div class="border rounded p-3 h-100">
+                <h6 class="mb-2">{{ 'menu.winrate_by_set'|trans }}</h6>
+                <canvas id="chart-winrate-set" style="height:240px;max-height:240px"></canvas>
+            </div>
+        </div>
+        <div class="col-12 col-md-6">
+            <div class="border rounded p-3 h-100">
+                <h6 class="mb-2">{{ 'menu.winrate_by_sas'|trans }}</h6>
+                <canvas id="chart-winrate-sas" style="height:240px;max-height:240px"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-12">
+            <div class="border rounded p-3">
+                <h6 class="mb-2">{{ 'menu.avg_stats'|trans }}</h6>
+                <div class="row g-0 small">
+                    <div class="col-12 col-md-6">
+                        <ul id="avg-stats-list" class="list-unstyled mb-0 me-2">
+                            <li class="d-flex justify-content-between py-1 border-bottom text-muted" style="font-size:0.75rem">
+                                <span></span>
+                                <span class="d-flex gap-3">
+                                    <span style="min-width:2.5rem;text-align:right" class="text-success">W</span>
+                                    <span style="min-width:2.5rem;text-align:right" class="text-danger">L</span>
+                                    <span id="avg-player-header" style="min-width:2.5rem;text-align:right;display:none" class="text-primary">{% if deck_id is defined and deck_id %}{{ 'menu.deck'|trans }}{% else %}{{ 'menu.you'|trans }}{% endif %}</span>
+                                </span>
+                            </li>
+                            <li class="d-flex justify-content-between py-1 border-bottom">
+                                <span class="text-muted">{{ 'menu.turns'|trans }}</span>
+                                <span class="d-flex gap-3">
+                                    <span class="fw-bold" id="avg-turns" style="min-width:2.5rem;text-align:right">—</span>
+                                    <span class="fw-bold" style="min-width:2.5rem;text-align:right"></span>
+                                    <span class="fw-bold" style="min-width:2.5rem;text-align:right"></span>
+                                </span>
+                            </li>
+                            <li class="d-flex justify-content-between align-items-center py-1 border-bottom">
+                                <span class="text-muted">{{ 'game.timeline.REAP'|trans }}</span>
+                                <span class="d-flex gap-3">
+                                    <span class="text-success fw-bold" id="avg-winner-reaps" style="min-width:2.5rem;text-align:right">—</span>
+                                    <span class="text-danger fw-bold" id="avg-loser-reaps" style="min-width:2.5rem;text-align:right">—</span>
+                                    <span class="text-primary fw-bold" id="avg-player-reaps" style="min-width:2.5rem;text-align:right;display:none">—</span>
+                                </span>
+                            </li>
+                            <li class="d-flex justify-content-between align-items-center py-1 border-bottom">
+                                <span class="text-muted">{{ 'game.timeline.FIGHT'|trans }}</span>
+                                <span class="d-flex gap-3">
+                                    <span class="text-success fw-bold" id="avg-winner-fights" style="min-width:2.5rem;text-align:right">—</span>
+                                    <span class="text-danger fw-bold" id="avg-loser-fights" style="min-width:2.5rem;text-align:right">—</span>
+                                    <span class="text-primary fw-bold" id="avg-player-fights" style="min-width:2.5rem;text-align:right;display:none">—</span>
+                                </span>
+                            </li>
+                            <li class="d-flex justify-content-between align-items-center py-1 border-bottom">
+                                <span class="text-muted">{{ 'menu.amber_obtained'|trans }}</span>
+                                <span class="d-flex gap-3">
+                                    <span class="text-success fw-bold" id="avg-winner-amber" style="min-width:2.5rem;text-align:right">—</span>
+                                    <span class="text-danger fw-bold" id="avg-loser-amber" style="min-width:2.5rem;text-align:right">—</span>
+                                    <span class="text-primary fw-bold" id="avg-player-amber-obtained" style="min-width:2.5rem;text-align:right;display:none">—</span>
+                                </span>
+                            </li>
+                            <li class="d-flex justify-content-between align-items-center py-1 border-bottom border-md-bottom-0">
+                                <span class="text-muted">{{ 'menu.amber_stolen'|trans }}</span>
+                                <span class="d-flex gap-3">
+                                    <span class="text-success fw-bold" id="avg-winner-stolen" style="min-width:2.5rem;text-align:right">—</span>
+                                    <span class="text-danger fw-bold" id="avg-loser-stolen" style="min-width:2.5rem;text-align:right">—</span>
+                                    <span class="text-primary fw-bold" id="avg-player-amber-stolen" style="min-width:2.5rem;text-align:right;display:none">—</span>
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <ul class="list-unstyled mb-0 ms-1">
+                            <li class="d-flex justify-content-between py-1 border-bottom text-muted d-none d-md-flex" style="font-size:0.75rem">
+                                <span></span>
+                                <span class="d-flex gap-3">
+                                    <span style="min-width:2.5rem;text-align:right" class="text-success">W</span>
+                                    <span style="min-width:2.5rem;text-align:right" class="text-danger">L</span>
+                                    <span id="avg-player-header-2" style="min-width:2.5rem;text-align:right;display:none" class="text-primary">{% if deck_id is defined and deck_id %}{{ 'menu.deck'|trans }}{% else %}{{ 'menu.you'|trans }}{% endif %}</span>
+                                </span>
+                            </li>
+                            <li class="d-flex justify-content-between align-items-center py-1 border-bottom">
+                                <span class="text-muted">{{ 'menu.cards_played'|trans }}</span>
+                                <span class="d-flex gap-3">
+                                    <span class="text-success fw-bold" id="avg-winner-cards-played" style="min-width:2.5rem;text-align:right">—</span>
+                                    <span class="text-danger fw-bold" id="avg-loser-cards-played" style="min-width:2.5rem;text-align:right">—</span>
+                                    <span class="text-primary fw-bold" id="avg-player-cards-played" style="min-width:2.5rem;text-align:right;display:none">—</span>
+                                </span>
+                            </li>
+                            <li class="d-flex justify-content-between align-items-center py-1 border-bottom">
+                                <span class="text-muted">{{ 'menu.cards_drawn'|trans }}</span>
+                                <span class="d-flex gap-3">
+                                    <span class="text-success fw-bold" id="avg-winner-cards-drawn" style="min-width:2.5rem;text-align:right">—</span>
+                                    <span class="text-danger fw-bold" id="avg-loser-cards-drawn" style="min-width:2.5rem;text-align:right">—</span>
+                                    <span class="text-primary fw-bold" id="avg-player-cards-drawn" style="min-width:2.5rem;text-align:right;display:none">—</span>
+                                </span>
+                            </li>
+                            <li class="d-flex justify-content-between align-items-center py-1 border-bottom">
+                                <span class="text-muted">{{ 'menu.cards_discarded'|trans }}</span>
+                                <span class="d-flex gap-3">
+                                    <span class="text-success fw-bold" id="avg-winner-cards-discarded" style="min-width:2.5rem;text-align:right">—</span>
+                                    <span class="text-danger fw-bold" id="avg-loser-cards-discarded" style="min-width:2.5rem;text-align:right">—</span>
+                                    <span class="text-primary fw-bold" id="avg-player-cards-discarded" style="min-width:2.5rem;text-align:right;display:none">—</span>
+                                </span>
+                            </li>
+                            <li class="d-flex justify-content-between align-items-center py-1 border-bottom">
+                                <span class="text-muted">{{ 'menu.keys_forged'|trans }}</span>
+                                <span class="d-flex gap-3">
+                                    <span class="text-success fw-bold" id="avg-winner-keys-forged" style="min-width:2.5rem;text-align:right">—</span>
+                                    <span class="text-danger fw-bold" id="avg-loser-keys-forged" style="min-width:2.5rem;text-align:right">—</span>
+                                    <span class="text-primary fw-bold" id="avg-player-keys-forged" style="min-width:2.5rem;text-align:right;display:none">—</span>
+                                </span>
+                            </li>
+                            <li class="d-flex justify-content-between align-items-center py-1">
+                                <span class="text-muted">{{ 'menu.extra_turns'|trans }}</span>
+                                <span class="d-flex gap-3">
+                                    <span class="text-success fw-bold" id="avg-winner-extra-turns" style="min-width:2.5rem;text-align:right">—</span>
+                                    <span class="text-danger fw-bold" id="avg-loser-extra-turns" style="min-width:2.5rem;text-align:right">—</span>
+                                    <span class="text-primary fw-bold" id="avg-player-extra-turns" style="min-width:2.5rem;text-align:right;display:none">—</span>
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let gamesStatsCharts = {};
+
+    function destroyChart(id) {
+        if (gamesStatsCharts[id]) {
+            gamesStatsCharts[id].destroy();
+            delete gamesStatsCharts[id];
+        }
+    }
+
+    function buildGamesStatsParams() {
+        const params = new URLSearchParams(window.location.search);
+        const result = {};
+
+        const winnerEl     = document.getElementById('winner-selector');
+        const loserEl      = document.getElementById('loser-selector');
+        const scoreEl      = document.getElementById('score-selector');
+        const competitionEl = document.getElementById('competition-selector');
+
+        if (winnerEl) {
+            const v = Array.from(winnerEl.selectedOptions).map(o => o.value).filter(Boolean);
+            if (v.length) result['extraFilterWinner[]'] = v;
+        } else if (params.has('winner')) {
+            result['extraFilterWinner[]'] = params.get('winner').split(',').filter(Boolean);
+        }
+
+        if (loserEl) {
+            const v = Array.from(loserEl.selectedOptions).map(o => o.value).filter(Boolean);
+            if (v.length) result['extraFilterLoser[]'] = v;
+        } else if (params.has('loser')) {
+            result['extraFilterLoser[]'] = params.get('loser').split(',').filter(Boolean);
+        }
+
+        if (scoreEl) {
+            const v = Array.from(scoreEl.selectedOptions).map(o => o.value).filter(Boolean);
+            if (v.length) result['extraFilterScore[]'] = v;
+        } else if (params.has('score')) {
+            result['extraFilterScore[]'] = params.get('score').split(',').filter(Boolean);
+        }
+
+        if (competitionEl) {
+            const v = Array.from(competitionEl.selectedOptions).map(o => o.value).filter(Boolean);
+            if (v.length) result['extraFilterCompetition[]'] = v;
+        } else if (params.has('competition')) {
+            result['extraFilterCompetition[]'] = params.get('competition').split(',').filter(Boolean);
+        }
+
+        if (params.has('date_from')) {
+            result['extraFilterDateFrom'] = params.get('date_from');
+        }
+
+        if (params.has('date_to')) {
+            result['extraFilterDateTo'] = params.get('date_to');
+        }
+
+        const logStatKeys = [
+            'turnsMin', 'turnsMax',
+            'winnerAmberObtainedMin', 'winnerAmberObtainedMax',
+            'winnerAmberStolenMin', 'winnerAmberStolenMax',
+            'winnerCardsPlayedMin', 'winnerCardsPlayedMax',
+            'winnerCardsDrawnMin', 'winnerCardsDrawnMax',
+            'winnerCardsDiscardedMin', 'winnerCardsDiscardedMax',
+            'winnerKeysForgedMin', 'winnerKeysForgedMax',
+            'winnerFightsMin', 'winnerFightsMax',
+            'winnerReapsMin', 'winnerReapsMax',
+            'winnerExtraTurnsMin', 'winnerExtraTurnsMax',
+            'loserAmberObtainedMin', 'loserAmberObtainedMax',
+            'loserAmberStolenMin', 'loserAmberStolenMax',
+            'loserCardsPlayedMin', 'loserCardsPlayedMax',
+            'loserCardsDrawnMin', 'loserCardsDrawnMax',
+            'loserCardsDiscardedMin', 'loserCardsDiscardedMax',
+            'loserKeysForgedMin', 'loserKeysForgedMax',
+            'loserFightsMin', 'loserFightsMax',
+            'loserReapsMin', 'loserReapsMax',
+            'loserExtraTurnsMin', 'loserExtraTurnsMax',
+            'totalAmberObtainedMin', 'totalAmberObtainedMax',
+            'totalAmberStolenMin', 'totalAmberStolenMax',
+            'totalCardsPlayedMin', 'totalCardsPlayedMax',
+            'totalCardsDrawnMin', 'totalCardsDrawnMax',
+            'totalCardsDiscardedMin', 'totalCardsDiscardedMax',
+            'totalKeysForgedMin', 'totalKeysForgedMax',
+            'totalFightsMin', 'totalFightsMax',
+            'totalReapsMin', 'totalReapsMax',
+            'totalExtraTurnsMin', 'totalExtraTurnsMax',
+        ];
+        logStatKeys.forEach(k => { if (params.has(k)) result[k] = params.get(k); });
+
+        {% if user_id is defined and user_id %}
+        result['userId'] = '{{ user_id }}';
+        {% endif %}
+        {% if deck_id is defined and deck_id %}
+        result['deckId'] = '{{ deck_id }}';
+        {% endif %}
+
+        return result;
+    }
+
+    function loadGamesStats() {
+        $.ajax({
+            url: '{{ path('keyforge_games_stats') }}',
+            type: 'GET',
+            data: buildGamesStatsParams(),
+            traditional: false,
+            success: function (data) {
+                renderGamesStats(data);
+            },
+            error: function () {
+                $('#games-stats-section').hide();
+            },
+        });
+    }
+
+    function renderGamesStats(data) {
+        const section = document.getElementById('games-stats-section');
+
+        const totalGames = (data.winrate_over_time || []).reduce((s, r) => s + r.total, 0);
+        if (totalGames === 0) {
+            section.style.display = 'none';
+            return;
+        }
+
+        section.style.display = '';
+
+        const totalWins   = (data.winrate_over_time || []).reduce((s, r) => s + r.wins, 0);
+        const totalLosses = (data.winrate_over_time || []).reduce((s, r) => s + r.losses, 0);
+        const overallWr   = totalGames > 0 ? (totalWins / totalGames * 100).toFixed(1) : 0;
+
+        document.getElementById('stats-game-count').textContent =
+            totalGames + ' games · ' + totalWins + 'W / ' + totalLosses + 'L · ' + overallWr + '% WR';
+
+        const streak = data.win_streak || {};
+        const curWin  = streak.current_win  ?? 0;
+        const curLoss = streak.current_loss ?? 0;
+        const curEl   = document.getElementById('stat-cur-streak');
+        if (curWin > 0) {
+            curEl.textContent = curWin;
+            curEl.className = 'fw-bold text-success';
+        } else if (curLoss > 0) {
+            curEl.textContent = curLoss;
+            curEl.className = 'fw-bold text-danger';
+        } else {
+            curEl.textContent = '—';
+            curEl.className = 'fw-bold';
+        }
+        document.getElementById('stat-best-win').textContent  = streak.best_win  ?? '—';
+        document.getElementById('stat-best-loss').textContent = streak.best_loss ?? '—';
+
+        const avgs = data.avg_stats || {};
+        document.getElementById('avg-turns').textContent                  = avgs.turns                  ?? '—';
+        document.getElementById('avg-winner-reaps').textContent           = avgs.winner_reaps            ?? '—';
+        document.getElementById('avg-winner-fights').textContent          = avgs.winner_fights           ?? '—';
+        document.getElementById('avg-winner-amber').textContent           = avgs.winner_amber_obtained   ?? '—';
+        document.getElementById('avg-winner-stolen').textContent          = avgs.winner_amber_stolen     ?? '—';
+        document.getElementById('avg-winner-cards-played').textContent    = avgs.winner_cards_played     ?? '—';
+        document.getElementById('avg-winner-cards-drawn').textContent     = avgs.winner_cards_drawn      ?? '—';
+        document.getElementById('avg-winner-cards-discarded').textContent = avgs.winner_cards_discarded  ?? '—';
+        document.getElementById('avg-winner-keys-forged').textContent     = avgs.winner_keys_forged      ?? '—';
+        document.getElementById('avg-winner-extra-turns').textContent     = avgs.winner_extra_turns      ?? '—';
+        document.getElementById('avg-loser-reaps').textContent            = avgs.loser_reaps             ?? '—';
+        document.getElementById('avg-loser-fights').textContent           = avgs.loser_fights            ?? '—';
+        document.getElementById('avg-loser-amber').textContent            = avgs.loser_amber_obtained    ?? '—';
+        document.getElementById('avg-loser-stolen').textContent           = avgs.loser_amber_stolen      ?? '—';
+        document.getElementById('avg-loser-cards-played').textContent     = avgs.loser_cards_played      ?? '—';
+        document.getElementById('avg-loser-cards-drawn').textContent      = avgs.loser_cards_drawn       ?? '—';
+        document.getElementById('avg-loser-cards-discarded').textContent  = avgs.loser_cards_discarded   ?? '—';
+        document.getElementById('avg-loser-keys-forged').textContent      = avgs.loser_keys_forged       ?? '—';
+        document.getElementById('avg-loser-extra-turns').textContent      = avgs.loser_extra_turns       ?? '—';
+
+        const playerAvgs = data.player_avg_stats || {};
+        const hasPlayer  = Object.keys(playerAvgs).length > 0;
+        document.querySelectorAll('#avg-player-header, #avg-player-header-2, #avg-player-reaps, #avg-player-fights, #avg-player-amber-obtained, #avg-player-amber-stolen, #avg-player-cards-played, #avg-player-cards-drawn, #avg-player-cards-discarded, #avg-player-keys-forged, #avg-player-extra-turns').forEach(el => {
+            el.style.display = hasPlayer ? '' : 'none';
+        });
+        if (hasPlayer) {
+            document.getElementById('avg-player-reaps').textContent           = playerAvgs.reaps            ?? '—';
+            document.getElementById('avg-player-fights').textContent          = playerAvgs.fights           ?? '—';
+            document.getElementById('avg-player-amber-obtained').textContent  = playerAvgs.amber_obtained   ?? '—';
+            document.getElementById('avg-player-amber-stolen').textContent    = playerAvgs.amber_stolen     ?? '—';
+            document.getElementById('avg-player-cards-played').textContent    = playerAvgs.cards_played     ?? '—';
+            document.getElementById('avg-player-cards-drawn').textContent     = playerAvgs.cards_drawn      ?? '—';
+            document.getElementById('avg-player-cards-discarded').textContent = playerAvgs.cards_discarded  ?? '—';
+            document.getElementById('avg-player-keys-forged').textContent     = playerAvgs.keys_forged      ?? '—';
+            document.getElementById('avg-player-extra-turns').textContent     = playerAvgs.extra_turns      ?? '—';
+        }
+
+        renderWinrateOverTimeChart(data.winrate_over_time || []);
+        renderWinrateBySetChart(data.winrate_by_set || []);
+        renderWinrateBySasChart(data.winrate_by_sas || []);
+    }
+
+    function renderWinrateOverTimeChart(rows) {
+        destroyChart('winrate-time');
+        if (!rows.length) return;
+
+        const labels   = rows.map(r => r.month);
+        const winrates = rows.map(r => r.winrate);
+        const cumWr    = rows.map(r => r.cum_winrate);
+        const wins     = rows.map(r => r.wins);
+        const losses   = rows.map(r => r.losses);
+
+        gamesStatsCharts['winrate-time'] = new Chart(
+            document.getElementById('chart-winrate-time').getContext('2d'),
+            {
+                type: 'bar',
+                data: {
+                    labels,
+                    datasets: [
+                        {
+                            label: 'Wins',
+                            data: wins,
+                            backgroundColor: 'rgba(40,167,69,0.7)',
+                            stack: 'games',
+                            yAxisID: 'count',
+                            order: 2,
+                        },
+                        {
+                            label: 'Losses',
+                            data: losses,
+                            backgroundColor: 'rgba(220,53,69,0.7)',
+                            stack: 'games',
+                            yAxisID: 'count',
+                            order: 2,
+                        },
+                        {
+                            label: 'WR %',
+                            data: winrates,
+                            type: 'line',
+                            borderColor: 'rgb(37,41,33)',
+                            backgroundColor: 'transparent',
+                            pointRadius: 3,
+                            borderWidth: 2,
+                            yAxisID: 'pct',
+                            order: 1,
+                        },
+                        {
+                            label: 'Cum. WR %',
+                            data: cumWr,
+                            type: 'line',
+                            borderColor: 'rgb(255,193,7)',
+                            backgroundColor: 'transparent',
+                            borderDash: [4, 4],
+                            pointRadius: 2,
+                            borderWidth: 2,
+                            yAxisID: 'pct',
+                            order: 1,
+                        },
+                    ],
+                },
+                options: {
+                    responsive: true,
+                    interaction: { mode: 'index' },
+                    plugins: { legend: { position: 'bottom', labels: { boxWidth: 12 } } },
+                    scales: {
+                        count: { type: 'linear', position: 'left',  stacked: true, title: { display: false }, ticks: { precision: 0 } },
+                        pct:   { type: 'linear', position: 'right', min: 0, max: 100, title: { display: false }, grid: { drawOnChartArea: false }, ticks: { callback: v => v + '%' } },
+                    },
+                },
+            },
+        );
+    }
+
+    function renderWinrateBySetChart(rows) {
+        destroyChart('winrate-set');
+        if (!rows.length) return;
+
+        const labels   = rows.map(r => r.set);
+        const wins     = rows.map(r => r.wins);
+        const losses   = rows.map(r => r.losses);
+        const winrates = rows.map(r => r.winrate);
+
+        gamesStatsCharts['winrate-set'] = new Chart(
+            document.getElementById('chart-winrate-set').getContext('2d'),
+            {
+                type: 'bar',
+                data: {
+                    labels,
+                    datasets: [
+                        {
+                            label: 'Wins',
+                            data: wins,
+                            backgroundColor: 'rgba(40,167,69,0.75)',
+                            stack: 'games',
+                            yAxisID: 'count',
+                            order: 2,
+                        },
+                        {
+                            label: 'Losses',
+                            data: losses,
+                            backgroundColor: 'rgba(220,53,69,0.75)',
+                            stack: 'games',
+                            yAxisID: 'count',
+                            order: 2,
+                        },
+                        {
+                            label: 'WR %',
+                            data: winrates,
+                            type: 'line',
+                            borderColor: 'rgb(37,41,33)',
+                            backgroundColor: 'transparent',
+                            pointRadius: 4,
+                            borderWidth: 2,
+                            yAxisID: 'pct',
+                            order: 1,
+                        },
+                    ],
+                },
+                options: {
+                    responsive: true,
+                    interaction: { mode: 'index' },
+                    plugins: { legend: { position: 'bottom', labels: { boxWidth: 12 } } },
+                    scales: {
+                        count: { type: 'linear', position: 'left',  stacked: true, ticks: { precision: 0 } },
+                        pct:   { type: 'linear', position: 'right', min: 0, max: 100, grid: { drawOnChartArea: false }, ticks: { callback: v => v + '%' } },
+                    },
+                },
+            },
+        );
+    }
+
+    function renderWinrateBySasChart(rows) {
+        destroyChart('winrate-sas');
+        if (!rows.length) return;
+
+        const labels   = rows.map(r => r.sas);
+        const wins     = rows.map(r => r.wins);
+        const losses   = rows.map(r => r.losses);
+        const winrates = rows.map(r => r.winrate);
+
+        gamesStatsCharts['winrate-sas'] = new Chart(
+            document.getElementById('chart-winrate-sas').getContext('2d'),
+            {
+                type: 'bar',
+                data: {
+                    labels,
+                    datasets: [
+                        {
+                            label: 'Wins',
+                            data: wins,
+                            backgroundColor: 'rgba(40,167,69,0.75)',
+                            stack: 'games',
+                            yAxisID: 'count',
+                            order: 2,
+                        },
+                        {
+                            label: 'Losses',
+                            data: losses,
+                            backgroundColor: 'rgba(220,53,69,0.75)',
+                            stack: 'games',
+                            yAxisID: 'count',
+                            order: 2,
+                        },
+                        {
+                            label: 'WR %',
+                            data: winrates,
+                            type: 'line',
+                            borderColor: 'rgb(37,41,33)',
+                            backgroundColor: 'transparent',
+                            pointRadius: 4,
+                            borderWidth: 2,
+                            yAxisID: 'pct',
+                            order: 1,
+                        },
+                    ],
+                },
+                options: {
+                    responsive: true,
+                    interaction: { mode: 'index' },
+                    plugins: { legend: { position: 'bottom', labels: { boxWidth: 12 } } },
+                    scales: {
+                        count: { type: 'linear', position: 'left',  stacked: true, ticks: { precision: 0 } },
+                        pct:   { type: 'linear', position: 'right', min: 0, max: 100, grid: { drawOnChartArea: false }, ticks: { callback: v => v + '%' } },
+                    },
+                },
+            },
+        );
+    }
+
+    $(document).ready(function () {
+        {% if deck_id is not defined or not deck_id %}
+        loadGamesStats();
+        {% endif %}
+    });
+
+    $('#applyGamesFilters').on('click', function () {
+        setTimeout(loadGamesStats, 100);
+    });
+
+    $(document).on('gamesFiltersChanged', function () {
+        setTimeout(loadGamesStats, 100);
+    });
+</script>
