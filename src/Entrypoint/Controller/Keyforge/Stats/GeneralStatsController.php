@@ -15,6 +15,20 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class GeneralStatsController extends Controller
 {
+    private const array HOUSES = [
+        KeyforgeSet::CotA->value => 0,
+        KeyforgeSet::AoA->value => 0,
+        KeyforgeSet::WC->value => 0,
+        KeyforgeSet::MM->value => 0,
+        KeyforgeSet::DT->value => 0,
+        KeyforgeSet::WoE->value => 0,
+        KeyforgeSet::GR->value => 0,
+        KeyforgeSet::ToC->value => 0,
+        KeyforgeSet::AS->value => 0,
+        KeyforgeSet::PV->value => 0,
+        KeyforgeSet::DM->value => 0,
+    ];
+
     public function __construct(
         MessageBusInterface $bus,
         Security $security,
@@ -94,18 +108,7 @@ final class GeneralStatsController extends Controller
 
     public function winrateBySet(mixed $wrBySet): array
     {
-        $wrBySetOrdered = [
-            KeyforgeSet::CotA->value => 0,
-            KeyforgeSet::AoA->value => 0,
-            KeyforgeSet::WC->value => 0,
-            KeyforgeSet::MM->value => 0,
-            KeyforgeSet::DT->value => 0,
-            KeyforgeSet::WoE->value => 0,
-            KeyforgeSet::GR->value => 0,
-            KeyforgeSet::ToC->value => 0,
-            KeyforgeSet::AS->value => 0,
-            KeyforgeSet::PV->value => 0,
-        ];
+        $wrBySetOrdered = self::HOUSES;
 
         foreach ($wrBySet as $key => $value) {
             if (false === \array_key_exists($key, $wrBySetOrdered)) {
@@ -120,18 +123,7 @@ final class GeneralStatsController extends Controller
 
     private function avgStatsBySet(mixed $avgStatsBySet): array
     {
-        $avgStatsBySetOrdered = [
-            KeyforgeSet::CotA->value => 0,
-            KeyforgeSet::AoA->value => 0,
-            KeyforgeSet::WC->value => 0,
-            KeyforgeSet::MM->value => 0,
-            KeyforgeSet::DT->value => 0,
-            KeyforgeSet::WoE->value => 0,
-            KeyforgeSet::GR->value => 0,
-            KeyforgeSet::ToC->value => 0,
-            KeyforgeSet::AS->value => 0,
-            KeyforgeSet::PV->value => 0,
-        ];
+        $avgStatsBySetOrdered = self::HOUSES;
 
         foreach ($avgStatsBySet as $key => $value) {
             if (false === \array_key_exists($key, $avgStatsBySetOrdered)) {
