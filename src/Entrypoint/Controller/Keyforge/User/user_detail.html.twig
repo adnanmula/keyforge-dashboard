@@ -25,17 +25,10 @@
                 <div class="col-10 d-flex justify-content-start"><h6>{{ 'menu.tco_name'|trans }}: {{ tcoName }}</h6></div>
             </div>
         {% endif %}
-
-        <div class="divider py-2"></div>
-
-        <div class="row">
-        {% for competition,wr in wr_by_competition %}
-            <div class="col-12 col-sm-6 col-md-4">
-                <canvas id="wr_by_competition_{{ competition }}" class="deck_stats_comparison"></canvas>
-            </div>
-        {% endfor %}
-        </div>
     </div>
+
+    {% include 'Keyforge/Game/List/games_stats.html.twig' with {'user_id': reference} %}
+
     <div class="p-3 mb-1 w-100">
         <div class="row">
             {% if deck_stats is not null and deck_stats.best_win_ratio_deck_id is defined %}

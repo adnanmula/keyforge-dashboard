@@ -544,3 +544,14 @@ menu.winner_single_char: G
 menu.loser_single_char: P
 menu.total_single_char: ∑
 menu.key: ⚷
+menu.stats: Estadísticas
+menu.streaks: 'Rachas'
+menu.current: 'Actual'
+menu.best: 'Mejor'
+menu.current_win_streak: 'Racha de victorias actual'
+menu.current_loss_streak: 'Racha de derrotas actual'
+menu.best_loss_streak: 'Mejor racha de derrotas'
+menu.winrate_over_time: 'Ratio de victorias en el tiempo'
+menu.winrate_by_set: 'Ratio de victorias por edición'
+menu.winrate_by_sas: 'Ratio de victorias por SAS'
+menu.avg_stats: 'Estadísticas medias'

@@ -86,13 +86,13 @@ final readonly class GetGamesQueryHandler
                     : null,
                 'winner_name' => $indexedUsers[$game->winner()->value()] ?? 'Anonymous',
                 'winner_deck' => $game->winnerDeck()->value(),
-                'winner_deck_name' => $indexedDecks[$game->winnerDeck()->value()],
+                'winner_deck_name' => $indexedDecks[$game->winnerDeck()->value()] ?? 'Unknown',
                 'loser' => array_key_exists($game->loser()->value(), $indexedUsers)
                     ? $game->loser()->value()
                     : null,
                 'loser_name' => $indexedUsers[$game->loser()->value()] ?? 'Anonymous',
                 'loser_deck' => $game->loserDeck()->value(),
-                'loser_deck_name' => $indexedDecks[$game->loserDeck()->value()],
+                'loser_deck_name' => $indexedDecks[$game->loserDeck()->value()] ?? 'Unknown',
                 'score' => $game->score()->winnerScore() . '/' . $game->score()->loserScore(),
                 'first_turn' => null === $game->firstTurn()
                     ? null
