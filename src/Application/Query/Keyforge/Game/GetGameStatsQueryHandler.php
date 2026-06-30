@@ -4,7 +4,9 @@ namespace AdnanMula\Cards\Application\Query\Keyforge\Game;
 
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeSet;
+use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeGame;
 use AdnanMula\Cards\Domain\Model\Keyforge\Game\KeyforgeGameRepository;
+use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Criteria\Criteria;
 use AdnanMula\Criteria\Filter\Filter;
 use AdnanMula\Criteria\Filter\FilterOperator;
@@ -23,8 +25,8 @@ final readonly class GetGameStatsQueryHandler
     public function __invoke(GetGameStatsQuery $query): array
     {
         $gamesQuery = new GetGamesQuery(
-            deckId: $query->deckId,
-            userId: $query->userId,
+            deckId: $query->deckId?->value(),
+            userId: $query->userId?->value(),
             winners: $query->winners,
             losers: $query->losers,
             loserScores: $query->loserScores,
@@ -77,25 +79,30 @@ final readonly class GetGameStatsQueryHandler
         ];
     }
 
-    private function isWin(mixed $game, ?string $userId, ?string $deckId): bool
+    private function isWin(KeyforgeGame $game, ?Uuid $userId, ?Uuid $deckId): bool
     {
         if (null !== $userId) {
-            return $game->winner()->value() === $userId;
+            return $game->winner()->equalTo($userId);
         }
 
         if (null !== $deckId) {
-            return $game->winnerDeck()->value() === $deckId;
+            return $game->winnerDeck()->equalTo($deckId);
         }
 
         return false;
     }
 
-    private function computeWinrateOverTime(array $games, ?string $userId, ?string $deckId = null): array
+    private function computeWinrateOverTime(array $games, ?Uuid $userId, ?Uuid $deckId = null): array
     {
         $byMonth = [];
 
+        /** @var KeyforgeGame $game */
         foreach ($games as $game) {
             $month = \substr($game->date()->format('Y-m-d'), 0, 7);
+
+            if (null === $deckId && $game->isSoloPlay()) {
+                continue;
+            }
 
             if (!isset($byMonth[$month])) {
                 $byMonth[$month] = ['wins' => 0, 'losses' => 0];
@@ -146,8 +153,10 @@ final readonly class GetGameStatsQueryHandler
         $sums = \array_fill_keys($statKeys, 0);
         $counts = \array_fill_keys($statKeys, 0);
 
+        /** @var KeyforgeGame $game */
         foreach ($games as $game) {
             $stats = $game->logStats();
+
             if (null === $stats) {
                 continue;
             }
@@ -168,7 +177,7 @@ final readonly class GetGameStatsQueryHandler
         return $avgs;
     }
 
-    private function computePlayerAvgStats(array $games, ?string $userId, ?string $deckId = null): array
+    private function computePlayerAvgStats(array $games, ?Uuid $userId, ?Uuid $deckId = null): array
     {
         if (null === $userId && null === $deckId) {
             return [];
@@ -218,7 +227,7 @@ final readonly class GetGameStatsQueryHandler
         return $avgs;
     }
 
-    private function computeWinStreak(array $games, ?string $userId, ?string $deckId = null): array
+    private function computeWinStreak(array $games, ?Uuid $userId, ?Uuid $deckId = null): array
     {
         $currentWinStreak = 0;
         $currentLossStreak = 0;
@@ -228,6 +237,10 @@ final readonly class GetGameStatsQueryHandler
         $runStreak = 0;
 
         foreach ($games as $game) {
+            if (null === $deckId && $game->isSoloPlay()) {
+                continue;
+            }
+
             $isWin = $this->isWin($game, $userId, $deckId);
 
             if ($lastResult === null) {
@@ -266,7 +279,7 @@ final readonly class GetGameStatsQueryHandler
         ];
     }
 
-    private function computeWinrateBySet(array $games, ?string $userId, ?string $deckId, array $deckDataById): array
+    private function computeWinrateBySet(array $games, ?Uuid $userId, ?Uuid $deckId, array $deckDataById): array
     {
         $bySet = [];
 
@@ -319,7 +332,7 @@ final readonly class GetGameStatsQueryHandler
         return $result;
     }
 
-    private function computeWinrateBySas(array $games, ?string $userId, ?string $deckId, array $deckDataById): array
+    private function computeWinrateBySas(array $games, ?Uuid $userId, ?Uuid $deckId, array $deckDataById): array
     {
         $bySas = [];
 
