@@ -4,16 +4,16 @@ namespace AdnanMula\Cards\Domain\Model\Shared\ValueObject;
 
 use Assert\Assert;
 
-final class TagStyle implements \JsonSerializable
+final readonly class TagStyle implements \JsonSerializable
 {
     public const string COLOR_BG = 'color_bg';
     public const string COLOR_TEXT = 'color_text';
     public const string COLOR_OUTLINE = 'color_outline';
 
     private function __construct(
-        public readonly string $colorBg,
-        public readonly string $colorText,
-        public readonly string $colorOutline,
+        public string $colorBg,
+        public string $colorText,
+        public string $colorOutline,
     ) {}
 
     public static function from(array $style): self

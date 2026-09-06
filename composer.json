@@ -12,7 +12,7 @@
         "adnanmula/keyforge-game-log-parser": "dev-master",
         "adnanmula/tournament": "dev-master",
         "beberlei/assert": "^3.3",
-        "doctrine/dbal": "^4.3",
+        "doctrine/dbal": "^4.4",
         "nelmio/api-doc-bundle": "^5.0",
         "ramsey/uuid": "^4.7",
         "robmorgan/phinx": "^0.16",
@@ -32,7 +32,7 @@
         "symfony/yaml": "8.1.*"
     },
     "require-dev": {
-        "adnanmula/coding-standard": "^0.0.13",
+        "adnanmula/coding-standard": "^0.0.14",
         "phpro/grumphp": "^2.9",
         "phpstan/phpstan": "^2.1",
         "phpunit/phpunit": "^12",
