@@ -5,8 +5,9 @@
 
 <script>
     const forgeEvents = JSON.parse('{{ log.timeline.filter(eventTypes.KEY_FORGED).items|json_encode|raw }}');
+    const unforgeEvents = JSON.parse('{{ log.timeline.filter(eventTypes.KEY_UNFORGED).items|json_encode|raw }}');
     const checkEvents = JSON.parse('{{ log.timeline.filter(eventTypes.CHECK_DECLARED).items|json_encode|raw }}');
-    const events = checkEvents.concat(forgeEvents);
+    const events = checkEvents.concat(forgeEvents).concat(unforgeEvents);
 
     const playerMap = {};
     let playerIndex = 0;
@@ -27,7 +28,7 @@
             datasets: [{
                 data: dataPoints,
                 pointRadius: 15,
-                pointStyle: 'circle',
+                pointStyle: dataPoints.map(k => k.type === 'KEY_UNFORGED' ? 'triangle' : 'circle'),
                 backgroundColor: dataPoints.map(k => k.keyColor),
                 showLine: false,
             }],
@@ -38,17 +39,23 @@
                 tooltip: {
                     callbacks: {
                         label: ctx => {
-                            if ('CHECK_DECLARED' === ctx.raw.type) {
-                                return [
-                                    `${ctx.raw.turn}`,
-                                    `{{ 'game.timeline.check'|trans }}`,
-                                ];
-                            } else {
-                                return [
-                                    `${ctx.raw.turn}`,
-                                    `${ctx.raw.amberCost}`,
-                                    `${ctx.raw.amberRemaining}`,
-                                ];
+                            switch (ctx.raw.type) {
+                                case 'CHECK_DECLARED':
+                                    return [
+                                        `${ctx.raw.turn}`,
+                                        `{{ 'game.timeline.check'|trans }}`,
+                                    ];
+                                case 'KEY_UNFORGED':
+                                    return [
+                                        `${ctx.raw.turn}`,
+                                        `{{ 'game.timeline.unforge'|trans }}`,
+                                    ];
+                                default:
+                                    return [
+                                        `${ctx.raw.turn}`,
+                                        `${ctx.raw.amberCost}`,
+                                        `${ctx.raw.amberRemaining}`,
+                                    ];
                             }
                         },
                     },
@@ -102,7 +109,7 @@
 
         const dataPoints = events.map(e => ({
             x: e.turn.value,
-            y: playerMap[e.player],
+            y: e.type === 'KEY_UNFORGED' ? playerMap[e.payload.target] : playerMap[e.player],
             borderWidth: 0,
             player: e.player,
             key: e.value,

@@ -152,7 +152,7 @@
             </div>
 
             <div class="row mt-3">
-                <div class="col-md-12">
+                <div class="col-12">
                     <label for="notes" class="form-label">{{ 'game.notes'|trans }}</label>
                     <textarea class="form-control" name="notes" id="notes" rows="5" maxlength="512"></textarea>
                 </div>
@@ -161,9 +161,11 @@
             <div class="divider py-1"></div>
 
             <div class="row mt-3">
-                <div class="col-md-12">
+                <div class="col-12">
                     <label for="log" class="form-label">{{ 'game.log'|trans }}</label>
                     <i class="bi bi-info-circle" data-toggle="tooltip" title="{{ 'menu.game_log_tooltip'|trans }}"></i>
+                    <button type="button" id="autofill" class="btn btn-sm btn-dark float-end mb-1">{{ 'game.autofill'|trans }}</button>
+
                     <textarea class="form-control" name="log" id="log" rows="5"></textarea>
                 </div>
             </div>
@@ -173,7 +175,7 @@
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('keyforge_game_create') }}">
 
             <div class="row mt-3">
-                <div class="col-md-12">
+                <div class="col-12">
                     <button type="submit" class="btn btn-block btn-dark w-100">{{ 'game.save'|trans }}</button>
                 </div>
             </div>
@@ -209,7 +211,7 @@
                 let selectData = winnerSelect.select2('data');
 
                 if (selectData.length > 0) {
-                    winner = {id: selectData[0].id, name: selectData[0].name};
+                    winner = {id: selectData[0].id, name: selectData[0].text};
                 }
             }
 
@@ -221,7 +223,7 @@
                 let selectData = loserSelect.select2('data');
 
                 if (selectData.length > 0) {
-                    loser = {id: selectData[0].id, name: selectData[0].name};
+                    loser = {id: selectData[0].id, name: selectData[0].text};
                 }
             }
 
@@ -231,7 +233,7 @@
             }
         }
 
-        function refreshFirstPlayerInput() {
+        function refreshFirstPlayerInput(selected) {
             const users = currentUsers();
             const winner = users.winner;
             const loser = users.loser;
@@ -241,12 +243,12 @@
             select.empty();
 
             if (winner) {
-                select.append(new Option(winner.name, winner.id, false, false));
+                select.append(new Option(winner.name, winner.id, selected === winner.id, selected === winner.id));
             }
 
             if (undefined !== loser) {
                 if (undefined === winner || winner.id !== loser.id) {
-                    select.append(new Option(loser.name, loser.id, false, false));
+                    select.append(new Option(loser.name, loser.id, selected === loser.id, selected === loser.id));
                 }
             }
 
@@ -455,6 +457,65 @@
             });
 
             this.submit();
+        });
+
+        $('#autofill').click(function (e) {
+            e.preventDefault();
+            $.post({
+                url: '{{ path('keyforge_game_autofill_values') }}',
+                data: {
+                    'log': $('#log')[0].value,
+                },
+            }).done(function(data) {
+                const isValid = data.game.is_valid;
+
+                if (false === isValid) {
+                    alert('Invalid or incomplete game log');
+                    return;
+                }
+
+                const winnerDeckId = data.winner.deck_id;
+                const loserDeckId = data.loser.deck_id;
+                const gameType = data.game.type;
+                const loserScore = data.loser.score;
+                const winnerIsExternal = null === data.winner.id;
+                const loserIsExternal = null === data.loser.id;
+                const winner = data.winner.name;
+                const loser = data.loser.name;
+
+                $("#competition").val(gameType).trigger('change');
+                $('input[name="loserScore"][value="'+loserScore+'"]').prop('checked', true);
+
+                $('#winnerDeckSwitch').prop('checked', null !== winnerDeckId).trigger('change');
+                $('#loserDeckSwitch').prop('checked', null !== loserDeckId).trigger('change');
+
+                if (null !== winnerDeckId) {
+                    $("#winnerDeckId").val(winnerDeckId).trigger('change');
+                }
+
+                if (null !== loserDeckId) {
+                    $("#loserDeckId").val(loserDeckId).trigger('change');
+                }
+
+                $('#winnerSwitch').prop('checked', winnerIsExternal).trigger('change');
+                $('#loserSwitch').prop('checked', loserIsExternal).trigger('change');
+
+                if (winnerIsExternal) {
+                    $("#winnerId").val(winner).trigger('change');
+                } else {
+                    $('#winner').empty().append(new Option(data.winner.name, data.winner.id, true, true)).trigger('change');
+                }
+
+                if (loserIsExternal) {
+                    $("#loserId").val(loser).trigger('change');
+                } else {
+                    $('#loser').empty().append(new Option(data.loser.name, data.loser.id, true, true)).trigger('change');
+                }
+
+
+            }).fail(function() {
+                alert('Error');
+            });
         });
     </script>
 {% endblock %}

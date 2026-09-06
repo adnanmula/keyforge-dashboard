@@ -139,6 +139,7 @@ error.invalid_format: 'Formato inválido'
 error.invalid_result: 'Resultado inválido'
 error.something_wrong: 'Algo ha ido mal'
 exception.user_not_exists: Usuario no existe
+game.autofill: Autocompletar
 game.competition: Torneo
 game.date: Fecha
 game.first_turn: 'Primer turno'
@@ -406,6 +407,7 @@ menu.keys_forged: Llaves forjadas
 menu.current_amber: Ámbar actual
 menu.played: Jugado
 menu.key_forged: Llave forjada
+menu.key_unforged: Llave desforjada
 menu.cost: Coste
 menu.remaining: Restante
 menu.house_chosen: Casa elegida
@@ -425,6 +427,7 @@ game.timeline.resolved2: Resueltas
 game.timeline.reduced_chains: 'Las cadenas se redujeron en %by% a %to%'
 game.timeline.added_chains: 'Las cadenas aumentaron en %by% (%reason%)'
 game.timeline.check: Check declarado
+game.timeline.unforge: Llave desforjada por el oponente
 game.timeline.conceded: Se rindió
 game.timeline.the_fate_of: El destino de
 game.timeline.the_prophecy: La profecía
@@ -441,6 +444,7 @@ game.timeline.CARDS_DRAWN: Cartas robadas
 game.timeline.CARDS_PLAYED: Cartas jugadas
 game.timeline.HOUSE_CHOSEN: Casa elegida
 game.timeline.KEY_FORGED: Llave forjada
+game.timeline.KEY_UNFORGED: Llave desforjada
 game.timeline.FIGHT: Lucha
 game.timeline.REAP: Cosecha
 game.timeline.CARD_USED: Carta usada

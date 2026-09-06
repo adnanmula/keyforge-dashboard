@@ -60,12 +60,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/adnanmula/keyforge-game-log-parser.git",
-                "reference": "8e83843d2536ffb6ee753ccab77461f3c480cac1"
+                "reference": "cddc3408614ef5ad4ae666a668284af0d876c76d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/adnanmula/keyforge-game-log-parser/zipball/8e83843d2536ffb6ee753ccab77461f3c480cac1",
-                "reference": "8e83843d2536ffb6ee753ccab77461f3c480cac1",
+                "url": "https://api.github.com/repos/adnanmula/keyforge-game-log-parser/zipball/cddc3408614ef5ad4ae666a668284af0d876c76d",
+                "reference": "cddc3408614ef5ad4ae666a668284af0d876c76d",
                 "shasum": ""
             },
             "require": {
@@ -74,7 +74,7 @@
                 "symfony/dom-crawler": "^7.2 || ^8.0"
             },
             "require-dev": {
-                "adnanmula/coding-standard": "^0.0.13",
+                "adnanmula/coding-standard": "^0.0.14",
                 "phpro/grumphp": "^2.5",
                 "phpstan/phpstan": "^2",
                 "phpunit/phpunit": "^11.0",
@@ -101,7 +101,7 @@
                 "issues": "https://github.com/adnanmula/keyforge-game-log-parser/issues",
                 "source": "https://github.com/adnanmula/keyforge-game-log-parser/tree/master"
             },
-            "time": "2026-06-05T08:29:01+00:00"
+            "time": "2026-09-06T20:51:10+00:00"
         },
         {
             "name": "adnanmula/tournament",

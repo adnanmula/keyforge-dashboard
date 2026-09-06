@@ -139,6 +139,7 @@ error.invalid_format: 'Invalid format'
 error.invalid_result: 'Invalid result'
 error.something_wrong: 'Something went wrong'
 exception.user_not_exists: User not exists
+game.autofill: Autofill
 game.competition: Competition
 game.date: Date
 game.first_turn: 'First turn'
@@ -405,7 +406,7 @@ menu.cards_discarded: Cards discarded
 menu.keys_forged: Keys forged
 menu.current_amber: Current amber
 menu.played: Played
-menu.key_forged: Key forged
+menu.key_unforged: Key unforged
 menu.cost: Cost
 menu.remaining: Remaining
 menu.house_chosen: House chosen
@@ -425,6 +426,7 @@ game.timeline.resolved2: Resolved
 game.timeline.reduced_chains: 'Chains were reduced by %by% to %to%'
 game.timeline.added_chains: 'Chains were increased by %by% (%reason%)'
 game.timeline.check: Check declared
+game.timeline.unforge: Key unforged by opponent
 game.timeline.conceded: Conceded
 game.timeline.the_fate_of: The fate of
 game.timeline.the_prophecy: The prophecy
@@ -441,6 +443,7 @@ game.timeline.CARDS_DRAWN: Cards drawn
 game.timeline.CARDS_PLAYED: Cards played
 game.timeline.HOUSE_CHOSEN: House chosen
 game.timeline.KEY_FORGED: Key forged
+game.timeline.KEY_UNFORGED: Key unforged
 game.timeline.FIGHT: Fight
 game.timeline.REAP: Reap
 game.timeline.CARD_USED: Card used

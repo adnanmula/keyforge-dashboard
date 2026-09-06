@@ -109,6 +109,7 @@
             <option value="CARDS_PLAYED">{{ 'game.timeline.CARDS_PLAYED'|trans }}</option>
             <option value="HOUSE_CHOSEN">{{ 'game.timeline.HOUSE_CHOSEN'|trans }}</option>
             <option value="KEY_FORGED">{{ 'game.timeline.KEY_FORGED'|trans }}</option>
+            <option value="KEY_UNFORGED">{{ 'game.timeline.KEY_UNFORGED'|trans }}</option>
             <option value="FIGHT">{{ 'game.timeline.FIGHT'|trans }}</option>
             <option value="REAP">{{ 'game.timeline.REAP'|trans }}</option>
             <option value="CARD_USED">{{ 'game.timeline.CARD_USED'|trans }}</option>
@@ -158,6 +159,10 @@
 
                 case 'KEY_FORGED':
                     actions.push('<span data-type="'+event.type+'">{{ 'menu.key_forged'|trans }}: ' + event.value + ' {{ 'menu.cost'|trans }}: ' + event.payload.amberCost + ' {{ 'menu.remaining'|trans }}: ' + event.payload.amberRemaining + '</span>');
+                    break;
+
+                case 'KEY_UNFORGED':
+                    actions.push('<span data-type="'+event.type+'">{{ 'menu.key_unforged'|trans }}: ' + event.value + '</span>');
                     break;
 
                 case 'CARDS_DISCARDED':

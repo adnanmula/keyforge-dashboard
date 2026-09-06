@@ -29,6 +29,7 @@ final class GameLogDetailController extends Controller
             EventType::CARDS_PLAYED->value => EventType::CARDS_PLAYED,
             EventType::HOUSE_CHOSEN->value => EventType::HOUSE_CHOSEN,
             EventType::KEY_FORGED->value => EventType::KEY_FORGED,
+            EventType::KEY_UNFORGED->value => EventType::KEY_UNFORGED,
             EventType::FIGHT->value => EventType::FIGHT,
             EventType::REAP->value => EventType::REAP,
             EventType::CARD_USED->value => EventType::CARD_USED,
