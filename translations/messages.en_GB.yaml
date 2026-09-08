@@ -406,6 +406,7 @@ menu.cards_discarded: Cards discarded
 menu.keys_forged: Keys forged
 menu.current_amber: Current amber
 menu.played: Played
+menu.key_forged: Key forged
 menu.key_unforged: Key unforged
 menu.cost: Cost
 menu.remaining: Remaining

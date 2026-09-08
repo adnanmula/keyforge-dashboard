@@ -4,6 +4,7 @@ namespace AdnanMula\Cards\Entrypoint\Controller\Keyforge\Deck\Alliance;
 
 use AdnanMula\Cards\Application\Command\Keyforge\Deck\GenerateAlliances\GenerateDeckAlliancesCommand;
 use AdnanMula\Cards\Application\Service\Json;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeSet;
 use AdnanMula\Cards\Entrypoint\Controller\Shared\Controller;
 use Ramsey\Uuid\Exception\InvalidUuidStringException;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -17,13 +18,13 @@ final class GenerateAlliancesController extends Controller
         $this->assertIsLogged();
 
         if ($request->getMethod() === Request::METHOD_GET) {
-            return $this->render('Keyforge/Deck/Alliance/generate_alliances.html.twig', ['result' => false, 'success' => null]);
+            return $this->render('Keyforge/Deck/Alliance/generate_alliances.html.twig', ['result' => false, 'success' => null, 'sets' => KeyforgeSet::cases()]);
         }
 
         if ($request->getMethod() === Request::METHOD_POST) {
             $payload = Json::decode($request->getContent());
 
-            $this->validateCsrfToken('keyforge_alliance_generate', $request->request->get('_csrf_token'));
+            $this->validateCsrfToken('keyforge_alliance_generate', $payload['_csrf_token']);
 
             try {
                 $result = $this->extractResult(
@@ -39,6 +40,7 @@ final class GenerateAlliancesController extends Controller
                 return new JsonResponse([
                     'success' => true,
                     'result' => $result,
+                    'sets' => KeyforgeSet::cases(),
                 ]);
             } catch (InvalidUuidStringException) {
                 return new JsonResponse(['error' => 'Invalid uuid']);

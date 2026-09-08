@@ -22,23 +22,11 @@
 
     <div class="shadow-lg p-3 mb-5 bg-white rounded">
         <select id="set" name="set" class="form-select mb-3">
-            <option value="CotA">{{ 'set.full.CotA'|trans }}</option>
-            <option value="AoA">{{ 'set.full.AoA'|trans }}</option>
-            <option value="WC">{{ 'set.full.WC'|trans }}</option>
-            <option value="MM">{{ 'set.full.MM'|trans }}</option>
-            <option value="DT">{{ 'set.full.DT'|trans }}</option>
-            <option value="WoE">{{ 'set.full.WoE'|trans }}</option>
-            <option value="GR">{{ 'set.full.GR'|trans }}</option>
-            <option value="AS">{{ 'set.full.AS'|trans }}</option>
-            <option value="PV">{{ 'set.full.PV'|trans }}</option>
-            <option value="U22">{{ 'set.full.U22'|trans }}</option>
-            <option value="M24">{{ 'set.full.M24'|trans }}</option>
-            <option value="VM23">{{ 'set.full.VM23'|trans }}</option>
-            <option value="VM24">{{ 'set.full.VM24'|trans }}</option>
-            <option value="VM25">{{ 'set.full.VM25'|trans }}</option>
-            <option value="MoM">{{ 'set.full.MoM'|trans }}</option>
-            <option value="ToC">{{ 'set.full.ToC'|trans }}</option>
-            <option value="DIS">{{ 'set.full.DIS'|trans }}</option>
+            {% for set in sets %}
+                {% if set.isEnabled %}
+                    <option value="{{ set.value }}">{{ ('set.full.'~set.value)|trans }}</option>
+                {% endif %}
+            {% endfor %}
         </select>
         <form id="generateAlliancesForm">
             <div id="decksBlock"></div>
@@ -145,7 +133,7 @@
             addDeck();
         });
 
-        $('select').on('select2:open', function(e) {
+        $(document).on('select2:open', '.deck_selector', function(e) {
             const select2 = $(e.target).data('select2');
 
             $('.select2-search--dropdown .select2-search__field').attr('placeholder', '{{ 'menu.type_to_search'|trans }}');
@@ -244,6 +232,12 @@
                         const $card = $(`
                             <div class="card shadow-sm p-3" style="min-width: 250px;">
                                 <h5 class="card-title mb-2">${deckData.deck.name}</h5>
+                                <p class="mb-0">
+                                    <b>${deckData.deck.stats.sas} (${deckData.deck.stats.aercScore}+${deckData.deck.stats.synergyRating}-${deckData.deck.stats.antiSynergyRating})</b>
+                                </p>
+                                <p class="mb-0">
+                                    A:${deckData.deck.stats.amberControl}, E:${deckData.deck.stats.expectedAmber}, R:${deckData.deck.stats.artifactControl}, C:${deckData.deck.stats.creatureControl}
+                                </p>
                                 ${deckData.deck.houses[0]}
                                 ${deckData.deck.houses[1]}
                                 ${deckData.deck.houses[2]}
@@ -311,7 +305,7 @@
                     minimumInputLength: 3,
                     data: function (params) {
                         let query = {
-                            search: { 'value': params.term },
+                            extraFilterName: params.term,
                             extraFilterDeckTypes: ['STANDARD'],
                             extraFilterSet: [$('#set')[0].value],
                             length: 20
