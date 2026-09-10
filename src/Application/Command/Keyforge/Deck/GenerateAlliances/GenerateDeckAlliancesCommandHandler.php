@@ -110,6 +110,11 @@ readonly class GenerateDeckAlliancesCommandHandler
             }
         }
 
+        usort(
+            $importedDecks,
+            static fn (array $a, array $b) => $b['deck']->stats()->sas <=> $a['deck']->stats()->sas,
+        );
+
         return [
             'combinations' => \count($combinations),
             'decks' => $importedDecks,

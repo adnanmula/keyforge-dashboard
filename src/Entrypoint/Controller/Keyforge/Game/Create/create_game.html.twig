@@ -486,8 +486,8 @@
                 $("#competition").val(gameType).trigger('change');
                 $('input[name="loserScore"][value="'+loserScore+'"]').prop('checked', true);
 
-                $('#winnerDeckSwitch').prop('checked', null !== winnerDeckId).trigger('change');
-                $('#loserDeckSwitch').prop('checked', null !== loserDeckId).trigger('change');
+                $('#winnerDeckSwitch').prop('checked', true).trigger('change');
+                $('#loserDeckSwitch').prop('checked', true).trigger('change');
 
                 if (null !== winnerDeckId) {
                     $("#winnerDeckId").val(winnerDeckId).trigger('change');
@@ -511,8 +511,6 @@
                 } else {
                     $('#loser').empty().append(new Option(data.loser.name, data.loser.id, true, true)).trigger('change');
                 }
-
-
             }).fail(function() {
                 alert('Error');
             });
