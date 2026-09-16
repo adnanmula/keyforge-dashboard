@@ -20,6 +20,7 @@ use AdnanMula\Criteria\Filter\Filters;
 use AdnanMula\Criteria\Filter\FilterType;
 use AdnanMula\Criteria\FilterField\FilterField;
 use AdnanMula\Criteria\FilterValue\ArrayElementFilterValue;
+use AdnanMula\Criteria\FilterValue\IntFilterValue;
 use AdnanMula\Criteria\FilterValue\StringArrayFilterValue;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -56,6 +57,8 @@ final readonly class ImportMyDecksFromDokService
             ),
         );
 
+        [$scalingAmberCards, $boardClearCards, $giganticCards] = $this->specialCards();
+
         foreach ($response as $responseDeck) {
             /** @var ?KeyforgeDeck $storedDeck */
             $storedDeck = \array_values(\array_filter(
@@ -66,8 +69,6 @@ final readonly class ImportMyDecksFromDokService
             if (false === $forceUpdate && null !== $storedDeck) {
                 continue;
             }
-
-            [$scalingAmberCards, $boardClearCards] = $this->specialCards();
 
             $newDeck = new KeyforgeDeck(
                 Uuid::from($responseDeck['deck']['keyforgeId']),
@@ -82,8 +83,7 @@ final readonly class ImportMyDecksFromDokService
 
             $this->repository->save($newDeck);
             $this->repository->addOwner($newDeck->id(), $owner);
-
-            $this->tagsService->execute($newDeck->id());
+            $this->tagsService->execute($newDeck->id(), $newDeck, $scalingAmberCards, $boardClearCards, $giganticCards);
         }
     }
 
@@ -115,9 +115,23 @@ final readonly class ImportMyDecksFromDokService
             ),
         );
 
+        $giganticCards = $this->cardRepository->search(
+            new Criteria(
+                new Filters(
+                    FilterType::AND,
+                    new Filter(
+                        new FilterField('is_big'),
+                        new IntFilterValue(1),
+                        FilterOperator::EQUAL,
+                    ),
+                ),
+            ),
+        );
+
         return [
             \array_map(static fn (KeyforgeCard $c): string => $c->nameUrl, $scalingAmberCards),
             \array_map(static fn (KeyforgeCard $c): string => $c->nameUrl, $boardClearsCards),
+            \array_map(static fn (KeyforgeCard $c): string => $c->nameUrl, $giganticCards),
         ];
     }
 }

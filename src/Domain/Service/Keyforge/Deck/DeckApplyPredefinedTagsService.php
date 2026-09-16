@@ -56,27 +56,26 @@ final readonly class DeckApplyPredefinedTagsService
         private KeyforgeCardRepository $cardRepository,
     ) {}
 
-    public function execute(Uuid $id): void
-    {
-        $deck = $this->repository->searchOne(
-            new Criteria(
-                new Filters(
-                    FilterType::AND,
-                    new Filter(
-                        new FilterField('id'),
-                        new StringFilterValue($id->value()),
-                        FilterOperator::EQUAL,
-                    ),
-                ),
-            ),
-        );
+    /**
+     * @param array<string>|null $scalingAmberCards
+     * @param array<string>|null $boardClearCards
+     * @param array<string>|null $giganticCards
+     */
+    public function execute(
+        Uuid $id,
+        ?KeyforgeDeck $deck = null,
+        ?array $scalingAmberCards = null,
+        ?array $boardClearCards = null,
+        ?array $giganticCards = null,
+    ): void {
+        $deck = $this->fetchDeck($id, $deck);
 
         if (null === $deck) {
             return;
         }
 
         $newTags = [];
-
+        [$scalingAmberCards, $boardClearCards, $giganticCards] = $this->fetchCards($scalingAmberCards, $boardClearCards, $giganticCards);
         [$maverickCount, $legacyCount, $anomalyCount] = $this->specialCardsCount($deck->cards());
 
         $newTags[] = $this->tagActionCount($deck);
@@ -94,15 +93,15 @@ final readonly class DeckApplyPredefinedTagsService
         $newTags[] = $this->tagEfficiency($deck);
         $newTags[] = $this->tagExpectedAmber($deck);
         $newTags[] = $this->tagHasAnomaly($anomalyCount);
-        $newTags[] = $this->tagHasBoardWipes($deck);
+        $newTags[] = $this->tagHasBoardWipes($deck, $boardClearCards);
         $newTags[] = $this->tagHasKeyCheats($deck);
         $newTags[] = $this->tagHasLegacy($legacyCount);
         $newTags[] = $this->tagHasMaverick($maverickCount);
-        $newTags[] = $this->tagHasScalingAmberControl($deck);
+        $newTags[] = $this->tagHasScalingAmberControl($deck, $scalingAmberCards);
         $newTags[] = $this->tagRecursion($deck);
         $newTags[] = $this->tagSynergy($deck);
         $newTags[] = $this->tagUpgradeCount($deck);
-        $newTags[] = $this->tagHasGiganticCreatures($deck);
+        $newTags[] = $this->tagHasGiganticCreatures($deck, $giganticCards);
 
         $draftDecks = [
             '19ee9a3b-cbe5-4fe5-b4a5-388a1cc3c37a',
@@ -118,6 +117,82 @@ final readonly class DeckApplyPredefinedTagsService
         $deck->setTags(...$this->mergeTags($deck->tags(), \array_filter($newTags)));
 
         $this->repository->save($deck);
+    }
+
+    private function fetchDeck(Uuid $id, ?KeyforgeDeck $deck): ?KeyforgeDeck
+    {
+        if (null === $deck) {
+            $deck = $this->repository->searchOne(
+                new Criteria(
+                    new Filters(
+                        FilterType::AND,
+                        new Filter(
+                            new FilterField('id'),
+                            new StringFilterValue($id->value()),
+                            FilterOperator::EQUAL,
+                        ),
+                    ),
+                ),
+            );
+        }
+
+        return $deck;
+    }
+
+    private function fetchCards(?array $scalingAmberCards, ?array $boardClearCards, ?array $giganticCards): array
+    {
+        if (null === $scalingAmberCards) {
+            $scalingAmberCards = $this->cardRepository->search(
+                new Criteria(
+                    new Filters(
+                        FilterType::AND,
+                        new Filter(
+                            new FilterField('tags'),
+                            new ArrayElementFilterValue('scalingAmberControl'),
+                            FilterOperator::IN_ARRAY,
+                        ),
+                    ),
+                ),
+            );
+
+            $scalingAmberCards = \array_map(static fn (KeyforgeCard $c): string => $c->nameUrl, $scalingAmberCards);
+        }
+
+        if (null === $boardClearCards) {
+            $boardClearCards = $this->cardRepository->search(
+                new Criteria(
+                    new Filters(
+                        FilterType::AND,
+                        new Filter(
+                            new FilterField('tags'),
+                            new ArrayElementFilterValue('boardClear'),
+                            FilterOperator::IN_ARRAY,
+                        ),
+                    ),
+                ),
+            );
+
+            $boardClearCards = \array_map(static fn (KeyforgeCard $c): string => $c->nameUrl, $boardClearCards);
+        }
+
+        if (null === $giganticCards) {
+            $giganticCards = $this->cardRepository->search(
+                new Criteria(
+                    new Filters(
+                        FilterType::AND,
+                        new Filter(
+                            new FilterField('is_big'),
+                            new IntFilterValue(1),
+                            FilterOperator::EQUAL,
+                        ),
+                    ),
+                ),
+            );
+
+            $giganticCards = \array_map(static fn (KeyforgeCard $c): string => $c->nameUrl, $giganticCards);
+        }
+
+        return [$scalingAmberCards, $boardClearCards, $giganticCards];
     }
 
     private function mergeTags(array $currentTags, array $newTags): array
@@ -381,7 +456,7 @@ final readonly class DeckApplyPredefinedTagsService
         return null;
     }
 
-    private function tagHasScalingAmberControl(KeyforgeDeck $deck): ?KeyforgeDeckTag
+    private function tagHasScalingAmberControl(KeyforgeDeck $deck, array $scalingAmberCards): ?KeyforgeDeckTag
     {
         $cards = \array_merge(
             $deck->cards()->firstPodCards,
@@ -389,31 +464,14 @@ final readonly class DeckApplyPredefinedTagsService
             $deck->cards()->thirdPodCards,
         );
 
-        $scalingAmberCards = $this->cardRepository->search(
-            new Criteria(
-                new Filters(
-                    FilterType::AND,
-                    new Filter(
-                        new FilterField('tags'),
-                        new ArrayElementFilterValue('scalingAmberControl'),
-                        FilterOperator::IN_ARRAY,
-                    ),
-                ),
-            ),
-        );
-
-        $scalingAmberCardNames = \array_map(static fn (KeyforgeCard $c): string => $c->nameUrl, $scalingAmberCards);
-
-        foreach ($cards as $card) {
-            if (\in_array($card->serializedName, $scalingAmberCardNames, true)) {
-                return new KeyforgeTagHasScalingAmberControl();
-            }
+        if (array_any($cards, static fn ($card) => \in_array($card->serializedName, $scalingAmberCards, true))) {
+            return new KeyforgeTagHasScalingAmberControl();
         }
 
         return null;
     }
 
-    private function tagHasBoardWipes(KeyforgeDeck $deck): ?KeyforgeDeckTag
+    private function tagHasBoardWipes(KeyforgeDeck $deck, array $boardClearCards): ?KeyforgeDeckTag
     {
         $cards = \array_merge(
             $deck->cards()->firstPodCards,
@@ -421,25 +479,8 @@ final readonly class DeckApplyPredefinedTagsService
             $deck->cards()->thirdPodCards,
         );
 
-        $boardClearsCards = $this->cardRepository->search(
-            new Criteria(
-                new Filters(
-                    FilterType::AND,
-                    new Filter(
-                        new FilterField('tags'),
-                        new ArrayElementFilterValue('boardClear'),
-                        FilterOperator::IN_ARRAY,
-                    ),
-                ),
-            ),
-        );
-
-        $boardClearsCardNames = \array_map(static fn (KeyforgeCard $c): string => $c->nameUrl, $boardClearsCards);
-
-        foreach ($cards as $card) {
-            if (\in_array($card->serializedName, $boardClearsCardNames, true)) {
-                return new KeyforgeTagHasBoardWipes();
-            }
+        if (array_any($cards, static fn ($card) => \in_array($card->serializedName, $boardClearCards, true))) {
+            return new KeyforgeTagHasBoardWipes();
         }
 
         return null;
@@ -467,7 +508,7 @@ final readonly class DeckApplyPredefinedTagsService
         return null;
     }
 
-    private function tagHasGiganticCreatures(KeyforgeDeck $deck): ?KeyforgeDeckTag
+    private function tagHasGiganticCreatures(KeyforgeDeck $deck, array $giganticCards): ?KeyforgeDeckTag
     {
         $cards = \array_merge(
             $deck->cards()->firstPodCards,
@@ -475,25 +516,8 @@ final readonly class DeckApplyPredefinedTagsService
             $deck->cards()->thirdPodCards,
         );
 
-        $giganticCards = $this->cardRepository->search(
-            new Criteria(
-                new Filters(
-                    FilterType::AND,
-                    new Filter(
-                        new FilterField('is_big'),
-                        new IntFilterValue(1),
-                        FilterOperator::EQUAL,
-                    ),
-                ),
-            ),
-        );
-
-        $giganticNames = \array_map(static fn (KeyforgeCard $c): string => $c->nameUrl, $giganticCards);
-
-        foreach ($cards as $card) {
-            if (\in_array($card->serializedName, $giganticNames, true)) {
-                return new KeyforgeTagHasGigantic();
-            }
+        if (array_any($cards, static fn ($card) => \in_array($card->serializedName, $giganticCards, true))) {
+            return new KeyforgeTagHasGigantic();
         }
 
         return null;
