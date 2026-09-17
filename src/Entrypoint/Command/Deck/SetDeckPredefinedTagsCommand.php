@@ -46,12 +46,15 @@ final class SetDeckPredefinedTagsCommand extends Command
         $progressBar = new ProgressBar($output, $total);
         $progressBar->start();
 
-        foreach ($decks as $deck) {
-            $this->service->execute($deck->id());
+        foreach (array_chunk($decks, 100) as $deckChunk) {
+            $this->service->execute($deckChunk);
             $progressBar->advance();
+            $output->writeln('Chunk processed');
 
             if ($output->isVerbose()) {
-                $output->writeln(' | ' . $deck->id() . ' ' . $deck->name());
+                foreach ($deckChunk as $deck) {
+                    $output->writeln(' | ' . $deck->id() . ' ' . $deck->name());
+                }
             }
         }
 

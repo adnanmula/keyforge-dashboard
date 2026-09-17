@@ -93,207 +93,170 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
         return  $result;
     }
 
-    public function save(KeyforgeDeck $deck, bool $updateUserData = false): void
+    public function save(KeyforgeDeck ...$decks): void
     {
-        $stmt = $this->connection->prepare(
-            \sprintf(
-                '
-                INSERT INTO %s (
-                    id,
-                    name,
-                    set,
-                    houses,
-                    dok_id,
-                    sas,
-                    amber_control,
-                    artifact_control,
-                    expected_amber,
-                    creature_control,
-                    efficiency,
-                    recursion,
-                    disruption,
-                    effective_power,
-                    creature_protection,
-                    other,
-                    raw_amber,
-                    total_power,
-                    total_armor,
-                    efficiency_bonus,
-                    creature_count,
-                    action_count,
-                    artifact_count,
-                    upgrade_count,
-                    card_draw_count,
-                    card_archive_count,
-                    key_cheat_count,
-                    board_clear_count,
-                    board_clear_cards,
-                    scaling_amber_control_count,
-                    scaling_amber_control_cards,
-                    synergy_rating,
-                    anti_synergy_rating,
-                    aerc_score,
-                    aerc_version,
-                    sas_version,
-                    sas_percentile,
-                    previous_sas_rating,
-                    previous_major_sas_rating,
-                    last_sas_update,
-                    cards,
-                    tags,
-                    deck_type
-                ) VALUES (
-                    :id,
-                    :name,
-                    :set,
-                    :houses,
-                    :dok_id,
-                    :sas,
-                    :amber_control,
-                    :artifact_control,
-                    :expected_amber,
-                    :creature_control,
-                    :efficiency,
-                    :recursion,
-                    :disruption,
-                    :effective_power,
-                    :creature_protection,
-                    :other,
-                    :raw_amber,
-                    :total_power,
-                    :total_armor,
-                    :efficiency_bonus,
-                    :creature_count,
-                    :action_count,
-                    :artifact_count,
-                    :upgrade_count,
-                    :card_draw_count,
-                    :card_archive_count,
-                    :key_cheat_count,
-                    :board_clear_count,
-                    :board_clear_cards,
-                    :scaling_amber_control_count,
-                    :scaling_amber_control_cards,
-                    :synergy_rating,
-                    :anti_synergy_rating,
-                    :aerc_score,
-                    :aerc_version,
-                    :sas_version,
-                    :sas_percentile,
-                    :previous_sas_rating,
-                    :previous_major_sas_rating,
-                    :last_sas_update,
-                    :cards,
-                    :tags,
-                    :deck_type
-                ) ON CONFLICT (id) DO UPDATE SET
-                    sas = :sas,
-                    amber_control = :amber_control,
-                    artifact_control = :artifact_control,
-                    expected_amber = :expected_amber,
-                    creature_control = :creature_control,
-                    efficiency = :efficiency,
-                    recursion = :recursion,
-                    disruption = :disruption,
-                    effective_power = :effective_power,
-                    creature_protection = :creature_protection,
-                    other = :other,
-                    raw_amber = :raw_amber,
-                    total_power = :total_power,
-                    total_armor = :total_armor,
-                    efficiency_bonus = :efficiency_bonus,
-                    creature_count = :creature_count,
-                    action_count = :action_count,
-                    artifact_count = :artifact_count,
-                    upgrade_count = :upgrade_count,
-                    card_draw_count = :card_draw_count,
-                    card_archive_count = :card_archive_count,
-                    key_cheat_count = :key_cheat_count,
-                    board_clear_count = :board_clear_count,
-                    board_clear_cards = :board_clear_cards,
-                    scaling_amber_control_count = :scaling_amber_control_count,
-                    scaling_amber_control_cards = :scaling_amber_control_cards,
-                    synergy_rating = :synergy_rating,
-                    anti_synergy_rating = :anti_synergy_rating,
-                    aerc_score = :aerc_score,
-                    aerc_version = :aerc_version,
-                    sas_version = :sas_version,
-                    sas_percentile = :sas_percentile,
-                    previous_sas_rating = :previous_sas_rating,
-                    previous_major_sas_rating = :previous_major_sas_rating,
-                    last_sas_update = :last_sas_update,
-                    cards = :cards,
-                    tags = :tags
-                ',
-                self::TABLE,
-            ),
-        );
+        if ([] === $decks) {
+            return;
+        }
 
-        $stmt->bindValue(':id', $deck->id()->value());
-        $stmt->bindValue(':name', $deck->name());
-        $stmt->bindValue(':set', $deck->set()->name);
-        $stmt->bindValue(':houses', Json::encode($deck->houses()->value()));
-        $stmt->bindValue(':dok_id', $deck->dokId());
-        $stmt->bindValue(':amber_control', $deck->stats()->amberControl);
-        $stmt->bindValue(':artifact_control', $deck->stats()->artifactControl);
-        $stmt->bindValue(':expected_amber', $deck->stats()->expectedAmber);
-        $stmt->bindValue(':creature_control', $deck->stats()->creatureControl);
-        $stmt->bindValue(':efficiency', $deck->stats()->efficiency);
-        $stmt->bindValue(':recursion', $deck->stats()->recursion);
-        $stmt->bindValue(':disruption', $deck->stats()->disruption);
-        $stmt->bindValue(':effective_power', $deck->stats()->effectivePower);
-        $stmt->bindValue(':creature_protection', $deck->stats()->creatureProtection);
-        $stmt->bindValue(':other', $deck->stats()->other);
-        $stmt->bindValue(':raw_amber', $deck->stats()->rawAmber);
-        $stmt->bindValue(':total_power', $deck->stats()->totalPower);
-        $stmt->bindValue(':total_armor', $deck->stats()->totalArmor);
-        $stmt->bindValue(':efficiency_bonus', $deck->stats()->efficiencyBonus);
-        $stmt->bindValue(':creature_count', $deck->stats()->creatureCount);
-        $stmt->bindValue(':action_count', $deck->stats()->actionCount);
-        $stmt->bindValue(':artifact_count', $deck->stats()->artifactCount);
-        $stmt->bindValue(':upgrade_count', $deck->stats()->upgradeCount);
-        $stmt->bindValue(':card_draw_count', $deck->stats()->cardDrawCount);
-        $stmt->bindValue(':card_archive_count', $deck->stats()->cardArchiveCount);
-        $stmt->bindValue(':key_cheat_count', $deck->stats()->keyCheatCount);
-        $stmt->bindValue(':board_clear_count', $deck->stats()->boardClearCount);
-        $stmt->bindValue(':board_clear_cards', Json::encode($deck->stats()->boardClearCards));
-        $stmt->bindValue(':scaling_amber_control_count', $deck->stats()->scalingAmberControlCount);
-        $stmt->bindValue(':scaling_amber_control_cards', Json::encode($deck->stats()->scalingAmberControlCards));
-        $stmt->bindValue(':synergy_rating', $deck->stats()->synergyRating);
-        $stmt->bindValue(':anti_synergy_rating', $deck->stats()->antiSynergyRating);
-        $stmt->bindValue(':sas', $deck->stats()->sas);
-        $stmt->bindValue(':previous_sas_rating', $deck->stats()->previousSasRating);
-        $stmt->bindValue(':previous_major_sas_rating', $deck->stats()->previousMajorSasRating);
-        $stmt->bindValue(':sas_percentile', $deck->stats()->sasPercentile);
-        $stmt->bindValue(':aerc_score', $deck->stats()->aercScore);
-        $stmt->bindValue(':aerc_version', $deck->stats()->aercVersion);
-        $stmt->bindValue(':sas_version', $deck->stats()->sasVersion);
-        $stmt->bindValue(':last_sas_update', $deck->stats()->lastSasUpdate?->format(\DateTimeInterface::ATOM));
-        $stmt->bindValue(':cards', Json::encode($deck->cards()->jsonSerialize()));
-        $stmt->bindValue(':tags', Json::encode($deck->tags()));
-        $stmt->bindValue(':deck_type', $deck->type()->value);
-
-        $stmt->executeStatement();
+        foreach (array_chunk($decks, 500) as $chunk) {
+            $this->saveChunk(...$chunk);
+        }
     }
 
-    public function addOwner(Uuid $deckId, Uuid $userId): void
+    private function saveChunk(KeyforgeDeck ...$decks): void
     {
-        $stmt = $this->connection->prepare(
-            \sprintf('
-                INSERT INTO %s (deck_id, user_id, notes, user_tags)
-                VALUES (:deck_id, :user_id, :notes, :user_tags)
-                ON CONFLICT (deck_id, user_id) DO NOTHING
-                ',
-                self::TABLE_OWNERSHIP,
-            ),
+        $values = [];
+        $params = [];
+
+        foreach ($decks as $i => $deck) {
+            $values[] = sprintf(
+                '(
+                    :id_%1$d, :name_%1$d, :set_%1$d, :houses_%1$d, :dok_id_%1$d, :sas_%1$d,
+                    :amber_control_%1$d, :artifact_control_%1$d, :expected_amber_%1$d, :creature_control_%1$d, :efficiency_%1$d, :recursion_%1$d, :disruption_%1$d, :effective_power_%1$d, :creature_protection_%1$d,
+                    :other_%1$d, :raw_amber_%1$d, :total_power_%1$d, :total_armor_%1$d, :efficiency_bonus_%1$d, :creature_count_%1$d, :action_count_%1$d, :artifact_count_%1$d, :upgrade_count_%1$d, :card_draw_count_%1$d,
+                    :card_archive_count_%1$d, :key_cheat_count_%1$d, :board_clear_count_%1$d, :board_clear_cards_%1$d, :scaling_amber_control_count_%1$d, :scaling_amber_control_cards_%1$d, :synergy_rating_%1$d, :anti_synergy_rating_%1$d,
+                    :aerc_score_%1$d, :aerc_version_%1$d, :sas_version_%1$d, :sas_percentile_%1$d, :previous_sas_rating_%1$d, :previous_major_sas_rating_%1$d, :last_sas_update_%1$d, :cards_%1$d, :tags_%1$d, :deck_type_%1$d
+                )',
+                $i,
+            );
+
+            $params['id_'.$i] = $deck->id()->value();
+            $params['name_'.$i] = $deck->name();
+            $params['set_'.$i] = $deck->set()->name;
+            $params['houses_'.$i] = Json::encode($deck->houses()->value());
+            $params['dok_id_'.$i] = $deck->dokId();
+            $params['amber_control_'.$i] = $deck->stats()->amberControl;
+            $params['artifact_control_'.$i] = $deck->stats()->artifactControl;
+            $params['expected_amber_'.$i] = $deck->stats()->expectedAmber;
+            $params['creature_control_'.$i] = $deck->stats()->creatureControl;
+            $params['efficiency_'.$i] = $deck->stats()->efficiency;
+            $params['recursion_'.$i] = $deck->stats()->recursion;
+            $params['disruption_'.$i] = $deck->stats()->disruption;
+            $params['effective_power_'.$i] = $deck->stats()->effectivePower;
+            $params['creature_protection_'.$i] = $deck->stats()->creatureProtection;
+            $params['other_'.$i] = $deck->stats()->other;
+            $params['raw_amber_'.$i] = $deck->stats()->rawAmber;
+            $params['total_power_'.$i] = $deck->stats()->totalPower;
+            $params['total_armor_'.$i] = $deck->stats()->totalArmor;
+            $params['efficiency_bonus_'.$i] = $deck->stats()->efficiencyBonus;
+            $params['creature_count_'.$i] = $deck->stats()->creatureCount;
+            $params['action_count_'.$i] = $deck->stats()->actionCount;
+            $params['artifact_count_'.$i] = $deck->stats()->artifactCount;
+            $params['upgrade_count_'.$i] = $deck->stats()->upgradeCount;
+            $params['card_draw_count_'.$i] = $deck->stats()->cardDrawCount;
+            $params['card_archive_count_'.$i] = $deck->stats()->cardArchiveCount;
+            $params['key_cheat_count_'.$i] = $deck->stats()->keyCheatCount;
+            $params['board_clear_count_'.$i] = $deck->stats()->boardClearCount;
+            $params['board_clear_cards_'.$i] = Json::encode($deck->stats()->boardClearCards);
+            $params['scaling_amber_control_count_'.$i] = $deck->stats()->scalingAmberControlCount;
+            $params['scaling_amber_control_cards_'.$i] = Json::encode($deck->stats()->scalingAmberControlCards);
+            $params['synergy_rating_'.$i] = $deck->stats()->synergyRating;
+            $params['anti_synergy_rating_'.$i] = $deck->stats()->antiSynergyRating;
+            $params['sas_'.$i] = $deck->stats()->sas;
+            $params['previous_sas_rating_'.$i] = $deck->stats()->previousSasRating;
+            $params['previous_major_sas_rating_'.$i] = $deck->stats()->previousMajorSasRating;
+            $params['sas_percentile_'.$i] = $deck->stats()->sasPercentile;
+            $params['aerc_score_'.$i] = $deck->stats()->aercScore;
+            $params['aerc_version_'.$i] = $deck->stats()->aercVersion;
+            $params['sas_version_'.$i] = $deck->stats()->sasVersion;
+            $params['last_sas_update_'.$i] = $deck->stats()->lastSasUpdate?->format(\DateTimeInterface::ATOM);
+            $params['cards_'.$i] = Json::encode($deck->cards()->jsonSerialize());
+            $params['tags_'.$i] = Json::encode($deck->tags());
+            $params['deck_type_'.$i] = $deck->type()->value;
+        }
+
+        $sql = sprintf(
+            '
+                INSERT INTO %s (
+                    id, name, set, houses, dok_id, sas,
+                    amber_control, artifact_control, expected_amber, creature_control, efficiency, recursion, disruption, effective_power, creature_protection, other,
+                    raw_amber, total_power, total_armor, efficiency_bonus, creature_count, action_count, artifact_count, upgrade_count, card_draw_count, card_archive_count, key_cheat_count,
+                    board_clear_count, board_clear_cards, scaling_amber_control_count, scaling_amber_control_cards, synergy_rating, anti_synergy_rating,
+                    aerc_score, aerc_version, sas_version, sas_percentile, previous_sas_rating, previous_major_sas_rating,
+                    last_sas_update, cards, tags, deck_type
+                ) VALUES %s
+                ON CONFLICT (id) DO UPDATE SET
+                    sas = EXCLUDED.sas,
+                    amber_control = EXCLUDED.amber_control,
+                    artifact_control = EXCLUDED.artifact_control,
+                    expected_amber = EXCLUDED.expected_amber,
+                    creature_control = EXCLUDED.creature_control,
+                    efficiency = EXCLUDED.efficiency,
+                    recursion = EXCLUDED.recursion,
+                    disruption = EXCLUDED.disruption,
+                    effective_power = EXCLUDED.effective_power,
+                    creature_protection = EXCLUDED.creature_protection,
+                    other = EXCLUDED.other,
+                    raw_amber = EXCLUDED.raw_amber,
+                    total_power = EXCLUDED.total_power,
+                    total_armor = EXCLUDED.total_armor,
+                    efficiency_bonus = EXCLUDED.efficiency_bonus,
+                    creature_count = EXCLUDED.creature_count,
+                    action_count = EXCLUDED.action_count,
+                    artifact_count = EXCLUDED.artifact_count,
+                    upgrade_count = EXCLUDED.upgrade_count,
+                    card_draw_count = EXCLUDED.card_draw_count,
+                    card_archive_count = EXCLUDED.card_archive_count,
+                    key_cheat_count = EXCLUDED.key_cheat_count,
+                    board_clear_count = EXCLUDED.board_clear_count,
+                    board_clear_cards = EXCLUDED.board_clear_cards,
+                    scaling_amber_control_count = EXCLUDED.scaling_amber_control_count,
+                    scaling_amber_control_cards = EXCLUDED.scaling_amber_control_cards,
+                    synergy_rating = EXCLUDED.synergy_rating,
+                    anti_synergy_rating = EXCLUDED.anti_synergy_rating,
+                    aerc_score = EXCLUDED.aerc_score,
+                    aerc_version = EXCLUDED.aerc_version,
+                    sas_version = EXCLUDED.sas_version,
+                    sas_percentile = EXCLUDED.sas_percentile,
+                    previous_sas_rating = EXCLUDED.previous_sas_rating,
+                    previous_major_sas_rating = EXCLUDED.previous_major_sas_rating,
+                    last_sas_update = EXCLUDED.last_sas_update,
+                    cards = EXCLUDED.cards,
+                    tags = EXCLUDED.tags
+            ',
+            self::TABLE,
+            implode(', ', $values),
         );
 
-        $stmt->bindValue(':deck_id', $deckId->value());
-        $stmt->bindValue(':user_id', $userId->value());
-        $stmt->bindValue(':notes', '');
-        $stmt->bindValue(':user_tags', Json::encode([]));
+        $this->connection->executeStatement($sql, $params);
+    }
 
-        $stmt->executeStatement();
+    public function addOwner(Uuid $userId, Uuid ...$deckIds): void
+    {
+        if ([] === $deckIds) {
+            return;
+        }
+
+        $values = [];
+        $params = [];
+
+        foreach (array_chunk($deckIds, 500) as $chunk) {
+            foreach ($chunk as $i => $deckId) {
+
+                $values[] = sprintf(
+                    '(:deck_id_%1$d, :user_id_%1$d, :notes_%1$d, :user_tags_%1$d)',
+                    $i,
+                );
+
+                $params['deck_id_'.$i] = $deckId->value();
+                $params['user_id_'.$i] = $userId->value();
+                $params['notes_'.$i] = '';
+                $params['user_tags_'.$i] = Json::encode([]);
+            }
+
+            $sql = sprintf(
+                '
+                INSERT INTO %s (deck_id, user_id, notes, user_tags)
+                VALUES %s
+                ON CONFLICT (deck_id, user_id) DO NOTHING
+            ',
+                self::TABLE_OWNERSHIP,
+                implode(', ', $values),
+            );
+
+            $this->connection->executeStatement($sql, $params);
+        }
     }
 
     public function removeOwner(Uuid $deckId, Uuid $userId): void

@@ -38,7 +38,6 @@ use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagRecursionHigh;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagSynergyHigh;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Tag\KeyforgeTagUpgradeCountHigh;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeCards;
-use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Criteria\Criteria;
 use AdnanMula\Criteria\Filter\Filter;
 use AdnanMula\Criteria\Filter\FilterOperator;
@@ -47,7 +46,6 @@ use AdnanMula\Criteria\Filter\FilterType;
 use AdnanMula\Criteria\FilterField\FilterField;
 use AdnanMula\Criteria\FilterValue\ArrayElementFilterValue;
 use AdnanMula\Criteria\FilterValue\IntFilterValue;
-use AdnanMula\Criteria\FilterValue\StringFilterValue;
 
 final readonly class DeckApplyPredefinedTagsService
 {
@@ -57,52 +55,24 @@ final readonly class DeckApplyPredefinedTagsService
     ) {}
 
     /**
+     * @param array<KeyforgeDeck> $decks
      * @param array<string>|null $scalingAmberCards
      * @param array<string>|null $boardClearCards
      * @param array<string>|null $giganticCards
+     * @return array<KeyforgeDeck>
      */
     public function execute(
-        Uuid $id,
-        ?KeyforgeDeck $deck = null,
+        array $decks,
         ?array $scalingAmberCards = null,
         ?array $boardClearCards = null,
         ?array $giganticCards = null,
-    ): void {
-        $deck = $this->fetchDeck($id, $deck);
-
-        if (null === $deck) {
-            return;
+        bool $persist = true,
+    ): array {
+        if ([] === $decks) {
+            return [];
         }
 
-        $newTags = [];
         [$scalingAmberCards, $boardClearCards, $giganticCards] = $this->fetchCards($scalingAmberCards, $boardClearCards, $giganticCards);
-        [$maverickCount, $legacyCount, $anomalyCount] = $this->specialCardsCount($deck->cards());
-
-        $newTags[] = $this->tagActionCount($deck);
-        $newTags[] = $this->tagAmberControl($deck);
-        $newTags[] = $this->tagAntiSynergy($deck);
-        $newTags[] = $this->tagArchiveCardCount($deck);
-        $newTags[] = $this->tagArtifactControl($deck);
-        $newTags[] = $this->tagArtifactCount($deck);
-        $newTags[] = $this->tagBonusAmber($deck);
-        $newTags[] = $this->tagCreatureControl($deck);
-        $newTags[] = $this->tagCreatureCount($deck);
-        $newTags[] = $this->tagCreatureProtection($deck);
-        $newTags[] = $this->tagDisruption($deck);
-        $newTags[] = $this->tagEffectivePower($deck);
-        $newTags[] = $this->tagEfficiency($deck);
-        $newTags[] = $this->tagExpectedAmber($deck);
-        $newTags[] = $this->tagHasAnomaly($anomalyCount);
-        $newTags[] = $this->tagHasBoardWipes($deck, $boardClearCards);
-        $newTags[] = $this->tagHasKeyCheats($deck);
-        $newTags[] = $this->tagHasLegacy($legacyCount);
-        $newTags[] = $this->tagHasMaverick($maverickCount);
-        $newTags[] = $this->tagHasScalingAmberControl($deck, $scalingAmberCards);
-        $newTags[] = $this->tagRecursion($deck);
-        $newTags[] = $this->tagSynergy($deck);
-        $newTags[] = $this->tagUpgradeCount($deck);
-        $newTags[] = $this->tagHasGiganticCreatures($deck, $giganticCards);
-
         $draftDecks = [
             '19ee9a3b-cbe5-4fe5-b4a5-388a1cc3c37a',
             '37259b93-1cdd-4ea8-8206-767b071b2643',
@@ -110,33 +80,52 @@ final readonly class DeckApplyPredefinedTagsService
             'dcbc4eae-b03b-4a75-a8ba-65742f1ca1c6',
         ];
 
-        if (\in_array($deck->id()->value(), $draftDecks, true)) {
+        foreach ($decks as $deck) {
+            if (in_array($deck->id()->value(), $draftDecks, true)) {
+                continue;
+            }
+
+            [$maverickCount, $legacyCount, $anomalyCount] = $this->specialCardsCount($deck->cards());
+
             $newTags = [];
+
+            $newTags[] = $this->tagActionCount($deck);
+            $newTags[] = $this->tagAmberControl($deck);
+            $newTags[] = $this->tagAntiSynergy($deck);
+            $newTags[] = $this->tagArchiveCardCount($deck);
+            $newTags[] = $this->tagArtifactControl($deck);
+            $newTags[] = $this->tagArtifactCount($deck);
+            $newTags[] = $this->tagBonusAmber($deck);
+            $newTags[] = $this->tagCreatureControl($deck);
+            $newTags[] = $this->tagCreatureCount($deck);
+            $newTags[] = $this->tagCreatureProtection($deck);
+            $newTags[] = $this->tagDisruption($deck);
+            $newTags[] = $this->tagEffectivePower($deck);
+            $newTags[] = $this->tagEfficiency($deck);
+            $newTags[] = $this->tagExpectedAmber($deck);
+            $newTags[] = $this->tagHasAnomaly($anomalyCount);
+            $newTags[] = $this->tagHasBoardWipes($deck, $boardClearCards);
+            $newTags[] = $this->tagHasKeyCheats($deck);
+            $newTags[] = $this->tagHasLegacy($legacyCount);
+            $newTags[] = $this->tagHasMaverick($maverickCount);
+            $newTags[] = $this->tagHasScalingAmberControl($deck, $scalingAmberCards);
+            $newTags[] = $this->tagRecursion($deck);
+            $newTags[] = $this->tagSynergy($deck);
+            $newTags[] = $this->tagUpgradeCount($deck);
+            $newTags[] = $this->tagHasGiganticCreatures($deck, $giganticCards);
+
+            if (\in_array($deck->id()->value(), $draftDecks, true)) {
+                $newTags = [];
+            }
+
+            $deck->setTags(...$this->mergeTags($deck->tags(), \array_filter($newTags)));
         }
 
-        $deck->setTags(...$this->mergeTags($deck->tags(), \array_filter($newTags)));
-
-        $this->repository->save($deck);
-    }
-
-    private function fetchDeck(Uuid $id, ?KeyforgeDeck $deck): ?KeyforgeDeck
-    {
-        if (null === $deck) {
-            $deck = $this->repository->searchOne(
-                new Criteria(
-                    new Filters(
-                        FilterType::AND,
-                        new Filter(
-                            new FilterField('id'),
-                            new StringFilterValue($id->value()),
-                            FilterOperator::EQUAL,
-                        ),
-                    ),
-                ),
-            );
+        if ($persist && count($decks) > 0) {
+            $this->repository->save(...$decks);
         }
 
-        return $deck;
+        return $decks;
     }
 
     private function fetchCards(?array $scalingAmberCards, ?array $boardClearCards, ?array $giganticCards): array

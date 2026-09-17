@@ -84,10 +84,10 @@ final readonly class ImportDeckAllianceFromDokService implements ImportDeckAllia
         ]);
 
         if (null !== $owner) {
-            $this->repository->addOwner($newDeck->id(), $owner);
+            $this->repository->addOwner($owner, $newDeck->id());
         }
 
-        $this->tagsService->execute($newDeck->id());
+        $this->tagsService->execute([$newDeck]);
 
         return $newDeck;
     }

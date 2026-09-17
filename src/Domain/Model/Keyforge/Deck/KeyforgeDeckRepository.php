@@ -13,7 +13,7 @@ interface KeyforgeDeckRepository extends Repository
     public function search(Criteria $criteria, bool $isMyDecks = false): array;
     public function searchOne(Criteria $criteria): ?KeyforgeDeck;
     public function count(Criteria $criteria): int;
-    public function addOwner(Uuid $deckId, Uuid $userId): void;
+    public function addOwner(Uuid $userId, Uuid ...$deckIds): void;
     public function removeOwner(Uuid $deckId, Uuid $userId): void;
     /** @return array<array{deck_id: string, user_id: string, notes: string}> */
     public function ownersOf(Uuid $deckId): array;
@@ -22,7 +22,7 @@ interface KeyforgeDeckRepository extends Repository
     public function ownedInfo(Uuid $userId, Uuid $deckId): ?array;
     public function updateUserTags(Uuid $userId, Uuid $deckId, string ...$tags): void;
     public function updateNotes(Uuid $userId, Uuid $deckId, string $notes): void;
-    public function save(KeyforgeDeck $deck): void;
+    public function save(KeyforgeDeck ...$decks): void;
     public function bellCurve(?KeyforgeDeckType $deckType): array;
     public function homeCounts(): array;
 }

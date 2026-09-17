@@ -64,7 +64,7 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
             ),
         );
 
-        $this->repository->addOwner(Uuid::from(self::FIXTURE_KEYFORGE_DECK_1_ID), Uuid::from(UserFixtures::FIXTURE_USER_1_ID));
+        $this->repository->addOwner(Uuid::from(UserFixtures::FIXTURE_USER_1_ID), Uuid::from(self::FIXTURE_KEYFORGE_DECK_1_ID));
 
         $this->repository->save(
             new KeyforgeDeck(
@@ -81,7 +81,7 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
             ),
         );
 
-        $this->repository->addOwner(Uuid::from(self::FIXTURE_KEYFORGE_DECK_2_ID), Uuid::from(UserFixtures::FIXTURE_USER_2_ID));
+        $this->repository->addOwner(Uuid::from(UserFixtures::FIXTURE_USER_2_ID), Uuid::from(self::FIXTURE_KEYFORGE_DECK_2_ID));
 
         $this->repository->save(
             new KeyforgeDeck(
@@ -98,7 +98,7 @@ final class KeyforgeDecksFixtures extends DbalFixture implements Fixture
             ),
         );
 
-        $this->repository->addOwner(Uuid::from(self::FIXTURE_KEYFORGE_DECK_3_ID), Uuid::from(UserFixtures::FIXTURE_USER_3_ID));
+        $this->repository->addOwner(Uuid::from(UserFixtures::FIXTURE_USER_3_ID), Uuid::from(self::FIXTURE_KEYFORGE_DECK_3_ID));
 
         $this->repository->save(
             new KeyforgeDeck(

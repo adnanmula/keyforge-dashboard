@@ -77,14 +77,14 @@ final class ImportDeckFromDokService implements ImportDeckService
         $this->repository->save($newDeck);
 
         if (null !== $owner) {
-            $this->repository->addOwner($newDeck->id(), $owner);
+            $this->repository->addOwner($owner, $newDeck->id());
         }
 
         if ($withHistory) {
             $this->statHistoryService->execute($newDeck->id());
         }
 
-        $this->tagsService->execute($newDeck->id());
+        $this->tagsService->execute([$newDeck]);
 
         return $newDeck;
     }

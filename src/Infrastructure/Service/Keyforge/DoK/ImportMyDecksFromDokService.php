@@ -58,6 +58,7 @@ final readonly class ImportMyDecksFromDokService
         );
 
         [$scalingAmberCards, $boardClearCards, $giganticCards] = $this->specialCards();
+        $newDecks = [];
 
         foreach ($response as $responseDeck) {
             /** @var ?KeyforgeDeck $storedDeck */
@@ -70,7 +71,7 @@ final readonly class ImportMyDecksFromDokService
                 continue;
             }
 
-            $newDeck = new KeyforgeDeck(
+            $newDecks[] = new KeyforgeDeck(
                 Uuid::from($responseDeck['deck']['keyforgeId']),
                 $responseDeck['deck']['id'],
                 KeyforgeDeckType::STANDARD,
@@ -80,11 +81,15 @@ final readonly class ImportMyDecksFromDokService
                 KeyforgeCards::fromDokData($responseDeck),
                 KeyforgeDeckStats::fromDokData($responseDeck, $scalingAmberCards, $boardClearCards),
             );
-
-            $this->repository->save($newDeck);
-            $this->repository->addOwner($newDeck->id(), $owner);
-            $this->tagsService->execute($newDeck->id(), $newDeck, $scalingAmberCards, $boardClearCards, $giganticCards);
         }
+
+        $newDecks = $this->tagsService->execute($newDecks, $scalingAmberCards, $boardClearCards, $giganticCards, false);
+
+        $this->repository->save(...$newDecks);
+        $this->repository->addOwner(
+            $owner,
+            ...\array_map(static fn (KeyforgeDeck $d): Uuid => $d->id(), $newDecks),
+        );
     }
 
     private function specialCards(): array
