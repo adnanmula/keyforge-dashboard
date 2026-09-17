@@ -3,6 +3,7 @@
 namespace AdnanMula\Cards;
 
 use AdnanMula\Cards\Infrastructure\Fixtures\FixturesPass;
+use AdnanMula\Cards\Infrastructure\Http\TraceHttpClientsPass;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -15,6 +16,7 @@ class Kernel extends BaseKernel
 
     protected function build(ContainerBuilder $container): void
     {
+        $container->addCompilerPass(new TraceHttpClientsPass());
         $container->addCompilerPass(new FixturesPass());
     }
 
