@@ -6,14 +6,17 @@ FILE=docker-compose.yml
 build: ## docker compose build
 	UID=${UID} GID={GID} docker compose -f ${FILE} build
 
-up: ## up all containers
+up: ## up app containers
 	UID=${UID} GID=${GID} docker compose -f ${FILE} up -d
+
+up-all: ## up all containers
+	UID=${UID} GID=${GID} docker compose -f ${FILE} --profile logs up -d
 
 stop: ## stop all containers
 	UID=${UID} GID=${GID} docker compose -f ${FILE} stop
 
 down: ## down all containers
-	UID=${UID} GID=${GID} docker compose -f ${FILE} down
+	UID=${UID} GID=${GID} docker compose -f ${FILE} --profile logs down
 
 bash: ## gets inside a php container
 	UID=${UID} GID={GID} docker compose -f ${FILE} exec --user=${UID} php-fpm sh
