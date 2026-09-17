@@ -12,6 +12,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -19,6 +20,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 final class ImportCardsCommand extends Command
 {
     public function __construct(
+        #[Target('dokClient')]
         private readonly HttpClientInterface $dokClient,
         private readonly KeyforgeCardRepository $repository,
     ) {

@@ -23,6 +23,7 @@ use AdnanMula\Criteria\Filter\FilterType;
 use AdnanMula\Criteria\FilterField\FilterField;
 use AdnanMula\Criteria\FilterValue\ArrayElementFilterValue;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
+use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -31,6 +32,7 @@ final class ImportDeckFromDokService implements ImportDeckService
     public function __construct(
         private KeyforgeDeckRepository $repository,
         private KeyforgeCardRepository $cardRepository,
+        #[Target('dokClient')]
         private HttpClientInterface $dokClient,
         private DeckApplyPredefinedTagsService $tagsService,
         private ImportDeckStatHistoryFromDokService $statHistoryService,

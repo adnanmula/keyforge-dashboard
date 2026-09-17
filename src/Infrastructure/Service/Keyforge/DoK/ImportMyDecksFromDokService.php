@@ -22,12 +22,14 @@ use AdnanMula\Criteria\FilterField\FilterField;
 use AdnanMula\Criteria\FilterValue\ArrayElementFilterValue;
 use AdnanMula\Criteria\FilterValue\IntFilterValue;
 use AdnanMula\Criteria\FilterValue\StringArrayFilterValue;
+use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 final readonly class ImportMyDecksFromDokService
 {
     public function __construct(
+        #[Target('dokClient')]
         private HttpClientInterface $dokClient,
         private KeyforgeDeckRepository $repository,
         private KeyforgeCardRepository $cardRepository,

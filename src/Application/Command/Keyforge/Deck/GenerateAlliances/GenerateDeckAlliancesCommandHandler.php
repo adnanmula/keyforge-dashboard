@@ -20,6 +20,7 @@ use AdnanMula\Criteria\FilterField\FilterField;
 use AdnanMula\Criteria\FilterValue\StringArrayFilterValue;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -29,6 +30,7 @@ readonly class GenerateDeckAlliancesCommandHandler
         private KeyforgeDeckRepository $deckRepository,
         private KeyforgeDeckAllianceRepository $deckAllianceRepository,
         private ImportDeckAllianceService $importDeckAllianceService,
+        #[Target('dokClient')]
         private HttpClientInterface $dokClient,
         private string $dokUser,
         private string $dokPass,

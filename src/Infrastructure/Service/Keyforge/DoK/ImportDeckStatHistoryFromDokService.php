@@ -13,12 +13,14 @@ use AdnanMula\Criteria\Filter\Filters;
 use AdnanMula\Criteria\Filter\FilterType;
 use AdnanMula\Criteria\FilterField\FilterField;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
+use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 final class ImportDeckStatHistoryFromDokService
 {
     public function __construct(
+        #[Target('dokClient')]
         private HttpClientInterface $dokClient,
         private KeyforgeDeckRepository $repository,
         private KeyforgeDeckStatHistoryRepository $historyRepository,

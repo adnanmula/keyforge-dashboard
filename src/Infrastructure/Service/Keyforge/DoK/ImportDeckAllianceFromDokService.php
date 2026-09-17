@@ -24,6 +24,7 @@ use AdnanMula\Criteria\Filter\FilterType;
 use AdnanMula\Criteria\FilterField\FilterField;
 use AdnanMula\Criteria\FilterValue\ArrayElementFilterValue;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
+use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -33,6 +34,7 @@ final readonly class ImportDeckAllianceFromDokService implements ImportDeckAllia
         private KeyforgeDeckRepository $repository,
         private KeyforgeDeckAllianceRepository $allianceRepository,
         private KeyforgeCardRepository $cardRepository,
+        #[Target('dokClient')]
         private HttpClientInterface $dokClient,
         private DeckApplyPredefinedTagsService $tagsService,
     ) {}
