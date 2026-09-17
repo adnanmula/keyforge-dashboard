@@ -247,10 +247,10 @@ final class KeyforgeDeckDbalRepository extends DbalRepository implements Keyforg
 
             $sql = sprintf(
                 '
-                INSERT INTO %s (deck_id, user_id, notes, user_tags)
-                VALUES %s
-                ON CONFLICT (deck_id, user_id) DO NOTHING
-            ',
+                    INSERT INTO %s (deck_id, user_id, notes, user_tags)
+                    VALUES %s
+                    ON CONFLICT (deck_id, user_id) DO NOTHING
+                ',
                 self::TABLE_OWNERSHIP,
                 implode(', ', $values),
             );

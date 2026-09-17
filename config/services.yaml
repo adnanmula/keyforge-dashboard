@@ -2,6 +2,7 @@ parameters:
   web_host: '%env(resolve:VIRTUAL_HOST)%'
   db_url: '%env(resolve:DATABASE_URL)%'
   db_url_default: '%env(resolve:DATABASE_URL_DEFAULT)%'
+  env: '%env(APP_ENV)%'
 
 services:
   _defaults:
@@ -12,8 +13,8 @@ services:
       Doctrine\DBAL\Connection $defaultConnection: '@repository.dbal.connection_default'
       Doctrine\DBAL\Connection $connection: '@repository.dbal.connection'
       Psr\Log\LoggerInterface $userActivityLogger: '@monolog.logger.user_activity'
-      bool $registrationClosed: '%env(REGISTRATION_CLOSED)%'
       string $dbUrl: '%db_url%'
+      bool $registrationClosed: '%env(REGISTRATION_CLOSED)%'
 
   AdnanMula\Cards\Application\Command\:
     resource: '../src/Application/Command/*/*/*/*Handler.php'

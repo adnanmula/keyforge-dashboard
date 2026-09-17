@@ -3,13 +3,17 @@ services:
     class: Doctrine\DBAL\Connection
     factory: 'AdnanMula\Cards\Infrastructure\Persistence\Repository\ConnectionFactory::create'
     arguments:
+      - '%env%'
       - '%db_url%'
+      - '@debug.stopwatch'
 
   repository.dbal.connection_default:
     class: Doctrine\DBAL\Connection
     factory: 'AdnanMula\Cards\Infrastructure\Persistence\Repository\ConnectionFactory::create'
     arguments:
+      - '%env%'
       - '%db_url_default%'
+      - '@debug.stopwatch'
 
   Doctrine\DBAL\Connection:
     alias: repository.dbal.connection
