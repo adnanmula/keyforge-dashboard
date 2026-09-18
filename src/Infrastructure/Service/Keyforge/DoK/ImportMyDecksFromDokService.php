@@ -63,6 +63,12 @@ final readonly class ImportMyDecksFromDokService
         $newDecks = [];
 
         foreach ($response as $responseDeck) {
+            $set = KeyforgeSet::fromDokName($responseDeck['deck']['expansion']);
+
+            if (false === $set->isEnabled()) {
+                continue;
+            }
+
             /** @var ?KeyforgeDeck $storedDeck */
             $storedDeck = \array_values(\array_filter(
                 $storedDecks,
@@ -78,7 +84,7 @@ final readonly class ImportMyDecksFromDokService
                 $responseDeck['deck']['id'],
                 KeyforgeDeckType::STANDARD,
                 $responseDeck['deck']['name'],
-                KeyforgeSet::fromDokName($responseDeck['deck']['expansion']),
+                $set,
                 KeyforgeDeckHouses::fromDokData($responseDeck),
                 KeyforgeCards::fromDokData($responseDeck),
                 KeyforgeDeckStats::fromDokData($responseDeck, $scalingAmberCards, $boardClearCards),
