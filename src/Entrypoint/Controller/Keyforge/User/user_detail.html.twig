@@ -114,40 +114,4 @@
             'statsMax': statsMax,
         } %}
     </div>
-
-    <script>
-        {% for competition,data in wr_by_competition %}
-            graph('wr_by_competition_{{ competition }}', '{{ ('game.'~competition|lower)|trans }}', JSON.parse('{{ data|json_encode|raw }}'))
-        {% endfor %}
-
-        function graph(id, title, data) {
-            new Chart(document.getElementById(id).getContext('2d'), {
-                type: 'doughnut',
-                data: {
-                    labels: ['W', 'L'],
-                    datasets: [
-                        {
-                            data: [data.total_wins, data.total_losses],
-                            borderColor: ['rgb(105,202,26)', 'rgb(221,0,0)'],
-                            backgroundColor: ['rgb(105,202,26)', 'rgb(221,0,0)'],
-                        },
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    aspectRatio: 2,
-                    plugins: {
-                        legend: {
-                            display: false,
-                            position: 'bottom',
-                        },
-                        title: {
-                            display: true,
-                            text: title,
-                        }
-                    }
-                },
-            });
-        }
-    </script>
 {% endblock %}

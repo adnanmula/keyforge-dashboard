@@ -52,6 +52,7 @@
                     {% for friend in requestsSent %}
                         <li class="list-group-item">
                             <a href="{{ path('keyforge_user_detail', {'userId': friend.friend_id}) }}">{{ friend.receiver_name }}</a>
+                            <button data-toggle="tooltip" title="{{ 'menu.remove'|trans }}" type="button" class="btn btn-outline-danger removeFriend" data-friend="{{ friend.friend_id }}" style="float: right;"><i class="bi bi-trash" style="pointer-events: none;"></i></button>
                         </li>
                     {% endfor %}
                 </ul>
