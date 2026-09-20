@@ -131,15 +131,6 @@ final class ImportDeckStatsBulkCommand extends Command
 
     private function decks(int $batch, array $deckIds, array $alreadyImported, KeyforgeDeckType $type): array
     {
-        $draftDecks = [
-            '37259b93-1cdd-4ea8-8206-767b071b2643',
-            'dcbc4eae-b03b-4a75-a8ba-65742f1ca1c6',
-            '19ee9a3b-cbe5-4fe5-b4a5-388a1cc3c37a',
-            'eaa1eb19-6ec9-400f-8881-b88eeddd06bc',
-        ];
-
-        $alreadyImported = \array_merge($alreadyImported, $draftDecks);
-
         $query = $this->connection->createQueryBuilder()
             ->select('a.id')
             ->from('keyforge_decks', 'a')

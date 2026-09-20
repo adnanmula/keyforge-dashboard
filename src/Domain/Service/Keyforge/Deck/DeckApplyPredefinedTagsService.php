@@ -73,18 +73,8 @@ final readonly class DeckApplyPredefinedTagsService
         }
 
         [$scalingAmberCards, $boardClearCards, $giganticCards] = $this->fetchCards($scalingAmberCards, $boardClearCards, $giganticCards);
-        $draftDecks = [
-            '19ee9a3b-cbe5-4fe5-b4a5-388a1cc3c37a',
-            '37259b93-1cdd-4ea8-8206-767b071b2643',
-            'eaa1eb19-6ec9-400f-8881-b88eeddd06bc',
-            'dcbc4eae-b03b-4a75-a8ba-65742f1ca1c6',
-        ];
 
         foreach ($decks as $deck) {
-            if (in_array($deck->id()->value(), $draftDecks, true)) {
-                continue;
-            }
-
             [$maverickCount, $legacyCount, $anomalyCount] = $this->specialCardsCount($deck->cards());
 
             $newTags = [];
@@ -113,10 +103,6 @@ final readonly class DeckApplyPredefinedTagsService
             $newTags[] = $this->tagSynergy($deck);
             $newTags[] = $this->tagUpgradeCount($deck);
             $newTags[] = $this->tagHasGiganticCreatures($deck, $giganticCards);
-
-            if (\in_array($deck->id()->value(), $draftDecks, true)) {
-                $newTags = [];
-            }
 
             $deck->setTags(...$this->mergeTags($deck->tags(), \array_filter($newTags)));
         }

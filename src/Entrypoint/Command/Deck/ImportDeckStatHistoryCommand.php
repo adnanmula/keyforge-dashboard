@@ -7,13 +7,11 @@ use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Infrastructure\Service\Keyforge\DoK\ImportDeckStatHistoryFromDokService;
 use AdnanMula\Criteria\Criteria;
-use AdnanMula\Criteria\Filter\CompositeFilter;
 use AdnanMula\Criteria\Filter\Filter;
 use AdnanMula\Criteria\Filter\FilterOperator;
 use AdnanMula\Criteria\Filter\Filters;
 use AdnanMula\Criteria\Filter\FilterType;
 use AdnanMula\Criteria\FilterField\FilterField;
-use AdnanMula\Criteria\FilterValue\StringArrayFilterValue;
 use AdnanMula\Criteria\FilterValue\StringFilterValue;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -110,20 +108,7 @@ final class ImportDeckStatHistoryCommand extends Command
 
         return $this->deckRepository->search(
             new Criteria(
-                filters: new Filters(
-                    FilterType::AND,
-                    new Filter(
-                        new FilterField('id'),
-                        new StringArrayFilterValue(
-                            '37259b93-1cdd-4ea8-8206-767b071b2643',
-                            'dcbc4eae-b03b-4a75-a8ba-65742f1ca1c6',
-                            '19ee9a3b-cbe5-4fe5-b4a5-388a1cc3c37a',
-                            'eaa1eb19-6ec9-400f-8881-b88eeddd06bc',
-                        ),
-                        FilterOperator::NOT_IN,
-                    ),
-                    new CompositeFilter(FilterType::OR, ...$filters),
-                ),
+                filters: new Filters(FilterType::OR, ...$filters),
                 limit: $batch,
             ),
         );
