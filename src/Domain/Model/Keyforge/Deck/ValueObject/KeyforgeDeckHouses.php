@@ -2,7 +2,7 @@
 
 namespace AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject;
 
-final class KeyforgeDeckHouses implements \JsonSerializable
+final class KeyforgeDeckHouses implements \JsonSerializable, \ArrayAccess
 {
     private array $value;
 
@@ -51,5 +51,25 @@ final class KeyforgeDeckHouses implements \JsonSerializable
     public function jsonSerialize(): array
     {
         return [$this->value[0]->name, $this->value[1]->name, $this->value[2]->name];
+    }
+
+    public function offsetExists(mixed $offset): bool
+    {
+        return array_key_exists($offset, $this->value);
+    }
+
+    public function offsetGet(mixed $offset): KeyforgeHouse
+    {
+        return $this->value[$offset];
+    }
+
+    public function offsetSet(mixed $offset, mixed $value): void
+    {
+        throw new \BadMethodCallException('Cannot set value');
+    }
+
+    public function offsetUnset(mixed $offset): void
+    {
+        throw new \BadMethodCallException('Cannot unset value');
     }
 }

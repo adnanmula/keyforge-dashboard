@@ -7,7 +7,6 @@ final readonly class KeyforgeCard implements \JsonSerializable
     private function __construct(
         public string $name,
         public string $serializedName,
-        public ?string $imageUrl,
         public KeyforgeCardRarity $rarity,
         public bool $isEnhanced,
         public bool $isMaverick,
@@ -24,22 +23,46 @@ final readonly class KeyforgeCard implements \JsonSerializable
 
     public static function fromArray(array $data): self
     {
+        if (array_key_exists('name', $data)) {
+            return new self(
+                $data['name'],
+                $data['serializedName'],
+                KeyforgeCardRarity::from(\strtoupper($data['rarity'])),
+                $data['isEnhanced'] ?? false,
+                $data['isMaverick'] ?? false,
+                $data['isLegacy'] ?? false,
+                $data['isAnomaly'] ?? false,
+                $data['bonusAember'] ?? 0,
+                $data['bonusCapture'] ?? 0,
+                $data['bonusDamage'] ?? 0,
+                $data['bonusDraw'] ?? 0,
+                $data['bonusDiscard'] ?? 0,
+                $data['bonusPower'] ?? 0,
+                $data['bonusHouses'] ?? [],
+            );
+        }
+
+        if (strlen($data['r']) > 2) {
+            $rarity = KeyforgeCardRarity::from(\strtoupper($data['r']));
+        } else {
+            $rarity = KeyforgeCardRarity::fromAbbreviation(\strtoupper($data['r']));
+        }
+
         return new self(
-            $data['name'],
-            $data['serializedName'],
-            $data['imageUrl'] ?? '',
-            KeyforgeCardRarity::from(\strtoupper($data['rarity'])),
-            $data['isEnhanced'] ?? false,
-            $data['isMaverick'] ?? false,
-            $data['isLegacy'] ?? false,
-            $data['isAnomaly'] ?? false,
-            $data['bonusAember'] ?? 0,
-            $data['bonusCapture'] ?? 0,
-            $data['bonusDamage'] ?? 0,
-            $data['bonusDraw'] ?? 0,
-            $data['bonusDiscard'] ?? 0,
-            $data['bonusPower'] ?? 0,
-            $data['bonusHouses'] ?? [],
+            $data['n'],
+            $data['sN'],
+            $rarity,
+            $data['iE'] ?? false,
+            $data['iM'] ?? false,
+            $data['iL'] ?? false,
+            $data['iA'] ?? false,
+            $data['bA'] ?? 0,
+            $data['bC'] ?? 0,
+            $data['bDa'] ?? 0,
+            $data['bDr'] ?? 0,
+            $data['bDi'] ?? 0,
+            $data['bP'] ?? 0,
+            $data['bH'] ?? [],
         );
     }
 
@@ -51,7 +74,6 @@ final readonly class KeyforgeCard implements \JsonSerializable
         return new self(
             $data['cardTitle'],
             $serializedName,
-            $data['cardTitleUrl'],
             KeyforgeCardRarity::from(\strtoupper($data['rarity'])),
             $data['enhanced'] ?? false,
             $data['maverick'] ?? false,
@@ -69,22 +91,21 @@ final readonly class KeyforgeCard implements \JsonSerializable
 
     public function jsonSerialize(): array
     {
-        return [
-            'name' => $this->name,
-            'serializedName' => $this->serializedName,
-            'imageUrl' => $this->imageUrl,
-            'rarity' => $this->rarity->jsonSerialize(),
-            'isEnhanced' => $this->isEnhanced,
-            'isMaverick' => $this->isMaverick,
-            'isLegacy' => $this->isLegacy,
-            'isAnomaly' => $this->isAnomaly,
-            'bonusAember' => $this->bonusAember,
-            'bonusCapture' => $this->bonusCapture,
-            'bonusDamage' => $this->bonusDamage,
-            'bonusDraw' => $this->bonusDraw,
-            'bonusDiscard' => $this->bonusDiscard,
-            'bonusPower' => $this->bonusPower,
-            'bonusHouses' => $this->bonusHouses,
-        ];
+        return array_filter([
+            'n' => $this->name,
+            'sN' => $this->serializedName,
+            'r' => $this->rarity->abbreviated(),
+            'iE' => $this->isEnhanced,
+            'iM' => $this->isMaverick,
+            'iL' => $this->isLegacy,
+            'iA' => $this->isAnomaly,
+            'bA' => $this->bonusAember,
+            'bC' => $this->bonusCapture,
+            'bDa' => $this->bonusDamage,
+            'bDr' => $this->bonusDraw,
+            'bDi' => $this->bonusDiscard,
+            'bP' => $this->bonusPower,
+            'bH' => $this->bonusHouses,
+        ]);
     }
 }

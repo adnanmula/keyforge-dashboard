@@ -15,4 +15,31 @@ enum KeyforgeCardRarity: string implements \JsonSerializable
     case SPECIAL = 'SPECIAL';
     case VARIANT = 'VARIANT';
     case EVILTWIN = 'EVILTWIN';
+
+    public static function fromAbbreviation(string $abbreviation): self
+    {
+        return match ($abbreviation) {
+            'R' => self::RARE,
+            'C' => self::COMMON,
+            'U' => self::UNCOMMON,
+            'F' => self::FIXED,
+            'S' => self::SPECIAL,
+            'V' => self::VARIANT,
+            'ET' => self::EVILTWIN,
+            default => throw new \InvalidArgumentException($abbreviation),
+        };
+    }
+
+    public function abbreviated(): string
+    {
+        return match ($this) {
+            self::RARE => 'R',
+            self::COMMON => 'C',
+            self::UNCOMMON => 'U',
+            self::FIXED => 'F',
+            self::SPECIAL => 'S',
+            self::VARIANT => 'V',
+            self::EVILTWIN => 'ET',
+        };
+    }
 }

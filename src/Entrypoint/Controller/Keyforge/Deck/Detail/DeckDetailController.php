@@ -13,6 +13,7 @@ use AdnanMula\Cards\Domain\Model\Keyforge\Card\ValueObject\KeyforgeCardType;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Exception\DeckNotExistsException;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeck;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckRepository;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeCard;
 use AdnanMula\Cards\Domain\Model\Shared\User;
 use AdnanMula\Cards\Domain\Model\Shared\UserRepository;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\TagVisibility;
@@ -68,6 +69,7 @@ final class DeckDetailController extends Controller
         }
 
         [$publicTags, $privateTags, $allPrivateTags] = $this->tags($user, $deck);
+        [$cards, $cardTypes] = $this->cardTypes($deck);
 
         return $this->render(
             'Keyforge/Deck/Detail/deck_detail.html.twig',
@@ -78,16 +80,17 @@ final class DeckDetailController extends Controller
                 'deck_owner' => $deck->userData()?->userId()?->value(),
                 'deck_owners' => \array_map(static fn (Uuid $id): string => $id->value(), $deck->owners()),
                 'deck_owner_name' => $this->ownerName($deck),
-                'deck' => $deck->jsonSerialize(),
+                'deck' => $deck,
                 'deck_notes' => $this->notes($user, $deck),
                 'deck_history' => $this->deckHistory($deckId),
                 'stats' => $this->stats($deck),
                 'indexed_friends' => $indexedFriends,
-                'deck_card_types' => $this->cardTypes($deck),
+                'deck_card_types' => $cardTypes,
                 'bell_curve' => $this->deckRepository->bellCurve($deck->type()),
                 'public_tags' => $publicTags,
                 'private_tags' => $privateTags,
                 'all_private_tags' => $allPrivateTags,
+                'cards' => $cards,
             ],
         );
     }
@@ -230,11 +233,12 @@ final class DeckDetailController extends Controller
 
     private function cardTypes(KeyforgeDeck $deck): array
     {
-        $cardNames = [];
-
-        foreach (\array_merge($deck->cards()->firstPodCards, $deck->cards()->secondPodCards, $deck->cards()->thirdPodCards) as $card) {
-            $cardNames[] = $card->serializedName;
-        }
+        $cardNames = array_merge(
+            array_map(static fn (KeyforgeCard $c): string => $c->serializedName, $deck->cards()->firstPodCards),
+            array_map(static fn (KeyforgeCard $c): string => $c->serializedName, $deck->cards()->secondPodCards),
+            array_map(static fn (KeyforgeCard $c): string => $c->serializedName, $deck->cards()->thirdPodCards),
+            array_map(static fn (array $c): string => $c['sN'], $deck->cards()->extraCards),
+        );
 
         $cards = $this->cardRepository->search(
             new Criteria(
@@ -258,10 +262,14 @@ final class DeckDetailController extends Controller
         ];
 
         foreach ($cardNames as $cardName) {
+            if (false === in_array($indexedCards[$cardName]->type->value, $cardTypes, true)) {
+                continue;
+            }
+
             ++$cardTypes[$indexedCards[$cardName]->type->value];
         }
 
-        return $cardTypes;
+        return [$indexedCards, $cardTypes];
     }
 
     private function tags(?User $user, KeyforgeDeck $deck): array

@@ -33,6 +33,11 @@ class Uuid extends StringValueObject
         return new static(VendorUuid::uuid4()->toString());
     }
 
+    public static function v7(): static
+    {
+        return new static(VendorUuid::uuid7()->toString());
+    }
+
     public static function null(): static
     {
         return new static(self::NULL_UUID);

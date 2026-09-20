@@ -3,11 +3,19 @@
 namespace AdnanMula\Cards\Entrypoint\Command\Deck;
 
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\Exception\DeckNotExistsException;
+use AdnanMula\Cards\Domain\Model\Keyforge\Deck\KeyforgeDeckRepository;
 use AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject\KeyforgeDeckType;
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Uuid;
 use AdnanMula\Cards\Domain\Service\Keyforge\ImportDeckService;
 use AdnanMula\Cards\Infrastructure\Persistence\Repository\Keyforge\Deck\KeyforgeDeckUpdateDbalRepository;
 use AdnanMula\Cards\Infrastructure\Service\Keyforge\DoK\ImportDeckAllianceFromDokService;
+use AdnanMula\Criteria\Criteria;
+use AdnanMula\Criteria\Filter\Filter;
+use AdnanMula\Criteria\Filter\FilterOperator;
+use AdnanMula\Criteria\Filter\Filters;
+use AdnanMula\Criteria\Filter\FilterType;
+use AdnanMula\Criteria\FilterField\FilterField;
+use AdnanMula\Criteria\FilterValue\StringFilterValue;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -24,6 +32,7 @@ final class ImportDeckStatsBulkCommand extends Command
 {
     public function __construct(
         private readonly Connection $connection,
+        private readonly KeyforgeDeckRepository $deckRepository,
         private readonly KeyforgeDeckUpdateDbalRepository $updateRepository,
         private readonly ImportDeckService $service,
         private readonly ImportDeckAllianceFromDokService $allianceService,
@@ -36,14 +45,16 @@ final class ImportDeckStatsBulkCommand extends Command
         $this->addArgument('batch', InputArgument::OPTIONAL, 'Amount of decks to process', 10)
             ->addOption('with-history', null, InputOption::VALUE_NONE, 'Import stats history')
             ->addOption('decks', 'd', InputOption::VALUE_REQUIRED, 'Filter by deck ids, comma separated')
-            ->addOption('type', 't', InputOption::VALUE_REQUIRED, 'Filter by deck type', KeyforgeDeckType::STANDARD->value);
+            ->addOption('type', 't', InputOption::VALUE_REQUIRED, 'Filter by deck type', KeyforgeDeckType::STANDARD->value)
+            ->addOption('onlyFormat', 'f', InputOption::VALUE_NONE, 'Save deck to apply new format, dont fetch from third party')
+        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
 
-        [$batch, $withHistory, $deckIds, $type] = $this->params($input);
+        [$batch, $withHistory, $deckIds, $type, $onlyFormat] = $this->params($input);
 
         $alreadyImported = $this->updateRepository->all();
         $decks = $this->decks($batch, $deckIds, $alreadyImported, $type);
@@ -52,28 +63,41 @@ final class ImportDeckStatsBulkCommand extends Command
         $progressBar = new ProgressBar($output, $total);
         $progressBar->start();
 
-        foreach ($decks as $index => $deck) {
+        foreach ($decks as $index => $deckId) {
             try {
+                if ($onlyFormat) {
+                    $deck = $this->deckRepository->searchOne(new Criteria(
+                        new Filters(
+                            FilterType::AND,
+                            new Filter(new FilterField('id'), new StringFilterValue($deckId), FilterOperator::EQUAL),
+                        ),
+                    ));
+
+                    $this->deckRepository->save($deck);
+
+                    continue;
+                }
+
                 if (KeyforgeDeckType::ALLIANCE === $type) {
-                    $this->allianceService->execute(Uuid::from($deck), null, true);
+                    $this->allianceService->execute(Uuid::from($deckId), null, true);
                 } else {
-                    $this->service->execute(Uuid::from($deck), null, true, $withHistory);
+                    $this->service->execute(Uuid::from($deckId), null, true, $withHistory);
                 }
 
                 if ($io->isVerbose()) {
-                    $io->writeln(' | ' . $deck);
+                    $io->writeln(' | ' . $deckId);
                 }
             } catch (DeckNotExistsException) {
                 if ($io->isVerbose()) {
-                    $io->error(' | NOT FOUND: '. $deck);
+                    $io->error(' | NOT FOUND: '. $deckId);
                 }
             }
 
-            $this->updateRepository->add(Uuid::from($deck));
+            $this->updateRepository->add(Uuid::from($deckId));
 
             $progressBar->advance();
 
-            if ($index*2 > 0 && ($index*2+2) % 25 === 0) {
+            if (false === $onlyFormat && $index*2 > 0 && ($index*2+2) % 25 === 0) {
                 if ($io->isVerbose()) {
                     $io->error(' | Reached request limit sleeping for 65 seconds');
                 }
@@ -96,12 +120,13 @@ final class ImportDeckStatsBulkCommand extends Command
         $withHistory = $input->getOption('with-history') ?? false;
         $deckIds = $input->getOption('decks') ?? [];
         $type = KeyforgeDeckType::from($input->getOption('type'));
+        $onlyFormat = $input->getOption('onlyFormat');
 
         if ([] !== $deckIds) {
             $deckIds = \explode(',', $input->getOption('decks'));
         }
 
-        return [$batch, $withHistory, $deckIds, $type];
+        return [$batch, $withHistory, $deckIds, $type, $onlyFormat];
     }
 
     private function decks(int $batch, array $deckIds, array $alreadyImported, KeyforgeDeckType $type): array

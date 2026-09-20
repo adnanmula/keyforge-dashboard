@@ -64,7 +64,7 @@
         </div>
         <div class="d-flex col-12 col-md-1 justify-content-end">
             <h2 style="margin-top: 5px; white-space: nowrap;" data-toggle="tooltip" title="{{ deck.stats.aercScore }}+{{ deck.stats.synergyRating }}-{{ deck.stats.antiSynergyRating }}">{{ deck.stats.sas }}</h2>
-            <img style="margin-bottom: 15px" width="40px" src="/assets/keyforge/sets/{{ deck.set }}.svg" alt="{{ deck.set }}"/>
+            <img style="margin-bottom: 15px" width="40px" src="/assets/keyforge/sets/{{ deck.set.value }}.svg" alt="{{ deck.set.value }}"/>
         </div>
     </div>
     <div class="row">
@@ -72,7 +72,7 @@
             <div class="row">
                 {% for pod in 0..2 %}
                     <div class="col-12 col-lg-4" style="margin-top: 10px">
-                        <img width="33px" src="/assets/keyforge/houses/{{ deck.houses[pod] }}.png" alt="{{ deck.houses[pod] }}"/><span style="font-size: 1.5em; vertical-align: middle; margin-left: 4px">{{ deck.houses[pod] }}</span>
+                        <img width="33px" src="/assets/keyforge/houses/{{ deck.houses[pod].value }}.png" alt="{{ deck.houses[pod].value }}"/><span style="font-size: 1.5em; vertical-align: middle; margin-left: 4px">{{ deck.houses[pod].value }}</span>
                         <div class="row">
                             {% if deck.type == 'ALLIANCE' %}
                                 <div class="col-6 col-lg-12">
@@ -82,16 +82,16 @@
 
                             {% set podKeys = { 0: 'firstPodCards', 1: 'secondPodCards', 2: 'thirdPodCards' } %}
 
-                            {% for card in deck.cards[podKeys[pod]] %}
+                            {% for card in deck.cards.(podKeys[pod]) %}
                                 <div class="col-6 col-lg-12">
-                                    <img width="18px" src="/assets/keyforge/rarities/{{ card.rarity }}.svg" alt="{{ card.rarity }}" class="img-fluid"/>
-                                    <span class="card_name" data-bs-toggle="modal" data-bs-target="#card_image" data-card="{{ card.name }}" data-card-image="{{ card.imageUrl }}">{{ card.name }}</span>
+                                    <img width="18px" src="/assets/keyforge/rarities/{{ card.rarity.value }}.svg" alt="{{ card.rarity.value }}" class="img-fluid"/>
+                                    <span class="card_name" data-bs-toggle="modal" data-bs-target="#card_image" data-card="{{ card.name }}" data-card-image="{{ cards.(card.serializedName).imageUrl }}">{{ card.name }}</span>
 
                                     {% if card.isEnhanced %}
                                         {% set bonuses = ['Aember','Capture','Damage','Draw','Discard','Power'] %}
 
                                         {% for bonus in bonuses %}
-                                            {% set bonusCount = card["bonus" ~ bonus] %}
+                                            {% set bonusCount = card.("bonus" ~ bonus) %}
                                             {% if bonusCount > 0 %}
                                                 {% for i in 1..bonusCount %}
                                                     <img width="20px" src="/assets/keyforge/logos/bonus/{{ bonus|lower }}.png" alt="{{ bonus }}" class="img-fluid"/>
@@ -107,7 +107,7 @@
                                     {% set categories = ['Maverick', 'Legacy', 'Anomaly'] %}
 
                                     {% for category in categories %}
-                                        {% set isCategory = card["is" ~ category] %}
+                                        {% set isCategory = card.("is" ~ category) %}
                                         {% if isCategory %}
                                             <img width="20px" src="/assets/keyforge/logos/{{ category|lower }}.svg" alt="{{ category }}" class="img-fluid"/>
                                         {% endif %}
@@ -124,10 +124,10 @@
 
         {% for extraCard in deck.cards.extraCards %}
             <div>
-                {% if extraCard.type != 'prophecy' or  loop.index == 1 %}
-                    <h3>{{ ('deck.'~extraCard.type)|trans }}</h3>
+                {% if extraCard.t != 'prophecy' or  loop.index == 1 %}
+                    <h3>{{ ('deck.'~extraCard.t)|trans }}</h3>
                 {% endif %}
-                <span class="card_name" data-bs-toggle="modal" data-bs-target="#card_image" data-card="{{ extraCard.name }}" data-card-image="{{ extraCard.imageUrl }}">{{ extraCard.name }}</span>
+                <span class="card_name" data-bs-toggle="modal" data-bs-target="#card_image" data-card="{{ extraCard.n }}" data-card-image="{{ cards.(extraCard.sN).imageUrl }}">{{ extraCard.n }}</span>
             </div>
         {% endfor %}
 

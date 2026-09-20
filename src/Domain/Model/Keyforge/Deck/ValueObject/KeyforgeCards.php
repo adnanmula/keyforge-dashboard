@@ -2,7 +2,7 @@
 
 namespace AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject;
 
-final readonly class KeyforgeCards implements \JsonSerializable
+final readonly class KeyforgeCards
 {
     /**
      * @param array<KeyforgeCard> $firstPodCards
@@ -21,6 +21,33 @@ final readonly class KeyforgeCards implements \JsonSerializable
 
     public static function fromArray(array $data): self
     {
+        $extraCards = $data['extraCards'] ?? [];
+
+        foreach ($extraCards as &$extraCard) {
+            if (array_key_exists('name', $extraCard)) {
+                $extraCard['n'] = $extraCard['name'];
+                unset($extraCard['name']);
+            }
+
+            if (array_key_exists('type', $extraCard)) {
+                $extraCard['t'] = $extraCard['type'];
+                unset($extraCard['type']);
+            }
+
+            if (array_key_exists('serializedName', $extraCard)) {
+                $extraCard['sN'] = $extraCard['serializedName'];
+                unset($extraCard['serializedName']);
+            }
+
+            if (array_key_exists('imageUrl', $extraCard)) {
+                unset($extraCard['imageUrl']);
+            }
+
+            if (array_key_exists('iU', $extraCard)) {
+                unset($extraCard['iU']);
+            }
+        }
+
         return new self(
             KeyforgeHouse::fromDokName($data['firstPodHouse']),
             \array_map(static fn (array $card): KeyforgeCard => KeyforgeCard::fromArray($card), $data['firstPodCards']),
@@ -28,7 +55,7 @@ final readonly class KeyforgeCards implements \JsonSerializable
             \array_map(static fn (array $card): KeyforgeCard => KeyforgeCard::fromArray($card), $data['secondPodCards']),
             KeyforgeHouse::fromDokName($data['thirdPodHouse']),
             \array_map(static fn (array $card): KeyforgeCard => KeyforgeCard::fromArray($card), $data['thirdPodCards']),
-            $data['extraCards'] ?? [],
+            $extraCards,
         );
     }
 
@@ -42,10 +69,10 @@ final readonly class KeyforgeCards implements \JsonSerializable
             $serializedName = self::nameFromUrl($deck['tokenInfo']['nameUrl']);
 
             $extraCards[] = [
-                'name' => $deck['tokenInfo']['name'],
-                'serializedName' => $serializedName,
-                'type' => 'token-creature',
-                'imageUrl' => $deck['tokenInfo']['nameUrl'],
+                'n' => $deck['tokenInfo']['name'],
+                'sN' => $serializedName,
+                't' => 'token-creature',
+                'iU' => $deck['tokenInfo']['nameUrl'],
             ];
         }
 
@@ -54,10 +81,10 @@ final readonly class KeyforgeCards implements \JsonSerializable
                 $serializedName = self::nameFromUrl($prophecy['cardTitleUrl']);
 
                 $extraCards[] = [
-                    'name' => $prophecy['cardTitle'],
-                    'serializedName' => $serializedName,
-                    'type' => 'prophecy',
-                    'imageUrl' => $prophecy['cardTitleUrl'],
+                    'n' => $prophecy['cardTitle'],
+                    'sN' => $serializedName,
+                    't' => 'prophecy',
+                    'iU' => $prophecy['cardTitleUrl'],
                 ];
             }
         }
@@ -68,10 +95,10 @@ final readonly class KeyforgeCards implements \JsonSerializable
             $serializedName = self::nameFromUrl($archonPowerCard['cardTitleUrl']);
 
             $extraCards[] = [
-                'name' => $archonPowerCard['cardTitle'],
-                'serializedName' => $serializedName,
-                'type' => 'archon-power',
-                'imageUrl' => $archonPowerCard['cardTitleUrl'],
+                'n' => $archonPowerCard['cardTitle'],
+                'sN' => $serializedName,
+                't' => 'archon-power',
+                'iU' => $archonPowerCard['cardTitleUrl'],
             ];
         }
 
@@ -88,15 +115,20 @@ final readonly class KeyforgeCards implements \JsonSerializable
 
     public function jsonSerialize(): array
     {
-        return [
+        $data = [
             'firstPodHouse' => $this->firstPodHouse,
             'firstPodCards' => \array_map(static fn (KeyforgeCard $card) => $card->jsonSerialize(), $this->firstPodCards),
             'secondPodHouse' => $this->secondPodHouse,
             'secondPodCards' => \array_map(static fn (KeyforgeCard $card) => $card->jsonSerialize(), $this->secondPodCards),
             'thirdPodHouse' => $this->thirdPodHouse,
             'thirdPodCards' => \array_map(static fn (KeyforgeCard $card) => $card->jsonSerialize(), $this->thirdPodCards),
-            'extraCards' => $this->extraCards,
         ];
+
+        if (count($this->extraCards) > 0) {
+            $data['extraCards'] = $this->extraCards;
+        }
+
+        return $data;
     }
 
     public function has(string $card, int $times = 1): bool
