@@ -23,35 +23,10 @@ final readonly class KeyforgeCard implements \JsonSerializable
 
     public static function fromArray(array $data): self
     {
-        if (array_key_exists('name', $data)) {
-            return new self(
-                $data['name'],
-                $data['serializedName'],
-                KeyforgeCardRarity::from(\strtoupper($data['rarity'])),
-                $data['isEnhanced'] ?? false,
-                $data['isMaverick'] ?? false,
-                $data['isLegacy'] ?? false,
-                $data['isAnomaly'] ?? false,
-                $data['bonusAember'] ?? 0,
-                $data['bonusCapture'] ?? 0,
-                $data['bonusDamage'] ?? 0,
-                $data['bonusDraw'] ?? 0,
-                $data['bonusDiscard'] ?? 0,
-                $data['bonusPower'] ?? 0,
-                $data['bonusHouses'] ?? [],
-            );
-        }
-
-        if (strlen($data['r']) > 2) {
-            $rarity = KeyforgeCardRarity::from(\strtoupper($data['r']));
-        } else {
-            $rarity = KeyforgeCardRarity::fromAbbreviation(\strtoupper($data['r']));
-        }
-
         return new self(
             $data['n'],
             $data['sN'],
-            $rarity,
+            KeyforgeCardRarity::fromAbbreviation(\strtoupper($data['r'])),
             $data['iE'] ?? false,
             $data['iM'] ?? false,
             $data['iL'] ?? false,

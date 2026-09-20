@@ -13,7 +13,7 @@ services:
       ELASTIC_APM_SERVICE_NAME: cards
       ELASTIC_APM_ENVIRONMENT: local
       ELASTIC_APM_SERVER_URL: http://apm-server:8200
-      ELASTIC_APM_TRANSACTION_SAMPLE_RATE: "1.0"
+      ELASTIC_APM_TRANSACTION_SAMPLE_RATE: "0.1"
     networks:
       - network_cards
   nginx:

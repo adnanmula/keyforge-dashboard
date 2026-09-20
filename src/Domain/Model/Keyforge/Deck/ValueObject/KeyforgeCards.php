@@ -21,33 +21,6 @@ final readonly class KeyforgeCards
 
     public static function fromArray(array $data): self
     {
-        $extraCards = $data['extraCards'] ?? [];
-
-        foreach ($extraCards as &$extraCard) {
-            if (array_key_exists('name', $extraCard)) {
-                $extraCard['n'] = $extraCard['name'];
-                unset($extraCard['name']);
-            }
-
-            if (array_key_exists('type', $extraCard)) {
-                $extraCard['t'] = $extraCard['type'];
-                unset($extraCard['type']);
-            }
-
-            if (array_key_exists('serializedName', $extraCard)) {
-                $extraCard['sN'] = $extraCard['serializedName'];
-                unset($extraCard['serializedName']);
-            }
-
-            if (array_key_exists('imageUrl', $extraCard)) {
-                unset($extraCard['imageUrl']);
-            }
-
-            if (array_key_exists('iU', $extraCard)) {
-                unset($extraCard['iU']);
-            }
-        }
-
         return new self(
             KeyforgeHouse::fromDokName($data['firstPodHouse']),
             \array_map(static fn (array $card): KeyforgeCard => KeyforgeCard::fromArray($card), $data['firstPodCards']),
@@ -55,7 +28,7 @@ final readonly class KeyforgeCards
             \array_map(static fn (array $card): KeyforgeCard => KeyforgeCard::fromArray($card), $data['secondPodCards']),
             KeyforgeHouse::fromDokName($data['thirdPodHouse']),
             \array_map(static fn (array $card): KeyforgeCard => KeyforgeCard::fromArray($card), $data['thirdPodCards']),
-            $extraCards,
+            $data['extraCards'] ?? [],
         );
     }
 
