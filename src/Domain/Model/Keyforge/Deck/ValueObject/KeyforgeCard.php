@@ -5,7 +5,6 @@ namespace AdnanMula\Cards\Domain\Model\Keyforge\Deck\ValueObject;
 final readonly class KeyforgeCard implements \JsonSerializable
 {
     private function __construct(
-        public string $name,
         public string $serializedName,
         public KeyforgeCardRarity $rarity,
         public bool $isEnhanced,
@@ -24,7 +23,6 @@ final readonly class KeyforgeCard implements \JsonSerializable
     public static function fromArray(array $data): self
     {
         return new self(
-            $data['n'],
             $data['sN'],
             KeyforgeCardRarity::fromAbbreviation(\strtoupper($data['r'])),
             $data['iE'] ?? false,
@@ -47,7 +45,6 @@ final readonly class KeyforgeCard implements \JsonSerializable
         $serializedName = explode('.', end($urlPieces))[0];
 
         return new self(
-            $data['cardTitle'],
             $serializedName,
             KeyforgeCardRarity::from(\strtoupper($data['rarity'])),
             $data['enhanced'] ?? false,
@@ -67,7 +64,6 @@ final readonly class KeyforgeCard implements \JsonSerializable
     public function jsonSerialize(): array
     {
         return array_filter([
-            'n' => $this->name,
             'sN' => $this->serializedName,
             'r' => $this->rarity->abbreviated(),
             'iE' => $this->isEnhanced,

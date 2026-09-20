@@ -4,13 +4,13 @@ namespace AdnanMula\Cards\Shared;
 
 use AdnanMula\Cards\Domain\Model\Shared\ValueObject\Locale;
 
-final class LocalizedString implements \JsonSerializable
+final class LocalizedString implements \JsonSerializable, \Stringable
 {
     private function __construct(private array $values)
     {
     }
 
-    public static function fromLocale(string $value, Locale $locale = Locale::es_ES): self
+    public static function fromLocale(string $value, Locale $locale = Locale::en_GB): self
     {
         return new self([$locale->value => $value]);
     }
@@ -28,5 +28,10 @@ final class LocalizedString implements \JsonSerializable
     public function jsonSerialize(): array
     {
         return $this->values;
+    }
+
+    public function __toString(): string
+    {
+        return $this->values[Locale::en_GB->value] ?? '';
     }
 }
