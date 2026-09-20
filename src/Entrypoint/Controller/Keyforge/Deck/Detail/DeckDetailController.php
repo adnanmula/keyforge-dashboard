@@ -262,7 +262,7 @@ final class DeckDetailController extends Controller
         ];
 
         foreach ($cardNames as $cardName) {
-            if (false === in_array($indexedCards[$cardName]->type->value, $cardTypes, true)) {
+            if (false === in_array($indexedCards[$cardName]->type->value, array_keys($cardTypes), true)) {
                 continue;
             }
 
