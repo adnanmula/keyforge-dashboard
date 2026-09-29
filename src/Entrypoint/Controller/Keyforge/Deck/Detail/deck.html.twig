@@ -74,9 +74,9 @@
                     <div class="col-12 col-lg-4" style="margin-top: 10px">
                         <img width="33px" src="/assets/keyforge/houses/{{ deck.houses[pod].value }}.png" alt="{{ deck.houses[pod].value }}"/><span style="font-size: 1.5em; vertical-align: middle; margin-left: 4px">{{ deck.houses[pod].value }}</span>
                         <div class="row">
-                            {% if deck.type == 'ALLIANCE' %}
+                            {% if deck.type.value == 'ALLIANCE' %}
                                 <div class="col-6 col-lg-12">
-                                    <a href="{{ path('keyforge_deck_detail', {'deckId': deck.alliance_composition.pods[pod].keyforgeId}) }}">{{ deck.alliance_composition.pods[pod].name }}</a>
+                                    <a href="{{ path('keyforge_deck_detail', {'deckId': deck.allianceComposition.pods[pod].keyforgeId}) }}">{{ deck.allianceComposition.pods[pod].name }}</a>
                                 </div>
                             {% endif %}
 
@@ -167,16 +167,16 @@
     {% endif %}
 
     <div class="d-flex flex-row-reverse">
-        {% if deck.type == 'STANDARD' %}
+        {% if deck.type.value == 'STANDARD' %}
             <a href="https://decksofkeyforge.com/decks/{{ reference }}" target="_blank"><img class="img-thumbnail" width="40px" style="min-width: 40px" src="{{ asset('assets/keyforge/logos/dok.svg') }}" alt="DoK"/></a>
             <a href="https://keyforgegame.com/deck-details/{{ reference }}" target="_blank"><img class="img-thumbnail" width="50px" style="min-width: 50px" src="{{ asset('assets/keyforge/logos/vault.png') }}" alt="Vault"/></a>
         {% endif %}
 
-        {% if deck.type == 'ALLIANCE' %}
+        {% if deck.type.value == 'ALLIANCE' %}
             <a href="https://decksofkeyforge.com/alliance-decks/{{ reference }}" target="_blank"><img class="img-thumbnail" width="40px" style="min-width: 40px" src="{{ asset('assets/keyforge/logos/dok.svg') }}" alt="DoK"/></a>
         {% endif %}
 
-        {% if deck.type == 'THEORETICAL' %}
+        {% if deck.type.value == 'THEORETICAL' %}
             <a href="https://decksofkeyforge.com/theoretical-decks/{{ reference }}" target="_blank"><img class="img-thumbnail" width="40px" style="min-width: 40px" src="{{ asset('assets/keyforge/logos/dok.svg') }}" alt="DoK"/></a>
         {% endif %}
 

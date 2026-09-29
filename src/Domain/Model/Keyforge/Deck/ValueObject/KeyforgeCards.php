@@ -110,7 +110,7 @@ final readonly class KeyforgeCards
         $count = 0;
 
         foreach ($deckCards as $deckCard) {
-            if ($deckCard->name === $card) {
+            if ($deckCard->serializedName === $card) {
                 ++$count;
             }
 
@@ -127,7 +127,7 @@ final readonly class KeyforgeCards
         $deckCards = \array_merge($this->firstPodCards, $this->secondPodCards, $this->thirdPodCards);
 
         foreach ($deckCards as $deckCard) {
-            if ($deckCard->name === $card) {
+            if ($deckCard->serializedName === $card) {
                 return $deckCard;
             }
         }
