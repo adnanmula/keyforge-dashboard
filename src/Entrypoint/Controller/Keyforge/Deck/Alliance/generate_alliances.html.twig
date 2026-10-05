@@ -2,7 +2,40 @@
 
 {% block title %}{{ 'deck.import'|trans }}{% endblock %}
 
+{% block header %}
+    <style>
+        .spinner-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 3px solid #ddd;
+            border-top-color: #333;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+{% endblock %}
+
 {% block body %}
+    <div class="spinner-overlay" style="display: none;">
+        <div class="spinner"></div>
+    </div>
+
     {% if result != false %}
         <div class="row">
             <div class="col-1 col-sm-4 col-lg-3"></div>
@@ -153,6 +186,8 @@
         $('#generateAlliancesForm').submit(function (e) {
             e.preventDefault();
 
+            $('.spinner-overlay').show();
+
             const decks = {};
 
             $('.deck_selector').each(function() {
@@ -209,6 +244,8 @@
                     _csrf_token: '{{ csrf_token('keyforge_alliance_generate') }}',
                 }),
             }).done(function(data) {
+                $('.spinner-overlay').hide();
+
                 if (data.success && data.result.decks.length > 0) {
                     const $block = $('#resultBlock');
                     $block.empty();

@@ -33,6 +33,7 @@ final readonly class CreateGameCommandHandler
 {
     private const array COMPETITIONS_VS_RANDOMS = [
         KeyforgeCompetition::VT,
+        KeyforgeCompetition::NATIONAL,
         KeyforgeCompetition::TCO_CASUAL,
         KeyforgeCompetition::TCO_COMPETITIVE,
         KeyforgeCompetition::LGS,
