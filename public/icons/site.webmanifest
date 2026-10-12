@@ -1,6 +1,9 @@
 {
-    "name": "",
-    "short_name": "",
+    "id": "keyforge_dashboard",
+    "name": "Keyforge Dashboard",
+    "short_name": "KeyforgeDashboard",
+    "start_url": "/",
+    "scope": "/",
     "icons": [
         {
             "src": "/android-chrome-192x192.png",
@@ -10,6 +13,11 @@
         {
             "src": "/android-chrome-256x256.png",
             "sizes": "256x256",
+            "type": "image/png"
+        },
+        {
+            "src": "/android-chrome-512x512.png",
+            "sizes": "512x512",
             "type": "image/png"
         }
     ],
